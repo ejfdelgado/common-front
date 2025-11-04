@@ -15,11 +15,15 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "esModuleInterop": true,
     "paths": {
       "@tools/*": ["app/tools/*"],
       "@services/*": ["app/services/*"],
       
-    }
+    },
+    "types": ["three"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

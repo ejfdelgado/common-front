@@ -1,0 +1,15 @@
+.red_text {
+    color: red;
+}
+
+.bold_text {
+    font-weight: bold;
+}
+
+.text_link {
+    cursor: pointer;
+}
+
+.text_link:hover {
+    text-decoration: underline;
+}

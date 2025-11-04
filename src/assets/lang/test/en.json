@@ -1,0 +1,11 @@
+{
+  "say_hi": "Hello",
+  "popups": {
+    "alert": {
+      "text": "Text"
+    },
+    "choices": {
+      "ok": "Ok"
+    }
+  }
+}

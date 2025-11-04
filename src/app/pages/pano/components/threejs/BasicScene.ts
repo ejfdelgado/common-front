@@ -1,6 +1,7 @@
 //import { GUI } from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
+import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
 
 /**
@@ -24,14 +25,16 @@ export class BasicScene extends THREE.Scene {
   lightDistance: number = 3;
   // Get some basic params
   bounds: DOMRect;
+  indicatorSrv: IndicatorService;
   configuration: PanoConfig | null = null;
   panoramaAdded: boolean = false;
 
   canvasRef: HTMLCanvasElement;
-  constructor(canvasRef: any, bounds: DOMRect) {
+  constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
     this.canvasRef = canvasRef;
     this.bounds = bounds;
+    this.indicatorSrv = indicatorSrv;
   }
   /**
    * Initializes the scene by adding lights, and the geometry
@@ -96,6 +99,7 @@ export class BasicScene extends THREE.Scene {
     }
     this.panoramaAdded = true;
     // get config json
+    const promise: Wait = this.indicatorSrv.start();
 
     return new Promise((resolve) => {
       const loader = new THREE.TextureLoader();
@@ -111,6 +115,7 @@ export class BasicScene extends THREE.Scene {
           this.background = texture;
           // Optional: Use as environment for reflective materials
           this.environment = texture;
+          promise.done();
           resolve(null);
         });
       }
