@@ -21,6 +21,7 @@
     "paths": {
       "@tools/*": ["app/tools/*"],
       "@services/*": ["app/services/*"],
+      "@components/*": ["app/components/*"],
       
     },
     "types": ["three"]

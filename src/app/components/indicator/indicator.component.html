@@ -1,0 +1,10 @@
+<div class="btp-overlay" *ngIf="isLoading">
+    <div class="loading_indicator_container">
+        <div>
+            <img src="{{ getIconImage() }}" alt="sistema ocupado">
+            <div class="messages">
+                <p class="message" *ngFor="let task of tasks">{{ task.detail?.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
