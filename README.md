@@ -19,3 +19,7 @@ ng generate component component-name
 ```bash
 ng build
 ```
+
+
+[Stage page](https://stg-playtolearn.storage.googleapis.com/index.html)
+[Stage page](https://pro-playtolearn.storage.googleapis.com/index.html)
