@@ -1,0 +1,88 @@
+<div #myparent class="theparent" [ngClass]="{'invisible': viewState!=='photo'}">
+    <canvas #mycanvas width="1" height="1">
+        Tu navegador no admite el elemento &lt;canvas&gt;.
+    </canvas>
+</div>
+<div #myprintparent class="theparent" [ngClass]="{'invisible': viewState!=='print'}">
+    <div class="container_horizontal margin_15">
+        <select [(ngModel)]="paperSelectedOption">
+            <option *ngFor="let option of paperOptions" [value]="option.id">{{ option.name }}</option>
+        </select>
+        <select [(ngModel)]="dpi">
+            <option *ngFor="let option of dpiOptions" [value]="option.id">{{ option.name }}</option>
+        </select>
+        <select [(ngModel)]="selectedExtension">
+            <option *ngFor="let option of extensionOptions" [value]="option.id">{{ option.name }}</option>
+        </select>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('double_wall')">Doble
+            pared</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('half_double_wall')">1/2 Doble
+            pared</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('double_wall_3')">1/3 Doble
+            pared</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('classic')">Clasico</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('tiny_world')">Mundo
+            pequeño</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('eye_fish')">Ojo de pez</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('mug')">Mug</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('cube_no_tabs')">Solo Cubo</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('two_halfs')">Dos mitades</button>
+        <button class="container_horizontal center2 manito" (click)="recreatePrinted('simpler')">Sencillo</button>
+    </div>
+    <div class="container_horizontal">
+        <div class="container_vertical">
+            <canvas #myprintcanvas class="print_canvas" width="1" height="1">
+                Tu navegador no admite el elemento &lt;canvas&gt;.
+            </canvas>
+            <canvas #qrcanvas class="print_canvas" width="1" height="1">
+                Tu navegador no admite el elemento &lt;canvas&gt;.
+            </canvas>
+        </div>
+    </div>
+</div>
+<div class="theparent" id="map" [ngClass]="{'invisible': viewState!=='map'}"></div>
+<div class="hover_container">
+    <div class="titles" *ngIf="['print'].indexOf(viewState) < 0">
+        <div>
+            <h1 class="white_subtitle" id="my_title">{{ configuration.title }}</h1>
+        </div>
+        <div>
+            <p class="outlined" id="my_subtitle">{{ configuration.subtitle }}</p>
+        </div>
+    </div>
+    <div class="relleno"></div>
+    <div class="controles container_horizontal gap_10 centered">
+        <button (click)="goToMap()" *ngIf="!hasMobile && hasValidLocation() && viewState!=='map'">
+            <mat-icon class="red">location_on</mat-icon>
+        </button>
+        <button (click)="setViewState('photo')" *ngIf="viewState!=='photo'">
+            <mat-icon class="green">photo</mat-icon>
+        </button>
+        <button (click)="setViewState('print')" *ngIf="!hasMobile && viewState!=='print'">
+            <mat-icon class="white">print</mat-icon>
+        </button>
+        <button (click)="playSound()" *ngIf="configuration.audioUrl && !soundActivated">
+            <mat-icon class="green">play_arrow</mat-icon>
+        </button>
+        <button (click)="stopSound()" *ngIf="configuration.audioUrl && soundActivated">
+            <mat-icon>pause</mat-icon>
+        </button>
+        <button (click)="waze()" *ngIf="hasValidLocation() && hasMobile">
+            <img class="svg_icon" src="/assets/img/waze-icon.svg" />
+        </button>
+        <button (click)="whatsapp()" *ngIf="hasPhone() && hasMobile">
+            <img class="svg_icon" src="/assets/img/icons8-whatsapp.svg" />
+        </button>
+        <button (click)="share()" *ngIf="canShare()">
+            <mat-icon class="white">share</mat-icon>
+        </button>
+    </div>
+</div>
+<div class="top_right" *ngIf="viewState=='photo'">
+    <button (click)="setFullScreen(true)" *ngIf="!isFullScreen">
+        <mat-icon class="white_subtitle">fullscreen</mat-icon>
+    </button>
+    <button (click)="setFullScreen(false)" *ngIf="isFullScreen">
+        <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
+    </button>
+</div>

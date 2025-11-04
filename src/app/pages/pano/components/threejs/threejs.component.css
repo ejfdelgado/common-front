@@ -1,0 +1,138 @@
+.theparent {
+  background-color: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.theparent canvas {
+  flex: 1;
+}
+
+.hover_container {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  padding: 0 10%;
+}
+
+.hover_container .titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5em;
+  gap: 10px;
+}
+
+.hover_container .titles h1 {
+  font-size: 2em;
+  text-align: center;
+  line-height: 1em;
+}
+
+.hover_container .titles p {
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.hover_container .relleno {
+  pointer-events: none;
+  flex: 1;
+}
+
+.hover_container .controles {
+  pointer-events: all;
+  margin-bottom: 2em;
+}
+
+/*
+.hover_container .controles button {
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  width: 4em;
+  height: 4em;
+  border: 1px solid;
+}
+*/
+
+.hover_container .controles button,
+.top_right button {
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+}
+
+.hover_container .controles button mat-icon {
+  font-size: 4em;
+  width: unset;
+  height: unset;
+  text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
+    1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.blue {
+  color: blue;
+}
+
+.white {
+  color: white;
+}
+
+.top_right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 15px;
+}
+
+.margin_15 {
+  margin: 15px;
+}
+
+.container_horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.container_vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.center1 {
+  justify-content: center;
+}
+
+.center2 {
+  align-items: center;
+}
+
+.print_canvas {
+  border: 1px solid;
+  display: none;
+}
+
+.svg_icon {
+  height: 34pt;
+}
