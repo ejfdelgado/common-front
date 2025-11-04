@@ -9,11 +9,15 @@ import {
 import { BasicScene } from './BasicScene';
 import { PrintBasicScene, PrintConfig, QRConfig } from './PrintBasicScene';
 import { IndicatorService, Wait } from '@services/indicator.service';
-//import { ModuloSonido } from '@ejfdelgado/ejflab-common/src/ModuloSonido';
-import { PromiseEmitter } from "../../../../tools/PromiseEmitter";
+import { ModuloSonido } from '@services/sonido.service';
 import { importLibrary } from '@googlemaps/js-api-loader';
 import jsPDF from 'jspdf';
 import { toCanvas } from 'qrcode';
+import { PromiseEmitter } from "@tools/PromiseEmitter";
+//
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface PanoConfig {
   title: string;
@@ -26,7 +30,13 @@ export interface PanoConfig {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-threejs',
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatIconModule,
+  ],
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
@@ -131,6 +141,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
+    private indicatorSrv: IndicatorService,
   ) {
     this.hasMobile = this.isMobile();
   }
@@ -210,7 +221,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
       return;
     }
     const theCanvas = this.canvasRef.nativeElement;
-    this.scene = new BasicScene(theCanvas, this.bounds);
+    this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv);
     this.scene.initialize();
     this.sceneCreated.resolve();
     this.loop();
@@ -280,14 +291,14 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   }
 
   async loadConfiguration() {
-    //const promise: Wait = this.indicatorSrv.start();
+    const promise: Wait = this.indicatorSrv.start();
     const configUrl = `https://storage.googleapis.com/pro-ejflab-assets/pano/${this.queryParam}/config.json?t=${this.tParam}`;
     try {
       this.configuration = await this.fetchJson(configUrl);
     } catch (err) {
 
     } finally {
-      //promise.done();
+      promise.done();
     }
   }
 
@@ -299,12 +310,12 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     }
     const loop = true;
     const volume = 1;
-    //ModuloSonido.play(this.configuration.audioUrl + `?t=${this.tParam}`, loop, volume);
+    ModuloSonido.play(this.configuration.audioUrl + `?t=${this.tParam}`, loop, volume);
     this.soundActivated = true;
   }
 
   stopSound() {
-    //ModuloSonido.stop(this.configuration.audioUrl + `?t=${this.tParam}`);
+    ModuloSonido.stop(this.configuration.audioUrl + `?t=${this.tParam}`);
     this.soundActivated = false;
   }
 
@@ -385,7 +396,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   }
 
   async recreatePrinted(modelId: string) {
-    //const activity = this.indicatorSrv.start();
+    const activity = this.indicatorSrv.start();
 
     const paperSelection = this.papers[this.paperSelectedOption];
 
@@ -645,7 +656,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
       if (this.printScene) {
         PrintBasicScene.disposeScene(this.printScene);
       }
-      this.printScene = new PrintBasicScene(canvas, printConfigs[i]);
+      this.printScene = new PrintBasicScene(canvas, printConfigs[i], this.indicatorSrv);
       await this.printScene.setConfig(this.configuration);
 
       const imgWidth = canvas.width;
@@ -680,7 +691,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
 
     pdf.save(`paper_model_${this.selectedExtension}_${this.dpi}dpi_${this.paperSelectedOption}_${modelId}.pdf`);
 
-    //activity.done();
+    activity.done();
   }
 
   isMobile() {

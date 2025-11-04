@@ -1,7 +1,6 @@
-//import { GUI } from 'dat.gui';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
 import { PanoConfig } from './threejs.component';
+import { IndicatorService } from "@services/indicator.service";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 
@@ -46,16 +45,18 @@ export class PrintBasicScene extends THREE.Scene {
   lightDistance: number = 3;
   // Get some basic params
   bounds: DOMRect;
+  indicatorSrv: IndicatorService;
   configuration: PanoConfig | null = null;
   objectLoaded: boolean = false;
   printConfig: PrintConfig;
 
   canvasRef: HTMLCanvasElement;
-  constructor(canvasRef: any, printConfig: PrintConfig) {
+  constructor(canvasRef: any, printConfig: PrintConfig, indicatorSrv: IndicatorService) {
     super();
     this.printConfig = printConfig;
     this.canvasRef = canvasRef;
     this.bounds = new DOMRect(0, 0, printConfig.width, printConfig.height);
+    this.indicatorSrv = indicatorSrv;
   }
   /**
    * Initializes the scene by adding lights, and the geometry
