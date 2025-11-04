@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IndicatorService } from "@services/indicator.service";
 
 @Component({
   selector: 'app-index',
@@ -8,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrl: './index.scss',
 })
 export class Index {
+  constructor(
+    private indicatorSrv: IndicatorService,
+  ) {
 
+  }
 }
