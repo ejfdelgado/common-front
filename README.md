@@ -9,6 +9,10 @@ ng serve
 ```
 
 ```bash
+npx ng generate component pages/game-lr
+```
+
+```bash
 ng generate component component-name
 ```
 
