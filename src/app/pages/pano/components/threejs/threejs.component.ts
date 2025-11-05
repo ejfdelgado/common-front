@@ -20,7 +20,7 @@ import { Base64 } from "@tools/Base64";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-setOptions({ key: Base64.decode('QUl6YVN5QlV4RWRsX2ZGcExwb25zRl9tQ2E0bTd0TU1YNVo0cmRR') });
+setOptions({ key: Base64.decode('QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j') });
 
 export interface PanoConfig {
   title: string;
