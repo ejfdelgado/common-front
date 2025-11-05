@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { PanoConfig } from './threejs.component';
 import { IndicatorService } from "@services/indicator.service";
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 
 export interface QRConfig {
   pg: number,

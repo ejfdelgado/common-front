@@ -1,26 +1,20 @@
 import { Routes } from '@angular/router';
-import { Index } from "./pages/index/index";
-import { GameLr } from "./pages/game-lr/game-lr";
-import { Pano } from "./pages/pano/pano";
 
 export const routes: Routes = [
     {
         path: '',
-        component: Index,
-        children: [],
+        loadComponent: () => import('./pages/index/index').then(m => m.Index),
     },
     {
         path: 'rightleft',
-        component: GameLr,
-        children: [],
+        loadComponent: () => import('./pages/game-lr/game-lr').then(m => m.GameLr),
     },
     {
         path: 'pano',
-        component: Pano,
-        children: [],
+        loadComponent: () => import('./pages/pano/pano').then(m => m.Pano),
     },
     {
         path: '**',
-        redirectTo: 'authentication/error',
+        redirectTo: '404',
     },
 ];
