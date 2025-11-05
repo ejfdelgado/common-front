@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -10,14 +11,16 @@ import { BasicScene } from './BasicScene';
 import { PrintBasicScene, PrintConfig, QRConfig } from './PrintBasicScene';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { ModuloSonido } from '@services/sonido.service';
-import { importLibrary } from '@googlemaps/js-api-loader';
+import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import jsPDF from 'jspdf';
 import { toCanvas } from 'qrcode';
+import { MatIconModule } from '@angular/material/icon';
 import { PromiseEmitter } from "@tools/PromiseEmitter";
-//
+import { Base64 } from "@tools/Base64";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
+
+setOptions({ key: Base64.decode('QUl6YVN5QlV4RWRsX2ZGcExwb25zRl9tQ2E0bTd0TU1YNVo0cmRR') });
 
 export interface PanoConfig {
   title: string;
@@ -142,6 +145,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private indicatorSrv: IndicatorService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.hasMobile = this.isMobile();
   }
@@ -171,8 +175,8 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   }
 
   async importMapLibraries() {
-    const { Map } = await importLibrary('maps');
-    const { AdvancedMarkerElement } = await importLibrary('marker');
+    const { Map } = await importLibrary("maps");
+    const { AdvancedMarkerElement } = await importLibrary("marker");
     this.mapLib = {
       Map,
       AdvancedMarkerElement,
@@ -278,6 +282,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
         await this.importMapLibraries();
         this.loadMap();
       }
+      this.cdr.detectChanges();
     });
   }
 
