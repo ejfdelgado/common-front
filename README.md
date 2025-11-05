@@ -24,4 +24,4 @@ ng build
 [Stage page](https://stg-playtolearn.storage.googleapis.com/index.html)
 [Stage page](https://pro-playtolearn.storage.googleapis.com/index.html)
 
-[pano Sample](http://localhost:4200/?q=2025-07%2F001)
+[pano Sample](http://localhost:4200/?q=2025-07%2F001#/pano)

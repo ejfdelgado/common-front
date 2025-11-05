@@ -258,7 +258,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.onResize({});
     }, 0);
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.hash.split("?")[1]);
     const queryParam = urlParams.get("q");
     if (!queryParam) {
       return;
