@@ -56,20 +56,30 @@ export class BasicScene extends THREE.Scene {
 
     this.background = new THREE.Color(0xefefef);
 
-    const light = new THREE.AmbientLight(0xefefef, 2);
-    const hemiLight = new THREE.HemisphereLight(0xefefef, 0xefefef, 2);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
+    const ambient = new THREE.AmbientLight(0xefefef, 0.3);
+    this.add(ambient);
 
-    this.add(directionalLight);
-    this.add(light);
+    const pointLight = new THREE.PointLight(0xffffff, 150, 100);
+    pointLight.position.set(3, 5, -3);
+    this.add(pointLight);
 
-    this.addModel({
-      name: "chessboard",
-      url: "https://storage.googleapis.com/labs-pro-public/models3d/leftright/chessboard.glb",
-    }).then((object) => {
+    const ROOT_PATH = "https://storage.googleapis.com/labs-pro-public/models3d/leftright/";
+
+    const loading = this.indicatorSrv.start();
+    this.addModel({ name: "chessboard", url: ROOT_PATH + "chessboard.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
         this.fitCameraToObject(this.camera, object, this.orbitals);
       }
+      // Add coins
+      const promises: Promise<any>[] = [];
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_cent.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_quarter.glb", }, false));
+
+      const responses = await Promise.all(promises);
+
+      loading.done();
     });
   }
 
@@ -149,7 +159,7 @@ export class BasicScene extends THREE.Scene {
   }
 
   async addModel(
-    item: ItemModelRef
+    item: ItemModelRef, autoAdd: boolean = true
   ): Promise<THREE.Object3D<THREE.Object3DEventMap>> {
     return new Promise((resolve, reject) => {
       const url = item.url;
@@ -172,8 +182,11 @@ export class BasicScene extends THREE.Scene {
               } else {
                 object = response;
               }
+              //object.name = item.name;
               if (object != null) {
-                this.add(object);
+                if (autoAdd) {
+                  this.add(object);
+                }
               }
               resolve(object);
             },
