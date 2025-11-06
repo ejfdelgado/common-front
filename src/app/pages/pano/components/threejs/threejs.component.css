@@ -1,27 +1,9 @@
-.theparent {
-  background-color: white;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-}
 
 .theparent canvas {
   flex: 1;
 }
 
 .hover_container {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  display: flex;
-  flex-direction: column;
-  pointer-events: none;
   padding: 0 10%;
 }
 
@@ -53,18 +35,6 @@
   pointer-events: all;
   margin-bottom: 2em;
 }
-
-/*
-.hover_container .controles button {
-  background-color: white;
-  border-radius: 100%;
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  width: 4em;
-  height: 4em;
-  border: 1px solid;
-}
-*/
 
 .hover_container .controles button,
 .top_right button {

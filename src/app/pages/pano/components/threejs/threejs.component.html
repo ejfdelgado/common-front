@@ -1,9 +1,9 @@
-<div #myparent class="theparent" [ngClass]="{'invisible': viewState!=='photo'}">
+<div #myparent class="theparent full_screen background_white container_vertical" [ngClass]="{'invisible': viewState!=='photo'}">
     <canvas #mycanvas width="1" height="1">
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
 </div>
-<div #myprintparent class="theparent" [ngClass]="{'invisible': viewState!=='print'}">
+<div #myprintparent class="theparent full_screen background_white container_vertical" [ngClass]="{'invisible': viewState!=='print'}">
     <div class="container_horizontal margin_15">
         <select [(ngModel)]="paperSelectedOption">
             <option *ngFor="let option of paperOptions" [value]="option.id">{{ option.name }}</option>
@@ -40,8 +40,8 @@
         </div>
     </div>
 </div>
-<div class="theparent" id="map" [ngClass]="{'invisible': viewState!=='map'}"></div>
-<div class="hover_container">
+<div class="theparent full_screen background_white container_vertical" id="map" [ngClass]="{'invisible': viewState!=='map'}"></div>
+<div class="hover_container full_screen container_vertical no_mouse">
     <div class="titles" *ngIf="['print'].indexOf(viewState) < 0">
         <div>
             <h1 class="white_subtitle" id="my_title">{{ configuration.title }}</h1>

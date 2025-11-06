@@ -1,81 +1,97 @@
 .container_vertical {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .container_horizontal {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .width_100 {
-    width: 100%;
+  width: 100%;
 }
 
 .full {
-    flex: 1;
+  flex: 1;
 }
 
 .gap_10 {
-    gap: 10px;
+  gap: 10px;
 }
 
 .gap_20 {
-    gap: 20px;
+  gap: 20px;
 }
 
 .gap_30 {
-    gap: 30px;
+  gap: 30px;
 }
 
 .margin_10 {
-    margin: 10px;
+  margin: 10px;
 }
 
 .padding_10 {
-    padding: 10px;
+  padding: 10px;
 }
 
 .container_vertical.centered {
-    justify-content: center;
+  justify-content: center;
 }
 
 .container_vertical.align_centered,
 .container_vertical.hcentered {
-    align-items: center;
+  align-items: center;
 }
 
 .container_vertical.start {
-    justify-content: start;
+  justify-content: start;
 }
 
 .container_vertical.end {
-    justify-content: end;
+  justify-content: end;
 }
 
 .container_vertical.no_gap,
 .container_horizontal.no_gap {
-    gap: 0;
+  gap: 0;
 }
 
 .container_horizontal.centered {
-    justify-content: center;
+  justify-content: center;
 }
 
 .container_horizontal.vcentered {
-    align-items: center;
+  align-items: center;
 }
 
 .container_horizontal.end {
-    justify-content: end;
+  justify-content: end;
 }
 
 .justify_end {
-    justify-content: end;
+  justify-content: end;
+}
+
+.background_white {
+  background-color: white;
+}
+
+.full_screen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.no_mouse {
+  pointer-events: none;
 }
 
 @media screen and (max-width: 500px) {
-    .container_horizontal.responsive_vertical {
-        flex-direction: column;
-    }
+  .container_horizontal.responsive_vertical {
+    flex-direction: column;
+  }
 }
