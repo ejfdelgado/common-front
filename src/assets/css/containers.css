@@ -97,6 +97,13 @@
   bottom: 0;
 }
 
+.top_absolute {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
 .button_simple {
   background-color: transparent;
   border: 0px;
@@ -121,6 +128,14 @@
 
 .no_mouse {
   pointer-events: none;
+}
+
+.hand {
+  cursor: pointer;
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 500px) {

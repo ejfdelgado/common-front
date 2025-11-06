@@ -6,6 +6,11 @@ import { VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
+export interface SelectOptionType {
+  id: string;
+  label: string;
+};
+
 @Component({
   standalone: true,
   selector: 'app-read',
@@ -19,6 +24,12 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 })
 export class Read {
   isRunning: boolean = false;
+  langs: SelectOptionType[] = [
+    { id: "es-ES", label: "Español" },
+    { id: "en-US", label: "English" },
+    { id: "fr-FR", label: "Français" },
+  ];
+  currentLang: string = "es-ES";
   constructor(
     public voiceSrv: VoiceRecognitionService,
     public speechSrv: SpeechSynthesisService,
@@ -45,10 +56,12 @@ export class Read {
     await this.speechSrv.init();
   }
 
+  defineLanguage(val: string) {
+    this.currentLang = val;
+  }
+
   startListening() {
-    //this.voiceSrv.start("en-US");
-    this.voiceSrv.start({ lang: "es-ES", autorestart: true });
-    //this.voiceSrv.start("fr-FR");
+    this.voiceSrv.start({ lang: this.currentLang, autorestart: true });
     this.isRunning = true;
   }
 
