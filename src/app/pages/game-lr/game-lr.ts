@@ -49,6 +49,15 @@ export class GameLr {
   ) {
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
+    /*
+    this.voiceSrv.setKeywords(
+      [
+        "left", "right", "up", "down",
+        "izquierda", "derecha", "arriba", "abajo",
+        "gauche", "droite", "haut", "bas"
+      ],
+    );
+    */
 
     const word$ = this.voiceSrv.recognizedWord$.pipe(
       filter(w => w.confidence >= 0.5),
