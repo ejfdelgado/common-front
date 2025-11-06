@@ -3,7 +3,12 @@
     <div class="bottom_absolute container_vertical padding_20">
         <div class=""></div>
         <div class="container_horizontal centered">
-            <button class="button_simple" (click)="startListening()"><mat-icon class="white">play_arrow</mat-icon></button>
+            @if (!isRunning) {
+            <button class="button_simple font_green" (click)="startListening()"><mat-icon
+                    class="white">play_arrow</mat-icon></button>
+            } @else {
+            <button class="button_simple font_red" (click)="stopListening()"><mat-icon class="white">pause</mat-icon></button>
+            }
         </div>
     </div>
 </div>

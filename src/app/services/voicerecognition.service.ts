@@ -39,6 +39,7 @@ type SpeechRecognitionCtor = new () => SpeechRecognition;
 export class VoiceRecognitionService {
   private recognition: SpeechRecognition | null = null;
   private isSupported = false;
+  private autoRestart = false;
 
   // RxJS streams
   private wordSubject = new Subject<RecognizedWord>();
@@ -149,6 +150,10 @@ export class VoiceRecognitionService {
       return;
     }
 
+    if (typeof options.autorestart == 'boolean') {
+      this.autoRestart = options.autorestart;
+    }
+
     if (options.lang) this.recognition.lang = options.lang;
 
     try {
@@ -156,7 +161,9 @@ export class VoiceRecognitionService {
 
       if (options.autorestart === true) {
         this.recognition.onend = () => {
-          if (this.isSupported) this.start(options);
+          if (this.isSupported && this.autoRestart) {
+            this.start(options);
+          }
         };
       }
 
@@ -184,6 +191,10 @@ export class VoiceRecognitionService {
   setContinuous(cont: boolean) {
     if (!this.recognition) return;
     this.recognition.continuous = cont;
+  }
+
+  setAutorestart(val: boolean) {
+    this.autoRestart = val;
   }
 
   setInterimResults(enabled: boolean) {

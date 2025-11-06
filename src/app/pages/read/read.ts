@@ -18,6 +18,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
   styleUrl: './read.scss',
 })
 export class Read {
+  isRunning: boolean = false;
   constructor(
     public voiceSrv: VoiceRecognitionService,
     public speechSrv: SpeechSynthesisService,
@@ -44,10 +45,17 @@ export class Read {
     await this.speechSrv.init();
   }
 
-  async startListening() {
+  startListening() {
     //this.voiceSrv.start("en-US");
     this.voiceSrv.start({ lang: "es-ES", autorestart: true });
     //this.voiceSrv.start("fr-FR");
+    this.isRunning = true;
+  }
+
+  stopListening() {
+    this.voiceSrv.setAutorestart(false);
+    this.voiceSrv.stop();
+    this.isRunning = false;
   }
 
   async talk() {
