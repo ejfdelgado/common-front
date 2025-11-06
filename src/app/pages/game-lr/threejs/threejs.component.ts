@@ -68,6 +68,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
       this.scene.camera?.updateProjectionMatrix();
       this.scene.renderer?.render(this.scene, this.scene.camera);
       this.scene.orbitals?.update();
+      this.scene.animate();
       requestAnimationFrame(() => {
         this.loop();
       });

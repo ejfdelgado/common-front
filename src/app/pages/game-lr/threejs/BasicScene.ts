@@ -20,6 +20,17 @@ export class BasicScene extends THREE.Scene {
   fbxLoader = new FBXLoader();
   gltfLoader = new GLTFLoader();
 
+  virtualChessBoard: { [key: number]: { [key: number]: any } } = {
+    0: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    1: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    2: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    3: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    4: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    5: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    6: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+    7: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
+  };
+
   canvasRef: HTMLCanvasElement;
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
@@ -39,7 +50,7 @@ export class BasicScene extends THREE.Scene {
       1000
     );
     this.camera.position.z = 10;
-    this.camera.position.y = 10;
+    this.camera.position.y = 5;
     this.camera.position.x = 0;
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -48,6 +59,8 @@ export class BasicScene extends THREE.Scene {
       antialias: true
     });
     this.renderer.setSize(this.bounds.width, this.bounds.height);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: softer shadows
     // sets up the camera's orbital controls
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitals.enableZoom = true; // default is true
@@ -56,11 +69,13 @@ export class BasicScene extends THREE.Scene {
 
     this.background = new THREE.Color(0x333333);
 
-    const ambient = new THREE.AmbientLight(0xefefef, 0.3);
-    this.add(ambient);
+    //const ambient = new THREE.AmbientLight(0xefefef, 0.3);
+    //this.add(ambient);
 
-    const pointLight = new THREE.PointLight(0xffffff, 150, 100);
-    pointLight.position.set(3, 5, -3);
+    const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    pointLight.castShadow = true;
+    //pointLight.position.set(3, 5, -3);
+    pointLight.position.set(0, 5, 0);
     this.add(pointLight);
 
     const ROOT_PATH = "https://storage.googleapis.com/labs-pro-public/models3d/leftright/";
@@ -72,6 +87,7 @@ export class BasicScene extends THREE.Scene {
       }
       // Add coins
       const promises: Promise<any>[] = [];
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "bunny_coffe.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_cent.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five.glb", }, false));
@@ -79,11 +95,71 @@ export class BasicScene extends THREE.Scene {
 
       const responses = await Promise.all(promises);
 
-      // Compute x,y, virtual positions.
-
-
+      this.fillRandomChessBoard(responses);
       loading.done();
     });
+  }
+
+  isFreePosition(x: number, y: number) {
+    return this.virtualChessBoard[x][y] === null;
+  }
+
+  setChessPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number) {
+    this.virtualChessBoard[x][y] = { object: obj, x, y };
+    obj.position.set((x - 3.5) * 1.6, 0, (3.5 - y) * 1.6); // move it 5 units along x
+  }
+
+  addCloneOnPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number) {
+    const clone = obj.clone();
+    this.setChessPosition(clone, x, y);
+    this.add(clone);
+    return clone;
+  }
+
+  animate() {
+    // Rotate coins
+  }
+
+  getRandomNotBussyXY() {
+    //Compute how many nulls exists
+    let count = 0;
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.virtualChessBoard[i][i] == null) {
+          count++;
+        }
+      }
+    }
+    //Generate a random integer between 0 and count
+    const picked = Math.floor(Math.random() * count);
+    let index = 0;
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (index == picked) {
+          return { x: i, y: j };
+        }
+        index++;
+      }
+    }
+    return null;
+  }
+
+  fillRandomChessBoard(assets: any[]) {
+    // Place bunny
+    const bunnyStart = this.getRandomNotBussyXY();
+    if (!bunnyStart) {
+      return;
+    }
+    this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y);
+
+    // Place random coins, there are 4 types of coins
+    for (let i = 0; i < 15; i++) {
+      const coinPosition = this.getRandomNotBussyXY();
+      if (coinPosition) {
+        const coinType = i % 4 + 1;
+        this.addCloneOnPosition(assets[coinType], coinPosition.x, coinPosition.y);
+      }
+    }
   }
 
   fitCameraToObject(
@@ -181,7 +257,11 @@ export class BasicScene extends THREE.Scene {
             async (response: any) => {
               let object = null;
               if (loader == this.gltfLoader) {
-                object = response.scene.children[0];
+                //console.log(response.scene.children);
+                const group = new THREE.Object3D(); // or new THREE.Group()
+                // Add all objects to the parent
+                response.scene.children.forEach((obj: any) => group.add(obj));
+                object = group;
               } else {
                 object = response;
               }
@@ -194,7 +274,7 @@ export class BasicScene extends THREE.Scene {
               resolve(object);
             },
             (xhr: any) => {
-              console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+              //console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
             },
             (error: any) => {
               reject(error);
