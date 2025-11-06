@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { VoiceRecognitionService } from "@services/voicerecognition.service";
+import { RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { distinctUntilChanged, filter, map } from 'rxjs';
+import { generateHueColors } from '@tools/Colors';
+
+export interface WordType {
+  word: string;
+  time: number;
+  color: string;
+}
 
 export interface SelectOptionType {
   id: string;
@@ -25,14 +32,20 @@ export interface SelectOptionType {
 export class Read {
   isRunning: boolean = false;
   langs: SelectOptionType[] = [
-    { id: "es-ES", label: "Español" },
-    { id: "en-US", label: "English" },
-    { id: "fr-FR", label: "Français" },
+    { id: "es-ES", label: "🇪🇸 Español" },
+    { id: "en-US", label: "🇺🇸 English" },
+    { id: "fr-FR", label: "🇫🇷 Français" },
   ];
   currentLang: string = "es-ES";
+  words: WordType[] = [];
+
+  currentColor: number = 0;
+  colors = generateHueColors(5, 70, 70);
+
   constructor(
     public voiceSrv: VoiceRecognitionService,
     public speechSrv: SpeechSynthesisService,
+    public cdr: ChangeDetectorRef,
   ) {
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
@@ -47,8 +60,47 @@ export class Read {
       }),
     );
 
-    word$.subscribe((data) => { console.log(data); });
-    //this.voiceSrv.recognizedWord$.subscribe((data) => { console.log(data); });
+    setInterval(() => {
+      this.adjustWords();
+    }, 1000);
+
+    const addWordFun = (input: RecognizedWord) => {
+      this.words.push({
+        word: input.word,
+        time: input.timestamp,
+        color: this.getNextColor(),
+      });
+      this.adjustWords();
+      this.cdr.detectChanges();
+    };
+
+    word$.subscribe(addWordFun);
+    //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
+  }
+
+  adjustWords() {
+    const MAX_NUMBER_OF_WORDS = 5;
+    const THRESHOLD_MS = 10000;//10 seconds
+    const now = Date.now();
+    const initialLen = this.words.length;
+    // First limite number of words
+    this.words.splice(0, Math.max(0, this.words.length - MAX_NUMBER_OF_WORDS));
+    // Second erase old words
+    this.words = this.words.filter((word) => {
+      return now - word.time < THRESHOLD_MS;
+    });
+    if (initialLen != this.words.length) {
+      this.cdr.detectChanges();
+    }
+  }
+
+  getNextColor() {
+    const actual = this.colors[this.currentColor];
+    this.currentColor++;
+    if (this.currentColor >= this.colors.length) {
+      this.currentColor = 0;
+    }
+    return actual;
   }
 
   async ngOnInit() {
@@ -61,6 +113,7 @@ export class Read {
 
   startListening() {
     this.voiceSrv.start({ lang: this.currentLang, autorestart: true });
+    this.words = [];
     this.isRunning = true;
   }
 

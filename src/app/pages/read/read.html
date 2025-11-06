@@ -2,7 +2,7 @@
     <div class="top_absolute container_horizontal gap_10 padding_20">
         @if (!isRunning) {
         @for (lang of langs; track lang.id) {
-        <span class="hand" [ngClass]="{'underline': lang.id==currentLang}" (click)="defineLanguage(lang.id)">{{
+        <span class="hand lang_option" [ngClass]="{'higlighted': lang.id==currentLang}" (click)="defineLanguage(lang.id)">{{
             lang.label }}</span>
         }
         }
@@ -10,7 +10,11 @@
 
 
     <div class="bottom_absolute container_vertical padding_20">
-        <div class=""></div>
+        <span class="words_space">
+            @for (word of words; track word.time) {
+            <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
+            }
+        </span>
         <div class="container_horizontal centered">
             @if (!isRunning) {
             <button class="button_simple font_green" (click)="startListening()"><mat-icon

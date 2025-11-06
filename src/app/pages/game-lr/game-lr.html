@@ -2,7 +2,7 @@
     <div class="top_absolute container_horizontal gap_10 padding_20">
         @if (!isRunning) {
         @for (lang of langs; track lang.id) {
-        <span class="hand" [ngClass]="{'underline': lang.id==currentLang}" (click)="defineLanguage(lang.id)">{{
+        <span class="hand lang_option" [ngClass]="{'higlighted': lang.id==currentLang}" (click)="defineLanguage(lang.id)">{{
             lang.label }}</span>
         }
         }

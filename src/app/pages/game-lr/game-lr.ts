@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+import { distinctUntilChanged, filter, map } from 'rxjs';
 import { generateHueColors } from '@tools/Colors';
 
 export interface SelectOptionType {
@@ -32,9 +32,9 @@ export interface WordType {
 export class GameLr {
   isRunning: boolean = false;
   langs: SelectOptionType[] = [
-    { id: "es-ES", label: "Español" },
-    { id: "en-US", label: "English" },
-    { id: "fr-FR", label: "Français" },
+    { id: "es-ES", label: "🇪🇸 Español" },
+    { id: "en-US", label: "🇺🇸 English" },
+    { id: "fr-FR", label: "🇫🇷 Français" },
   ];
   currentLang: string = "es-ES";
   words: WordType[] = [];
