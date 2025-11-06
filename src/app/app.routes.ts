@@ -6,6 +6,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/index/index').then(m => m.Index),
     },
     {
+        path: 'speech',
+        loadComponent: () => import('./pages/speech/speech').then(m => m.Speech),
+    },
+    {
         path: 'read',
         loadComponent: () => import('./pages/read/read').then(m => m.Read),
     },
