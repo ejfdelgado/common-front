@@ -120,7 +120,7 @@ export class BasicScene extends THREE.Scene {
   }
 
   addCloneOnPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number) {
-    const clone = obj.clone();
+    const clone = obj.clone(true);
     this.setChessPosition(clone, x, y);
     this.add(clone);
     return clone;
@@ -132,7 +132,7 @@ export class BasicScene extends THREE.Scene {
     this.previousTime = currentTime;
     // Rotate coins
     this.rotatingCoins.forEach((coinData) => {
-      const rotationSpeed = (coinData.direction ? 1 : -1) + coinData.speed * Math.PI / 2 / 100;
+      const rotationSpeed = (coinData.direction ? 1 : -1) + coinData.speed * Math.PI / 2 / 1000000;
       coinData.obj.rotation.y += rotationSpeed * delta;
     });
   }
