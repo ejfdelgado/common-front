@@ -8,6 +8,13 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 export interface ItemModelRef {
   url: string;
   name: string;
+};
+
+export interface RotationType {
+  direction: boolean;
+  obj: any;
+  speed: number;
+  rotation: number;
 }
 
 export class BasicScene extends THREE.Scene {
@@ -19,6 +26,9 @@ export class BasicScene extends THREE.Scene {
   indicatorSrv: IndicatorService;
   fbxLoader = new FBXLoader();
   gltfLoader = new GLTFLoader();
+  previousTime = performance.now();
+
+  rotatingCoins: RotationType[] = [];
 
   virtualChessBoard: { [key: number]: { [key: number]: any } } = {
     0: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
@@ -117,7 +127,14 @@ export class BasicScene extends THREE.Scene {
   }
 
   animate() {
+    const currentTime = performance.now();
+    const delta = (currentTime - this.previousTime) / 1000;
+    this.previousTime = currentTime;
     // Rotate coins
+    this.rotatingCoins.forEach((coinData) => {
+      const rotationSpeed = (coinData.direction ? 1 : -1) + coinData.speed * Math.PI / 2 / 100;
+      coinData.obj.rotation.y += rotationSpeed * delta;
+    });
   }
 
   getRandomNotBussyXY() {
@@ -125,7 +142,7 @@ export class BasicScene extends THREE.Scene {
     let count = 0;
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (this.virtualChessBoard[i][i] == null) {
+        if (this.virtualChessBoard[i][j] == null) {
           count++;
         }
       }
@@ -135,10 +152,12 @@ export class BasicScene extends THREE.Scene {
     let index = 0;
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (index == picked) {
-          return { x: i, y: j };
+        if (this.virtualChessBoard[i][j] == null) {
+          if (index == picked) {
+            return { x: i, y: j };
+          }
+          index++;
         }
-        index++;
       }
     }
     return null;
@@ -157,7 +176,13 @@ export class BasicScene extends THREE.Scene {
       const coinPosition = this.getRandomNotBussyXY();
       if (coinPosition) {
         const coinType = i % 4 + 1;
-        this.addCloneOnPosition(assets[coinType], coinPosition.x, coinPosition.y);
+        const coin = this.addCloneOnPosition(assets[coinType], coinPosition.x, coinPosition.y);
+        this.rotatingCoins.push({
+          direction: i % 2 == 0,
+          obj: coin,
+          speed: 60 + Math.random() * 40,
+          rotation: 0,
+        });
       }
     }
   }
