@@ -7,6 +7,7 @@ import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { generateHueColors } from '@tools/Colors';
 import { IndicatorService } from "@services/indicator.service";
+import { ThreejsComponent } from "./threejs/threejs.component";
 
 export interface SelectOptionType {
   id: string;
@@ -27,6 +28,7 @@ export interface WordType {
     CommonModule,
     FormsModule,
     MatIconModule,
+    ThreejsComponent,
   ],
   templateUrl: './game-lr.html',
   styleUrl: './game-lr.scss',
