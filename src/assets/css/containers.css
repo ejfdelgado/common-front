@@ -36,6 +36,10 @@
   padding: 10px;
 }
 
+.padding_20 {
+  padding: 20px;
+}
+
 .container_vertical.centered {
   justify-content: center;
 }
@@ -84,6 +88,25 @@
   right: 0;
   top: 0;
   bottom: 0;
+}
+
+.bottom_absolute {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.button_simple {
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+}
+
+.button_simple mat-icon {
+  font-size: 60px;
+  height: 60px;
+  width: 60px;
 }
 
 .no_mouse {
