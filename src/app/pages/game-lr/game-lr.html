@@ -1,1 +1,24 @@
-<p>game-lr works!</p>
+<div class="full_screen container_vertical">
+    <div class="top_absolute container_horizontal gap_10 padding_20">
+        @if (!isRunning) {
+        @for (lang of langs; track lang.id) {
+        <span class="hand" [ngClass]="{'underline': lang.id==currentLang}" (click)="defineLanguage(lang.id)">{{
+            lang.label }}</span>
+        }
+        }
+    </div>
+
+
+    <div class="bottom_absolute container_vertical padding_20">
+        <div class=""></div>
+        <div class="container_horizontal centered">
+            @if (!isRunning) {
+            <button class="button_simple font_green" (click)="startListening()"><mat-icon
+                    class="white">play_arrow</mat-icon></button>
+            } @else {
+            <button class="button_simple font_red" (click)="stopListening()"><mat-icon
+                    class="white">pause</mat-icon></button>
+            }
+        </div>
+    </div>
+</div>

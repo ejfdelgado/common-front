@@ -38,7 +38,7 @@ export class Read {
     this.voiceSrv.setContinuous(false);
 
     const word$ = this.voiceSrv.recognizedWord$.pipe(
-      filter(w => w.confidence >= 0.9),
+      filter(w => w.confidence >= 0.5),
       map(w => ({ ...w, word: w.word.toLowerCase().trim() })),
       distinctUntilChanged((prev, curr) => {
         const sameWord = prev.word === curr.word;
@@ -47,9 +47,8 @@ export class Read {
       }),
     );
 
-    word$.subscribe((data) => {
-      console.log(data);
-    });
+    word$.subscribe((data) => { console.log(data); });
+    //this.voiceSrv.recognizedWord$.subscribe((data) => { console.log(data); });
   }
 
   async ngOnInit() {
