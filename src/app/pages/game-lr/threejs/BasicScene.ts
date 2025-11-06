@@ -60,7 +60,7 @@ export class BasicScene extends THREE.Scene {
       1000
     );
     this.camera.position.z = 10;
-    this.camera.position.y = 5;
+    this.camera.position.y = 7.5;
     this.camera.position.x = 0;
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -69,8 +69,8 @@ export class BasicScene extends THREE.Scene {
       antialias: true
     });
     this.renderer.setSize(this.bounds.width, this.bounds.height);
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: softer shadows
+    //this.renderer.shadowMap.enabled = true;
+    //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: softer shadows
     // sets up the camera's orbital controls
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitals.enableZoom = true; // default is true
@@ -79,11 +79,11 @@ export class BasicScene extends THREE.Scene {
 
     this.background = new THREE.Color(0x333333);
 
-    //const ambient = new THREE.AmbientLight(0xefefef, 0.3);
-    //this.add(ambient);
+    const ambient = new THREE.AmbientLight(0xefefef, 0.3);
+    this.add(ambient);
 
     const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    pointLight.castShadow = true;
+    //pointLight.castShadow = true;
     //pointLight.position.set(3, 5, -3);
     pointLight.position.set(0, 5, 0);
     this.add(pointLight);
@@ -98,10 +98,10 @@ export class BasicScene extends THREE.Scene {
       // Add coins
       const promises: Promise<any>[] = [];
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "bunny_coffe.glb", }, false));
-      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_cent.glb", }, false));
-      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime.glb", }, false));
-      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five.glb", }, false));
-      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_quarter.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_cent2.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime2.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five2.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_quarter2.glb", }, false));
 
       const responses = await Promise.all(promises);
 
@@ -129,11 +129,10 @@ export class BasicScene extends THREE.Scene {
   animate() {
     const currentTime = performance.now();
     const delta = (currentTime - this.previousTime) / 1000;
-    this.previousTime = currentTime;
     // Rotate coins
     this.rotatingCoins.forEach((coinData) => {
-      const rotationSpeed = (coinData.direction ? 1 : -1) + coinData.speed * Math.PI / 2 / 1000000;
-      coinData.obj.rotation.y += rotationSpeed * delta;
+      coinData.rotation = 0.5 * (coinData.direction ? 1 : -1) * (delta * coinData.speed) % 360;
+      coinData.obj.rotation.y = coinData.rotation * Math.PI / 180;
     });
   }
 
@@ -172,7 +171,7 @@ export class BasicScene extends THREE.Scene {
     this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y);
 
     // Place random coins, there are 4 types of coins
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 20; i++) {
       const coinPosition = this.getRandomNotBussyXY();
       if (coinPosition) {
         const coinType = i % 4 + 1;
@@ -180,7 +179,7 @@ export class BasicScene extends THREE.Scene {
         this.rotatingCoins.push({
           direction: i % 2 == 0,
           obj: coin,
-          speed: 60 + Math.random() * 40,
+          speed: 50 + Math.random() * 50,
           rotation: 0,
         });
       }
