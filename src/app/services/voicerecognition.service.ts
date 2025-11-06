@@ -17,6 +17,11 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'zh-TW', name: 'Chinese (Traditional, Taiwan)' }
 ];
 
+export interface StartOptions {
+  lang?: string,
+  autorestart?: boolean;
+}
+
 // Minimal type for emitted word events
 export interface RecognizedWord {
   word: string;
@@ -137,17 +142,24 @@ export class VoiceRecognitionService {
   }
 
   /** Public API */
-  start(lang?: string) {
+  start(options: StartOptions) {
     if (!this.isSupported || !this.recognition) {
       this.statusSubject.next('unsupported');
       this.errorSubject.next('Speech Recognition API not supported in this browser');
       return;
     }
 
-    if (lang) this.recognition.lang = lang;
+    if (options.lang) this.recognition.lang = options.lang;
 
     try {
       this.recognition.start();
+
+      if (options.autorestart === true) {
+        this.recognition.onend = () => {
+          if (this.isSupported) this.start(options);
+        };
+      }
+
       // status will be set by onstart
     } catch (err) {
       // Some browsers throw if start is called while already running
@@ -163,12 +175,6 @@ export class VoiceRecognitionService {
     } catch (err) {
       this.errorSubject.next(err as Error);
     }
-  }
-
-  toggle() {
-    const s = this.statusSubject.value;
-    if (s === 'listening') this.stop();
-    else this.start();
   }
 
   setKeywords(keywords: string[] | null) {
