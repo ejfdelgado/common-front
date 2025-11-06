@@ -54,7 +54,7 @@ export class BasicScene extends THREE.Scene {
     this.orbitals.enableRotate = false;
     this.orbitals.zoomSpeed = 1.0;   // pinch zoom speed
 
-    this.background = new THREE.Color(0xefefef);
+    this.background = new THREE.Color(0x333333);
 
     const ambient = new THREE.AmbientLight(0xefefef, 0.3);
     this.add(ambient);
@@ -78,6 +78,9 @@ export class BasicScene extends THREE.Scene {
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_quarter.glb", }, false));
 
       const responses = await Promise.all(promises);
+
+      // Compute x,y, virtual positions.
+
 
       loading.done();
     });
