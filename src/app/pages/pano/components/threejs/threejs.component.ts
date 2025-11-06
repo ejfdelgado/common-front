@@ -258,11 +258,15 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
       .join(' ');
   }
 
+  getUrlQueryParams() {
+    return new URLSearchParams(window.location.hash.split("?")[1]);
+  }
+
   ngOnInit(): void {
     setTimeout(() => {
       this.onResize({});
     }, 0);
-    const urlParams = new URLSearchParams(window.location.hash.split("?")[1]);
+    const urlParams = this.getUrlQueryParams();
     const queryParam = urlParams.get("q");
     if (!queryParam) {
       return;
@@ -308,7 +312,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   }
 
   playSound() {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = this.getUrlQueryParams();
     const queryParam = urlParams.get("q");
     if (!queryParam) {
       return;
@@ -329,7 +333,9 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   }
 
   getShareUrl() {
-    return window.location.origin + "/k.html" + window.location.search;
+    const urlParams = this.getUrlQueryParams();
+    const temp = window.location.origin + "/index.html#/pano?" + urlParams.toString();
+    return temp;
   }
 
   waze() {
