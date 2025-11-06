@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component pages/game-lr
+npx ng generate component pages/read
 ```
 
 ```bash
