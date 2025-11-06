@@ -6,6 +6,13 @@ import { RecognizedWord, VoiceRecognitionService } from "@services/voicerecognit
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { generateHueColors } from '@tools/Colors';
+import { IndicatorService } from "@services/indicator.service";
+
+export interface SelectOptionType {
+  id: string;
+  label: string;
+  icon: string;
+};
 
 export interface WordType {
   word: string;
@@ -32,9 +39,9 @@ export interface SelectOptionType {
 export class Read {
   isRunning: boolean = false;
   langs: SelectOptionType[] = [
-    { id: "es-ES", label: "🇪🇸 Español" },
-    { id: "en-US", label: "🇺🇸 English" },
-    { id: "fr-FR", label: "🇫🇷 Français" },
+    { id: "es-ES", label: "Español", icon: "🇪🇸" },
+    { id: "en-US", label: "English", icon: "🇺🇸" },
+    { id: "fr-FR", label: "Français", icon: "🇫🇷" },
   ];
   currentLang: string = "es-ES";
   words: WordType[] = [];
@@ -46,9 +53,19 @@ export class Read {
     public voiceSrv: VoiceRecognitionService,
     public speechSrv: SpeechSynthesisService,
     public cdr: ChangeDetectorRef,
+    private indicatorSrv: IndicatorService,
   ) {
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
+    /*
+    this.voiceSrv.setKeywords(
+      [
+        "left", "right", "up", "down",
+        "izquierda", "derecha", "arriba", "abajo",
+        "gauche", "droite", "haut", "bas"
+      ],
+    );
+    */
 
     const word$ = this.voiceSrv.recognizedWord$.pipe(
       filter(w => w.confidence >= 0.5),
@@ -104,11 +121,14 @@ export class Read {
   }
 
   async ngOnInit() {
+    const promise = this.indicatorSrv.start();
     await this.speechSrv.init();
+    promise.done();
   }
 
-  defineLanguage(val: string) {
-    this.currentLang = val;
+  defineLanguage(val: SelectOptionType) {
+    this.currentLang = val.id;
+    this.talk(val.label);
   }
 
   startListening() {
@@ -123,9 +143,14 @@ export class Read {
     this.isRunning = false;
   }
 
-  async talk() {
-    const langs = this.speechSrv.getLangs();
-    console.log(langs);
-    this.speechSrv.speak("Hello from Angular!");
+  async talk(text: string, useLoading: boolean = false) {
+    let promise: any = null;
+    if (useLoading) {
+      promise = this.indicatorSrv.start();
+    }
+    await this.speechSrv.speak(text, this.currentLang);
+    if (promise) {
+      promise.done();
+    }
   }
 }

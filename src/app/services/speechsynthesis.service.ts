@@ -18,10 +18,18 @@ export class SpeechSynthesisService {
         });
     }
 
-    speak(text: string, lang: string = 'en-US'): void {
+    speak(text: string, lang: string = 'en-US'): Promise<boolean> {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.voice = this.voices.find(v => v.lang === lang) || null;
-        speechSynthesis.speak(utterance);
+        return new Promise((resolve, reject) => {
+            utterance.onend = () => {
+                resolve(true);
+            }
+            utterance.onerror = (e) => {
+                resolve(false);
+            }
+            speechSynthesis.speak(utterance);
+        });
     }
 
     getLangs() {

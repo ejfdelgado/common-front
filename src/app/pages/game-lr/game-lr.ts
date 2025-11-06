@@ -6,10 +6,12 @@ import { RecognizedWord, VoiceRecognitionService } from "@services/voicerecognit
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { generateHueColors } from '@tools/Colors';
+import { IndicatorService } from "@services/indicator.service";
 
 export interface SelectOptionType {
   id: string;
   label: string;
+  icon: string;
 };
 
 export interface WordType {
@@ -32,9 +34,9 @@ export interface WordType {
 export class GameLr {
   isRunning: boolean = false;
   langs: SelectOptionType[] = [
-    { id: "es-ES", label: "🇪🇸 Español" },
-    { id: "en-US", label: "🇺🇸 English" },
-    { id: "fr-FR", label: "🇫🇷 Français" },
+    { id: "es-ES", label: "Español", icon: "🇪🇸" },
+    { id: "en-US", label: "English", icon: "🇺🇸" },
+    { id: "fr-FR", label: "Français", icon: "🇫🇷" },
   ];
   currentLang: string = "es-ES";
   words: WordType[] = [];
@@ -46,6 +48,7 @@ export class GameLr {
     public voiceSrv: VoiceRecognitionService,
     public speechSrv: SpeechSynthesisService,
     public cdr: ChangeDetectorRef,
+    private indicatorSrv: IndicatorService,
   ) {
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
@@ -113,11 +116,14 @@ export class GameLr {
   }
 
   async ngOnInit() {
+    const promise = this.indicatorSrv.start();
     await this.speechSrv.init();
+    promise.done();
   }
 
-  defineLanguage(val: string) {
-    this.currentLang = val;
+  defineLanguage(val: SelectOptionType) {
+    this.currentLang = val.id;
+    this.talk(val.label);
   }
 
   startListening() {
@@ -132,9 +138,14 @@ export class GameLr {
     this.isRunning = false;
   }
 
-  async talk() {
-    const langs = this.speechSrv.getLangs();
-    console.log(langs);
-    this.speechSrv.speak("Hello from Angular!");
+  async talk(text: string, useLoading: boolean = false) {
+    let promise: any = null;
+    if (useLoading) {
+      promise = this.indicatorSrv.start();
+    }
+    await this.speechSrv.speak(text, this.currentLang);
+    if (promise) {
+      promise.done();
+    }
   }
 }
