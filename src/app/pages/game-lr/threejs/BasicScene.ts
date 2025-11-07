@@ -54,13 +54,13 @@ export class BasicScene extends THREE.Scene {
   initialize(debug: boolean = true, addGridHelper: boolean = true) {
     // setup camera
     this.camera = new THREE.PerspectiveCamera(
-      35,
+      50,
       this.bounds.width / this.bounds.height,
       0.1,
       1000
     );
-    this.camera.position.z = 10;
-    this.camera.position.y = 7.5;
+    this.camera.position.z = 20;
+    this.camera.position.y = 15;
     this.camera.position.x = 0;
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -92,9 +92,11 @@ export class BasicScene extends THREE.Scene {
 
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "chessboard", url: ROOT_PATH + "chessboard.glb", }, true).then(async (object) => {
+      /*
       if (this.camera && this.orbitals) {
         this.fitCameraToObject(this.camera, object, this.orbitals);
       }
+      */
       // Add coins
       const promises: Promise<any>[] = [];
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "bunny_coffe5.glb", }, false));

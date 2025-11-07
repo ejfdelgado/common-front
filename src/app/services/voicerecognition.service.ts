@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, filter, map, distinctUntilChanged } from 'rxjs';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-US', name: 'English (United States)' },
@@ -17,9 +17,20 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'zh-TW', name: 'Chinese (Traditional, Taiwan)' }
 ];
 
+export interface CommandConfigType {
+  confidenceMin: number,
+  maxDiffMillis: number,
+  commands: { [key: string]: { [key: string]: any } },
+}
+
 export interface StartOptions {
   lang?: string,
   autorestart?: boolean;
+}
+
+export interface RecognizedCommand {
+  command: string;
+  timestamp: number;
 }
 
 // Minimal type for emitted word events
@@ -44,6 +55,8 @@ export class VoiceRecognitionService {
   // RxJS streams
   private wordSubject = new Subject<RecognizedWord>();
   readonly recognizedWord$ = this.wordSubject.asObservable();
+  private word$: Observable<RecognizedWord> | null = null;
+  private command$: Observable<RecognizedCommand> | null = null;
 
   private transcriptSubject = new Subject<string>();
   readonly transcript$ = this.transcriptSubject.asObservable();
@@ -213,5 +226,62 @@ export class VoiceRecognitionService {
 
   supported(): boolean {
     return this.isSupported;
+  }
+
+  simplifyWord(word: string) {
+    let result = word;
+    result = result.toLowerCase().trim();
+    return result;
+  }
+
+  normalizeString(input: string) {
+    return input
+      // Normalize accented characters into base + diacritic
+      .normalize("NFD")
+      // Remove diacritics (accents)
+      .replace(/[\u0300-\u036f]/g, "")
+      // Keep only letters (A–Z, a–z) and spaces
+      .replace(/[^a-zA-Z\s]/g, "")
+      // Replace multiple spaces with a single one and trim
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  singleWordConnect({
+    confidenceMin,
+    maxDiffMillis,
+    commands
+  }: CommandConfigType) {
+    this.word$ = this.recognizedWord$.pipe(
+      filter(w => w.confidence >= confidenceMin),
+      map(w => ({ ...w, word: this.simplifyWord(w.word) })),
+      distinctUntilChanged((prev, curr) => {
+        const sameWord = prev.word === curr.word;
+        const shortDiffTime = Math.abs(prev.timestamp - curr.timestamp) < maxDiffMillis;
+        return sameWord && shortDiffTime;
+      }),
+    );
+    this.command$ = this.word$.pipe(
+      map((word) => {
+        let dictionary: any = {};
+        if (this.recognition?.lang && this.recognition.lang in commands) {
+          dictionary = commands[this.recognition.lang];
+        }
+        let simplifiedWord = this.normalizeString(word.word);
+        const comm: RecognizedCommand = {
+          command: "",
+          timestamp: word.timestamp,
+        }
+        if (simplifiedWord in dictionary) {
+          comm.command = dictionary[simplifiedWord];
+        }
+        return comm;
+      }),
+      filter(w => w.command != "")
+    );
+    return {
+      word$: this.word$,
+      command$: this.command$,
+    };
   }
 }

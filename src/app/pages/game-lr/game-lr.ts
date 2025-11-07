@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { generateHueColors } from '@tools/Colors';
@@ -54,25 +54,55 @@ export class GameLr {
   ) {
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
-    /*
-    this.voiceSrv.setKeywords(
-      [
-        "left", "right", "up", "down",
-        "izquierda", "derecha", "arriba", "abajo",
-        "gauche", "droite", "haut", "bas"
-      ],
-    );
-    */
 
-    const word$ = this.voiceSrv.recognizedWord$.pipe(
-      filter(w => w.confidence >= 0.5),
-      map(w => ({ ...w, word: w.word.toLowerCase().trim() })),
-      distinctUntilChanged((prev, curr) => {
-        const sameWord = prev.word === curr.word;
-        const shortDiffTime = Math.abs(prev.timestamp - curr.timestamp) < 600;
-        return sameWord && shortDiffTime;
-      }),
-    );
+    const config: CommandConfigType = {
+      confidenceMin: 0.5,
+      maxDiffMillis: 600,
+      commands: {
+        "es-ES": {
+          "izquierda": "left",
+          "derecha": "right",
+          //
+          "arriba": "up",
+          "adelante": "up",
+          "frente": "up",
+          //
+          "abajo": "down",
+          "atras": "down",
+          "deatras": "down",
+          "reversa": "down",
+        },
+        "en-US": {
+          "left": "left",
+          "right": "right",
+          //
+          "up": "up",
+          "front": "up",
+          "frontward": "up",
+          //
+          "down": "down",
+          "back": "down",
+          "backward": "down",
+          "reverse": "down",
+        },
+        "fr-FR": {
+          "gauche": "left",
+          "droite": "right",
+          "droit": "right",
+          "adroit": "right",
+          //
+          "haut": "up",
+          "avant": "up",
+          "devant": "up",
+          "avance": "up",
+          //
+          "bas": "down",
+          "arriere": "down",
+          "derriere": "down",
+        }
+      },
+    };
+    const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
 
     setInterval(() => {
       this.adjustWords();
@@ -89,6 +119,9 @@ export class GameLr {
     };
 
     word$.subscribe(addWordFun);
+    command$.subscribe((command) => {
+      console.log(JSON.stringify(command));
+    });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
   }
 
