@@ -97,7 +97,7 @@ export class BasicScene extends THREE.Scene {
       }
       // Add coins
       const promises: Promise<any>[] = [];
-      promises.push(this.addModel({ name: "", url: ROOT_PATH + "bunny_coffe.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "bunny_coffe5.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_cent2.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime2.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five2.glb", }, false));
@@ -282,10 +282,12 @@ export class BasicScene extends THREE.Scene {
               let object = null;
               if (loader == this.gltfLoader) {
                 //console.log(response.scene.children);
-                const group = new THREE.Object3D(); // or new THREE.Group()
-                // Add all objects to the parent
+                /*
+                const group = new THREE.Object3D(); // or new THREE.Group();
                 response.scene.children.forEach((obj: any) => group.add(obj));
                 object = group;
+                */
+                object = response.scene.children[0];
               } else {
                 object = response;
               }
