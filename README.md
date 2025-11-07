@@ -28,7 +28,9 @@ ng build
 [Left right](http://localhost:4200/#/rightleft?lan=fr-FR&n=5)
 [Stage page](https://stg-playtolearn.storage.googleapis.com/index.html#/pano?q=2025-07%2F001)
 [Stage page](https://stg-playtolearn.storage.googleapis.com/index.html#/read)
-[Stage page](https://stg-playtolearn.storage.googleapis.com/play.html#/rightleft)
+[Left right french](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=fr-FR&n=5)
+[Left right english](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=en-US&n=5)
+[Left right spanish](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=es-ES&n=5)
 
 ```
 gsutil cors get gs://pro-ejflab-assets
