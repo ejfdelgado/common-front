@@ -203,7 +203,7 @@ export class BasicScene extends THREE.Scene {
     this.bunnyObj = this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y, "bunny");
 
     // Place random coins, there are 4 types of coins
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 20; i++) {
       const coinPosition = this.getRandomNotBussyXY();
       if (coinPosition) {
         const coinType = i % 4 + 1;

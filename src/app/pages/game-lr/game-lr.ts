@@ -101,6 +101,10 @@ export class GameLr {
           "avant": "up",
           "devant": "up",
           "avance": "up",
+          "vents": "up",
+          "ventes": "up",
+          "vins": "up",
+          "devin": "up",
           //
           "bas": "down",
           "arriere": "down",
