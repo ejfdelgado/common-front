@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RecognizedCommand } from '@services/voicerecognition.service';
 
 @Component({
   standalone: true,
@@ -119,5 +120,9 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   isMobile() {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
       .test(navigator.userAgent);
+  }
+
+  executeCommand(command: RecognizedCommand) {
+    this.scene?.executeCommand(command);
   }
 }

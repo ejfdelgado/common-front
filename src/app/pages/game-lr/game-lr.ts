@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
@@ -34,6 +34,7 @@ export interface WordType {
   styleUrl: './game-lr.scss',
 })
 export class GameLr {
+  @ViewChild("three_component") threeComponent!: ThreejsComponent;
   isRunning: boolean = false;
   langs: SelectOptionType[] = [
     { id: "es-ES", label: "Español", icon: "🇪🇸" },
@@ -44,7 +45,7 @@ export class GameLr {
   words: WordType[] = [];
 
   currentColor: number = 0;
-  colors = generateHueColors(5, 70, 70);
+  colors = generateHueColors(10, 70, 70);
 
   constructor(
     public voiceSrv: VoiceRecognitionService,
@@ -120,7 +121,7 @@ export class GameLr {
 
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
-      console.log(JSON.stringify(command));
+      this.threeComponent.executeCommand(command);
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
   }

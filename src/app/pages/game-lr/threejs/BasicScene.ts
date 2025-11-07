@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { RecognizedCommand } from '@services/voicerecognition.service';
 
 export interface ItemModelRef {
   url: string;
@@ -17,6 +18,11 @@ export interface RotationType {
   rotation: number;
 }
 
+export interface PawLocation {
+  x: number;
+  y: number;
+};
+
 export class BasicScene extends THREE.Scene {
   camera: THREE.PerspectiveCamera | null = null;
   renderer: THREE.WebGLRenderer | null = null;
@@ -27,6 +33,8 @@ export class BasicScene extends THREE.Scene {
   fbxLoader = new FBXLoader();
   gltfLoader = new GLTFLoader();
   previousTime = performance.now();
+  bunnyLocation: PawLocation = { x: 0, y: 0 };
+  bunnyObj: THREE.Object3D<THREE.Object3DEventMap> | null = null
 
   rotatingCoins: RotationType[] = [];
 
@@ -170,7 +178,9 @@ export class BasicScene extends THREE.Scene {
     if (!bunnyStart) {
       return;
     }
-    this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y);
+    this.bunnyLocation.x = bunnyStart.x;
+    this.bunnyLocation.y = bunnyStart.y;
+    this.bunnyObj = this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y);
 
     // Place random coins, there are 4 types of coins
     for (let i = 0; i < 20; i++) {
@@ -313,5 +323,42 @@ export class BasicScene extends THREE.Scene {
         }
       }
     });
+  }
+
+  relocateBunny(x: number, y: number) {
+    if (!this.bunnyObj) {
+      return;
+    }
+    this.bunnyLocation.x = x;
+    this.bunnyLocation.y = y;
+    this.setChessPosition(this.bunnyObj, x, y);
+  }
+
+  executeCommand(command: RecognizedCommand) {
+    if (command.command == "left") {
+      this.bunnyLocation.x = this.bunnyLocation.x - 1;
+      if (this.bunnyLocation.x < 0) {
+        this.bunnyLocation.x = 0;
+      }
+      this.relocateBunny(this.bunnyLocation.x, this.bunnyLocation.y);
+    } else if (command.command == "right") {
+      this.bunnyLocation.x = this.bunnyLocation.x + 1;
+      if (this.bunnyLocation.x >= 8) {
+        this.bunnyLocation.x = 7;
+      }
+      this.relocateBunny(this.bunnyLocation.x, this.bunnyLocation.y);
+    } else if (command.command == "up") {
+      this.bunnyLocation.y = this.bunnyLocation.y + 1;
+      if (this.bunnyLocation.y >= 8) {
+        this.bunnyLocation.y = 7;
+      }
+      this.relocateBunny(this.bunnyLocation.x, this.bunnyLocation.y);
+    } else if (command.command == "down") {
+      this.bunnyLocation.y = this.bunnyLocation.y - 1;
+      if (this.bunnyLocation.y < 0) {
+        this.bunnyLocation.y = 0;
+      }
+      this.relocateBunny(this.bunnyLocation.x, this.bunnyLocation.y);
+    }
   }
 }
