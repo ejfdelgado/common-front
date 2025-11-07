@@ -62,6 +62,7 @@ export class GameLr {
       commands: {
         "es-ES": {
           "izquierda": "left",
+          //
           "derecha": "right",
           //
           "arriba": "up",
@@ -75,7 +76,9 @@ export class GameLr {
         },
         "en-US": {
           "left": "left",
+          //
           "right": "right",
+          "write": "right",
           //
           "up": "up",
           "front": "up",
@@ -83,11 +86,13 @@ export class GameLr {
           //
           "down": "down",
           "back": "down",
+          "bach": "down",
           "backward": "down",
           "reverse": "down",
         },
         "fr-FR": {
           "gauche": "left",
+          //
           "droite": "right",
           "droit": "right",
           "adroit": "right",

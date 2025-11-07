@@ -7,6 +7,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ModuloSonido } from '@services/sonido.service';
 
+const COIN_NAMES = ["coin_1", "coin_2", "coin_3", "coin_4"];
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/models3d/leftright/";
 
 export interface ActorType {
@@ -45,6 +46,8 @@ export class BasicScene extends THREE.Scene {
   previousTime = performance.now();
   bunnyLocation: PawLocation = { x: 0, y: 0 };
   bunnyObj: THREE.Object3D<THREE.Object3DEventMap> | null = null
+  treasureObject: THREE.Object3D<THREE.Object3DEventMap> | null = null
+  pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
 
   rotatingCoins: RotationType[] = [];
 
@@ -100,11 +103,10 @@ export class BasicScene extends THREE.Scene {
     const ambient = new THREE.AmbientLight(0xefefef, 0.3);
     this.add(ambient);
 
-    const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
     //pointLight.castShadow = true;
     //pointLight.position.set(3, 5, -3);
-    pointLight.position.set(0, 5, 0);
-    this.add(pointLight);
+    this.pointLight.position.set(0, 5, 0);
+    this.add(this.pointLight);
 
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "chessboard", url: ROOT_PATH + "chessboard.glb", }, true).then(async (object) => {
@@ -120,6 +122,7 @@ export class BasicScene extends THREE.Scene {
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five2.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime2.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_quarter2.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "treasure4.glb", }, false));
 
       const responses = await Promise.all(promises);
 
@@ -200,7 +203,7 @@ export class BasicScene extends THREE.Scene {
     this.bunnyObj = this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y, "bunny");
 
     // Place random coins, there are 4 types of coins
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 5; i++) {
       const coinPosition = this.getRandomNotBussyXY();
       if (coinPosition) {
         const coinType = i % 4 + 1;
@@ -213,6 +216,9 @@ export class BasicScene extends THREE.Scene {
         });
       }
     }
+
+    // Treasure
+    this.treasureObject = assets[5];
   }
 
   fitCameraToObject(
@@ -379,7 +385,6 @@ export class BasicScene extends THREE.Scene {
     }
     // Read what object is at this position
     const capturedObject = this.virtualChessBoard[this.bunnyLocation.x][this.bunnyLocation.y];
-    const COIN_NAMES = ["coin_1", "coin_2", "coin_3", "coin_4"];
     if (capturedObject != null) {
       const alias = capturedObject.alias;
       if (COIN_NAMES.indexOf(alias) >= 0) {
@@ -390,6 +395,35 @@ export class BasicScene extends THREE.Scene {
         // Play sound
         ModuloSonido.play(ROOT_PATH + "sounds/mario-coin.mp3", false, 1);
       }
+    }
+    // Check if there is no more coins
+    if (this.countCoins() == 0) {
+      this.winNotification();
+    }
+  }
+
+  countCoins() {
+    let count = 0;
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        const actual = this.virtualChessBoard[i][j];
+        if (actual != null) {
+          if (COIN_NAMES.indexOf(actual.alias) >= 0) {
+            count++;
+          }
+        }
+      }
+    }
+    return count;
+  }
+
+  winNotification() {
+    if (this.treasureObject && this.orbitals) {
+      ModuloSonido.play(ROOT_PATH + "sounds/success.mp3", false, 1);
+      this.locateChessPosition(this.treasureObject, 3.5, 3.5);
+      this.add(this.treasureObject);
+      this.pointLight.intensity = 10;
+      this.orbitals.enableRotate = true;
     }
   }
 }
