@@ -88,7 +88,7 @@ export class BasicScene extends THREE.Scene {
     pointLight.position.set(0, 5, 0);
     this.add(pointLight);
 
-    const ROOT_PATH = "https://storage.googleapis.com/labs-pro-public/models3d/leftright/";
+    const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/models3d/leftright/";
 
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "chessboard", url: ROOT_PATH + "chessboard.glb", }, true).then(async (object) => {
@@ -177,7 +177,7 @@ export class BasicScene extends THREE.Scene {
         const coinType = i % 4 + 1;
         const coin = this.addCloneOnPosition(assets[coinType], coinPosition.x, coinPosition.y);
         this.rotatingCoins.push({
-          direction: i % 2 == 0,
+          direction: Math.floor((Math.random() * 10)) % 2 == 0,
           obj: coin,
           speed: 50 + Math.random() * 50,
           rotation: 0,
