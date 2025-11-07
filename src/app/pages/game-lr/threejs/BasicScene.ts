@@ -5,6 +5,16 @@ import { IndicatorService, Wait } from '@services/indicator.service';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { RecognizedCommand } from '@services/voicerecognition.service';
+import { ModuloSonido } from '@services/sonido.service';
+
+const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/models3d/leftright/";
+
+export interface ActorType {
+  object: any;
+  alias: string;
+  x: number;
+  y: number;
+};
 
 export interface ItemModelRef {
   url: string;
@@ -38,7 +48,7 @@ export class BasicScene extends THREE.Scene {
 
   rotatingCoins: RotationType[] = [];
 
-  virtualChessBoard: { [key: number]: { [key: number]: any } } = {
+  virtualChessBoard: { [key: number]: { [key: number]: ActorType | null } } = {
     0: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
     1: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
     2: { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null },
@@ -96,8 +106,6 @@ export class BasicScene extends THREE.Scene {
     pointLight.position.set(0, 5, 0);
     this.add(pointLight);
 
-    const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/models3d/leftright/";
-
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "chessboard", url: ROOT_PATH + "chessboard.glb", }, true).then(async (object) => {
       /*
@@ -109,8 +117,8 @@ export class BasicScene extends THREE.Scene {
       const promises: Promise<any>[] = [];
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "bunny_coffe5.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_cent2.glb", }, false));
-      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime2.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_five2.glb", }, false));
+      promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_dime2.glb", }, false));
       promises.push(this.addModel({ name: "", url: ROOT_PATH + "coin_quarter2.glb", }, false));
 
       const responses = await Promise.all(promises);
@@ -124,14 +132,23 @@ export class BasicScene extends THREE.Scene {
     return this.virtualChessBoard[x][y] === null;
   }
 
-  setChessPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number) {
-    this.virtualChessBoard[x][y] = { object: obj, x, y };
+  setChessPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number, alias: string) {
+    this.virtualChessBoard[x][y] = {
+      object: obj,
+      alias,
+      x,
+      y
+    };
+    this.locateChessPosition(obj, x, y);
+  }
+
+  locateChessPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number) {
     obj.position.set((x - 3.5) * 1.6, 0, (3.5 - y) * 1.6); // move it 5 units along x
   }
 
-  addCloneOnPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number) {
+  addCloneOnPosition(obj: THREE.Object3D<THREE.Object3DEventMap>, x: number, y: number, alias: string) {
     const clone = obj.clone(true);
-    this.setChessPosition(clone, x, y);
+    this.setChessPosition(clone, x, y, alias);
     this.add(clone);
     return clone;
   }
@@ -180,14 +197,14 @@ export class BasicScene extends THREE.Scene {
     }
     this.bunnyLocation.x = bunnyStart.x;
     this.bunnyLocation.y = bunnyStart.y;
-    this.bunnyObj = this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y);
+    this.bunnyObj = this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y, "bunny");
 
     // Place random coins, there are 4 types of coins
     for (let i = 0; i < 20; i++) {
       const coinPosition = this.getRandomNotBussyXY();
       if (coinPosition) {
         const coinType = i % 4 + 1;
-        const coin = this.addCloneOnPosition(assets[coinType], coinPosition.x, coinPosition.y);
+        const coin = this.addCloneOnPosition(assets[coinType], coinPosition.x, coinPosition.y, `coin_${coinType}`);
         this.rotatingCoins.push({
           direction: Math.floor((Math.random() * 10)) % 2 == 0,
           obj: coin,
@@ -331,7 +348,7 @@ export class BasicScene extends THREE.Scene {
     }
     this.bunnyLocation.x = x;
     this.bunnyLocation.y = y;
-    this.setChessPosition(this.bunnyObj, x, y);
+    this.locateChessPosition(this.bunnyObj, x, y);
   }
 
   executeCommand(command: RecognizedCommand) {
@@ -359,6 +376,20 @@ export class BasicScene extends THREE.Scene {
         this.bunnyLocation.y = 0;
       }
       this.relocateBunny(this.bunnyLocation.x, this.bunnyLocation.y);
+    }
+    // Read what object is at this position
+    const capturedObject = this.virtualChessBoard[this.bunnyLocation.x][this.bunnyLocation.y];
+    const COIN_NAMES = ["coin_1", "coin_2", "coin_3", "coin_4"];
+    if (capturedObject != null) {
+      const alias = capturedObject.alias;
+      if (COIN_NAMES.indexOf(alias) >= 0) {
+        // It's a coin
+        // Dissapear coin
+        this.remove(capturedObject.object);
+        this.virtualChessBoard[this.bunnyLocation.x][this.bunnyLocation.y] = null;
+        // Play sound
+        ModuloSonido.play(ROOT_PATH + "sounds/mario-coin.mp3", false, 1);
+      }
     }
   }
 }
