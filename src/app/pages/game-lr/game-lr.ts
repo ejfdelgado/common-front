@@ -9,6 +9,8 @@ import { generateHueColors } from '@tools/Colors';
 import { IndicatorService } from "@services/indicator.service";
 import { ThreejsComponent } from "./threejs/threejs.component";
 
+const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
+
 export interface SelectOptionType {
   id: string;
   label: string;
@@ -55,10 +57,16 @@ export class GameLr {
   ) {
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
+    const params = this.getUrlQueryParams();
+    const suggestedLang = params.get("lan");
+    if (suggestedLang && POSSIBLE_LANGS.indexOf(suggestedLang) >= 0) {
+      this.currentLang = suggestedLang;
+    }
 
     const config: CommandConfigType = {
       confidenceMin: 0.5,
       maxDiffMillis: 600,
+
       commands: {
         "es-ES": {
           "izquierda": "left",
@@ -133,6 +141,10 @@ export class GameLr {
       this.threeComponent.executeCommand(command);
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
+  }
+
+  getUrlQueryParams() {
+    return new URLSearchParams(window.location.hash.split("?")[1]);
   }
 
   adjustWords() {

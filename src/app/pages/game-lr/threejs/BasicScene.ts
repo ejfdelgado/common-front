@@ -48,6 +48,7 @@ export class BasicScene extends THREE.Scene {
   bunnyObj: THREE.Object3D<THREE.Object3DEventMap> | null = null
   treasureObject: THREE.Object3D<THREE.Object3DEventMap> | null = null
   pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
+  numberOfCoins: number = 20;
 
   rotatingCoins: RotationType[] = [];
 
@@ -68,6 +69,11 @@ export class BasicScene extends THREE.Scene {
     this.canvasRef = canvasRef;
     this.bounds = bounds;
     this.indicatorSrv = indicatorSrv;
+    const params = this.getUrlQueryParams();
+    const suggestedCoins = params.get("n") != null ? parseInt(params.get("n")!) : null;
+    if (suggestedCoins && !isNaN(suggestedCoins)) {
+      this.numberOfCoins = suggestedCoins;
+    }
   }
   /**
    * Initializes the scene by adding lights, and the geometry
@@ -156,6 +162,10 @@ export class BasicScene extends THREE.Scene {
     return clone;
   }
 
+  getUrlQueryParams() {
+    return new URLSearchParams(window.location.hash.split("?")[1]);
+  }
+
   animate() {
     const currentTime = performance.now();
     const delta = (currentTime - this.previousTime) / 1000;
@@ -203,7 +213,7 @@ export class BasicScene extends THREE.Scene {
     this.bunnyObj = this.addCloneOnPosition(assets[0], bunnyStart.x, bunnyStart.y, "bunny");
 
     // Place random coins, there are 4 types of coins
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < this.numberOfCoins; i++) {
       const coinPosition = this.getRandomNotBussyXY();
       if (coinPosition) {
         const coinType = i % 4 + 1;
