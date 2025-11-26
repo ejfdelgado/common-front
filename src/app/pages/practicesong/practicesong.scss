@@ -17,3 +17,16 @@
     background: rgb(117, 117, 117);
     color: white;
 }
+
+.verse_higlight {
+    cursor: pointer;
+    padding: 15px;
+    margin: 0;
+    border-radius: 15px;
+    background-color: aliceblue;
+}
+
+.song_container {
+    gap: 10px;
+    padding: 0 10px;
+}
