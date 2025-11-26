@@ -204,11 +204,9 @@ export class Practicesong extends CommonSpeech {
     if (verse.millis !== undefined) {
       this.millisTime = verse.millis - 1;
     }
-    verse.selected = true;
+    this.computeCurrentVerse();
     this.cdr.detectChanges();
     await this.talk(verse.txt);
-    verse.selected = false;
-    this.cdr.detectChanges();
   }
 
   async playVerse2(event: MouseEvent, verse: Verse) {
@@ -230,7 +228,7 @@ export class Practicesong extends CommonSpeech {
       this.millisTime = Date.now() - this.millisStartTime;
       this.computeCurrentVerse();
       this.cdr.detectChanges();
-    }, 200);
+    }, 300);
   }
 
   async stopSong() {

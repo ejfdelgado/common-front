@@ -24,10 +24,10 @@
         </span>
         <div class="container_horizontal centered vcentered">
             @if (!isPlaying) {
-            <button class="button_simple font_green" (click)="startSong(0)"><mat-icon
+            <button class="button_simple font_green" (click)="startSong(millisTime)"><mat-icon
                     class="white">play_arrow</mat-icon></button>
             } @else {
-            <button class="button_simple font_red" (click)="stopSong()"><mat-icon
+            <button class="button_simple font_red" (click)="toggleSong()"><mat-icon
                     class="white">pause</mat-icon></button>
             }
             <h3 class="allow_select">millis: {{ millisTime }}</h3>
