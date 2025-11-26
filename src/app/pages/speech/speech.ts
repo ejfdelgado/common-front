@@ -8,13 +8,6 @@ import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 
-
-export interface WordType {
-  word: string;
-  time: number;
-  color: string;
-}
-
 @Component({
   standalone: true,
   selector: 'app-read',
@@ -27,13 +20,11 @@ export interface WordType {
   styleUrl: './speech.scss',
 })
 export class Speech extends CommonSpeech {
-  isRunning: boolean = false;
   langs: SelectOptionType[] = [
     { id: "es-ES", label: "Español", icon: "🇪🇸" },
     { id: "en-US", label: "English", icon: "🇺🇸" },
     { id: "fr-FR", label: "Français", icon: "🇫🇷" },
   ];
-  words: WordType[] = [];
 
   constructor(
     public cdr: ChangeDetectorRef,
@@ -106,18 +97,4 @@ export class Speech extends CommonSpeech {
     await this.speechSrv.init();
     promise.done();
   }
-
-  startListening() {
-    this.voiceSrv.start({ lang: this.currentLang, autorestart: true });
-    this.words = [];
-    this.isRunning = true;
-  }
-
-  stopListening() {
-    this.voiceSrv.setAutorestart(false);
-    this.voiceSrv.stop();
-    this.isRunning = false;
-  }
-
-
 }

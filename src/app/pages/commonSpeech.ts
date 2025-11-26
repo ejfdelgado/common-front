@@ -11,10 +11,18 @@ export interface SelectOptionType {
     icon: string;
 };
 
+export interface WordType {
+    word: string;
+    time: number;
+    color: string;
+}
+
 export class CommonSpeech {
     currentLang: string = "es-ES";
     currentColor: number = 0;
     colors = generateHueColors(10, 70, 70);
+    isRunning: boolean = false;
+    words: WordType[] = [];
     constructor(
         public voiceSrv: VoiceRecognitionService,
         public speechSrv: SpeechSynthesisService,
@@ -53,5 +61,17 @@ export class CommonSpeech {
             this.currentColor = 0;
         }
         return actual;
+    }
+
+    startListening() {
+        this.voiceSrv.start({ lang: this.currentLang, autorestart: true });
+        this.words = [];
+        this.isRunning = true;
+    }
+
+    stopListening() {
+        this.voiceSrv.setAutorestart(false);
+        this.voiceSrv.stop();
+        this.isRunning = false;
     }
 }

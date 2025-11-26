@@ -9,13 +9,6 @@ import { IndicatorService } from "@services/indicator.service";
 import { ThreejsComponent } from "./threejs/threejs.component";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 
-
-export interface WordType {
-  word: string;
-  time: number;
-  color: string;
-}
-
 @Component({
   selector: 'app-game-lr',
   standalone: true,
@@ -30,14 +23,11 @@ export interface WordType {
 })
 export class GameLr extends CommonSpeech {
   @ViewChild("three_component") threeComponent!: ThreejsComponent;
-  isRunning: boolean = false;
   langs: SelectOptionType[] = [
     { id: "es-ES", label: "Español", icon: "🇪🇸" },
     { id: "en-US", label: "English", icon: "🇺🇸" },
     { id: "fr-FR", label: "Français", icon: "🇫🇷" },
   ];
-
-  words: WordType[] = [];
 
   constructor(
     public cdr: ChangeDetectorRef,
@@ -145,23 +135,9 @@ export class GameLr extends CommonSpeech {
     }
   }
 
-
-
   async ngOnInit() {
     const promise = this.indicatorSrv.start();
     await this.speechSrv.init();
     promise.done();
-  }
-
-  startListening() {
-    this.voiceSrv.start({ lang: this.currentLang, autorestart: true });
-    this.words = [];
-    this.isRunning = true;
-  }
-
-  stopListening() {
-    this.voiceSrv.setAutorestart(false);
-    this.voiceSrv.stop();
-    this.isRunning = false;
   }
 }
