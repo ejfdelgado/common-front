@@ -8,9 +8,9 @@
         }
         }
     </div>
-    <div class="full use_vertical_scroll">
+    <div class="full use_vertical_scroll container_vertical hcentered">
         @for (verse of song; track verse.txt) {
-        <h1 (click)="playVerse(verse)">{{ verse.txt }}</h1>
+        <h1 class="text_centered" (click)="playVerse(verse)">{{ verse.txt }}</h1>
         }
     </div>
 

@@ -109,6 +109,10 @@
   overflow-y: scroll;
 }
 
+.text_centered {
+  text-align: center;
+}
+
 @media screen and (max-width: 500px) {
   .container_horizontal.responsive_vertical {
     flex-direction: column;

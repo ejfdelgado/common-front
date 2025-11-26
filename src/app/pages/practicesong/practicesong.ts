@@ -33,6 +33,7 @@ export class Practicesong extends CommonSpeech {
   song: Verse[] = [
     { txt: "Yeah, you could be the greatest", },
     { txt: "you can be the best", },
+    { txt: "you can be the king kong banging on your chest", },
   ];
 
   constructor(
