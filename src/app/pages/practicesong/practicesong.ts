@@ -31,13 +31,13 @@ export class Practicesong extends CommonSpeech {
   ];
 
   song: Verse[] = [
-    { txt: "you could be the greatest", },
-    { txt: "you can be the best", },
-    { txt: "you can be the king kong bangin on your chest", },
-    { txt: "you can beat the world", },
-    { txt: "you can beat the war", },
-    { txt: "you can talk to God", },
-    { txt: "go bangin on his door", },
+    { txt: "you could be the greatest 🏆", },
+    { txt: "you can be the best 🥇", },
+    { txt: "you can be the king kong 🦍 bangin on your chest", },
+    { txt: "you can beat the world 🌍", },
+    { txt: "you can beat the war 💣", },
+    { txt: "you can talk to God 👑", },
+    { txt: "go bangin on his door 🚪", },
   ];
 
   constructor(
@@ -46,7 +46,7 @@ export class Practicesong extends CommonSpeech {
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv);
+    super(voiceSrv, speechSrv, indicatorSrv, "en-US");
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

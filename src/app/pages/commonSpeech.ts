@@ -27,7 +27,11 @@ export class CommonSpeech {
         public voiceSrv: VoiceRecognitionService,
         public speechSrv: SpeechSynthesisService,
         public indicatorSrv: IndicatorService,
+        preferedLang?: string,
     ) {
+        if (preferedLang) {
+            this.currentLang = preferedLang;
+        }
         const params = this.getUrlQueryParams();
         const suggestedLang = params.get("lan");
         if (suggestedLang && POSSIBLE_LANGS.indexOf(suggestedLang) >= 0) {
@@ -38,12 +42,17 @@ export class CommonSpeech {
         return new URLSearchParams(window.location.hash.split("?")[1]);
     }
 
+    removeEmojis(text: string) {
+        return text.replace(/\p{Emoji}/gu, '');
+    }
+
     async talk(text: string, useLoading: boolean = false) {
         let promise: any = null;
         if (useLoading) {
             promise = this.indicatorSrv.start();
         }
-        await this.speechSrv.speak(text, this.currentLang);
+        const sanitized = this.removeEmojis(text);
+        await this.speechSrv.speak(sanitized, this.currentLang);
         if (promise) {
             promise.done();
         }
