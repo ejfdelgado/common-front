@@ -35,3 +35,17 @@ ng build
 ```
 gsutil cors get gs://pro-ejflab-assets
 ```
+
+## TODO
+
+- Reload game (avoid win notification after finishing)
+- Fullscreen toggle
+- Notify: your device don't support
+- Creditos
+
+https://sketchfab.com/3d-models/cute-bunny-7d30845d69c4474ebeddd177df6b7f02
+
+https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45
+
+https://sketchfab.com/3d-models/treasure-chest-773a2f35025b4e2e9ac48fd84c16b3ab
+

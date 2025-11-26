@@ -5,17 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
-import { generateHueColors } from '@tools/Colors';
 import { IndicatorService } from "@services/indicator.service";
 import { ThreejsComponent } from "./threejs/threejs.component";
+import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 
-const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
-
-export interface SelectOptionType {
-  id: string;
-  label: string;
-  icon: string;
-};
 
 export interface WordType {
   word: string;
@@ -35,7 +28,7 @@ export interface WordType {
   templateUrl: './game-lr.html',
   styleUrl: './game-lr.scss',
 })
-export class GameLr {
+export class GameLr extends CommonSpeech {
   @ViewChild("three_component") threeComponent!: ThreejsComponent;
   isRunning: boolean = false;
   langs: SelectOptionType[] = [
@@ -43,25 +36,18 @@ export class GameLr {
     { id: "en-US", label: "English", icon: "🇺🇸" },
     { id: "fr-FR", label: "Français", icon: "🇫🇷" },
   ];
-  currentLang: string = "es-ES";
+
   words: WordType[] = [];
 
-  currentColor: number = 0;
-  colors = generateHueColors(10, 70, 70);
-
   constructor(
-    public voiceSrv: VoiceRecognitionService,
-    public speechSrv: SpeechSynthesisService,
     public cdr: ChangeDetectorRef,
-    private indicatorSrv: IndicatorService,
+    public override voiceSrv: VoiceRecognitionService,
+    public override speechSrv: SpeechSynthesisService,
+    public override indicatorSrv: IndicatorService,
   ) {
+    super(voiceSrv, speechSrv, indicatorSrv);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
-    const params = this.getUrlQueryParams();
-    const suggestedLang = params.get("lan");
-    if (suggestedLang && POSSIBLE_LANGS.indexOf(suggestedLang) >= 0) {
-      this.currentLang = suggestedLang;
-    }
 
     const config: CommandConfigType = {
       confidenceMin: 0.5,
@@ -143,10 +129,6 @@ export class GameLr {
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
   }
 
-  getUrlQueryParams() {
-    return new URLSearchParams(window.location.hash.split("?")[1]);
-  }
-
   adjustWords() {
     const MAX_NUMBER_OF_WORDS = 5;
     const THRESHOLD_MS = 10000;//10 seconds
@@ -163,24 +145,12 @@ export class GameLr {
     }
   }
 
-  getNextColor() {
-    const actual = this.colors[this.currentColor];
-    this.currentColor++;
-    if (this.currentColor >= this.colors.length) {
-      this.currentColor = 0;
-    }
-    return actual;
-  }
+
 
   async ngOnInit() {
     const promise = this.indicatorSrv.start();
     await this.speechSrv.init();
     promise.done();
-  }
-
-  defineLanguage(val: SelectOptionType) {
-    this.currentLang = val.id;
-    this.talk(val.label);
   }
 
   startListening() {
@@ -193,16 +163,5 @@ export class GameLr {
     this.voiceSrv.setAutorestart(false);
     this.voiceSrv.stop();
     this.isRunning = false;
-  }
-
-  async talk(text: string, useLoading: boolean = false) {
-    let promise: any = null;
-    if (useLoading) {
-      promise = this.indicatorSrv.start();
-    }
-    await this.speechSrv.speak(text, this.currentLang);
-    if (promise) {
-      promise.done();
-    }
   }
 }
