@@ -52,27 +52,27 @@ export class Practicesong extends CommonSpeech {
     { txt: "you can beat the clock", millis: 34800 },
     { txt: "you can move a mountain", millis: 36200 },
     { txt: "you can break rocks", millis: 37800 },
-    { txt: "you can be a master", },
-    { txt: "don't wait for luck", },
-    { txt: "dedicate yourself", },
-    { txt: "and you gon find yourself", },
-    { txt: "...", },
-    { txt: "standing in the hall of fame", },
-    { txt: "and the world's gonna know your name", },
-    { txt: "cause you burn with the brightest flame", },
-    { txt: "and the world's gonna know your name", },
-    { txt: "and you'll be on the walls of the hall of fame", },
-    { txt: "...", },
-    { txt: "you can go the distance", },
-    { txt: "you can run de mile", },
-    { txt: "you can walk straight", },
-    { txt: "through hell with a smile", },
-    { txt: "you can be a hero", },
-    { txt: "you can get the gold", },
-    { txt: "breaking all the records", },
-    { txt: "they thought never could be broke", },
-    { txt: "do it for your people", },
-    { txt: "do it for your pride", },
+    { txt: "you can be a master", millis: 39000 },
+    { txt: "don't wait for luck", millis: 40401 },
+    { txt: "dedicate yourself", millis: 41801 },
+    { txt: "and you gon find yourself", millis: 42802 },
+    { txt: "...", millis: 43800 },
+    { txt: "standing in the hall of fame", millis: 43802 },
+    { txt: "and the world's gonna know your name", millis: 49002 },
+    { txt: "cause you burn with the brightest flame", millis: 54602 },
+    { txt: "and the world's gonna know your name", millis: 60203 },
+    { txt: "and you'll be on the walls of the hall of fame", millis: 64603 },
+    { txt: "...", millis: 67602 },
+    { txt: "you can go the distance", millis: 67350 },
+    { txt: "you can run de mile", millis: 68750 },
+    { txt: "you can walk straight", millis: 70150 },
+    { txt: "through hell with a smile", millis: 71000 },
+    { txt: "you can be a hero", millis: 72951 },
+    { txt: "you can get the gold", millis: 74350 },
+    { txt: "breaking all the records", millis: 75550 },
+    { txt: "they thought never could be broke", millis: 76751 },
+    { txt: "do it for your people", millis: 78400 },
+    { txt: "do it for your pride", millis: 80000 },
     { txt: "how are you ever gonna know?", },
     { txt: "if you never even try", },
     { txt: "do it for your country", },
@@ -198,7 +198,8 @@ export class Practicesong extends CommonSpeech {
     promise.done();
   }
 
-  async playVerse(verse: Verse) {
+  async playVerse(event: MouseEvent, verse: Verse) {
+    event.stopPropagation();
     if (typeof verse.millis == "number") {
       this.startSong(verse.millis);
     } else {

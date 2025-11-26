@@ -8,10 +8,10 @@
         }
         }
     </div>
-    <div class="song_container full use_vertical_scroll container_vertical hcentered">
+    <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="stopSong()">
         @for (verse of song; track verse.txt) {
         <h1 class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true}"
-            (click)="playVerse(verse)">{{ verse.txt }}</h1>
+            (click)="playVerse($event, verse)">{{ verse.txt }}</h1>
         }
     </div>
 
