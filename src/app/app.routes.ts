@@ -22,6 +22,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/pano/pano').then(m => m.Pano),
     },
     {
+        path: 'playsound',
+        loadComponent: () => import('./pages/playsound/playsound').then(m => m.Playsound),
+    },
+    {
+        path: 'practicesong',
+        loadComponent: () => import('./pages/practicesong/practicesong').then(m => m.Practicesong),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
