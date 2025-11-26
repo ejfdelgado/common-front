@@ -105,6 +105,10 @@
   cursor: pointer;
 }
 
+.use_vertical_scroll {
+  overflow-y: scroll;
+}
+
 @media screen and (max-width: 500px) {
   .container_horizontal.responsive_vertical {
     flex-direction: column;

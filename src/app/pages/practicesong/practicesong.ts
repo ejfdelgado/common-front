@@ -8,6 +8,10 @@ import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 
+export interface Verse {
+  txt: string;
+}
+
 @Component({
   standalone: true,
   selector: 'app-practicesong',
@@ -24,6 +28,11 @@ export class Practicesong extends CommonSpeech {
     { id: "es-ES", label: "Español", icon: "🇪🇸" },
     { id: "en-US", label: "English", icon: "🇺🇸" },
     { id: "fr-FR", label: "Français", icon: "🇫🇷" },
+  ];
+
+  song: Verse[] = [
+    { txt: "Yeah, you could be the greatest", },
+    { txt: "you can be the best", },
   ];
 
   constructor(
@@ -96,5 +105,9 @@ export class Practicesong extends CommonSpeech {
     const promise = this.indicatorSrv.start();
     await this.speechSrv.init();
     promise.done();
+  }
+
+  async playVerse(verse: Verse) {
+    await this.talk(verse.txt);
   }
 }
