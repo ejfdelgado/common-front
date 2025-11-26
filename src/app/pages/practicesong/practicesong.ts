@@ -10,6 +10,7 @@ import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 
 export interface Verse {
   txt: string;
+  selected?: boolean;
 }
 
 @Component({
@@ -38,6 +39,14 @@ export class Practicesong extends CommonSpeech {
     { txt: "you can beat the war 💣", },
     { txt: "you can talk to God 👑", },
     { txt: "go bangin on his door 🚪", },
+    { txt: "you can throw your hands up", },
+    { txt: "you can beat the clock", },
+    { txt: "you can move a mountain", },
+    { txt: "you can break rocks", },
+    { txt: "you can be a master", },
+    { txt: "don't wait for luck", },
+    { txt: "dedicate yourself", },
+    { txt: "and you gon find yourself", },
   ];
 
   constructor(
@@ -113,6 +122,10 @@ export class Practicesong extends CommonSpeech {
   }
 
   async playVerse(verse: Verse) {
+    verse.selected = true;
+    this.cdr.detectChanges();
     await this.talk(verse.txt);
+    verse.selected = false;
+    this.cdr.detectChanges();
   }
 }
