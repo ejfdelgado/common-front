@@ -21,14 +21,15 @@
             <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
             }
         </span>
-        <div class="container_horizontal centered">
-            @if (!isRunning) {
-            <button class="button_simple font_green" (click)="startListening()"><mat-icon
+        <div class="container_horizontal centered vcentered">
+            @if (!isPlaying) {
+            <button class="button_simple font_green" (click)="startSong(0)"><mat-icon
                     class="white">play_arrow</mat-icon></button>
             } @else {
-            <button class="button_simple font_red" (click)="stopListening()"><mat-icon
+            <button class="button_simple font_red" (click)="stopSong()"><mat-icon
                     class="white">pause</mat-icon></button>
             }
+            <h3 class="allow_select">millis: {{ millisTime }}</h3>
         </div>
     </div>
 </div>

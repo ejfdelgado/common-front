@@ -7,10 +7,14 @@ import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
+import { ModuloSonido } from '@services/sonido.service';
+
+const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
 export interface Verse {
   txt: string;
   selected?: boolean;
+  millis?: number;
 }
 
 @Component({
@@ -25,6 +29,10 @@ export interface Verse {
   styleUrl: './practicesong.scss',
 })
 export class Practicesong extends CommonSpeech {
+  isPlaying: boolean = false;
+  millisStartTime: number = 0;
+  millisTime: number = 0;
+  cronoInterval: NodeJS.Timeout | null = null;
   langs: SelectOptionType[] = [
     { id: "es-ES", label: "Español", icon: "🇪🇸" },
     { id: "en-US", label: "English", icon: "🇺🇸" },
@@ -32,17 +40,18 @@ export class Practicesong extends CommonSpeech {
   ];
 
   song: Verse[] = [
-    { txt: "you could be the greatest 🏆", },
-    { txt: "you can be the best 🥇", },
-    { txt: "you can be the king kong 🦍 bangin on your chest", },
-    { txt: "you can beat the world 🌍", },
-    { txt: "you can beat the war 💣", },
-    { txt: "you can talk to God 👑", },
-    { txt: "go bangin on his door 🚪", },
-    { txt: "you can throw your hands up", },
-    { txt: "you can beat the clock", },
-    { txt: "you can move a mountain", },
-    { txt: "you can break rocks", },
+    { txt: "🎵", millis: 0 },
+    { txt: "you could be the greatest 🏆", millis: 22150 },
+    { txt: "you can be the best 🥇", millis: 23500 },
+    { txt: "you can be the king kong 🦍 bangin on your chest", millis: 24800 },
+    { txt: "you can beat the world 🌍", millis: 27600 },
+    { txt: "you can beat the war 💣", millis: 29200 },
+    { txt: "you can talk to God 👑", millis: 30600 },
+    { txt: "go bangin on his door 🚪", millis: 31600 },
+    { txt: "you can throw your hands up", millis: 33400 },
+    { txt: "you can beat the clock", millis: 34800 },
+    { txt: "you can move a mountain", millis: 36200 },
+    { txt: "you can break rocks", millis: 37800 },
     { txt: "you can be a master", },
     { txt: "don't wait for luck", },
     { txt: "dedicate yourself", },
@@ -190,10 +199,58 @@ export class Practicesong extends CommonSpeech {
   }
 
   async playVerse(verse: Verse) {
-    verse.selected = true;
+    if (typeof verse.millis == "number") {
+      this.startSong(verse.millis);
+    } else {
+      verse.selected = true;
+      this.cdr.detectChanges();
+      await this.talk(verse.txt);
+      verse.selected = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  async startSong(startingPoint: number) {
+    const promise = this.indicatorSrv.start();
+    await ModuloSonido.play(ROOT_PATH + "hall_of_fame.mp3", false, 1, startingPoint);
+    promise.done();
+    this.isPlaying = true;
     this.cdr.detectChanges();
-    await this.talk(verse.txt);
-    verse.selected = false;
-    this.cdr.detectChanges();
+    this.millisStartTime = Date.now() - startingPoint;
+    this.resetInterval();
+    this.cronoInterval = setInterval(() => {
+      this.millisTime = Date.now() - this.millisStartTime;
+      this.computeCurrentVerse();
+      this.cdr.detectChanges();
+    }, 200);
+  }
+
+  async stopSong() {
+    ModuloSonido.stop(ROOT_PATH + "hall_of_fame.mp3");
+    this.isPlaying = false;
+    this.resetInterval();
+  }
+
+  resetInterval() {
+    if (this.cronoInterval) {
+      clearInterval(this.cronoInterval);
+      this.cronoInterval = null;
+    }
+  }
+
+  computeCurrentVerse() {
+    // Clear all verses
+    const song = this.song;
+    let last: Verse | null = null;
+    for (let i = 0; i < song.length; i++) {
+      const actual = song[i];
+      if (actual.millis !== undefined && actual.millis < this.millisTime) {
+        last = actual;
+      }
+      actual.selected = false;
+    }
+    if (last) {
+      last.selected = true;
+    }
   }
 }

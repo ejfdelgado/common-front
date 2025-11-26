@@ -58,7 +58,7 @@ export class ModuloSonido {
 		ModuloSonido.sincId = id;
 	}
 
-	static async play(llave: string, loop = false, volume = 1) {
+	static async play(llave: string, loop: boolean = false, volume: number = 1, startMillis: number = 0) {
 		let ref = null;
 		if (llave in ModuloSonido.sonidos) {
 			ref = ModuloSonido.sonidos[llave];
@@ -73,7 +73,12 @@ export class ModuloSonido {
 			if (ModuloSonido.sincId) {
 				ref.setSinkId(ModuloSonido.sincId);
 			}
+			ref.currentTime = startMillis / 1000;
 			ref.play();
+		} else {
+			if (startMillis != 0) {
+				ref.currentTime = startMillis / 1000;
+			}
 		}
 	};
 
