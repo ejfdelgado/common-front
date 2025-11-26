@@ -40,7 +40,7 @@ export class Practicesong extends CommonSpeech {
   ];
 
   song: Verse[] = [
-    { txt: "🎵", millis: 0 },
+    { txt: "🎵", millis: 1 },
     { txt: "you could be the greatest 🏆", millis: 22150 },
     { txt: "you can be the best 🥇", millis: 23500 },
     { txt: "you can be the king kong 🦍 bangin on your chest", millis: 24800 },
@@ -71,37 +71,37 @@ export class Practicesong extends CommonSpeech {
     { txt: "you can get the gold", millis: 74350 },
     { txt: "breaking all the records", millis: 75550 },
     { txt: "they thought never could be broke", millis: 76751 },
-    { txt: "do it for your people", millis: 78400 },
+    { txt: "do it for your people", millis: 78500 },
     { txt: "do it for your pride", millis: 80000 },
-    { txt: "how are you ever gonna know?", },
-    { txt: "if you never even try", },
-    { txt: "do it for your country", },
-    { txt: "do it for your name", },
-    { txt: "cause there's gon' be a day", },
-    { txt: "when you're", },
-    { txt: "...", },
-    { txt: "standing in the hall of fame", },
-    { txt: "and the world's gonna know your name", },
-    { txt: "cause you burn with the brightest flame", },
-    { txt: "and the world's gonna know your name", },
-    { txt: "and you'll be on the walls of the hall of fame", },
-    { txt: "...", },
-    { txt: "be a champion", },
-    { txt: "be a champion", },
-    { txt: "be a champion", },
-    { txt: "be a champion", },
-    { txt: "...", },
-    { txt: "be students, be teachers", },
-    { txt: "be politicians, be preachers", },
-    { txt: "be believers, be leaders", },
-    { txt: "be astronauts, be champions", },
-    { txt: "be truth seekers", },
-    { txt: "be students, be teachers", },
-    { txt: "be politicians, be preachers", },
-    { txt: "be believers, be leaders", },
-    { txt: "be astronauts, be champions", },
-    { txt: "...", },
-    { txt: "standing in the hall of fame", },
+    { txt: "how are you ever gonna know?", millis: 81001 },
+    { txt: "if you never even try", millis: 82401 },
+    { txt: "do it for your country", millis: 83901 },
+    { txt: "do it for your name", millis: 85701 },
+    { txt: "cause there's gon' be a day", millis: 87001 },
+    { txt: "when you're", millis: 88802 },
+    { txt: "...", millis: 89200},
+    { txt: "standing in the hall of fame", millis: 89202},
+    { txt: "and the world's gonna know your name", millis: 93602},
+    { txt: "cause you burn with the brightest flame", millis: 99602},
+    { txt: "and the world's gonna know your name", millis: 105202},
+    { txt: "and you'll be on the walls of the hall of fame", millis: 109802},
+    { txt: "...", millis: 112600},
+    { txt: "be a champion", millis: 112602},
+    { txt: "be a champion", millis: 115202},
+    { txt: "be a champion", millis: 118002},
+    { txt: "be a champion", millis: 121202},
+    { txt: "...", millis: 124400},
+    { txt: "be students, be teachers", millis: 124403},
+    { txt: "be politicians, be preachers", millis: 126403},
+    { txt: "be believers, be leaders", millis: 130403},
+    { txt: "be astronauts, be champions", millis: 132204},
+    { txt: "be truth seekers", millis: 134404},
+    { txt: "be students, be teachers", millis: 135804},
+    { txt: "be politicians, be preachers", millis: 137900},
+    { txt: "be believers, be leaders", millis: 141500},
+    { txt: "be astronauts, be champions", millis: 143600},
+    { txt: "...", millis: 145550},
+    { txt: "standing in the hall of fame", millis: 145600},
     { txt: "and the world's gonna know your name", },
     { txt: "cause you burn with the brightest flame", },
     { txt: "and the world's gonna know your name", },
@@ -252,6 +252,14 @@ export class Practicesong extends CommonSpeech {
     }
     if (last) {
       last.selected = true;
+    }
+  }
+
+  toggleSong() {
+    if (this.isPlaying) {
+      this.stopSong();
+    } else {
+      this.startSong(this.millisTime);
     }
   }
 }
