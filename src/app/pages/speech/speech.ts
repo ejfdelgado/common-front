@@ -20,11 +20,6 @@ import { CommonSpeech, SelectOptionType } from "../commonSpeech";
   styleUrl: './speech.scss',
 })
 export class Speech extends CommonSpeech {
-  langs: SelectOptionType[] = [
-    { id: "es-ES", label: "Español", icon: "🇪🇸" },
-    { id: "en-US", label: "English", icon: "🇺🇸" },
-    { id: "fr-FR", label: "Français", icon: "🇫🇷" },
-  ];
 
   constructor(
     public cdr: ChangeDetectorRef,

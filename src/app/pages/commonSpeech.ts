@@ -1,6 +1,6 @@
 import { VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { IndicatorService } from "@services/indicator.service";
+import { IndicatorService, Wait } from "@services/indicator.service";
 import { generateHueColors } from '@tools/Colors';
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
@@ -18,6 +18,12 @@ export interface WordType {
 }
 
 export class CommonSpeech {
+    tParam: string = "0";
+    langs: SelectOptionType[] = [
+        { id: "es-ES", label: "Español", icon: "🇪🇸" },
+        { id: "en-US", label: "English", icon: "🇺🇸" },
+        { id: "fr-FR", label: "Français", icon: "🇫🇷" },
+    ];
     currentLang: string = "es-ES";
     currentColor: number = 0;
     colors = generateHueColors(10, 70, 70);
@@ -34,6 +40,10 @@ export class CommonSpeech {
         }
         const params = this.getUrlQueryParams();
         const suggestedLang = params.get("lan");
+        const tParam = params.get("t");
+        if (tParam) {
+            this.tParam = tParam;
+        }
         if (suggestedLang && POSSIBLE_LANGS.indexOf(suggestedLang) >= 0) {
             this.currentLang = suggestedLang;
         }
@@ -82,5 +92,27 @@ export class CommonSpeech {
         this.voiceSrv.setAutorestart(false);
         this.voiceSrv.stop();
         this.isRunning = false;
+    }
+
+    async fetchJson<T>(url: string): Promise<T> {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+        }
+        const data: T = await response.json();
+        return data;
+    }
+
+    async loadConfiguration(url: string): Promise<any> {
+        const promise: Wait = this.indicatorSrv.start();
+        const configUrl = `${url}?t=${this.tParam}`;
+        try {
+            return await this.fetchJson(configUrl);
+        } catch (err) {
+            // ToDo Display error
+        } finally {
+            promise.done();
+        }
+        return null;
     }
 }

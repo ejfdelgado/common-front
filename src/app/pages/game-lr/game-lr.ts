@@ -23,11 +23,6 @@ import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 })
 export class GameLr extends CommonSpeech {
   @ViewChild("three_component") threeComponent!: ThreejsComponent;
-  langs: SelectOptionType[] = [
-    { id: "es-ES", label: "Español", icon: "🇪🇸" },
-    { id: "en-US", label: "English", icon: "🇺🇸" },
-    { id: "fr-FR", label: "Français", icon: "🇫🇷" },
-  ];
 
   constructor(
     public cdr: ChangeDetectorRef,

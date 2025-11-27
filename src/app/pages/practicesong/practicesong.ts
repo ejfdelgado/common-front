@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
-import { IndicatorService } from "@services/indicator.service";
+import { IndicatorService, Wait } from '@services/indicator.service';
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 import { ModuloSonido } from '@services/sonido.service';
 
@@ -15,6 +15,12 @@ export interface Verse {
   txt: string;
   selected?: boolean;
   millis?: number;
+}
+
+export interface ConfigSong {
+  lang: string;
+  lyric: Verse[];
+  sound: string;
 }
 
 @Component({
@@ -33,98 +39,8 @@ export class Practicesong extends CommonSpeech {
   millisStartTime: number = 0;
   millisTime: number = 0;
   cronoInterval: NodeJS.Timeout | null = null;
-  langs: SelectOptionType[] = [
-    { id: "es-ES", label: "Español", icon: "🇪🇸" },
-    { id: "en-US", label: "English", icon: "🇺🇸" },
-    { id: "fr-FR", label: "Français", icon: "🇫🇷" },
-  ];
 
-  song: Verse[] = [
-    { txt: "🎵", millis: 1 },
-    { txt: "you could be the greatest 🏆", millis: 22150 },
-    { txt: "you can be the best 🥇", millis: 23500 },
-    { txt: "you can be the king kong 🦍 bangin on your chest", millis: 24800 },
-    { txt: "you can beat 👊 the world 🌍", millis: 27600 },
-    { txt: "you can beat 👊 the war 💣", millis: 29200 },
-    { txt: "you can talk 👄 to God 👑", millis: 30600 },
-    { txt: "go bangin 👊 on his door 🚪", millis: 31600 },
-    { txt: "you can throw your hands up 🙌🏼", millis: 33400 },
-    { txt: "you can beat 👊 the clock 🕛", millis: 34800 },
-    { txt: "you can move 🫸 a mountain ⛰️", millis: 36200 },
-    { txt: "you can break 💥 rocks 🪨", millis: 37800 },
-    { txt: "you can be a master 💪", millis: 39000 },
-    { txt: "don't wait for luck 🍀", millis: 40401 },
-    { txt: "dedicate yourself ❤️", millis: 41801 },
-    { txt: "and you gon find 👀 yourself", millis: 42802 },
-    { txt: "...", millis: 43800 },
-    { txt: "standing in the hall of fame 🏆", millis: 43802 },
-    { txt: "and the world's 🌍 gonna know your name", millis: 49002 },
-    { txt: "cause you burn ❤️‍🔥 with the brightest flame 🔥", millis: 54602 },
-    { txt: "and the world's 🌍 gonna know your name", millis: 60203 },
-    { txt: "and you'll be on the walls of the hall of fame 🏆", millis: 64603 },
-    { txt: "...", millis: 67602 },
-    { txt: "you can go 🚶‍♀️ the distance", millis: 67350 },
-    { txt: "you can run 🏃‍♀️‍➡️ de mile", millis: 68750 },
-    { txt: "you can walk 🚶🏻‍♀️‍➡️ straight", millis: 70150 },
-    { txt: "through hell 🌋 with a smile 😎", millis: 71000 },
-    { txt: "you can be a hero 🦸🏻‍♀️", millis: 72951 },
-    { txt: "you can get the gold 🥇", millis: 74350 },
-    { txt: "breaking all the records 🏁", millis: 75550 },
-    { txt: "they thought never could be broke 💥", millis: 76751 },
-    { txt: "do it for your people 👫", millis: 78500 },
-    { txt: "do it for your pride 🥰", millis: 80000 },
-    { txt: "how are you ever gonna know?", millis: 81001 },
-    { txt: "if you never even try ✌️", millis: 82401 },
-    { txt: "do it for your country 🇨🇴", millis: 83901 },
-    { txt: "do it for your name 👧", millis: 85701 },
-    { txt: "cause there's gon' be a day 🌞", millis: 87001 },
-    { txt: "when you're", millis: 88802 },
-    { txt: "...", millis: 89200 },
-    { txt: "standing in the hall of fame 🥇", millis: 89202 },
-    { txt: "and the world's 🌍 gonna know your name", millis: 93602 },
-    { txt: "cause you burn ❤️‍🔥 with the brightest flame 🔥", millis: 99602 },
-    { txt: "and the world's 🌍 gonna know your name", millis: 105202 },
-    { txt: "and you'll be on the walls of the hall of fame 🏆", millis: 109802 },
-    { txt: "...", millis: 112600 },
-    { txt: "be a champion 🥇", millis: 112602 },
-    { txt: "be a champion 🏆", millis: 115202 },
-    { txt: "be a champion 🏅", millis: 118002 },
-    { txt: "be a champion 🪙", millis: 121202 },
-    { txt: "...", millis: 124400 },
-    { txt: "be students 👩‍🎓, be teachers 👨‍🏫", millis: 124403 },
-    { txt: "be politicians 🏛️, be preachers ⛪", millis: 126403 },
-    { txt: "be believers, be leaders 🙋", millis: 130403 },
-    { txt: "be astronauts 👩‍🚀, be champions 🏆", millis: 132204 },
-    { txt: "be truth 👁️ seekers", millis: 134404 },
-    { txt: "be students 👩‍🎓, be teachers 👨‍🏫", millis: 135804 },
-    { txt: "be politicians 🏛️, be preachers ⛪", millis: 137900 },
-    { txt: "be believers, be leaders 🙋", millis: 141500 },
-    { txt: "be astronauts 👩‍🚀, be champions 🏆", millis: 143600 },
-    { txt: "...", millis: 145550 },
-    { txt: "standing in the hall of fame 🏆", millis: 145600 },
-    { txt: "and the world's 🌍 gonna know your name", millis: 150600 },
-    { txt: "cause you burn ❤️‍🔥 with the brightest flame 🔥", millis: 156000 },
-    { txt: "and the world's 🌍 gonna know your name", millis: 161801 },
-    { txt: "and you'll be on the walls of the hall of fame 🏅", millis: 166402 },
-    { txt: "...", millis: 169200 },
-    { txt: "you could be the greatest 🏆", millis: 169202 },
-    { txt: "you can be the best 🥇", millis: 170402 },
-    { txt: "you can be the king kong 🦍 bangin on your chest", millis: 171603 },
-    { txt: "you can beat 👊 the world 🌍", millis: 174403 },
-    { txt: "you can beat 👊 the war 💣", millis: 175803 },
-    { txt: "you can talk 👄 to God 👑", millis: 177403 },
-    { txt: "go bangin 👊 on his door 🚪", millis: 178603 },
-    { txt: "you can throw your hands up 🙌🏼", millis: 180203 },
-    { txt: "you can beat 👊 the clock 🕛", millis: 181403 },
-    { txt: "you can move 🫸 a mountain ⛰️", millis: 182803 },
-    { txt: "you can break 💥 rocks 🪨", millis: 184604 },
-    { txt: "you can be a master 💪", millis: 185604 },
-    { txt: "don't wait for luck 🍀", millis: 187204 },
-    { txt: "dedicate yourself ❤️", millis: 188604 },
-    { txt: "and you gon find 👀 yourself", millis: 189605 },
-    { txt: "...", millis: 190600 },
-    { txt: "standing in the hall of fame 🏆", millis: 190604 },
-  ];
+  config: ConfigSong | null = null;
 
   constructor(
     public cdr: ChangeDetectorRef,
@@ -196,6 +112,14 @@ export class Practicesong extends CommonSpeech {
     const promise = this.indicatorSrv.start();
     await this.speechSrv.init();
     promise.done();
+    // Load json
+    const params = this.getUrlQueryParams();
+    const q = params.get("q");
+    if (q !== null) {
+      // Fetch from bucket json
+      this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
+      this.cdr.detectChanges();
+    }
   }
 
   async playVerse1(event: MouseEvent, verse: Verse) {
@@ -217,8 +141,11 @@ export class Practicesong extends CommonSpeech {
   }
 
   async startSong(startingPoint: number) {
+    if (!this.config) {
+      return;
+    }
     const promise = this.indicatorSrv.start();
-    await ModuloSonido.play(ROOT_PATH + "hall_of_fame.mp3", false, 1, startingPoint);
+    await ModuloSonido.play(ROOT_PATH + this.config.sound, false, 1, startingPoint);
     promise.done();
     this.isPlaying = true;
     this.cdr.detectChanges();
@@ -246,7 +173,10 @@ export class Practicesong extends CommonSpeech {
 
   computeCurrentVerse() {
     // Clear all verses
-    const song = this.song;
+    if (!this.config) {
+      return;
+    }
+    const song = this.config.lyric;
     let last: Verse | null = null;
     for (let i = 0; i < song.length; i++) {
       const actual = song[i];
