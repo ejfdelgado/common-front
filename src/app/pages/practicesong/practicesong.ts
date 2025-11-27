@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
@@ -42,13 +42,19 @@ export class Practicesong extends CommonSpeech {
 
   config: ConfigSong | null = null;
 
+  @ViewChild('parentContainer', { read: ElementRef })
+  parent!: ElementRef<HTMLElement>;
+
+  @ViewChildren('child', { read: ElementRef })
+  children!: QueryList<ElementRef<HTMLElement>>;
+
   constructor(
     public cdr: ChangeDetectorRef,
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, "en-US");
+    super(voiceSrv, speechSrv, indicatorSrv);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 
@@ -118,7 +124,10 @@ export class Practicesong extends CommonSpeech {
     if (q !== null) {
       // Fetch from bucket json
       this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
-      this.cdr.detectChanges();
+      if (this.config) {
+        this.defineLanguage(this.config.lang);
+        this.cdr.detectChanges();
+      }
     }
   }
 
@@ -126,7 +135,7 @@ export class Practicesong extends CommonSpeech {
     event.stopPropagation();
     this.stopSong();
     if (verse.millis !== undefined) {
-      this.millisTime = verse.millis - 1;
+      this.millisTime = verse.millis + 1;
     }
     this.computeCurrentVerse();
     this.cdr.detectChanges();
@@ -187,6 +196,8 @@ export class Practicesong extends CommonSpeech {
     }
     if (last) {
       last.selected = true;
+      const index = song.indexOf(last);
+      this.scrollToIndex(index);
     }
   }
 
@@ -196,5 +207,31 @@ export class Practicesong extends CommonSpeech {
     } else {
       this.startSong(this.millisTime);
     }
+  }
+
+  scrollToIndex(index: number) {
+    const parentEl = this.parent.nativeElement;
+    const childEl = this.children.get(index)?.nativeElement;
+
+    if (!childEl) return;
+
+    const parentRect = parentEl.getBoundingClientRect();
+    const childRect = childEl.getBoundingClientRect();
+
+    const fullyVisible =
+      childRect.top >= parentRect.top &&
+      childRect.bottom <= parentRect.bottom;
+
+    if (fullyVisible) {
+      return; // nothing to do
+    }
+
+    // Child is not fully visible → scroll to it
+    const offset = childRect.top - parentRect.top + parentEl.scrollTop;
+
+    parentEl.scrollTo({
+      top: offset,
+      behavior: 'smooth'
+    });
   }
 }

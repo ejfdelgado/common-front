@@ -68,9 +68,13 @@ export class CommonSpeech {
         }
     }
 
-    defineLanguage(val: SelectOptionType) {
-        this.currentLang = val.id;
-        this.talk(val.label);
+    defineLanguage(val: SelectOptionType | string) {
+        if (typeof val == "string") {
+            this.currentLang = val;
+        } else {
+            this.currentLang = val.id;
+            this.talk(val.label);
+        }
     }
 
     getNextColor() {
