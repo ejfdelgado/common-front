@@ -168,7 +168,10 @@ export class Practicesong extends CommonSpeech {
   }
 
   async stopSong() {
-    ModuloSonido.stop(ROOT_PATH + "hall_of_fame.mp3");
+    if (!this.config) {
+      return;
+    }
+    ModuloSonido.stop(ROOT_PATH + this.config.sound);
     this.isPlaying = false;
     this.resetInterval();
   }
