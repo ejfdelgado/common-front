@@ -32,8 +32,8 @@ ng build
 [Left right english](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=en-US&n=5)
 [Left right spanish](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=es-ES&n=5)
 
-
-[local song](http://localhost:4200/#/practicesong?q=hall_of_fame_json)
+[local song](http://localhost:4200/#/practicesong?q=hall_of_fame_json&t=1)
+[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=hall_of_fame_json&t=1)
 
 ```
 gsutil cors get gs://pro-ejflab-assets
