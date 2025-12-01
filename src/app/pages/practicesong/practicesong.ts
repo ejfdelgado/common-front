@@ -124,6 +124,7 @@ export class Practicesong extends CommonSpeech {
     if (q !== null) {
       // Fetch from bucket json
       this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
+      //this.config = {};
       if (this.config) {
         this.defineLanguage(this.config.lang);
         this.cdr.detectChanges();
@@ -223,14 +224,14 @@ export class Practicesong extends CommonSpeech {
 
     const fullyVisible =
       childRect.top >= parentRect.top &&
-      childRect.bottom + childRect.height <= parentRect.bottom;
+      childRect.bottom + childRect.height * 2 <= parentRect.bottom;
 
     if (fullyVisible) {
       return; // nothing to do
     }
 
     // Child is not fully visible → scroll to it
-    const offset = childRect.top - parentRect.top + parentEl.scrollTop;
+    const offset = childRect.top - childRect.height - parentRect.top + parentEl.scrollTop;
 
     parentEl.scrollTo({
       top: offset,

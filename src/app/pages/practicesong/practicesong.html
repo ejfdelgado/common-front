@@ -1,19 +1,20 @@
 <div class="full_screen container_vertical">
+    @if (config == null) {
     <div class="container_horizontal gap_10 padding_20">
-        @if (config == null) {
         @for (lang of langs; track lang.id) {
         <span class="hand lang_option" [ngClass]="{'higlighted': lang.id==currentLang}"
             (click)="defineLanguage(lang)">{{ lang.icon }} {{
             lang.label }}</span>
         }
-        }
     </div>
-    <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="toggleSong()" #parentContainer>
+    }
+    <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="toggleSong()"
+        #parentContainer>
         @for (verse of config?.lyric; track verse.txt) {
-        <span class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true}" #child>
-            <h3 (click)="playVerse1($event, verse)">💬</h3>&nbsp;
-            <h3 (click)="playVerse2($event, verse)">{{ verse.txt }}</h3>
-        </span>
+        <h3 class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true}" #child>
+            <span (click)="playVerse1($event, verse)">💬</span>
+            <span (click)="playVerse2($event, verse)">{{ verse.txt }}</span>
+        </h3>
         }
     </div>
 
