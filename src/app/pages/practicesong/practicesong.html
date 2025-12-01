@@ -11,10 +11,10 @@
     <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="toggleSong()"
         #parentContainer>
         @for (verse of config?.lyric; track verse.txt) {
-        <h3 class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true}" #child>
+        <span class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true}" #child>
             <span (click)="playVerse1($event, verse)">💬</span>
             <span (click)="playVerse2($event, verse)">{{ verse.txt }}</span>
-        </h3>
+        </span>
         }
     </div>
 
