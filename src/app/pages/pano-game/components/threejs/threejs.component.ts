@@ -14,6 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommonSpeech, SelectOptionType } from "../../../commonSpeech";
+import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 
 export interface PanoConfig {
   title: string;
@@ -36,14 +39,13 @@ export interface PanoConfig {
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
-export class ThreejsComponent implements OnInit, AfterViewInit {
+export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewInit {
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   @ViewChild('myparent') parentRef!: ElementRef;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
   queryParam: string = "";
-  tParam: string = "0";
   viewState: "photo" | "map" | "print" = "photo";
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   isFullScreen: boolean = false;
@@ -57,10 +59,70 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
-    private indicatorSrv: IndicatorService,
-    private cdr: ChangeDetectorRef,
+    public override indicatorSrv: IndicatorService,
+    public cdr: ChangeDetectorRef,
+    public override voiceSrv: VoiceRecognitionService,
+    public override speechSrv: SpeechSynthesisService,
   ) {
+    super(voiceSrv, speechSrv, indicatorSrv);
     this.hasMobile = this.isMobile();
+
+    this.voiceSrv.setInterimResults(true);
+    this.voiceSrv.setContinuous(false);
+
+    const config: CommandConfigType = {
+      confidenceMin: 0.5,
+      maxDiffMillis: 600,
+
+      commands: {
+        "es-ES": {
+          "ayuda": "help",
+        },
+        "en-US": {
+          "help": "help",
+        },
+        "fr-FR": {
+          "aide": "help",//bug don't work aide-moi
+        }
+      },
+    };
+
+    const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
+
+    setInterval(() => {
+      this.adjustWords();
+    }, 1000);
+
+    const addWordFun = (input: RecognizedWord) => {
+      this.words.push({
+        word: input.word,
+        time: input.timestamp,
+        color: this.getNextColor(),
+      });
+      this.adjustWords();
+      this.cdr.detectChanges();
+    };
+
+    word$.subscribe(addWordFun);
+    command$.subscribe((command) => {
+      console.log(command);
+    });
+  }
+
+  adjustWords() {
+    const MAX_NUMBER_OF_WORDS = 5;
+    const THRESHOLD_MS = 10000;//10 seconds
+    const now = Date.now();
+    const initialLen = this.words.length;
+    // First limite number of words
+    this.words.splice(0, Math.max(0, this.words.length - MAX_NUMBER_OF_WORDS));
+    // Second erase old words
+    this.words = this.words.filter((word) => {
+      return now - word.time < THRESHOLD_MS;
+    });
+    if (initialLen != this.words.length) {
+      this.cdr.detectChanges();
+    }
   }
 
   setViewState(nextState: "map" | "photo" | "print") {
@@ -117,10 +179,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     this.bounds = parentNativeElement.getBoundingClientRect();
   }
 
-  getUrlQueryParams() {
-    return new URLSearchParams(window.location.hash.split("?")[1]);
-  }
-
   ngOnInit(): void {
     setTimeout(() => {
       this.onResize({});
@@ -135,7 +193,8 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
       this.tParam = tParam;
     }
     this.queryParam = queryParam;
-    this.loadConfiguration().then(async () => {
+    this.loadConfiguration(`https://storage.googleapis.com/pro-ejflab-assets/pano/${this.queryParam}/config.json`).then(async (config) => {
+      this.configuration = config;
       await this.sceneCreated.promise;
       if (this.scene) {
         await this.scene.setConfig(this.configuration);
@@ -144,26 +203,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async fetchJson<T>(url: string): Promise<T> {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-    }
-    const data: T = await response.json();
-    return data;
-  }
-
-  async loadConfiguration() {
-    const promise: Wait = this.indicatorSrv.start();
-    const configUrl = `https://storage.googleapis.com/pro-ejflab-assets/pano/${this.queryParam}/config.json?t=${this.tParam}`;
-    try {
-      this.configuration = await this.fetchJson(configUrl);
-    } catch (err) {
-
-    } finally {
-      promise.done();
-    }
-  }
 
   stopSound() {
     ModuloSonido.stop(this.configuration.audioUrl + `?t=${this.tParam}`);

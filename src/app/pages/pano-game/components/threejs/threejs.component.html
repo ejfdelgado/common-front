@@ -6,10 +6,22 @@
 </div>
 <div class="hover_container full_screen container_vertical no_mouse">
     <div class="relleno"></div>
+    <span class="words_space">
+        @for (word of words; track word.time) {
+        <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
+        }
+    </span>
     <div class="controles container_horizontal gap_10 centered">
         <button (click)="setViewState('photo')" *ngIf="viewState!=='photo'">
             <mat-icon class="green">photo</mat-icon>
         </button>
+        @if (!isRunning) {
+        <button class="button_simple font_green" (click)="startListening()"><mat-icon
+                class="white">play_arrow</mat-icon></button>
+        } @else {
+        <button class="button_simple font_red" (click)="stopListening()"><mat-icon
+                class="white">pause</mat-icon></button>
+        }
     </div>
 </div>
 @if (viewState=='photo') {
@@ -23,7 +35,7 @@
         <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
     </button>
     }
-        @if (!useStereo) {
+    @if (!useStereo) {
     <button (click)="toggleStereo()">
         <mat-icon class="white_subtitle">live_tv</mat-icon>
     </button>
