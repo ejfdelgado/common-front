@@ -1,5 +1,6 @@
 //import { GUI } from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { StereoEffect } from 'three/examples/jsm/effects/StereoEffect.js';
 import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
@@ -30,6 +31,8 @@ export class BasicScene extends THREE.Scene {
   panoramaAdded: boolean = false;
 
   canvasRef: HTMLCanvasElement;
+  effect: StereoEffect | null = null;
+
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
     this.canvasRef = canvasRef;
@@ -59,10 +62,23 @@ export class BasicScene extends THREE.Scene {
     this.renderer.setSize(this.bounds.width, this.bounds.height);
     // sets up the camera's orbital controls
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
-    this.orbitals.enableZoom = true; // default is true
-    this.orbitals.zoomSpeed = 1.0;   // pinch zoom speed
+    this.orbitals.enableDamping = true;
+
+    // Stereo effect (splits the screen)
+    this.effect = new StereoEffect(this.renderer);
     this.addPanorama();
   }
+
+  localRender(useStereo: boolean) {
+    if (this.effect && this.camera) {
+      if (useStereo) {
+        this.effect?.render(this, this.camera);
+      } else {
+        this.renderer?.render(this, this.camera);
+      }
+    }
+  }
+
   /**
    * Given a ThreeJS camera and renderer, resizes the scene if the
    * browser window is resized.
@@ -77,6 +93,9 @@ export class BasicScene extends THREE.Scene {
     this.camera.aspect = this.bounds.width / this.bounds.height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.bounds.width, this.bounds.height);
+    if (this.effect) {
+      this.effect.setSize(window.innerWidth, window.innerHeight);
+    }
   }
 
   async setConfig(configuration: PanoConfig) {

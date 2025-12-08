@@ -10,16 +10,10 @@ import {
 import { BasicScene } from './BasicScene';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { ModuloSonido } from '@services/sonido.service';
-import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
-import jsPDF from 'jspdf';
-import { toCanvas } from 'qrcode';
 import { MatIconModule } from '@angular/material/icon';
 import { PromiseEmitter } from "@tools/PromiseEmitter";
-import { Base64 } from "@tools/Base64";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-setOptions({ key: Base64.decode('QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j') });
 
 export interface PanoConfig {
   title: string;
@@ -54,6 +48,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   isFullScreen: boolean = false;
   hasMobile: boolean;
+  useStereo: boolean = false;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
     subtitle: "toman tiempo...",
@@ -83,6 +78,12 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  toggleStereo() {
+    this.useStereo = !this.useStereo;
+    this.onResize(null);
+    this.cdr.detectChanges();
+  }
+
   ngAfterViewInit(): void {
     this.computeDimensions();
     if (this.bounds == null) {
@@ -98,7 +99,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   loop() {
     if (this.scene != null && this.scene.camera) {
       this.scene.camera?.updateProjectionMatrix();
-      this.scene.renderer?.render(this.scene, this.scene.camera);
+      this.scene.localRender(this.useStereo);
       this.scene.orbitals?.update();
       requestAnimationFrame(() => {
         this.loop();

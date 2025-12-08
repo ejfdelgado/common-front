@@ -23,5 +23,14 @@
         <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
     </button>
     }
+        @if (!useStereo) {
+    <button (click)="toggleStereo()">
+        <mat-icon class="white_subtitle">live_tv</mat-icon>
+    </button>
+    } @else {
+    <button (click)="toggleStereo()">
+        <mat-icon class="white_subtitle">tv</mat-icon>
+    </button>
+    }
 </div>
 }
