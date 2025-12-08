@@ -5,29 +5,23 @@
     </canvas>
 </div>
 <div class="hover_container full_screen container_vertical no_mouse">
-    @if (['print'].indexOf(viewState) < 0) { <div class="titles">
-        <div>
-            <h1 class="white_subtitle" id="my_title">{{ configuration.title }}</h1>
-        </div>
-        <div>
-            <p class="outlined" id="my_subtitle">{{ configuration.subtitle }}</p>
-        </div>
-</div>
-}
-<div class="relleno"></div>
-<div class="controles container_horizontal gap_10 centered">
-    <button (click)="setViewState('photo')" *ngIf="viewState!=='photo'">
-        <mat-icon class="green">photo</mat-icon>
-    </button>
-</div>
+    <div class="relleno"></div>
+    <div class="controles container_horizontal gap_10 centered">
+        <button (click)="setViewState('photo')" *ngIf="viewState!=='photo'">
+            <mat-icon class="green">photo</mat-icon>
+        </button>
+    </div>
 </div>
 @if (viewState=='photo') {
 <div class="top_right">
-    <button (click)="setFullScreen(true)" *ngIf="!isFullScreen">
+    @if (!isFullScreen) {
+    <button (click)="setFullScreen(true)">
         <mat-icon class="white_subtitle">fullscreen</mat-icon>
     </button>
-    <button (click)="setFullScreen(false)" *ngIf="isFullScreen">
+    } @else {
+    <button (click)="setFullScreen(false)">
         <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
     </button>
+    }
 </div>
 }
