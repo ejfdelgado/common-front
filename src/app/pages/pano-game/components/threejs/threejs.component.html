@@ -25,13 +25,6 @@
         <button (click)="setViewState('photo')" *ngIf="viewState!=='photo'">
             <mat-icon class="green">photo</mat-icon>
         </button>
-        @if (!isRunning) {
-        <button class="button_simple font_green" (click)="startListening()"><mat-icon
-                class="white">play_arrow</mat-icon></button>
-        } @else {
-        <button class="button_simple font_red" (click)="stopListening()"><mat-icon
-                class="white">pause</mat-icon></button>
-        }
     </div>
 </div>
 @if (viewState=='photo') {
@@ -47,11 +40,11 @@
     }
     @if (!useStereo) {
     <button (click)="toggleStereo()">
-        <mat-icon class="white_subtitle">live_tv</mat-icon>
+        <mat-icon class="white_subtitle">play_arrow</mat-icon>
     </button>
     } @else {
     <button (click)="toggleStereo()">
-        <mat-icon class="white_subtitle">tv</mat-icon>
+        <mat-icon class="white_subtitle">pause</mat-icon>
     </button>
     }
 </div>

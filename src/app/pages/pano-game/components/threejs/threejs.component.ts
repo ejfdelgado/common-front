@@ -144,8 +144,12 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     this.useStereo = !this.useStereo;
     if (this.useStereo) {
       this.scene?.enableGyro();
+      this.setFullScreen(true);
+      this.startListening();
     } else {
       this.scene?.disableGyro();
+      this.setFullScreen(false);
+      this.stopListening();
     }
     this.onResize(null);
     this.cdr.detectChanges();
