@@ -115,6 +115,10 @@
   font-size: 2em;
 }
 
+.is_mobile .one_word {
+  font-size: 1em;
+}
+
 .lang_option {
   padding: 5px;
   border-radius: 5px;

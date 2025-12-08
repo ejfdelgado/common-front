@@ -1,10 +1,10 @@
 <div #myparent class="theparent full_screen background_white container_vertical"
-    [ngClass]="{'invisible': viewState!=='photo'}">
+    [ngClass]="{'invisible': viewState!=='photo', 'is_mobile': hasMobile}">
     <canvas #mycanvas width="1" height="1">
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
 </div>
-<div class="hover_container full_screen container_vertical no_mouse">
+<div class="hover_container full_screen container_vertical no_mouse" [ngClass]="{'is_mobile': hasMobile}">
     <div class="relleno"></div>
     <div class="speech_recognition_place">
         <span class="words_space">

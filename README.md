@@ -39,6 +39,9 @@ ng build
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=unstopable.json&t=1)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=karma.json)
 
+
+[Pano Game](https://stg-playtolearn.storage.googleapis.com/index.html#/panogame?q=2025-07%2F001)
+
 ```
 gsutil cors get gs://pro-ejflab-assets
 ```
