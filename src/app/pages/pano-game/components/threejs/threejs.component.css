@@ -1,10 +1,9 @@
-
 .theparent canvas {
   flex: 1;
 }
 
 .hover_container {
-  padding: 0 10%;
+  padding: 0;
 }
 
 .hover_container .titles {
@@ -47,8 +46,8 @@
   font-size: 4em;
   width: unset;
   height: unset;
-  text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
-    1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+  text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000,
+    0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
 }
 
 .red {
@@ -105,4 +104,33 @@
 
 .svg_icon {
   height: 34pt;
+}
+
+.words_space {
+  text-align: center;
+  max-width: 100%;
+}
+
+.one_word {
+  font-size: 2em;
+}
+
+.lang_option {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.higlighted {
+  font-weight: bold;
+  background: rgb(117, 117, 117);
+  color: white;
+}
+
+.speech_recognition_place {
+  display: flex;
+  flex-direction: row;
+}
+
+.speech_recognition_place .words_space {
+  flex: 1;
 }

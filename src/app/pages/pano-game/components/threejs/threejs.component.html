@@ -6,11 +6,21 @@
 </div>
 <div class="hover_container full_screen container_vertical no_mouse">
     <div class="relleno"></div>
-    <span class="words_space">
-        @for (word of words; track word.time) {
-        <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
+    <div class="speech_recognition_place">
+        <span class="words_space">
+            @for (word of words; track word.time) {
+            <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
+            }
+        </span>
+        @if (useStereo) {
+        <span class="words_space">
+            @for (word of words; track word.time) {
+            <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
+            }
+        </span>
         }
-    </span>
+    </div>
+
     <div class="controles container_horizontal gap_10 centered">
         <button (click)="setViewState('photo')" *ngIf="viewState!=='photo'">
             <mat-icon class="green">photo</mat-icon>
