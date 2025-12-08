@@ -61,15 +61,6 @@ export class BasicScene extends THREE.Scene {
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitals.enableZoom = true; // default is true
     this.orbitals.zoomSpeed = 1.0;   // pinch zoom speed
-
-    this.orbitals.autoRotate = true;
-    this.orbitals.autoRotateSpeed = 0.5;
-    this.orbitals.rotateSpeed = -0.5;
-    this.orbitals.addEventListener('start', () => {
-      if (this.orbitals) {
-        this.orbitals.autoRotate = false;
-      }
-    });
     this.addPanorama();
   }
   /**

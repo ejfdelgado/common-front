@@ -44,19 +44,13 @@ export interface PanoConfig {
 })
 export class ThreejsComponent implements OnInit, AfterViewInit {
   @ViewChild('mycanvas') canvasRef!: ElementRef;
-  @ViewChild('qrcanvas') canvasQRRef!: ElementRef;
-  @ViewChild('myprintcanvas') printCanvasRef!: ElementRef;
   @ViewChild('myparent') parentRef!: ElementRef;
-  @ViewChild('myprintparent') printParentRef!: ElementRef;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
   queryParam: string = "";
   tParam: string = "0";
   viewState: "photo" | "map" | "print" = "photo";
-  mapLib: any;
-  map: any = null;
-  markers: Array<any> = [];
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   isFullScreen: boolean = false;
   hasMobile: boolean;
@@ -65,80 +59,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     subtitle: "toman tiempo...",
     imageUrl: "",
     audioUrl: null,
-  };
-  extMap: any = {
-    "jpeg": {
-      attr1: "image/jpeg",
-      attr2: "JPEG"
-    },
-    "png": {
-      attr1: "image/png",
-      attr2: "PNG"
-    }
-  };
-  dpi: number = 200;
-  dpiOptions = [
-    { id: 100, name: '100 dpi' },
-    { id: 200, name: '200 dpi' },
-    { id: 300, name: '300 dpi' },
-  ]
-  extensionOptions = [
-    { id: "jpeg", name: 'JPEG' },
-    { id: "png", name: 'PNG' },
-  ];
-  selectedExtension = "jpeg";
-  paperOptions = [
-    { id: "letter", name: 'Carta' },
-    { id: "legal", name: 'Oficio' },
-    { id: "legal_letter", name: 'Legal-Letter' },
-    { id: "b1", name: 'B1 (pliego)' },
-    { id: "b2", name: 'B2 (medio pliego)' },
-    { id: "b3", name: 'B3 (cuarto)' },
-    { id: "b3_like", name: '48x32' },
-    { id: "b4", name: 'B4 (octavo)' },
-  ];
-  paperSelectedOption = "legal_letter";
-  papers: { [key: string]: any } = {
-    "letter": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [8.5, 11],
-    },
-    "legal": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [8.5, 14],
-    },
-    "legal_letter": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [8.5, 13.11],
-    },
-    "b4": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [9.8, 13.8],
-    },
-    "b3": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [13.9, 19.7],
-    },
-    "b3_like": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [12.559, 18.858],
-    },
-    "b2": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [19.7, 27.8],
-    },
-    "b1": {
-      orientation: 'portrait',
-      unit: 'in',
-      format: [27.8, 39.4],
-    }
   };
 
   constructor(
@@ -153,60 +73,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.onResize({});
     }, 0);
-  }
-
-  goToMap() {
-    if (this.isMobile()) {
-      let url = `https://www.google.com/maps/dir/?api=1&destination=${this.configuration.lat},${this.configuration.lon}`;
-      window.open(url, "_blank");
-    } else {
-      this.setViewState('map');
-    }
-  }
-
-  hasValidLocation() {
-    return (typeof this.configuration.lat == "number" && typeof this.configuration.lon == "number");
-  }
-
-  hasPhone() {
-    return (typeof this.configuration.phone == "number");
-  }
-
-  async importMapLibraries() {
-    const { Map } = await importLibrary("maps");
-    const { AdvancedMarkerElement } = await importLibrary("marker");
-    this.mapLib = {
-      Map,
-      AdvancedMarkerElement,
-    };
-  }
-
-  addMarker(lat: number, lon: number) {
-    const marker = new this.mapLib.AdvancedMarkerElement({
-      map: this.map,
-      position: { lat: lat, lng: lon },
-    });
-    this.markers.push(marker);
-  }
-
-  loadMap() {
-    const mapOptions = {
-      center: {
-        lat: this.configuration.lat,
-        lng: this.configuration.lon,
-      },
-      zoom: 16,
-      mapId: 'DEMO_MAP_ID',
-      mapTypeId: 'satellite',
-    };
-
-    const elem = document.getElementById('map');
-    if (elem) {
-      this.map = new this.mapLib.Map(elem, mapOptions);
-      if (this.configuration.lat && this.configuration.lon) {
-        this.addMarker(this.configuration.lat, this.configuration.lon);
-      }
-    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -245,17 +111,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     this.bounds = parentNativeElement.getBoundingClientRect();
   }
 
-  setSubtitle(text: string) {
-    const span = document.getElementById("my_subtitle");
-    if (!span) {
-      return;
-    }
-    span.innerHTML = text
-      .split(' ')
-      .map(word => `<span class="outlined">${word}</span>`)
-      .join(' ');
-  }
-
   getUrlQueryParams() {
     return new URLSearchParams(window.location.hash.split("?")[1]);
   }
@@ -278,11 +133,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
       await this.sceneCreated.promise;
       if (this.scene) {
         await this.scene.setConfig(this.configuration);
-      }
-
-      if (this.hasValidLocation()) {
-        await this.importMapLibraries();
-        this.loadMap();
       }
       this.cdr.detectChanges();
     });
