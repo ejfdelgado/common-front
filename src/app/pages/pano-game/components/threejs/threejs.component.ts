@@ -80,6 +80,11 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
 
   toggleStereo() {
     this.useStereo = !this.useStereo;
+    if (this.useStereo) {
+      this.scene?.enableGyro();
+    } else {
+      this.scene?.disableGyro();
+    }
     this.onResize(null);
     this.cdr.detectChanges();
   }

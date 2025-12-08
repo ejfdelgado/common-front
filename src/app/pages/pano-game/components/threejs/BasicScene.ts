@@ -4,6 +4,8 @@ import { StereoEffect } from 'three/examples/jsm/effects/StereoEffect.js';
 import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
+import { GyroControls } from './GyroControls';
+
 
 /**
  * A class to set up some basic scene elements to minimize code in the
@@ -32,6 +34,7 @@ export class BasicScene extends THREE.Scene {
 
   canvasRef: HTMLCanvasElement;
   effect: StereoEffect | null = null;
+  gyro: GyroControls | null = null;
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
@@ -53,6 +56,9 @@ export class BasicScene extends THREE.Scene {
     this.camera.position.z = 1;
     this.camera.position.y = 0;
     this.camera.position.x = 0;
+
+    this.gyro = new GyroControls(this.camera);
+
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvasRef,
@@ -70,7 +76,8 @@ export class BasicScene extends THREE.Scene {
   }
 
   localRender(useStereo: boolean) {
-    if (this.effect && this.camera) {
+    if (this.effect && this.camera && this.gyro) {
+      this.gyro.update();
       if (useStereo) {
         this.effect?.render(this, this.camera);
       } else {
@@ -130,5 +137,24 @@ export class BasicScene extends THREE.Scene {
         });
       }
     });
+  }
+
+  async enableGyro() {
+    if (typeof DeviceOrientationEvent !== "undefined" &&
+      (DeviceOrientationEvent as any).requestPermission) {
+
+      const perm = await (DeviceOrientationEvent as any).requestPermission();
+      if (perm !== "granted") {
+        alert("Gyro permission denied");
+        return;
+      }
+    }
+    if (this.gyro) {
+      this.gyro.enable();
+    }
+  }
+
+  disableGyro() {
+    this.gyro?.disable();
   }
 }
