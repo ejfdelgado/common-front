@@ -18,6 +18,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/game-lr/game-lr').then(m => m.GameLr),
     },
     {
+        path: 'panogame',
+        loadComponent: () => import('./pages/pano-game/pano-game').then(m => m.PanoGame),
+    },
+    {
         path: 'pano',
         loadComponent: () => import('./pages/pano/pano').then(m => m.Pano),
     },

@@ -224,7 +224,7 @@ export class Practicesong extends CommonSpeech {
 
     const fullyVisible =
       childRect.top >= parentRect.top &&
-      childRect.bottom + childRect.height * 2 <= parentRect.bottom;
+      childRect.bottom + childRect.height <= parentRect.bottom;
 
     if (fullyVisible) {
       return; // nothing to do
