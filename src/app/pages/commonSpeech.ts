@@ -153,7 +153,8 @@ export class CommonSpeech {
                 if (input.transcript) {
                     let index = 0;
                     for (let opcion of options) {
-                        const groups = opcion.reg.exec(input.transcript);
+                        const normalized = this.voiceSrv.normalizeString(input.transcript);
+                        const groups = opcion.reg.exec(normalized);
                         if (groups) {
                             const name = groups[opcion.index];
                             //console.log(index);
@@ -198,7 +199,7 @@ export class CommonSpeech {
             ], [
                 { reg: /(yo\s)(me\s)(llamo\s)(.+)$/ig, index: 4 },
                 { reg: /(me\s)(llamo\s)(.+)$/ig, index: 3 },
-                { reg: /(llamame|llameme\s)(.+)$/ig, index: 2 },
+                { reg: /(llamame\s|llameme\s)(.+)$/ig, index: 2 },
                 { reg: /(me\s)(puedes?\s)(llamar\s)(.+)$/ig, index: 4 },
                 { reg: /(mi\s)(nombre\s)(es\s)(.+)$/ig, index: 4 },
                 { reg: /(.+)/ig, index: 1 },
@@ -209,7 +210,7 @@ export class CommonSpeech {
                 `Escuché bien que tu nombre es ${nombre.text}?`,
             ], [
                 { reg: /(no|incorrecto|mal)/ig, index: 1 },
-                { reg: /(s[ií]|correcto|bien|confirmado)/ig, index: 1 },
+                { reg: /(si|correcto|bien|confirmado)/ig, index: 1 },
             ]);
             if (confirmacion.index == 1) {
                 //confirmed
