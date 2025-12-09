@@ -14,19 +14,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommonSpeech, SelectOptionType } from "../../../commonSpeech";
+import { CommonSpeech, SelectOptionType, VoiceQuery } from "../../../commonSpeech";
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { Question, QuestionDataType } from "../question/question";
+import { shuffleInPlace } from '@tools/ArrayUtil';
 
 export interface PanoConfig {
   title: string;
   subtitle: string;
   imageUrl: string;
   audioUrl: string | null;
-  lat?: number;
-  lon?: number;
-  phone?: number;
 }
 
 @Component({
@@ -59,30 +57,33 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     imageUrl: "",
     audioUrl: null,
   };
-  currentQuestion: QuestionDataType | null = {
-    text: "Como quieres conquistar la historia?",
-    options: [
-      {
-        id: "gato",
-        emoji: "🐱",
-        text: "Brillar y caminar",
-      }, {
-        id: "perro",
-        emoji: "🐶",
-        text: "Ser soporte para una causa mas grande que yo",
-        selected: true,
-      },
-      {
-        id: "mico",
-        emoji: "🐒",
-        text: "Brillar y caminar",
-      }, {
-        id: "león",
-        emoji: "🦁",
-        text: "Ser soporte para una causa mas grande que yo",
-      }
-    ]
-  };
+  questions: QuestionDataType[] = [
+    {
+      text: '¿A qué ciudad colombiana se le conoce como "La ciudad de la eterna primavera"?',
+      options: [
+        {
+          id: "gato",
+          emoji: "🐱",
+          text: "Cali",
+        }, {
+          id: "perro",
+          emoji: "🐶",
+          text: "Cartagena",
+        },
+        {
+          id: "mico",
+          emoji: "🐒",
+          text: "Barranquilla",
+        }, {
+          id: "león",
+          emoji: "🦁",
+          text: "Medellín",
+          points: 1,
+        }
+      ]
+    }
+  ];
+  currentQuestion: QuestionDataType | null = null;
 
   constructor(
     public override indicatorSrv: IndicatorService,
@@ -105,6 +106,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
           "ayuda": "help",
           "hola": "hello",
           "ola": "hello",
+          "pregunta": "ask",
         },
         "en-US": {
           "help": "help",
@@ -135,9 +137,94 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     command$.subscribe((command) => {
       if (command.command == "hello") {
         this.askName();
+      } else if (command.command == "ask") {
+        this.placeQuestion(this.questions[0]);
       }
       //console.log(command);
     });
+  }
+
+  async placeQuestion(question: QuestionDataType) {
+    shuffleInPlace(question.options);
+    this.currentQuestion = question;
+    this.cdr.detectChanges();
+    this.stopListening();
+
+    do {
+      await this.talk(question.text);
+      const INTRO_OPC: string[] = [
+        "las opciones son: ",
+        "elige una opción: ",
+        "escoge la respuesta que consideres verdadera: ",
+        "cual es la respuesta correcta?: ",
+        "elige la respuesta correcta: ",
+      ];
+      let textoCompleto = "";
+      let opciones: VoiceQuery[] = [];
+      for (let option of question.options) {
+        textoCompleto += `Di ${option.id}, para ${option.text}.`;
+        opciones.push({
+          index: 1,
+          reg: new RegExp("(" + this.voiceSrv.normalizeString(`${option.id}`) + ")", "ig"),
+        });
+      }
+
+      const respuesta = await this.genericVoiceQuery(
+        INTRO_OPC.map((prefix) => prefix + textoCompleto),
+        opciones,
+      );
+
+      const idChoice = respuesta.index;
+      if (idChoice < question.options.length) {
+        const selectedChoice = question.options[idChoice];
+        const correctQuestions = question.options.filter((op) => {
+          return typeof op.points == "number" && op.points > 0;
+        });
+
+        const CONFIRM: string[] = [
+          `Di "última palabra" para ${selectedChoice.id}, ${selectedChoice.text}?,. Di "cancelar" para cambiar la respuesta.`,
+        ];
+        let confirmOptionsPositive: VoiceQuery[] = [
+          { reg: /(ultima palabra)/ig, index: 1 },
+          { reg: /(si)/ig, index: 1 },
+          { reg: /(correcto)/ig, index: 1 },
+        ];
+        let confirmOptionsNegative: VoiceQuery[] = [
+          { reg: /(no)/ig, index: 1 },
+          { reg: /(cancelar)/ig, index: 1 },
+          { reg: /(cambiar)/ig, index: 1 },
+        ];
+
+        const confirmation = await this.genericVoiceQuery(
+          CONFIRM,
+          [...confirmOptionsNegative, ...confirmOptionsPositive],
+        );
+
+        if (confirmation.index >= confirmOptionsNegative.length) {
+          if (typeof selectedChoice.points == "number" && selectedChoice.points > 0) {
+            const SUCCESS_TEXT: string[] = [
+              "Correcto!",
+              "Excelente!",
+              "Muy bien hecho!",
+            ];
+            const suffix = ` La respuesta correcta es ${correctQuestions[0].id}, ${correctQuestions[0].text}`;
+            shuffleInPlace(SUCCESS_TEXT);
+            await this.talk(SUCCESS_TEXT.map((op) => op + suffix)[0]);
+            break;
+          } else {
+            const ERROR_TEXT: string[] = [
+              `Te has equivocado, `,
+              `Lo siento mucho, `,
+              `Ups!, `,
+            ];
+            const suffix = ` La respuesta correcta era ${correctQuestions[0].id}, ${correctQuestions[0].text}`;
+            shuffleInPlace(ERROR_TEXT);
+            await this.talk(ERROR_TEXT.map((op) => op + suffix)[0]);
+            break;
+          }
+        }
+      }
+    } while (true);
   }
 
   adjustWords() {

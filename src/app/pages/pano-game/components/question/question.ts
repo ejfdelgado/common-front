@@ -8,6 +8,7 @@ export interface OptionDataType {
   emoji: string;
   id: string;
   selected?: boolean;
+  points?: number;
 }
 
 export interface QuestionDataType {
