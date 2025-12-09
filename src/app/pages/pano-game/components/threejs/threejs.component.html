@@ -5,10 +5,16 @@
     </canvas>
 </div>
 <div class="hover_container full_screen container_vertical no_mouse" [ngClass]="{'is_mobile': hasMobile}">
+    <div class="status_bar"></div>
     <div class="relleno">
-        @if (currentQuestion !== null) {
-        <app-question [question]="currentQuestion"></app-question>
-        }
+        <div class="question_parent">
+            @if (currentQuestion !== null) {
+            <app-question [question]="currentQuestion"></app-question>
+            @if (useStereo) {
+            <app-question [question]="currentQuestion"></app-question>
+            }
+            }
+        </div>
     </div>
     <div class="speech_recognition_place">
         <span class="words_space">

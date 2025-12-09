@@ -28,6 +28,9 @@
 .hover_container .relleno {
   pointer-events: none;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hover_container .controles {
@@ -137,4 +140,22 @@
 
 .speech_recognition_place .words_space {
   flex: 1;
+}
+
+.question_parent {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.question_parent > * {
+  flex: 1;
+}
+
+.status_bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  min-height: 18px;
+  max-height: 18px;
 }

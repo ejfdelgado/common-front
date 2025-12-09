@@ -68,6 +68,14 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       }, {
         id: "Verde",
         text: "Ser soporte para una causa mas grande que yo",
+        selected: true,
+      },
+      {
+        id: "Amarillo",
+        text: "Brillar y caminar",
+      }, {
+        id: "Azul",
+        text: "Ser soporte para una causa mas grande que yo",
       }
     ]
   };
