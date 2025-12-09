@@ -4,7 +4,9 @@
     <div class="options">
         @for (option of question.options; track option.id; let i = $index) {
         <div class="option black_subtitle" [ngStyle]="{'background-color': getBackgroundColor(i, option.selected)}"
-            [innerHTML]="sanitizeText(option.text)" [ngClass]="{'selected': option.selected === true}">
+            [ngClass]="{'selected': option.selected === true}">
+            <span class="emoji">{{ option.emoji }}</span>
+            <span class="text" [innerHTML]="sanitizeText(option.text)"></span>
         </div>
         }
     </div>

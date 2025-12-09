@@ -5,6 +5,7 @@ import { generateHueColors } from '@tools/Colors';
 
 export interface OptionDataType {
   text: string;
+  emoji: string;
   id: string;
   selected?: boolean;
 }

@@ -63,18 +63,22 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     text: "Como quieres conquistar la historia?",
     options: [
       {
-        id: "Rojo",
+        id: "gato",
+        emoji: "🐱",
         text: "Brillar y caminar",
       }, {
-        id: "Verde",
+        id: "perro",
+        emoji: "🐶",
         text: "Ser soporte para una causa mas grande que yo",
         selected: true,
       },
       {
-        id: "Amarillo",
+        id: "mico",
+        emoji: "🐒",
         text: "Brillar y caminar",
       }, {
-        id: "Azul",
+        id: "león",
+        emoji: "🦁",
         text: "Ser soporte para una causa mas grande que yo",
       }
     ]
