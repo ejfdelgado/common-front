@@ -44,6 +44,7 @@ export interface PanoConfig {
 export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewInit {
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   @ViewChild('myparent') parentRef!: ElementRef;
+  @ViewChild('fadable_container') parentFade!: ElementRef;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
@@ -154,7 +155,10 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   }
 
   async placeQuestion(question: QuestionDataType) {
-    this.scene?.addPanorama(question);
+    this.currentQuestion = null;
+    this.cdr.detectChanges();
+    await this.scene?.addPanorama(question);
+    this.fadeIn();
     const sonidoUrl = BASE_BUCKET + question.sound;
 
     shuffleInPlace(question.options);
@@ -201,7 +205,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         });
 
         const CONFIRM: string[] = [
-          `Di "última palabra" para ${selectedChoice.id}, ${selectedChoice.text}?,. Di "cancelar" para cambiar la respuesta.`,
+          `Di "última palabra" para ${selectedChoice.id}, ${selectedChoice.text}, o di "cancelar" para cambiar la respuesta.`,
         ];
         let confirmOptionsPositive: VoiceQuery[] = [
           { reg: /(ultima palabra)/ig, index: 1 },
@@ -247,6 +251,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         }
       }
     } while (true);
+    await this.fadeOut();
+    this.currentQuestion = null;
+    this.cdr.detectChanges();
   }
 
   adjustWords() {
@@ -296,6 +303,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   }
 
   ngAfterViewInit(): void {
+    this.setFadeValue(0);
     this.computeDimensions();
     if (this.bounds == null) {
       return;
@@ -380,5 +388,58 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   isMobile() {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
       .test(navigator.userAgent);
+  }
+
+  setFadeValue(value: number) {
+    // Clamp between 0 and 1
+    const v = Math.min(1, Math.max(0, value));
+
+    // Convert 0→1 into alpha 255→0  
+    const alpha = Math.round((1 - v) * 255);
+
+    // Convert alpha to 2-digit hex
+    const alphaHex = alpha.toString(16).padStart(2, '0');
+
+    // Build final ARGB hex color (#000000AA)
+    const color = `#000000${alphaHex}`;
+    this.parentFade.nativeElement.style.backgroundColor = color;
+  }
+
+  async fadeIn() {
+    let current = 0;
+    let steps = 100;
+    let millis = 5000;
+    let increase = 1 / steps;
+    this.setFadeValue(current);
+    return new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        current += increase;
+        current = Math.min(1, current);
+        this.setFadeValue(current);
+        if (current == 1) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, millis / steps);
+    });
+  }
+
+  async fadeOut() {
+    let current = 1;
+    let steps = 100;
+    let millis = 3000;
+    let increase = 1 / steps;
+    this.setFadeValue(current);
+    return new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        current -= increase;
+        current = Math.max(0, current);
+        this.setFadeValue(current);
+        if (current == 0) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, millis / steps);
+    });
   }
 }

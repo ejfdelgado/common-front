@@ -32,7 +32,6 @@ export class BasicScene extends THREE.Scene {
   bounds: DOMRect;
   indicatorSrv: IndicatorService;
   configuration: PanoConfig | null = null;
-  panoramaAdded: boolean = false;
 
   canvasRef: HTMLCanvasElement;
   effect: StereoEffect | null = null;
@@ -111,7 +110,6 @@ export class BasicScene extends THREE.Scene {
   }
 
   async addPanorama(question: QuestionDataType) {
-    this.panoramaAdded = true;
     // get config json
     const promise: Wait = this.indicatorSrv.start();
 

@@ -4,7 +4,7 @@
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
 </div>
-<div class="hover_container full_screen container_vertical no_mouse" [ngClass]="{'is_mobile': hasMobile}">
+<div #fadable_container class="hover_container fadable_background full_screen container_vertical no_mouse" [ngClass]="{'is_mobile': hasMobile}">
     <div class="status_bar"></div>
     <div class="relleno">
         <div class="question_parent">
