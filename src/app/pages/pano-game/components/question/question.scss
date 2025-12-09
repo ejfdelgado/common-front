@@ -42,3 +42,7 @@
 .parent_1 .options .option.selected {
     border: 3px solid black;
 }
+
+.parent_1 .options .option.not_selected {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+}

@@ -63,19 +63,23 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       options: [
         {
           id: "gato",
+          idRegex: "gato",
           emoji: "🐱",
           text: "Cali",
         }, {
           id: "perro",
+          idRegex: "perro",
           emoji: "🐶",
           text: "Cartagena",
         },
         {
           id: "mico",
+          idRegex: "mi[ck]o",
           emoji: "🐒",
           text: "Barranquilla",
         }, {
           id: "león",
+          idRegex: "leon",
           emoji: "🦁",
           text: "Medellín",
           points: 1,
@@ -165,7 +169,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         textoCompleto += `Di ${option.id}, para ${option.text}.`;
         opciones.push({
           index: 1,
-          reg: new RegExp("(" + this.voiceSrv.normalizeString(`${option.id}`) + ")", "ig"),
+          reg: new RegExp(`(${option.idRegex})`, "ig"),
         });
       }
 
@@ -176,7 +180,10 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
 
       const idChoice = respuesta.index;
       if (idChoice < question.options.length) {
+        question.options.forEach((el) => el.selected = false);
         const selectedChoice = question.options[idChoice];
+        selectedChoice.selected = true;
+        this.cdr.detectChanges();
         const correctQuestions = question.options.filter((op) => {
           return typeof op.points == "number" && op.points > 0;
         });
@@ -222,6 +229,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
             await this.talk(ERROR_TEXT.map((op) => op + suffix)[0]);
             break;
           }
+        } else {
+          question.options.forEach((el) => el.selected = false);
+          this.cdr.detectChanges();
         }
       }
     } while (true);

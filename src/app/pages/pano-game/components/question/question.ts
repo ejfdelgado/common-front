@@ -7,6 +7,7 @@ export interface OptionDataType {
   text: string;
   emoji: string;
   id: string;
+  idRegex: string;
   selected?: boolean;
   points?: number;
 }
@@ -56,7 +57,7 @@ export class Question implements OnInit {
     if (selected) {
       return this.colors[i] + (selected ? "FF" : "7F");
     } else {
-      return "FFFFFF7F"
+      return "FFFFFF7F";
     }
   }
 }
