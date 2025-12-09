@@ -64,7 +64,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv);
+    super(voiceSrv, speechSrv, indicatorSrv, "es-ES");
     this.hasMobile = this.isMobile();
 
     this.voiceSrv.setInterimResults(true);
@@ -77,6 +77,8 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       commands: {
         "es-ES": {
           "ayuda": "help",
+          "hola": "hello",
+          "ola": "hello",
         },
         "en-US": {
           "help": "help",
@@ -105,7 +107,10 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
 
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
-      console.log(command);
+      if (command.command == "hello") {
+        this.askName();
+      }
+      //console.log(command);
     });
   }
 

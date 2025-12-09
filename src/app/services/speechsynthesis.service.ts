@@ -6,6 +6,7 @@ export class SpeechSynthesisService {
 
     async init(): Promise<void> {
         this.voices = await this.loadVoices();
+        //console.log(this.getLangs());
     }
 
     private loadVoices(): Promise<SpeechSynthesisVoice[]> {
@@ -19,6 +20,7 @@ export class SpeechSynthesisService {
     }
 
     speak(text: string, lang: string = 'en-US'): Promise<boolean> {
+        console.log(`Speaking ${lang}`);
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.voice = this.voices.find(v => v.lang === lang) || null;
         return new Promise((resolve, reject) => {

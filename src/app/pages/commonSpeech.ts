@@ -1,9 +1,21 @@
-import { VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { generateHueColors } from '@tools/Colors';
+import { debounceTime } from 'rxjs/operators';
+import { Subscription } from "rxjs";
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
+
+export interface VoiceAnswer {
+    text: string;
+    index: number;
+}
+
+export interface VoiceQuery {
+    reg: RegExp,
+    index: number;
+};
 
 export interface SelectOptionType {
     id: string;
@@ -47,6 +59,7 @@ export class CommonSpeech {
         if (suggestedLang && POSSIBLE_LANGS.indexOf(suggestedLang) >= 0) {
             this.currentLang = suggestedLang;
         }
+        this.speechSrv.init();
     }
     getUrlQueryParams() {
         return new URLSearchParams(window.location.hash.split("?")[1]);
@@ -118,5 +131,92 @@ export class CommonSpeech {
             promise.done();
         }
         return null;
+    }
+
+    async genericVoiceQuery(query1: string[], options: VoiceQuery[]) {
+        this.stopListening();
+        const query = [...query1];
+        const picked = query.splice(Math.floor(Math.random() * query.length), 1);
+        await this.talk(picked[0]);
+        const config: CommandConfigType = {
+            confidenceMin: 0.5,
+            maxDiffMillis: 600,
+            commands: {},
+        };
+        this.voiceSrv.setInterimResults(false);
+        this.voiceSrv.setContinuous(false);
+        this.startListening();
+        const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
+        let subscription: Subscription | null = null;
+        const promise = new Promise<VoiceAnswer>((resolve, reject) => {
+            const addWordFun = (input: RecognizedWord) => {
+                if (input.transcript) {
+                    let index = 0;
+                    for (let opcion of options) {
+                        const groups = opcion.reg.exec(input.transcript);
+                        if (groups) {
+                            const name = groups[opcion.index];
+                            //console.log(index);
+                            //console.log(input);
+                            //console.log(groups);
+                            //console.log(name);
+                            resolve({
+                                index,
+                                text: name,
+                            });
+                            break;
+                        }
+                        index++;
+                    }
+                }
+            };
+            subscription = word$.pipe(
+                debounceTime(300)
+            ).subscribe(addWordFun);
+        });
+        promise.finally(() => {
+            this.stopListening();
+            if (subscription) {
+                subscription.unsubscribe();
+            }
+        })
+        return promise;
+    }
+
+    async askName() {
+        this.stopListening();
+        await this.talk("Hola, espero estés muy bien");
+        let nombre: VoiceAnswer = {
+            index: 0,
+            text: "",
+        };
+        do {
+            nombre = await this.genericVoiceQuery([
+                "por favor dime cuál es tu nombre?",
+                "por favor dime cómo te llamas?",
+                "por favor dime cómo te puedo llamar?",
+            ], [
+                { reg: /(yo\s)(me\s)(llamo\s)(.+)$/ig, index: 4 },
+                { reg: /(me\s)(llamo\s)(.+)$/ig, index: 3 },
+                { reg: /(llamame|llameme\s)(.+)$/ig, index: 2 },
+                { reg: /(me\s)(puedes?\s)(llamar\s)(.+)$/ig, index: 4 },
+                { reg: /(mi\s)(nombre\s)(es\s)(.+)$/ig, index: 4 },
+                { reg: /(.+)/ig, index: 1 },
+            ]);
+
+            const confirmacion = await this.genericVoiceQuery([
+                `Confírmame si te puedo llamar ${nombre.text}?`,
+                `Escuché bien que tu nombre es ${nombre.text}?`,
+            ], [
+                { reg: /(no|incorrecto|mal)/ig, index: 1 },
+                { reg: /(s[ií]|correcto|bien|confirmado)/ig, index: 1 },
+            ]);
+            if (confirmacion.index == 1) {
+                //confirmed
+                await this.talk(`Listo ${nombre.text}! vamos a jugar`);
+                break;
+            }
+        } while (true);
+        return nombre.text;
     }
 }
