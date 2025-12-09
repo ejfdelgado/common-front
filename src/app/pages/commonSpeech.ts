@@ -133,7 +133,7 @@ export class CommonSpeech {
         return null;
     }
 
-    async genericVoiceQuery(query1: string[], options: VoiceQuery[], timeout: number | null = 5000) {
+    async genericVoiceQuery(query1: string[], options: VoiceQuery[], timeout: number | null = 5000, repeat: boolean = true): Promise<VoiceAnswer> {
         this.stopListening();
         const query = [...query1];
         const picked = query.splice(Math.floor(Math.random() * query.length), 1);
@@ -148,9 +148,10 @@ export class CommonSpeech {
         this.startListening();
         const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
         let subscription: Subscription | null = null;
+        let timeoutHandler: NodeJS.Timeout | null = null;
         const promise = new Promise<VoiceAnswer>((resolve, reject) => {
             if (typeof timeout == "number") {
-                setTimeout(() => {
+                timeoutHandler = setTimeout(() => {
                     reject();
                 }, timeout);
             }
@@ -181,12 +182,28 @@ export class CommonSpeech {
             ).subscribe(addWordFun);
         });
         promise.finally(() => {
+            if (timeoutHandler) {
+                clearTimeout(timeoutHandler);
+            }
             this.stopListening();
             if (subscription) {
                 subscription.unsubscribe();
             }
-        })
-        return promise;
+        });
+        if (repeat) {
+            return new Promise((resolve) => {
+                promise.then((success) => {
+                    resolve(success);
+                }).catch(() => {
+                    requestAnimationFrame(async () => {
+                        const response = await this.genericVoiceQuery(query1, options, timeout, repeat);
+                        resolve(response);
+                    });
+                });
+            });
+        } else {
+            return promise;
+        }
     }
 
     async askName() {
@@ -196,48 +213,36 @@ export class CommonSpeech {
             index: 0,
             text: "",
         };
-        let finalizado1 = false;
+
         do {
-            try {
-                nombre = await this.genericVoiceQuery([
-                    "por favor dime cuál es tu nombre?",
-                    "por favor dime cómo te llamas?",
-                    "por favor dime cómo te puedo llamar?",
-                ], [
-                    { reg: /(yo\s)(me\s)(llamo\s)(.+)$/ig, index: 4 },
-                    { reg: /(me\s)(llamo\s)(.+)$/ig, index: 3 },
-                    { reg: /(llamame\s|llameme\s)(.+)$/ig, index: 2 },
-                    { reg: /(me\s)(puedes?\s)(llamar\s)(.+)$/ig, index: 4 },
-                    { reg: /(mi\s)(nombre\s)(es\s)(.+)$/ig, index: 4 },
-                    { reg: /(.+)/ig, index: 1 },
-                ]);
 
-                let finalizado2 = false;
-                do {
-                    try {
-                        const confirmacion = await this.genericVoiceQuery([
-                            `Confírmame si te puedo llamar ${nombre.text}?`,
-                            `Escuché bien que tu nombre es ${nombre.text}?`,
-                            `Está bien si te llamo ${nombre.text}?`,
-                        ], [
-                            { reg: /(no|incorrecto|mal)/ig, index: 1 },
-                            { reg: /(si|correcto|bien|confirmado)/ig, index: 1 },
-                        ]);
-                        if (confirmacion.index == 1) {
-                            //confirmed
-                            await this.talk(`Listo ${nombre.text}! vamos a jugar`);
-                            finalizado1 = true;
-                        }
-                        finalizado2 = true;
-                    } catch (err1) {
+            nombre = await this.genericVoiceQuery([
+                "por favor dime cuál es tu nombre?",
+                "por favor dime cómo te llamas?",
+                "por favor dime cómo te puedo llamar?",
+            ], [
+                { reg: /(yo\s)(me\s)(llamo\s)(.+)$/ig, index: 4 },
+                { reg: /(me\s)(llamo\s)(.+)$/ig, index: 3 },
+                { reg: /(llamame\s|llameme\s)(.+)$/ig, index: 2 },
+                { reg: /(me\s)(puedes?\s)(llamar\s)(.+)$/ig, index: 4 },
+                { reg: /(mi\s)(nombre\s)(es\s)(.+)$/ig, index: 4 },
+                { reg: /(.+)/ig, index: 1 },
+            ]);
 
-                    }
-                } while (!finalizado2);
-
-            } catch (err) {
-
+            const confirmacion = await this.genericVoiceQuery([
+                `Confírmame si te puedo llamar ${nombre.text}?`,
+                `Escuché bien que tu nombre es ${nombre.text}?`,
+                `Está bien si te llamo ${nombre.text}?`,
+            ], [
+                { reg: /(no|incorrecto|mal)/ig, index: 1 },
+                { reg: /(si|correcto|bien|confirmado)/ig, index: 1 },
+            ]);
+            if (confirmacion.index == 1) {
+                //confirmed
+                await this.talk(`Listo ${nombre.text}! vamos a jugar`);
+                break;
             }
-        } while (!finalizado1);
+        } while (true);
         return nombre.text;
     }
 }
