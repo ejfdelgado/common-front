@@ -20,6 +20,8 @@ import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { Question, QuestionDataType } from "../question/question";
 import { shuffleInPlace } from '@tools/ArrayUtil';
 
+const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
+
 export interface PanoConfig {
   title: string;
   subtitle: string;
@@ -59,6 +61,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   };
   questions: QuestionDataType[] = [
     {
+      photo: "/pano/2025-07/001/pano.jpg",
+      sound: "/pano/2025-07/001/ambience.aac",
+      intro: "Imagina una ciudad que se alza en medio de un enorme valle verde, rodeada por montañas que parecen abrazarla. Su clima es tan suave que muchos la llaman “la ciudad de la eterna primavera”: no hace demasiado calor, ni demasiado frío, y siempre hay flores en los jardines, en los parques y hasta en los balcones.",
       text: '¿A qué ciudad colombiana se le conoce como "La ciudad de la eterna primavera"?',
       options: [
         {
@@ -149,13 +154,20 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   }
 
   async placeQuestion(question: QuestionDataType) {
+    this.scene?.addPanorama(question);
+    const sonidoUrl = BASE_BUCKET + question.sound;
+
     shuffleInPlace(question.options);
-    this.currentQuestion = question;
-    this.cdr.detectChanges();
     this.stopListening();
 
+    ModuloSonido.play(sonidoUrl, true, 1, null);
+    await this.talk(question.intro);
     do {
+      ModuloSonido.play(sonidoUrl, true, 1, null);
+      this.currentQuestion = question;
+      this.cdr.detectChanges();
       await this.talk(question.text);
+      ModuloSonido.pause(sonidoUrl);
       const INTRO_OPC: string[] = [
         "las opciones son: ",
         "elige una opción: ",
@@ -333,12 +345,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       }
       this.cdr.detectChanges();
     });
-  }
-
-
-  stopSound() {
-    ModuloSonido.stop(this.configuration.audioUrl + `?t=${this.tParam}`);
-    this.soundActivated = false;
   }
 
   enterFullscreen(element: any) {

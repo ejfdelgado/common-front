@@ -5,7 +5,9 @@ import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
 import { GyroControls } from './GyroControls';
+import { QuestionDataType } from '../question/question';
 
+const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
 /**
  * A class to set up some basic scene elements to minimize code in the
@@ -72,7 +74,6 @@ export class BasicScene extends THREE.Scene {
 
     // Stereo effect (splits the screen)
     this.effect = new StereoEffect(this.renderer);
-    this.addPanorama();
   }
 
   localRender(useStereo: boolean) {
@@ -107,35 +108,29 @@ export class BasicScene extends THREE.Scene {
 
   async setConfig(configuration: PanoConfig) {
     this.configuration = configuration;
-    await this.addPanorama();
   }
 
-  async addPanorama() {
-    if (!this.configuration || this.panoramaAdded) {
-      return;
-    }
+  async addPanorama(question: QuestionDataType) {
     this.panoramaAdded = true;
     // get config json
     const promise: Wait = this.indicatorSrv.start();
 
     return new Promise((resolve) => {
       const loader = new THREE.TextureLoader();
-      if (this.configuration) {
-        loader.load(this.configuration.imageUrl, (texture) => {
-          texture.mapping = THREE.EquirectangularReflectionMapping;
-          // 3. Optional: Create cube render target if you want environment reflections
-          const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(texture.image.height / 2);
-          if (this.renderer) {
-            cubeRenderTarget.fromEquirectangularTexture(this.renderer, texture);
-          }
-          // 4. Set as scene background
-          this.background = texture;
-          // Optional: Use as environment for reflective materials
-          this.environment = texture;
-          promise.done();
-          resolve(null);
-        });
-      }
+      loader.load(BASE_BUCKET + question.photo, (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        // 3. Optional: Create cube render target if you want environment reflections
+        const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(texture.image.height / 2);
+        if (this.renderer) {
+          cubeRenderTarget.fromEquirectangularTexture(this.renderer, texture);
+        }
+        // 4. Set as scene background
+        this.background = texture;
+        // Optional: Use as environment for reflective materials
+        this.environment = texture;
+        promise.done();
+        resolve(null);
+      });
     });
   }
 

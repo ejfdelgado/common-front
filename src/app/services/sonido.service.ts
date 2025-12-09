@@ -58,7 +58,7 @@ export class ModuloSonido {
 		ModuloSonido.sincId = id;
 	}
 
-	static async play(llave: string, loop: boolean = false, volume: number = 1, startMillis: number = 0) {
+	static async play(llave: string, loop: boolean = false, volume: number = 1, startMillis: number | null = 0) {
 		let ref = null;
 		if (llave in ModuloSonido.sonidos) {
 			ref = ModuloSonido.sonidos[llave];
@@ -73,10 +73,12 @@ export class ModuloSonido {
 			if (ModuloSonido.sincId) {
 				ref.setSinkId(ModuloSonido.sincId);
 			}
-			ref.currentTime = startMillis / 1000;
+			if (typeof startMillis == "number") {
+				ref.currentTime = startMillis / 1000;
+			}
 			ref.play();
 		} else {
-			if (startMillis != 0) {
+			if (typeof startMillis == "number" && startMillis != 0) {
 				ref.currentTime = startMillis / 1000;
 			}
 		}
@@ -87,6 +89,13 @@ export class ModuloSonido {
 		if (sonido) {
 			sonido.pause();
 			sonido.currentTime = 0;
+		}
+	}
+
+	static pause(llave: string) {
+		const sonido = ModuloSonido.sonidos[llave];
+		if (sonido) {
+			sonido.pause();
 		}
 	}
 

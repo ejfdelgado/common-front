@@ -13,6 +13,9 @@ export interface OptionDataType {
 }
 
 export interface QuestionDataType {
+  photo: string;
+  sound: string;
+  intro: string;
   text: string;
   options: OptionDataType[];
 }
