@@ -133,7 +133,7 @@ export class CommonSpeech {
         return null;
     }
 
-    async genericVoiceQuery(query1: string[], options: VoiceQuery[]) {
+    async genericVoiceQuery(query1: string[], options: VoiceQuery[], timeout: number | null = 5000) {
         this.stopListening();
         const query = [...query1];
         const picked = query.splice(Math.floor(Math.random() * query.length), 1);
@@ -149,6 +149,11 @@ export class CommonSpeech {
         const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
         let subscription: Subscription | null = null;
         const promise = new Promise<VoiceAnswer>((resolve, reject) => {
+            if (typeof timeout == "number") {
+                setTimeout(() => {
+                    reject();
+                }, timeout);
+            }
             const addWordFun = (input: RecognizedWord) => {
                 if (input.transcript) {
                     let index = 0;
@@ -191,33 +196,48 @@ export class CommonSpeech {
             index: 0,
             text: "",
         };
+        let finalizado1 = false;
         do {
-            nombre = await this.genericVoiceQuery([
-                "por favor dime cuál es tu nombre?",
-                "por favor dime cómo te llamas?",
-                "por favor dime cómo te puedo llamar?",
-            ], [
-                { reg: /(yo\s)(me\s)(llamo\s)(.+)$/ig, index: 4 },
-                { reg: /(me\s)(llamo\s)(.+)$/ig, index: 3 },
-                { reg: /(llamame\s|llameme\s)(.+)$/ig, index: 2 },
-                { reg: /(me\s)(puedes?\s)(llamar\s)(.+)$/ig, index: 4 },
-                { reg: /(mi\s)(nombre\s)(es\s)(.+)$/ig, index: 4 },
-                { reg: /(.+)/ig, index: 1 },
-            ]);
+            try {
+                nombre = await this.genericVoiceQuery([
+                    "por favor dime cuál es tu nombre?",
+                    "por favor dime cómo te llamas?",
+                    "por favor dime cómo te puedo llamar?",
+                ], [
+                    { reg: /(yo\s)(me\s)(llamo\s)(.+)$/ig, index: 4 },
+                    { reg: /(me\s)(llamo\s)(.+)$/ig, index: 3 },
+                    { reg: /(llamame\s|llameme\s)(.+)$/ig, index: 2 },
+                    { reg: /(me\s)(puedes?\s)(llamar\s)(.+)$/ig, index: 4 },
+                    { reg: /(mi\s)(nombre\s)(es\s)(.+)$/ig, index: 4 },
+                    { reg: /(.+)/ig, index: 1 },
+                ]);
 
-            const confirmacion = await this.genericVoiceQuery([
-                `Confírmame si te puedo llamar ${nombre.text}?`,
-                `Escuché bien que tu nombre es ${nombre.text}?`,
-            ], [
-                { reg: /(no|incorrecto|mal)/ig, index: 1 },
-                { reg: /(si|correcto|bien|confirmado)/ig, index: 1 },
-            ]);
-            if (confirmacion.index == 1) {
-                //confirmed
-                await this.talk(`Listo ${nombre.text}! vamos a jugar`);
-                break;
+                let finalizado2 = false;
+                do {
+                    try {
+                        const confirmacion = await this.genericVoiceQuery([
+                            `Confírmame si te puedo llamar ${nombre.text}?`,
+                            `Escuché bien que tu nombre es ${nombre.text}?`,
+                            `Está bien si te llamo ${nombre.text}?`,
+                        ], [
+                            { reg: /(no|incorrecto|mal)/ig, index: 1 },
+                            { reg: /(si|correcto|bien|confirmado)/ig, index: 1 },
+                        ]);
+                        if (confirmacion.index == 1) {
+                            //confirmed
+                            await this.talk(`Listo ${nombre.text}! vamos a jugar`);
+                            finalizado1 = true;
+                        }
+                        finalizado2 = true;
+                    } catch (err1) {
+
+                    }
+                } while (!finalizado2);
+
+            } catch (err) {
+
             }
-        } while (true);
+        } while (!finalizado1);
         return nombre.text;
     }
 }
