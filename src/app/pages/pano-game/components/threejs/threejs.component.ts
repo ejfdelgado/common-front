@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonSpeech, SelectOptionType } from "../../../commonSpeech";
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
+import { Question, QuestionDataType } from "../question/question";
 
 export interface PanoConfig {
   title: string;
@@ -35,6 +36,7 @@ export interface PanoConfig {
     CommonModule,
     FormsModule,
     MatIconModule,
+    Question,
   ],
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
@@ -56,6 +58,18 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     subtitle: "toman tiempo...",
     imageUrl: "",
     audioUrl: null,
+  };
+  currentQuestion: QuestionDataType | null = {
+    text: "Como quieres conquistar la historia?",
+    options: [
+      {
+        id: "Rojo",
+        text: "Brillar y caminar",
+      }, {
+        id: "Verde",
+        text: "Ser soporte para una causa mas grande que yo",
+      }
+    ]
   };
 
   constructor(

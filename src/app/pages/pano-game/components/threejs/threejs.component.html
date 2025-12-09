@@ -5,7 +5,11 @@
     </canvas>
 </div>
 <div class="hover_container full_screen container_vertical no_mouse" [ngClass]="{'is_mobile': hasMobile}">
-    <div class="relleno"></div>
+    <div class="relleno">
+        @if (currentQuestion !== null) {
+        <app-question [question]="currentQuestion"></app-question>
+        }
+    </div>
     <div class="speech_recognition_place">
         <span class="words_space">
             @for (word of words; track word.time) {

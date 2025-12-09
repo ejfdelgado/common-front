@@ -1,0 +1,10 @@
+<div class="parent_1">
+    <div class="question" [innerHTML]="sanitizeText(question.text)">
+    </div>
+    <div class="options">
+        @for (option of question.options; track option.id) {
+        <div class="option" [innerHTML]="sanitizeText(option.text)" [ngClass]="{'selected': option.selected === true}">
+        </div>
+        }
+    </div>
+</div>
