@@ -30,8 +30,15 @@ export class GyroControls {
         window.removeEventListener("deviceorientation", this.onDeviceOrientation, true);
     }
 
+    private getScreenOrientation(): number {
+        if (screen.orientation && screen.orientation.angle !== undefined) {
+            return screen.orientation.angle;
+        }
+        return window.orientation || 0; // fallback
+    }
+
     private onScreenOrientation() {
-        this.screenOrientation = window.orientation as number | 0;
+        this.screenOrientation = this.getScreenOrientation();
     }
 
     private onDeviceOrientation(event: DeviceOrientationEvent) {

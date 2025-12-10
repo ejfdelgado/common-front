@@ -54,7 +54,7 @@
     </div>
 </div>
 @if (viewState=='photo') {
-<div class="top_right">
+<div class="top_right" [ngClass]="{'is_mobile': hasMobile}">
     @if (!isFullScreen) {
     <button (click)="setFullScreen(true)">
         <mat-icon class="white_subtitle">fullscreen</mat-icon>

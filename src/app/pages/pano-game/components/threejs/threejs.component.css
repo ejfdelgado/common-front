@@ -76,6 +76,14 @@
   padding: 15px;
 }
 
+.top_right.is_mobile {
+  padding: 8px;
+}
+
+.top_right.is_mobile mat-icon {
+  font-size: 19px;
+}
+
 .margin_15 {
   margin: 15px;
 }
@@ -156,8 +164,8 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  min-height: 35px;
-  max-height: 35px;
+  min-height: 30px;
+  max-height: 30px;
 }
 
 .status_bar .status_bar_container {
@@ -166,7 +174,7 @@
   position: relative;
 }
 
-app-statusbar {
+.status_bar app-statusbar {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -175,11 +183,11 @@ app-statusbar {
 }
 
 .status_bar.is_stereo .status_bar_container:nth-child(1) app-statusbar {
-  right: 5px;
+  right: 3px;
 }
 
 .status_bar.is_stereo .status_bar_container:nth-child(2) app-statusbar {
-  left: 5px;
+  left: 3px;
 }
 
 .vertical_separator {
@@ -195,12 +203,12 @@ app-statusbar {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 10px;
-  left: -5px;
+  width: 6px;
+  left: -3px;
 }
 
 .is_listening {
-  border: 5px solid rgb(0, 255, 0);
+  border: 3px solid rgb(0, 255, 0);
 }
 
 .is_listening .vertical_separator .vertical_line {

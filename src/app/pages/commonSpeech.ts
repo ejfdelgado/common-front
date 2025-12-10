@@ -135,7 +135,23 @@ export class CommonSpeech {
         return null;
     }
 
+    isBussy: boolean = false;
+
     async genericVoiceQuery(query1: string[], options: VoiceQuery[], timeout: number | null = 5000, repeat: boolean = true): Promise<VoiceAnswer> {
+        try {
+            if (this.isBussy) {
+                throw new Error("bussy");
+            }
+            this.isBussy = true;
+            const response = await this.genericVoiceQueryInternal(query1, options, timeout, repeat);
+            this.isBussy = false;
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async genericVoiceQueryInternal(query1: string[], options: VoiceQuery[], timeout: number | null = 5000, repeat: boolean = true): Promise<VoiceAnswer> {
         this.stopListening();
         const query = [...query1];
         const picked = query.splice(Math.floor(Math.random() * query.length), 1);
@@ -213,7 +229,7 @@ export class CommonSpeech {
                     resolve(success);
                 }).catch(() => {
                     requestAnimationFrame(async () => {
-                        const response = await this.genericVoiceQuery(query1, options, timeout, repeat);
+                        const response = await this.genericVoiceQueryInternal(query1, options, timeout, repeat);
                         resolve(response);
                     });
                 });
@@ -224,6 +240,9 @@ export class CommonSpeech {
     }
 
     async askName() {
+        if (this.isBussy) {
+            return;
+        }
         this.stopListening();
         await this.talk("Hola, espero estés muy bien");
         let nombre: VoiceAnswer = {

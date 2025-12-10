@@ -21,6 +21,7 @@ import { Question, QuestionDataType } from "../question/question";
 import { shuffleInPlace } from '@tools/ArrayUtil';
 import { BooleanStateService } from "@services/boolean-state.service";
 import { Statusbar } from "../statusbar/statusbar";
+import { isMobile } from '@tools/mobile';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -110,7 +111,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public override booleanService: BooleanStateService,
   ) {
     super(voiceSrv, speechSrv, indicatorSrv, booleanService, "es-ES");
-    this.hasMobile = this.isMobile();
+    this.hasMobile = isMobile();
 
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
@@ -168,6 +169,14 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       }
       this.cdr.detectChanges();
     });
+  }
+
+  playSuccess() {
+    ModuloSonido.play(BASE_BUCKET + "/sounds/violin_success.mp3", false, 1, 0);
+  }
+
+  playFail() {
+    ModuloSonido.play(BASE_BUCKET + "/sounds/loose.mp3", false, 1, 0);
   }
 
   async placeQuestion(question: QuestionDataType) {
@@ -253,6 +262,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
             ];
             const suffix = ` La respuesta correcta es ${correctQuestions[0].id}, ${correctQuestions[0].text}`;
             shuffleInPlace(SUCCESS_TEXT);
+            this.playSuccess();
             await this.talk(SUCCESS_TEXT.map((op) => op + suffix)[0]);
             break;
           } else {
@@ -263,6 +273,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
             ];
             const suffix = ` La respuesta correcta era ${correctQuestions[0].id}, ${correctQuestions[0].text}`;
             shuffleInPlace(ERROR_TEXT);
+            this.playFail();
             await this.talk(ERROR_TEXT.map((op) => op + suffix)[0]);
             break;
           }
@@ -404,11 +415,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     } else {
       this.exitFullscreen();
     }
-  }
-
-  isMobile() {
-    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-      .test(navigator.userAgent);
   }
 
   setFadeValue(value: number) {

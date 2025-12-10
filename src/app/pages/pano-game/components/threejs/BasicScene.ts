@@ -6,6 +6,8 @@ import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
 import { GyroControls } from './GyroControls';
 import { QuestionDataType } from '../question/question';
+import { isMobile } from '@tools/mobile';
+import { DeviceOrientationControls } from "./DeviceOrientationControls";
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -35,7 +37,8 @@ export class BasicScene extends THREE.Scene {
 
   canvasRef: HTMLCanvasElement;
   effect: StereoEffect | null = null;
-  gyro: GyroControls | null = null;
+  controls: GyroControls | DeviceOrientationControls | null = null;
+  hasMobile = isMobile();
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
@@ -54,11 +57,6 @@ export class BasicScene extends THREE.Scene {
       0.1,
       1000
     );
-    this.camera.position.z = 1;
-    this.camera.position.y = 0;
-    this.camera.position.x = 0;
-
-    this.gyro = new GyroControls(this.camera);
 
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -67,17 +65,32 @@ export class BasicScene extends THREE.Scene {
       antialias: true
     });
     this.renderer.setSize(this.bounds.width, this.bounds.height);
-    // sets up the camera's orbital controls
-    this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
-    this.orbitals.enableDamping = true;
+
+    this.camera.rotation.order = "YXZ";
+    this.camera.position.set(0, 0, 0);
+    this.camera.lookAt(0, 0, -1);
+
+    if (this.hasMobile) {
+      this.camera.position.z = 0.01;
+      this.controls = new GyroControls(this.camera);
+      //this.controls = new DeviceOrientationControls(this.camera);
+    } else {
+      this.camera.position.z = 1;
+      // sets up the camera's orbital controls
+      this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
+      this.orbitals.enableDamping = true;
+    }
 
     // Stereo effect (splits the screen)
     this.effect = new StereoEffect(this.renderer);
   }
 
+
   localRender(useStereo: boolean) {
-    if (this.effect && this.camera && this.gyro) {
-      this.gyro.update();
+    if (this.effect && this.camera) {
+      if (this.controls) {
+        this.controls.update();
+      }
       if (useStereo) {
         this.effect?.render(this, this.camera);
       } else {
@@ -142,12 +155,12 @@ export class BasicScene extends THREE.Scene {
         return;
       }
     }
-    if (this.gyro) {
-      this.gyro.enable();
+    if (this.controls) {
+      this.controls.enable();
     }
   }
 
   disableGyro() {
-    this.gyro?.disable();
+    this.controls?.disable();
   }
 }
