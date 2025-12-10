@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component pages/pano-game/components/question
+npx ng generate component pages/pano-game/components/statusbar
 ```
 
 ```bash
@@ -47,6 +47,9 @@ gsutil cors get gs://pro-ejflab-assets
 ```
 
 ## TODO
+
+- Avoid fadein fadeout conflict!
+- progress bar border
 
 - Reload game (avoid win notification after finishing)
 - Fullscreen toggle

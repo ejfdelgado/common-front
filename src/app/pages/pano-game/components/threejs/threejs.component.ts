@@ -20,6 +20,7 @@ import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { Question, QuestionDataType } from "../question/question";
 import { shuffleInPlace } from '@tools/ArrayUtil';
 import { BooleanStateService } from "@services/boolean-state.service";
+import { Statusbar } from "../statusbar/statusbar";
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -38,6 +39,7 @@ export interface PanoConfig {
     FormsModule,
     MatIconModule,
     Question,
+    Statusbar,
   ],
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
@@ -57,6 +59,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   useStereo: boolean = false;
   isSystemListening: boolean = false;
   listeningTimeoutPercentage: number = 0;
+  fadeTimeout: NodeJS.Timeout | null = null;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
     subtitle: "toman tiempo...",
@@ -67,7 +70,8 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     {
       photo: "/pano/2025-07/001/pano.jpg",
       sound: "/pano/2025-07/001/ambience.aac",
-      intro: "Imagina una ciudad que se alza en medio de un enorme valle verde, rodeada por montañas que parecen abrazarla. Su clima es tan suave que muchos la llaman “la ciudad de la eterna primavera”: no hace demasiado calor, ni demasiado frío, y siempre hay flores en los jardines, en los parques y hasta en los balcones.",
+      //intro: "Imagina una ciudad que se alza en medio de un enorme valle verde, rodeada por montañas que parecen abrazarla. Su clima es tan suave que muchos la llaman “la ciudad de la eterna primavera”: no hace demasiado calor, ni demasiado frío, y siempre hay flores en los jardines, en los parques y hasta en los balcones.",
+      intro: "intro",
       text: '¿A qué ciudad colombiana se le conoce como "La ciudad de la eterna primavera"?',
       options: [
         {
@@ -162,7 +166,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       if (typeof value.percentage == "number") {
         this.listeningTimeoutPercentage = value.percentage;
       }
-      console.log(`listeningTimeoutPercentage = ${this.listeningTimeoutPercentage}`);
       this.cdr.detectChanges();
     });
   }
@@ -171,7 +174,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     if (this.currentQuestion != null) {
       return;
     }
-    const LONG_TIMEOUT = 10000;
+    const LONG_TIMEOUT = 60000;
     this.cdr.detectChanges();
     await this.scene?.addPanorama(question);
     this.fadeIn();
@@ -424,18 +427,23 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   }
 
   async fadeIn() {
+    if (this.fadeTimeout) {
+      clearInterval(this.fadeTimeout);
+    }
     let current = 0;
     let steps = 100;
     let millis = 5000;
     let increase = 1 / steps;
     this.setFadeValue(current);
     return new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
+      this.fadeTimeout = setInterval(() => {
         current += increase;
         current = Math.min(1, current);
         this.setFadeValue(current);
         if (current == 1) {
-          clearInterval(interval);
+          if (this.fadeTimeout) {
+            clearInterval(this.fadeTimeout);
+          }
           resolve();
         }
       }, millis / steps);
@@ -443,18 +451,23 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   }
 
   async fadeOut() {
+    if (this.fadeTimeout) {
+      clearInterval(this.fadeTimeout);
+    }
     let current = 1;
     let steps = 100;
     let millis = 3000;
     let increase = 1 / steps;
     this.setFadeValue(current);
     return new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
+      this.fadeTimeout = setInterval(() => {
         current -= increase;
         current = Math.max(0, current);
         this.setFadeValue(current);
         if (current == 0) {
-          clearInterval(interval);
+          if (this.fadeTimeout) {
+            clearInterval(this.fadeTimeout);
+          }
           resolve();
         }
       }, millis / steps);

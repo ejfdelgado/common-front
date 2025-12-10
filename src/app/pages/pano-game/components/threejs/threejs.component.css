@@ -156,8 +156,30 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  min-height: 18px;
-  max-height: 18px;
+  min-height: 35px;
+  max-height: 35px;
+}
+
+.status_bar .status_bar_container {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+app-statusbar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.status_bar.is_stereo .status_bar_container:nth-child(1) app-statusbar {
+  right: 5px;
+}
+
+.status_bar.is_stereo .status_bar_container:nth-child(2) app-statusbar {
+  left: 5px;
 }
 
 .vertical_separator {

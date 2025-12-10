@@ -1,0 +1,9 @@
+<div class="grand_parent">
+    @if (isListening) {
+    <div class="parent">
+        <div class="progress_bar" [ngClass]="{'in_progress': typeof progress == 'number' && progress > 0}">
+            <div #progress_reference class="progress"></div>
+        </div>
+    </div>
+    }
+</div>

@@ -6,7 +6,16 @@
 </div>
 <div #fadable_container class="hover_container fadable_background full_screen container_vertical no_mouse"
     [ngClass]="{'is_mobile': hasMobile, 'is_listening': isSystemListening}">
-    <div class="status_bar"></div>
+    <div class="status_bar" [ngClass]="{'is_stereo': useStereo}">
+        <div class="status_bar_container">
+            <app-statusbar [isListening]="isSystemListening" [progress]="listeningTimeoutPercentage"></app-statusbar>
+        </div>
+        @if (useStereo) {
+        <div class="status_bar_container">
+            <app-statusbar [isListening]="isSystemListening" [progress]="listeningTimeoutPercentage"></app-statusbar>
+        </div>
+        }
+    </div>
     @if (useStereo) {
     <div class="vertical_separator no_mouse">
         <div class="vertical_line"></div>
@@ -30,6 +39,7 @@
         </span>
         @if (useStereo) {
         <span class="words_space">
+            <span class="one_word white_subtitle">&nbsp;</span>
             @for (word of words; track word.time) {
             <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
             }

@@ -154,8 +154,6 @@ export class CommonSpeech {
         // Intermediate updates
         let refreshInterval: NodeJS.Timeout | null = null;
         if (typeof timeout == "number") {
-            const steps = 10;
-            const stepMillis = timeout / steps;
             const startTime = Date.now();
             this.booleanService.setState({ inUse: true, percentage: 100, });
             refreshInterval = setInterval(() => {
@@ -163,7 +161,7 @@ export class CommonSpeech {
                 const diff = actual - startTime;
                 const advance = 100 * Math.max(1 - diff / timeout, 0);
                 this.booleanService.setState({ inUse: true, percentage: advance, });
-            }, stepMillis);
+            }, 100);
         }
         const promise = new Promise<VoiceAnswer>((resolve, reject) => {
             if (typeof timeout == "number") {
