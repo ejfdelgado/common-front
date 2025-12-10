@@ -8,6 +8,7 @@ import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 import { ModuloSonido } from '@services/sonido.service';
+import { BooleanStateService } from "@services/boolean-state.service";
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -53,8 +54,9 @@ export class Practicesong extends CommonSpeech {
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
+    public override booleanService: BooleanStateService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

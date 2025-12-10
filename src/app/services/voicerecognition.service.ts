@@ -166,7 +166,9 @@ export class VoiceRecognitionService {
       this.errorSubject.next('Speech Recognition API not supported in this browser');
       return;
     }
-    this.booleanService.setState(true);
+    this.booleanService.setState({
+      inUse: true,
+    });
 
     if (typeof options.autorestart == 'boolean') {
       this.autoRestart = options.autorestart;
@@ -196,7 +198,10 @@ export class VoiceRecognitionService {
     if (!this.recognition) return;
     try {
       this.recognition.stop();
-      this.booleanService.setState(false);
+      this.booleanService.setState({
+        inUse: false,
+        percentage: 0,
+      });
       // onend will set status
     } catch (err) {
       this.errorSubject.next(err as Error);

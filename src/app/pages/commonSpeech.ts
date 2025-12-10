@@ -4,6 +4,7 @@ import { IndicatorService, Wait } from "@services/indicator.service";
 import { generateHueColors } from '@tools/Colors';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from "rxjs";
+import { BooleanStateService } from "@services/boolean-state.service";
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
 
@@ -45,6 +46,7 @@ export class CommonSpeech {
         public voiceSrv: VoiceRecognitionService,
         public speechSrv: SpeechSynthesisService,
         public indicatorSrv: IndicatorService,
+        public booleanService: BooleanStateService,
         preferedLang?: string,
     ) {
         if (preferedLang) {
@@ -149,6 +151,20 @@ export class CommonSpeech {
         const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
         let subscription: Subscription | null = null;
         let timeoutHandler: NodeJS.Timeout | null = null;
+        // Intermediate updates
+        let refreshInterval: NodeJS.Timeout | null = null;
+        if (typeof timeout == "number") {
+            const steps = 10;
+            const stepMillis = timeout / steps;
+            const startTime = Date.now();
+            this.booleanService.setState({ inUse: true, percentage: 100, });
+            refreshInterval = setInterval(() => {
+                const actual = Date.now();
+                const diff = actual - startTime;
+                const advance = 100 * Math.max(1 - diff / timeout, 0);
+                this.booleanService.setState({ inUse: true, percentage: advance, });
+            }, stepMillis);
+        }
         const promise = new Promise<VoiceAnswer>((resolve, reject) => {
             if (typeof timeout == "number") {
                 timeoutHandler = setTimeout(() => {
@@ -184,6 +200,9 @@ export class CommonSpeech {
         promise.finally(() => {
             if (timeoutHandler) {
                 clearTimeout(timeoutHandler);
+            }
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
             }
             this.stopListening();
             if (subscription) {

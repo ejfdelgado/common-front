@@ -7,6 +7,7 @@ import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
+import { BooleanStateService } from "@services/boolean-state.service";
 
 @Component({
   standalone: true,
@@ -26,8 +27,9 @@ export class Speech extends CommonSpeech {
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
+    public override booleanService: BooleanStateService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

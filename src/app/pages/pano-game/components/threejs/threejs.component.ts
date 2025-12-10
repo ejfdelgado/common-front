@@ -56,6 +56,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   hasMobile: boolean;
   useStereo: boolean = false;
   isSystemListening: boolean = false;
+  listeningTimeoutPercentage: number = 0;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
     subtitle: "toman tiempo...",
@@ -102,9 +103,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public cdr: ChangeDetectorRef,
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
-    private booleanService: BooleanStateService,
+    public override booleanService: BooleanStateService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, "es-ES");
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, "es-ES");
     this.hasMobile = this.isMobile();
 
     this.voiceSrv.setInterimResults(true);
@@ -157,7 +158,11 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     });
 
     this.booleanService.state$.subscribe(value => {
-      this.isSystemListening = value;
+      this.isSystemListening = value.inUse;
+      if (typeof value.percentage == "number") {
+        this.listeningTimeoutPercentage = value.percentage;
+      }
+      console.log(`listeningTimeoutPercentage = ${this.listeningTimeoutPercentage}`);
       this.cdr.detectChanges();
     });
   }

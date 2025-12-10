@@ -48,8 +48,6 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- resaltar marco cuando uno tiene que hablar.
-
 - Reload game (avoid win notification after finishing)
 - Fullscreen toggle
 - Notify: your device don't support
