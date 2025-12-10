@@ -1,5 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, filter, map, distinctUntilChanged } from 'rxjs';
+import { BooleanStateService } from "@services/boolean-state.service";
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-US', name: 'English (United States)' },
@@ -70,7 +71,10 @@ export class VoiceRecognitionService {
   // optional keywords filter - if provided only these words will be emitted
   private keywords: string[] | null = null;
 
-  constructor(private ngZone: NgZone) {
+  constructor(
+    private ngZone: NgZone,
+    private booleanService: BooleanStateService
+  ) {
     this.setupRecognition();
   }
 
@@ -162,6 +166,7 @@ export class VoiceRecognitionService {
       this.errorSubject.next('Speech Recognition API not supported in this browser');
       return;
     }
+    this.booleanService.setState(true);
 
     if (typeof options.autorestart == 'boolean') {
       this.autoRestart = options.autorestart;
@@ -191,6 +196,7 @@ export class VoiceRecognitionService {
     if (!this.recognition) return;
     try {
       this.recognition.stop();
+      this.booleanService.setState(false);
       // onend will set status
     } catch (err) {
       this.errorSubject.next(err as Error);

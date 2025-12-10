@@ -160,6 +160,27 @@
   max-height: 18px;
 }
 
-.fadable_background {
-  
+.vertical_separator {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+}
+
+.vertical_separator .vertical_line {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  left: -5px;
+}
+
+.is_listening {
+  border: 5px solid rgb(0, 255, 0);
+}
+
+.is_listening .vertical_separator .vertical_line {
+  background-color: rgb(0, 255, 0);
 }

@@ -121,3 +121,25 @@ function hslToHex(h: number, s: number, l: number): string {
 function clamp(x: number, min: number, max: number): number {
     return Math.min(max, Math.max(min, x));
 }
+
+export function setMobileBrowserBarsTo(color: string = "#000000") {
+    const tags = [
+        // Android Chrome status bar & nav bar
+        { name: "theme-color", content: color },
+        { name: "msapplication-navbutton-color", content: color },
+
+        // iOS Safari status bar
+        { name: "apple-mobile-web-app-capable", content: "yes" },
+        { name: "apple-mobile-web-app-status-bar-style", content: color },
+    ];
+
+    tags.forEach(({ name, content }) => {
+        let tag = document.querySelector(`meta[name="${name}"]`);
+        if (!tag) {
+            tag = document.createElement("meta");
+            tag.setAttribute("name", name);
+            document.head.appendChild(tag);
+        }
+        tag.setAttribute("content", content);
+    });
+}

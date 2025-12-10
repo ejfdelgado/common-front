@@ -19,6 +19,7 @@ import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@ser
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { Question, QuestionDataType } from "../question/question";
 import { shuffleInPlace } from '@tools/ArrayUtil';
+import { BooleanStateService } from "@services/boolean-state.service";
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -54,6 +55,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   isFullScreen: boolean = false;
   hasMobile: boolean;
   useStereo: boolean = false;
+  isSystemListening: boolean = false;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
     subtitle: "toman tiempo...",
@@ -100,6 +102,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public cdr: ChangeDetectorRef,
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
+    private booleanService: BooleanStateService,
   ) {
     super(voiceSrv, speechSrv, indicatorSrv, "es-ES");
     this.hasMobile = this.isMobile();
@@ -152,10 +155,18 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       }
       //console.log(command);
     });
+
+    this.booleanService.state$.subscribe(value => {
+      this.isSystemListening = value;
+      this.cdr.detectChanges();
+    });
   }
 
   async placeQuestion(question: QuestionDataType) {
-    this.currentQuestion = null;
+    if (this.currentQuestion != null) {
+      return;
+    }
+    const LONG_TIMEOUT = 10000;
     this.cdr.detectChanges();
     await this.scene?.addPanorama(question);
     this.fadeIn();
@@ -192,6 +203,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       const respuesta = await this.genericVoiceQuery(
         INTRO_OPC.map((prefix) => prefix + textoCompleto),
         opciones,
+        LONG_TIMEOUT,
       );
 
       const idChoice = respuesta.index;
@@ -221,6 +233,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         const confirmation = await this.genericVoiceQuery(
           CONFIRM,
           [...confirmOptionsNegative, ...confirmOptionsPositive],
+          LONG_TIMEOUT,
         );
 
         if (confirmation.index >= confirmOptionsNegative.length) {

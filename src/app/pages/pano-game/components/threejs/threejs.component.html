@@ -4,8 +4,14 @@
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
 </div>
-<div #fadable_container class="hover_container fadable_background full_screen container_vertical no_mouse" [ngClass]="{'is_mobile': hasMobile}">
+<div #fadable_container class="hover_container fadable_background full_screen container_vertical no_mouse"
+    [ngClass]="{'is_mobile': hasMobile, 'is_listening': isSystemListening}">
     <div class="status_bar"></div>
+    @if (useStereo) {
+    <div class="vertical_separator no_mouse">
+        <div class="vertical_line"></div>
+    </div>
+    }
     <div class="relleno">
         <div class="question_parent">
             @if (currentQuestion !== null) {
