@@ -345,29 +345,14 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     const theCanvas = this.canvasRef.nativeElement;
     this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv);
     this.scene.initialize();
-    this.fastOverride();
     this.sceneCreated.resolve();
     this.loop();
-  }
-
-  async fastOverride() {
-    this.setFadeValue(1);
-    this.toggleStereo();
-    /*
-    this.scene?.addHelpers();
-    */
-    await this.scene?.addPanorama(this.questions[0]);
-  }
-
-  cambiar() {
-    this.cameraChoice = !this.cameraChoice;
   }
 
   loop() {
     if (this.scene != null && this.scene.camera) {
       this.scene.localRender(this.useStereo, this.cameraChoice);
       this.cdr.detectChanges();
-
       requestAnimationFrame(() => {
         this.loop();
       });

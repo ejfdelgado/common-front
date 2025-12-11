@@ -18,8 +18,6 @@ const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 export class BasicScene extends THREE.Scene {
   // A dat.gui class debugger that is added by default
   //debugger: GUI = null;
-  debugCamera: THREE.PerspectiveCamera | null = null;
-  debugCameraHelper: THREE.CameraHelper | null = null;
   // Setups a scene camera
   camera: THREE.PerspectiveCamera | null = null;
   // setup renderer
@@ -75,8 +73,6 @@ export class BasicScene extends THREE.Scene {
 
     if (this.hasMobile) {
       this.camera.position.z = 0.01;
-      //this.controls = new GyroControls(this.camera);
-      //this.controls = new DeviceOrientationControls(this.camera);
       this.controls = new DeviceOrientationControlsGPT(this.camera);
     } else {
       this.camera.position.z = 1;
@@ -89,70 +85,12 @@ export class BasicScene extends THREE.Scene {
     this.effect = new StereoEffect(this.renderer);
   }
 
-  addHelpers() {
-    const grid = new THREE.GridHelper(10, 10);
-    this.add(grid);
-
-    // --- 2. AXES HELPER ---
-    const axes = new THREE.AxesHelper(3); // size 2 units
-    this.add(axes);
-
-    // --- 3. AXIS LABELS ---
-    const addLabel = (text: string, position: THREE.Vector3, color: string) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
-      canvas.width = 256;
-      canvas.height = 128;
-
-      ctx.fillStyle = color;
-      ctx.font = '48px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
-
-      const tex = new THREE.CanvasTexture(canvas);
-      const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
-      const sprite = new THREE.Sprite(mat);
-      const localScale = 2;
-      sprite.scale.set(0.5 * localScale, 0.25 * localScale, 1 * localScale);
-      sprite.position.copy(position);
-      this.add(sprite);
-    };
-
-    // X (red)
-    addLabel('X', new THREE.Vector3(2.2, 0, 0), '#000000ff');
-
-    // Y (green)
-    addLabel('Y', new THREE.Vector3(0, 2.2, 0), '#000000ff');
-
-    // Z (blue)
-    addLabel('Z', new THREE.Vector3(0, 0, 2.2), '#000000ff');
-
-    this.debugCamera = new THREE.PerspectiveCamera(
-      50,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-
-    // Place the debug camera somewhere where it can “see” the main camera
-    this.debugCamera.position.set(5, 5, 5);
-    this.debugCamera.lookAt(0, 0, 0);
-
-    if (this.camera) {
-      this.debugCameraHelper = new THREE.CameraHelper(this.camera);
-      this.add(this.debugCameraHelper);
-    }
-  }
-
   localRender(useStereo: boolean, cameraMain: boolean = true) {
     if (this.controls) {
       this.controls.update();
     }
     this.camera?.updateMatrixWorld(true);
     this.camera?.updateProjectionMatrix();
-    //this.debugCamera?.updateProjectionMatrix();
-    //this.orbitals?.update();
 
     if (this.effect && this.camera) {
       if (useStereo) {
@@ -161,7 +99,6 @@ export class BasicScene extends THREE.Scene {
         this.renderer?.render(this, this.camera);
       }
     }
-    //this.debugCameraHelper?.update();
   }
 
   /**
