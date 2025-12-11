@@ -4,6 +4,9 @@
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
 </div>
+<div style="position: absolute; background-color: trasnsparent;">
+    <pre style="background-color: white; z-index: 3; position: absolute; padding: 10px;" class="white_subtitle">{{ gyroData | json }}</pre>
+</div>
 <div #fadable_container class="hover_container fadable_background full_screen container_vertical no_mouse"
     [ngClass]="{'is_mobile': hasMobile, 'is_listening': isSystemListening}">
     <div class="status_bar" [ngClass]="{'is_stereo': useStereo}">

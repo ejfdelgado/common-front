@@ -22,6 +22,7 @@ import { shuffleInPlace } from '@tools/ArrayUtil';
 import { BooleanStateService } from "@services/boolean-state.service";
 import { Statusbar } from "../statusbar/statusbar";
 import { isMobile } from '@tools/mobile';
+import { GyroReturnType } from './types';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -61,6 +62,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   isSystemListening: boolean = false;
   listeningTimeoutPercentage: number = 0;
   fadeTimeout: NodeJS.Timeout | null = null;
+  gyroData: GyroReturnType | undefined;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
     subtitle: "toman tiempo...",
@@ -350,7 +352,8 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   loop() {
     if (this.scene != null && this.scene.camera) {
       this.scene.camera?.updateProjectionMatrix();
-      this.scene.localRender(this.useStereo);
+      this.gyroData = this.scene.localRender(this.useStereo);
+      this.cdr.detectChanges();
       this.scene.orbitals?.update();
       requestAnimationFrame(() => {
         this.loop();

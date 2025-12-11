@@ -4,10 +4,11 @@ import { StereoEffect } from 'three/examples/jsm/effects/StereoEffect.js';
 import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
-import { GyroControls } from './GyroControls';
 import { QuestionDataType } from '../question/question';
 import { isMobile } from '@tools/mobile';
 import { DeviceOrientationControls } from "./DeviceOrientationControls";
+import { GyroReturnType } from './types';
+import { GyroControls } from './GyroControls';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -87,9 +88,10 @@ export class BasicScene extends THREE.Scene {
 
 
   localRender(useStereo: boolean) {
+    let gyroData: GyroReturnType | undefined;
     if (this.effect && this.camera) {
       if (this.controls) {
-        this.controls.update();
+        gyroData = this.controls.update();
       }
       if (useStereo) {
         this.effect?.render(this, this.camera);
@@ -97,6 +99,7 @@ export class BasicScene extends THREE.Scene {
         this.renderer?.render(this, this.camera);
       }
     }
+    return gyroData;
   }
 
   /**
