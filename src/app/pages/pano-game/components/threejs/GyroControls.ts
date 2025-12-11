@@ -51,6 +51,8 @@ export class GyroControls {
     update(): GyroReturnType | undefined {
         if (!this.enabled || this.alpha === null) return;
 
+        const worldUp = new THREE.Vector3(0, 0, 1);
+
         const alpha = THREE.MathUtils.degToRad(this.alpha);
         const beta = THREE.MathUtils.degToRad(this.beta || 0);
         const gamma = THREE.MathUtils.degToRad(this.gamma || 0);
@@ -61,18 +63,12 @@ export class GyroControls {
         //alpha es el axial de mi cabeza yaw
         //gamma es decir si con el celular pitch
         const euler = new THREE.Euler(
-            //beta, 
-            //alpha, 
-            //-gamma, 
-            -gamma,
-            alpha,
             beta,
+            alpha,
+            -gamma,
             "YXZ");
         const q = new THREE.Quaternion().setFromEuler(euler);
-        const qScreen = new THREE.Quaternion().setFromAxisAngle(
-            new THREE.Vector3(0, 0, 1),
-            -orient
-        );
+        const qScreen = new THREE.Quaternion().setFromAxisAngle(worldUp, -orient);
 
         this.camera.quaternion.copy(q).multiply(qScreen);
         return {
