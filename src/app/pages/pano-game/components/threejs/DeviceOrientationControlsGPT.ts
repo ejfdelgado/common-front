@@ -65,20 +65,21 @@ export class DeviceOrientationControlsGPT {
         // euler order: YXZ
         const euler = new THREE.Euler(betaRad, alphaRad, -gammaRad, "YXZ");
 
-        const starting = new THREE.Quaternion().setFromAxisAngle(
-            // Y NO
-            new THREE.Vector3(0, 1, 0), -1 * Math.PI / 2,
-        );
-
         const quaternion = new THREE.Quaternion().setFromEuler(euler);
 
         // Correct for screen portrait/landscape
+        // Fix Z axis -orientRad 
         const qScreen = new THREE.Quaternion().setFromAxisAngle(
             new THREE.Vector3(0, 0, 1),
             -orientRad
         );
 
-        quaternion.multiply(qScreen).multiply(starting);
+        // Fix Y axis -90 degrees
+        const fixing = new THREE.Quaternion().setFromAxisAngle(
+            new THREE.Vector3(0, 1, 0), -1 * Math.PI / 2,
+        );
+
+        quaternion.multiply(qScreen).multiply(fixing);
 
         // Older iOS devices used reversed Z axis — keep the behavior
         // Optional: enable if needed
