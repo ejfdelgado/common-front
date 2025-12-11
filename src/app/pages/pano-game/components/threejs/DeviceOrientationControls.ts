@@ -5,6 +5,7 @@ import {
     Quaternion,
     Vector3,
 } from 'three';
+import { GyroReturnType } from './types';
 
 // Define the structure for the DeviceOrientationEvent data
 interface DeviceOrientationData {
@@ -92,7 +93,7 @@ export class DeviceOrientationControls extends EventDispatcher {
         this.disable();
     }
 
-    public update(): void {
+    update(): GyroReturnType | undefined {
         if (!this.enabled) return;
 
         const { alpha, beta, gamma } = this.deviceOrientation;
@@ -130,5 +131,12 @@ export class DeviceOrientationControls extends EventDispatcher {
         // (X right, Y up, Z out of the screen).
         screenTransform.setFromAxisAngle(new Vector3(1, 0, 0), this.PI_2);
         this.object.quaternion.multiply(screenTransform);
+
+        return {
+            alpha: parseInt(alpha.toFixed(0)),
+            beta: parseInt(beta.toFixed(0)),
+            gamma: parseInt(gamma.toFixed(0)),
+            orient: parseInt((this.screenOrientation / degToRad).toFixed(0)),
+        };
     }
 }
