@@ -21,12 +21,12 @@ export class GyroControls {
         this.onScreenOrientation();
     }
 
-    enable() {
+    connect() {
         this.enabled = true;
         window.addEventListener("deviceorientation", this.onDeviceOrientation, true);
     }
 
-    disable() {
+    disconnect() {
         this.enabled = false;
         window.removeEventListener("deviceorientation", this.onDeviceOrientation, true);
     }

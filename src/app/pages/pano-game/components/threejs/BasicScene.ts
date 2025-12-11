@@ -7,6 +7,7 @@ import { PanoConfig } from './threejs.component';
 import { QuestionDataType } from '../question/question';
 import { isMobile } from '@tools/mobile';
 import { DeviceOrientationControls } from "./DeviceOrientationControls";
+import { DeviceOrientationControlsGPT } from "./DeviceOrientationControlsGPT";
 import { GyroReturnType } from './types';
 import { GyroControls } from './GyroControls';
 
@@ -40,7 +41,7 @@ export class BasicScene extends THREE.Scene {
 
   canvasRef: HTMLCanvasElement;
   effect: StereoEffect | null = null;
-  controls: GyroControls | DeviceOrientationControls | null = null;
+  controls: GyroControls | DeviceOrientationControls | DeviceOrientationControlsGPT | null = null;
   hasMobile = isMobile();
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
@@ -70,13 +71,14 @@ export class BasicScene extends THREE.Scene {
     this.renderer.setSize(this.bounds.width, this.bounds.height);
 
     this.camera.rotation.order = "YXZ";
-    this.camera.position.set(0, 0, 0);
-    this.camera.lookAt(0, 0, -1);
+    //this.camera.position.set(0, 0, 0);
+    //this.camera.lookAt(0, 0, -1);
 
     if (this.hasMobile) {
       this.camera.position.z = 0.01;
       //this.controls = new GyroControls(this.camera);
-      this.controls = new DeviceOrientationControls(this.camera);
+      //this.controls = new DeviceOrientationControls(this.camera);
+      this.controls = new DeviceOrientationControlsGPT(this.camera);
     } else {
       this.camera.position.z = 1;
       // sets up the camera's orbital controls
@@ -222,11 +224,11 @@ export class BasicScene extends THREE.Scene {
       }
     }
     if (this.controls) {
-      this.controls.enable();
+      this.controls.connect();
     }
   }
 
   disableGyro() {
-    this.controls?.disable();
+    this.controls?.disconnect();
   }
 }

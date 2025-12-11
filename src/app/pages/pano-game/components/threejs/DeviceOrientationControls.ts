@@ -75,7 +75,7 @@ export class DeviceOrientationControls extends EventDispatcher {
 
     // --- Public Methods ---
 
-    public enable(): void {
+    public connect(): void {
         if ('ondeviceorientation' in window) {
             window.addEventListener('deviceorientation', this.onDeviceOrientationChangeBind, false);
         }
@@ -83,14 +83,14 @@ export class DeviceOrientationControls extends EventDispatcher {
         this.enabled = true;
     }
 
-    public disable(): void {
+    public disconnect(): void {
         window.removeEventListener('deviceorientation', this.onDeviceOrientationChangeBind, false);
         window.removeEventListener('orientationchange', this.onScreenOrientationChangeBind, false);
         this.enabled = false;
     }
 
     public dispose(): void {
-        this.disable();
+        this.disconnect();
     }
 
     update(): GyroReturnType | undefined {
