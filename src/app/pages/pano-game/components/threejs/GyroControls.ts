@@ -48,7 +48,7 @@ export class GyroControls {
         this.gamma = event.gamma;
     }
 
-    update(): GyroReturnType | undefined {
+    update() {
         if (!this.enabled || this.alpha === null) return;
 
         const alpha = THREE.MathUtils.degToRad(this.alpha);
@@ -65,11 +65,6 @@ export class GyroControls {
         );
 
         this.camera.quaternion.copy(q).multiply(qScreen);
-        return {
-            alpha: parseInt((this.alpha).toFixed(0)),
-            beta: parseInt((this.beta || 0).toFixed(0)),
-            gamma: parseInt((this.gamma || 0).toFixed(0)),
-            orient: parseInt((this.screenOrientation).toFixed(0)),
-        };
+
     }
 }

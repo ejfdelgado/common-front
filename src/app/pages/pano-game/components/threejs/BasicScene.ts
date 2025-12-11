@@ -6,9 +6,9 @@ import { IndicatorService, Wait } from '@services/indicator.service';
 import { PanoConfig } from './threejs.component';
 import { QuestionDataType } from '../question/question';
 import { isMobile } from '@tools/mobile';
+import { GyroReturnType } from './types';
 import { DeviceOrientationControls } from "./DeviceOrientationControls";
 import { DeviceOrientationControlsGPT } from "./DeviceOrientationControlsGPT";
-import { GyroReturnType } from './types';
 import { GyroControls } from './GyroControls';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
@@ -148,9 +148,8 @@ export class BasicScene extends THREE.Scene {
   }
 
   localRender(useStereo: boolean, cameraMain: boolean = true) {
-    let gyroData: GyroReturnType | undefined;
     if (this.controls) {
-      gyroData = this.controls.update();
+      this.controls.update();
     }
     this.camera?.updateMatrixWorld(true);
     this.camera?.updateProjectionMatrix();
@@ -165,7 +164,6 @@ export class BasicScene extends THREE.Scene {
       }
     }
     this.debugCameraHelper?.update();
-    return gyroData;
   }
 
   /**

@@ -52,7 +52,7 @@ export class DeviceOrientationControlsGPT {
         window.removeEventListener("orientationchange", this.onScreenOrientation);
     }
 
-    update(): GyroReturnType | undefined {
+    update() {
         if (!this.enabled || this.alpha === null || this.beta === null || this.gamma === null) return;
 
         // Convert degrees → radians
@@ -65,6 +65,11 @@ export class DeviceOrientationControlsGPT {
         // euler order: YXZ
         const euler = new THREE.Euler(betaRad, alphaRad, -gammaRad, "YXZ");
 
+        const starting = new THREE.Quaternion().setFromAxisAngle(
+            // Y NO
+            new THREE.Vector3(0, 1, 0), -1 * Math.PI / 2,
+        );
+
         const quaternion = new THREE.Quaternion().setFromEuler(euler);
 
         // Correct for screen portrait/landscape
@@ -73,7 +78,7 @@ export class DeviceOrientationControlsGPT {
             -orientRad
         );
 
-        quaternion.multiply(qScreen);
+        quaternion.multiply(qScreen).multiply(starting);
 
         // Older iOS devices used reversed Z axis — keep the behavior
         // Optional: enable if needed
@@ -82,12 +87,5 @@ export class DeviceOrientationControlsGPT {
         // }
 
         this.camera.quaternion.copy(quaternion);
-
-        return {
-            alpha: parseInt(this.alpha.toFixed(0)),
-            beta: parseInt(this.beta.toFixed(0)),
-            gamma: parseInt(this.gamma.toFixed(0)),
-            orient: parseInt((this.screenOrientation).toFixed(0)),
-        };
     }
 }

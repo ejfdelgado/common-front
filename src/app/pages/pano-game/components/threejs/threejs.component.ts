@@ -63,7 +63,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   isSystemListening: boolean = false;
   listeningTimeoutPercentage: number = 0;
   fadeTimeout: NodeJS.Timeout | null = null;
-  gyroData: GyroReturnType | undefined;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
     subtitle: "toman tiempo...",
@@ -367,7 +366,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
 
   loop() {
     if (this.scene != null && this.scene.camera) {
-      this.gyroData = this.scene.localRender(this.useStereo, this.cameraChoice);
+      this.scene.localRender(this.useStereo, this.cameraChoice);
       this.cdr.detectChanges();
 
       requestAnimationFrame(() => {
