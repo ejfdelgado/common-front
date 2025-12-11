@@ -71,8 +71,9 @@ export class BasicScene extends THREE.Scene {
     this.renderer.setSize(this.bounds.width, this.bounds.height);
 
     this.camera.rotation.order = "YXZ";
-    //this.camera.position.set(0, 0, 0);
-    //this.camera.lookAt(0, 0, -1);
+    this.camera.up.set(0, 0, 1);
+    this.camera.position.set(0, 1.6, 0); 
+    this.camera.lookAt(0, 1.6, 1);
 
     if (this.hasMobile) {
       this.camera.position.z = 0.01;

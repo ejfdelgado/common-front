@@ -50,7 +50,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('fadable_container') parentFade!: ElementRef;
-  cameraChoice: boolean = true;
+  cameraChoice: boolean = false;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
