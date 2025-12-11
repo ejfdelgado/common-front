@@ -144,21 +144,21 @@ export class BasicScene extends THREE.Scene {
     }
   }
 
-
   localRender(useStereo: boolean, cameraMain: boolean = true) {
     let gyroData: GyroReturnType | undefined;
     if (this.controls) {
       gyroData = this.controls.update();
     }
+    this.camera?.updateMatrixWorld(true);
     this.camera?.updateProjectionMatrix();
     this.debugCamera?.updateProjectionMatrix();
     this.orbitals?.update();
 
     if (this.effect && this.camera && this.debugCamera) {
       if (useStereo) {
-        this.effect?.render(this, cameraMain ? this.camera: this.debugCamera);
+        this.effect?.render(this, cameraMain ? this.camera : this.debugCamera);
       } else {
-        this.renderer?.render(this, cameraMain ? this.camera: this.debugCamera);
+        this.renderer?.render(this, cameraMain ? this.camera : this.debugCamera);
       }
     }
     this.debugCameraHelper?.update();

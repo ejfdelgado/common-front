@@ -98,7 +98,7 @@ export class DeviceOrientationControls extends EventDispatcher {
 
         const { alpha, beta, gamma } = this.deviceOrientation;
 
-        if (alpha === null || beta === null || gamma === null) return; // Only update if device orientation data is available
+        if (alpha === null || beta == null || gamma == null) return; // Only update if device orientation data is available
 
         // Convert degrees to radians
         const degToRad = Math.PI / 180;
