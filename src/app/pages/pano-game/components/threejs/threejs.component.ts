@@ -50,6 +50,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('fadable_container') parentFade!: ElementRef;
+  cameraChoice: boolean = true;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
@@ -128,6 +129,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
           "hola": "hello",
           "ola": "hello",
           "pregunta": "ask",
+          "cambiar": "change",
         },
         "en-US": {
           "help": "help",
@@ -160,6 +162,8 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         this.askName();
       } else if (command.command == "ask") {
         this.placeQuestion(this.questions[0]);
+      } else if (command.command == "change") {
+        this.cambiar();
       }
       //console.log(command);
     });
@@ -345,16 +349,27 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     const theCanvas = this.canvasRef.nativeElement;
     this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv);
     this.scene.initialize();
+    this.fastOverride();
     this.sceneCreated.resolve();
     this.loop();
   }
 
+  async fastOverride() {
+    this.setFadeValue(1);
+    this.toggleStereo();
+    this.scene?.addHelpers();
+    //await this.scene?.addPanorama(this.questions[0]);
+  }
+
+  cambiar() {
+    this.cameraChoice = !this.cameraChoice;
+  }
+
   loop() {
     if (this.scene != null && this.scene.camera) {
-      this.scene.camera?.updateProjectionMatrix();
-      this.gyroData = this.scene.localRender(this.useStereo);
+      this.gyroData = this.scene.localRender(this.useStereo, this.cameraChoice);
       this.cdr.detectChanges();
-      this.scene.orbitals?.update();
+
       requestAnimationFrame(() => {
         this.loop();
       });
