@@ -50,7 +50,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('fadable_container') parentFade!: ElementRef;
-  cameraChoice: boolean = false;
+  cameraChoice: boolean = true;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
@@ -128,7 +128,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
           "hola": "hello",
           "ola": "hello",
           "pregunta": "ask",
-          "cambiar": "change",
         },
         "en-US": {
           "help": "help",
@@ -161,8 +160,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         this.askName();
       } else if (command.command == "ask") {
         this.placeQuestion(this.questions[0]);
-      } else if (command.command == "change") {
-        this.cambiar();
       }
       //console.log(command);
     });
@@ -356,8 +353,10 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   async fastOverride() {
     this.setFadeValue(1);
     this.toggleStereo();
+    /*
     this.scene?.addHelpers();
-    //await this.scene?.addPanorama(this.questions[0]);
+    */
+    await this.scene?.addPanorama(this.questions[0]);
   }
 
   cambiar() {

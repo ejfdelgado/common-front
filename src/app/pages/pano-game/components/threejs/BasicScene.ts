@@ -7,9 +7,7 @@ import { PanoConfig } from './threejs.component';
 import { QuestionDataType } from '../question/question';
 import { isMobile } from '@tools/mobile';
 import { GyroReturnType } from './types';
-import { DeviceOrientationControls } from "./DeviceOrientationControls";
 import { DeviceOrientationControlsGPT } from "./DeviceOrientationControlsGPT";
-import { GyroControls } from './GyroControls';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -41,7 +39,7 @@ export class BasicScene extends THREE.Scene {
 
   canvasRef: HTMLCanvasElement;
   effect: StereoEffect | null = null;
-  controls: GyroControls | DeviceOrientationControls | DeviceOrientationControlsGPT | null = null;
+  controls: DeviceOrientationControlsGPT | null = null;
   hasMobile = isMobile();
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
@@ -153,17 +151,17 @@ export class BasicScene extends THREE.Scene {
     }
     this.camera?.updateMatrixWorld(true);
     this.camera?.updateProjectionMatrix();
-    this.debugCamera?.updateProjectionMatrix();
-    this.orbitals?.update();
+    //this.debugCamera?.updateProjectionMatrix();
+    //this.orbitals?.update();
 
-    if (this.effect && this.camera && this.debugCamera) {
+    if (this.effect && this.camera) {
       if (useStereo) {
-        this.effect?.render(this, cameraMain ? this.camera : this.debugCamera);
+        this.effect?.render(this, this.camera);
       } else {
-        this.renderer?.render(this, cameraMain ? this.camera : this.debugCamera);
+        this.renderer?.render(this, this.camera);
       }
     }
-    this.debugCameraHelper?.update();
+    //this.debugCameraHelper?.update();
   }
 
   /**
