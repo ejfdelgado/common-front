@@ -52,3 +52,21 @@
 .verse_higlight * {
     display: inline;
 }
+
+.millis_button {
+    cursor: pointer;
+}
+
+.fade-white-to-black {
+  color: white;
+  animation: fadeText 1s ease-in-out forwards;
+}
+
+@keyframes fadeText {
+  from {
+    color: white;
+  }
+  to {
+    color: black;
+  }
+}
