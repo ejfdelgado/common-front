@@ -125,76 +125,16 @@ export class Practicesong extends CommonSpeech {
     const q = params.get("q");
     if (q !== null) {
       // Fetch from bucket json
-      //this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
+      this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
+      /*
       this.config = {
         "lang": "en-US",
         "sound": "runaway.mp3",
         "lyric": [
           { "txt": "🎵", "millis": 1 },
-          { "txt": "I was listenin' 🙉 to the ocean 🌊", "millis": 17401 },
-          { "txt": "I saw 👀 a face 😊 in the sand ⛱️", "millis": 21002 },
-          { "txt": "But when I picked it up 🫳", "millis": 24603 },
-          { "txt": "Then it vanished away from my hands 🤲, da-da", "millis": 26704 },
-          { "txt": "I had a dream 💭 I was seven 7️⃣", "millis": 33904 },
-          { "txt": "Climbing 🧗‍♀️ my way in a tree 🌳", "millis": 37505 },
-          { "txt": "I saw 👀 a piece of heaven 🌅", "millis": 41106 },
-          { "txt": "Waiting impatient for me, da-da", "millis": 44106 },
-          { "txt": "And I was running far away", "millis": 50406 },
-          { "txt": "Would I run off the world someday?", "millis": 52207 },
-          { "txt": "Nobody knows, nobody knows", "millis": 54906 },
-          { "txt": "I was dancing in the rain", "millis": 58508 },
-          { "txt": "I felt alive and I can't complain", "millis": 60908 },
-          { "txt": "But now take me home", "millis": 63308 },
-          { "txt": "Take me home where I belong", "millis": 65108 },
-          { "txt": "I can't take it anymore", "millis": 69308 },
-          { "txt": "I was painting a picture", "millis": 75909 },
-          { "txt": "The picture was a painting of you", "millis": 78609 },
-          { "txt": "And for a moment I thought you were here", "millis": 82208 },
-          { "txt": "But then again, it wasn't true, da-da", "millis": 86108 },
-          { "txt": "And all this time I have been lying", "millis": 92108 },
-          { "txt": "Oh, lying in secret to myself", "millis": 95408 },
-          { "txt": "I've been putting sorrow on the farthest place on my shelf", "millis": 99609 },
-          { "txt": "La-di-da", "millis": 105309 },
-          { "txt": "And I was running far away", "millis": 108610 },
-          { "txt": "Would I run off the world someday?", "millis": 110710 },
-          { "txt": "Nobody knows, nobody knows", "millis": 113410 },
-          { "txt": "I was dancing in the rain", "millis": 117010 },
-          { "txt": "I felt alive and I can't complain", "millis": 119410 },
-          { "txt": "But now take me home", "millis": 121810 },
-          { "txt": "Take me home where I belong", "millis": 123912 },
-          { "txt": "I got no other place to go", "millis": 127210 },
-          { "txt": "Now take me home", "millis": 130210 },
-          { "txt": "Take me home where I belong", "millis": 132311 },
-          { "txt": "I got no other place to go", "millis": 135311 },
-          { "txt": "Now take me home", "millis": 138812 },
-          { "txt": "Take me home where I belong", "millis": 140612 },
-          { "txt": "I can't take it anymore", "millis": 144212 },
-          { "txt": "But I kept running for a soft place to fall", "millis": 149613 },
-          { "txt": "And I kept running for a soft place to fall", "millis": 158013 },
-          { "txt": "But I kept running for a soft place to fall", "millis": 166412 },
-          { "txt": "And I kept running for a soft place to fall", "millis": 174813 },
-          { "txt": "And I was running far away", "millis": 183813 },
-          { "txt": "Would I run off the world someday?", "millis": 185913 },
-          { "txt": "But now take me home", "millis": 188814 },
-          { "txt": "Take me home where I belong", "millis": 190713 },
-          { "txt": "I got no other place to go", "millis": 194214 },
-          { "txt": "Now take me home", "millis": 197214 },
-          { "txt": "Take me home where I belong", "millis": 199014 },
-          { "txt": "I got no other place to go", "millis": 202314 },
-          { "txt": "Now take me home", "millis": 205315 },
-          { "txt": "Home where I belong", "millis": 208016 },
-          { "txt": "No, no", "millis": 210716 },
-          { "txt": "Now take me home", "millis": 213416 },
-          { "txt": "Home where I belong", "millis": 216416 },
-          { "txt": "Home, home", "millis": 219116 },
-          { "txt": "Now take me home", "millis": 222116 },
-          { "txt": "Home where I belong", "millis": 224517 },
-          { "txt": "No, no", "millis": 227818 },
-          { "txt": "Now take me home", "millis": 230219 },
-          { "txt": "Home where I belong", "millis": 233216 },
-          { "txt": "I can't take it anymore", "millis": 236517 }
         ]
       };
+      */
       if (this.config) {
         this.defineLanguage(this.config.lang);
         this.cdr.detectChanges();
