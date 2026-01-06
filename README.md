@@ -20,6 +20,8 @@ ng generate component component-name
 ng build
 ```
 
+Configure branding at:
+[OAuth branding](https://console.cloud.google.com/auth/branding?project=ejfexperiments)
 
 [Stage page](https://stg-playtolearn.storage.googleapis.com/index.html)
 [Stage page](https://pro-playtolearn.storage.googleapis.com/index.html)
