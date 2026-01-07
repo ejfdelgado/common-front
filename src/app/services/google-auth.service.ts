@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { GoogleGsiLoaderService } from './google-gsi-loader.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 declare global {
     interface Window {
@@ -32,7 +33,8 @@ export class GoogleAuthService {
     private tokenClient!: any;
 
     constructor(
-        private loader: GoogleGsiLoaderService
+        private loader: GoogleGsiLoaderService,
+        private http: HttpClient
     ) {
         /* Bridge Signal → RxJS */
         effect(() => {
@@ -45,13 +47,12 @@ export class GoogleAuthService {
 
     private async initialize(): Promise<void> {
         await this.loader.load();
-
         this.tokenClient = window.google.accounts.oauth2.initTokenClient({
             client_id: this.clientId,
             scope: 'openid profile email',
             callback: (response: any) => {
                 if (response.access_token) {
-                    this.fetchUserInfo(response.access_token);
+                    this.fetchUserInfo(response.access_token).subscribe(()=>{});
                 }
             },
         });
@@ -70,23 +71,36 @@ export class GoogleAuthService {
 
     /* ---------------- Internal ---------------- */
 
-    private async fetchUserInfo(accessToken: string): Promise<void> {
-        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        const user = (await res.json()) as GoogleUser;
-        this.userSignal.set(user);
+    private fetchUserInfo(accessToken: string): Observable<GoogleUser> {
+        return this.http
+            .get<any>('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: new HttpHeaders({
+                    Authorization: `Bearer ${accessToken}`,
+                }),
+            })
+            .pipe(
+                map((user) => {
+                    return {
+                        id: user.sub,
+                        email: user.email,
+                        name: user.name,
+                        token: accessToken,
+                        picture: user.picture
+                    };
+                }),
+                tap((user: GoogleUser) => {
+                    // fire your signal after mapping
+                    this.userSignal.set(user);
+                }),
+            );
     }
+
 }
 
-/* ---------------- Model ---------------- */
-
 export interface GoogleUser {
-    sub: string;
+    id: string;
     email: string;
     name: string;
+    token: string; // OAuth access token
     picture: string;
 }

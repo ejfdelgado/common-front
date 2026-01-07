@@ -5,7 +5,9 @@ import { GoogleAuthService } from "@services/google-auth.service";
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [],
+  imports: [
+
+  ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
 })
