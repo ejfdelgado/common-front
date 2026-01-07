@@ -14,6 +14,7 @@ import { catchError, filter, take, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { GoogleAuthService } from '@services/google-auth.service';
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -65,8 +66,7 @@ export class AuthInterceptor implements HttpInterceptor {
      */
     private addTokenToRequest(request: HttpRequest<any>): HttpRequest<any> {
         const token = this.authService.getAccessToken();
-
-        if (token && !this.authService.isTokenExpired(token)) {
+        if (token) {
             return request.clone({
                 setHeaders: {
                     Authorization: `Bearer ${token}`,
@@ -106,18 +106,12 @@ export class AuthInterceptor implements HttpInterceptor {
             '/public/'
         ];
 
+        if (!request.url.startsWith(environment.apiUrl)) {
+            return true;
+        }
+
         // Skip token addition for specific URLs
         if (skipUrls.some(url => request.url.includes(url))) {
-            return true;
-        }
-
-        // Skip if it's a login request (no token yet)
-        if (request.url.includes('/auth/login') && request.method === 'POST') {
-            return true;
-        }
-
-        // Skip if running on server-side
-        if (!isPlatformBrowser(this.platformId)) {
             return true;
         }
 
