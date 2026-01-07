@@ -5,6 +5,7 @@ import {
   OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-camera-capture',
@@ -23,12 +24,16 @@ export class CameraCaptureComponent implements OnDestroy {
   private rejecter?: (reason?: any) => void;
   public videoDevices: MediaDeviceInfo[] = [];
   private currentDeviceIndex = 0;
-
+  private result$ = new Subject<Blob>();
   isOpen = false;
 
   constructor(
     public cdr: ChangeDetectorRef,
   ) { }
+
+  getResult$(): Observable<Blob> {
+    return this.result$.asObservable();
+  }
 
   /**
    * Public API
@@ -106,6 +111,7 @@ export class CameraCaptureComponent implements OnDestroy {
     canvas.toBlob((blob) => {
       if (blob && this.resolver) {
         this.resolver(blob);
+        this.result$.next(blob);
       }
       this.cleanup();
     }, 'image/jpeg', 0.95);

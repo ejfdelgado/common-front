@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, effect, ChangeDetectorRef, NgZone } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { GoogleGsiLoaderService } from './google-gsi-loader.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -37,7 +37,8 @@ export class GoogleAuthService {
 
     constructor(
         private loader: GoogleGsiLoaderService,
-        private http: HttpClient
+        private http: HttpClient,
+        private zone: NgZone,
     ) {
         /* Bridge Signal → RxJS */
         effect(() => {
@@ -57,7 +58,9 @@ export class GoogleAuthService {
                 if (response.access_token) {
                     this.accessToken = response.access_token;
                     localStorage.setItem(AUTH_FLAG_KEY, 'true');
-                    this.fetchUserInfo(response.access_token).subscribe(() => { });
+                    this.zone.run(() => {
+                        this.fetchUserInfo(response.access_token).subscribe(() => { });
+                    });
                 }
             },
         });
@@ -80,10 +83,12 @@ export class GoogleAuthService {
     }
 
     logout(): void {
-        this.accessToken = undefined;
-        localStorage.removeItem(AUTH_FLAG_KEY);
-        this.userSignal.set(null);
-        //window.google.accounts.oauth2.revoke(this.clientId, () => { });
+        this.zone.run(() => {
+            this.accessToken = undefined;
+            localStorage.removeItem(AUTH_FLAG_KEY);
+            this.userSignal.set(null);
+            //window.google.accounts.oauth2.revoke(this.clientId, () => { });
+        });
     }
 
     /* ---------------- Internal ---------------- */
