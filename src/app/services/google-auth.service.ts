@@ -3,6 +3,7 @@ import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { GoogleGsiLoaderService } from './google-gsi-loader.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from 'environments/environment';
 
 const AUTH_FLAG_KEY = 'google_auth_logged_in';
 
@@ -16,7 +17,7 @@ declare global {
     providedIn: 'root',
 })
 export class GoogleAuthService {
-    private readonly clientId = '1066977671859-rpsf2gtmi33chnc0vo5b7u0i354qtd65.apps.googleusercontent.com';
+    private readonly clientId = environment.googleClientId;
 
     /* ---------------- Signals (internal state) ---------------- */
 

@@ -24,6 +24,7 @@
       "@tools/*": ["app/tools/*"],
       "@services/*": ["app/services/*"],
       "@components/*": ["app/components/*"],
+      "@interceptors/*": ["app/interceptors/*"],
       
     },
     "types": ["three"]
