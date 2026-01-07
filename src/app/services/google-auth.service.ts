@@ -3,6 +3,8 @@ import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { GoogleGsiLoaderService } from './google-gsi-loader.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+const AUTH_FLAG_KEY = 'google_auth_logged_in';
+
 declare global {
     interface Window {
         google: any;
@@ -31,6 +33,7 @@ export class GoogleAuthService {
         this.authStateSubject.asObservable();
 
     private tokenClient!: any;
+    private accessToken?: string;
 
     constructor(
         private loader: GoogleGsiLoaderService,
@@ -52,9 +55,21 @@ export class GoogleAuthService {
             scope: 'openid profile email',
             callback: (response: any) => {
                 if (response.access_token) {
-                    this.fetchUserInfo(response.access_token).subscribe(()=>{});
+                    this.accessToken = response.access_token;
+                    localStorage.setItem(AUTH_FLAG_KEY, 'true');
+                    this.fetchUserInfo(response.access_token).subscribe(() => { });
                 }
             },
+        });
+
+        if (localStorage.getItem(AUTH_FLAG_KEY) === 'true') {
+            this.silentLogin();
+        }
+    }
+
+    private silentLogin(): void {
+        this.tokenClient?.requestAccessToken({
+            prompt: 'none'
         });
     }
 
@@ -65,6 +80,8 @@ export class GoogleAuthService {
     }
 
     logout(): void {
+        this.accessToken = undefined;
+        localStorage.removeItem(AUTH_FLAG_KEY);
         this.userSignal.set(null);
         //window.google.accounts.oauth2.revoke(this.clientId, () => { });
     }
