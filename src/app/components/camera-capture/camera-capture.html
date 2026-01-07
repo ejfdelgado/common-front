@@ -1,0 +1,11 @@
+<button (click)="openCamera()">Open Camera</button>
+@if (isOpen) {
+<div class="overlay">
+    <video #video playsinline></video>
+
+    <div class="controls">
+        <button class="cancel" (click)="cancel()">Cancel</button>
+        <button class="capture" (click)="capture()">Capture</button>
+    </div>
+</div>
+}
