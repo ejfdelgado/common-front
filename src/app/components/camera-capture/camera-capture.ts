@@ -21,6 +21,8 @@ export class CameraCaptureComponent implements OnDestroy {
   private stream?: MediaStream;
   private resolver?: (blob: Blob) => void;
   private rejecter?: (reason?: any) => void;
+  public videoDevices: MediaDeviceInfo[] = [];
+  private currentDeviceIndex = 0;
 
   isOpen = false;
 
@@ -31,7 +33,7 @@ export class CameraCaptureComponent implements OnDestroy {
   /**
    * Public API
    */
-  openCamera(): Promise<Blob> {
+  async openCamera(): Promise<Blob> {
     this.isOpen = true;
 
     return new Promise<Blob>(async (resolve, reject) => {
@@ -39,22 +41,56 @@ export class CameraCaptureComponent implements OnDestroy {
       this.rejecter = reject;
 
       try {
-        this.stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
-          audio: false
-        });
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        this.videoDevices = devices.filter(d => d.kind === 'videoinput');
 
-        setTimeout(() => {
-          const video = this.videoRef.nativeElement;
-          video.srcObject = this.stream!;
-          video.play();
-        });
+        if (this.videoDevices.length === 0) {
+          throw new Error('No camera devices found');
+        }
+
+        this.currentDeviceIndex = 0;
+        await this.startCamera();
 
       } catch (err) {
         this.cleanup();
         reject(err);
       }
     });
+  }
+
+  private async startCamera(): Promise<void> {
+    this.stopStream();
+
+    const deviceId = this.videoDevices[this.currentDeviceIndex].deviceId;
+
+    this.stream = await navigator.mediaDevices.getUserMedia({
+      video: { deviceId: { exact: deviceId } },
+      audio: false
+    });
+
+    setTimeout(() => {
+      const video = this.videoRef.nativeElement;
+      video.srcObject = this.stream!;
+      video.play();
+    });
+  }
+
+  private stopStream(): void {
+    if (this.stream) {
+      this.stream.getTracks().forEach(t => t.stop());
+      this.stream = undefined;
+    }
+  }
+
+  async switchCamera(): Promise<void> {
+    if (this.videoDevices.length <= 1) {
+      return;
+    }
+
+    this.currentDeviceIndex =
+      (this.currentDeviceIndex + 1) % this.videoDevices.length;
+
+    await this.startCamera();
   }
 
   capture(): void {
@@ -85,10 +121,7 @@ export class CameraCaptureComponent implements OnDestroy {
   private cleanup(): void {
     this.isOpen = false;
 
-    if (this.stream) {
-      this.stream.getTracks().forEach(t => t.stop());
-      this.stream = undefined;
-    }
+    this.stopStream();
 
     this.resolver = undefined;
     this.rejecter = undefined;

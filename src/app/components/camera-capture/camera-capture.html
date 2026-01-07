@@ -5,6 +5,11 @@
 
     <div class="controls">
         <button class="cancel" (click)="cancel()">Cancel</button>
+        @if (videoDevices.length > 1) {
+        <button class="switch" (click)="switchCamera()">
+            Switch
+        </button>
+        }
         <button class="capture" (click)="capture()">Capture</button>
     </div>
 </div>
