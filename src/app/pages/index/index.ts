@@ -4,6 +4,8 @@ import { GoogleAuthService } from "@services/google-auth.service";
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-index',
@@ -22,7 +24,8 @@ export class Index implements AfterViewInit {
 
   constructor(
     private indicatorSrv: IndicatorService,
-    public authSrv: GoogleAuthService
+    public authSrv: GoogleAuthService,
+    private http: HttpClient,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -41,6 +44,18 @@ export class Index implements AfterViewInit {
       },
       error: (err) => console.error('Camera error', err),
       complete: () => console.log('Camera closed')
+    });
+  }
+
+  callPublic() {
+    this.http.get(`${environment.apiUrl}public/health`).subscribe((res) => {
+      console.log(res);
+    });
+  }
+
+  callPrivate() {
+    this.http.get(`${environment.apiUrl}check_user`).subscribe((res) => {
+      console.log(res);
     });
   }
 }
