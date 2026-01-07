@@ -2,6 +2,7 @@ import { Injectable, signal, computed, effect, ChangeDetectorRef, NgZone } from 
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { GoogleGsiLoaderService } from './google-gsi-loader.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
 
 const AUTH_FLAG_KEY = 'google_auth_logged_in';
 
@@ -47,6 +48,20 @@ export class GoogleAuthService {
         this.initialize();
     }
 
+    getAccessToken() {
+        return this.accessToken;
+    }
+
+    isTokenExpired(token: string) {
+        try {
+            const decoded = jwtDecode<any>(token);
+            const currentTime = Date.now() / 1000;
+            return decoded.exp < currentTime;
+        } catch (error) {
+            return true;
+        }
+    }
+
     /* ---------------- OAuth Setup ---------------- */
 
     private async initialize(): Promise<void> {
@@ -59,7 +74,7 @@ export class GoogleAuthService {
                     this.accessToken = response.access_token;
                     localStorage.setItem(AUTH_FLAG_KEY, 'true');
                     this.zone.run(() => {
-                        this.fetchUserInfo(response.access_token).subscribe(() => { });
+                        this.fetchUserInfo(response.access_token).subscribe();
                     });
                 }
             },
