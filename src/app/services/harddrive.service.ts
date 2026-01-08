@@ -3,6 +3,9 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, firstValueFrom, map } from 'rxjs';
 import { environment } from 'environments/environment';
 
+export interface HardDriveOptionsType {
+
+}
 
 export interface UploadResponse {
     message: string;
@@ -21,6 +24,7 @@ export class HardDriveService {
     upload(
         bucketPath: string,
         blob: Blob,
+        options?: HardDriveOptionsType,
     ): Promise<UploadResponse> {
         const formData = new FormData();
         const fileName = bucketPath.split('/').pop();

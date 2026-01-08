@@ -3,6 +3,10 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, firstValueFrom, map } from 'rxjs';
 import { environment } from 'environments/environment';
 
+export interface BucketOptionsType {
+    bucketName?: string;
+    makePublic?: boolean;
+}
 
 export interface UploadResponse {
     message: string;
@@ -24,17 +28,16 @@ export class BucketService {
     upload(
         bucketPath: string,
         blob: Blob,
-        bucketName?: string,
-        makePublic?: boolean,
+        options?: BucketOptionsType,
     ): Promise<UploadResponse> {
         const formData = new FormData();
         const fileName = bucketPath.split('/').pop();
-        if (bucketName) {
-            formData.append('bucket_name', bucketName);
+        if (options?.bucketName) {
+            formData.append('bucket_name', options?.bucketName);
         }
         formData.append('file_path', bucketPath);
         formData.append('file', blob, fileName);
-        formData.append('make_public', makePublic === true ? "1" : "0");
+        formData.append('make_public', options?.makePublic === true ? "1" : "0");
 
         return firstValueFrom(this.http.post<UploadResponse>(environment.apiUrl + this.uploadUrl, formData));
     }

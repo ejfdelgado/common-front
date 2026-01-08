@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BucketService } from '@services/bucket.service';
 import { HardDriveService } from '@services/harddrive.service';
+import { FileService } from '@services/file.srv';
 
 @Component({
   selector: 'app-index',
@@ -28,8 +29,7 @@ export class Index implements AfterViewInit {
     private indicatorSrv: IndicatorService,
     public authSrv: GoogleAuthService,
     private http: HttpClient,
-    private bucketSrv: BucketService,
-    private hardDriveServ: HardDriveService,
+    private fileSrv: FileService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -46,8 +46,7 @@ export class Index implements AfterViewInit {
         //console.log('Image captured:', blob);
         // upload / preview / save
         try {
-          //const respose = await this.bucketSrv.upload("prueba/archivo.jpg", blob);
-          const response = await this.hardDriveServ.upload("prueba/archivo.jpg", blob);
+          const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "hard_drive");
         } catch (err) { }
 
       },
