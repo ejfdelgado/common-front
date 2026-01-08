@@ -27,7 +27,7 @@ export class GoogleAuthService {
     readonly authState$: Observable<GoogleUser | null> =
         this.authStateSubject.asObservable();
 
-    private accessToken?: string;
+    private token: string = "";
 
     constructor(
         private loader: GoogleGsiLoaderService,
@@ -40,7 +40,7 @@ export class GoogleAuthService {
     }
 
     getAccessToken() {
-        return this.accessToken;
+        return this.token;
     }
 
     private async initialize(): Promise<void> {
@@ -67,7 +67,7 @@ export class GoogleAuthService {
 
     logout(): void {
         this.zone.run(() => {
-            this.accessToken = undefined;
+            this.token = "";
             localStorage.removeItem(AUTH_FLAG_KEY);
             this.userSignal.set(null);
             window.google.accounts.id.disableAutoSelect();
@@ -77,7 +77,7 @@ export class GoogleAuthService {
     private handleCredential(response: any) {
         const idToken = response.credential;
         localStorage.setItem(AUTH_FLAG_KEY, 'true');
-
+        this.token = idToken;
         // Decode locally ONLY for UI (NOT trust)
         const payload = JSON.parse(atob(idToken.split('.')[1]));
 
