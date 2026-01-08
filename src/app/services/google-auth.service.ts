@@ -68,6 +68,13 @@ export class GoogleAuthService {
 
     private async initialize(): Promise<void> {
         await this.loader.load();
+
+        window.google.accounts.id.initialize({
+            client_id: this.clientId,
+            callback: (resp: any) => this.handleCredential(resp),
+            auto_select: false
+        });
+
         this.tokenClient = window.google.accounts.oauth2.initTokenClient({
             client_id: this.clientId,
             scope: 'openid profile email',
@@ -88,15 +95,19 @@ export class GoogleAuthService {
     }
 
     private silentLogin(): void {
+        /*
         this.tokenClient?.requestAccessToken({
             prompt: 'none'
         });
+        */
+        window.google.accounts.id.prompt();
     }
 
     /* ---------------- Public API ---------------- */
 
     login(): void {
-        this.tokenClient.requestAccessToken({ prompt: 'consent' });
+        //this.tokenClient.requestAccessToken({ prompt: 'consent' });
+        window.google.accounts.id.prompt();
     }
 
     logout(): void {
@@ -104,7 +115,24 @@ export class GoogleAuthService {
             this.accessToken = undefined;
             localStorage.removeItem(AUTH_FLAG_KEY);
             this.userSignal.set(null);
+            window.google.accounts.id.disableAutoSelect();
             //window.google.accounts.oauth2.revoke(this.clientId, () => { });
+        });
+    }
+
+    private handleCredential(response: any) {
+        const idToken = response.credential;
+        localStorage.setItem(AUTH_FLAG_KEY, 'true');
+
+        // Decode locally ONLY for UI (NOT trust)
+        const payload = JSON.parse(atob(idToken.split('.')[1]));
+
+        this.userSignal.set({
+            id: payload.sub,
+            email: payload.email,
+            name: payload.name,
+            picture: payload.picture,
+            token: idToken
         });
     }
 
