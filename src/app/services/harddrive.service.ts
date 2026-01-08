@@ -13,44 +13,28 @@ export interface UploadResponse {
 @Injectable({
     providedIn: 'root',
 })
-export class BucketService {
-    private readonly uploadUrl = 'bucket/file';
+export class HardDriveService {
+    private readonly uploadUrl = 'harddrive/file';
 
     constructor(private http: HttpClient) { }
 
-    /**
-     * Upload a blob to backend
-     */
     upload(
         bucketPath: string,
         blob: Blob,
-        bucketName?: string,
-        makePublic?: boolean,
     ): Promise<UploadResponse> {
         const formData = new FormData();
         const fileName = bucketPath.split('/').pop();
-        if (bucketName) {
-            formData.append('bucket_name', bucketName);
-        }
         formData.append('file_path', bucketPath);
         formData.append('file', blob, fileName);
-        formData.append('make_public', makePublic === true ? "1" : "0");
 
         return firstValueFrom(this.http.post<UploadResponse>(environment.apiUrl + this.uploadUrl, formData));
     }
 
-    /**
-     * Optional: upload with progress tracking
-     */
     uploadWithProgress(
         bucketPath: string,
-        blob: Blob,
-        bucketName?: string,
+        blob: Blob
     ): Observable<number> {
         const formData = new FormData();
-        if (bucketName) {
-            formData.append('bucket_name', bucketName);
-        }
 
         const fileName = bucketPath.split('/').pop();
 

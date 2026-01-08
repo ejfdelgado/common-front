@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BucketService } from '@services/bucket.service';
+import { HardDriveService } from '@services/harddrive.service';
 
 @Component({
   selector: 'app-index',
@@ -28,6 +29,7 @@ export class Index implements AfterViewInit {
     public authSrv: GoogleAuthService,
     private http: HttpClient,
     private bucketSrv: BucketService,
+    private hardDriveServ: HardDriveService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -44,10 +46,9 @@ export class Index implements AfterViewInit {
         //console.log('Image captured:', blob);
         // upload / preview / save
         try {
-          const respose = await this.bucketSrv.upload("prueba/archivo.jpg", blob);
-        } catch (err) {
-
-        }
+          //const respose = await this.bucketSrv.upload("prueba/archivo.jpg", blob);
+          const response = await this.hardDriveServ.upload("prueba/archivo.jpg", blob);
+        } catch (err) { }
 
       },
       error: (err) => console.error('Camera error', err),
