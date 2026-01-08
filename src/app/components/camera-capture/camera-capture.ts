@@ -69,7 +69,7 @@ export class CameraCaptureComponent implements OnDestroy {
     const deviceId = this.videoDevices[this.currentDeviceIndex].deviceId;
 
     this.stream = await navigator.mediaDevices.getUserMedia({
-      video: { deviceId: { exact: deviceId } },
+      video: { deviceId: { ideal: deviceId } },
       audio: false
     });
 
