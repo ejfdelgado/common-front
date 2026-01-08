@@ -6,8 +6,6 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { BucketService } from '@services/bucket.service';
-import { HardDriveService } from '@services/harddrive.service';
 import { FileService } from '@services/file.srv';
 
 @Component({
