@@ -45,11 +45,8 @@ export class Index implements AfterViewInit {
         // upload / preview / save
         try {
           const respose = await this.bucketSrv.upload("prueba/archivo.jpg", blob);
-          console.log("respose");
-          console.log(respose);
         } catch (err) {
-          console.log("error");
-          console.log(err);
+
         }
 
       },
