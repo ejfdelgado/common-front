@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
+import { BucketService } from '@services/bucket.service';
 
 @Component({
   selector: 'app-index',
@@ -26,6 +27,7 @@ export class Index implements AfterViewInit {
     private indicatorSrv: IndicatorService,
     public authSrv: GoogleAuthService,
     private http: HttpClient,
+    private bucketSrv: BucketService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -38,9 +40,18 @@ export class Index implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.camera.getResult$().subscribe({
-      next: (blob) => {
-        console.log('Image captured:', blob);
+      next: async (blob) => {
+        //console.log('Image captured:', blob);
         // upload / preview / save
+        try {
+          const respose = await this.bucketSrv.upload("prueba/archivo.jpg", blob);
+          console.log("respose");
+          console.log(respose);
+        } catch (err) {
+          console.log("error");
+          console.log(err);
+        }
+
       },
       error: (err) => console.error('Camera error', err),
       complete: () => console.log('Camera closed')
