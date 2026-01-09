@@ -20,7 +20,8 @@ import { FileService } from '@services/file.srv';
 })
 export class Index implements AfterViewInit {
 
-  @ViewChild("camera_capture") camera!: CameraCaptureComponent;
+  @ViewChild("camera_capture_bucket") cameraBucket!: CameraCaptureComponent;
+  @ViewChild("camera_capture_harddrive") cameraHarddrive!: CameraCaptureComponent;
   openCamera$ = new Subject<void>();
 
   constructor(
@@ -39,14 +40,20 @@ export class Index implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.camera.getResult$().subscribe({
+    this.cameraBucket.getResult$().subscribe({
       next: async (blob) => {
-        //console.log('Image captured:', blob);
-        // upload / preview / save
         try {
           const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
         } catch (err) { }
-
+      },
+      error: (err) => console.error('Camera error', err),
+      complete: () => console.log('Camera closed')
+    });
+    this.cameraHarddrive.getResult$().subscribe({
+      next: async (blob) => {
+        try {
+          const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "hard_drive");
+        } catch (err) { }
       },
       error: (err) => console.error('Camera error', err),
       complete: () => console.log('Camera closed')

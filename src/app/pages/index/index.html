@@ -12,4 +12,5 @@
 }
 <button (click)="callPublic()">Call public</button>
 <button (click)="callPrivate()">Call private</button>
-<app-camera-capture #camera_capture [ngClass]="{'invisible': !authSrv.isLoggedIn()}"></app-camera-capture>
+<app-camera-capture #camera_capture_bucket [ngClass]="{'invisible': !authSrv.isLoggedIn()}"></app-camera-capture>
+<app-camera-capture #camera_capture_harddrive [ngClass]="{'invisible': !authSrv.isLoggedIn()}"></app-camera-capture>
