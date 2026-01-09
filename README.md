@@ -65,6 +65,8 @@ https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45
 https://sketchfab.com/3d-models/treasure-chest-773a2f35025b4e2e9ac48fd84c16b3ab
 
 
+https://stg-playtolearn.storage.googleapis.com/index.html
+
 Read:
 
 https://pro-common-backend-1066977671859.us-central1.run.app/public/harddrive/file?file_path=prueba/archivo.jpg
