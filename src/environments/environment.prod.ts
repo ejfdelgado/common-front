@@ -1,7 +1,7 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/',
+  apiUrl: 'https://pro-common-backend-1066977671859.us-central1.run.app/',
   googleClientId: '1066977671859-rpsf2gtmi33chnc0vo5b7u0i354qtd65.apps.googleusercontent.com',
   tokenRefreshInterval: 300000
 };
