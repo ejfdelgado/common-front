@@ -39,4 +39,18 @@ export class HardDriveService {
         const query = new URLSearchParams(parameters).toString();
         return firstValueFrom(this.http.delete<ApiResponse>(`${environment.apiUrl}${this.uploadUrl}?${query}`));
     }
+
+    async open(
+        bucketPath: string,
+        options?: any,
+    ): Promise<any> {
+        const parameters: any = {
+            file_path: bucketPath,
+        };
+        if (options?.bucketName) {
+            parameters.bucket_name = options?.bucketName;
+        };
+        const query = new URLSearchParams(parameters).toString();
+        window.open(`${environment.apiUrl}public/${this.uploadUrl}?${query}`);
+    }
 }

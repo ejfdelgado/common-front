@@ -75,4 +75,8 @@ export class Index implements AfterViewInit {
   async deleteFile(type: StorageType) {
     await this.fileSrv.delete("prueba/archivo.jpg", type);
   }
+
+  async openFile(type: StorageType) {
+    await this.fileSrv.open("prueba/archivo.jpg", type);
+  }
 }

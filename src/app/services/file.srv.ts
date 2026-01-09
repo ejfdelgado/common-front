@@ -43,4 +43,18 @@ export class FileService {
             throw new Error("Incorrect option");
         }
     }
+
+    open(
+        path: string,
+        type: StorageType = "bucket",
+        options?: any,
+    ): Promise<ApiResponse> {
+        if (type == "bucket") {
+            return this.bucketSrv.open(path, options);
+        } else if (type == "hard_drive") {
+            return this.hardDriveSrv.open(path, options);
+        } else {
+            throw new Error("Incorrect option");
+        }
+    }
 }

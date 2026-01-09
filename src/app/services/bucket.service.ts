@@ -50,4 +50,18 @@ export class BucketService {
         const query = new URLSearchParams(parameters).toString();
         return firstValueFrom(this.http.delete<ApiResponse>(`${environment.apiUrl}${this.uploadUrl}?${query}`));
     }
+
+    async open(
+        bucketPath: string,
+        options?: BucketOptionsType,
+    ): Promise<any> {
+        const parameters: any = {
+            file_path: bucketPath,
+        };
+        if (options?.bucketName) {
+            parameters.bucket_name = options?.bucketName;
+        };
+        const query = new URLSearchParams(parameters).toString();
+        window.open(`${environment.apiUrl}public/${this.uploadUrl}?${query}`);
+    }
 }

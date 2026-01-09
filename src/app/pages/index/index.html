@@ -16,9 +16,11 @@
     <span>Bucket</span>
     <app-camera-capture #camera_capture_bucket></app-camera-capture>
     <button (click)="deleteFile('bucket')">Delete</button>
+    <button (click)="openFile('bucket')">Open</button>
 </div>
 <div [ngClass]="{'invisible': !authSrv.isLoggedIn()}">
     <span>Hard Drive</span>
     <app-camera-capture #camera_capture_harddrive></app-camera-capture>
     <button (click)="deleteFile('hard_drive')">Delete</button>
+    <button (click)="openFile('hard_drive')">Open</button>
 </div>
