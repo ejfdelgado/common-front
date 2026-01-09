@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { FileService } from '@services/file.srv';
+import { FileService, StorageType } from '@services/file.srv';
 
 @Component({
   selector: 'app-index',
@@ -70,5 +70,9 @@ export class Index implements AfterViewInit {
     this.http.get(`${environment.apiUrl}check_user`).subscribe((res) => {
       console.log(res);
     });
+  }
+
+  async deleteFile(type: StorageType) {
+    await this.fileSrv.delete("prueba/archivo.jpg", type);
   }
 }

@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 import { BucketService } from "./bucket.service";
 import { HardDriveService } from "./harddrive.service";
-import { UploadResponse } from "types/file";
+import { ApiResponse, UploadResponse } from "types/file";
+
+export type StorageType = "bucket" | "hard_drive";
 
 @Injectable({
     providedIn: 'root',
@@ -16,13 +18,27 @@ export class FileService {
     upload(
         path: string,
         blob: Blob,
-        type: "bucket" | "hard_drive" = "bucket",
+        type: StorageType = "bucket",
         options?: any,
     ): Promise<UploadResponse> {
         if (type == "bucket") {
             return this.bucketSrv.upload(path, blob, options);
         } else if (type == "hard_drive") {
             return this.hardDriveSrv.upload(path, blob, options);
+        } else {
+            throw new Error("Incorrect option");
+        }
+    }
+
+    delete(
+        path: string,
+        type: StorageType = "bucket",
+        options?: any,
+    ): Promise<ApiResponse> {
+        if (type == "bucket") {
+            return this.bucketSrv.delete(path, options);
+        } else if (type == "hard_drive") {
+            return this.hardDriveSrv.delete(path, options);
         } else {
             throw new Error("Incorrect option");
         }

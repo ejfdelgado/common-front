@@ -12,5 +12,13 @@
 }
 <button (click)="callPublic()">Call public</button>
 <button (click)="callPrivate()">Call private</button>
-<app-camera-capture #camera_capture_bucket [ngClass]="{'invisible': !authSrv.isLoggedIn()}"></app-camera-capture>
-<app-camera-capture #camera_capture_harddrive [ngClass]="{'invisible': !authSrv.isLoggedIn()}"></app-camera-capture>
+<div [ngClass]="{'invisible': !authSrv.isLoggedIn()}">
+    <span>Bucket</span>
+    <app-camera-capture #camera_capture_bucket></app-camera-capture>
+    <button (click)="deleteFile('bucket')">Delete</button>
+</div>
+<div [ngClass]="{'invisible': !authSrv.isLoggedIn()}">
+    <span>Hard Drive</span>
+    <app-camera-capture #camera_capture_harddrive></app-camera-capture>
+    <button (click)="deleteFile('hard_drive')">Delete</button>
+</div>
