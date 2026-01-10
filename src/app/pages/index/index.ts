@@ -25,6 +25,8 @@ export class Index implements AfterViewInit {
   @ViewChild("camera_capture_harddrive") cameraHarddrive!: CameraCaptureComponent;
   openCamera$ = new Subject<void>();
 
+  firestoreTemporal: any = { count: 0 };
+
   constructor(
     private indicatorSrv: IndicatorService,
     public authSrv: GoogleAuthService,
@@ -83,6 +85,18 @@ export class Index implements AfterViewInit {
   }
 
   async firestoreCreateUpdate() {
-    this.firestoreSrv.createUpdate("animals", { id: "dog", name: "dog" });
+    const data = {
+      id: "dog",
+      name: "Laica",
+      created: Date.now(),
+    };
+    await this.firestoreSrv.createUpdate("animals", data);
+  }
+
+  async firestoreCreateUpdate2() {
+    const response = await this.firestoreSrv.createUpdate("animals", this.firestoreTemporal);
+    this.firestoreTemporal.id = response.id;
+    this.firestoreTemporal.count += 1;
+
   }
 }
