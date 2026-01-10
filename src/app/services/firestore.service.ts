@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
 import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "types/file";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
 
 export interface UpdatedEntityType {
     id: string;
@@ -29,5 +31,13 @@ export class FirestoreService {
         } else {
             throw new Error("No id found");
         }
+    }
+
+    async paging(collectionName: string) {
+        const snap = await getDocs(collection(db, collectionName));
+        return snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
     }
 }

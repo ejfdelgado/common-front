@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IndicatorService } from "@services/indicator.service";
 import { GoogleAuthService } from "@services/google-auth.service";
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
@@ -26,6 +26,7 @@ export class Index implements AfterViewInit {
   openCamera$ = new Subject<void>();
 
   firestoreTemporal: any = { count: 0 };
+  pageList: any[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -33,6 +34,7 @@ export class Index implements AfterViewInit {
     private http: HttpClient,
     private fileSrv: FileService,
     private firestoreSrv: FirestoreService,
+    public cdr: ChangeDetectorRef,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -103,6 +105,10 @@ export class Index implements AfterViewInit {
     const response = await this.firestoreSrv.createUpdate("animals", this.firestoreTemporal, conf);
     this.firestoreTemporal.id = response.id;
     this.firestoreTemporal.count += 1;
+  }
 
+  async firestorePaginate() {
+    this.pageList = await this.firestoreSrv.paging("pro-animals");
+    this.cdr.detectChanges();
   }
 }
