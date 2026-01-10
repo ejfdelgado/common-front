@@ -69,6 +69,13 @@ https://stg-playtolearn.storage.googleapis.com/index.html
 
 Read:
 
+https://pro-wordpress-1-284609972807.us-central1.run.app/public/harddrive/file?file_path=prueba/test.png
+https://pro-wordpress-1-284609972807.us-central1.run.app/public/bucket/file?file_path=prueba/test.png
+
+https://pro-wordpress-1-284609972807.us-central1.run.app/public/harddrive/file?file_path=/cloudsql/local-volt-431316-m2:us-central1:pro-wordpress-1
+
+https://pro-wordpress-1-284609972807.us-central1.run.app/public/mysql/check
+
 https://pro-common-backend-1066977671859.us-central1.run.app/public/harddrive/file?file_path=prueba/archivo.jpg
 
 http://localhost:8080/public/harddrive/file?file_path=prueba/archivo.jpg
