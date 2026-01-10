@@ -13,7 +13,7 @@ export interface UpdatedEntityType {
 })
 export class FirestoreService {
 
-    private readonly uploadUrl = 'public/firestore';
+    private readonly uploadUrl = 'firestore';
 
     constructor(private http: HttpClient) { }
 
