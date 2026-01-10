@@ -90,11 +90,17 @@ export class Index implements AfterViewInit {
       name: "Laica",
       created: Date.now(),
     };
-    await this.firestoreSrv.createUpdate("animals", data);
+    const conf: any = {
+      autoAuthor: true,
+    };
+    await this.firestoreSrv.createUpdate("animals", data, conf);
   }
 
   async firestoreCreateUpdate2() {
-    const response = await this.firestoreSrv.createUpdate("animals", this.firestoreTemporal);
+    const conf: any = {
+      autoAuthor: true,
+    };
+    const response = await this.firestoreSrv.createUpdate("animals", this.firestoreTemporal, conf);
     this.firestoreTemporal.id = response.id;
     this.firestoreTemporal.count += 1;
 

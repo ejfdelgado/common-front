@@ -17,10 +17,11 @@ export class FirestoreService {
 
     constructor(private http: HttpClient) { }
 
-    async createUpdate(collection: string, data: any): Promise<UpdatedEntityType> {
+    async createUpdate(collection: string, data: any, conf: any = {}): Promise<UpdatedEntityType> {
         const payload: any = {
             collection,
             data,
+            conf,
         };
         const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + this.uploadUrl, payload));
         if (typeof response.data.id == "string") {
