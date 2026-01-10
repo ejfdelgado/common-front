@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { FileService, StorageType } from '@services/file.srv';
+import { FirestoreService } from '@services/firestore.service';
 
 @Component({
   selector: 'app-index',
@@ -29,6 +30,7 @@ export class Index implements AfterViewInit {
     public authSrv: GoogleAuthService,
     private http: HttpClient,
     private fileSrv: FileService,
+    private firestoreSrv: FirestoreService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -78,5 +80,9 @@ export class Index implements AfterViewInit {
 
   async openFile(type: StorageType) {
     await this.fileSrv.open("prueba/archivo.jpg", type);
+  }
+
+  async firestoreCreateUpdate() {
+    this.firestoreSrv.createUpdate("animals", { id: "dog", name: "dog" });
   }
 }
