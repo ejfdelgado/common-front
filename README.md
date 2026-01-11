@@ -52,6 +52,9 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
+- When clicking login it do nothing if canceled autologin. maybe reset permissions or ask permissions again?
+- Camera switch button does not exists.
+
 - Avoid fadein fadeout conflict!
 - progress bar border
 

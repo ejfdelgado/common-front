@@ -48,6 +48,7 @@ export class CameraCaptureComponent implements OnDestroy {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         this.videoDevices = devices.filter(d => d.kind === 'videoinput');
+        this.cdr.detectChanges();
 
         if (this.videoDevices.length === 0) {
           throw new Error('No camera devices found');
