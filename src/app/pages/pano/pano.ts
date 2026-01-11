@@ -8,7 +8,10 @@ import { ThreejsComponent } from "./components/threejs/threejs.component";
     ThreejsComponent
   ],
   templateUrl: './pano.html',
-  styleUrl: './pano.scss',
+  styleUrls: [
+    './pano.scss',
+    '../../../threejs_styles.scss',
+  ],
 })
 export class Pano {
 

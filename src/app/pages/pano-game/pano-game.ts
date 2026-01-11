@@ -9,7 +9,10 @@ import { setMobileBrowserBarsTo } from '@tools/Colors';
     ThreejsComponent
   ],
   templateUrl: './pano-game.html',
-  styleUrl: './pano-game.scss',
+  styleUrls: [
+    './pano-game.scss',
+    '../../../threejs_styles.scss',
+  ],
 })
 export class PanoGame {
   constructor() {

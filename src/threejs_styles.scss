@@ -1,0 +1,16 @@
+body,
+html,
+canvas {
+    touch-action: none;
+    /* Critical for pinch to work */
+    -ms-touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow: hidden;
+}

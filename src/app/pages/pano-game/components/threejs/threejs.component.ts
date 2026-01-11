@@ -169,7 +169,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       if (typeof value.percentage == "number") {
         this.listeningTimeoutPercentage = value.percentage;
       }
-      this.cdr.detectChanges();
+      try {
+        this.cdr.detectChanges();
+      } catch (err) { }
     });
   }
 

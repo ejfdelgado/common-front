@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
@@ -20,7 +20,11 @@ import { BooleanStateService } from "@services/boolean-state.service";
     ThreejsComponent,
   ],
   templateUrl: './game-lr.html',
-  styleUrl: './game-lr.scss',
+  encapsulation: ViewEncapsulation.None,
+  styleUrls: [
+    './game-lr.scss', 
+    '../../../threejs_styles.scss',
+  ],
 })
 export class GameLr extends CommonSpeech {
   @ViewChild("three_component") threeComponent!: ThreejsComponent;
@@ -86,6 +90,7 @@ export class GameLr extends CommonSpeech {
           "ventes": "up",
           "vins": "up",
           "devin": "up",
+          "vendre": "up",
           //
           "bas": "down",
           "arriere": "down",
