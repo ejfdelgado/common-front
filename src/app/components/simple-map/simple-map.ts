@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader';
 import { environment } from 'environments/environment';
 import { Observable, Subject } from 'rxjs';
@@ -25,6 +25,8 @@ setOptions({
 })
 export class SimpleMapComponent implements AfterViewInit {
   @ViewChild('mapContainer') mapElement!: ElementRef;
+
+  @Input() transform?: (a: MarkType) => Promise<string>;
 
   map!: google.maps.Map;
   mapLib: any;
@@ -84,14 +86,19 @@ export class SimpleMapComponent implements AfterViewInit {
 
   async addMarker(data: MarkType) {
     const { AdvancedMarkerElement } = await this.libPromises;
-    const pinElement = document.createElement('div');
-    pinElement.innerHTML = '<b style="color: red;">📍</b>';
-    const marker = new AdvancedMarkerElement({
+    const config: any = {
       map: this.map,
       position: { lat: data.lat, lng: data.lon },
       title: data.title,
-      content: pinElement,
-    });
+    };
+
+    if (this.transform) {
+      const pinElement = document.createElement('div');
+      pinElement.innerHTML = await this.transform(data);
+      config.content = pinElement;
+    }
+
+    const marker = new AdvancedMarkerElement(config);
     const observable = new Subject<MarkType>();
     marker.addListener('click', () => {
       observable.next(data);

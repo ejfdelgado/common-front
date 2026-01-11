@@ -44,6 +44,8 @@ Configure branding at:
 
 [Pano Game](https://stg-playtolearn.storage.googleapis.com/index.html#/panogame?q=2025-07%2F001)
 
+[Index](https://stg-playtolearn.storage.googleapis.com/index.html)
+
 ```
 gsutil cors get gs://pro-ejflab-assets
 ```

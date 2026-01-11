@@ -8,7 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { FileService, StorageType } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
-import { SimpleMapComponent } from '@components/simple-map/simple-map';
+import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
+import { LocationService } from '@services/location.service';
 
 @Component({
   selector: 'app-index',
@@ -25,6 +26,8 @@ export class Index implements AfterViewInit {
 
   @ViewChild("camera_capture_bucket") cameraBucket!: CameraCaptureComponent;
   @ViewChild("camera_capture_harddrive") cameraHarddrive!: CameraCaptureComponent;
+  @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
+
   openCamera$ = new Subject<void>();
 
   firestoreTemporal: any = { count: 0 };
@@ -38,6 +41,7 @@ export class Index implements AfterViewInit {
     private fileSrv: FileService,
     private firestoreSrv: FirestoreService,
     public cdr: ChangeDetectorRef,
+    public locationSrv: LocationService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -118,5 +122,27 @@ export class Index implements AfterViewInit {
   async showDevices() {
     this.devices = await navigator.mediaDevices.enumerateDevices();
     this.cdr.detectChanges();
+  }
+
+  async transformMark(data: MarkType) {
+    return `<b class="white_subtitle" style="font-size: 2em;">📍</b>`;
+  }
+
+  async addMark() {
+    const activity = this.indicatorSrv.start();
+    try {
+      const pos = await this.locationSrv.getCurrentPosition();
+      const marker: MarkType = {
+        id: "",
+        lat: pos.latitude,
+        lon: pos.longitude,
+        title: new Date().toDateString(),
+      };
+      const observable = await this.simpleMap.addMarker(marker);
+      observable.subscribe((mark) => {
+        console.log(mark);
+      });
+    } catch (err) { }
+    activity.done();
   }
 }
