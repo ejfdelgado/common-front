@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/camera-capture
+npx ng generate component --standalone components/simple-map
 ```
 
 ```bash

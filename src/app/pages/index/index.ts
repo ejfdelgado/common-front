@@ -8,13 +8,15 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { FileService, StorageType } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
+import { SimpleMapComponent } from '@components/simple-map/simple-map';
 
 @Component({
   selector: 'app-index',
   standalone: true,
   imports: [
     CommonModule,
-    CameraCaptureComponent
+    CameraCaptureComponent,
+    SimpleMapComponent,
   ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
