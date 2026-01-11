@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader';
+import { environment } from 'environments/environment';
 
 setOptions({
-  key: atob('QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j'),
+  key: atob(environment.mapKey),
   v: 'weekly',
   libraries: ["places"],
 });
