@@ -52,6 +52,7 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
+- Use httpOnly cookie to store token
 - Add QR service, display it to allow scan it.
 - When clicking login it do nothing if canceled autologin. maybe reset permissions or ask permissions again?
 - Camera switch button does not exists
