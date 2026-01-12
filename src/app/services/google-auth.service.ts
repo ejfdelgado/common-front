@@ -1,7 +1,8 @@
-import { Injectable, signal, computed, effect, ChangeDetectorRef, NgZone } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { Injectable, signal, computed, effect, NgZone } from '@angular/core';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { GoogleGsiLoaderService } from './google-gsi-loader.service';
 import { environment } from 'environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 const AUTH_FLAG_KEY = 'google_auth_logged_in';
 
@@ -22,6 +23,8 @@ export class GoogleAuthService {
     readonly user = computed(() => this.userSignal());
     readonly isLoggedIn = computed(() => !!this.userSignal());
 
+    initializer: any;
+
     private authStateSubject = new BehaviorSubject<GoogleUser | null>(null);
 
     readonly authState$: Observable<GoogleUser | null> =
@@ -30,6 +33,7 @@ export class GoogleAuthService {
     private token: string = "";
 
     constructor(
+        private http: HttpClient,
         private loader: GoogleGsiLoaderService,
         private zone: NgZone,
     ) {
@@ -46,23 +50,66 @@ export class GoogleAuthService {
     private async initialize(): Promise<void> {
         await this.loader.load();
 
-        window.google.accounts.id.initialize({
+        this.initializer = window.google.accounts.id.initialize({
             client_id: this.clientId,
             callback: (resp: any) => this.handleCredential(resp),
-            auto_select: false
+            auto_select: false,
+            redirect_uri: this.getRedirectUrl(),
         });
-
-        if (localStorage.getItem(AUTH_FLAG_KEY) === 'true') {
-            this.silentLogin();
-        }
     }
 
-    private silentLogin(): void {
-        window.google.accounts.id.prompt();
+    private getRedirectUrl() {
+        return location.origin;
     }
 
     login(): void {
-        window.google.accounts.id.prompt();
+        this.loginBackend();
+    }
+
+    silentLogin(): void {
+        window.google.accounts.id.prompt((notification: any) => {
+            if (notification.isNotDisplayed()) {
+                console.log('Not displayed:', notification.getNotDisplayedReason());
+            }
+
+            if (notification.isSkippedMoment()) {
+                const cause = notification.getSkippedReason();
+                console.log('Skipped:', cause);
+                if (cause == "tap_outside") {
+                    this.logout();
+                } else if (cause == "unknown_reason") {
+                    this.logout();
+                }
+            }
+
+            if (notification.isDismissedMoment()) {
+                const cause = notification.getDismissedReason();
+                console.log('Dismissed:', cause);
+                if (cause == "credential_returned") {
+
+                } else if (cause == "unknown_reason") {
+                    this.logout();
+                }
+            }
+        });
+    }
+
+    loginBackend(): void {
+        const redirect_uri = this.getRedirectUrl()
+        window.google.accounts.oauth2.initCodeClient({
+            client_id: this.clientId,
+            scope: 'openid email profile',
+            callback: async (response: any) => {
+                const tokens: any = await firstValueFrom(this.http.post(environment.apiUrl + 'public/auth/google', {
+                    code: response.code,
+                    redirect_uri: redirect_uri,
+                }));
+                this.handleCredential({
+                    credential: tokens.id_token,
+                });
+            },
+            auto_select: false,
+        }).requestCode();
     }
 
     logout(): void {

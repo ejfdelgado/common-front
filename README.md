@@ -52,8 +52,13 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
+- Add QR service, display it to allow scan it.
 - When clicking login it do nothing if canceled autologin. maybe reset permissions or ask permissions again?
-- Camera switch button does not exists.
+- Camera switch button does not exists
+- Make a thumbnail in front end
+- Add env variables to force entities:
+    - bucket, permisos de usuario y tamanio
+    - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.
 
 - Avoid fadein fadeout conflict!
 - progress bar border
