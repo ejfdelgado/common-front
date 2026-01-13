@@ -34,6 +34,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/practicesong/practicesong').then(m => m.Practicesong),
     },
     {
+        path: 'voyage_photo',
+        loadComponent: () => import('./pages/voyage-photo/voyage-photo').then(m => m.VoyagePhoto),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },

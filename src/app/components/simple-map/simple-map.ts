@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader';
 import { environment } from 'environments/environment';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export interface MarkType {
   id: string;
@@ -62,7 +62,8 @@ export class SimpleMapComponent implements AfterViewInit {
         center: { lat: 6.6062575, lng: -73.0541827 },
         mapTypeId: "satellite",//roadmap satellite hybrid terrain
         zoom: 21,
-        mapId: 'MAP_ID'
+        mapId: 'MAP_ID',
+        disableDefaultUI: true,
       };
 
       this.map = new Map(this.mapElement.nativeElement, mapOptions);

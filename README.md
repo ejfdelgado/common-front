@@ -13,6 +13,10 @@ npx ng generate component --standalone components/simple-map
 ```
 
 ```bash
+npx ng generate component --standalone pages/voyage-photo
+```
+
+```bash
 ng generate component component-name
 ```
 
