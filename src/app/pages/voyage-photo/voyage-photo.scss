@@ -28,6 +28,11 @@
     gap: 10px;
 }
 
+.dynamic_content {
+    width: 100%;
+    flex: 1;
+}
+
 @media screen AND (max-width: 900px) {
     .main_container {
         grid-template-columns: 1fr;

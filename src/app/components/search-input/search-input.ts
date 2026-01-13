@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,14 +19,15 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './search-input.scss',
 })
 export class SearchInputComponent {
+
+  @Output() search = new EventEmitter<string>();
   searchCtrl = new FormControl('');
 
   onSearch(): void {
     const value = this.searchCtrl.value?.trim();
     if (!value) return;
 
-    console.log('Searching for:', value);
-    // 🔁 call your service / emit event here
+    if (value) this.search.emit(value);
   }
 
   clear(): void {
