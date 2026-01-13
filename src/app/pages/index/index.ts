@@ -17,7 +17,6 @@ import { LocationService } from '@services/location.service';
   imports: [
     CommonModule,
     CameraCaptureComponent,
-    SimpleMapComponent,
   ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
@@ -26,7 +25,6 @@ export class Index implements AfterViewInit {
 
   @ViewChild("camera_capture_bucket") cameraBucket!: CameraCaptureComponent;
   @ViewChild("camera_capture_harddrive") cameraHarddrive!: CameraCaptureComponent;
-  @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
 
   openCamera$ = new Subject<void>();
 
@@ -122,27 +120,5 @@ export class Index implements AfterViewInit {
   async showDevices() {
     this.devices = await navigator.mediaDevices.enumerateDevices();
     this.cdr.detectChanges();
-  }
-
-  async transformMark(data: MarkType) {
-    return `<b class="white_subtitle" style="font-size: 2em;">📍</b>`;
-  }
-
-  async addMark() {
-    const activity = this.indicatorSrv.start();
-    try {
-      const pos = await this.locationSrv.getCurrentPosition();
-      const marker: MarkType = {
-        id: "",
-        lat: pos.latitude,
-        lon: pos.longitude,
-        title: new Date().toDateString(),
-      };
-      const observable = await this.simpleMap.addMarker(marker);
-      observable.subscribe((mark) => {
-        console.log(mark);
-      });
-    } catch (err) { }
-    activity.done();
   }
 }
