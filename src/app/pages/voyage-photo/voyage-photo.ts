@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
+import { CardDoc } from '@components/card-doc/card-doc';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { Statusbar } from '@components/statusbar/statusbar';
@@ -22,6 +23,7 @@ import { LocationService } from '@services/location.service';
     MatButtonModule,
     Statusbar,
     SearchInputComponent,
+    CardDoc,
   ],
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
