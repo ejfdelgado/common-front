@@ -1,21 +1,49 @@
-<button mat-fab color="primary" [matMenuTriggerFor]="menu" aria-label="Open menu">
-    <mat-icon>more_vert</mat-icon>
-</button>
+<div class="main_container">
+    <div class="menu_container">
+        <button mat-fab color="primary" [matMenuTriggerFor]="menu" aria-label="Open menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <!-- Menu -->
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+            </button>
 
-<!-- Menu -->
-<mat-menu #menu="matMenu">
-    <button mat-menu-item>
-        <mat-icon>edit</mat-icon>
-        <span>Edit</span>
-    </button>
+            <button mat-menu-item>
+                <mat-icon>share</mat-icon>
+                <span>Share</span>
+            </button>
 
-    <button mat-menu-item>
-        <mat-icon>share</mat-icon>
-        <span>Share</span>
-    </button>
+            <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+            </button>
+        </mat-menu>
+    </div>
+    <div class="title_content">
+        Esto es un título
+    </div>
+    <div class="menu_container">
+        <button mat-fab color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
+            <mat-icon>face</mat-icon>
+        </button>
+        <!-- Menu -->
+        <mat-menu #menu2="matMenu">
+            <button mat-menu-item>
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+            </button>
 
-    <button mat-menu-item>
-        <mat-icon>delete</mat-icon>
-        <span>Delete</span>
-    </button>
-</mat-menu>
+            <button mat-menu-item>
+                <mat-icon>share</mat-icon>
+                <span>Share</span>
+            </button>
+
+            <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+            </button>
+        </mat-menu>
+    </div>
+</div>
