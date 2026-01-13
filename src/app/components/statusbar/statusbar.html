@@ -1,0 +1,21 @@
+<button mat-fab color="primary" [matMenuTriggerFor]="menu" aria-label="Open menu">
+    <mat-icon>more_vert</mat-icon>
+</button>
+
+<!-- Menu -->
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+    </button>
+
+    <button mat-menu-item>
+        <mat-icon>share</mat-icon>
+        <span>Share</span>
+    </button>
+
+    <button mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+    </button>
+</mat-menu>

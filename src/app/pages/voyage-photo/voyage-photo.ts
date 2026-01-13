@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
+import { Statusbar } from '@components/statusbar/statusbar';
 import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { GoogleAuthService } from '@services/google-auth.service';
@@ -16,6 +18,8 @@ import { LocationService } from '@services/location.service';
     CommonModule,
     CameraCaptureComponent,
     SimpleMapComponent,
+    MatButtonModule,
+    Statusbar,
   ],
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
