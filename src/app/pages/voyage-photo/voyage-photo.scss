@@ -35,12 +35,25 @@
     flex-direction: column;
 }
 
-.grid_docs_found {
+.container_grid_docs_found {
     flex: 1;
+
+    position: relative;
+}
+
+.container_grid_docs_found_scroll {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+}
+
+.grid_docs_found {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    overflow-y: scroll;
-    gap: 10px;
+    gap: 20px;
 }
 
 @media screen AND (max-width: 900px) {
