@@ -1,6 +1,9 @@
 <div class="main_container">
     <div class="photo_container">
-        <app-statusbar></app-statusbar>
+        <div class="inner_photo_container">
+            <app-statusbar></app-statusbar>
+            <app-search-input />
+        </div>
     </div>
     <div class="map_container">
         <app-simple-map #simple_map [transform]="transformMark"></app-simple-map>

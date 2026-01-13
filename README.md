@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/statusbar
+npx ng generate component --standalone components/search-input
 ```
 
 ```bash
