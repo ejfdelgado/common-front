@@ -37,7 +37,6 @@
 
 .container_grid_docs_found {
     flex: 1;
-
     position: relative;
 }
 
@@ -56,9 +55,21 @@
     gap: 20px;
 }
 
+@media screen AND (max-width: 1400px) {
+    .grid_docs_found {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 @media screen AND (max-width: 900px) {
     .main_container {
         grid-template-columns: 1fr;
         bottom: unset;
+    }
+}
+
+@media screen AND (max-width: 450px) {
+    .grid_docs_found {
+        grid-template-columns: 1fr;
     }
 }

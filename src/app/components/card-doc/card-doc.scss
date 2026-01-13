@@ -6,3 +6,18 @@
     background-image: url('https://material.angular.dev/assets/img/examples/shiba1.jpg');
     background-size: cover;
 }
+
+[mat-card-image] {
+    width: 100%;
+}
+
+mat-card-content {
+    position: relative;
+}
+
+mat-card-content .text_date {
+    position: absolute;
+    right: 0.5em;
+    top: -1.5em;
+    font-size: 1em;
+}
