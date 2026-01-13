@@ -59,9 +59,9 @@ export class SimpleMapComponent implements AfterViewInit {
       const { Map } = await this.libPromises;
 
       const mapOptions: google.maps.MapOptions = {
-        center: { lat: 0, lng: 0 },
+        center: { lat: 6.6062575, lng: -73.0541827 },
         mapTypeId: "satellite",//roadmap satellite hybrid terrain
-        zoom: 8,
+        zoom: 21,
         mapId: 'MAP_ID'
       };
 

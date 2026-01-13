@@ -39,7 +39,7 @@ export class LocationService {
      * MUST be triggered from a user action (click/tap)
      */
     getCurrentPosition(
-        timeoutMs = 15000
+        timeoutMs = 20000
     ): Promise<GeoLocationResult> {
 
         return new Promise((resolve, reject) => {

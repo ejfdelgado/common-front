@@ -63,10 +63,10 @@ export class GoogleAuthService {
     }
 
     login(): void {
-        this.loginBackend();
+        this.loginFrontend();
     }
 
-    silentLogin(): void {
+    loginFrontend(): void {
         window.google.accounts.id.prompt((notification: any) => {
             if (notification.isNotDisplayed()) {
                 console.log('Not displayed:', notification.getNotDisplayedReason());
