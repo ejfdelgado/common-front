@@ -155,6 +155,8 @@ export class GoogleAuthService {
             this.handleCredential({
                 credential: oldIdToken
             });
+        } else {
+            this.logout();
         }
     }
 
