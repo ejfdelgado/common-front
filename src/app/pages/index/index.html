@@ -1,15 +1,4 @@
 <p>index works!</p>
-@if (!authSrv.isLoggedIn()) {
-<button (click)="authSrv.login()">
-    Login with Google
-</button>
-} @else {
-<div>
-    <img [src]="authSrv.user()?.picture" width="32" />
-    <span>{{ authSrv.user()?.name }}</span>
-    <button (click)="authSrv.logout()">Logout</button>
-</div>
-}
 <button (click)="callPublic()">Call public</button>
 <button (click)="callPrivate()">Call private</button>
 <div [ngClass]="{'invisible': !authSrv.isLoggedIn()}">

@@ -10,7 +10,7 @@
     border: 1px solid #ccc;
     border-bottom: none;
     border-radius: 4px 4px 0 0;
-    background: #fafafa;
+    background: aliceblue;
     position: absolute;
     height: 32px;
     top: -42px;
@@ -24,11 +24,15 @@
     cursor: pointer;
     padding: 4px 6px;
     font-size: 14px;
+    border-radius: 4px;
+    background-color: rgb(141, 202, 255);
+    width: 2em;
+    text-align: center;
 }
 
 .toolbar button:hover {
-    background: #e0e0e0;
-    border-radius: 4px;
+    background-color: rgb(91, 178, 255);
+
 }
 
 .editable-input {
