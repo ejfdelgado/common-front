@@ -56,6 +56,8 @@ export class GoogleAuthService {
             auto_select: false,
             redirect_uri: this.getRedirectUrl(),
         });
+
+        this.checkStoredSession();
     }
 
     private getRedirectUrl() {
@@ -116,14 +118,37 @@ export class GoogleAuthService {
         this.zone.run(() => {
             this.token = "";
             localStorage.removeItem(AUTH_FLAG_KEY);
+            sessionStorage.removeItem("access_token");
             this.userSignal.set(null);
             window.google.accounts.id.disableAutoSelect();
         });
     }
 
+    isTokenExpired(token: string) {
+        if (!token) return true;
+
+        const payloadBase64 = token.split('.')[1];
+        const payloadJson = atob(payloadBase64);
+        const payload = JSON.parse(payloadJson);
+
+        const now = Math.floor(Date.now() / 1000);
+        return payload.exp < now;
+    }
+
+    checkStoredSession() {
+        const oldIdToken = sessionStorage.getItem("access_token");
+        if (oldIdToken && !this.isTokenExpired(oldIdToken)) {
+            this.handleCredential({
+                credential: oldIdToken
+            });
+        }
+    }
+
     private handleCredential(response: any) {
         const idToken = response.credential;
         localStorage.setItem(AUTH_FLAG_KEY, 'true');
+        // Store it on session storage
+        sessionStorage.setItem("access_token", idToken);
         this.token = idToken;
         // Decode locally ONLY for UI (NOT trust)
         const payload = JSON.parse(atob(idToken.split('.')[1]));
