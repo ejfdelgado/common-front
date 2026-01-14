@@ -2,7 +2,6 @@
     <div class="photo_container">
         <div class="inner_photo_container">
             <app-statusbar [options]="menuOptions"></app-statusbar>
-            <app-camera-capture [hiddenButton]="true" #camera_capture_bucket></app-camera-capture>
             <div class="dynamic_content">
                 <app-search-input />
                 <div class="container_grid_docs_found">
@@ -23,3 +22,4 @@
         <app-simple-map #simple_map [transform]="transformMark"></app-simple-map>
     </div>
 </div>
+<app-camera-capture [hiddenButton]="true" #camera_capture_bucket></app-camera-capture>

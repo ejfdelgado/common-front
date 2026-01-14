@@ -41,7 +41,6 @@ export class CameraCaptureComponent implements OnDestroy {
    * Public API
    */
   async openCamera(): Promise<Blob> {
-    console.log("openCamera!");
     this.isOpen = true;
 
     return new Promise<Blob>(async (resolve, reject) => {

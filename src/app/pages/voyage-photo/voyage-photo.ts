@@ -54,6 +54,12 @@ export class VoyagePhoto implements AfterViewInit {
       icon: "photo_camera",
       callback: this.capturePhoto.bind(this),
     });
+
+    this.menuOptions.push({
+      label: "Tomar ubicación",
+      icon: "add_location",
+      callback: this.addMark.bind(this),
+    });
   }
 
   ngAfterViewInit(): void {
