@@ -7,6 +7,12 @@ import { IndicatorService } from '@services/indicator.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
+export interface MenuOptionType {
+  label: string;
+  icon: string;
+  callback: Function,
+}
+
 @Component({
   selector: 'app-statusbar',
   standalone: true,
@@ -21,6 +27,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Statusbar {
   @Input() iconSmall: boolean = true;
+  @Input() options: MenuOptionType[] = [];
   user: GoogleUser | null = null;
 
   constructor(
@@ -31,7 +38,9 @@ export class Statusbar {
   ) {
     this.authSrv.authState$.subscribe(user => {
       this.user = user;
-      this.cdr.detectChanges();
+      try {
+        this.cdr.detectChanges();
+      } catch (err) { }
     });
   }
 }

@@ -3,7 +3,8 @@ import {
   ElementRef,
   ViewChild,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Input
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -18,6 +19,7 @@ export class CameraCaptureComponent implements OnDestroy {
 
   @ViewChild('video', { static: false })
   videoRef!: ElementRef<HTMLVideoElement>;
+  @Input() hiddenButton: boolean = false;
 
   private stream?: MediaStream;
   private resolver?: (blob: Blob) => void;
@@ -39,6 +41,7 @@ export class CameraCaptureComponent implements OnDestroy {
    * Public API
    */
   async openCamera(): Promise<Blob> {
+    console.log("openCamera!");
     this.isOpen = true;
 
     return new Promise<Blob>(async (resolve, reject) => {

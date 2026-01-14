@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
 import { CardDoc } from '@components/card-doc/card-doc';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
-import { Statusbar } from '@components/statusbar/statusbar';
-import { FileService } from '@services/file.srv';
+import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
+import { FileService, StorageType } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { IndicatorService } from '@services/indicator.service';
@@ -28,9 +28,10 @@ import { LocationService } from '@services/location.service';
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
 })
-export class VoyagePhoto {
-
+export class VoyagePhoto implements AfterViewInit {
+  @ViewChild("camera_capture_bucket") cameraBucket!: CameraCaptureComponent;
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
+  menuOptions: MenuOptionType[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -47,6 +48,23 @@ export class VoyagePhoto {
       } else {
         console.log('Logged out');
       }
+    });
+    this.menuOptions.push({
+      label: "Tomar foto",
+      icon: "photo_camera",
+      callback: this.capturePhoto.bind(this),
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.cameraBucket.getResult$().subscribe({
+      next: async (blob) => {
+        try {
+          const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
+        } catch (err) { }
+      },
+      error: (err) => console.error('Camera error', err),
+      complete: () => console.log('Camera closed')
     });
   }
 
@@ -70,5 +88,9 @@ export class VoyagePhoto {
       });
     } catch (err) { }
     activity.done();
+  }
+
+  async capturePhoto() {
+    await this.cameraBucket.openCamera();
   }
 }

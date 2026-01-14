@@ -11,10 +11,12 @@
         </button>
         }
         <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>photo_camera</mat-icon>
-                <span>Tomar foto</span>
+            @for(option of options; track option.label) {
+            <button mat-menu-item (click)="option.callback()">
+                <mat-icon>{{ option.icon }}</mat-icon>
+                <span>{{ option.label }}</span>
             </button>
+            }
         </mat-menu>
     </div>
     }

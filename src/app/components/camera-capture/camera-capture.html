@@ -1,4 +1,6 @@
+@if (!hiddenButton) {
 <button (click)="openCamera()">Open Camera</button>
+}
 @if (isOpen) {
 <div class="overlay">
     <video #video playsinline></video>

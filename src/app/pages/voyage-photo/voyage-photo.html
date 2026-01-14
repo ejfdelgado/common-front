@@ -1,7 +1,8 @@
 <div class="main_container">
     <div class="photo_container">
         <div class="inner_photo_container">
-            <app-statusbar></app-statusbar>
+            <app-statusbar [options]="menuOptions"></app-statusbar>
+            <app-camera-capture [hiddenButton]="true" #camera_capture_bucket></app-camera-capture>
             <div class="dynamic_content">
                 <app-search-input />
                 <div class="container_grid_docs_found">
