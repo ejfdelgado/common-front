@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/card-doc
+npx ng generate component --standalone components/editable-input
 ```
 
 ```bash

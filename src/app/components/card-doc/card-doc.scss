@@ -18,6 +18,11 @@ mat-card-content {
 mat-card-content .text_date {
     position: absolute;
     right: 0.5em;
-    top: -1.5em;
+    top: -2em;
     font-size: 1em;
+}
+
+.content_parent {
+    margin-top: 0;
+    padding-top: 10px;
 }
