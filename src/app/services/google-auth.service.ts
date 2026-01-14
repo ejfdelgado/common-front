@@ -114,11 +114,25 @@ export class GoogleAuthService {
         }).requestCode();
     }
 
+    persistToken(token: string | null, type: "session" | "local" = "local") {
+        const store = type == "local" ? localStorage : sessionStorage;
+        if (token == null) {
+            store.removeItem("access_token");
+        } else {
+            store.setItem("access_token", token);
+        }
+    }
+
+    loadToken(type: "session" | "local" = "local") {
+        const store = type == "local" ? localStorage : sessionStorage;
+        return store.getItem("access_token");
+    }
+
     logout(): void {
         this.zone.run(() => {
             this.token = "";
             localStorage.removeItem(AUTH_FLAG_KEY);
-            sessionStorage.removeItem("access_token");
+            this.persistToken(null);
             this.userSignal.set(null);
             window.google.accounts.id.disableAutoSelect();
         });
@@ -136,7 +150,7 @@ export class GoogleAuthService {
     }
 
     checkStoredSession() {
-        const oldIdToken = sessionStorage.getItem("access_token");
+        const oldIdToken = this.loadToken();
         if (oldIdToken && !this.isTokenExpired(oldIdToken)) {
             this.handleCredential({
                 credential: oldIdToken
@@ -148,7 +162,7 @@ export class GoogleAuthService {
         const idToken = response.credential;
         localStorage.setItem(AUTH_FLAG_KEY, 'true');
         // Store it on session storage
-        sessionStorage.setItem("access_token", idToken);
+        this.persistToken(idToken);
         this.token = idToken;
         // Decode locally ONLY for UI (NOT trust)
         const payload = JSON.parse(atob(idToken.split('.')[1]));

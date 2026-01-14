@@ -30,7 +30,6 @@ export class Index implements AfterViewInit {
 
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
-  devices: any = null;
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -114,11 +113,6 @@ export class Index implements AfterViewInit {
 
   async firestorePaginate() {
     this.pageList = await this.firestoreSrv.paging("pro-animals");
-    this.cdr.detectChanges();
-  }
-
-  async showDevices() {
-    this.devices = await navigator.mediaDevices.enumerateDevices();
     this.cdr.detectChanges();
   }
 }
