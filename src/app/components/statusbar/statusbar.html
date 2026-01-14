@@ -32,31 +32,47 @@
     </div>
     <div class="menu_container">
         @if (iconSmall) {
+        @if(user == null) {
         <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
             <mat-icon>face</mat-icon>
         </button>
         } @else {
+        <button class="small_user_picture"
+            [style.background-image]="'url(' + user.picture + ')'"
+            mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
+        </button>
+        }
+
+        } @else {
+        @if(user == null) {
         <button mat-fab color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
             <mat-icon>face</mat-icon>
         </button>
+        } @else {
+        <button mat-fab color="primary" class="small_user_picture"
+            [style.background-image]="'url(' + user.picture + ')'"
+            [matMenuTriggerFor]="menu2" aria-label="Open menu">
+
+        </button>
+        }
         }
 
         <!-- Menu -->
         <mat-menu #menu2="matMenu">
-            <button mat-menu-item>
-                <mat-icon>edit</mat-icon>
-                <span>Edit</span>
+            @if(user == null) {
+            <button mat-menu-item (click)="authSrv.login()">
+                <mat-icon>login</mat-icon>
+                <span>Ingresar</span>
             </button>
-
+            } @else {
             <button mat-menu-item>
-                <mat-icon>share</mat-icon>
-                <span>Share</span>
+                <span>{{ user.name }}</span>
             </button>
-
-            <button mat-menu-item>
-                <mat-icon>delete</mat-icon>
-                <span>Delete</span>
+            <button mat-menu-item (click)="authSrv.logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Salir</span>
             </button>
+            }
         </mat-menu>
     </div>
 </div>
