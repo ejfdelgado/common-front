@@ -9,6 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editable-input',
@@ -20,7 +21,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       multi: true,
     },
   ],
-  imports: [],
+  imports: [
+    CommonModule,
+  ],
   templateUrl: './editable-input.html',
   styleUrl: './editable-input.scss',
 })
@@ -35,6 +38,7 @@ export class EditableInput implements ControlValueAccessor {
   @Output() enter = new EventEmitter<string>();
 
   value = '';
+  focused = false;
   private composing = false;
 
   /* ---------------- CVA ---------------- */
@@ -59,15 +63,20 @@ export class EditableInput implements ControlValueAccessor {
 
   /* ---------------- Events ---------------- */
 
+  onFocus(): void {
+    this.focused = true;
+  }
+
+  onBlur(): void {
+    this.focused = false;
+    this.onTouched();
+  }
+
   onInput(): void {
     if (this.composing) return;
 
     this.value = this.getText();
     this.onChange(this.value);
-  }
-
-  onBlur(): void {
-    this.onTouched();
   }
 
   @HostListener('keydown.enter', ['$event'])
@@ -114,6 +123,15 @@ export class EditableInput implements ControlValueAccessor {
 
   private setText(value: string): void {
     this.editable.nativeElement.textContent = value;
+  }
+
+
+  /* ---------------- Formatting ---------------- */
+
+  format(command: 'bold' | 'italic', event: MouseEvent): void {
+    event.preventDefault(); // keeps focus
+    this.editable.nativeElement.focus();
+    document.execCommand(command);
   }
 
   private onChange = (_: string) => { };
