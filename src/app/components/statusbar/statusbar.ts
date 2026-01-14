@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './statusbar.scss',
 })
 export class Statusbar {
-  @Input() iconSmall: boolean = false;
+  @Input() iconSmall: boolean = true;
   user: GoogleUser | null = null;
 
   constructor(

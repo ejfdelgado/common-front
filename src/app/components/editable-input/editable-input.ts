@@ -118,11 +118,11 @@ export class EditableInput implements ControlValueAccessor {
   /* ---------------- Helpers ---------------- */
 
   private getText(): string {
-    return this.editable.nativeElement.textContent ?? '';
+    return this.editable.nativeElement.innerHTML ?? '';
   }
 
   private setText(value: string): void {
-    this.editable.nativeElement.textContent = value;
+    this.editable.nativeElement.innerHTML = value;
   }
 
 

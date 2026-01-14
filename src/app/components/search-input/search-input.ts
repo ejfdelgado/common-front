@@ -32,5 +32,6 @@ export class SearchInputComponent {
 
   clear(): void {
     this.searchCtrl.setValue('');
+    this.search.emit('');
   }
 }

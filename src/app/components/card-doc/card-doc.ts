@@ -20,6 +20,6 @@ export class CardDoc {
   form = new FormGroup({
     title: new FormControl('Shiba Inu'),
     subtitle: new FormControl('Dog Breed'),
-    content: new FormControl('The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.'),
+    content: new FormControl('Hello <b>world</b> <i>Angular</i> The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.'),
   });
 }
