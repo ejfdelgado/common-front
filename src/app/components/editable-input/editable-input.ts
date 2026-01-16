@@ -134,6 +134,10 @@ export class EditableInput implements ControlValueAccessor {
     document.execCommand(command);
   }
 
+  openEmoticons() {
+
+  }
+
   private onChange = (_: string) => { };
   private onTouched = () => { };
 }

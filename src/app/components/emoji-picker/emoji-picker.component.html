@@ -1,0 +1,18 @@
+<div class="emoji-overlay" (click)="close.emit()">
+    <div class="emoji-popup" (click)="$event.stopPropagation()">
+
+        <div class="header">
+            <input type="text" placeholder="Search emojis..." [(ngModel)]="searchText" autofocus />
+            <button class="close-btn" (click)="close.emit()">&times;</button>
+        </div>
+
+        <div class="emoji-grid">
+            <span *ngFor="let emoji of filteredEmojis" (click)="pickEmoji(emoji.symbol)" [title]="emoji.name"
+                class="emoji-item">
+                {{ emoji.symbol }}
+            </span>
+            <p *ngIf="filteredEmojis.length === 0" class="no-results">No emojis found.</p>
+        </div>
+
+    </div>
+</div>

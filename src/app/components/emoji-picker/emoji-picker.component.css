@@ -1,0 +1,70 @@
+.emoji-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.emoji-popup {
+    background: white;
+    border-radius: 8px;
+    width: 300px;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.header input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.emoji-grid {
+    padding: 10px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    font-size: 24px;
+}
+
+.emoji-item {
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.1s;
+}
+
+.emoji-item:hover {
+    transform: scale(1.2);
+}
+
+.no-results {
+    grid-column: span 5;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}

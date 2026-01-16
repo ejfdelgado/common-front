@@ -3,12 +3,16 @@
     @if (focused) {
     <div class="toolbar">
         <button type="button" (mousedown)="format('bold', $event)" aria-label="Bold">
-            <b>B</b>
+            <b>b</b>
         </button>
 
         <button type="button" (mousedown)="format('italic', $event)" aria-label="Italic">
-            <i>I</i>
+            <i>It</i>
         </button>
+
+        <button type="button" (mousedown)="openEmoticons()" aria-label="Italic">
+            <span>😎</span>
+        </button>        
     </div>
     }
 
