@@ -172,6 +172,11 @@ app-flowchart .mat-tab-body-wrapper {
     z-index: 10000000 !important;
 }
 
+.custom-emoji-picker .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
 mat-form-field.full_height>div,
 mat-form-field.full_height>div>div,
 mat-form-field.full_height>div>div>div,

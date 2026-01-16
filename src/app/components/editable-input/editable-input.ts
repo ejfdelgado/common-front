@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.component';
 
 @Component({
   selector: 'app-editable-input',
@@ -23,6 +25,7 @@ import { CommonModule } from '@angular/common';
   ],
   imports: [
     CommonModule,
+    EmojiPickerComponent,
   ],
   templateUrl: './editable-input.html',
   styleUrl: './editable-input.scss',
@@ -40,6 +43,10 @@ export class EditableInput implements ControlValueAccessor {
   value = '';
   focused = false;
   private composing = false;
+
+  constructor(private dialog: MatDialog) {
+
+  }
 
   /* ---------------- CVA ---------------- */
 
@@ -135,7 +142,16 @@ export class EditableInput implements ControlValueAccessor {
   }
 
   openEmoticons() {
+    const dialogRef = this.dialog.open(EmojiPickerComponent, {
+      width: '350px',
+      panelClass: 'custom-emoji-picker'
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+      }
+    });
   }
 
   private onChange = (_: string) => { };

@@ -1,70 +1,72 @@
-.emoji-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+/* Container to fill the dialog space */
+.picker-container {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    max-height: 450px;
+    /* Limits the dialog height */
+    overflow: hidden;
+}
+
+/* Header section with Search and Close button */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 8px;
+    background: #fff;
+}
+
+/* Ensure the form field takes up remaining space */
+mat-form-field {
+    flex: 1;
+}
+
+/* Customizing the emoji grid */
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    /* 6 emojis per row */
+    gap: 12px;
+    padding: 16px 16px 16px 16px;
+    overflow-y: auto;
+    /* Allows scrolling only the emojis */
+    max-height: 250px;
+}
+
+/* Individual Emoji styling */
+.emoji-item {
+    font-size: 28px;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-}
-
-.emoji-popup {
-    background: white;
     border-radius: 8px;
-    width: 300px;
-    max-height: 400px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.header {
-    padding: 10px;
-    display: flex;
-    gap: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.header input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.emoji-grid {
-    padding: 10px;
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    font-size: 24px;
-}
-
-.emoji-item {
-    cursor: pointer;
-    text-align: center;
-    transition: transform 0.1s;
+    padding: 4px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    user-select: none;
 }
 
 .emoji-item:hover {
-    transform: scale(1.2);
+    background-color: #f0f0f0;
+    transform: scale(1.15);
 }
 
+/* Scrollbar styling for a cleaner look */
+.emoji-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.emoji-grid::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+/* No results text */
 .no-results {
-    grid-column: span 5;
-    font-size: 14px;
-    color: #666;
+    grid-column: 1 / -1;
     text-align: center;
+    color: #757575;
+    margin-top: 20px;
+    font-style: italic;
 }

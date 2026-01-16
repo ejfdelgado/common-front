@@ -1,47 +1,46 @@
-import { Component, EventEmitter, Output, HostListener } from '@angular/core';
-
-interface Emoji {
-    symbol: string;
-    name: string;
-}
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
-    selector: 'app-emoji-picker',
-    templateUrl: './emoji-picker.component.html',
-    styleUrls: ['./emoji-picker.component.css']
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatIconModule,
+    MatInputModule,
+  ],
+  selector: 'app-emoji-picker',
+  templateUrl: './emoji-picker.component.html',
+  styleUrls: ['./emoji-picker.component.css']
 })
 export class EmojiPickerComponent {
-    @Output() selectEmoji = new EventEmitter<string>();
-    @Output() close = new EventEmitter<void>();
+  searchText: string = '';
+  emojis = [
+    { symbol: '😀', name: 'happy' }, { symbol: '😂', name: 'laugh' },
+    { symbol: '❤️', name: 'heart' }, { symbol: '🔥', name: 'fire' },
+    { symbol: '👍', name: 'thumbs up' }, { symbol: '🚀', name: 'rocket' }
+  ];
 
-    searchText: string = '';
+  constructor(private dialogRef: MatDialogRef<EmojiPickerComponent>) { }
 
-    // Example subset of emojis
-    emojis: Emoji[] = [
-        { symbol: '😀', name: 'happy smile' },
-        { symbol: '😂', name: 'laughing' },
-        { symbol: '❤️', name: 'heart' },
-        { symbol: '🔥', name: 'fire' },
-        { symbol: '👍', name: 'thumbs up' },
-        { symbol: '🎉', name: 'party' },
-        { symbol: '🤔', name: 'thinking' },
-        { symbol: '🚀', name: 'rocket' },
-        // Add more as needed...
-    ];
+  get filteredEmojis() {
+    return this.emojis.filter(e =>
+      e.name.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
 
-    get filteredEmojis() {
-        return this.emojis.filter(e =>
-            e.name.toLowerCase().includes(this.searchText.toLowerCase())
-        );
-    }
+  // Close the dialog and pass the symbol back to the caller
+  pickEmoji(symbol: string) {
+    this.dialogRef.close(symbol);
+  }
 
-    @HostListener('document:keydown.escape', ['$event'])
-    onEscapeHandler(event: KeyboardEvent) {
-        this.close.emit();
-    }
-
-    pickEmoji(symbol: string) {
-        this.selectEmoji.emit(symbol);
-        this.close.emit();
-    }
+  close() {
+    this.dialogRef.close();
+  }
 }
