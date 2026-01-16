@@ -18,7 +18,6 @@ import { LocationService } from '@services/location.service';
   standalone: true,
   imports: [
     CommonModule,
-    CameraCaptureComponent,
     SimpleMapComponent,
     MatButtonModule,
     Statusbar,
@@ -28,8 +27,7 @@ import { LocationService } from '@services/location.service';
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
 })
-export class VoyagePhoto implements AfterViewInit {
-  @ViewChild("camera_capture_bucket") cameraBucket!: CameraCaptureComponent;
+export class VoyagePhoto {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
   menuOptions: MenuOptionType[] = [];
 
@@ -62,18 +60,6 @@ export class VoyagePhoto implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.cameraBucket.getResult$().subscribe({
-      next: async (blob) => {
-        try {
-          const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
-        } catch (err) { }
-      },
-      error: (err) => console.error('Camera error', err),
-      complete: () => console.log('Camera closed')
-    });
-  }
-
   async transformMark(data: MarkType) {
     return `<b class="white_subtitle" style="font-size: 2em;">📍</b>`;
   }
@@ -97,6 +83,12 @@ export class VoyagePhoto implements AfterViewInit {
   }
 
   async capturePhoto() {
-    await this.cameraBucket.openCamera();
+    const blob = await this.fileSrv.openCamera();
+    if (!blob) {
+      return;
+    }
+    try {
+      const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
+    } catch (err) { }
   }
 }

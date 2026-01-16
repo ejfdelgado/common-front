@@ -65,7 +65,11 @@ export class GoogleAuthService {
     }
 
     login(): void {
-        this.loginFrontend();
+        if (environment.production) {
+            this.loginFrontend();
+        } else {
+            this.loginBackend();
+        }
     }
 
     loginFrontend(): void {

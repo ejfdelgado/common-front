@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { BucketService } from "./bucket.service";
 import { HardDriveService } from "./harddrive.service";
 import { ApiResponse, UploadResponse } from "types/file";
+import { CameraCaptureComponent } from "@components/camera-capture/camera-capture";
+import { Observable, Subject } from 'rxjs';
 
 export type StorageType = "bucket" | "hard_drive";
 
@@ -9,12 +11,24 @@ export type StorageType = "bucket" | "hard_drive";
     providedIn: 'root',
 })
 export class FileService {
+
+    cameraPicker: CameraCaptureComponent | null = null;
+
     constructor(
         private bucketSrv: BucketService,
         private hardDriveSrv: HardDriveService,
     ) {
 
     }
+
+    setPickerComponent(cameraPicker: CameraCaptureComponent) {
+        this.cameraPicker = cameraPicker;
+    }
+
+    async openCamera(): Promise<Blob | undefined> {
+        return this.cameraPicker?.openCamera();
+    }
+
     upload(
         path: string,
         blob: Blob,
