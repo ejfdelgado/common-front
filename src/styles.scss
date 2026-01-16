@@ -215,7 +215,8 @@ mat-form-field.full_height .mat-form-field-subscript-wrapper {
     gap: 4px;
 }
 
-[mat-dialog-content]>mat-form-field {
+[mat-dialog-content]>mat-form-field,
+[mat-dialog-content]>div[formArrayName]>mat-form-field:first-child {
     padding-top: 16px;
 }
 

@@ -4,7 +4,7 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { CardDoc } from '@components/card-doc/card-doc';
-import { DialogFormComponent } from '@components/dialog-form/dialog-form.component';
+import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
@@ -45,7 +45,7 @@ export class VoyagePhoto {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
         //
-      } else {}
+      } else { }
     });
     this.menuOptions.push({
       label: "Tomar foto",
@@ -99,13 +99,20 @@ export class VoyagePhoto {
   }
 
   async openDialog() {
-    const dialogRef = this.dialog.open(DialogFormComponent, {
-      width: '400px',
-      panelClass: 'custom-emoji-picker',
-      data: {
+    const formConfig: FormDataType = {
+      fields: [
+        { label: "Título", type: "text", key: "title" },
+        { label: "Descripción", type: "textarea", key: "description" },
+      ],
+      model: {
         title: '',
         description: ''
       }
+    };
+    const dialogRef = this.dialog.open(DialogFormComponent, {
+      width: '400px',
+      panelClass: 'custom-emoji-picker',
+      data: formConfig,
     });
 
     dialogRef.afterClosed().subscribe(result => {

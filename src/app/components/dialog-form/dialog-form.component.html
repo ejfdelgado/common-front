@@ -2,29 +2,26 @@
 
 <form [formGroup]="form" mat-dialog-content class="flex flex-col gap-4">
 
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Title</mat-label>
-    <input matInput formControlName="title" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Description</mat-label>
-    <textarea
-      matInput
-      rows="4"
-      formControlName="description">
-    </textarea>
-  </mat-form-field>
-
+    <div formArrayName="dynamicFields">
+        @for (field of config.fields; track field.key) {
+        @if (field.type=='text') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput [formControl]="formControlMap[field.key]" />
+        </mat-form-field>
+        } @else if (field.type=='textarea') {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ field.label }}</mat-label>
+            <textarea matInput rows="4" [formControl]="formControlMap[field.key]"></textarea>
+        </mat-form-field>
+        }
+        }
+    </div>
 </form>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="close()">Close</button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="save()"
-    [disabled]="form.invalid">
-    Save
-  </button>
+    <button mat-button (click)="close()">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
+        Save
+    </button>
 </mat-dialog-actions>

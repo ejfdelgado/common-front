@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { MatDialogModule } from '@angular/material/dialog';
@@ -7,6 +7,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+
+export interface FieldDataType {
+    type: "text" | "textarea";
+    label: string;
+    key: string;
+};
+
+export interface FormDataType {
+    fields: FieldDataType[],
+    model: { [key: string]: any },
+}
 
 @Component({
     standalone: true,
@@ -22,16 +33,29 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class DialogFormComponent {
     form: FormGroup;
+    config!: FormDataType;
+    formControlMap: { [key: string]: FormControl } = {};
 
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<DialogFormComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
+        this.config = data;
         this.form = this.fb.group({
-            title: [data?.title || '', Validators.required],
-            description: [data?.description || '']
+            dynamicFields: this.fb.array([]),
         });
+
+        const dynamicFields = this.form.get('dynamicFields') as FormArray;
+        for (const field of this.config.fields) {
+            const newField = new FormControl(this.config.model[field.key]);
+            dynamicFields.push(newField);
+            this.formControlMap[field.key] = newField;
+        }
+    }
+
+    get dynamicFields() {
+        return this.form.get('dynamicFields') as FormArray;
     }
 
     close(): void {
