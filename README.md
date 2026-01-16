@@ -56,10 +56,16 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Use httpOnly cookie to store token
+- Popup create/update entity
+- File picker
+- Popup to chose image by file or photo
+- Text editor with link/image src editor
+- Text editor with scroll and max height and top toolbar
+- Adjust style on card to put the image as background to clip it.
+- Create the social backend for thumbnail preview.
+- Allow oauth token id exists for ever (security risk)
 - Add QR service, display it to allow scan it
-- Camera switch button does not exists
-- Make a thumbnail in front end
+- Make a thumbnail in front end, also allow clip the image, like a post processing after uploading image.
 - Add env variables to force entities:
     - bucket, permisos de usuario y tamanio
     - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.

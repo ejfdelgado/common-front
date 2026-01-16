@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
+import { MatDialog } from '@angular/material/dialog';
 import { CardDoc } from '@components/card-doc/card-doc';
+import { DialogFormComponent } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
-import { FileService, StorageType } from '@services/file.srv';
+import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { IndicatorService } from '@services/indicator.service';
@@ -39,13 +40,12 @@ export class VoyagePhoto {
     private firestoreSrv: FirestoreService,
     public cdr: ChangeDetectorRef,
     public locationSrv: LocationService,
+    private dialog: MatDialog,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
-        console.log('Logged in:', user.name);
-      } else {
-        console.log('Logged out');
-      }
+        //
+      } else {}
     });
     this.menuOptions.push({
       label: "Tomar foto",
@@ -57,6 +57,12 @@ export class VoyagePhoto {
       label: "Tomar ubicación",
       icon: "add_location",
       callback: this.addMark.bind(this),
+    });
+
+    this.menuOptions.push({
+      label: "Open form",
+      icon: "add_location",
+      callback: this.openDialog.bind(this),
     });
   }
 
@@ -90,5 +96,23 @@ export class VoyagePhoto {
     try {
       const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
     } catch (err) { }
+  }
+
+  async openDialog() {
+    const dialogRef = this.dialog.open(DialogFormComponent, {
+      width: '400px',
+      panelClass: 'custom-emoji-picker',
+      data: {
+        title: '',
+        description: ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Saved data:', result);
+        // { title: '...', description: '...' }
+      }
+    });
   }
 }
