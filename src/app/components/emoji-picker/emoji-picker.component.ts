@@ -9519,7 +9519,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6F3"
       ],
-      "emoji": "🛳",
+      "emoji": "🛳️",
       "name": "passenger ship",
       "category": "Travel & Places",
       "subcategory": "transport-water"
@@ -9528,7 +9528,7 @@ export class EmojiPickerComponent {
       "code": [
         "26F4"
       ],
-      "emoji": "⛴",
+      "emoji": "⛴️",
       "name": "ferry",
       "category": "Travel & Places",
       "subcategory": "transport-water"
@@ -9537,7 +9537,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E5"
       ],
-      "emoji": "🛥",
+      "emoji": "🛥️",
       "name": "motor boat",
       "category": "Travel & Places",
       "subcategory": "transport-water"
@@ -9555,7 +9555,7 @@ export class EmojiPickerComponent {
       "code": [
         "2708"
       ],
-      "emoji": "✈",
+      "emoji": "✈️",
       "name": "airplane",
       "category": "Travel & Places",
       "subcategory": "transport-air"
@@ -9564,7 +9564,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E9"
       ],
-      "emoji": "🛩",
+      "emoji": "🛩️",
       "name": "small airplane",
       "category": "Travel & Places",
       "subcategory": "transport-air"
@@ -9645,7 +9645,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6F0"
       ],
-      "emoji": "🛰",
+      "emoji": "🛰️",
       "name": "satellite",
       "category": "Travel & Places",
       "subcategory": "transport-air"
@@ -9672,7 +9672,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6CE"
       ],
-      "emoji": "🛎",
+      "emoji": "🛎️",
       "name": "bellhop bell",
       "category": "Travel & Places",
       "subcategory": "hotel"
@@ -9726,7 +9726,7 @@ export class EmojiPickerComponent {
       "code": [
         "23F1"
       ],
-      "emoji": "⏱",
+      "emoji": "⏱️",
       "name": "stopwatch",
       "category": "Travel & Places",
       "subcategory": "time"
@@ -9735,7 +9735,7 @@ export class EmojiPickerComponent {
       "code": [
         "23F2"
       ],
-      "emoji": "⏲",
+      "emoji": "⏲️",
       "name": "timer clock",
       "category": "Travel & Places",
       "subcategory": "time"
@@ -9744,7 +9744,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F570"
       ],
-      "emoji": "🕰",
+      "emoji": "🕰️",
       "name": "mantelpiece clock",
       "category": "Travel & Places",
       "subcategory": "time"
@@ -10077,7 +10077,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F321"
       ],
-      "emoji": "🌡",
+      "emoji": "🌡️",
       "name": "thermometer",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10086,7 +10086,7 @@ export class EmojiPickerComponent {
       "code": [
         "2600"
       ],
-      "emoji": "☀",
+      "emoji": "☀️",
       "name": "sun",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10158,7 +10158,7 @@ export class EmojiPickerComponent {
       "code": [
         "2601"
       ],
-      "emoji": "☁",
+      "emoji": "☁️",
       "name": "cloud",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10176,7 +10176,7 @@ export class EmojiPickerComponent {
       "code": [
         "26C8"
       ],
-      "emoji": "⛈",
+      "emoji": "⛈️",
       "name": "cloud with lightning and rain",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10185,7 +10185,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F324"
       ],
-      "emoji": "🌤",
+      "emoji": "🌤️",
       "name": "sun behind small cloud",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10194,7 +10194,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F325"
       ],
-      "emoji": "🌥",
+      "emoji": "⛅",
       "name": "sun behind large cloud",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10203,7 +10203,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F326"
       ],
-      "emoji": "🌦",
+      "emoji": "🌦️",
       "name": "sun behind rain cloud",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10212,7 +10212,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F327"
       ],
-      "emoji": "🌧",
+      "emoji": "🌧️",
       "name": "cloud with rain",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10221,7 +10221,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F328"
       ],
-      "emoji": "🌨",
+      "emoji": "🌨️",
       "name": "cloud with snow",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10230,7 +10230,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F329"
       ],
-      "emoji": "🌩",
+      "emoji": "🌩️",
       "name": "cloud with lightning",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10239,7 +10239,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F32A"
       ],
-      "emoji": "🌪",
+      "emoji": "🌪️",
       "name": "tornado",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10248,7 +10248,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F32B"
       ],
-      "emoji": "🌫",
+      "emoji": "🌫️",
       "name": "fog",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10257,7 +10257,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F32C"
       ],
-      "emoji": "🌬",
+      "emoji": "🌬️",
       "name": "wind face",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
