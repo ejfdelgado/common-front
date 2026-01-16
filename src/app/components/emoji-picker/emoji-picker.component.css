@@ -6,6 +6,7 @@
     max-height: 450px;
     /* Limits the dialog height */
     overflow: hidden;
+    padding-bottom: 20px;
 }
 
 /* Header section with Search and Close button */
@@ -30,6 +31,7 @@ mat-form-field {
     gap: 12px;
     padding: 16px 16px 16px 16px;
     overflow-y: auto;
+    overflow-x: hidden;
     /* Allows scrolling only the emojis */
     max-height: 250px;
 }

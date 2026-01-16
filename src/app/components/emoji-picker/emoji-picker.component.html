@@ -7,8 +7,8 @@
     </div>
 
     <div mat-dialog-content class="emoji-grid">
-        <span *ngFor="let emoji of filteredEmojis" (click)="pickEmoji(emoji.symbol)" class="emoji-item">
-            {{ emoji.symbol }}
+        <span *ngFor="let emoji of filteredEmojis" (click)="pickEmoji(emoji.emoji)" class="emoji-item">
+            {{ emoji.emoji }}
         </span>
     </div>
 </div>
