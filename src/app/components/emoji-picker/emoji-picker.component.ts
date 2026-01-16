@@ -6923,7 +6923,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F577"
       ],
-      "emoji": "🕷",
+      "emoji": "🕷️",
       "name": "spider",
       "category": "Animals & Nature",
       "subcategory": "animal-bug"
@@ -6932,7 +6932,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F578"
       ],
-      "emoji": "🕸",
+      "emoji": "🕸️",
       "name": "spider web",
       "category": "Animals & Nature",
       "subcategory": "animal-bug"
@@ -7022,7 +7022,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F3F5"
       ],
-      "emoji": "🏵",
+      "emoji": "🏵️",
       "name": "rosette",
       "category": "Animals & Nature",
       "subcategory": "plant-flower"
@@ -7166,7 +7166,7 @@ export class EmojiPickerComponent {
       "code": [
         "2618"
       ],
-      "emoji": "☘",
+      "emoji": "☘️",
       "name": "shamrock",
       "category": "Animals & Nature",
       "subcategory": "plant-other"
@@ -7474,7 +7474,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F336"
       ],
-      "emoji": "🌶",
+      "emoji": "🌶️",
       "name": "hot pepper",
       "category": "Food & Drink",
       "subcategory": "food-vegetable"
@@ -8376,7 +8376,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F37D"
       ],
-      "emoji": "🍽",
+      "emoji": "🍽️",
       "name": "fork and knife with plate",
       "category": "Food & Drink",
       "subcategory": "dishware"
@@ -8853,7 +8853,7 @@ export class EmojiPickerComponent {
       "code": [
         "26E9"
       ],
-      "emoji": "⛩",
+      "emoji": "⛩️",
       "name": "shinto shrine",
       "category": "Travel & Places",
       "subcategory": "place-religious"
@@ -8907,7 +8907,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F3D9"
       ],
-      "emoji": "🏙",
+      "emoji": "🏙️",
       "name": "cityscape",
       "category": "Travel & Places",
       "subcategory": "place-other"
@@ -8961,7 +8961,7 @@ export class EmojiPickerComponent {
       "code": [
         "2668"
       ],
-      "emoji": "♨",
+      "emoji": "♨️",
       "name": "hot springs",
       "category": "Travel & Places",
       "subcategory": "place-other"
@@ -12948,7 +12948,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E1"
       ],
-      "emoji": "🛡",
+      "emoji": "🛡️",
       "name": "shield",
       "category": "Objects",
       "subcategory": "tool"
@@ -12993,7 +12993,7 @@ export class EmojiPickerComponent {
       "code": [
         "2699"
       ],
-      "emoji": "⚙",
+      "emoji": "⚙️",
       "name": "gear",
       "category": "Objects",
       "subcategory": "tool"
@@ -13002,7 +13002,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5DC"
       ],
-      "emoji": "🗜",
+      "emoji": "🗜️",
       "name": "clamp",
       "category": "Objects",
       "subcategory": "tool"
@@ -13011,7 +13011,7 @@ export class EmojiPickerComponent {
       "code": [
         "2696"
       ],
-      "emoji": "⚖",
+      "emoji": "⚖️",
       "name": "balance scale",
       "category": "Objects",
       "subcategory": "tool"
@@ -13050,7 +13050,7 @@ export class EmojiPickerComponent {
       "code": [
         "26D3"
       ],
-      "emoji": "⛓",
+      "emoji": "⛓️",
       "name": "chains",
       "category": "Objects",
       "subcategory": "tool"
@@ -13104,7 +13104,7 @@ export class EmojiPickerComponent {
       "code": [
         "2697"
       ],
-      "emoji": "⚗",
+      "emoji": "⚗️",
       "name": "alembic",
       "category": "Objects",
       "subcategory": "science"
@@ -13266,7 +13266,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6CF"
       ],
-      "emoji": "🛏",
+      "emoji": "🛏️",
       "name": "bed",
       "category": "Objects",
       "subcategory": "household"
@@ -13275,7 +13275,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6CB"
       ],
-      "emoji": "🛋",
+      "emoji": "🛋️",
       "name": "couch and lamp",
       "category": "Objects",
       "subcategory": "household"
@@ -13464,7 +13464,7 @@ export class EmojiPickerComponent {
       "code": [
         "26B0"
       ],
-      "emoji": "⚰",
+      "emoji": "⚰️",
       "name": "coffin",
       "category": "Objects",
       "subcategory": "other-object"
@@ -13482,7 +13482,7 @@ export class EmojiPickerComponent {
       "code": [
         "26B1"
       ],
-      "emoji": "⚱",
+      "emoji": "⚱️",
       "name": "funeral urn",
       "category": "Objects",
       "subcategory": "other-object"
@@ -13653,7 +13653,7 @@ export class EmojiPickerComponent {
       "code": [
         "26A0"
       ],
-      "emoji": "⚠",
+      "emoji": "⚠️",
       "name": "warning",
       "category": "Symbols",
       "subcategory": "warning"
@@ -13752,7 +13752,7 @@ export class EmojiPickerComponent {
       "code": [
         "2622"
       ],
-      "emoji": "☢",
+      "emoji": "☢️",
       "name": "radioactive",
       "category": "Symbols",
       "subcategory": "warning"
@@ -13761,7 +13761,7 @@ export class EmojiPickerComponent {
       "code": [
         "2623"
       ],
-      "emoji": "☣",
+      "emoji": "☣️",
       "name": "biohazard",
       "category": "Symbols",
       "subcategory": "warning"
@@ -13770,7 +13770,7 @@ export class EmojiPickerComponent {
       "code": [
         "2B06"
       ],
-      "emoji": "⬆",
+      "emoji": "⬆️",
       "name": "up arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13779,7 +13779,7 @@ export class EmojiPickerComponent {
       "code": [
         "2197"
       ],
-      "emoji": "↗",
+      "emoji": "↗️",
       "name": "up-right arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13788,7 +13788,7 @@ export class EmojiPickerComponent {
       "code": [
         "27A1"
       ],
-      "emoji": "➡",
+      "emoji": "➡️",
       "name": "right arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13797,7 +13797,7 @@ export class EmojiPickerComponent {
       "code": [
         "2198"
       ],
-      "emoji": "↘",
+      "emoji": "↘️",
       "name": "down-right arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13806,7 +13806,7 @@ export class EmojiPickerComponent {
       "code": [
         "2B07"
       ],
-      "emoji": "⬇",
+      "emoji": "⬇️",
       "name": "down arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13815,7 +13815,7 @@ export class EmojiPickerComponent {
       "code": [
         "2199"
       ],
-      "emoji": "↙",
+      "emoji": "↙️",
       "name": "down-left arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13824,7 +13824,7 @@ export class EmojiPickerComponent {
       "code": [
         "2B05"
       ],
-      "emoji": "⬅",
+      "emoji": "⬅️",
       "name": "left arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13833,7 +13833,7 @@ export class EmojiPickerComponent {
       "code": [
         "2196"
       ],
-      "emoji": "↖",
+      "emoji": "↖️",
       "name": "up-left arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13842,7 +13842,7 @@ export class EmojiPickerComponent {
       "code": [
         "2195"
       ],
-      "emoji": "↕",
+      "emoji": "↕️",
       "name": "up-down arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13851,7 +13851,7 @@ export class EmojiPickerComponent {
       "code": [
         "2194"
       ],
-      "emoji": "↔",
+      "emoji": "↔️",
       "name": "left-right arrow",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13860,7 +13860,7 @@ export class EmojiPickerComponent {
       "code": [
         "21A9"
       ],
-      "emoji": "↩",
+      "emoji": "↩️",
       "name": "right arrow curving left",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13869,7 +13869,7 @@ export class EmojiPickerComponent {
       "code": [
         "21AA"
       ],
-      "emoji": "↪",
+      "emoji": "↪️",
       "name": "left arrow curving right",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13878,7 +13878,7 @@ export class EmojiPickerComponent {
       "code": [
         "2934"
       ],
-      "emoji": "⤴",
+      "emoji": "⤴️",
       "name": "right arrow curving up",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13887,7 +13887,7 @@ export class EmojiPickerComponent {
       "code": [
         "2935"
       ],
-      "emoji": "⤵",
+      "emoji": "⤵️",
       "name": "right arrow curving down",
       "category": "Symbols",
       "subcategory": "arrow"
@@ -13968,7 +13968,7 @@ export class EmojiPickerComponent {
       "code": [
         "269B"
       ],
-      "emoji": "⚛",
+      "emoji": "⚛️",
       "name": "atom symbol",
       "category": "Symbols",
       "subcategory": "religion"
@@ -13977,7 +13977,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F549"
       ],
-      "emoji": "🕉",
+      "emoji": "🕉️",
       "name": "om",
       "category": "Symbols",
       "subcategory": "religion"
@@ -13986,7 +13986,7 @@ export class EmojiPickerComponent {
       "code": [
         "2721"
       ],
-      "emoji": "✡",
+      "emoji": "✡️",
       "name": "star of David",
       "category": "Symbols",
       "subcategory": "religion"
@@ -13995,7 +13995,7 @@ export class EmojiPickerComponent {
       "code": [
         "2638"
       ],
-      "emoji": "☸",
+      "emoji": "☸️",
       "name": "wheel of dharma",
       "category": "Symbols",
       "subcategory": "religion"
@@ -14004,7 +14004,7 @@ export class EmojiPickerComponent {
       "code": [
         "262F"
       ],
-      "emoji": "☯",
+      "emoji": "☯️",
       "name": "yin yang",
       "category": "Symbols",
       "subcategory": "religion"
@@ -14013,7 +14013,7 @@ export class EmojiPickerComponent {
       "code": [
         "271D"
       ],
-      "emoji": "✝",
+      "emoji": "✝️",
       "name": "latin cross",
       "category": "Symbols",
       "subcategory": "religion"
@@ -14022,7 +14022,7 @@ export class EmojiPickerComponent {
       "code": [
         "2626"
       ],
-      "emoji": "☦",
+      "emoji": "☦️",
       "name": "orthodox cross",
       "category": "Symbols",
       "subcategory": "religion"
@@ -14031,7 +14031,7 @@ export class EmojiPickerComponent {
       "code": [
         "262A"
       ],
-      "emoji": "☪",
+      "emoji": "☪️",
       "name": "star and crescent",
       "category": "Symbols",
       "subcategory": "religion"
@@ -14040,7 +14040,7 @@ export class EmojiPickerComponent {
       "code": [
         "262E"
       ],
-      "emoji": "☮",
+      "emoji": "☮️",
       "name": "peace symbol",
       "category": "Symbols",
       "subcategory": "religion"
