@@ -6277,8 +6277,8 @@ export class EmojiPickerComponent {
       "code": [
         "1F43F"
       ],
-      "emoji": "🐿",
-      "name": "chipmunk",
+      "emoji": "🐿️",
+      "name": "chipmunk squirrel",
       "category": "Animals & Nature",
       "subcategory": "animal-mammal"
     },
@@ -6478,7 +6478,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F54A"
       ],
-      "emoji": "🕊",
+      "emoji": "🕊️",
       "name": "dove",
       "category": "Animals & Nature",
       "subcategory": "animal-bird"
@@ -8466,7 +8466,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5FA"
       ],
-      "emoji": "🗺",
+      "emoji": "🗺️",
       "name": "world map",
       "category": "Travel & Places",
       "subcategory": "place-map"
@@ -9285,7 +9285,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F3CE"
       ],
-      "emoji": "🏎",
+      "emoji": "🏎️",
       "name": "racing car",
       "category": "Travel & Places",
       "subcategory": "transport-ground"
@@ -9294,7 +9294,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F3CD"
       ],
-      "emoji": "🏍",
+      "emoji": "🏍️",
       "name": "motorcycle",
       "category": "Travel & Places",
       "subcategory": "transport-ground"
@@ -9384,7 +9384,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E3"
       ],
-      "emoji": "🛣",
+      "emoji": "🛣️",
       "name": "motorway",
       "category": "Travel & Places",
       "subcategory": "transport-ground"
@@ -9393,7 +9393,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E4"
       ],
-      "emoji": "🛤",
+      "emoji": "🛤️",
       "name": "railway track",
       "category": "Travel & Places",
       "subcategory": "transport-ground"
@@ -9402,7 +9402,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E2"
       ],
-      "emoji": "🛢",
+      "emoji": "🛢️",
       "name": "oil drum",
       "category": "Travel & Places",
       "subcategory": "transport-ground"
@@ -9474,7 +9474,7 @@ export class EmojiPickerComponent {
       "code": [
         "2693"
       ],
-      "emoji": "⚓",
+      "emoji": '⚓',
       "name": "anchor",
       "category": "Travel & Places",
       "subcategory": "transport-water"
@@ -10293,7 +10293,7 @@ export class EmojiPickerComponent {
       "code": [
         "2602"
       ],
-      "emoji": "☂",
+      "emoji": "☂️",
       "name": "umbrella",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10311,7 +10311,7 @@ export class EmojiPickerComponent {
       "code": [
         "26F1"
       ],
-      "emoji": "⛱",
+      "emoji": "⛱️",
       "name": "umbrella on ground",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10329,7 +10329,7 @@ export class EmojiPickerComponent {
       "code": [
         "2744"
       ],
-      "emoji": "❄",
+      "emoji": "❄️",
       "name": "snowflake",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10338,8 +10338,8 @@ export class EmojiPickerComponent {
       "code": [
         "2603"
       ],
-      "emoji": "☃",
-      "name": "snowman",
+      "emoji": "☃️",
+      "name": "snowman snow",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
     },
@@ -10348,7 +10348,7 @@ export class EmojiPickerComponent {
         "26C4"
       ],
       "emoji": "⛄",
-      "name": "snowman without snow",
+      "name": "snowman",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
     },
@@ -10356,7 +10356,7 @@ export class EmojiPickerComponent {
       "code": [
         "2604"
       ],
-      "emoji": "☄",
+      "emoji": "☄️",
       "name": "comet",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
@@ -10554,7 +10554,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F397"
       ],
-      "emoji": "🎗",
+      "emoji": "🎗️",
       "name": "reminder ribbon",
       "category": "Activities",
       "subcategory": "event"
@@ -10563,7 +10563,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F39F"
       ],
-      "emoji": "🎟",
+      "emoji": "🎟️",
       "name": "admission tickets",
       "category": "Activities",
       "subcategory": "event"
@@ -10581,7 +10581,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F396"
       ],
-      "emoji": "🎖",
+      "emoji": "🎖️",
       "name": "military medal",
       "category": "Activities",
       "subcategory": "award-medal"
@@ -10815,7 +10815,7 @@ export class EmojiPickerComponent {
       "code": [
         "26F8"
       ],
-      "emoji": "⛸",
+      "emoji": "⛸️",
       "name": "ice skate",
       "category": "Activities",
       "subcategory": "sport"
@@ -10950,7 +10950,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F579"
       ],
-      "emoji": "🕹",
+      "emoji": "🕹️",
       "name": "joystick",
       "category": "Activities",
       "subcategory": "game"
@@ -11022,7 +11022,7 @@ export class EmojiPickerComponent {
       "code": [
         "2660"
       ],
-      "emoji": "♠",
+      "emoji": "♠️",
       "name": "spade suit",
       "category": "Activities",
       "subcategory": "game"
@@ -11031,7 +11031,7 @@ export class EmojiPickerComponent {
       "code": [
         "2665"
       ],
-      "emoji": "♥",
+      "emoji": "♥️",
       "name": "heart suit",
       "category": "Activities",
       "subcategory": "game"
@@ -11040,7 +11040,7 @@ export class EmojiPickerComponent {
       "code": [
         "2666"
       ],
-      "emoji": "♦",
+      "emoji": "♦️",
       "name": "diamond suit",
       "category": "Activities",
       "subcategory": "game"
@@ -11049,7 +11049,7 @@ export class EmojiPickerComponent {
       "code": [
         "2663"
       ],
-      "emoji": "♣",
+      "emoji": "♣️",
       "name": "club suit",
       "category": "Activities",
       "subcategory": "game"
@@ -11058,7 +11058,7 @@ export class EmojiPickerComponent {
       "code": [
         "265F"
       ],
-      "emoji": "♟",
+      "emoji": "♟️",
       "name": "chess pawn",
       "category": "Activities",
       "subcategory": "game"
@@ -11103,7 +11103,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5BC"
       ],
-      "emoji": "🖼",
+      "emoji": "🖼️",
       "name": "framed picture",
       "category": "Activities",
       "subcategory": "arts & crafts"
@@ -11166,7 +11166,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F576"
       ],
-      "emoji": "🕶",
+      "emoji": "🕶️",
       "name": "sunglasses",
       "category": "Objects",
       "subcategory": "clothing"
@@ -11373,7 +11373,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6CD"
       ],
-      "emoji": "🛍",
+      "emoji": "🛍️",
       "name": "shopping bags",
       "category": "Objects",
       "subcategory": "clothing"
@@ -11401,7 +11401,7 @@ export class EmojiPickerComponent {
         "1F45E"
       ],
       "emoji": "👞",
-      "name": "man’s shoe",
+      "name": "man's shoe",
       "category": "Objects",
       "subcategory": "clothing"
     },
@@ -11535,8 +11535,8 @@ export class EmojiPickerComponent {
       "code": [
         "26D1"
       ],
-      "emoji": "⛑",
-      "name": "rescue worker’s helmet",
+      "emoji": "⛑️",
+      "name": "rescue worker's helmet",
       "category": "Objects",
       "subcategory": "clothing"
     },
@@ -11688,7 +11688,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F399"
       ],
-      "emoji": "🎙",
+      "emoji": "🎙️",
       "name": "studio microphone",
       "category": "Objects",
       "subcategory": "music"
@@ -11697,7 +11697,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F39A"
       ],
-      "emoji": "🎚",
+      "emoji": "🎚️",
       "name": "level slider",
       "category": "Objects",
       "subcategory": "music"
@@ -11706,7 +11706,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F39B"
       ],
-      "emoji": "🎛",
+      "emoji": "🎛️",
       "name": "control knobs",
       "category": "Objects",
       "subcategory": "music"
@@ -11868,7 +11868,7 @@ export class EmojiPickerComponent {
       "code": [
         "260E"
       ],
-      "emoji": "☎",
+      "emoji": "☎️",
       "name": "telephone",
       "category": "Objects",
       "subcategory": "phone"
@@ -11940,7 +11940,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5A5"
       ],
-      "emoji": "🖥",
+      "emoji": "🖥️",
       "name": "desktop computer",
       "category": "Objects",
       "subcategory": "computer"
@@ -11949,7 +11949,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5A8"
       ],
-      "emoji": "🖨",
+      "emoji": "🖨️",
       "name": "printer",
       "category": "Objects",
       "subcategory": "computer"
@@ -11958,7 +11958,7 @@ export class EmojiPickerComponent {
       "code": [
         "2328"
       ],
-      "emoji": "⌨",
+      "emoji": "⌨️",
       "name": "keyboard",
       "category": "Objects",
       "subcategory": "computer"
@@ -11967,7 +11967,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5B1"
       ],
-      "emoji": "🖱",
+      "emoji": "🖱️",
       "name": "computer mouse",
       "category": "Objects",
       "subcategory": "computer"
@@ -11976,7 +11976,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5B2"
       ],
-      "emoji": "🖲",
+      "emoji": "🖲️",
       "name": "trackball",
       "category": "Objects",
       "subcategory": "computer"
@@ -12039,7 +12039,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F39E"
       ],
-      "emoji": "🎞",
+      "emoji": "🎞️",
       "name": "film frames",
       "category": "Objects",
       "subcategory": "light & video"
@@ -12048,7 +12048,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F4FD"
       ],
-      "emoji": "📽",
+      "emoji": "📽️",
       "name": "film projector",
       "category": "Objects",
       "subcategory": "light & video"
@@ -12129,7 +12129,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F56F"
       ],
-      "emoji": "🕯",
+      "emoji": "🕯️",
       "name": "candle",
       "category": "Objects",
       "subcategory": "light & video"
@@ -12291,7 +12291,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5DE"
       ],
-      "emoji": "🗞",
+      "emoji": "🗞️",
       "name": "rolled-up newspaper",
       "category": "Objects",
       "subcategory": "book-paper"
@@ -12318,7 +12318,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F3F7"
       ],
-      "emoji": "🏷",
+      "emoji": "🏷️",
       "name": "label",
       "category": "Objects",
       "subcategory": "book-paper"
@@ -12417,7 +12417,7 @@ export class EmojiPickerComponent {
       "code": [
         "2709"
       ],
-      "emoji": "✉",
+      "emoji": "✉️",
       "name": "envelope",
       "category": "Objects",
       "subcategory": "mail"
@@ -12525,7 +12525,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5F3"
       ],
-      "emoji": "🗳",
+      "emoji": "🗳️",
       "name": "ballot box with ballot",
       "category": "Objects",
       "subcategory": "mail"
@@ -12534,7 +12534,7 @@ export class EmojiPickerComponent {
       "code": [
         "270F"
       ],
-      "emoji": "✏",
+      "emoji": "✏️",
       "name": "pencil",
       "category": "Objects",
       "subcategory": "writing"
@@ -12543,7 +12543,7 @@ export class EmojiPickerComponent {
       "code": [
         "2712"
       ],
-      "emoji": "✒",
+      "emoji": "✒️",
       "name": "black nib",
       "category": "Objects",
       "subcategory": "writing"
@@ -12552,7 +12552,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F58B"
       ],
-      "emoji": "🖋",
+      "emoji": "🖋️",
       "name": "fountain pen",
       "category": "Objects",
       "subcategory": "writing"
@@ -12561,7 +12561,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F58A"
       ],
-      "emoji": "🖊",
+      "emoji": "🖊️",
       "name": "pen",
       "category": "Objects",
       "subcategory": "writing"
@@ -12570,7 +12570,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F58C"
       ],
-      "emoji": "🖌",
+      "emoji": "🖌️",
       "name": "paintbrush",
       "category": "Objects",
       "subcategory": "writing"
@@ -12579,7 +12579,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F58D"
       ],
-      "emoji": "🖍",
+      "emoji": "🖍️",
       "name": "crayon",
       "category": "Objects",
       "subcategory": "writing"
@@ -12624,7 +12624,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5C2"
       ],
-      "emoji": "🗂",
+      "emoji": "🗂️",
       "name": "card index dividers",
       "category": "Objects",
       "subcategory": "office"
@@ -12651,7 +12651,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5D2"
       ],
-      "emoji": "🗒",
+      "emoji": "🗒️",
       "name": "spiral notepad",
       "category": "Objects",
       "subcategory": "office"
@@ -12660,7 +12660,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5D3"
       ],
-      "emoji": "🗓",
+      "emoji": "🗓️",
       "name": "spiral calendar",
       "category": "Objects",
       "subcategory": "office"
@@ -12741,7 +12741,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F587"
       ],
-      "emoji": "🖇",
+      "emoji": "🖇️",
       "name": "linked paperclips",
       "category": "Objects",
       "subcategory": "office"
@@ -12768,7 +12768,7 @@ export class EmojiPickerComponent {
       "code": [
         "2702"
       ],
-      "emoji": "✂",
+      "emoji": "✂️",
       "name": "scissors",
       "category": "Objects",
       "subcategory": "office"
@@ -12777,7 +12777,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5C3"
       ],
-      "emoji": "🗃",
+      "emoji": "🗃️",
       "name": "card file box",
       "category": "Objects",
       "subcategory": "office"
@@ -12786,7 +12786,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5C4"
       ],
-      "emoji": "🗄",
+      "emoji": "🗄️",
       "name": "file cabinet",
       "category": "Objects",
       "subcategory": "office"
@@ -12795,7 +12795,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5D1"
       ],
-      "emoji": "🗑",
+      "emoji": "🗑️",
       "name": "wastebasket",
       "category": "Objects",
       "subcategory": "office"
@@ -12849,7 +12849,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5DD"
       ],
-      "emoji": "🗝",
+      "emoji": "🗝️",
       "name": "old key",
       "category": "Objects",
       "subcategory": "lock"
@@ -12876,7 +12876,7 @@ export class EmojiPickerComponent {
       "code": [
         "26CF"
       ],
-      "emoji": "⛏",
+      "emoji": "⛏️",
       "name": "pick",
       "category": "Objects",
       "subcategory": "tool"
@@ -12885,7 +12885,7 @@ export class EmojiPickerComponent {
       "code": [
         "2692"
       ],
-      "emoji": "⚒",
+      "emoji": "⚒️",
       "name": "hammer and pick",
       "category": "Objects",
       "subcategory": "tool"
@@ -12894,7 +12894,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F6E0"
       ],
-      "emoji": "🛠",
+      "emoji": "🛠️",
       "name": "hammer and wrench",
       "category": "Objects",
       "subcategory": "tool"
@@ -12903,7 +12903,7 @@ export class EmojiPickerComponent {
       "code": [
         "1F5E1"
       ],
-      "emoji": "🗡",
+      "emoji": "🗡️",
       "name": "dagger",
       "category": "Objects",
       "subcategory": "tool"
@@ -12912,7 +12912,7 @@ export class EmojiPickerComponent {
       "code": [
         "2694"
       ],
-      "emoji": "⚔",
+      "emoji": "⚔️",
       "name": "crossed swords",
       "category": "Objects",
       "subcategory": "tool"
