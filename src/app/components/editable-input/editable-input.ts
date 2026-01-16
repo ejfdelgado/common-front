@@ -40,12 +40,21 @@ export class EditableInput implements ControlValueAccessor {
 
   @Output() enter = new EventEmitter<string>();
 
+  savedRange: Range | null = null;
+
   value = '';
   focused = false;
   private composing = false;
 
   constructor(private dialog: MatDialog) {
 
+  }
+
+  saveSelection() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.savedRange = selection.getRangeAt(0);
+    }
   }
 
   /* ---------------- CVA ---------------- */
@@ -149,7 +158,21 @@ export class EditableInput implements ControlValueAccessor {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.editable.nativeElement.focus();
+
+        const selection = window.getSelection();
+        if (selection && this.savedRange) {
+          // 1. Clear any current selection
+          selection.removeAllRanges();
+          // 2. Re-apply the saved cursor position
+          selection.addRange(this.savedRange);
+
+          // 3. Execute the insert command
+          document.execCommand('insertText', false, result);
+
+          // 4. Update the saved range to be after the new emoji
+          this.saveSelection();
+        }
       }
     });
   }

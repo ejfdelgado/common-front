@@ -12,7 +12,7 @@
 
         <button type="button" (mousedown)="openEmoticons()" aria-label="Italic">
             <span>😎</span>
-        </button>        
+        </button>
     </div>
     }
 
@@ -20,6 +20,6 @@
     <div #editable [ngClass]="{'with_focus': focused}" class="editable-input" contenteditable="true" role="textbox"
         aria-multiline="false" [attr.data-placeholder]="placeholder" [class.empty]="!value" [class.disabled]="disabled"
         [attr.tabindex]="disabled ? -1 : 0" (focus)="onFocus()" (blur)="onBlur()" (input)="onInput()"
-        (paste)="onPaste($event)">
+        (keyup)="saveSelection()" (mouseup)="saveSelection()" (paste)="onPaste($event)">
     </div>
 </div>
