@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { CardDoc } from '@components/card-doc/card-doc';
@@ -13,6 +13,12 @@ import { FirestoreService } from '@services/firestore.service';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
+
+export interface NoteDataType {
+  id: string;
+  title: string;
+  description: string;
+};
 
 @Component({
   selector: 'app-voyage-photo',
@@ -28,9 +34,10 @@ import { LocationService } from '@services/location.service';
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
 })
-export class VoyagePhoto {
+export class VoyagePhoto implements OnInit {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
   menuOptions: MenuOptionType[] = [];
+  notes: NoteDataType[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -64,6 +71,10 @@ export class VoyagePhoto {
       icon: "add_location",
       callback: this.openDialog.bind(this),
     });
+  }
+  
+  ngOnInit(): void {
+    this.pageNotes();
   }
 
   async transformMark(data: MarkType) {
@@ -124,5 +135,11 @@ export class VoyagePhoto {
         // { title: '...', description: '...' }
       }
     });
+  }
+
+  async pageNotes() {
+    const page = (await this.firestoreSrv.paging("pro-note"));
+    this.notes.push(...(page as NoteDataType[]));
+    this.cdr.detectChanges();
   }
 }

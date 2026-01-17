@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
 import { generateHueColors } from '@tools/Colors';
 
 export interface OptionDataType {
@@ -29,31 +30,20 @@ export interface QuestionDataType {
   templateUrl: './question.html',
   styleUrl: './question.scss',
 })
-export class Question implements OnInit {
+export class Question extends CommonComponent implements OnInit {
 
   @Input() question!: QuestionDataType;
-
-  cache: { [key: string]: SafeHtml } = {};
 
   colors: string[] = [];
 
   constructor(
-    private sanitizer: DomSanitizer
+    public override sanitizer: DomSanitizer,
   ) {
-
+    super(sanitizer);
   }
 
   ngOnInit() {
     this.colors = generateHueColors(this.question.options.length, 100, 70);
-  }
-
-  sanitizeText(text: string) {
-    if (text in this.cache) {
-      return this.cache[text];
-    } else {
-      this.cache[text] = this.sanitizer.bypassSecurityTrustHtml(text);
-      return this.cache[text];
-    }
   }
 
   getBackgroundColor(i: number, selected?: boolean) {
