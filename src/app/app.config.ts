@@ -5,6 +5,10 @@ import { routes } from './app.routes';
 import { AuthInterceptor } from '@interceptors/auth.interceptor';
 import { ErrorInterceptor } from '@interceptors/error.interceptor';
 import { LoadingInterceptor } from '@interceptors/loading.interceptor';
+import moment from 'moment';
+import 'moment/locale/es';
+
+moment.locale('es');
 
 export const appConfig: ApplicationConfig = {
   providers: [
