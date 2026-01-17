@@ -9,15 +9,13 @@ import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { FileService } from '@services/file.srv';
-import { FirestoreService } from '@services/firestore.service';
+import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 
-export interface NoteDataType {
-  id: string;
-  title: string;
-  description: string;
+export interface NoteDataType extends BasicDataType {
+
 };
 
 @Component({
@@ -72,7 +70,7 @@ export class VoyagePhoto implements OnInit {
       callback: this.openDialog.bind(this),
     });
   }
-  
+
   ngOnInit(): void {
     this.pageNotes();
   }
@@ -139,6 +137,7 @@ export class VoyagePhoto implements OnInit {
 
   async pageNotes() {
     const page = (await this.firestoreSrv.paging("pro-note"));
+    console.log(page);
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
   }

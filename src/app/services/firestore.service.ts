@@ -10,6 +10,16 @@ export interface UpdatedEntityType {
     id: string;
 }
 
+export interface BasicDataType extends UpdatedEntityType {
+    title: string;
+    description: string;
+    author: string;
+    author_name: string;
+    author_picture: string;
+    created: number;
+    updated: number;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -33,11 +43,11 @@ export class FirestoreService {
         }
     }
 
-    async paging(collectionName: string) {
+    async paging(collectionName: string): Promise<BasicDataType[]> {
         const snap = await getDocs(collection(db, collectionName));
-        return snap.docs.map(d => ({
+        return (snap.docs.map(d => ({
             id: d.id,
             ...d.data()
-        }));
+        }))) as BasicDataType[];
     }
 }

@@ -33,6 +33,12 @@ body {
 
 /* You can add global styles to this file, and also import other style files */
 
+/* styles.scss */
+html {
+    --mat-card-title-text-font: "Comfortaa", "Helvetica Neue", sans-serif;
+    --mat-card-subtitle-text-font: "Comfortaa", "Helvetica Neue", sans-serif;
+}
+
 * {
     font-family: "Comfortaa", "Helvetica Neue", sans-serif;
 }
