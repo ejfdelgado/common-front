@@ -40,6 +40,8 @@ export class EditableInput implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
   @Input() discrete: boolean = true;
+  @Input() minHeight: number = 6;
+  @Input() maxHeight: number = 10;
 
   @Output() enter = new EventEmitter<string>();
 

@@ -70,11 +70,16 @@
 
 .visible .scrolled_content {
     padding: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid #828282;
     border-radius: 0px 0px 4px 4px;
-    max-height: 8em;
     overflow-y: scroll;
     overflow-x: hidden;
+    display: grid;
+    align-items: stretch;
+}
+
+.visible.focused .scrolled_content {
+    border: 2px solid #252aba;
 }
 
 .visible .scrolled_content .editable-input.with_focus {
