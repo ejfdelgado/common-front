@@ -137,17 +137,33 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        //console.log('Saved data:', result);
-        // { title: '...', description: '...' }
+        if (!oldModel) {
+          // Creation
+          this.pageNotes(true);
+        } else {
+          // Update
+          // mix objects
+          Object.assign(oldModel, result);
+          this.cdr.detectChanges();
+        }
       }
     });
   }
 
   async deleteNote(item: any) {
     await this.firestoreSrv.delete("note", item.id);
+    // If all is ok, just remove from the list
+    const index = this.notes.indexOf(item);
+    if (index >= 0) {
+      this.notes.splice(index, 1);
+      this.cdr.detectChanges();
+    }
   }
 
-  async pageNotes() {
+  async pageNotes(startover: boolean = false) {
+    if (startover && this.notes.length > 0) {
+      this.notes.splice(0, this.notes.length);
+    }
     const page = (await this.firestoreSrv.paging("pro-note"));
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();

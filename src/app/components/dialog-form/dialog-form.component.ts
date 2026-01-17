@@ -97,7 +97,7 @@ export class DialogFormComponent {
             }
             await this.internalSave(data);
 
-            this.dialogRef.close(this.form.value);
+            this.dialogRef.close(data);
         }
     }
 
