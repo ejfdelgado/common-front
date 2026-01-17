@@ -11,7 +11,7 @@
     <p class="content_parent" [innerHTML]="sanitizeText(model.description)"></p>
   </mat-card-content>
   <mat-card-actions>
-    @if (user && user.id == model.author) {
+    @if (user && user.email == model.author) {
     <button matButton (click)="openEdit()"><mat-icon>edit</mat-icon>Editar</button>
     }
     <button matButton (click)="share()"><mat-icon>share</mat-icon>Compartir</button>

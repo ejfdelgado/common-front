@@ -14,7 +14,9 @@ export class AuthenticatedComponent extends CommonComponent {
         super(sanitizer);
         this.authSrv.authState$.subscribe(user => {
             this.user = user;
-            this.cdr.detectChanges();
+            try {
+                this.cdr.detectChanges();
+            } catch (err) { }
         });
     }
 }
