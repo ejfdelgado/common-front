@@ -101,6 +101,8 @@ export class VoyagePhoto {
   async openDialog() {
     const formConfig: FormDataType = {
       title: "Crear / actualizar",
+      autoAuthor: true,
+      modelName: "note",
       fields: [
         { label: "Título", type: "text", key: "title", required: true },
         { label: "Descripción", type: "contenteditable", key: "description" },
@@ -118,7 +120,7 @@ export class VoyagePhoto {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Saved data:', result);
+        //console.log('Saved data:', result);
         // { title: '...', description: '...' }
       }
     });

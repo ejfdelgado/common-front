@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditableInput } from '@components/editable-input/editable-input';
 import { MatIcon } from '@angular/material/icon';
+import { FirestoreService } from '@services/firestore.service';
 
 export interface FieldDataType {
     type: "text" | "textarea" | "contenteditable";
@@ -18,6 +19,8 @@ export interface FieldDataType {
 };
 
 export interface FormDataType {
+    modelName: string;
+    autoAuthor: boolean;
     title: string;
     fields: FieldDataType[],
     model: { [key: string]: any },
@@ -41,10 +44,12 @@ export class DialogFormComponent {
     form: FormGroup;
     config!: FormDataType;
     formControlMap: { [key: string]: FormControl } = {};
+    fieldNames: string[] = [];
 
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<DialogFormComponent>,
+        private firestoreSrv: FirestoreService,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         this.config = data;
@@ -59,6 +64,7 @@ export class DialogFormComponent {
                 newField.addValidators(Validators.required);
             }
             dynamicFields.push(newField);
+            this.fieldNames.push(field.key);
             this.formControlMap[field.key] = newField;
         }
     }
@@ -71,9 +77,34 @@ export class DialogFormComponent {
         this.dialogRef.close();
     }
 
-    save(): void {
+    async save(): Promise<void> {
         if (this.form.valid) {
+            const dataArray = this.form.value.dynamicFields;
+            const data: { [key: string]: any } = {};
+            // Add id if provided
+            const PASSTRHU = ["id"];
+            PASSTRHU.forEach((key) => {
+                if (this.config.model[key] !== undefined) {
+                    data[key] = this.config.model[key];
+                }
+            });
+
+            for (let i = 0; i < this.fieldNames.length; i++) {
+                const fieldName = this.fieldNames[i];
+                if (!data["id"] || this.formControlMap[fieldName].dirty) {
+                    data[fieldName] = dataArray[i];
+                }
+            }
+            await this.internalSave(data);
+
             this.dialogRef.close(this.form.value);
         }
+    }
+
+    async internalSave(data: { [key: string]: any }) {
+        const conf: any = {
+            autoAuthor: this.config.autoAuthor,
+        };
+        await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
     }
 }
