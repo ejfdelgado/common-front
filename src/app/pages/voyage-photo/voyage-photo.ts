@@ -100,13 +100,14 @@ export class VoyagePhoto {
 
   async openDialog() {
     const formConfig: FormDataType = {
+      title: "Crear / actualizar",
       fields: [
-        { label: "Título", type: "text", key: "title" },
-        { label: "Descripción", type: "textarea", key: "description" },
+        { label: "Título", type: "text", key: "title", required: true },
+        { label: "Descripción", type: "contenteditable", key: "description" },
       ],
       model: {
         title: '',
-        description: ''
+        description: 'Esto es una frase',
       }
     };
     const dialogRef = this.dialog.open(DialogFormComponent, {

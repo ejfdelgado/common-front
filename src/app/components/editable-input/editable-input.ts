@@ -6,6 +6,7 @@ import {
   HostListener,
   Input,
   Output,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -32,11 +33,13 @@ import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.comp
 })
 export class EditableInput implements ControlValueAccessor {
   @ViewChild('editable', { static: true }) editable!: ElementRef<HTMLDivElement>;
+  scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
   @Input() placeholder = '';
   @Input() ariaLabel = 'Text input';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
+  @Input() discrete: boolean = true;
 
   @Output() enter = new EventEmitter<string>();
 
@@ -45,6 +48,7 @@ export class EditableInput implements ControlValueAccessor {
   value = '';
   focused = false;
   private composing = false;
+  savedScroll: number = 0;
 
   constructor(private dialog: MatDialog) {
 
@@ -151,6 +155,7 @@ export class EditableInput implements ControlValueAccessor {
   }
 
   openEmoticons() {
+    this.saveScrollPos();
     const dialogRef = this.dialog.open(EmojiPickerComponent, {
       width: '350px',
       panelClass: 'custom-emoji-picker'
@@ -173,10 +178,25 @@ export class EditableInput implements ControlValueAccessor {
           // 4. Update the saved range to be after the new emoji
           this.saveSelection();
         }
+        if (!this.discrete) {
+          this.restoreScrollPos();
+        }
       }
     });
   }
 
   private onChange = (_: string) => { };
   private onTouched = () => { };
+
+  saveScrollPos() {
+    const el = this.scrollContainer()?.nativeElement;
+    this.savedScroll = el ? el.scrollTop : 0;
+  }
+
+  restoreScrollPos() {
+    const el = this.scrollContainer()?.nativeElement;
+    if (el) {
+      el.scrollTop = this.savedScroll;
+    }
+  }
 }

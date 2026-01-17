@@ -1,7 +1,5 @@
-<h2 mat-dialog-title>Form Popup</h2>
-
+<h2 mat-dialog-title>{{ config.title }}</h2>
 <form [formGroup]="form" mat-dialog-content class="flex flex-col gap-4">
-
     <div formArrayName="dynamicFields">
         @for (field of config.fields; track field.key) {
         @if (field.type=='text') {
@@ -14,12 +12,13 @@
             <mat-label>{{ field.label }}</mat-label>
             <textarea matInput rows="4" [formControl]="formControlMap[field.key]"></textarea>
         </mat-form-field>
+        } @else if (field.type=='contenteditable') {
+        <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]"></app-editable-input>
         }
         }
     </div>
 </form>
-
-<mat-dialog-actions align="end">
+<mat-dialog-actions>
     <button mat-button (click)="close()">Close</button>
     <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
         Save

@@ -7,14 +7,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditableInput } from '@components/editable-input/editable-input';
 
 export interface FieldDataType {
-    type: "text" | "textarea";
+    type: "text" | "textarea" | "contenteditable";
     label: string;
     key: string;
+    required?: boolean;
 };
 
 export interface FormDataType {
+    title: string;
     fields: FieldDataType[],
     model: { [key: string]: any },
 }
@@ -27,6 +30,7 @@ export interface FormDataType {
         MatInputModule,
         MatButtonModule,
         ReactiveFormsModule,
+        EditableInput,
     ],
     selector: 'app-dialog-form',
     templateUrl: './dialog-form.component.html'
@@ -49,6 +53,9 @@ export class DialogFormComponent {
         const dynamicFields = this.form.get('dynamicFields') as FormArray;
         for (const field of this.config.fields) {
             const newField = new FormControl(this.config.model[field.key]);
+            if (field.required === true) {
+                newField.addValidators(Validators.required);
+            }
             dynamicFields.push(newField);
             this.formControlMap[field.key] = newField;
         }

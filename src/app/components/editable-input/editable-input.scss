@@ -18,6 +18,17 @@
     right: 0;
 }
 
+.visible {
+    font-size: 1.2em;
+    letter-spacing: normal;
+}
+
+.visible .toolbar {
+    position: relative;
+    top: 0px;
+    background: white;
+}
+
 .toolbar button {
     border: none;
     background: transparent;
@@ -55,4 +66,17 @@
 .editable-input.disabled {
     background: #f5f5f5;
     cursor: not-allowed;
+}
+
+.visible .scrolled_content {
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 0px 0px 4px 4px;
+    max-height: 8em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.visible .scrolled_content .editable-input.with_focus {
+    background-color: unset;
 }
