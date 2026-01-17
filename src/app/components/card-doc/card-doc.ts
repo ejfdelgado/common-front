@@ -24,6 +24,7 @@ export class CardDoc extends CommonComponent {
 
   @Input() model: any;
   @Input() user: GoogleUser | null = null;
+  @Input() createUpdate!: Function;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -32,7 +33,7 @@ export class CardDoc extends CommonComponent {
   }
 
   async openEdit() {
-
+    await this.createUpdate(this.model);
   }
 
   async share() {

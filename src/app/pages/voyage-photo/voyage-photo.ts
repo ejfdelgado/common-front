@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc } from '@components/card-doc/card-doc';
-import { CommonComponent } from '@components/common.component';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
@@ -39,6 +38,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
+  createUpdateFun!: Function;
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -52,6 +52,9 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     public override sanitizer: DomSanitizer,
   ) {
     super(sanitizer, authSrv, cdr);
+
+    this.createUpdateFun = this.openDialog.bind(this);
+
     this.menuOptions.push({
       label: "Tomar foto",
       icon: "photo_camera",
@@ -107,7 +110,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     } catch (err) { }
   }
 
-  async openDialog() {
+  async openDialog(oldModel: any) {
     const formConfig: FormDataType = {
       title: "Crear / actualizar",
       autoAuthor: true,
@@ -117,10 +120,13 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         { label: "Descripción", type: "contenteditable", key: "description" },
       ],
       model: {
-        title: '',
-        description: 'Esto es una frase',
+        title: 'Título...',
+        description: 'Descripción...',
       }
     };
+    if (oldModel) {
+      formConfig.model = oldModel;
+    }
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '400px',
       panelClass: 'custom-emoji-picker',
@@ -137,7 +143,6 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   async pageNotes() {
     const page = (await this.firestoreSrv.paging("pro-note"));
-    console.log(page);
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
   }
