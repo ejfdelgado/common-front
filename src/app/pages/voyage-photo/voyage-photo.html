@@ -8,7 +8,8 @@
                     <div class="container_grid_docs_found_scroll">
                         <div class="grid_docs_found">
                             @for(note of notes; track note.id) {
-                            <app-card-doc [model]="note" [user]="user" [createUpdate]="createUpdateFun"></app-card-doc>
+                            <app-card-doc [model]="note" [user]="user" [createUpdate]="createUpdateFun"
+                                [delete]="deleteNoteFun"></app-card-doc>
                             }
                         </div>
                     </div>

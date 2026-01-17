@@ -7,6 +7,7 @@ import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { GoogleUser } from '@services/google-auth.service';
+import { ConfirmDialogService } from '@services/confirm-dialog.service';
 
 @Component({
   selector: 'app-card-doc',
@@ -25,15 +26,28 @@ export class CardDoc extends CommonComponent {
   @Input() model: any;
   @Input() user: GoogleUser | null = null;
   @Input() createUpdate!: Function;
+  @Input() delete!: Function;
 
   constructor(
     public override sanitizer: DomSanitizer,
+    public confirmSrv: ConfirmDialogService,
   ) {
     super(sanitizer);
   }
 
   async openEdit() {
     await this.createUpdate(this.model);
+  }
+
+  async askDelete() {
+    // ask confirm
+    const confirm = await this.confirmSrv.confirm({
+      title: "Está seguro?",
+      message: "Al borrar no se podrá deshacer",
+    });
+    if (confirm) {
+      await this.delete(this.model);
+    }
   }
 
   async share() {

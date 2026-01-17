@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/editable-input
+npx ng generate component --standalone components/confirm-dialog
 ```
 
 ```bash

@@ -39,6 +39,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
   createUpdateFun!: Function;
+  deleteNoteFun!: Function;
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -54,6 +55,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     super(sanitizer, authSrv, cdr);
 
     this.createUpdateFun = this.openDialog.bind(this);
+    this.deleteNoteFun = this.deleteNote.bind(this);
 
     this.menuOptions.push({
       label: "Tomar foto",
@@ -69,7 +71,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
     this.menuOptions.push({
       label: "Open form",
-      icon: "add_location",
+      icon: "add",
       callback: this.openDialog.bind(this),
     });
   }
@@ -139,6 +141,10 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         // { title: '...', description: '...' }
       }
     });
+  }
+
+  async deleteNote(item: any) {
+    await this.firestoreSrv.delete("note", item.id);
   }
 
   async pageNotes() {

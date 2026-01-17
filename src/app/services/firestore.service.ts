@@ -50,4 +50,11 @@ export class FirestoreService {
             ...d.data()
         }))) as BasicDataType[];
     }
+
+    async delete(collection: string, id: string) {
+        const parameters = { collection, id };
+        const query = new URLSearchParams(parameters).toString();
+        const response = await firstValueFrom(this.http.delete<ApiResponse>(`${environment.apiUrl}${this.uploadUrl}?${query}`));
+        return response;
+    }
 }

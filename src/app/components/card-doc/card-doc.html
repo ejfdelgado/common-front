@@ -11,9 +11,10 @@
     <p class="content_parent" [innerHTML]="sanitizeText(model.description)"></p>
   </mat-card-content>
   <mat-card-actions>
-    @if (user && user.email == model.author) {
-    <button matButton (click)="openEdit()"><mat-icon>edit</mat-icon>Editar</button>
-    }
     <button matButton (click)="share()"><mat-icon>share</mat-icon>Compartir</button>
+    @if (user && user.email == model.author) {
+    <button matButton (click)="openEdit()" class="icon_only"><mat-icon>edit</mat-icon></button>
+    <button matButton (click)="askDelete()" class="icon_only"><mat-icon>delete_forever</mat-icon></button>
+    }
   </mat-card-actions>
 </mat-card>
