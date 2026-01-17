@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditableInput } from '@components/editable-input/editable-input';
+import { MatIcon } from '@angular/material/icon';
 
 export interface FieldDataType {
     type: "text" | "textarea" | "contenteditable";
@@ -31,6 +32,7 @@ export interface FormDataType {
         MatButtonModule,
         ReactiveFormsModule,
         EditableInput,
+        MatIcon,
     ],
     selector: 'app-dialog-form',
     templateUrl: './dialog-form.component.html'

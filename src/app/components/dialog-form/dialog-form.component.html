@@ -19,8 +19,8 @@
     </div>
 </form>
 <mat-dialog-actions>
-    <button mat-button (click)="close()">Close</button>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
     <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
-        Save
+        <mat-icon>check</mat-icon>Guardar
     </button>
 </mat-dialog-actions>
