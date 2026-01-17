@@ -26,13 +26,11 @@ mat-form-field {
 /* Customizing the emoji grid */
 .emoji-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    /* 6 emojis per row */
+    grid-template-columns: repeat(5, 1fr);
     gap: 12px;
     padding: 16px 16px 16px 16px;
     overflow-y: auto;
     overflow-x: hidden;
-    /* Allows scrolling only the emojis */
     max-height: 250px;
 }
 
