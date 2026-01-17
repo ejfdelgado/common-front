@@ -1,10 +1,11 @@
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { GoogleAuthService, GoogleUser } from "@services/google-auth.service";
 
 export class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};
 
     constructor(
-        public sanitizer: DomSanitizer
+        public sanitizer: DomSanitizer,
     ) {
 
     }

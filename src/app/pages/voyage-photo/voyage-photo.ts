@@ -3,7 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc } from '@components/card-doc/card-doc';
+import { CommonComponent } from '@components/common.component';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
@@ -32,26 +35,23 @@ export interface NoteDataType extends BasicDataType {
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
 })
-export class VoyagePhoto implements OnInit {
+export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
-    public authSrv: GoogleAuthService,
+    public override authSrv: GoogleAuthService,
     private http: HttpClient,
     private fileSrv: FileService,
     private firestoreSrv: FirestoreService,
-    public cdr: ChangeDetectorRef,
+    public override cdr: ChangeDetectorRef,
     public locationSrv: LocationService,
     private dialog: MatDialog,
+    public override sanitizer: DomSanitizer,
   ) {
-    this.authSrv.authState$.subscribe(user => {
-      if (user) {
-        //
-      } else { }
-    });
+    super(sanitizer, authSrv, cdr);
     this.menuOptions.push({
       label: "Tomar foto",
       icon: "photo_camera",
