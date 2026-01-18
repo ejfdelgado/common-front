@@ -6,4 +6,16 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.image_container .cover {
+    flex: 1;
+}
+
+.image_container .controls {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
 }

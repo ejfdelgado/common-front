@@ -56,16 +56,14 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Popup create/update entity
-- File picker
 - Popup to chose image by file or photo
+- Make a thumbnail in front end, also allow clip the image, like a post processing after uploading image.
+
+- File picker
 - Text editor with link/image src editor
-- Text editor with scroll and max height and top toolbar
 - Adjust style on card to put the image as background to clip it.
-- Create the social backend for thumbnail preview.
 - Allow oauth token id exists for ever (security risk)
 - Add QR service, display it to allow scan it
-- Make a thumbnail in front end, also allow clip the image, like a post processing after uploading image.
 - Add env variables to force entities:
     - bucket, permisos de usuario y tamanio
     - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.
