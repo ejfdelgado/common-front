@@ -13,7 +13,10 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FileService } from '@services/file.srv';
+import { GoogleAuthService } from '@services/google-auth.service';
+import { getBucketPath } from '@tools/BucketPaths';
 
 export type ComponentDataType = string | null;
 
@@ -38,6 +41,9 @@ export type ComponentDataType = string | null;
 })
 export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
   @Input() label: string = "";
+  @Input() config: ImageDetailDataType | undefined = {
+    template: "default/${random}/image.jpg",
+  };
   value: ComponentDataType = null;
   disabled = false;
   temporalUrl: string | null = null;
@@ -45,6 +51,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
   constructor(
     private fileSrv: FileService,
     public cdr: ChangeDetectorRef,
+    public authSrv: GoogleAuthService,
   ) {
 
   }
@@ -74,6 +81,9 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
     if (!this.value) {
       return "./assets/img/default.jpeg";
     } else {
+      if (this.temporalUrl) {
+        return this.temporalUrl;
+      }
       return this.value;
     }
   }
@@ -81,7 +91,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
   /* ========= Component Logic ========= */
 
   async clickEdit(): Promise<void> {
-    if (this.disabled) return;
+    if (this.disabled || !this.config) return;
 
     const blob = await this.fileSrv.openCamera();
     if (!blob) {
@@ -89,9 +99,15 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
     }
 
     // In the middle we can edit image in canvas, then create the blob url
+    const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
+      user: GoogleAuthService.userStatic,
+    });
 
-    this.value = URL.createObjectURL(blob);
-    this.assignBlobUrl(this.value);
+    console.log(nextPath);
+
+    const temPath = URL.createObjectURL(blob);
+    this.value = nextPath;
+    this.assignBlobUrl(temPath);
     this.onChange(this.value);
     this.onTouched();
     this.cdr.detectChanges();

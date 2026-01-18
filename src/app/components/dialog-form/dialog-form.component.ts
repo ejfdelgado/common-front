@@ -14,11 +14,17 @@ import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 import { RatingComponent } from '@components/rating/rating';
 import { ImageFileComponent } from '@components/image-field/image-field';
 
+export interface ImageDetailDataType {
+    template: string;
+    withThumbnail?: boolean;
+}
+
 export interface FieldDataType {
     type: "text" | "textarea" | "contenteditable" | "toggle" | "rating" | "image";
     label: string;
     key: string;
     required?: boolean;
+    image?: ImageDetailDataType;
 };
 
 export interface FormDataType {

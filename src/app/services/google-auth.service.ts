@@ -23,6 +23,8 @@ export class GoogleAuthService {
     readonly user = computed(() => this.userSignal());
     readonly isLoggedIn = computed(() => !!this.userSignal());
 
+    static userStatic: GoogleUser | null = null;
+
     initializer: any;
 
     private authStateSubject = new BehaviorSubject<GoogleUser | null>(null);
@@ -173,13 +175,17 @@ export class GoogleAuthService {
         // Decode locally ONLY for UI (NOT trust)
         const payload = JSON.parse(atob(idToken.split('.')[1]));
 
-        this.userSignal.set({
+        const current: GoogleUser = {
             id: payload.sub,
             email: payload.email,
             name: payload.name,
             picture: payload.picture,
             token: idToken
-        });
+        };
+
+        this.userSignal.set(current);
+
+        GoogleAuthService.userStatic = current;
     }
 }
 
