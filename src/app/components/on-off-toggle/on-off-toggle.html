@@ -1,8 +1,8 @@
-<div class="field_container" (click)="toggle()">
+<div class="field_container noselect" (click)="toggle()" [ngClass]="{'disabled': disabled}">
     @if (value) {
-    <img class="image_class" [src]="onImageUrl" [ngClass]="{'disabled': disabled}">
+    <img class="image_class" [src]="onImageUrl">
     } @else {
-    <img class="image_class" [src]="offImageUrl" [ngClass]="{'disabled': disabled}">
+    <img class="image_class" [src]="offImageUrl">
     }
     <span>{{ label }}</span>
 </div>

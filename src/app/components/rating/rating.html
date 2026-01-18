@@ -1,0 +1,27 @@
+<div class="field_container noselect" [ngClass]="{'disabled': disabled}">
+    @if (value!= null && value > 0) {
+    <img class="image_class" [src]="onImageUrl" (click)="clickRate(1)">
+    } @else {
+    <img class="image_class" [src]="offImageUrl" (click)="clickRate(1)">
+    }
+    @if (value!= null && value > 1) {
+    <img class="image_class" [src]="onImageUrl" (click)="clickRate(2)">
+    } @else {
+    <img class="image_class" [src]="offImageUrl" (click)="clickRate(2)">
+    }
+    @if (value!= null && value > 2) {
+    <img class="image_class" [src]="onImageUrl" (click)="clickRate(3)">
+    } @else {
+    <img class="image_class" [src]="offImageUrl" (click)="clickRate(3)">
+    }
+    @if (value!= null && value > 3) {
+    <img class="image_class" [src]="onImageUrl" (click)="clickRate(4)">
+    } @else {
+    <img class="image_class" [src]="offImageUrl" (click)="clickRate(4)">
+    }
+    @if (value!= null && value > 4) {
+    <img class="image_class" [src]="onImageUrl" (click)="clickRate(5)">
+    } @else {
+    <img class="image_class" [src]="offImageUrl" (click)="clickRate(5)">
+    }
+</div>

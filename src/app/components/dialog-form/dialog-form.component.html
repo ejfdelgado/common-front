@@ -16,6 +16,8 @@
         <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]"></app-editable-input>
         } @else if (field.type=='toggle') {
         <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
+        } @else if (field.type=='rating') {
+        <app-rating [formControl]="formControlMap[field.key]"></app-rating>
         }
         }
     </div>

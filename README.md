@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/on-off-toggle
+npx ng generate component --standalone components/rating
 ```
 
 ```bash
