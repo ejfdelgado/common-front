@@ -1,4 +1,8 @@
-<button type="button" class="toggle-btn" [class.on]="value === 'on'" [class.off]="value === 'off'" [disabled]="disabled"
-    (click)="toggle()">
-    {{ value === 'on' ? 'ON' : 'OFF' }}
-</button>
+<div class="field_container" (click)="toggle()">
+    @if (value) {
+    <img class="image_class" [src]="onImageUrl" [ngClass]="{'disabled': disabled}">
+    } @else {
+    <img class="image_class" [src]="offImageUrl" [ngClass]="{'disabled': disabled}">
+    }
+    <span>{{ label }}</span>
+</div>

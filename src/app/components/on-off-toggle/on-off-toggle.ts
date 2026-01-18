@@ -1,20 +1,22 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   forwardRef,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  Input
 } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
 
-export type OnOffDataType = 'on' | 'off';
+export type OnOffDataType = boolean;
 
 @Component({
   selector: 'app-on-off-toggle',
   standalone: true,
   imports: [
-
+    CommonModule,
   ],
   templateUrl: './on-off-toggle.html',
   styleUrls: ['./on-off-toggle.scss'],
@@ -29,7 +31,10 @@ export type OnOffDataType = 'on' | 'off';
 })
 export class OnOffToggleComponent implements ControlValueAccessor {
 
-  value: OnOffDataType = 'off';
+  @Input() onImageUrl: string = "./assets/icons/heart.svg";
+  @Input() offImageUrl: string = "./assets/icons/heart_off.svg";
+  @Input() label: string = "Añadir a favorito";
+  value: OnOffDataType = false;
   disabled = false;
 
   /* ========= ControlValueAccessor API ========= */
@@ -38,9 +43,7 @@ export class OnOffToggleComponent implements ControlValueAccessor {
   private onTouched: () => void = () => { };
 
   writeValue(value: OnOffDataType | null): void {
-    if (value === 'on' || value === 'off') {
-      this.value = value;
-    }
+    this.value = !!value;
   }
 
   registerOnChange(fn: (value: OnOffDataType) => void): void {
@@ -60,7 +63,7 @@ export class OnOffToggleComponent implements ControlValueAccessor {
   toggle(): void {
     if (this.disabled) return;
 
-    this.value = this.value === 'on' ? 'off' : 'on';
+    this.value = !this.value;
     this.onChange(this.value);
     this.onTouched();
   }
