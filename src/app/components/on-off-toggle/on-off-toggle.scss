@@ -3,12 +3,13 @@
     flex-direction: row;
     gap: 1em;
     font-size: 1.1em;
-}
-
-.image_class {
     cursor: pointer;
 }
 
-.disabled {
+.field_container.disabled {
     cursor: not-allowed;
+}
+
+.image_class {
+    width: 1.1em;
 }

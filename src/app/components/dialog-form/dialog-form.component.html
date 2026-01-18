@@ -18,13 +18,15 @@
         <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
         } @else if (field.type=='rating') {
         <app-rating [formControl]="formControlMap[field.key]"></app-rating>
+        } @else if (field.type=='image') {
+        <app-image-field [formControl]="formControlMap[field.key]"></app-image-field>
         }
         }
     </div>
 </form>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
-    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
+    <button mat-flat-button color="primary" (click)="save()" [disabled]="form.invalid">
         <mat-icon>check</mat-icon>Guardar
     </button>
 </mat-dialog-actions>

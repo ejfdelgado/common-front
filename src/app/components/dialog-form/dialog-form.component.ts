@@ -12,9 +12,10 @@ import { MatIcon } from '@angular/material/icon';
 import { FirestoreService } from '@services/firestore.service';
 import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 import { RatingComponent } from '@components/rating/rating';
+import { ImageFileComponent } from '@components/image-field/image-field';
 
 export interface FieldDataType {
-    type: "text" | "textarea" | "contenteditable" | "toggle" | "rating";
+    type: "text" | "textarea" | "contenteditable" | "toggle" | "rating" | "image";
     label: string;
     key: string;
     required?: boolean;
@@ -39,6 +40,7 @@ export interface FormDataType {
         EditableInput,
         OnOffToggleComponent,
         RatingComponent,
+        ImageFileComponent,
         MatIcon,
     ],
     selector: 'app-dialog-form',
