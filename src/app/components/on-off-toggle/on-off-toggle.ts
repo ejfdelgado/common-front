@@ -8,6 +8,8 @@ import {
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
 
+export type OnOffDataType = 'on' | 'off';
+
 @Component({
   selector: 'app-on-off-toggle',
   standalone: true,
@@ -27,21 +29,21 @@ import {
 })
 export class OnOffToggleComponent implements ControlValueAccessor {
 
-  value: 'on' | 'off' = 'off';
+  value: OnOffDataType = 'off';
   disabled = false;
 
   /* ========= ControlValueAccessor API ========= */
 
-  private onChange: (value: 'on' | 'off') => void = () => { };
+  private onChange: (value: OnOffDataType) => void = () => { };
   private onTouched: () => void = () => { };
 
-  writeValue(value: 'on' | 'off' | null): void {
+  writeValue(value: OnOffDataType | null): void {
     if (value === 'on' || value === 'off') {
       this.value = value;
     }
   }
 
-  registerOnChange(fn: (value: 'on' | 'off') => void): void {
+  registerOnChange(fn: (value: OnOffDataType) => void): void {
     this.onChange = fn;
   }
 

@@ -40,7 +40,8 @@ export interface FormDataType {
         MatIcon,
     ],
     selector: 'app-dialog-form',
-    templateUrl: './dialog-form.component.html'
+    templateUrl: './dialog-form.component.html',
+    styleUrls: ["./dialog-form.component.scss",],
 })
 export class DialogFormComponent {
     form: FormGroup;

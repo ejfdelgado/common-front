@@ -1,9 +1,9 @@
 <h2 mat-dialog-title>{{ config.title }}</h2>
 <form [formGroup]="form" mat-dialog-content class="flex flex-col gap-4">
-    <div formArrayName="dynamicFields">
+    <div formArrayName="dynamicFields" class="fields_parent">
         @for (field of config.fields; track field.key) {
         @if (field.type=='text') {
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
             <mat-label>{{ field.label }}</mat-label>
             <input matInput [formControl]="formControlMap[field.key]" />
         </mat-form-field>
