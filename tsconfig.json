@@ -25,6 +25,8 @@
       "@services/*": ["app/services/*"],
       "@components/*": ["app/components/*"],
       "@interceptors/*": ["app/interceptors/*"],
+      "@directives/*": ["app/directives/*"],
+      "@pipes/*": ["app/pipes/*"],
       
     },
     "types": ["three"]

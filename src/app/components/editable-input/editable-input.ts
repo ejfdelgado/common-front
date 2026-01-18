@@ -26,7 +26,6 @@ import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.comp
   ],
   imports: [
     CommonModule,
-    EmojiPickerComponent,
   ],
   templateUrl: './editable-input.html',
   styleUrl: './editable-input.scss',
@@ -160,6 +159,7 @@ export class EditableInput implements ControlValueAccessor {
     this.saveScrollPos();
     const dialogRef = this.dialog.open(EmojiPickerComponent, {
       width: '350px',
+      autoFocus: false,
       panelClass: 'custom-emoji-picker'
     });
 

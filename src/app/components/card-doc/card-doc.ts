@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
-import { EditableInput } from '@components/editable-input/editable-input';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
@@ -15,7 +14,6 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
     MatCardModule,
     MatButtonModule,
     ReactiveFormsModule,
-    EditableInput,
     MatIcon,
   ],
   templateUrl: './card-doc.html',

@@ -2,7 +2,7 @@
     <div class="header">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Buscar...</mat-label>
-            <input autofocus matInput [(ngModel)]="searchText" autocomplete="off">
+            <input [appAutofocus]="!isMobile()" matInput [(ngModel)]="searchText" autocomplete="off">
         </mat-form-field>
     </div>
 

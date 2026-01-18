@@ -5,6 +5,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
+import { AutofocusDirective } from '@directives/autofocus.directive';
 
 @Component({
   standalone: true,
@@ -14,12 +17,13 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     MatIconModule,
     MatInputModule,
+    AutofocusDirective,
   ],
   selector: 'app-emoji-picker',
   templateUrl: './emoji-picker.component.html',
   styleUrls: ['./emoji-picker.component.css']
 })
-export class EmojiPickerComponent {
+export class EmojiPickerComponent extends CommonComponent {
   searchText: string = '';
   emojis = [
     {
@@ -18291,7 +18295,12 @@ export class EmojiPickerComponent {
     }
   ];
 
-  constructor(private dialogRef: MatDialogRef<EmojiPickerComponent>) { }
+  constructor(
+    private dialogRef: MatDialogRef<EmojiPickerComponent>,
+    public override sanitizer: DomSanitizer,
+  ) {
+    super(sanitizer);
+  }
 
   get filteredEmojis() {
     return this.emojis.filter(e =>

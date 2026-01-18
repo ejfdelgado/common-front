@@ -1,5 +1,6 @@
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { GoogleAuthService, GoogleUser } from "@services/google-auth.service";
+import { isMobile } from "@tools/mobile";
 import moment from "moment";
 
 export class CommonComponent {
@@ -19,6 +20,10 @@ export class CommonComponent {
             this.cache[text] = this.sanitizer.bypassSecurityTrustHtml(text);
             return this.cache[text];
         }
+    }
+
+    public isMobile() {
+        return isMobile();
     }
 
     epochTo(millis: number, type: "v1" | "v2" | "v3" = "v1") {
