@@ -10,9 +10,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditableInput } from '@components/editable-input/editable-input';
 import { MatIcon } from '@angular/material/icon';
 import { FirestoreService } from '@services/firestore.service';
+import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 
 export interface FieldDataType {
-    type: "text" | "textarea" | "contenteditable";
+    type: "text" | "textarea" | "contenteditable" | "toggle";
     label: string;
     key: string;
     required?: boolean;
@@ -35,6 +36,7 @@ export interface FormDataType {
         MatButtonModule,
         ReactiveFormsModule,
         EditableInput,
+        OnOffToggleComponent,
         MatIcon,
     ],
     selector: 'app-dialog-form',

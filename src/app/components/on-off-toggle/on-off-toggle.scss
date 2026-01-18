@@ -1,0 +1,23 @@
+.toggle-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s;
+}
+
+.toggle-btn.on {
+  background-color: #22c55e;
+  color: white;
+}
+
+.toggle-btn.off {
+  background-color: #ef4444;
+  color: white;
+}
+
+.toggle-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

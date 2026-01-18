@@ -1,0 +1,4 @@
+<button type="button" class="toggle-btn" [class.on]="value === 'on'" [class.off]="value === 'off'" [disabled]="disabled"
+    (click)="toggle()">
+    {{ value === 'on' ? 'ON' : 'OFF' }}
+</button>
