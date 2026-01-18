@@ -132,6 +132,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '400px',
       panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
       data: formConfig,
     });
 
