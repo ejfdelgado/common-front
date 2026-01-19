@@ -134,8 +134,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
       ],
       model: {
-        title: 'Título...',
-        description: 'Descripción...',
+        title: '',
+        description: '',
       }
     };
     if (oldModel) {

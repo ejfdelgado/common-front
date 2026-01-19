@@ -13,7 +13,7 @@
             <textarea matInput rows="4" [formControl]="formControlMap[field.key]"></textarea>
         </mat-form-field>
         } @else if (field.type=='contenteditable') {
-        <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]"></app-editable-input>
+        <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]" [placeholder]="field.label"></app-editable-input>
         } @else if (field.type=='toggle') {
         <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
         } @else if (field.type=='rating') {

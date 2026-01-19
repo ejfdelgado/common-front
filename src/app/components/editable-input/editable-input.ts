@@ -35,7 +35,7 @@ export class EditableInput implements ControlValueAccessor {
   scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
   @Input() placeholder = '';
-  @Input() ariaLabel = 'Text input';
+  @Input() ariaLabel = 'Texto';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
   @Input() discrete: boolean = true;
