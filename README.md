@@ -57,14 +57,14 @@ gsutil cors get gs://pro-ejflab-assets
 ## TODO
 
 - Generate searchable text
-- Create a cathegory picker
+- Create a list of cathegory picker from a predefined set
 
 - Allow a list of images to upload.
 
 - Text editor with link src editor
-- Allow oauth token id exists for ever (security risk)
 - Add QR service, display it to allow scan it
-- Add env variables to force entities:
+
+- Configuration over convention: Add env variables to force entities:
     - bucket, permisos de usuario y tamanio
     - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.
 
