@@ -16,11 +16,14 @@ import { MatIcon } from '@angular/material/icon';
 import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
-import { getBucketPath } from '@tools/BucketPaths';
+import { getBucketPath, getThumbnailPath } from '@tools/BucketPaths';
 import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { environment } from 'environments/environment';
 
 export type ComponentDataType = string | null;
+
+const maxSizePixels = 1024;
+const thumbnailMaxSizePixels = 512;
 
 @Component({
   selector: 'app-image-field',
@@ -45,6 +48,8 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
   @Input() label: string = "";
   @Input() config: ImageDetailDataType | undefined = {
     template: "default/${random}/image.jpg",
+    maxSizePixels: maxSizePixels,
+    thumbnailMaxSizePixels: thumbnailMaxSizePixels,
   };
   value: ComponentDataType = null;
   disabled = false;
@@ -108,13 +113,23 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
       return;
     }
 
+    // Assure max images size
+    const side = this.config.maxSizePixels ? this.config.maxSizePixels : maxSizePixels;
+    const resizedBlob = await this.fileSrv.resizeImageBlob(
+      blob,
+      side,
+      side,
+      'image/jpeg',
+      0.9
+    );
+
     // TODO In the middle we can edit image in canvas, then create the blob url
     const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
       user: GoogleAuthService.userStatic,
     });
 
     this.value = nextPath;
-    this.assignBlobUrl(blob);
+    this.assignBlobUrl(resizedBlob);
     this.onChange(this.value);
     this.onTouched();
     this.cdr.detectChanges();
@@ -140,7 +155,18 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
 
   async syncIfNeeded() {
     if (this.lastBlob && this.value) {
-      await this.fileSrv.upload(this.value.split("?")[0], this.lastBlob, "bucket");
+      // Create thumbnail
+      const side = this.config?.thumbnailMaxSizePixels ? this.config.thumbnailMaxSizePixels : thumbnailMaxSizePixels;
+      const thumbnailBlob = await this.fileSrv.resizeImageBlob(
+        this.lastBlob,
+        side,
+        side,
+        'image/jpeg',
+        0.9
+      );
+      const rawFileName = this.value.split("?")[0];
+      await this.fileSrv.upload(getThumbnailPath(rawFileName), thumbnailBlob, "bucket");
+      await this.fileSrv.upload(rawFileName, this.lastBlob, "bucket");
       this.destroyBlobUrl();
     }
   }

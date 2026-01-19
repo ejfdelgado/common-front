@@ -121,4 +121,52 @@ export class FileService {
             throw new Error("Incorrect option");
         }
     }
+
+    async resizeImageBlob(
+        inputBlob: Blob,
+        maxWidth: number,
+        maxHeight: number,
+        outputType: string = inputBlob.type,
+        quality: number = 0.92
+    ): Promise<Blob> {
+
+        // Decode image
+        const imageBitmap = await createImageBitmap(inputBlob);
+
+        const { width, height } = imageBitmap;
+
+        // Calculate scale ratio (never upscale)
+        const scale = Math.min(
+            maxWidth / width,
+            maxHeight / height,
+            1
+        );
+
+        const targetWidth = Math.round(width * scale);
+        const targetHeight = Math.round(height * scale);
+
+        // Draw on canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('Canvas 2D context not available');
+        }
+
+        ctx.drawImage(imageBitmap, 0, 0, targetWidth, targetHeight);
+
+        // Convert canvas back to Blob
+        return new Promise<Blob>((resolve, reject) => {
+            canvas.toBlob(
+                blob => {
+                    if (blob) resolve(blob);
+                    else reject(new Error('Canvas toBlob failed'));
+                },
+                outputType,
+                quality
+            );
+        });
+    }
 }

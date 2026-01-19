@@ -18,6 +18,8 @@ import { ComponentBucketField } from 'app/types/ComponentBucketField';
 export interface ImageDetailDataType {
     template: string;
     withThumbnail?: boolean;
+    maxSizePixels?: number;
+    thumbnailMaxSizePixels?: number;
 }
 
 export interface FieldDataType {

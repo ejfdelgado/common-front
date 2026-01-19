@@ -11,6 +11,12 @@ export function getBucketFilePath(value: string | null) {
     }
 }
 
+export function getThumbnailPath(value: string) {
+    return value.replace(/\.[a-z]+$/ig, (extension: string) => {
+        return "_xs" + extension;
+    });
+}
+
 export function getBucketPath(template: string, url: string, data: any) {
     const params = new URL(`http://temp.com/${url}`).searchParams;
     let versionString = params.get("v");
