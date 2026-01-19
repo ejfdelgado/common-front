@@ -133,7 +133,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
 
   async syncIfNeeded() {
     if (this.lastBlob && this.value) {
-      await this.fileSrv.upload(this.value, this.lastBlob, "bucket");
+      await this.fileSrv.upload(this.value.split("?")[0], this.lastBlob, "bucket");
       this.destroyBlobUrl();
     }
   }

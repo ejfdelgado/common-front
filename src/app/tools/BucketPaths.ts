@@ -1,6 +1,15 @@
 import { IdGen, MyTemplate } from "ejfdelgado-common-ts";
+import { environment } from "environments/environment";
 
 const templateEngine = new MyTemplate();
+
+export function getBucketFilePath(value: string | null) {
+    if (value != null && value.length > 0) {
+        return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${value}`;
+    } else {
+        return "./assets/img/default.jpeg";
+    }
+}
 
 export function getBucketPath(template: string, url: string, data: any) {
     const params = new URL(`http://temp.com/${url}`).searchParams;
