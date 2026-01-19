@@ -146,6 +146,9 @@ export class GoogleAuthService {
 
     isTokenExpired(token: string) {
         if (!token) return true;
+        if (!environment.check_token_expiration) {
+            return false;
+        }
 
         const payloadBase64 = token.split('.')[1];
         const payloadJson = atob(payloadBase64);

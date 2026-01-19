@@ -6,5 +6,6 @@ export const environment = {
   tokenRefreshInterval: 300000, // 5 minutes
   mapKey: 'QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j',
   DEFAULT_BUCKET: "pro-ejflab-assets",
+  check_token_expiration: false,
 };
 

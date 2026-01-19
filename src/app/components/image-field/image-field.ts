@@ -19,6 +19,7 @@ import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath, getThumbnailPath } from '@tools/BucketPaths';
 import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { environment } from 'environments/environment';
+import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;
 
@@ -165,8 +166,10 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
         0.9
       );
       const rawFileName = this.value.split("?")[0];
-      await this.fileSrv.upload(getThumbnailPath(rawFileName), thumbnailBlob, "bucket");
-      await this.fileSrv.upload(rawFileName, this.lastBlob, "bucket");
+      const promesas: Promise<UploadResponse>[] = [];
+      promesas.push(this.fileSrv.upload(getThumbnailPath(rawFileName), thumbnailBlob, "bucket"));
+      promesas.push(this.fileSrv.upload(rawFileName, this.lastBlob, "bucket"));
+      await Promise.all(promesas);
       this.destroyBlobUrl();
     }
   }

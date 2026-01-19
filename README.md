@@ -57,10 +57,11 @@ gsutil cors get gs://pro-ejflab-assets
 ## TODO
 
 - Generate searchable text
+- Create a cathegory picker
 
-- Allow a list of images
+- Allow a list of images to upload.
 
-- Text editor with link/image src editor
+- Text editor with link src editor
 - Allow oauth token id exists for ever (security risk)
 - Add QR service, display it to allow scan it
 - Add env variables to force entities:
