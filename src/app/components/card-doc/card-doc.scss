@@ -25,3 +25,11 @@ mat-card-content .text_date {
     margin-top: 0;
     padding-top: 10px;
 }
+
+.image_preview {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: 200px;
+    width: 100%;
+}

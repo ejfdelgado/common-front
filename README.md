@@ -56,13 +56,11 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Popup to chose image by file or photo
-- Make a thumbnail in front end, also allow clip the image, like a post processing after uploading image.
-- Read live latest notes on firestore
+- Generate searchable text
 
-- File picker
+- Allow a list of images
+
 - Text editor with link/image src editor
-- Adjust style on card to put the image as background to clip it.
 - Allow oauth token id exists for ever (security risk)
 - Add QR service, display it to allow scan it
 - Add env variables to force entities:
