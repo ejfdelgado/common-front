@@ -93,15 +93,22 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
 
   /* ========= Component Logic ========= */
 
-  async clickEdit(): Promise<void> {
+  async askForEdit(type: "photo" | "file"): Promise<void> {
     if (this.disabled || !this.config) return;
 
-    const blob = await this.fileSrv.openCamera();
+    let blob: Blob | undefined = undefined;
+
+    if (type == "photo") {
+      blob = await this.fileSrv.openCamera();
+    } else if (type = "file") {
+      blob = await this.fileSrv.pickImageFile();
+    }
+
     if (!blob) {
       return;
     }
 
-    // In the middle we can edit image in canvas, then create the blob url
+    // TODO In the middle we can edit image in canvas, then create the blob url
     const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
       user: GoogleAuthService.userStatic,
     });

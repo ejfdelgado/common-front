@@ -15,6 +15,7 @@ import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
+import { Unsubscribe } from 'firebase/firestore';
 
 export interface NoteDataType extends BasicDataType {
 
@@ -40,6 +41,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   notes: NoteDataType[] = [];
   createUpdateFun!: Function;
   deleteNoteFun!: Function;
+  liveSubscription: Unsubscribe | null = null;
+  liveMode: boolean = false;
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -77,7 +80,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageNotes();
+    this.setRefreshMethod(true);
   }
 
   async transformMark(data: MarkType) {
@@ -149,7 +152,9 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       if (result) {
         if (!oldModel) {
           // Creation
-          this.pageNotes(true);
+          if (!this.liveMode) {
+            this.pageNotes(true);
+          }
         } else {
           // Update
           // mix objects
@@ -177,5 +182,21 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     const page = (await this.firestoreSrv.paging("pro-note"));
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
+  }
+
+  setRefreshMethod(live: boolean) {
+    this.liveMode = live;
+    if (this.liveSubscription != null) {
+      this.liveSubscription();
+    }
+    if (live) {
+      this.liveSubscription = this.firestoreSrv.livePaging("pro-note", (page: any) => {
+        this.notes.splice(0, this.notes.length);
+        this.notes.push(...(page as NoteDataType[]));
+        this.cdr.detectChanges();
+      });
+    } else {
+      this.pageNotes(true);
+    }
   }
 }

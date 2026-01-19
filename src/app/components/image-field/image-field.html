@@ -2,6 +2,7 @@
     <div class="cover"></div>
     <div class="controls">
         <div class="cover"></div>
-        <button mat-flat-button color="primary" (click)="clickEdit()" class="icon_only"><mat-icon>edit</mat-icon></button>
+        <mat-icon (click)="askForEdit('file')" class="white_subtitle edit_icon">image_search</mat-icon>
+        <mat-icon (click)="askForEdit('photo')" class="white_subtitle edit_icon">photo_camera</mat-icon>
     </div>
 </div>

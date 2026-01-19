@@ -18,4 +18,13 @@
     display: flex;
     flex-direction: row;
     padding: 5px;
+    gap: 15px;
+}
+
+.edit_icon {
+    cursor: pointer;
+}
+
+.edit_icon:hover {
+    color: rgb(141, 202, 255);
 }

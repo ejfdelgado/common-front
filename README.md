@@ -58,6 +58,7 @@ gsutil cors get gs://pro-ejflab-assets
 
 - Popup to chose image by file or photo
 - Make a thumbnail in front end, also allow clip the image, like a post processing after uploading image.
+- Read live latest notes on firestore
 
 - File picker
 - Text editor with link/image src editor

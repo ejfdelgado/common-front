@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Subject } from "rxjs";
 import { ApiResponse } from "types/file";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { db } from "./firebase";
 
 export interface UpdatedEntityType {
@@ -41,6 +41,30 @@ export class FirestoreService {
         } else {
             throw new Error("No id found");
         }
+    }
+
+    livePaging(
+        collectionName: string,
+        callback: Function,
+        orderColumn: string = "created",
+        top: number = 10,
+    ): Unsubscribe {
+        const q = query(
+            collection(db, collectionName),
+            orderBy(orderColumn, 'desc'),
+            limit(top)
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const items = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+
+            callback(items);
+        });
+
+        return unsubscribe;
     }
 
     async paging(collectionName: string): Promise<BasicDataType[]> {

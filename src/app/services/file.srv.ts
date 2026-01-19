@@ -29,6 +29,56 @@ export class FileService {
         return this.cameraPicker?.openCamera();
     }
 
+    pickImageFile(): Promise<Blob> {
+        return this.pickFile(
+            [
+                'image/png',
+                'image/jpeg',
+            ]
+        );
+    }
+
+    pickFile(mimeTypes: string[]): Promise<Blob> {
+        return new Promise((resolve, reject) => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = mimeTypes.join(',');
+            input.multiple = false;
+            input.style.display = 'none';
+
+            const cleanup = () => {
+                input.remove();
+            };
+
+            input.onchange = () => {
+                const file = input.files?.[0];
+
+                if (!file) {
+                    cleanup();
+                    reject(new Error('No file selected'));
+                    return;
+                }
+
+                if (mimeTypes.length && !mimeTypes.includes(file.type)) {
+                    cleanup();
+                    reject(new Error(`Invalid file type: ${file.type}`));
+                    return;
+                }
+
+                cleanup();
+                resolve(file);
+            };
+
+            input.onerror = () => {
+                cleanup();
+                reject(new Error('File picker error'));
+            };
+
+            document.body.appendChild(input);
+            input.click();
+        });
+    }
+
     upload(
         path: string,
         blob: Blob,
