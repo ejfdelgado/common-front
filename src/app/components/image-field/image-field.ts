@@ -17,6 +17,8 @@ import { ImageDetailDataType } from '@components/dialog-form/dialog-form.compone
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath } from '@tools/BucketPaths';
+import { ComponentBucketField } from 'app/types/ComponentBucketField';
+import { environment } from 'environments/environment';
 
 export type ComponentDataType = string | null;
 
@@ -39,7 +41,7 @@ export type ComponentDataType = string | null;
     }
   ]
 })
-export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
+export class ImageFileComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
   @Input() label: string = "";
   @Input() config: ImageDetailDataType | undefined = {
     template: "default/${random}/image.jpg",
@@ -47,6 +49,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
   value: ComponentDataType = null;
   disabled = false;
   temporalUrl: string | null = null;
+  lastBlob: Blob | null = null;
 
   constructor(
     private fileSrv: FileService,
@@ -84,7 +87,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
       if (this.temporalUrl) {
         return this.temporalUrl;
       }
-      return this.value;
+      return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${this.value}`;
     }
   }
 
@@ -103,22 +106,20 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
       user: GoogleAuthService.userStatic,
     });
 
-    console.log(nextPath);
-
-    const temPath = URL.createObjectURL(blob);
     this.value = nextPath;
-    this.assignBlobUrl(temPath);
+    this.assignBlobUrl(blob);
     this.onChange(this.value);
     this.onTouched();
     this.cdr.detectChanges();
   }
 
-  assignBlobUrl(url: string) {
-    this.destroyBlobUIrl();
-    this.temporalUrl = url;
+  assignBlobUrl(blob: Blob) {
+    this.destroyBlobUrl();
+    this.lastBlob = blob;
+    this.temporalUrl = URL.createObjectURL(blob);
   }
 
-  destroyBlobUIrl() {
+  destroyBlobUrl() {
     if (this.temporalUrl) {
       URL.revokeObjectURL(this.temporalUrl);
     }
@@ -130,9 +131,10 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy {
     }
   }
 
-  async upload(blob: Blob) {
-    try {
-      const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
-    } catch (err) { }
+  async syncIfNeeded() {
+    if (this.lastBlob && this.value) {
+      await this.fileSrv.upload(this.value, this.lastBlob, "bucket");
+      this.destroyBlobUrl();
+    }
   }
 }

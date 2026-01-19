@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -13,6 +13,7 @@ import { FirestoreService } from '@services/firestore.service';
 import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 import { RatingComponent } from '@components/rating/rating';
 import { ImageFileComponent } from '@components/image-field/image-field';
+import { ComponentBucketField } from 'app/types/ComponentBucketField';
 
 export interface ImageDetailDataType {
     template: string;
@@ -59,6 +60,8 @@ export class DialogFormComponent {
     formControlMap: { [key: string]: FormControl } = {};
     fieldNames: string[] = [];
 
+    @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
+
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<DialogFormComponent>,
@@ -90,6 +93,16 @@ export class DialogFormComponent {
         this.dialogRef.close();
     }
 
+    async saveAllChangedImages() {
+        const temp: ComponentBucketField[] = [];
+        this.images.forEach((el) => {
+            temp.push(el);
+        });
+        for (let i = 0; i < temp.length; i++) {
+            await temp[i].syncIfNeeded();
+        }
+    }
+
     async save(): Promise<void> {
         if (this.form.valid) {
             const dataArray = this.form.value.dynamicFields;
@@ -108,6 +121,8 @@ export class DialogFormComponent {
                     data[fieldName] = dataArray[i];
                 }
             }
+
+            await this.saveAllChangedImages();
             await this.internalSave(data);
 
             this.dialogRef.close(data);
