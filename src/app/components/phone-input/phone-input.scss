@@ -1,11 +1,12 @@
-.phone-field {
-    width: 100%;
-}
-
 .phone-container {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-direction: row;
+}
+
+.phone-field {
+    flex: 1;
 }
 
 .prefix {
