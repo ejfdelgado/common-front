@@ -2,7 +2,7 @@
 <app-form-simple #inner_form [fields]="config.fields" [model]="config.model"></app-form-simple>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
-    <button mat-flat-button color="primary" (click)="save()">
+    <button mat-flat-button color="primary" (click)="save()" [disabled]="isInvalid()">
         <mat-icon>check</mat-icon>Guardar
     </button>
 </mat-dialog-actions>

@@ -83,8 +83,10 @@ export class DialogFormComponent {
     async save(): Promise<void> {
         //Child component save()
         const { valid, data } = await this.innerForm.save();
-        await this.internalSave(data);
-        this.dialogRef.close(data);
+        if (valid) {
+            await this.internalSave(data);
+            this.dialogRef.close(data);
+        }
 
     }
 
@@ -93,5 +95,9 @@ export class DialogFormComponent {
             autoAuthor: this.config.autoAuthor,
         };
         await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
+    }
+
+    isInvalid() {
+        return this.innerForm?.getForm().invalid;
     }
 }

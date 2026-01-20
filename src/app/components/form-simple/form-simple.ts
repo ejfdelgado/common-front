@@ -125,4 +125,8 @@ export class FormSimple implements OnInit {
   castJSONType(el: FieldDataType): FieldJSONDataType {
     return (el as FieldJSONDataType);
   }
+
+  getForm() {
+    return this.form;
+  }
 }
