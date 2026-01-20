@@ -55,6 +55,7 @@ export abstract class FormSimple {
   }
 
   setFormValue(key: string, value: any) {
+    console.log(`setFormValue ${key} ${value}`);
     this.formControlMap[key].setValue(value);
     this.formControlMap[key].markAsPristine();
     this.formControlMap[key].markAsUntouched();

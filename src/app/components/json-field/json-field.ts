@@ -105,11 +105,13 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
   async reloadModel() {
     if (this.value) {
       this.model = await this.fileSrv.getJSON(this.getJSONUrl(this.value));
-      const keys: string[] = Object.keys(this.model);
-      keys.forEach((key) => {
-        const value = this.model[key];
+      const model = JSON.parse(JSON.stringify(this.model));
+      const keys: string[] = Object.keys(model);
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = model[key];
         this.innerForm.setFormValue(key, value);
-      });
+      }
     } else {
       this.model = {};
     }
