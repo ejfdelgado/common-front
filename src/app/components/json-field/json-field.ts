@@ -14,6 +14,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
+import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath } from '@tools/BucketPaths';
@@ -29,8 +30,7 @@ export type ComponentDataType = string | null;
   standalone: true,
   imports: [
     CommonModule,
-    //MatButtonModule,
-    //MatIcon,
+    FormSimpleWithout,
   ],
   templateUrl: './json-field.html',
   styleUrls: ['./json-field.scss'],
@@ -45,8 +45,9 @@ export type ComponentDataType = string | null;
 })
 export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBucketField {
   @Input() label: string = "";
-  value: ComponentDataType = null;
   @Input() config!: JSONDetailDataType;
+
+  value: ComponentDataType = null;
   disabled = false;
 
   model: any = null;

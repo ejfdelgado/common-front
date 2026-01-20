@@ -1,62 +1,25 @@
-import { Component, Inject, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
-import { EditableInput } from '@components/editable-input/editable-input';
-import { MatIcon } from '@angular/material/icon';
-import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
-import { RatingComponent } from '@components/rating/rating';
-import { ImageFileComponent } from '@components/image-field/image-field';
-import { JsonField } from '@components/json-field/json-field';
-import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType, FieldDataType, FieldImageDataType, FieldJSONDataType } from '@components/dialog-form/dialog-form.component';
 
-@Component({
-  selector: 'app-form-simple',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    EditableInput,
-    OnOffToggleComponent,
-    RatingComponent,
-    ImageFileComponent,
-    MatIcon,
-    JsonField,
-  ],
-  templateUrl: './form-simple.html',
-  styleUrl: './form-simple.scss',
-})
-export class FormSimple implements OnInit {
-
-  @Input() fields!: AllFieldsDataType[];
-  @Input() model!: { [key: string]: any };
-
+export abstract class FormSimple {
   form: FormGroup;
   formControlMap: { [key: string]: FormControl } = {};
   fieldNames: string[] = [];
-
-  @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
-  @ViewChildren(JsonField) jsons!: QueryList<JsonField>;
+  modelInternal: { [key: string]: any } = {};
 
   constructor(
-    private fb: FormBuilder,
+    public fb: FormBuilder,
   ) {
     this.form = this.fb.group({
       dynamicFields: this.fb.array([]),
     });
   }
 
-  ngOnInit(): void {
+  ngOnInitInternal(fields: AllFieldsDataType[], model: { [key: string]: any }): void {
+    this.modelInternal = model;
     const dynamicFields = this.form.get('dynamicFields') as FormArray;
-    for (const field of this.fields) {
-      const newField = new FormControl(this.model[field.key]);
+    for (const field of fields) {
+      const newField = new FormControl(model[field.key]);
       if (field.required === true) {
         newField.addValidators(Validators.required);
       }
@@ -70,18 +33,7 @@ export class FormSimple implements OnInit {
     return this.form.get('dynamicFields') as FormArray;
   }
 
-  async saveAllChangedData() {
-    const temp: ComponentBucketField[] = [];
-    this.images.forEach((el) => {
-      temp.push(el);
-    });
-    this.jsons.forEach((el) => {
-      temp.push(el);
-    });
-    for (let i = 0; i < temp.length; i++) {
-      await temp[i].syncIfNeeded();
-    }
-  }
+  public abstract saveAllChangedData(): Promise<void>;
 
   async save(): Promise<{
     valid: boolean,
@@ -93,8 +45,8 @@ export class FormSimple implements OnInit {
       // Add id if provided
       const PASSTRHU = ["id"];
       PASSTRHU.forEach((key) => {
-        if (this.model[key] !== undefined) {
-          data[key] = this.model[key];
+        if (this.modelInternal[key] !== undefined) {
+          data[key] = this.modelInternal[key];
         }
       });
 

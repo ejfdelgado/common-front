@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { FirestoreService } from '@services/firestore.service';
-import { FormSimple } from '@components/form-simple/form-simple';
+import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 
 export interface TemplateDetailDataType {
     template: string;
@@ -16,6 +16,7 @@ export interface TemplateDetailDataType {
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
     fields: (FieldDataType | FieldImageDataType | FieldJSONDataType)[],
+    model: { [key: string]: any },
 }
 
 export interface ImageDetailDataType extends TemplateDetailDataType {
@@ -58,14 +59,14 @@ export interface FormDataType {
         MatButtonModule,
         ReactiveFormsModule,
         MatIcon,
-        FormSimple,
+        FormSimpleWith,
     ],
     selector: 'app-dialog-form',
     templateUrl: './dialog-form.component.html',
     styleUrls: ["./dialog-form.component.scss",],
 })
 export class DialogFormComponent {
-    @ViewChild('inner_form') innerForm!: FormSimple;
+    @ViewChild('inner_form') innerForm!: FormSimpleWith;
     config!: FormDataType;
 
     constructor(
