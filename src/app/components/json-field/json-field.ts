@@ -124,6 +124,7 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
   }
 
   hasMementoChanged() {
+    // TODO consider only after the fist change leave it change to better performance
     const actual = sortify(this.model);
     const changed = actual != this.memento;
     if (changed) {
@@ -148,7 +149,6 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
     const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
       user: GoogleAuthService.userStatic,
     });
-
     this.value = nextPath;
     this.onChange(this.value);
     this.onTouched();
@@ -194,6 +194,7 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
       const rawFileName = this.value.split("?")[0];
       const promesas: Promise<UploadResponse>[] = [];
       const jsonString = JSON.stringify(this.model, null, 2);
+      console.log(jsonString);
       const jsonBlob = new Blob([jsonString], { type: 'application/json' });
       promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
       await Promise.all(promesas);
