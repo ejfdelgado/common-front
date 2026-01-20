@@ -16,8 +16,15 @@ import { ImageFileComponent } from '@components/image-field/image-field';
 import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { JsonField } from '@components/json-field/json-field';
 
-export interface ImageDetailDataType {
+export interface TemplateDetailDataType {
     template: string;
+}
+
+export interface JSONDetailDataType extends TemplateDetailDataType {
+
+}
+
+export interface ImageDetailDataType extends TemplateDetailDataType {
     withThumbnail?: boolean;
     maxSizePixels?: number;
     thumbnailMaxSizePixels?: number;
@@ -29,6 +36,7 @@ export interface FieldDataType {
     key: string;
     required?: boolean;
     image?: ImageDetailDataType;
+    json?: JSONDetailDataType;
 };
 
 export interface FormDataType {

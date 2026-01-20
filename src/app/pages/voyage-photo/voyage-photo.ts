@@ -130,7 +130,11 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         { label: "Descripción", type: "contenteditable", key: "description" },
         { label: "Habilitado", type: "toggle", key: "enabled" },
         { label: "Calificación", type: "rating", key: "rate" },
-        { label: "Json", type: "json", key: "json" },
+        {
+          label: "Json", type: "json", key: "json", json: {
+            template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.json"
+          }
+        },
       ],
       model: {
         title: '',

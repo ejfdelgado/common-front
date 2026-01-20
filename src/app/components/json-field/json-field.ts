@@ -13,8 +13,11 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
+import { ComponentBucketField } from 'app/types/ComponentBucketField';
+import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
 
 export type ComponentDataType = string | null;
@@ -38,14 +41,17 @@ export type ComponentDataType = string | null;
     }
   ]
 })
-export class JsonField implements ControlValueAccessor, OnDestroy {
+export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBucketField {
   @Input() label: string = "";
   value: ComponentDataType = null;
+  @Input() config!: JSONDetailDataType;
   disabled = false;
 
   model: any = null;
   onChangeList: Function[] = [];
   onTouchedList: Function[] = [];
+
+  memento: string = "null";
 
   constructor(
     private fileSrv: FileService,
@@ -79,7 +85,18 @@ export class JsonField implements ControlValueAccessor, OnDestroy {
     } else {
       this.model = null;
     }
+    // freeze memento
+    this.captureMemento();
     this.cdr.detectChanges();
+  }
+
+  captureMemento() {
+    this.memento = sortify(this.model);
+  }
+
+  hasMementoChanged() {
+    const actual = sortify(this.model);
+    return actual != this.memento;
   }
 
   registerOnChange(fn: (value: ComponentDataType) => void): Function {
@@ -110,5 +127,10 @@ export class JsonField implements ControlValueAccessor, OnDestroy {
 
   ngOnDestroy() {
 
+  }
+
+  async syncIfNeeded() {
+    // Check if changes
+    // Create next
   }
 }

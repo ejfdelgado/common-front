@@ -47,11 +47,7 @@ const thumbnailMaxSizePixels = 512;
 })
 export class ImageFileComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
   @Input() label: string = "";
-  @Input() config: ImageDetailDataType | undefined = {
-    template: "default/${random}/image.jpg",
-    maxSizePixels: maxSizePixels,
-    thumbnailMaxSizePixels: thumbnailMaxSizePixels,
-  };
+  @Input() config!: ImageDetailDataType;
   value: ComponentDataType = null;
   disabled = false;
   temporalUrl: string | null = null;
