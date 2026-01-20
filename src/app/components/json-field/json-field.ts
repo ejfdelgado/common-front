@@ -24,8 +24,8 @@ export type ComponentDataType = string | null;
   standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatIcon,
+    //MatButtonModule,
+    //MatIcon,
   ],
   templateUrl: './json-field.html',
   styleUrls: ['./json-field.scss'],

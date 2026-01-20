@@ -20,6 +20,8 @@
         <app-rating [formControl]="formControlMap[field.key]"></app-rating>
         } @else if (field.type=='image') {
         <app-image-field [formControl]="formControlMap[field.key]" [config]="field.image"></app-image-field>
+        } @else if (field.type=='json') {
+        <app-json-field [formControl]="formControlMap[field.key]"></app-json-field>
         }
         }
     </div>

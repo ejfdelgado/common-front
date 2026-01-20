@@ -14,6 +14,7 @@ import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 import { RatingComponent } from '@components/rating/rating';
 import { ImageFileComponent } from '@components/image-field/image-field';
 import { ComponentBucketField } from 'app/types/ComponentBucketField';
+import { JsonField } from '@components/json-field/json-field';
 
 export interface ImageDetailDataType {
     template: string;
@@ -23,7 +24,7 @@ export interface ImageDetailDataType {
 }
 
 export interface FieldDataType {
-    type: "text" | "textarea" | "contenteditable" | "toggle" | "rating" | "image";
+    type: "text" | "textarea" | "contenteditable" | "toggle" | "rating" | "image" | "json";
     label: string;
     key: string;
     required?: boolean;
@@ -51,6 +52,7 @@ export interface FormDataType {
         RatingComponent,
         ImageFileComponent,
         MatIcon,
+        JsonField,
     ],
     selector: 'app-dialog-form',
     templateUrl: './dialog-form.component.html',
