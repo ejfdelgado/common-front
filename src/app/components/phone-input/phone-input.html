@@ -1,0 +1,11 @@
+<div class="phone-input">
+    <select [disabled]="disabled" [(ngModel)]="value.prefix" (ngModelChange)="update()">
+        <option value="">Prefix</option>
+        <option *ngFor="let p of prefixes" [value]="p">
+            {{ p }}
+        </option>
+    </select>
+
+    <input type="tel" placeholder="Phone number" [disabled]="disabled" [(ngModel)]="value.number"
+        (ngModelChange)="update()" />
+</div>

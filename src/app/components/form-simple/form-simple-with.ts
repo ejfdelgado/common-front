@@ -13,6 +13,7 @@ import { JsonField } from '@components/json-field/json-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimple } from './form-simple';
+import { PhoneInputComponent } from '@components/phone-input/phone-input';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -28,6 +29,7 @@ import { FormSimple } from './form-simple';
     RatingComponent,
     ImageFileComponent,
     JsonField,
+    PhoneInputComponent,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',

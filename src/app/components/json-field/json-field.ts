@@ -196,7 +196,6 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
       const rawFileName = this.value.split("?")[0];
       const promesas: Promise<UploadResponse>[] = [];
       const jsonString = JSON.stringify(this.model, null, 2);
-      console.log(jsonString);
       const jsonBlob = new Blob([jsonString], { type: 'application/json' });
       promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
       await Promise.all(promesas);

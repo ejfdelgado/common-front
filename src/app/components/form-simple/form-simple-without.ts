@@ -12,6 +12,7 @@ import { ImageFileComponent } from '@components/image-field/image-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimple } from './form-simple';
+import { PhoneInputComponent } from '@components/phone-input/phone-input';
 
 @Component({
   selector: 'app-form-simple-without',
@@ -26,6 +27,7 @@ import { FormSimple } from './form-simple';
     OnOffToggleComponent,
     RatingComponent,
     ImageFileComponent,
+    PhoneInputComponent,
   ],
   templateUrl: './form-simple-without.html',
   styleUrl: './form-simple-without.scss',

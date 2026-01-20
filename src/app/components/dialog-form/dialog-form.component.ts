@@ -25,7 +25,7 @@ export interface ImageDetailDataType extends TemplateDetailDataType {
 }
 
 export interface FieldDataType {
-    type: "text" | "textarea" | "contenteditable" | "toggle" | "rating" | "image" | "json";
+    type: "text" | "textarea" | "contenteditable" | "toggle" | "rating" | "image" | "json" | "phone";
     label: string;
     key: string;
     required?: boolean;
