@@ -1,10 +1,13 @@
-.phone-input {
+.phone-field {
+    width: 100%;
+}
+
+.phone-container {
     display: flex;
+    align-items: center;
     gap: 8px;
 }
 
-select,
-input {
-    padding: 6px 8px;
-    font-size: 14px;
+.prefix {
+    width: 90px;
 }

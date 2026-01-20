@@ -9,6 +9,9 @@ import {
   FormsModule
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 export interface PhoneValue {
   prefix: string;
@@ -21,6 +24,9 @@ export interface PhoneValue {
   imports: [
     CommonModule,
     FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule
   ],
   templateUrl: './phone-input.html',
   styleUrls: ['./phone-input.scss'],
@@ -34,10 +40,11 @@ export interface PhoneValue {
 })
 export class PhoneInputComponent implements ControlValueAccessor {
 
-  @Input() prefixes: string[] = ['+1', '+34', '+44', '+57'];
+  @Input() label = 'Phone number';
+  @Input() prefixes: string[] = ['+1', '+57'];
 
   value: PhoneValue = {
-    prefix: '',
+    prefix: '+57',
     number: ''
   };
 
@@ -47,11 +54,9 @@ export class PhoneInputComponent implements ControlValueAccessor {
   private onTouched: () => void = () => { };
 
   writeValue(value: PhoneValue | null): void {
-    if (value) {
-      this.value = { ...value };
-    } else {
-      this.value = { prefix: '', number: '' };
-    }
+    this.value = value
+      ? { ...value }
+      : { prefix: '', number: '' };
   }
 
   registerOnChange(fn: (value: PhoneValue) => void): void {
@@ -71,4 +76,3 @@ export class PhoneInputComponent implements ControlValueAccessor {
     this.onTouched();
   }
 }
-

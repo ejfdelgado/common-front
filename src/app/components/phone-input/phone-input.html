@@ -1,11 +1,16 @@
-<div class="phone-input">
-    <select [disabled]="disabled" [(ngModel)]="value.prefix" (ngModelChange)="update()">
-        <option value="">Prefix</option>
-        <option *ngFor="let p of prefixes" [value]="p">
-            {{ p }}
-        </option>
-    </select>
+<mat-form-field appearance="outline" class="phone-field">
+    <mat-label>{{ label }}</mat-label>
 
-    <input type="tel" placeholder="Phone number" [disabled]="disabled" [(ngModel)]="value.number"
-        (ngModelChange)="update()" />
-</div>
+    <div class="phone-container">
+        <mat-select class="prefix" [disabled]="disabled" [(ngModel)]="value.prefix" (selectionChange)="update()">
+            @for(p of prefixes; track p) {
+            <mat-option [value]="p">
+                {{ p }}
+            </mat-option>
+            }
+        </mat-select>
+
+        <input matInput type="tel" placeholder="Phone number" [disabled]="disabled" [(ngModel)]="value.number"
+            (ngModelChange)="update()" />
+    </div>
+</mat-form-field>
