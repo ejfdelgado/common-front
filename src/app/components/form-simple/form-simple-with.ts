@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditableInput } from '@components/editable-input/editable-input';
-import { MatIcon } from '@angular/material/icon';
 import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 import { RatingComponent } from '@components/rating/rating';
 import { ImageFileComponent } from '@components/image-field/image-field';
@@ -33,7 +32,7 @@ import { FormSimple } from './form-simple';
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',
 })
-export class FormSimpleWith extends FormSimple implements OnInit {
+export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
 
   @Input() fields!: AllFieldsDataType[];
   @Input() model!: { [key: string]: any };
@@ -45,6 +44,10 @@ export class FormSimpleWith extends FormSimple implements OnInit {
     public override fb: FormBuilder,
   ) {
     super(fb);
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroyInternal();
   }
 
   ngOnInit(): void {

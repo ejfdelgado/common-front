@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,7 +30,7 @@ import { FormSimple } from './form-simple';
   templateUrl: './form-simple-without.html',
   styleUrl: './form-simple-without.scss',
 })
-export class FormSimpleWithout extends FormSimple implements OnInit {
+export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
 
   @Input() fields!: AllFieldsDataType[];
   @Input() model!: { [key: string]: any };
@@ -45,6 +45,10 @@ export class FormSimpleWithout extends FormSimple implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInitInternal(this.fields, this.model);
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroyInternal();
   }
 
   async saveAllChangedData() {

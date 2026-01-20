@@ -1,11 +1,16 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AllFieldsDataType, FieldDataType, FieldImageDataType, FieldJSONDataType } from '@components/dialog-form/dialog-form.component';
+import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
+
+export type FlatJsonDataType = { [key: string]: any };
 
 export abstract class FormSimple {
   form: FormGroup;
   formControlMap: { [key: string]: FormControl } = {};
   fieldNames: string[] = [];
-  modelInternal: { [key: string]: any } = {};
+  modelInternal: FlatJsonDataType = {};
+  changeSubscription: Subscription | null = null;
+  changeSubject: Subject<FlatJsonDataType> = new Subject<FlatJsonDataType>();
 
   constructor(
     public fb: FormBuilder,
@@ -15,7 +20,7 @@ export abstract class FormSimple {
     });
   }
 
-  ngOnInitInternal(fields: AllFieldsDataType[], model: { [key: string]: any }): void {
+  ngOnInitInternal(fields: AllFieldsDataType[], model: FlatJsonDataType): void {
     this.modelInternal = model;
     const dynamicFields = this.form.get('dynamicFields') as FormArray;
     for (const field of fields) {
@@ -27,6 +32,32 @@ export abstract class FormSimple {
       this.fieldNames.push(field.key);
       this.formControlMap[field.key] = newField;
     }
+    this.changeSubscription = this.form.valueChanges.subscribe(newValue => {
+      const list = newValue.dynamicFields;
+      const model: FlatJsonDataType = {};
+      for (let i = 0; i < list.length; i++) {
+        const name = this.fieldNames[i];
+        model[name] = list[i];
+      }
+      this.changeSubject.next(model);
+    });
+  }
+
+  onModelChange(fun: any) {
+    return this.changeSubject.asObservable()
+      .subscribe(fun);
+  }
+
+  ngOnDestroyInternal() {
+    if (this.changeSubscription) {
+      this.changeSubscription.unsubscribe();
+    }
+  }
+
+  setFormValue(key: string, value: any) {
+    this.formControlMap[key].setValue(value);
+    this.formControlMap[key].markAsPristine();
+    this.formControlMap[key].markAsUntouched();
   }
 
   get dynamicFields() {

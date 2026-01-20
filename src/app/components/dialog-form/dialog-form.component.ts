@@ -16,7 +16,6 @@ export interface TemplateDetailDataType {
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
     fields: (FieldDataType | FieldImageDataType | FieldJSONDataType)[],
-    model: { [key: string]: any },
 }
 
 export interface ImageDetailDataType extends TemplateDetailDataType {

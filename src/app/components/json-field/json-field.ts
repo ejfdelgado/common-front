@@ -5,21 +5,24 @@ import {
   ChangeDetectionStrategy,
   Input,
   ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
+  ViewChild,
+  OnInit,
+  AfterViewInit
 } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
+import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath } from '@tools/BucketPaths';
 import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
+import { Subscription } from 'rxjs';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { UploadResponse } from 'types/file';
 
@@ -43,25 +46,40 @@ export type ComponentDataType = string | null;
     }
   ]
 })
-export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBucketField {
+export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, ComponentBucketField {
+  @ViewChild('inner_form') innerForm!: FormSimpleWithout;
+
   @Input() label: string = "";
   @Input() config!: JSONDetailDataType;
 
   value: ComponentDataType = null;
   disabled = false;
 
-  model: any = null;
+  model: any = {};
   onChangeList: Function[] = [];
   onTouchedList: Function[] = [];
 
-  memento: string = "null";
+  memento: string = "{}";
   mementoUrl: ComponentDataType = null;
+
+  changeSubscription: Subscription | null = null;
 
   constructor(
     private fileSrv: FileService,
     public cdr: ChangeDetectorRef,
     public authSrv: GoogleAuthService,
   ) {
+
+  }
+
+  ngAfterViewInit(): void {
+    this.changeSubscription = this.innerForm.onModelChange((model: FlatJsonDataType) => {
+      Object.assign(this.model, model);
+      this.hasMementoChanged();
+    });
+  }
+
+  ngOnInit(): void {
 
   }
 
@@ -72,6 +90,7 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
       el(value);
     });
   };
+
   private onTouched() {
     this.onTouchedList.forEach((el) => {
       el();
@@ -85,9 +104,14 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
 
   async reloadModel() {
     if (this.value) {
-      this.model = await this.fileSrv.getJSON(this.value);
+      this.model = await this.fileSrv.getJSON(this.getJSONUrl(this.value));
+      const keys: string[] = Object.keys(this.model);
+      keys.forEach((key) => {
+        const value = this.model[key];
+        this.innerForm.setFormValue(key, value);
+      });
     } else {
-      this.model = null;
+      this.model = {};
     }
     // freeze memento
     this.captureMemento();
@@ -158,7 +182,9 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
   }
 
   ngOnDestroy() {
-
+    if (this.changeSubscription) {
+      this.changeSubscription.unsubscribe();
+    }
   }
 
   async syncIfNeeded() {
@@ -171,6 +197,22 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
       const jsonBlob = new Blob([jsonString], { type: 'application/json' });
       promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
       await Promise.all(promesas);
+    }
+  }
+
+  isInvalid() {
+    return this.innerForm?.getForm().invalid;
+  }
+
+  getJSONUrl(url: string) {
+    if (!url) {
+      return "./assets/json/sample.json";
+    } else {
+      if (url.startsWith("./assets/")) {
+        return url;
+      } else {
+        return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${url}`;
+      }
     }
   }
 }
