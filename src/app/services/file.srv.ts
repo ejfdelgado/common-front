@@ -3,7 +3,8 @@ import { BucketService } from "./bucket.service";
 import { HardDriveService } from "./harddrive.service";
 import { ApiResponse, UploadResponse } from "types/file";
 import { CameraCaptureComponent } from "@components/camera-capture/camera-capture";
-import { Observable, Subject } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
 
 export type StorageType = "bucket" | "hard_drive";
 
@@ -17,6 +18,7 @@ export class FileService {
     constructor(
         private bucketSrv: BucketService,
         private hardDriveSrv: HardDriveService,
+        private http: HttpClient,
     ) {
 
     }
@@ -169,4 +171,14 @@ export class FileService {
             );
         });
     }
+
+
+    getJSON(url: string): Promise<any> {
+        return firstValueFrom(this.http.get(url, { responseType: 'text' }).pipe(
+            map(res => {
+                return JSON.parse(res);
+            })
+        ));
+    }
+
 }

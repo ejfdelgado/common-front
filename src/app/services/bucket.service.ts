@@ -15,7 +15,9 @@ export interface BucketOptionsType {
 export class BucketService {
     private readonly uploadUrl = 'bucket/file';
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+    ) { }
 
     /**
      * Upload a blob to backend

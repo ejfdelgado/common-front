@@ -13,13 +13,9 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
-import { getBucketPath, getThumbnailPath } from '@tools/BucketPaths';
-import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { environment } from 'environments/environment';
-import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;
 
@@ -42,7 +38,7 @@ export type ComponentDataType = string | null;
     }
   ]
 })
-export class JsonField {
+export class JsonField implements ControlValueAccessor, OnDestroy {
   @Input() label: string = "";
   value: ComponentDataType = null;
   disabled = false;
@@ -74,6 +70,16 @@ export class JsonField {
 
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
+    this.reloadModel();
+  }
+
+  async reloadModel() {
+    if (this.value) {
+      this.model = await this.fileSrv.getJSON(this.value);
+    } else {
+      this.model = null;
+    }
+    this.cdr.detectChanges();
   }
 
   registerOnChange(fn: (value: ComponentDataType) => void): Function {
@@ -100,5 +106,9 @@ export class JsonField {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  ngOnDestroy() {
+
   }
 }
