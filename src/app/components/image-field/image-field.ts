@@ -17,8 +17,8 @@ import { ImageDetailDataType } from '@components/dialog-form/dialog-form.compone
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath, getThumbnailPath } from '@tools/BucketPaths';
-import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { environment } from 'environments/environment';
+import { ComponentBucketField } from 'types/ComponentBucketField';
 import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;

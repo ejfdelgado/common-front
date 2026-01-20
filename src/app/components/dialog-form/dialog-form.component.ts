@@ -13,8 +13,8 @@ import { FirestoreService } from '@services/firestore.service';
 import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
 import { RatingComponent } from '@components/rating/rating';
 import { ImageFileComponent } from '@components/image-field/image-field';
-import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { JsonField } from '@components/json-field/json-field';
+import { ComponentBucketField } from 'types/ComponentBucketField';
 
 export interface TemplateDetailDataType {
     template: string;
@@ -35,15 +35,21 @@ export interface FieldDataType {
     label: string;
     key: string;
     required?: boolean;
-    image?: ImageDetailDataType;
-    json?: JSONDetailDataType;
 };
+
+export interface FieldImageDataType extends FieldDataType {
+    image: ImageDetailDataType;
+}
+
+export interface FieldJSONDataType extends FieldDataType {
+    json: JSONDetailDataType;
+}
 
 export interface FormDataType {
     modelName: string;
     autoAuthor: boolean;
     title: string;
-    fields: FieldDataType[],
+    fields: (FieldDataType | FieldImageDataType | FieldJSONDataType)[],
     model: { [key: string]: any },
 }
 
@@ -73,6 +79,7 @@ export class DialogFormComponent {
     fieldNames: string[] = [];
 
     @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
+    @ViewChildren(JsonField) jsons!: QueryList<JsonField>;
 
     constructor(
         private fb: FormBuilder,
@@ -105,9 +112,12 @@ export class DialogFormComponent {
         this.dialogRef.close();
     }
 
-    async saveAllChangedImages() {
+    async saveAllChangedData() {
         const temp: ComponentBucketField[] = [];
         this.images.forEach((el) => {
+            temp.push(el);
+        });
+        this.jsons.forEach((el) => {
             temp.push(el);
         });
         for (let i = 0; i < temp.length; i++) {
@@ -134,7 +144,7 @@ export class DialogFormComponent {
                 }
             }
 
-            await this.saveAllChangedImages();
+            await this.saveAllChangedData();
             await this.internalSave(data);
 
             this.dialogRef.close(data);
@@ -146,5 +156,13 @@ export class DialogFormComponent {
             autoAuthor: this.config.autoAuthor,
         };
         await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
+    }
+
+    castImageType(el: FieldDataType): FieldImageDataType {
+        return (el as FieldImageDataType);
+    }
+
+    castJSONType(el: FieldDataType): FieldJSONDataType {
+        return (el as FieldJSONDataType);
     }
 }

@@ -17,9 +17,10 @@ import { JSONDetailDataType } from '@components/dialog-form/dialog-form.componen
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath } from '@tools/BucketPaths';
-import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
+import { ComponentBucketField } from 'types/ComponentBucketField';
+import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;
 
@@ -103,12 +104,16 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
     if (changed) {
       this.triggerModelChanged();
     } else {
-      this.value = this.mementoUrl;
-      this.onChange(this.value);
-      this.onTouched();
-      this.cdr.detectChanges();
+      this.triggerModelRestored();
     }
     return changed;
+  }
+
+  triggerModelRestored() {
+    this.value = this.mementoUrl;
+    this.onChange(this.value);
+    this.onTouched();
+    this.cdr.detectChanges();
   }
 
   triggerModelChanged() {
@@ -157,8 +162,14 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
 
   async syncIfNeeded() {
     // Check if changes
-    if (this.hasMementoChanged()) {
-      // Generate next
+    if (this.value && this.mementoUrl != this.value) {
+      // Needs upload
+      const rawFileName = this.value.split("?")[0];
+      const promesas: Promise<UploadResponse>[] = [];
+      const jsonString = JSON.stringify(this.model, null, 2);
+      const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+      promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
+      await Promise.all(promesas);
     }
   }
 }
