@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/image-field
+npx ng generate component --standalone components/json-field
 ```
 
 ```bash

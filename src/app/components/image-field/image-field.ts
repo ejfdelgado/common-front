@@ -56,6 +56,8 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
   disabled = false;
   temporalUrl: string | null = null;
   lastBlob: Blob | null = null;
+  onChangeList: Function[] = [];
+  onTouchedList: Function[] = [];
 
   constructor(
     private fileSrv: FileService,
@@ -67,19 +69,41 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
 
   /* ========= ControlValueAccessor API ========= */
 
-  private onChange: (value: ComponentDataType) => void = () => { };
-  private onTouched: () => void = () => { };
+  private onChange(value: ComponentDataType) {
+    this.onChangeList.forEach((el) => {
+      el(value);
+    });
+  };
+  private onTouched() {
+    this.onTouchedList.forEach((el) => {
+      el();
+    });
+  };
 
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
   }
 
-  registerOnChange(fn: (value: ComponentDataType) => void): void {
-    this.onChange = fn;
+  registerOnChange(fn: (value: ComponentDataType) => void): Function {
+    const list = this.onChangeList;
+    list.push(fn);
+    return () => {
+      const ix = list.indexOf(fn);
+      if (ix >= 0) {
+        list.splice(ix, 1);
+      }
+    }
   }
 
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+  registerOnTouched(fn: () => void): Function {
+    const list = this.onTouchedList;
+    list.push(fn);
+    return () => {
+      const ix = list.indexOf(fn);
+      if (ix >= 0) {
+        list.splice(ix, 1);
+      }
+    }
   }
 
   setDisabledState(isDisabled: boolean): void {
