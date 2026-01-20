@@ -16,6 +16,7 @@ import { MatIcon } from '@angular/material/icon';
 import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FileService } from '@services/file.srv';
 import { GoogleAuthService } from '@services/google-auth.service';
+import { getBucketPath } from '@tools/BucketPaths';
 import { ComponentBucketField } from 'app/types/ComponentBucketField';
 import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
@@ -52,6 +53,7 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
   onTouchedList: Function[] = [];
 
   memento: string = "null";
+  mementoUrl: ComponentDataType = null;
 
   constructor(
     private fileSrv: FileService,
@@ -91,12 +93,36 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
   }
 
   captureMemento() {
+    this.mementoUrl = this.value;
     this.memento = sortify(this.model);
   }
 
   hasMementoChanged() {
     const actual = sortify(this.model);
-    return actual != this.memento;
+    const changed = actual != this.memento;
+    if (changed) {
+      this.triggerModelChanged();
+    } else {
+      this.value = this.mementoUrl;
+      this.onChange(this.value);
+      this.onTouched();
+      this.cdr.detectChanges();
+    }
+    return changed;
+  }
+
+  triggerModelChanged() {
+    if (this.mementoUrl != this.value) {
+      return;
+    }
+    const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
+      user: GoogleAuthService.userStatic,
+    });
+
+    this.value = nextPath;
+    this.onChange(this.value);
+    this.onTouched();
+    this.cdr.detectChanges();
   }
 
   registerOnChange(fn: (value: ComponentDataType) => void): Function {
@@ -131,6 +157,8 @@ export class JsonField implements ControlValueAccessor, OnDestroy, ComponentBuck
 
   async syncIfNeeded() {
     // Check if changes
-    // Create next
+    if (this.hasMementoChanged()) {
+      // Generate next
+    }
   }
 }
