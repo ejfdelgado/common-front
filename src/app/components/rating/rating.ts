@@ -3,7 +3,8 @@ import {
   Component,
   forwardRef,
   ChangeDetectionStrategy,
-  Input
+  Input,
+  ChangeDetectorRef
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -37,6 +38,12 @@ export class RatingComponent implements ControlValueAccessor {
   value: OnOffDataType = 0;
   disabled = false;
 
+  constructor(
+    public cdr: ChangeDetectorRef,
+  ) {
+
+  }
+
   /* ========= ControlValueAccessor API ========= */
 
   private onChange: (value: OnOffDataType) => void = () => { };
@@ -44,6 +51,9 @@ export class RatingComponent implements ControlValueAccessor {
 
   writeValue(value: OnOffDataType | null): void {
     this.value = value;
+    try {
+      this.cdr.detectChanges();
+    } catch (err) { }
   }
 
   registerOnChange(fn: (value: OnOffDataType) => void): void {

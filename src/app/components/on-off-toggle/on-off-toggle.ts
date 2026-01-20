@@ -3,7 +3,8 @@ import {
   Component,
   forwardRef,
   ChangeDetectionStrategy,
-  Input
+  Input,
+  ChangeDetectorRef
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -37,6 +38,12 @@ export class OnOffToggleComponent implements ControlValueAccessor {
   value: OnOffDataType = false;
   disabled = false;
 
+  constructor(
+    public cdr: ChangeDetectorRef,
+  ) {
+
+  }
+
   /* ========= ControlValueAccessor API ========= */
 
   private onChange: (value: OnOffDataType) => void = () => { };
@@ -44,6 +51,9 @@ export class OnOffToggleComponent implements ControlValueAccessor {
 
   writeValue(value: OnOffDataType | null): void {
     this.value = !!value;
+    try {
+      this.cdr.detectChanges();
+    } catch (err){}
   }
 
   registerOnChange(fn: (value: OnOffDataType) => void): void {
