@@ -1,36 +1,8 @@
 <h2 mat-dialog-title>{{ config.title }}</h2>
-<form [formGroup]="form" mat-dialog-content class="flex flex-col gap-4">
-    <div formArrayName="dynamicFields" class="fields_parent">
-        @for (field of config.fields; track field.key) {
-        @if (field.type=='text') {
-        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
-            <mat-label>{{ field.label }}</mat-label>
-            <input matInput [formControl]="formControlMap[field.key]" />
-        </mat-form-field>
-        } @else if (field.type=='textarea') {
-        <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.label }}</mat-label>
-            <textarea matInput rows="4" [formControl]="formControlMap[field.key]"></textarea>
-        </mat-form-field>
-        } @else if (field.type=='contenteditable') {
-        <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]"
-            [placeholder]="field.label"></app-editable-input>
-        } @else if (field.type=='toggle') {
-        <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
-        } @else if (field.type=='rating') {
-        <app-rating [formControl]="formControlMap[field.key]"></app-rating>
-        } @else if (field.type=='image') {
-        <app-image-field [formControl]="formControlMap[field.key]"
-            [config]="castImageType(field).image"></app-image-field>
-        } @else if (field.type=='json') {
-        <app-json-field [formControl]="formControlMap[field.key]" [config]="castJSONType(field).json"></app-json-field>
-        }
-        }
-    </div>
-</form>
+<app-form-simple #inner_form [fields]="config.fields" [model]="config.model"></app-form-simple>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
-    <button mat-flat-button color="primary" (click)="save()" [disabled]="form.invalid">
+    <button mat-flat-button color="primary" (click)="save()">
         <mat-icon>check</mat-icon>Guardar
     </button>
 </mat-dialog-actions>
