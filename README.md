@@ -57,17 +57,18 @@ gsutil cors get gs://pro-ejflab-assets
 ## TODO
 
 - Generate searchable text
-- Allow a list of images to upload.
 
-- Text editor with link src editor
-- Add QR service, display it to allow scan it
+- Develop server side sharing url with image/title/description
+- Add QR service, display it to allow scan it.
+
+- Create an email field.
+- Create an image gallery component.
+
+- Add utl link capability to rick text editor.
 
 - Configuration over convention: Add env variables to force entities:
     - bucket, permisos de usuario y tamanio
     - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.
-
-- Avoid fadein fadeout conflict!
-- progress bar border
 
 - Reload game (avoid win notification after finishing)
 - Fullscreen toggle
@@ -79,20 +80,3 @@ https://sketchfab.com/3d-models/cute-bunny-7d30845d69c4474ebeddd177df6b7f02
 https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45
 
 https://sketchfab.com/3d-models/treasure-chest-773a2f35025b4e2e9ac48fd84c16b3ab
-
-
-https://stg-playtolearn.storage.googleapis.com/index.html
-
-Read:
-
-https://pro-wordpress-1-284609972807.us-central1.run.app/public/harddrive/file?file_path=prueba/test.png
-
-https://pro-wordpress-1-284609972807.us-central1.run.app/public/bucket/file?file_path=prueba/test.png
-
-https://pro-wordpress-1-284609972807.us-central1.run.app/public/mysql/check
-
-https://pro-common-backend-1066977671859.us-central1.run.app/public/harddrive/file?file_path=prueba/archivo.jpg
-
-http://localhost:8080/public/harddrive/file?file_path=prueba/archivo.jpg
-
-http://localhost:8080/public/bucket/file?file_path=prueba/archivo.jpg
