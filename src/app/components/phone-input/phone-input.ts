@@ -1,12 +1,17 @@
 import {
+  ChangeDetectorRef,
   Component,
   forwardRef,
-  Input
+  Input,
 } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
-  FormsModule
+  NG_VALIDATORS,
+  Validator,
+  AbstractControl,
+  ValidationErrors,
+  FormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,12 +40,19 @@ export interface PhoneValue {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PhoneInputComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PhoneInputComponent),
+      multi: true
     }
   ]
 })
-export class PhoneInputComponent implements ControlValueAccessor {
+export class PhoneInputComponent
+  implements ControlValueAccessor, Validator {
 
   @Input() label = 'Phone number';
+  @Input() isRequired: boolean | undefined = false;
   @Input() prefixes: string[] = ['+1', '+57'];
 
   value: PhoneValue = {
@@ -49,9 +61,19 @@ export class PhoneInputComponent implements ControlValueAccessor {
   };
 
   disabled = false;
+  touched = false;
+
+  constructor(
+    public cdr: ChangeDetectorRef,
+  ) {
+
+  }
 
   private onChange: (value: PhoneValue) => void = () => { };
   private onTouched: () => void = () => { };
+  private onValidatorChange: () => void = () => { };
+
+  private readonly phoneRegex = /^\d{10}$/;
 
   writeValue(value: PhoneValue | null): void {
     this.value = value
@@ -67,12 +89,53 @@ export class PhoneInputComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
+  registerOnValidatorChange(fn: () => void): void {
+    this.onValidatorChange = fn;
+  }
+
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
   update(): void {
     this.onChange({ ...this.value });
-    this.onTouched();
+    this.markAsTouched();
+    this.onValidatorChange();
+  }
+
+  latestErrors: { [key: string]: boolean } | null = {};
+
+  validate(_: AbstractControl): ValidationErrors | null {
+    this.latestErrors = {};
+
+    if (!this.value.number || !this.value.prefix) {
+      if (this.isRequired !== true) {
+        return this.latestErrors;
+      }
+      this.latestErrors = { required: true };
+      //this.cdr.detectChanges();
+      return this.latestErrors;
+    }
+
+    if (!this.phoneRegex.test(this.value.number)) {
+      this.latestErrors = { invalidPhone: true };
+      //this.cdr.detectChanges();
+      return this.latestErrors;
+    }
+
+    this.latestErrors = null;
+    //this.cdr.detectChanges();
+    return this.latestErrors;
+  }
+
+  hasError(key: string) {
+    return this.latestErrors ? this.latestErrors[key] === true : false;
+  }
+
+  private markAsTouched(): void {
+    if (!this.touched) {
+      this.touched = true;
+      this.onTouched();
+    }
   }
 }

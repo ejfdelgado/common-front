@@ -22,7 +22,8 @@
         <app-image-field [formControl]="formControlMap[field.key]"
             [config]="castImageType(field).image"></app-image-field>
         } @else if (field.type=='phone') {
-        <app-phone-input [formControl]="formControlMap[field.key]"></app-phone-input>
+        <app-phone-input [formControl]="formControlMap[field.key]" [label]="field.label"
+            [isRequired]="field.required"></app-phone-input>
         }
         }
     </div>

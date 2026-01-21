@@ -14,3 +14,13 @@
             (ngModelChange)="update()" />
     </mat-form-field>
 </div>
+@if (touched && hasError('required')) {
+<mat-error>
+    Phone number is required
+</mat-error>
+}
+@if (touched && hasError('invalidPhone')) {
+<mat-error>
+    Phone number must be exactly 10 digits
+</mat-error>
+}
