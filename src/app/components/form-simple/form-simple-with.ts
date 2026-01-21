@@ -14,6 +14,7 @@ import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/phone-input/phone-input';
+import { ChipSelectComponent } from '@components/chip-select/chip-select.component';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -30,6 +31,7 @@ import { PhoneInputComponent } from '@components/phone-input/phone-input';
     ImageFileComponent,
     JsonField,
     PhoneInputComponent,
+    ChipSelectComponent,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',

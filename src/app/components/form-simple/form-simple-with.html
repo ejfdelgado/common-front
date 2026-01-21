@@ -26,6 +26,8 @@
         } @else if (field.type=='phone') {
         <app-phone-input [formControl]="formControlMap[field.key]" [label]="field.label"
             [isRequired]="field.required"></app-phone-input>
+        } @else if (field.type=='chip') {
+        <app-chip-select [formControl]="formControlMap[field.key]" [label]="field.label"></app-chip-select>
         }
         }
     </div>

@@ -9,7 +9,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/phone-input
+npx ng generate component --standalone components/chip-select
 ```
 
 ```bash

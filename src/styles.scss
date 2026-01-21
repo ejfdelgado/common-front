@@ -231,6 +231,10 @@ button.icon_only mat-icon {
     margin-right: 0 !important;
 }
 
+.mdc-evolution-chip-set__chips {
+    padding-bottom: 10px;
+}
+
 @media (max-width: 800px) {
     .nogalespopup {
         max-width: 90vw;

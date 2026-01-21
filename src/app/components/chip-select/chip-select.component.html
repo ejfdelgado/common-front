@@ -1,0 +1,26 @@
+<mat-form-field class="chip-list" appearance="fill" style="width: 100%">
+    <mat-label>{{ label }}</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Selection" [disabled]="disabled">
+        @for (item of selectedItems(); track item) {
+        <mat-chip-row (removed)="remove(item)">
+            {{ item }}
+            <button matChipRemove aria-label="'remove ' + item">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip-row>
+        }
+    </mat-chip-grid>
+
+    <input placeholder="Buscar..." [formControl]="itemCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        @for (option of allOptions; track option) {
+        @if (!selectedItems().includes(option)) {
+        <mat-option [value]="option">
+            {{ option }}
+        </mat-option>
+        }
+        }
+    </mat-autocomplete>
+</mat-form-field>

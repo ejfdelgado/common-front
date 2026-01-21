@@ -13,6 +13,7 @@ import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/phone-input/phone-input';
+import { ChipSelectComponent } from '@components/chip-select/chip-select.component';
 
 @Component({
   selector: 'app-form-simple-without',
@@ -28,6 +29,7 @@ import { PhoneInputComponent } from '@components/phone-input/phone-input';
     RatingComponent,
     ImageFileComponent,
     PhoneInputComponent,
+    ChipSelectComponent,
   ],
   templateUrl: './form-simple-without.html',
   styleUrl: './form-simple-without.scss',
