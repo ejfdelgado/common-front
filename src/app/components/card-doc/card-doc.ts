@@ -5,8 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
-import { GoogleUser } from '@services/google-auth.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-card-doc',
@@ -22,7 +22,7 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 export class CardDoc extends CommonComponent {
 
   @Input() model: any;
-  @Input() user: GoogleUser | null = null;
+  @Input() user: User | null = null;
   @Input() createUpdate!: Function;
   @Input() delete!: Function;
 

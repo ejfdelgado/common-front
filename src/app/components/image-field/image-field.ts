@@ -14,8 +14,8 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
+import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { GoogleAuthService } from '@services/google-auth.service';
 import { getBucketPath, getThumbnailPath } from '@tools/BucketPaths';
 import { environment } from 'environments/environment';
 import { ComponentBucketField } from 'types/ComponentBucketField';
@@ -58,7 +58,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
   constructor(
     private fileSrv: FileService,
     public cdr: ChangeDetectorRef,
-    public authSrv: GoogleAuthService,
+    public authSrv: AuthService,
   ) {
 
   }
@@ -146,7 +146,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
 
     // TODO In the middle we can edit image in canvas, then create the blob url
     const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
-      user: GoogleAuthService.userStatic,
+      user: AuthService.userStatic,
     });
 
     this.value = nextPath;

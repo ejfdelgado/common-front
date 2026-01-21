@@ -19,6 +19,7 @@ export class AuthService {
 
     private authSub?: Subscription;
 
+    static userStatic: User | null = null;
     private authStateSubject = new BehaviorSubject<User | null>(null);
 
     readonly authState$: Observable<User | null> =
@@ -29,6 +30,7 @@ export class AuthService {
             this._user.set(user);
 
             this.authStateSubject.next(user);
+            AuthService.userStatic = user;
 
             if (user) {
                 const token = await user.getIdToken();

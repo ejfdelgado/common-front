@@ -10,9 +10,9 @@ import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialo
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
+import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
-import { GoogleAuthService } from '@services/google-auth.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { Unsubscribe } from 'firebase/firestore';
@@ -46,7 +46,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   constructor(
     private indicatorSrv: IndicatorService,
-    public override authSrv: GoogleAuthService,
+    public override authSrv: AuthService,
     private http: HttpClient,
     private fileSrv: FileService,
     private firestoreSrv: FirestoreService,

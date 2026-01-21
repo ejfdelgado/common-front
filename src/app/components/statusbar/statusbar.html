@@ -30,7 +30,7 @@
             <mat-icon>face</mat-icon>
         </button>
         } @else {
-        <button class="small_user_picture" [style.background-image]="'url(' + user.picture + ')'" mat-icon-button
+        <button class="small_user_picture" [style.background-image]="'url(' + user.photoURL + ')'" mat-icon-button
             color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
         </button>
         }
@@ -42,20 +42,21 @@
         </button>
         } @else {
         <button mat-fab color="primary" class="small_user_picture"
-            [style.background-image]="'url(' + user.picture + ')'" [matMenuTriggerFor]="menu2" aria-label="Open menu">
+            [style.background-image]="'url(' + user.displayName + ')'" [matMenuTriggerFor]="menu2"
+            aria-label="Open menu">
 
         </button>
         }
         }
         <mat-menu #menu2="matMenu">
             @if(user == null) {
-            <button mat-menu-item (click)="authSrv.login()">
+            <button mat-menu-item (click)="authSrv.loginWithGoogle()">
                 <mat-icon>login</mat-icon>
                 <span>Ingresar</span>
             </button>
             } @else {
             <button mat-menu-item>
-                <span>{{ user.name }}</span>
+                <span>{{ user.displayName }}</span>
             </button>
             <button mat-menu-item (click)="authSrv.logout()">
                 <mat-icon>logout</mat-icon>

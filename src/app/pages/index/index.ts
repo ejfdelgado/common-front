@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IndicatorService } from "@services/indicator.service";
-import { GoogleAuthService } from "@services/google-auth.service";
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -8,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { FileService, StorageType } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
-import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { LocationService } from '@services/location.service';
 import { AuthService } from '@services/auth.service';
 
