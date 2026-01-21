@@ -130,17 +130,22 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         { label: "Descripción", type: "contenteditable", key: "description" },
         { label: "Habilitado", type: "toggle", key: "enabled" },
         { label: "Calificación", type: "rating", key: "rate" },
-        { label: "Teléfono", type: "phone", key: "phone", required: true },
+        { label: "Teléfono", type: "phone", key: "phone", required: false },
         { label: "Categorías", type: "chip", key: "cathegory", required: false, chip: { stringOptions: ["Manzana", "Pera"] } },
         {
           label: "Json", type: "json", key: "json", json: {
             template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.json",
             fields: [
               { label: "Título", type: "text", key: "tit", required: true },
+              {
+                label: "Imagen", type: "image", key: "image", image: {
+                  template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+                }
+              },
               { label: "Descripción", type: "contenteditable", key: "desc" },
               { label: "Habilitado", type: "toggle", key: "enabled" },
               { label: "Calificación", type: "rating", key: "rate" },
-              { label: "Teléfono", type: "phone", key: "phone", required: true },
+              { label: "Teléfono", type: "phone", key: "phone", required: false },
               { label: "Categorías", type: "chip", key: "cathegory", required: false, chip: { stringOptions: ["Manzana", "Pera"] } },
             ],
           }
@@ -156,7 +161,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       formConfig.model = oldModel;
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
-      width: '400px',
+      width: '800px',
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: formConfig,

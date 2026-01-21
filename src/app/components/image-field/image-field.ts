@@ -78,6 +78,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
 
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
+    this.cdr.detectChanges();
   }
 
   registerOnChange(fn: (value: ComponentDataType) => void): Function {

@@ -3,3 +3,9 @@
     flex-direction: column;
     gap: 15px;
 }
+
+form {
+    padding: 0 !important;
+    overflow-y: hidden !important;
+    max-height: none !important;
+}

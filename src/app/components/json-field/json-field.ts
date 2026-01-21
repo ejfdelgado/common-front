@@ -11,8 +11,11 @@ import {
   AfterViewInit
 } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
-  NG_VALUE_ACCESSOR
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors
 } from '@angular/forms';
 import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
@@ -43,7 +46,12 @@ export type ComponentDataType = string | null;
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => JsonField),
       multi: true
-    }
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => JsonField),
+      multi: true
+    },
   ]
 })
 export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, ComponentBucketField {
@@ -130,7 +138,9 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
     const actual = sortify(this.model);
     const changed = actual != this.memento;
     if (changed) {
-      this.triggerModelChanged();
+      if (!this.triggerModelChanged()) {
+        this.notifyChanges();
+      }
     } else {
       this.triggerModelRestored();
     }
@@ -139,6 +149,10 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
 
   triggerModelRestored() {
     this.value = this.mementoUrl;
+    this.notifyChanges();
+  }
+
+  notifyChanges() {
     this.onChange(this.value);
     this.onTouched();
     this.cdr.detectChanges();
@@ -146,15 +160,14 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
 
   triggerModelChanged() {
     if (this.mementoUrl != this.value) {
-      return;
+      return false;
     }
     const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
       user: AuthService.userStatic,
     });
     this.value = nextPath;
-    this.onChange(this.value);
-    this.onTouched();
-    this.cdr.detectChanges();
+    this.notifyChanges();
+    return true;
   }
 
   registerOnChange(fn: (value: ComponentDataType) => void): Function {
@@ -192,13 +205,16 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
   async syncIfNeeded() {
     // Check if changes
     if (this.value && this.mementoUrl != this.value) {
-      // Needs upload
-      const rawFileName = this.value.split("?")[0];
-      const promesas: Promise<UploadResponse>[] = [];
-      const jsonString = JSON.stringify(this.model, null, 2);
-      const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-      promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
-      await Promise.all(promesas);
+      const { valid, data } = await this.innerForm.save();
+      if (valid) {
+        // Needs upload
+        const rawFileName = this.value.split("?")[0];
+        const promesas: Promise<UploadResponse>[] = [];
+        const jsonString = JSON.stringify(this.model, null, 2);
+        const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+        promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
+        await Promise.all(promesas);
+      }
     }
   }
 
@@ -216,5 +232,13 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
         return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${url}`;
       }
     }
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    if (this.isInvalid()) {
+      return { inconsistent: true };
+    }
+
+    return null;
   }
 }

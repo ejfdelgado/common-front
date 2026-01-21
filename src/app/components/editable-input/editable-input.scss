@@ -51,6 +51,15 @@
     overflow: hidden;
 }
 
+.visible .scrolled_content {
+    margin-bottom: 2px;
+}
+
+.visible.focused .scrolled_content {
+    border: 2px solid #252aba;
+    margin-bottom: 0px;
+}
+
 .editable-input.with_focus {
     min-height: 1em;
     background-color: aliceblue;
@@ -76,10 +85,6 @@
     overflow-x: hidden;
     display: grid;
     align-items: stretch;
-}
-
-.visible.focused .scrolled_content {
-    border: 2px solid #252aba;
 }
 
 .visible .scrolled_content .editable-input.with_focus {
