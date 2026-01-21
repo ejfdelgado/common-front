@@ -57,8 +57,6 @@ gsutil cors get gs://pro-ejflab-assets
 ## TODO
 
 - Generate searchable text
-- Create a list of cathegory picker from a predefined set
-
 - Allow a list of images to upload.
 
 - Text editor with link src editor
