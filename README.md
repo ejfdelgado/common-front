@@ -62,9 +62,12 @@ gsutil cors get gs://pro-ejflab-assets
 - Add QR service, display it to allow scan it.
 
 - Create an email field.
-- Create an image gallery component.
+- Create an image gallery component. -> bucket.
+- Create comments component. -> bucket
 
-- Add utl link capability to rick text editor.
+- Add url link capability to rick text editor.
+
+- Enable Sendgrid email service to welcome or send notifications with templates.
 
 - Configuration over convention: Add env variables to force entities:
     - bucket, permisos de usuario y tamanio
