@@ -56,14 +56,18 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Generate searchable text
+- Generate searchable text using: title, description and cathegories.
 
-- Develop server side sharing url with image/title/description
+- Develop server side sharing url with image/title/description.
 - Add QR service, display it to allow scan it.
 
 - Create an email field.
 - Create an image gallery component. -> bucket.
 - Create comments component. -> bucket
+
+- Add google analytics
+
+- On/Off allow: lock/unlock, eye see/hide, check/uncheck
 
 - Add url link capability to rick text editor.
 

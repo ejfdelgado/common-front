@@ -1,4 +1,7 @@
 <p>index works!</p>
+<button (click)="login()">Login</button>
+<button (click)="logout()">Logout</button>
+
 <button (click)="callPublic()">Call public</button>
 <button (click)="callPrivate()">Call private</button>
 <div [ngClass]="{'invisible': !authSrv.isLoggedIn()}">

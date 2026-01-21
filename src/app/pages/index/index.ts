@@ -10,6 +10,7 @@ import { FileService, StorageType } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { LocationService } from '@services/location.service';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-index',
@@ -33,7 +34,7 @@ export class Index implements AfterViewInit {
 
   constructor(
     private indicatorSrv: IndicatorService,
-    public authSrv: GoogleAuthService,
+    public authSrv: AuthService,
     private http: HttpClient,
     private fileSrv: FileService,
     private firestoreSrv: FirestoreService,
@@ -42,7 +43,7 @@ export class Index implements AfterViewInit {
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
-        console.log('Logged in:', user.name);
+        console.log('Logged in:', user.displayName);
       } else {
         console.log('Logged out');
       }
@@ -114,5 +115,13 @@ export class Index implements AfterViewInit {
   async firestorePaginate() {
     this.pageList = await this.firestoreSrv.paging("pro-animals");
     this.cdr.detectChanges();
+  }
+
+  async login() {
+    this.authSrv.loginWithGoogle();
+  }
+
+  async logout() {
+    this.authSrv.logout();
   }
 }
