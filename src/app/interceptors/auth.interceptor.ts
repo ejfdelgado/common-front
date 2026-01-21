@@ -10,19 +10,16 @@ import {
     HttpResponse
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
-import { catchError, filter, take, switchMap, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
-import { GoogleAuthService } from '@services/google-auth.service';
 import { environment } from 'environments/environment';
+import { AuthService } from '@services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    private isRefreshing = false;
-    private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
     constructor(
-        private authService: GoogleAuthService,
+        private authService: AuthService,
         private router: Router,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
@@ -65,7 +62,7 @@ export class AuthInterceptor implements HttpInterceptor {
      * Add authorization header to request
      */
     private addTokenToRequest(request: HttpRequest<any>): HttpRequest<any> {
-        const token = this.authService.getAccessToken();
+        const token = this.authService.token();
         if (token) {
             return request.clone({
                 setHeaders: {
