@@ -6,6 +6,7 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { ChipDetailDataType } from '@components/dialog-form/dialog-form.component';
 
 @Component({
   selector: 'app-chip-select',
@@ -30,7 +31,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 })
 export class ChipSelectComponent implements ControlValueAccessor {
   @Input() label = 'Select Items';
-  @Input() allOptions: string[] = ["apple", "banana"];
+  @Input() config!: ChipDetailDataType;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly itemCtrl = new FormControl('');

@@ -14,10 +14,6 @@ export interface TemplateDetailDataType {
     template: string;
 }
 
-export interface JSONDetailDataType extends TemplateDetailDataType {
-    fields: (FieldDataType | FieldImageDataType | FieldJSONDataType)[],
-}
-
 export interface ImageDetailDataType extends TemplateDetailDataType {
     withThumbnail?: boolean;
     maxSizePixels?: number;
@@ -39,7 +35,19 @@ export interface FieldJSONDataType extends FieldDataType {
     json: JSONDetailDataType;
 }
 
-export type AllFieldsDataType = FieldDataType | FieldImageDataType | FieldJSONDataType;
+export interface ChipDetailDataType {
+    stringOptions: string[];
+}
+
+export interface ChipDataType extends FieldDataType {
+    chip: ChipDetailDataType;
+}
+
+export type AllFieldsDataType = FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType;
+
+export interface JSONDetailDataType extends TemplateDetailDataType {
+    fields: (FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType)[],
+}
 
 export interface FormDataType {
     modelName: string;

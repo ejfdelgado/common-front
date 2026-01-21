@@ -15,7 +15,7 @@
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
 
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        @for (option of allOptions; track option) {
+        @for (option of config.stringOptions; track option) {
         @if (!selectedItems().includes(option)) {
         <mat-option [value]="option">
             {{ option }}
