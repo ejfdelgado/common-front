@@ -12,7 +12,7 @@ export function getBucketFilePath(value: string | null) {
 }
 
 export function getThumbnailPath(value: string) {
-    return value.replace(/\.[a-z]+$/ig, (extension: string) => {
+    return value.replace(/\.[a-z\?=\d]+$/ig, (extension: string) => {
         return "_xs" + extension;
     });
 }

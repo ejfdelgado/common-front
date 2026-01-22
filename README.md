@@ -56,20 +56,21 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Generate searchable text using: title, description and cathegories.
+http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
-- Develop server side sharing url with image/title/description.
+
+- Develop server side sharing url with image/title/description, must receive the id on front end to display
 - Add QR service, display it to allow scan it.
 
 - Create an email field.
-- Create an image gallery component. -> suggest store in bucket.
-- Create comments component. -> suggest store in bucket.
+- Create an image gallery component. -> suggest store in bucket (single user updates)
+- Create comments component. -> suggest store in firebase (multiple users update).
 - Create a drop down with search for multiple choices selected.
 - Create a drop down with search for single choice selected.
 
-- Counters with event list with time gap.
+- Counters with event list strategy with time gap.
 
-- Add google analytics
+- Add google analytics.
 
 - On/Off allow: lock/unlock, eye see/hide, check/uncheck
 
