@@ -58,8 +58,8 @@ gsutil cors get gs://pro-ejflab-assets
 
 http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
+https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
-- Develop server side sharing url with image/title/description, must receive the id on front end to display
 - Add QR service, display it to allow scan it.
 
 - Create an email field.
