@@ -81,7 +81,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setRefreshMethod(true);
+    this.setRefreshMethod(false);
   }
 
   async transformMark(data: MarkType) {
@@ -200,7 +200,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     if (startover && this.notes.length > 0) {
       this.notes.splice(0, this.notes.length);
     }
-    const page = (await this.firestoreSrv.paging("pro-note", this.searchable == "" ? undefined : this.searchable));
+    const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
+    const page = (await this.firestoreSrv.paging("pro-note", searchable));
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
   }

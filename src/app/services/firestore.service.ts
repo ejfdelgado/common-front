@@ -86,7 +86,7 @@ export class FirestoreService {
         const constraints: QueryConstraint[] = [];
 
         if (typeof searchText == "string") {
-            constraints.push(where('search', 'array-contains', 'firebase'));
+            constraints.push(where('search', 'array-contains', searchText));
         }
         constraints.push(orderBy(orderColumn, orderDirection));
         if (lastDoc) {

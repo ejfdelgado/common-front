@@ -25,7 +25,10 @@ export class SearchInputComponent {
 
   onSearch(): void {
     const value = this.searchCtrl.value?.trim();
-    if (!value) return;
+    if (!value) {
+      this.search.emit('');
+      return;
+    };
 
     if (value) this.search.emit(value);
   }
