@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
 import { firstValueFrom, Subject } from "rxjs";
 import { ApiResponse } from "types/file";
-import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe, where, QueryConstraint, startAfter } from "firebase/firestore";
 import { db } from "./firebase";
 
 export interface FirestoreConfigDataType {
@@ -52,11 +52,12 @@ export class FirestoreService {
         collectionName: string,
         callback: Function,
         orderColumn: string = "created",
+        orderDirection: "asc" | "desc" = "desc",
         top: number = 10,
     ): Unsubscribe {
         const q = query(
             collection(db, collectionName),
-            orderBy(orderColumn, 'desc'),
+            orderBy(orderColumn, orderDirection),
             limit(top)
         );
 
@@ -72,8 +73,33 @@ export class FirestoreService {
         return unsubscribe;
     }
 
-    async paging(collectionName: string): Promise<BasicDataType[]> {
-        const snap = await getDocs(collection(db, collectionName));
+    async paging(
+        collectionName: string,
+        searchText: string | null = null,
+        lastDoc: any = null,
+        orderColumn: string = "created",
+        orderDirection: "asc" | "desc" = "desc",
+        top: number = 10,
+    ): Promise<BasicDataType[]> {
+        const colRef = collection(db, collectionName);
+
+        const constraints: QueryConstraint[] = [];
+
+        if (typeof searchText == "string") {
+            constraints.push(where('search', 'array-contains', 'firebase'));
+        }
+        constraints.push(orderBy(orderColumn, orderDirection));
+        if (lastDoc) {
+            constraints.push(startAfter(lastDoc));
+        }
+        constraints.push(limit(top));
+
+        const q = query(
+            colRef,
+            ...constraints,
+        );
+
+        const snap = await getDocs(q);
         return (snap.docs.map(d => ({
             id: d.id,
             ...d.data()

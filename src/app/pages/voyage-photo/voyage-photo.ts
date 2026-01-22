@@ -43,6 +43,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   deleteNoteFun!: Function;
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = false;
+  searchable: string = "";
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -199,7 +200,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     if (startover && this.notes.length > 0) {
       this.notes.splice(0, this.notes.length);
     }
-    const page = (await this.firestoreSrv.paging("pro-note"));
+    const page = (await this.firestoreSrv.paging("pro-note", this.searchable == "" ? undefined : this.searchable));
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
   }
@@ -218,5 +219,10 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     } else {
       this.pageNotes(true);
     }
+  }
+
+  async search(text: string) {
+    this.searchable = text;
+    this.pageNotes(true);
   }
 }
