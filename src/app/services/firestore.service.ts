@@ -5,6 +5,7 @@ import { firstValueFrom, Subject } from "rxjs";
 import { ApiResponse } from "types/file";
 import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe, where, QueryConstraint, startAfter } from "firebase/firestore";
 import { db } from "./firebase";
+import { MyUtilities } from "ejfdelgado-common-ts";
 
 export interface FirestoreConfigDataType {
     autoAuthor?: boolean;
@@ -86,7 +87,8 @@ export class FirestoreService {
         const constraints: QueryConstraint[] = [];
 
         if (typeof searchText == "string") {
-            constraints.push(where('search', 'array-contains', searchText));
+            const tokens = MyUtilities.partirTexto(searchText, false);
+            constraints.push(where('search', 'array-contains-any', tokens));
         }
         constraints.push(orderBy(orderColumn, orderDirection));
         if (lastDoc) {
