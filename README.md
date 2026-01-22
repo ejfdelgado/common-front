@@ -62,8 +62,12 @@ gsutil cors get gs://pro-ejflab-assets
 - Add QR service, display it to allow scan it.
 
 - Create an email field.
-- Create an image gallery component. -> bucket.
-- Create comments component. -> bucket
+- Create an image gallery component. -> suggest store in bucket.
+- Create comments component. -> suggest store in bucket.
+- Create a drop down with search for multiple choices selected.
+- Create a drop down with search for single choice selected.
+
+- Counters with event list with time gap.
 
 - Add google analytics
 

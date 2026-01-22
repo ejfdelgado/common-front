@@ -120,6 +120,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       title: "Crear / actualizar",
       autoAuthor: true,
       modelName: "note",
+      searchFields: ["title", "description", "cathegory"],
       fields: [
         { label: "Título", type: "text", key: "title", required: true },
         {

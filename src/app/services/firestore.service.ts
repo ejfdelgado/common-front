@@ -6,6 +6,11 @@ import { ApiResponse } from "types/file";
 import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { db } from "./firebase";
 
+export interface FirestoreConfigDataType {
+    autoAuthor?: boolean;
+    searchFields?: string[],
+}
+
 export interface UpdatedEntityType {
     id: string;
 }
@@ -29,7 +34,7 @@ export class FirestoreService {
 
     constructor(private http: HttpClient) { }
 
-    async createUpdate(collection: string, data: any, conf: any = {}): Promise<UpdatedEntityType> {
+    async createUpdate(collection: string, data: any, conf: FirestoreConfigDataType = {}): Promise<UpdatedEntityType> {
         const payload: any = {
             collection,
             data,

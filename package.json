@@ -8,7 +8,8 @@
     "angular": "npm run start",
     "build": "ng build",
     "build:prod": "ng build --configuration=production",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "custom_install": "npm install --legacy-peer-deps"
   },
   "prettier": {
     "printWidth": 100,
@@ -37,7 +38,7 @@
     "@types/qrcode": "^1.5.6",
     "@types/three": "^0.181.0",
     "buffer": "^6.0.3",
-    "ejfdelgado-common-ts": "^1.1.3",
+    "ejfdelgado-common-ts": "^1.1.4",
     "firebase": "^12.8.0",
     "jspdf": "^3.0.3",
     "moment": "^2.30.1",

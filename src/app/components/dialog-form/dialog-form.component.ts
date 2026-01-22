@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
-import { FirestoreService } from '@services/firestore.service';
+import { FirestoreConfigDataType, FirestoreService } from '@services/firestore.service';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 
 export interface TemplateDetailDataType {
@@ -55,6 +55,7 @@ export interface FormDataType {
     title: string;
     fields: AllFieldsDataType[],
     model: { [key: string]: any },
+    searchFields: string[],
 }
 
 @Component({
@@ -99,8 +100,9 @@ export class DialogFormComponent {
     }
 
     async internalSave(data: { [key: string]: any }) {
-        const conf: any = {
+        const conf: FirestoreConfigDataType = {
             autoAuthor: this.config.autoAuthor,
+            searchFields: this.config.searchFields,
         };
         await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
     }
