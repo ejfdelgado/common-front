@@ -16,15 +16,16 @@ import { MatIcon } from '@angular/material/icon';
 import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { getBucketPath, getThumbnailPath } from '@tools/BucketPaths';
+import { getBucketPath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
 import { environment } from 'environments/environment';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;
 
-const maxSizePixels = 1024;
-const thumbnailMaxSizePixels = 512;
+const maxSizePixels = 2048;
+const thumbnailMaxSizePixels = 1024;
+const squareMaxSizePixels = 1024;
 
 @Component({
   selector: 'app-image-field',
@@ -179,6 +180,7 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
     if (this.lastBlob && this.value) {
       // Create thumbnail
       const side = this.config?.thumbnailMaxSizePixels ? this.config.thumbnailMaxSizePixels : thumbnailMaxSizePixels;
+      const sideSquare = this.config?.squareMaxSizePixels ? this.config.squareMaxSizePixels : squareMaxSizePixels;
       const thumbnailBlob = await this.fileSrv.resizeImageBlob(
         this.lastBlob,
         side,
@@ -186,9 +188,16 @@ export class ImageFileComponent implements ControlValueAccessor, OnDestroy, Comp
         'image/jpeg',
         0.9
       );
+      const squaredBlob = await this.fileSrv.squareImageCover(
+        this.lastBlob,
+        sideSquare,
+        'image/jpeg',
+        0.9
+      );
       const rawFileName = this.value.split("?")[0];
       const promesas: Promise<UploadResponse>[] = [];
       promesas.push(this.fileSrv.upload(getThumbnailPath(rawFileName), thumbnailBlob, "bucket"));
+      promesas.push(this.fileSrv.upload(getSquarePath(rawFileName), squaredBlob, "bucket"));
       promesas.push(this.fileSrv.upload(rawFileName, this.lastBlob, "bucket"));
       await Promise.all(promesas);
       this.destroyBlobUrl();

@@ -11,7 +11,7 @@
   </div>
   <mat-card-content>
     <span class="text_date white_subtitle">{{ epochTo(model.created) }}</span>
-    <p class="content_parent" [innerHTML]="sanitizeText(model.description)"></p>
+    <p class="content_parent" [innerHTML]="sanitizeText(model.description, 256)"></p>
   </mat-card-content>
   <mat-card-actions>
     <button matButton (click)="localShare('link')"><mat-icon>share</mat-icon>Compartir</button>

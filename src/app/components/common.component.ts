@@ -13,7 +13,12 @@ export class CommonComponent {
 
     }
 
-    public sanitizeText(text: string) {
+    public sanitizeText(text: string, max?: number) {
+        if (max) {
+            if (text.length > max) {
+                text = text.substring(0, max) + "...";
+            }
+        }
         if (text in this.cache) {
             return this.cache[text];
         } else {

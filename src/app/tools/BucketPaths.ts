@@ -17,6 +17,12 @@ export function getThumbnailPath(value: string) {
     });
 }
 
+export function getSquarePath(value: string) {
+    return value.replace(/\.[a-z\?=\d]+$/ig, (extension: string) => {
+        return "_square" + extension;
+    });
+}
+
 export function getBucketPath(template: string, url: string, data: any) {
     const params = new URL(`http://temp.com/${url}`).searchParams;
     let versionString = params.get("v");

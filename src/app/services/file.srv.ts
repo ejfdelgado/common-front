@@ -172,6 +172,71 @@ export class FileService {
         });
     }
 
+    async squareImageCover(
+        imageBlob: Blob,
+        size: number,
+        outputType: string = 'image/jpeg',
+        quality: number = 0.92
+    ): Promise<Blob> {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            const url = URL.createObjectURL(imageBlob);
+
+            img.onload = () => {
+                URL.revokeObjectURL(url);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    reject(new Error('Canvas not supported'));
+                    return;
+                }
+
+                const imgWidth = img.width;
+                const imgHeight = img.height;
+
+                // Scale to cover
+                const scale = Math.max(size / imgWidth, size / imgHeight);
+                const scaledWidth = imgWidth * scale;
+                const scaledHeight = imgHeight * scale;
+
+                // Center crop
+                const dx = (size - scaledWidth) / 2;
+                const dy = (size - scaledHeight) / 2;
+
+                ctx.drawImage(
+                    img,
+                    dx,
+                    dy,
+                    scaledWidth,
+                    scaledHeight
+                );
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (!blob) {
+                            reject(new Error('Failed to create blob'));
+                            return;
+                        }
+                        resolve(blob);
+                    },
+                    outputType,
+                    quality
+                );
+            };
+
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Invalid image blob'));
+            };
+
+            img.src = url;
+        });
+    }
+
 
     getJSON(url: string): Promise<any> {
         return firstValueFrom(this.http.get(url, { responseType: 'text' }).pipe(

@@ -37,7 +37,7 @@ export class ShareSrv {
         return firstValueFrom(this.dialog
             .open(QrDialogComponent, {
                 width: '400px',
-                disableClose: true,
+                //disableClose: true,
                 data: payload,
                 panelClass: '',
             })

@@ -18,6 +18,7 @@ export interface ImageDetailDataType extends TemplateDetailDataType {
     withThumbnail?: boolean;
     maxSizePixels?: number;
     thumbnailMaxSizePixels?: number;
+    squareMaxSizePixels?: number;
 }
 
 export interface FieldDataType {
