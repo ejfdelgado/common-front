@@ -57,7 +57,7 @@ export class FirestoreService {
         top: number = 10,
     ): Unsubscribe {
         const q = query(
-            collection(db, collectionName),
+            collection(db, environment.env + "-" + collectionName),
             orderBy(orderColumn, orderDirection),
             limit(top)
         );
@@ -82,7 +82,7 @@ export class FirestoreService {
         orderDirection: "asc" | "desc" = "desc",
         top: number = 10,
     ): Promise<BasicDataType[]> {
-        const colRef = collection(db, collectionName);
+        const colRef = collection(db, environment.env + "-" + collectionName);
 
         const constraints: QueryConstraint[] = [];
 

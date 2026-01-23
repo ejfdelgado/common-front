@@ -7,4 +7,5 @@ export const environment = {
   mapKey: 'QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j',
   DEFAULT_BUCKET: "pro-ejflab-assets",
   check_token_expiration: false,
+  env: "pro",
 };

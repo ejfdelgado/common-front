@@ -205,7 +205,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       this.notes.splice(0, this.notes.length);
     }
     const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
-    const page = (await this.firestoreSrv.paging("pro-note", searchable));
+    const page = (await this.firestoreSrv.paging("note", searchable));
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
   }
@@ -216,7 +216,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       this.liveSubscription();
     }
     if (live) {
-      this.liveSubscription = this.firestoreSrv.livePaging("pro-note", (page: any) => {
+      this.liveSubscription = this.firestoreSrv.livePaging("note", (page: any) => {
         this.notes.splice(0, this.notes.length);
         this.notes.push(...(page as NoteDataType[]));
         this.cdr.detectChanges();

@@ -60,6 +60,8 @@ http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
 https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
+- Create single page for custom note.
+
 - Create an image gallery component.
 
 - Create an email field.
@@ -74,7 +76,7 @@ https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=
 
 - On/Off allow: lock/unlock, eye see/hide, check/uncheck
 
-- Add url link capability to rick text editor.
+- Add url link capability to richtext editor.
 
 - Enable Sendgrid email service to welcome or send notifications with templates.
 
