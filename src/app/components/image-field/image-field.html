@@ -1,9 +1,12 @@
-<div class="image_container" [style.background-image]="'url(' + getImageUrl() + ')'">
-    <div class="cover">
-    </div>
-    <div class="controls">
-        <div class="cover"></div>
-        <mat-icon (click)="askForEdit('file')" class="white_subtitle edit_icon">image_search</mat-icon>
-        <mat-icon (click)="askForEdit('photo')" class="white_subtitle edit_icon">photo_camera</mat-icon>
+<div class="image_parent">
+    <div class="image_back" [style.background-image]="'url(' + getImageUrl() + ')'"></div>
+    <div class="image_container" [style.background-image]="'url(' + getImageUrl() + ')'">
+        <div class="cover">
+        </div>
+        <div class="controls">
+            <div class="cover"></div>
+            <mat-icon (click)="askForEdit('file')" class="white_subtitle edit_icon">image_search</mat-icon>
+            <mat-icon (click)="askForEdit('photo')" class="white_subtitle edit_icon">photo_camera</mat-icon>
+        </div>
     </div>
 </div>
