@@ -60,7 +60,6 @@ http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
 https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
-- Add QR service, display it to allow scan it, add modified date.
 - Create an image gallery component.
 
 - Use background image with blur.

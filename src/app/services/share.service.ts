@@ -3,17 +3,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ShareDataType, SharePayload, truncateString } from '@tools/UrlUtil';
 import { environment } from 'environments/environment';
 import { ClipboardUtil } from '@tools/Clipboard';
+import { MatDialog } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
+import { QrDialogComponent, QrDialogData } from '@components/qr-dialog/qr-dialog';
 
 @Injectable({ providedIn: 'root' })
 export class ShareSrv {
 
     constructor(
         public snackBar: MatSnackBar,
+        private dialog: MatDialog,
     ) {
 
     }
 
-    async share(data: ShareDataType) {
+    getSharedURL(data: ShareDataType) {
         const payload: Record<string, string> = {
             col: data.collection,
             id: data.id,
@@ -24,6 +28,24 @@ export class ShareSrv {
         }
         const params = new URLSearchParams(payload);
         const url = `${environment.apiUrl}social?${params.toString()}`;
+        return url;
+    }
+
+    async shareQR(data: ShareDataType) {
+        const url = this.getSharedURL(data);
+        const payload: QrDialogData = { url };
+        return firstValueFrom(this.dialog
+            .open(QrDialogComponent, {
+                width: '400px',
+                disableClose: true,
+                data: payload,
+                panelClass: '',
+            })
+            .afterClosed());
+    }
+
+    async share(data: ShareDataType) {
+        const url = this.getSharedURL(data);
         const shareData: SharePayload = {
             title: truncateString(50, data.title),
             text: truncateString(120, data.description),

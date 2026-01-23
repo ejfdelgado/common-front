@@ -233,7 +233,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   async localShare(model: any) {
     const { id, title, description, updated } = model;
-    this.shareSrv.share({
+    this.shareSrv.shareQR({
       collection: "note",
       path: "/voyage_photo",
       id,
