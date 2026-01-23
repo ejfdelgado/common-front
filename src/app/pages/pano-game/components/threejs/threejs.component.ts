@@ -23,6 +23,7 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { Statusbar } from "../statusbar/statusbar";
 import { isMobile } from '@tools/mobile';
 import { GyroReturnType } from './types';
+import { getUrlQueryParams } from '@tools/UrlUtil';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -370,7 +371,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     setTimeout(() => {
       this.onResize({});
     }, 0);
-    const urlParams = this.getUrlQueryParams();
+    const urlParams = getUrlQueryParams();
     const queryParam = urlParams.get("q");
     if (!queryParam) {
       return;

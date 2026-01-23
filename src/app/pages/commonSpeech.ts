@@ -5,6 +5,7 @@ import { generateHueColors } from '@tools/Colors';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from "rxjs";
 import { BooleanStateService } from "@services/boolean-state.service";
+import { getUrlQueryParams } from "@tools/UrlUtil";
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
 
@@ -52,7 +53,7 @@ export class CommonSpeech {
         if (preferedLang) {
             this.currentLang = preferedLang;
         }
-        const params = this.getUrlQueryParams();
+        const params = getUrlQueryParams();
         const suggestedLang = params.get("lan");
         const tParam = params.get("t");
         if (tParam) {
@@ -63,9 +64,7 @@ export class CommonSpeech {
         }
         this.speechSrv.init();
     }
-    getUrlQueryParams() {
-        return new URLSearchParams(window.location.hash.split("?")[1]);
-    }
+
 
     removeEmojis(text: string) {
         return text.replace(/\p{Emoji}/gu, '');

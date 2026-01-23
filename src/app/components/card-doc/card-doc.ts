@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { User } from '@angular/fire/auth';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-card-doc',
@@ -24,6 +25,7 @@ export class CardDoc extends CommonComponent {
   @Input() model: any;
   @Input() user: User | null = null;
   @Input() createUpdate!: Function;
+  @Input() share!: Function;
   @Input() delete!: Function;
 
   constructor(
@@ -48,7 +50,7 @@ export class CardDoc extends CommonComponent {
     }
   }
 
-  async share() {
-
+  async localShare() {
+    await this.share(this.model);
   }
 }

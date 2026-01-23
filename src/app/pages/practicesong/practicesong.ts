@@ -9,6 +9,7 @@ import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 import { ModuloSonido } from '@services/sonido.service';
 import { BooleanStateService } from "@services/boolean-state.service";
 import { ClipboardUtil } from "@tools/Clipboard";
+import { getUrlQueryParams } from '@tools/UrlUtil';
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -121,7 +122,7 @@ export class Practicesong extends CommonSpeech {
     await this.speechSrv.init();
     promise.done();
     // Load json
-    const params = this.getUrlQueryParams();
+    const params = getUrlQueryParams();
     const q = params.get("q");
     if (q !== null) {
       // Fetch from bucket json

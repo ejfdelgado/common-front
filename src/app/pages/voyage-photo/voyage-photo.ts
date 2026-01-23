@@ -15,6 +15,7 @@ import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
+import { ShareSrv } from '@services/share.service';
 import { Unsubscribe } from 'firebase/firestore';
 
 export interface NoteDataType extends BasicDataType {
@@ -41,6 +42,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   notes: NoteDataType[] = [];
   createUpdateFun!: Function;
   deleteNoteFun!: Function;
+  localShareFun!: Function;
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = false;
   searchable: string = "";
@@ -55,11 +57,13 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     public locationSrv: LocationService,
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
+    public shareSrv: ShareSrv,
   ) {
     super(sanitizer, authSrv, cdr);
 
     this.createUpdateFun = this.openDialog.bind(this);
     this.deleteNoteFun = this.deleteNote.bind(this);
+    this.localShareFun = this.localShare.bind(this);
 
     this.menuOptions.push({
       label: "Tomar foto",
@@ -225,5 +229,17 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   async search(text: string) {
     this.searchable = text;
     this.pageNotes(true);
+  }
+
+  async localShare(model: any) {
+    const { id, title, description, updated } = model;
+    this.shareSrv.share({
+      collection: "note",
+      path: "/voyage_photo",
+      id,
+      title,
+      description,
+      updated,
+    });
   }
 }
