@@ -5,13 +5,17 @@
     <mat-card-title>{{ model.title }}</mat-card-title>
     <mat-card-subtitle>{{ model.author_name }}</mat-card-subtitle>
   </mat-card-header>
-  <div class="image_preview" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
+  <div class="image_preview_parent">
+    <div class="image_preview_blur" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
+    <div class="image_preview" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
+  </div>
   <mat-card-content>
     <span class="text_date white_subtitle">{{ epochTo(model.created) }}</span>
     <p class="content_parent" [innerHTML]="sanitizeText(model.description)"></p>
   </mat-card-content>
   <mat-card-actions>
-    <button matButton (click)="localShare()"><mat-icon>share</mat-icon>Compartir</button>
+    <button matButton (click)="localShare('link')"><mat-icon>share</mat-icon>Compartir</button>
+    <button matButton (click)="localShare('qr')" class="icon_only"><mat-icon>qr_code</mat-icon></button>
     @if (user && user.email == model.author) {
     <button matButton (click)="openEdit()" class="icon_only"><mat-icon>edit</mat-icon></button>
     <button matButton (click)="askDelete()" class="icon_only"><mat-icon>delete_forever</mat-icon></button>

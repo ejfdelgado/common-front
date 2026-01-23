@@ -26,11 +26,33 @@ mat-card-content .text_date {
     padding-top: 10px;
 }
 
-.image_preview {
+.image_preview_parent {
     margin-top: 5px;
+    height: 200px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.image_preview {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    height: 200px;
-    width: 100%;
+}
+
+.image_preview_blur {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: blur(5px);
 }

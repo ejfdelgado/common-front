@@ -62,7 +62,6 @@ https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=
 
 - Create an image gallery component.
 
-- Use background image with blur.
 - Create an email field.
 - Create address widget with map and address search.
 - Create comments component. -> suggest store in firebase (multiple users update).

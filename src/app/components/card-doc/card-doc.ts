@@ -50,7 +50,7 @@ export class CardDoc extends CommonComponent {
     }
   }
 
-  async localShare() {
-    await this.share(this.model);
+  async localShare(type: "link" | "qr") {
+    await this.share(this.model, type);
   }
 }

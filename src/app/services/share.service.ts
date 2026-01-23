@@ -44,7 +44,15 @@ export class ShareSrv {
             .afterClosed());
     }
 
-    async share(data: ShareDataType) {
+    async share(data: ShareDataType, type: "link" | "qr") {
+        if (type == "link") {
+            await this.shareUrl(data);
+        } else if (type == "qr") {
+            await this.shareQR(data);
+        }
+    }
+
+    async shareUrl(data: ShareDataType) {
         const url = this.getSharedURL(data);
         const shareData: SharePayload = {
             title: truncateString(50, data.title),

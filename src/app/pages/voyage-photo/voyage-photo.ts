@@ -231,15 +231,15 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.pageNotes(true);
   }
 
-  async localShare(model: any) {
+  async localShare(model: any, type: any) {
     const { id, title, description, updated } = model;
-    this.shareSrv.shareQR({
+    this.shareSrv.share({
       collection: "note",
       path: "/voyage_photo",
       id,
       title,
       description,
       updated,
-    });
+    }, type);
   }
 }
