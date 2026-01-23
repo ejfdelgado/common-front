@@ -94,3 +94,21 @@ https://sketchfab.com/3d-models/cute-bunny-7d30845d69c4474ebeddd177df6b7f02
 https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45
 
 https://sketchfab.com/3d-models/treasure-chest-773a2f35025b4e2e9ac48fd84c16b3ab
+
+
+css masonry
+
+.container {
+  columns: 3 200px; /* Shorthand for column-count and column-width */
+  gap: 1rem; /* Creates space between columns */
+}
+
+.item {
+  /* The break-inside property prevents items from being split across columns */
+  break-inside: avoid;
+  background: #f0f0f0;
+  margin-bottom: 1rem; /* Creates space between items */
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

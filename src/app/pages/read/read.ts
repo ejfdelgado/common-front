@@ -52,7 +52,9 @@ export class Read extends CommonSpeech {
     const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
 
     setInterval(() => {
-      this.adjustWords();
+      if (this.adjustWords()) {
+        this.cdr.detectChanges();
+      }
     }, 1000);
 
     const addWordFun = (input: RecognizedWord) => {
@@ -70,22 +72,6 @@ export class Read extends CommonSpeech {
       console.log(command);
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
-  }
-
-  adjustWords() {
-    const MAX_NUMBER_OF_WORDS = 5;
-    const THRESHOLD_MS = 10000;//10 seconds
-    const now = Date.now();
-    const initialLen = this.words.length;
-    // First limite number of words
-    this.words.splice(0, Math.max(0, this.words.length - MAX_NUMBER_OF_WORDS));
-    // Second erase old words
-    this.words = this.words.filter((word) => {
-      return now - word.time < THRESHOLD_MS;
-    });
-    if (initialLen != this.words.length) {
-      this.cdr.detectChanges();
-    }
   }
 
   async ngOnInit() {
