@@ -1,5 +1,10 @@
 # CommonFront
 
+Songs:
+In the name of love
+Luca Disney song
+Love song to the earth: https://www.youtube.com/watch?v=pLCSTn6_uU0
+
 ```
 npx @angular/cli@20 new common-front
 ```
@@ -13,7 +18,7 @@ npx ng generate component --standalone components/chip-select
 ```
 
 ```bash
-npx ng generate component --standalone pages/voyage-photo
+npx ng generate component --standalone pages/notes/note
 ```
 
 ```bash
