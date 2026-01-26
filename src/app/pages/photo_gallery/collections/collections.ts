@@ -100,9 +100,13 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
 
   }
 
-  async openDialog(oldModel: any) {
+  async openDialog(payload: any) {
+    let model: any = null;
+    if (payload) {
+      model = payload.model;
+    }
     const formConfig: FormDataType = {
-      title: oldModel ? "Actualizar" : "Crear",
+      title: model ? "Actualizar" : "Crear",
       autoAuthor: true,
       modelName: MODEL_NAME,
       searchFields: ["title", "description"],
@@ -120,8 +124,8 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
         description: '',
       }
     };
-    if (oldModel) {
-      formConfig.model = oldModel;
+    if (model) {
+      formConfig.model = model;
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '800px',
@@ -137,9 +141,9 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     });
   }
 
-  async deleteNote(item: any) {
-    await this.firestoreSrv.delete(MODEL_NAME, item.id);
-    const index = this.notes.indexOf(item);
+  async deleteNote({ model }: { model: any }) {
+    await this.firestoreSrv.delete(MODEL_NAME, model.id);
+    const index = this.notes.indexOf(model);
     if (index >= 0) {
       this.notes.splice(index, 1);
       this.cdr.detectChanges();
@@ -179,7 +183,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     this.pageNotes(true);
   }
 
-  async localShare(model: any, type: any) {
+  async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: MODEL_NAME,
