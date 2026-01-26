@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
 import { firstValueFrom, Subject } from "rxjs";
 import { ApiResponse } from "types/file";
-import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe, where, QueryConstraint, startAfter } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe, where, QueryConstraint, startAfter, getDoc, doc } from "firebase/firestore";
 import { db } from "./firebase";
 import { MyUtilities } from "ejfdelgado-common-ts";
 
@@ -82,6 +82,16 @@ export class FirestoreService {
         });
 
         return unsubscribe;
+    }
+
+    async readById(collectionName: string, id: string) {
+        const snap = await getDoc(doc(db, environment.env + "-" + collectionName, id));
+
+        if (snap.exists()) {
+            const data = snap.data();
+            return data;
+        }
+        return null;
     }
 
     async paging(

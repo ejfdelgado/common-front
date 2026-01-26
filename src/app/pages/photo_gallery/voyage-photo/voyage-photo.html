@@ -1,8 +1,11 @@
 <div class="main_container">
     <div class="photo_container">
         <div class="inner_photo_container">
-            <app-statusbar [options]="menuOptions"></app-statusbar>
+            <app-statusbar [options]="menuOptions" [title]="getAlbumTitle()"></app-statusbar>
             <div class="dynamic_content">
+                @if (collection) {
+                <p [innerHTML]="sanitizeText(collection.description)"></p>
+                }
                 <app-search-input (search)="search($event)" />
                 <div class="container_grid_docs_found">
                     <div class="container_grid_docs_found_scroll">

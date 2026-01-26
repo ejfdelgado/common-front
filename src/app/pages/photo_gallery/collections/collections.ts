@@ -199,7 +199,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
 
   async openDocument(model: any) {
     this.router.navigate([`photo_gallery/this`], {
-      queryParams: { col: MODEL_NAME, if: model.id }
+      queryParams: { col: MODEL_NAME, id: model.id }
     });
   }
 }

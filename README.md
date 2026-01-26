@@ -117,3 +117,80 @@ css masonry
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+-----
+
+
+  async openDialog(payload: any) {
+    let model: any = null;
+    if (payload) {
+      model = payload.model;
+    }
+    const formConfig: FormDataType = {
+      title: "Crear / actualizar",
+      autoAuthor: true,
+      modelName: "note",
+      searchFields: ["title", "description", "cathegory"],
+      fields: [
+        { label: "Título", type: "text", key: "title", required: true },
+        {
+          label: "Imagen", type: "image", key: "image", image: {
+            template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+          }
+        },
+        { label: "Descripción", type: "contenteditable", key: "description" },
+        { label: "Habilitado", type: "toggle", key: "enabled" },
+        { label: "Calificación", type: "rating", key: "rate" },
+        { label: "Teléfono", type: "phone", key: "phone", required: false },
+        { label: "Categorías", type: "chip", key: "cathegory", required: false, chip: { stringOptions: ["Manzana", "Pera"] } },
+        {
+          label: "Json", type: "json", key: "json", json: {
+            template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.json",
+            fields: [
+              { label: "Título", type: "text", key: "tit", required: true },
+              {
+                label: "Imagen", type: "image", key: "image", image: {
+                  template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+                }
+              },
+              { label: "Descripción", type: "contenteditable", key: "desc" },
+              { label: "Habilitado", type: "toggle", key: "enabled" },
+              { label: "Calificación", type: "rating", key: "rate" },
+              { label: "Teléfono", type: "phone", key: "phone", required: false },
+              { label: "Categorías", type: "chip", key: "cathegory", required: false, chip: { stringOptions: ["Manzana", "Pera"] } },
+            ],
+          }
+        },
+      ],
+      model: {
+        title: '',
+        description: '',
+        json: "./assets/json/sample.json"
+      }
+    };
+    if (model) {
+      formConfig.model = model;
+    }
+    const dialogRef = this.dialog.open(DialogFormComponent, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: formConfig,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (!model) {
+          // Creation
+          if (!this.liveMode) {
+            this.pageNotes(true);
+          }
+        } else {
+          // Update
+          // mix objects
+          Object.assign(model, result);
+          this.cdr.detectChanges();
+        }
+      }
+    });
+  }
