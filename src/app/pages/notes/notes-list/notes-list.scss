@@ -40,24 +40,33 @@
 
 .grid_docs_found {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     gap: 20px;
 }
 
+app-card-doc {
+    width: 100%;
+}
+
 @media screen AND (max-width: 1400px) {
+    .grid_docs_found {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media screen AND (max-width: 1200px) {
+    .grid_docs_found {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen AND (max-width: 976px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media screen AND (max-width: 900px) {
-    .main_container {
-        grid-template-columns: 1fr;
-        bottom: unset;
-    }
-}
-
-@media screen AND (max-width: 450px) {
+@media screen AND (max-width: 630px) {
     .grid_docs_found {
         grid-template-columns: 1fr;
     }

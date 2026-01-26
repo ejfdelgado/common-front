@@ -8,11 +8,18 @@ import { MatIcon } from '@angular/material/icon';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { User } from '@angular/fire/auth';
 import { environment } from 'environments/environment';
+import { CommonModule } from '@angular/common';
+
+export interface CardDocDataType {
+  shareLink?: boolean;
+  shareQR?: boolean;
+}
 
 @Component({
   selector: 'app-card-doc',
   imports: [
     MatCardModule,
+    CommonModule,
     MatButtonModule,
     ReactiveFormsModule,
     MatIcon,
@@ -27,6 +34,10 @@ export class CardDoc extends CommonComponent {
   @Input() createUpdate!: Function;
   @Input() share!: Function;
   @Input() delete!: Function;
+  @Input() config: CardDocDataType = {
+    shareLink: true,
+    shareQR: true,
+  }
 
   constructor(
     public override sanitizer: DomSanitizer,

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { CardDoc } from '@components/card-doc/card-doc';
+import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
@@ -45,6 +45,10 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = false;
   searchable: string = "";
+  cardConfig: CardDocDataType = {
+    shareLink: false,
+    shareQR: false,
+  }
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -83,11 +87,6 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
       searchFields: ["title", "description"],
       fields: [
         { label: "Título", type: "text", key: "title", required: true },
-        {
-          label: "Imagen", type: "image", key: "image", image: {
-            template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
-          }
-        },
         { label: "Descripción", type: "contenteditable", key: "description" },
       ],
       model: {
@@ -129,15 +128,22 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
   }
 
   async pageNotes(startover: boolean = false) {
-    if (startover && this.notes.length > 0) {
-      this.notes.splice(0, this.notes.length);
+    const indicator = this.indicatorSrv.start();
+    try {
+      if (startover && this.notes.length > 0) {
+        this.notes.splice(0, this.notes.length);
+      }
+      const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
+      const page = (await this.firestoreSrv.paging({
+        collectionName: "note", searchText: searchable
+      }));
+      this.notes.push(...(page as NoteDataType[]));
+      this.cdr.detectChanges();
+    } catch (err) {
+
+    } finally {
+      indicator.done();
     }
-    const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
-    const page = (await this.firestoreSrv.paging({
-      collectionName: "note", searchText: searchable
-    }));
-    this.notes.push(...(page as NoteDataType[]));
-    this.cdr.detectChanges();
   }
 
   setRefreshMethod() {
