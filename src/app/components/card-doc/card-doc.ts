@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export interface CardDocDataType {
   shareLink?: boolean;
   shareQR?: boolean;
+  showAuthorImg?: boolean;
 }
 
 @Component({
@@ -37,6 +38,7 @@ export class CardDoc extends CommonComponent {
   @Input() config: CardDocDataType = {
     shareLink: true,
     shareQR: true,
+    showAuthorImg: true,
   }
 
   constructor(
