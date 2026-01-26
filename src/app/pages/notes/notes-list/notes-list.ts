@@ -106,7 +106,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
       searchFields: ["title", "description"],
       fields: [
         { label: "Título", type: "text", key: "title", required: true },
-        { label: "Descripción", type: "contenteditable", key: "description" },
+        { label: "Descripción", type: "contenteditable", key: "description", contenteditable: { minHeight: 10, maxHeight: 20 } },
       ],
       model: {
         title: '',

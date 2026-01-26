@@ -44,10 +44,17 @@ export interface ChipDataType extends FieldDataType {
     chip: ChipDetailDataType;
 }
 
-export type AllFieldsDataType = FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType;
+export interface ContenteditableDataType extends FieldDataType {
+    contenteditable: {
+        maxHeight?: number;
+        minHeight?: number;
+    };
+}
+
+export type AllFieldsDataType = FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType | ContenteditableDataType;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
-    fields: (FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType)[],
+    fields: (FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType | ContenteditableDataType)[],
 }
 
 export interface FormDataType {
