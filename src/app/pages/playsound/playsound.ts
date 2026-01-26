@@ -34,7 +34,7 @@ export class Playsound extends CommonSpeech {
   database: SoundDataType[] = [
     {
       id: "claps",
-      matches: { "en-US": ["claps"] },
+      matches: { "en-US": ["clap"] },
       soundUrl: "sounds/claps.mp3",
     },
     {
@@ -46,6 +46,26 @@ export class Playsound extends CommonSpeech {
       id: "earthquake",
       matches: { "en-US": ["earthquake"] },
       soundUrl: "sounds/earthquake.mp3",
+    },
+    {
+      id: "nature",
+      matches: { "en-US": ["nature"] },
+      soundUrl: "sounds/nature.mp3",
+    },
+    {
+      id: "explosion",
+      matches: { "en-US": ["explosion"] },
+      soundUrl: "sounds/explosion.mp3",
+    },
+    {
+      id: "wolf",
+      matches: { "en-US": ["wolf", "howl"] },
+      soundUrl: "sounds/wolf.mp3",
+    },
+    {
+      id: "rain",
+      matches: { "en-US": ["rain"] },
+      soundUrl: "sounds/rain.mp3",
     },
   ]
 
