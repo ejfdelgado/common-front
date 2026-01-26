@@ -34,16 +34,16 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/practicesong/practicesong').then(m => m.Practicesong),
     },
     {
-        path: 'voyage_photo',
-        loadComponent: () => import('./pages/voyage-photo/voyage-photo').then(m => m.VoyagePhoto),
-    },
-    {
         path: 'notes',
         loadComponent: () => import('./pages/notes/notes-list/notes-list').then(m => m.NotesList),
     },
     {
         path: 'photo_gallery/all',
         loadComponent: () => import('./pages/photo_gallery/collections/collections').then(m => m.CollectionsComponent),
+    },
+    {
+        path: 'photo_gallery/this',
+        loadComponent: () => import('./pages/photo_gallery/voyage-photo/voyage-photo').then(m => m.VoyagePhoto),
     },
     {
         path: '**',

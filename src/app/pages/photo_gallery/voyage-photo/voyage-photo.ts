@@ -120,7 +120,11 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     } catch (err) { }
   }
 
-  async openDialog(oldModel: any) {
+  async openDialog(payload: any) {
+    let model: any = null;
+    if (payload) {
+      model = payload.model;
+    }
     const formConfig: FormDataType = {
       title: "Crear / actualizar",
       autoAuthor: true,
@@ -163,8 +167,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         json: "./assets/json/sample.json"
       }
     };
-    if (oldModel) {
-      formConfig.model = oldModel;
+    if (model) {
+      formConfig.model = model;
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '800px',
@@ -175,7 +179,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (!oldModel) {
+        if (!model) {
           // Creation
           if (!this.liveMode) {
             this.pageNotes(true);
@@ -183,17 +187,17 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         } else {
           // Update
           // mix objects
-          Object.assign(oldModel, result);
+          Object.assign(model, result);
           this.cdr.detectChanges();
         }
       }
     });
   }
 
-  async deleteNote(item: any) {
-    await this.firestoreSrv.delete("note", item.id);
+  async deleteNote({ model }: { model: any }) {
+    await this.firestoreSrv.delete("note", model.id);
     // If all is ok, just remove from the list
-    const index = this.notes.indexOf(item);
+    const index = this.notes.indexOf(model);
     if (index >= 0) {
       this.notes.splice(index, 1);
       this.cdr.detectChanges();
@@ -234,7 +238,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.pageNotes(true);
   }
 
-  async localShare(model: any, type: any) {
+  async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: "note",
