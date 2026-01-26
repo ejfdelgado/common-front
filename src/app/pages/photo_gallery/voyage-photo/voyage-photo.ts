@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
@@ -16,6 +17,7 @@ import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
+import { getBucketPath, getSquarePath } from '@tools/BucketPaths';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
 
@@ -35,6 +37,7 @@ const MODEL_NAME = "photogps";
     Statusbar,
     SearchInputComponent,
     CardDoc,
+    MatIcon,
   ],
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
@@ -73,11 +76,6 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.deleteNoteFun = this.deleteNote.bind(this);
     this.localShareFun = this.localShare.bind(this);
 
-    this.menuOptions.push({
-      label: "Tomar foto",
-      icon: "photo_camera",
-      callback: this.capturePhoto.bind(this),
-    });
 
     this.menuOptions.push({
       label: "Tomar ubicación",
@@ -143,13 +141,58 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   async capturePhoto() {
+    const pos = await this.locationSrv.getCurrentPosition();
     const blob = await this.fileSrv.openCamera();
     if (!blob) {
       return;
     }
     try {
-      const response = await this.fileSrv.upload("prueba/archivo.jpg", blob, "bucket");
-    } catch (err) { }
+      const template = "photo_gallery/${user.email}/${collection.id}/${date.year}-${date.month}-${date.day}/${random}.jpg";
+      const nextPath = getBucketPath(template, "", {
+        collection: this.collection,
+        user: AuthService.userStatic,
+      });
+      const limitedBlob = await this.fileSrv.resizeImageBlob(
+        blob,
+        1024,
+        1024,
+        'image/jpeg',
+        0.9
+      );
+      const squaredBlob = await this.fileSrv.squareImageCover(
+        blob,
+        512,
+        'image/jpeg',
+        0.9
+      );
+
+      const model: any = {
+        title: this.epochTo(Date.now()),
+        image: getSquarePath(nextPath),
+        thumbnail: nextPath,
+        lat: pos.latitude,
+        lon: pos.longitude,
+      };
+      const promesas: Promise<any>[] = [];
+      promesas.push(this.fileSrv.upload(model.image, limitedBlob, "bucket"));
+      promesas.push(this.fileSrv.upload(model.thumbnail, squaredBlob, "bucket"));
+      await Promise.all(promesas);
+
+      // Ask save
+      await this.firestoreSrv.createUpdate(this.getCollectionName(), model);
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  getCollectionName() {
+    const params = getUrlQueryParams();
+    const id = params.get("id");
+    if (!id) {
+      throw new Error("Missed parent");
+    }
+    return `photocollection/${id}/${MODEL_NAME}`;
   }
 
   async openDialog(payload: any) {
@@ -160,7 +203,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     const formConfig: FormDataType = {
       title: "Actualizar",
       autoAuthor: true,
-      modelName: MODEL_NAME,
+      modelName: this.getCollectionName(),
       searchFields: ["title", "description"],
       fields: [
         { label: "Título", type: "text", key: "title", required: true },
@@ -199,7 +242,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   async deleteNote({ model }: { model: any }) {
-    await this.firestoreSrv.delete(MODEL_NAME, model.id);
+    await this.firestoreSrv.delete(this.getCollectionName(), model.id);
     // If all is ok, just remove from the list
     const index = this.notes.indexOf(model);
     if (index >= 0) {
@@ -214,7 +257,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     }
     const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
     const page = (await this.firestoreSrv.paging({
-      collectionName: MODEL_NAME,
+      collectionName: this.getCollectionName(),
       searchText: searchable,
     }));
     this.notes.push(...(page as NoteDataType[]));
@@ -227,7 +270,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       this.liveSubscription();
     }
     if (live) {
-      this.liveSubscription = this.firestoreSrv.livePaging(MODEL_NAME, (page: any) => {
+      this.liveSubscription = this.firestoreSrv.livePaging(this.getCollectionName(), (page: any) => {
         this.notes.splice(0, this.notes.length);
         this.notes.push(...(page as NoteDataType[]));
         this.cdr.detectChanges();
@@ -245,7 +288,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
     const { id, title, description, updated } = model;
     this.shareSrv.share({
-      collection: MODEL_NAME,
+      collection: this.getCollectionName(),
       path: "/photo_gallery/single",
       id,
       title,

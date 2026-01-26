@@ -3,6 +3,7 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, firstValueFrom, map } from 'rxjs';
 import { environment } from 'environments/environment';
 import { ApiResponse, UploadResponse } from 'types/file';
+import { IndicatorService } from './indicator.service';
 
 export interface HardDriveOptionsType {
 
@@ -14,19 +15,30 @@ export interface HardDriveOptionsType {
 export class HardDriveService {
     private readonly uploadUrl = 'harddrive/file';
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private indicatorSrv: IndicatorService,
+    ) { }
 
-    upload(
+    async upload(
         filePath: string,
         blob: Blob,
         options?: HardDriveOptionsType,
     ): Promise<UploadResponse> {
-        const formData = new FormData();
-        const fileName = filePath.split('/').pop();
-        formData.append('file_path', filePath);
-        formData.append('file', blob, fileName);
+        const indicator = this.indicatorSrv.start();
+        try {
+            const formData = new FormData();
+            const fileName = filePath.split('/').pop();
+            formData.append('file_path', filePath);
+            formData.append('file', blob, fileName);
 
-        return firstValueFrom(this.http.post<UploadResponse>(environment.apiUrl + this.uploadUrl, formData));
+            const response = await firstValueFrom(this.http.post<UploadResponse>(environment.apiUrl + this.uploadUrl, formData));
+            return response;
+        } catch (err) {
+            throw err;
+        } finally {
+            indicator.done();
+        }
     }
 
     delete(

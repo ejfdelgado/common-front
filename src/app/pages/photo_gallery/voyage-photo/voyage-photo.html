@@ -16,11 +16,16 @@
                             }
                         </div>
                     </div>
+                    <div class="over_partent">
+                        <div class="record_button" (click)="capturePhoto()"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    @if (!isMobile()) {
     <div class="map_container">
         <app-simple-map #simple_map [transform]="transformMark"></app-simple-map>
     </div>
+    }
 </div>

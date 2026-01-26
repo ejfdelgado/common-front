@@ -18,8 +18,12 @@ service cloud.firestore {
         request.auth != null &&
         resource.data.author == request.auth.token.email;
     }
-    match /pro-photocollection/{document=**} {
+    match /pro-photocollection/{photoId} {
       allow read: if true;
+
+      match /pro-photogps/{gpsId} {
+        allow read: if true;
+      }
     }
   }
 }

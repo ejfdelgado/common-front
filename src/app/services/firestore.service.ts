@@ -45,6 +45,19 @@ export class FirestoreService {
 
     constructor(private http: HttpClient) { }
 
+    expandCollection(collection: string) {
+        const prefix = environment.env ? environment.env : "pro";
+        return collection.split("/").map((el, index) => {
+            if (index % 2 == 0) {
+                //collection name
+                return prefix + "-" + el
+            } else {
+                //id
+                return el;
+            }
+        }).join("/");
+    }
+
     async createUpdate(collection: string, data: any, conf: FirestoreConfigDataType = {}): Promise<UpdatedEntityType> {
         const payload: any = {
             collection,
@@ -67,7 +80,7 @@ export class FirestoreService {
         top: number = 10,
     ): Unsubscribe {
         const q = query(
-            collection(db, environment.env + "-" + collectionName),
+            collection(db, this.expandCollection(collectionName)),
             orderBy(orderColumn, orderDirection),
             limit(top)
         );
@@ -85,7 +98,7 @@ export class FirestoreService {
     }
 
     async readById(collectionName: string, id: string) {
-        const snap = await getDoc(doc(db, environment.env + "-" + collectionName, id));
+        const snap = await getDoc(doc(db, this.expandCollection(collectionName), id));
 
         if (snap.exists()) {
             const data = snap.data();
@@ -106,7 +119,7 @@ export class FirestoreService {
             top: 10
         }, requestIn);
 
-        const colRef = collection(db, environment.env + "-" + request.collectionName);
+        const colRef = collection(db, this.expandCollection(request.collectionName));
 
         const constraints: QueryConstraint[] = [];
 

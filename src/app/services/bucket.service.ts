@@ -3,6 +3,7 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, firstValueFrom, map } from 'rxjs';
 import { environment } from 'environments/environment';
 import { ApiResponse, UploadResponse } from 'types/file';
+import { IndicatorService } from './indicator.service';
 
 export interface BucketOptionsType {
     bucketName?: string;
@@ -17,26 +18,35 @@ export class BucketService {
 
     constructor(
         private http: HttpClient,
+        private indicatorSrv: IndicatorService,
     ) { }
 
     /**
      * Upload a blob to backend
      */
-    upload(
+    async upload(
         bucketPath: string,
         blob: Blob,
         options?: BucketOptionsType,
     ): Promise<UploadResponse> {
-        const formData = new FormData();
-        const fileName = bucketPath.split('/').pop();
-        if (options?.bucketName) {
-            formData.append('bucket_name', options?.bucketName);
-        }
-        formData.append('file_path', bucketPath);
-        formData.append('file', blob, fileName);
-        formData.append('make_public', options?.makePublic === true ? "1" : "0");
+        const indicator = this.indicatorSrv.start();
+        try {
+            const formData = new FormData();
+            const fileName = bucketPath.split('/').pop();
+            if (options?.bucketName) {
+                formData.append('bucket_name', options?.bucketName);
+            }
+            formData.append('file_path', bucketPath);
+            formData.append('file', blob, fileName);
+            formData.append('make_public', options?.makePublic === true ? "1" : "0");
 
-        return firstValueFrom(this.http.post<UploadResponse>(`${environment.apiUrl}${this.uploadUrl}`, formData));
+            const response = await firstValueFrom(this.http.post<UploadResponse>(`${environment.apiUrl}${this.uploadUrl}`, formData));
+            return response;
+        } catch (err) {
+            throw err;
+        } finally {
+            indicator.done();
+        }
     }
 
     delete(

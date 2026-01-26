@@ -49,6 +49,25 @@
     overflow-y: scroll;
 }
 
+.over_partent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.over_partent .record_button {
+    background-color: red;
+    cursor: pointer;
+    width: 4em;
+    height: 4em;
+    border-radius: 100%;
+}
+
 .grid_docs_found {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
