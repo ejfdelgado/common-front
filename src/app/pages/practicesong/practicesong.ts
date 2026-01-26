@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
@@ -86,10 +86,11 @@ export class Practicesong extends CommonSpeech {
       }
     }, 1000);
 
-    const addWordFun = (input: RecognizedWord) => {
+    const addWordFun = (input: RecognizedWordId) => {
       this.words.push({
         word: input.word,
         time: input.timestamp,
+        id: input.id,
         color: this.getNextColor(),
       });
       this.adjustWords();

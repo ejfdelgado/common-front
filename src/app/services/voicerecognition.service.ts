@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, filter, map, distinctUntilChanged } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, filter, map, distinctUntilChanged, tap } from 'rxjs';
 import { BooleanStateService } from "@services/boolean-state.service";
 
 export const SUPPORTED_LANGUAGES = [
@@ -22,6 +22,7 @@ export interface CommandConfigType {
   confidenceMin: number,
   maxDiffMillis: number,
   commands: { [key: string]: { [key: string]: any } },
+  type?: "singleWord" | "phrase",
 }
 
 export interface StartOptions {
@@ -42,6 +43,10 @@ export interface RecognizedWord {
   transcript?: string; // full recognized transcript for the result
 }
 
+export interface RecognizedWordId extends RecognizedWord {
+  id: number;
+}
+
 export type RecognitionStatus = 'idle' | 'listening' | 'error' | 'stopped' | 'unsupported';
 
 // Cross-browser type for the Web Speech API
@@ -56,7 +61,7 @@ export class VoiceRecognitionService {
   // RxJS streams
   private wordSubject = new Subject<RecognizedWord>();
   readonly recognizedWord$ = this.wordSubject.asObservable();
-  private word$: Observable<RecognizedWord> | null = null;
+  private word$: Observable<RecognizedWordId> | null = null;
   private command$: Observable<RecognizedCommand> | null = null;
 
   private transcriptSubject = new Subject<string>();
@@ -255,14 +260,16 @@ export class VoiceRecognitionService {
       .replace(/[^a-zA-Z\s]/g, "")
       // Replace multiple spaces with a single one and trim
       .replace(/\s+/g, " ")
-      .trim();
+      .trim().toLowerCase();
   }
 
   singleWordConnect({
     confidenceMin,
     maxDiffMillis,
-    commands
+    commands,
+    type,
   }: CommandConfigType) {
+    let counter: number = 0;
     this.word$ = this.recognizedWord$.pipe(
       filter(w => w.confidence >= confidenceMin),
       map(w => ({ ...w, word: this.simplifyWord(w.word) })),
@@ -271,6 +278,11 @@ export class VoiceRecognitionService {
         const shortDiffTime = Math.abs(prev.timestamp - curr.timestamp) < maxDiffMillis;
         return sameWord && shortDiffTime;
       }),
+      map<RecognizedWord, RecognizedWordId>(w => {
+        const el = w as RecognizedWordId;
+        el.id = counter++;
+        return el;
+      }),
     );
     this.command$ = this.word$.pipe(
       map((word) => {
@@ -278,13 +290,25 @@ export class VoiceRecognitionService {
         if (this.recognition?.lang && this.recognition.lang in commands) {
           dictionary = commands[this.recognition.lang];
         }
-        let simplifiedWord = this.normalizeString(word.word);
+        let simplifiedWord = "";
+        if (type == "phrase") {
+          if (word.transcript) {
+            simplifiedWord = this.normalizeString(word.transcript);
+          }
+        } else if (type == "singleWord") {
+          simplifiedWord = this.normalizeString(word.word);
+        } else {
+          simplifiedWord = this.normalizeString(word.word);
+        }
+
         const comm: RecognizedCommand = {
           command: "",
           timestamp: word.timestamp,
         }
-        if (simplifiedWord in dictionary) {
-          comm.command = dictionary[simplifiedWord];
+        const keys = Object.keys(dictionary);
+        const filtered = keys.filter((key) => simplifiedWord.indexOf(key) >= 0);
+        if (filtered.length > 0) {
+          comm.command = dictionary[filtered[0]];
         }
         return comm;
       }),

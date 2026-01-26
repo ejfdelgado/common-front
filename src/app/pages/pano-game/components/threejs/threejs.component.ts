@@ -15,7 +15,7 @@ import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommonSpeech, SelectOptionType, VoiceQuery } from "../../../commonSpeech";
-import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { Question, QuestionDataType } from "../question/question";
 import { shuffleInPlace } from '@tools/ArrayUtil';
@@ -147,10 +147,11 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       }
     }, 1000);
 
-    const addWordFun = (input: RecognizedWord) => {
+    const addWordFun = (input: RecognizedWordId) => {
       this.words.push({
         word: input.word,
         time: input.timestamp,
+        id: input.id,
         color: this.getNextColor(),
       });
       this.adjustWords();

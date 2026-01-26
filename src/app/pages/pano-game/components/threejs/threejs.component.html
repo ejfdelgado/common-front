@@ -40,7 +40,7 @@
         @if (useStereo) {
         <span class="words_space">
             <span class="one_word white_subtitle">&nbsp;</span>
-            @for (word of words; track word.time) {
+            @for (word of words; track word.id) {
             <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
             }
         </span>

@@ -29,6 +29,7 @@ export interface WordType {
     word: string;
     time: number;
     color: string;
+    id: number;
 }
 
 export class CommonSpeech {

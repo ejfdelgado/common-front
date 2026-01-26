@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { CommandConfigType, RecognizedWord, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
@@ -57,10 +57,11 @@ export class Read extends CommonSpeech {
       }
     }, 1000);
 
-    const addWordFun = (input: RecognizedWord) => {
+    const addWordFun = (input: RecognizedWordId) => {
       this.words.push({
         word: input.word,
         time: input.timestamp,
+        id: input.id,
         color: this.getNextColor(),
       });
       this.adjustWords();
