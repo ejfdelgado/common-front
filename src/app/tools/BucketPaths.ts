@@ -23,7 +23,7 @@ export function getSquarePath(value: string) {
     });
 }
 
-export function getBucketPath(template: string, url: string, data: any) {
+export function getBucketPath(template: string, url: string, data: any, addVersion: boolean = true) {
     const params = new URL(`http://temp.com/${url}`).searchParams;
     let versionString = params.get("v");
     let version: number = 0;
@@ -48,10 +48,18 @@ export function getBucketPath(template: string, url: string, data: any) {
             month: now.getMonth() + 1,
             day: now.getDate(),
         };
-        return templateEngine.render(template, data) + "?v=1";
+        if (addVersion) {
+            return templateEngine.render(template, data) + "?v=1";
+        } else {
+            return templateEngine.render(template, data);
+        }
     } else {
         // match, use old but with version increased
-        return `${url}?v=${version + 1}`;
+        if (addVersion) {
+            return `${url}?v=${version + 1}`;
+        } else {
+            return url;
+        }
     }
     // voyage_note/edgar.jose.fernando.delgado@gmail.com/2026-1-18/a23d5323ffsd.jpg
 }

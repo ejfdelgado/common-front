@@ -50,7 +50,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   deleteNoteFun!: Function;
   localShareFun!: Function;
   liveSubscription: Unsubscribe | null = null;
-  liveMode: boolean = false;
+  liveMode: boolean = true;
   searchable: string = "";
   collection: BasicDataType | null = null;
   cardConfig: CardDocDataType = {
@@ -151,7 +151,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       const nextPath = getBucketPath(template, "", {
         collection: this.collection,
         user: AuthService.userStatic,
-      });
+      }, false);
       const limitedBlob = await this.fileSrv.resizeImageBlob(
         blob,
         1024,
@@ -252,6 +252,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   async pageNotes(startover: boolean = false) {
+    console.log(`pageNotes startover=${startover}`);
     if (startover && this.notes.length > 0) {
       this.notes.splice(0, this.notes.length);
     }
