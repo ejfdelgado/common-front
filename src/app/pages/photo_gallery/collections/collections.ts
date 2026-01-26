@@ -4,6 +4,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@ang
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
@@ -65,6 +66,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
+    private router: Router,
   ) {
     super(sanitizer, authSrv, cdr);
 
@@ -196,6 +198,8 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
   }
 
   async openDocument(model: any) {
-    console.log(model);
+    this.router.navigate([`photo_gallery/this`], {
+      queryParams: { col: MODEL_NAME, if: model.id }
+    });
   }
 }
