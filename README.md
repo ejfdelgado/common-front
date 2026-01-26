@@ -18,7 +18,7 @@ npx ng generate component --standalone components/chip-select
 ```
 
 ```bash
-npx ng generate component --standalone pages/notes/note
+npx ng generate component --standalone pages/photo_gallery/collections
 ```
 
 ```bash

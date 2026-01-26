@@ -48,6 +48,18 @@ app-card-doc {
     width: 100%;
 }
 
+.see_more_parent {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.see_more_parent:hover p {
+    text-decoration: underline;
+}
+
 @media screen AND (max-width: 1400px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr 1fr 1fr;

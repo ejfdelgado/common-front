@@ -12,7 +12,7 @@ import { SimpleMapComponent } from '@components/simple-map/simple-map';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
+import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
@@ -23,10 +23,10 @@ export interface NoteDataType extends BasicDataType {
 
 };
 
-const MODEL_NAME = "note";
+const MODEL_NAME = "photocollection";
 
 @Component({
-  selector: 'app-notes-list',
+  selector: 'app-collections',
   standalone: true,
   imports: [
     CommonModule,
@@ -36,10 +36,10 @@ const MODEL_NAME = "note";
     SearchInputComponent,
     CardDoc,
   ],
-  templateUrl: './notes-list.html',
-  styleUrl: './notes-list.scss',
+  templateUrl: './collections.html',
+  styleUrl: './collections.scss',
 })
-export class NotesList extends AuthenticatedComponent implements OnInit, OnDestroy {
+export class CollectionsComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
   createUpdateFun!: Function;
@@ -72,7 +72,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
     this.localShareFun = this.localShare.bind(this);
 
     this.menuOptions.push({
-      label: "Agregar nota",
+      label: "Agregar album",
       icon: "add",
       callback: this.openDialog.bind(this),
     });
@@ -147,19 +147,11 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
         this.notes.splice(0, this.notes.length);
       }
       const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
-      const pagingOptions: PageDataType = {
+      const page = (await this.firestoreSrv.paging({
         collectionName: MODEL_NAME, searchText: searchable,
-        orderColumn: "updated",
+        orderColumn: "created",
         orderDirection: "desc",
-        author: this.user?.email,
-        top: 20,
-      };
-      if (!startover) {
-        if (this.notes.length > 0) {
-          pagingOptions.lastDoc = this.notes[this.notes.length - 1];
-        }
-      }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
+      }));
       this.notes.push(...(page as NoteDataType[]));
       this.cdr.detectChanges();
     } catch (err) {
@@ -178,7 +170,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: MODEL_NAME,
-      path: "/note",
+      path: "/photocollection",
       id,
       title,
       description,
