@@ -1,1 +1,18 @@
-<p>notes-list works!</p>
+<div class="main_container">
+    <div class="inner_photo_container">
+        <app-statusbar [title]="'Notas'" [options]="menuOptions"></app-statusbar>
+        <div class="dynamic_content">
+            <app-search-input (search)="search($event)" />
+            <div class="container_grid_docs_found">
+                <div class="container_grid_docs_found_scroll">
+                    <div class="grid_docs_found">
+                        @for(note of notes; track note.id) {
+                        <app-card-doc [model]="note" [user]="user" [createUpdate]="createUpdateFun"
+                            [delete]="deleteNoteFun" [share]="localShareFun"></app-card-doc>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,6 +29,7 @@ export interface MenuOptionType {
 export class Statusbar {
   @Input() iconSmall: boolean = true;
   @Input() options: MenuOptionType[] = [];
+  @Input() title: string = "";
   user: User | null = null;
 
   constructor(
