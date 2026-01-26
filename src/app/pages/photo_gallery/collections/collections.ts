@@ -43,9 +43,6 @@ const MODEL_NAME = "photocollection";
 export class CollectionsComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
-  createUpdateFun!: Function;
-  deleteNoteFun!: Function;
-  localShareFun!: Function;
   liveSubscription: Unsubscribe | null = null;
   searchable: string = "";
   authSubscription: Subscription | null = null;
@@ -70,10 +67,6 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     private router: Router,
   ) {
     super(sanitizer, authSrv, cdr);
-
-    this.createUpdateFun = this.openDialog.bind(this);
-    this.deleteNoteFun = this.deleteNote.bind(this);
-    this.localShareFun = this.localShare.bind(this);
 
     this.menuOptions.push({
       label: "Agregar álbum",

@@ -49,9 +49,6 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
   menuOptions: MenuOptionType[] = [];
   notes: PhotoGPSDataType[] = [];
-  createUpdateFun!: Function;
-  deleteNoteFun!: Function;
-  localShareFun!: Function;
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
   searchable: string = "";
@@ -63,6 +60,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     shareQR: false,
     hasImage: true,
   };
+  cardActions: string[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -79,9 +77,9 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   ) {
     super(sanitizer, authSrv, cdr);
 
-    this.createUpdateFun = this.openDialog.bind(this);
-    this.deleteNoteFun = this.deleteNote.bind(this);
-    this.localShareFun = this.localShare.bind(this);
+    if (!this.isMobile()) {
+      this.cardActions = ['location_on'];
+    }
 
     this.menuOptions.push({
       label: "Regresar a álbumes",
@@ -124,24 +122,6 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   async transformMark(data: MarkType) {
     return `<b class="white_subtitle" style="font-size: 2em;">📍</b>`;
-  }
-
-  async addMark() {
-    const activity = this.indicatorSrv.start();
-    try {
-      const pos = await this.locationSrv.getCurrentPosition();
-      const marker: MarkType = {
-        id: "",
-        lat: pos.latitude,
-        lon: pos.longitude,
-        title: new Date().toDateString(),
-      };
-      const observable = await this.simpleMap.addMarker(marker);
-      observable.subscribe((mark) => {
-        console.log(mark);
-      });
-    } catch (err) { }
-    activity.done();
   }
 
   async capturePhoto() {
@@ -187,7 +167,10 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       await Promise.all(promesas);
 
       // Ask save
-      await this.firestoreSrv.createUpdate(this.getCollectionName(), model);
+      await this.firestoreSrv.createUpdate(this.getCollectionName(), model, {
+        autoAuthor: true,
+        searchFields: ["title"],
+      });
       this.pageNotes(true);
     } catch (err) {
       console.log(err);
@@ -333,6 +316,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   async cardEvents($event: any) {
     const { action, model } = $event;
-    this.simpleMap.center(model.lat, model.lon)
+    if (action == "location_on") {
+      this.simpleMap.center(model.lat, model.lon);
+    }
   }
 }
