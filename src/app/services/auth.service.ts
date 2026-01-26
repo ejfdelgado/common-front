@@ -48,6 +48,10 @@ export class AuthService {
     readonly token = computed(() => this._token());
     readonly isAuthenticated = computed(() => !!this._user());
 
+    async login() {
+        await this.loginWithGoogle();
+    }
+
     /** 🔑 Google login */
     loginWithGoogle(): Promise<void> {
         const provider = new GoogleAuthProvider();

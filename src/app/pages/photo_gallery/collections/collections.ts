@@ -190,7 +190,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: MODEL_NAME,
-      path: "/photocollection",
+      path: "/photo_gallery/this",
       id,
       title,
       description,

@@ -145,6 +145,10 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   async capturePhoto() {
+    if (!this.authSrv.isLoggedIn()) {
+      this.authSrv.login();
+      return;
+    }
     const pos = await this.locationSrv.getCurrentPosition();
     const blob = await this.fileSrv.openCamera();
     if (!blob) {
