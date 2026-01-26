@@ -9,6 +9,7 @@ import {
     createUserWithEmailAndPassword,
     signOut,
 } from '@angular/fire/auth';
+import { getAuth } from 'firebase/auth';
 import { BehaviorSubject, from, Observable, Subscription } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -27,6 +28,7 @@ export class AuthService {
 
     constructor(private auth: Auth) {
         this.authSub = authState(this.auth).subscribe(async user => {
+            getAuth();
             this._user.set(user);
 
             this.authStateSubject.next(user);
