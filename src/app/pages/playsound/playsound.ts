@@ -66,10 +66,11 @@ export class Playsound extends CommonSpeech {
       type: "phrase",
       commands: {
         "es-ES": {
-
+          "silencio": "stop",
         },
         "en-US": {
-
+          "stop": "stop",
+          "silent": "stop",
         },
         "fr-FR": {
 
@@ -116,10 +117,14 @@ export class Playsound extends CommonSpeech {
     command$.pipe(
       distinctUntilKeyChangedWithTTL('command', 500),
       tap((command) => {
-        const sound = this.getSoundById(command.command);
-        if (sound) {
-          //console.log(JSON.stringify(sound));
-          ModuloSonido.play(getBucketFilePath(sound.soundUrl));
+        if (command.command == "stop") {
+          ModuloSonido.stopAll();
+        } else {
+          const sound = this.getSoundById(command.command);
+          if (sound) {
+            //console.log(JSON.stringify(sound));
+            ModuloSonido.play(getBucketFilePath(sound.soundUrl));
+          }
         }
       }),
     ).subscribe();
