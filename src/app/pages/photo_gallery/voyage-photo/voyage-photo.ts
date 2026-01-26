@@ -21,9 +21,11 @@ import { ShareSrv } from '@services/share.service';
 import { getBucketPath, getSquarePath } from '@tools/BucketPaths';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
+import { Subscription } from 'rxjs';
 
-export interface NoteDataType extends BasicDataType {
-
+export interface PhotoGPSDataType extends BasicDataType {
+  lat: number;
+  lon: number
 };
 
 const MODEL_NAME = "photogps";
@@ -46,7 +48,7 @@ const MODEL_NAME = "photogps";
 export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
   menuOptions: MenuOptionType[] = [];
-  notes: NoteDataType[] = [];
+  notes: PhotoGPSDataType[] = [];
   createUpdateFun!: Function;
   deleteNoteFun!: Function;
   localShareFun!: Function;
@@ -54,9 +56,12 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   liveMode: boolean = true;
   searchable: string = "";
   collection: BasicDataType | null = null;
+  markerSubscriptions: Subscription[] = [];
   cardConfig: CardDocDataType = {
     shareLink: true,
     showAuthorImg: true,
+    shareQR: false,
+    hasImage: true,
   };
 
   constructor(
@@ -99,7 +104,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCollection();
-    this.setRefreshMethod(false);
+    this.setRefreshMethod(true);
   }
 
   async loadCollection() {
@@ -259,7 +264,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       collectionName: this.getCollectionName(),
       searchText: searchable,
     }));
-    this.notes.push(...(page as NoteDataType[]));
+    this.notes.push(...(page as PhotoGPSDataType[]));
     this.cdr.detectChanges();
   }
 
@@ -271,7 +276,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     if (live) {
       this.liveSubscription = this.firestoreSrv.livePaging(this.getCollectionName(), (page: any) => {
         this.notes.splice(0, this.notes.length);
-        this.notes.push(...(page as NoteDataType[]));
+        this.notes.push(...(page as PhotoGPSDataType[]));
+        this.recomputeAllMarkers();
         this.cdr.detectChanges();
       });
     } else {
@@ -294,5 +300,35 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       description,
       updated,
     }, type);
+  }
+
+  async addSingleMarker(model: PhotoGPSDataType) {
+    const marker: MarkType = {
+      id: model.id,
+      lat: model.lat,
+      lon: model.lon,
+      title: model.title,
+    };
+    const observable = await this.simpleMap.addMarker(marker);
+    this.markerSubscriptions.push(observable.subscribe((mark) => {
+      const note = this.notes.filter(note => note.id == mark.id)[0]
+      console.log(note);
+    }));
+  }
+
+  recomputeAllMarkers() {
+    this.simpleMap.clearOverlays();
+    this.markerSubscriptions.forEach((subs) => {
+      subs.unsubscribe();
+    })
+    for (let i = 0; i < this.notes.length; i++) {
+      const note: any = this.notes[i];
+      this.addSingleMarker(note);
+    }
+  }
+
+  async cardEvents($event: any) {
+    const { action, model } = $event;
+    this.simpleMap.center(model.lat, model.lon)
   }
 }

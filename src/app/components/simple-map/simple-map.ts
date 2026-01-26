@@ -106,9 +106,13 @@ export class SimpleMapComponent implements AfterViewInit {
     });
     this.markers.push(marker);
     // Center
-    this.map.setOptions({
-      center: { lat: data.lat, lng: data.lon },
-    });
+    this.center(data.lat, data.lon);
     return observable.asObservable();
+  }
+
+  center(lat: number, lon: number) {
+    this.map.setOptions({
+      center: { lat: lat, lng: lon },
+    });
   }
 }

@@ -7,7 +7,7 @@
     <mat-card-title>{{ model.title }}</mat-card-title>
     <mat-card-subtitle>{{ model.author_name }}</mat-card-subtitle>
   </mat-card-header>
-  @if (model.image) {
+  @if (config.hasImage) {
   <div class="image_preview_parent" (click)="openDocument.emit(model)">
     <div class="image_preview_blur" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
     <div class="image_preview" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
@@ -27,6 +27,10 @@
     @if (user && user.email == model.author) {
     <button matButton (click)="openEdit()" class="icon_only"><mat-icon>edit</mat-icon></button>
     <button matButton (click)="askDelete()" class="icon_only"><mat-icon>delete_forever</mat-icon></button>
+    }
+    @for (action of actions; track action) {
+    <button matButton (click)="events.emit({action, model})" class="icon_only"><mat-icon>{{ action
+        }}</mat-icon></button>
     }
   </mat-card-actions>
 </mat-card>

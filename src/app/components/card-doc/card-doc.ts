@@ -14,6 +14,7 @@ export interface CardDocDataType {
   shareLink?: boolean;
   shareQR?: boolean;
   showAuthorImg?: boolean;
+  hasImage?: boolean,
 }
 
 @Component({
@@ -31,15 +32,18 @@ export interface CardDocDataType {
 export class CardDoc extends CommonComponent {
 
   @Input() model: any;
+  @Input() actions: string[] = [];
   @Input() user: User | null = null;
   @Output() createUpdate: EventEmitter<any> = new EventEmitter();
   @Output() share: EventEmitter<any> = new EventEmitter();
   @Output() delete: EventEmitter<any> = new EventEmitter();
   @Output() openDocument: EventEmitter<any> = new EventEmitter();
+  @Output() events: EventEmitter<any> = new EventEmitter();
   @Input() config: CardDocDataType = {
     shareLink: true,
     shareQR: true,
     showAuthorImg: true,
+    hasImage: true,
   }
 
   constructor(

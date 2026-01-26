@@ -53,6 +53,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     shareLink: true,
     shareQR: true,
     showAuthorImg: true,
+    hasImage: true,
   };
 
   constructor(

@@ -12,7 +12,8 @@
                         <div class="grid_docs_found">
                             @for(note of notes; track note.id) {
                             <app-card-doc [model]="note" [user]="user" (createUpdate)="openDialog($event)"
-                                (delete)="deleteNote($event)" (share)="localShare($event)"></app-card-doc>
+                            [config]="cardConfig" [actions]="['location_on']" (events)="cardEvents($event)"  
+                            (delete)="deleteNote($event)" (share)="localShare($event)"></app-card-doc>
                             }
                         </div>
                     </div>
