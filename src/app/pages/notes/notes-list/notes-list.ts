@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,6 +17,7 @@ import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { Unsubscribe } from 'firebase/firestore';
+import { Subscription } from 'rxjs';
 
 export interface NoteDataType extends BasicDataType {
 
@@ -36,7 +37,7 @@ export interface NoteDataType extends BasicDataType {
   templateUrl: './notes-list.html',
   styleUrl: './notes-list.scss',
 })
-export class NotesList extends AuthenticatedComponent implements OnInit {
+export class NotesList extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
   createUpdateFun!: Function;
@@ -45,10 +46,11 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = false;
   searchable: string = "";
+  authSubscription: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: false,
     shareQR: false,
-  }
+  };
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -73,10 +75,27 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
       icon: "add",
       callback: this.openDialog.bind(this),
     });
+
+    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+      if (!user) {
+        this.notes = [];
+        try {
+          this.cdr.detectChanges();
+        } catch (err) { }
+      } else {
+        this.pageNotes(true);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
-    this.setRefreshMethod();
+
   }
 
   async openDialog(oldModel: any) {
@@ -135,7 +154,8 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
       }
       const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
       const page = (await this.firestoreSrv.paging({
-        collectionName: "note", searchText: searchable
+        collectionName: "note", searchText: searchable,
+        author: this.user?.email,
       }));
       this.notes.push(...(page as NoteDataType[]));
       this.cdr.detectChanges();
@@ -144,10 +164,6 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
     } finally {
       indicator.done();
     }
-  }
-
-  setRefreshMethod() {
-    this.pageNotes(true);
   }
 
   async search(text: string) {

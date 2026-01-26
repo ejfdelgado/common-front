@@ -13,6 +13,7 @@ export interface PageDataType {
     lastDoc?: any;
     orderColumn?: string;
     orderDirection?: "asc" | "desc";
+    author?: string | null;
     top?: number;
 };
 
@@ -102,6 +103,10 @@ export class FirestoreService {
         if (typeof request.searchText == "string") {
             const tokens = MyUtilities.partirTexto(request.searchText, false);
             constraints.push(where('search', 'array-contains-any', tokens));
+        }
+
+        if (typeof request.author == "string") {
+            constraints.push(where('author', '==', request.author));
         }
         constraints.push(orderBy(request.orderColumn ? request.orderColumn : "created", request.orderDirection));
         if (request.lastDoc) {

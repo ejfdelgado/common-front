@@ -42,10 +42,6 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/notes/notes-list/notes-list').then(m => m.NotesList),
     },
     {
-        path: 'note',
-        loadComponent: () => import('./pages/notes/note/note').then(m => m.Note),
-    },
-    {
         path: '**',
         redirectTo: '404',
     },
