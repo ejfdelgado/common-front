@@ -105,13 +105,16 @@ export class FirestoreService {
             constraints.push(where('search', 'array-contains-any', tokens));
         }
 
+        constraints.push(orderBy(request.orderColumn ? request.orderColumn : "created", request.orderDirection));
+
         if (typeof request.author == "string") {
             constraints.push(where('author', '==', request.author));
         }
-        constraints.push(orderBy(request.orderColumn ? request.orderColumn : "created", request.orderDirection));
+
         if (request.lastDoc) {
             constraints.push(startAfter(request.lastDoc));
         }
+
         constraints.push(limit(request.top ? request.top : 10));
 
         const q = query(

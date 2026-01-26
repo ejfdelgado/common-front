@@ -44,7 +44,6 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
   deleteNoteFun!: Function;
   localShareFun!: Function;
   liveSubscription: Unsubscribe | null = null;
-  liveMode: boolean = false;
   searchable: string = "";
   authSubscription: Subscription | null = null;
   cardConfig: CardDocDataType = {
@@ -125,14 +124,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (!oldModel) {
-          if (!this.liveMode) {
-            this.pageNotes(true);
-          }
-        } else {
-          Object.assign(oldModel, result);
-          this.cdr.detectChanges();
-        }
+        this.pageNotes(true);
       }
     });
   }
@@ -155,6 +147,8 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
       const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
       const page = (await this.firestoreSrv.paging({
         collectionName: "note", searchText: searchable,
+        orderColumn: "updated",
+        orderDirection: "desc",
         author: this.user?.email,
       }));
       this.notes.push(...(page as NoteDataType[]));
