@@ -15,7 +15,8 @@
         </button>
     </div>
     }
-    <div #scrollContainer class="scrolled_content" [ngStyle]="{'min-height': discrete ? 'unset': minHeight+'em', 'max-height': discrete ? 'unset': maxHeight+'em'}">
+    <div #scrollContainer class="scrolled_content"
+        [ngStyle]="{'min-height': discrete ? 'unset': (minHeight ? minHeight : 6)+'em', 'max-height': discrete ? 'unset': (maxHeight ? maxHeight : 10)+'em'}">
         <div #editable [ngClass]="{'with_focus': focused}" class="editable-input" contenteditable="true" role="textbox"
             aria-multiline="false" [attr.data-placeholder]="placeholder" [class.empty]="!value"
             [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" (focus)="onFocus()" (blur)="onBlur()"

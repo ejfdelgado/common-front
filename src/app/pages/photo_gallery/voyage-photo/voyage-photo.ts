@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
@@ -69,6 +70,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
+    private router: Router,
   ) {
     super(sanitizer, authSrv, cdr);
 
@@ -76,17 +78,14 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.deleteNoteFun = this.deleteNote.bind(this);
     this.localShareFun = this.localShare.bind(this);
 
-
     this.menuOptions.push({
-      label: "Tomar ubicación",
-      icon: "add_location",
-      callback: this.addMark.bind(this),
-    });
-
-    this.menuOptions.push({
-      label: "Open form",
-      icon: "add",
-      callback: this.openDialog.bind(this),
+      label: "Regresar a álbumes",
+      icon: "arrow_back",
+      callback: () => {
+        this.router.navigate([`photo_gallery/all`], {
+          queryParams: {}
+        });
+      },
     });
   }
 
@@ -180,7 +179,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
       // Ask save
       await this.firestoreSrv.createUpdate(this.getCollectionName(), model);
-
+      this.pageNotes(true);
     } catch (err) {
       console.log(err);
     }
@@ -252,7 +251,6 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   async pageNotes(startover: boolean = false) {
-    console.log(`pageNotes startover=${startover}`);
     if (startover && this.notes.length > 0) {
       this.notes.splice(0, this.notes.length);
     }
