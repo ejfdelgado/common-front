@@ -101,7 +101,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
 
   async openDialog(oldModel: any) {
     const formConfig: FormDataType = {
-      title: "Crear / actualizar",
+      title: oldModel ? "Actualizar" : "Crear",
       autoAuthor: true,
       modelName: MODEL_NAME,
       searchFields: ["title", "description"],

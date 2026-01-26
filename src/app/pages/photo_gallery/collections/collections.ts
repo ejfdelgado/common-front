@@ -12,7 +12,7 @@ import { SimpleMapComponent } from '@components/simple-map/simple-map';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { BasicDataType, FirestoreService } from '@services/firestore.service';
+import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
@@ -49,8 +49,9 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
   searchable: string = "";
   authSubscription: Subscription | null = null;
   cardConfig: CardDocDataType = {
-    shareLink: false,
-    shareQR: false,
+    shareLink: true,
+    shareQR: true,
+    showAuthorImg: true,
   };
 
   constructor(
@@ -72,7 +73,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     this.localShareFun = this.localShare.bind(this);
 
     this.menuOptions.push({
-      label: "Agregar album",
+      label: "Agregar álbum",
       icon: "add",
       callback: this.openDialog.bind(this),
     });
@@ -101,12 +102,17 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
 
   async openDialog(oldModel: any) {
     const formConfig: FormDataType = {
-      title: "Crear / actualizar",
+      title: oldModel ? "Actualizar" : "Crear",
       autoAuthor: true,
       modelName: MODEL_NAME,
       searchFields: ["title", "description"],
       fields: [
         { label: "Título", type: "text", key: "title", required: true },
+        {
+          label: "Imagen", type: "image", key: "image", image: {
+            template: "photo_collection/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+          }
+        },
         { label: "Descripción", type: "contenteditable", key: "description", contenteditable: { minHeight: 10, maxHeight: 20 } },
       ],
       model: {
@@ -147,11 +153,18 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
         this.notes.splice(0, this.notes.length);
       }
       const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
-      const page = (await this.firestoreSrv.paging({
+      const pagingOptions: PageDataType = {
         collectionName: MODEL_NAME, searchText: searchable,
-        orderColumn: "created",
+        orderColumn: "updated",
         orderDirection: "desc",
-      }));
+        top: 20,
+      };
+      if (!startover) {
+        if (this.notes.length > 0) {
+          pagingOptions.lastDoc = this.notes[this.notes.length - 1];
+        }
+      }
+      const page = (await this.firestoreSrv.paging(pagingOptions));
       this.notes.push(...(page as NoteDataType[]));
       this.cdr.detectChanges();
     } catch (err) {

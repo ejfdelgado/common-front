@@ -18,5 +18,8 @@ service cloud.firestore {
         request.auth != null &&
         resource.data.author == request.auth.token.email;
     }
+    match /pro-photocollection/{document=**} {
+      allow read: if true;
+    }
   }
 }

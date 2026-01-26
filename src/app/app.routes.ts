@@ -42,6 +42,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/notes/notes-list/notes-list').then(m => m.NotesList),
     },
     {
+        path: 'photo_gallery/all',
+        loadComponent: () => import('./pages/photo_gallery/collections/collections').then(m => m.CollectionsComponent),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
