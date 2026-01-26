@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -32,9 +32,10 @@ export class CardDoc extends CommonComponent {
 
   @Input() model: any;
   @Input() user: User | null = null;
-  @Input() createUpdate!: Function;
-  @Input() share!: Function;
-  @Input() delete!: Function;
+  @Output() createUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() share: EventEmitter<any> = new EventEmitter();
+  @Output() delete: EventEmitter<any> = new EventEmitter();
+  @Output() openDocument: EventEmitter<any> = new EventEmitter();
   @Input() config: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -49,7 +50,7 @@ export class CardDoc extends CommonComponent {
   }
 
   async openEdit() {
-    await this.createUpdate(this.model);
+    await this.createUpdate.emit({ model: this.model });
   }
 
   async askDelete() {
@@ -59,11 +60,13 @@ export class CardDoc extends CommonComponent {
       message: "Al borrar no se podrá deshacer",
     });
     if (confirm) {
-      await this.delete(this.model);
+      await this.delete.emit({ model: this.model });
     }
   }
 
   async localShare(type: "link" | "qr") {
-    await this.share(this.model, type);
+    await this.share.emit({
+      model: this.model, type
+    });
   }
 }

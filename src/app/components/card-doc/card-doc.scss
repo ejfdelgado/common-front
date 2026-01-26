@@ -45,6 +45,7 @@ mat-card-content.with_image .text_date {
     width: 100%;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .image_preview {
@@ -72,6 +73,7 @@ mat-card-content.with_image .text_date {
 
 
 @media screen AND (max-width: 400px) {
+
     mat-card-title,
     mat-card-subtitle,
     .content_parent {

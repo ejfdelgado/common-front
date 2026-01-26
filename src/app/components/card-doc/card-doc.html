@@ -8,7 +8,7 @@
     <mat-card-subtitle>{{ model.author_name }}</mat-card-subtitle>
   </mat-card-header>
   @if (model.image) {
-  <div class="image_preview_parent">
+  <div class="image_preview_parent" (click)="openDocument.emit(model)">
     <div class="image_preview_blur" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
     <div class="image_preview" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
   </div>

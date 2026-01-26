@@ -7,8 +7,8 @@
                 <div class="container_grid_docs_found_scroll">
                     <div class="grid_docs_found">
                         @for(note of notes; track note.id) {
-                        <app-card-doc [config]="cardConfig" [model]="note" [user]="user"
-                            [createUpdate]="createUpdateFun" [delete]="deleteNoteFun"
+                        <app-card-doc (openDocument)="openDocument($event)" [config]="cardConfig" [model]="note"
+                            [user]="user" [createUpdate]="createUpdateFun" [delete]="deleteNoteFun"
                             [share]="localShareFun"></app-card-doc>
                         }
                         <div class="see_more_parent" (click)="pageNotes(false)">

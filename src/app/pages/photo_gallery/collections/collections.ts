@@ -190,4 +190,8 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
       updated,
     }, type);
   }
+
+  async openDocument(model: any) {
+    console.log(model);
+  }
 }
