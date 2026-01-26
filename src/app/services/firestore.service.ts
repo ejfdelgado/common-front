@@ -7,6 +7,15 @@ import { collection, getDocs, query, orderBy, limit, onSnapshot, Unsubscribe, wh
 import { db } from "./firebase";
 import { MyUtilities } from "ejfdelgado-common-ts";
 
+export interface PageDataType {
+    collectionName: string;
+    searchText?: string | null;
+    lastDoc?: any;
+    orderColumn?: string;
+    orderDirection?: "asc" | "desc";
+    top?: number;
+};
+
 export interface FirestoreConfigDataType {
     autoAuthor?: boolean;
     searchFields?: string[],
@@ -75,26 +84,30 @@ export class FirestoreService {
     }
 
     async paging(
-        collectionName: string,
-        searchText: string | null = null,
-        lastDoc: any = null,
-        orderColumn: string = "created",
-        orderDirection: "asc" | "desc" = "desc",
-        top: number = 10,
+        requestIn: PageDataType
     ): Promise<BasicDataType[]> {
-        const colRef = collection(db, environment.env + "-" + collectionName);
+
+        const request: PageDataType = Object.assign({
+            searchText: null,
+            lastDoc: null,
+            orderColumn: "created",
+            orderDirection: "desc",
+            top: 10
+        }, requestIn);
+
+        const colRef = collection(db, environment.env + "-" + request.collectionName);
 
         const constraints: QueryConstraint[] = [];
 
-        if (typeof searchText == "string") {
-            const tokens = MyUtilities.partirTexto(searchText, false);
+        if (typeof request.searchText == "string") {
+            const tokens = MyUtilities.partirTexto(request.searchText, false);
             constraints.push(where('search', 'array-contains-any', tokens));
         }
-        constraints.push(orderBy(orderColumn, orderDirection));
-        if (lastDoc) {
-            constraints.push(startAfter(lastDoc));
+        constraints.push(orderBy(request.orderColumn ? request.orderColumn : "created", request.orderDirection));
+        if (request.lastDoc) {
+            constraints.push(startAfter(request.lastDoc));
         }
-        constraints.push(limit(top));
+        constraints.push(limit(request.top ? request.top : 10));
 
         const q = query(
             colRef,

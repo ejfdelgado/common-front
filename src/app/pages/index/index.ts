@@ -111,7 +111,9 @@ export class Index implements AfterViewInit {
   }
 
   async firestorePaginate() {
-    this.pageList = await this.firestoreSrv.paging("pro-animals");
+    this.pageList = await this.firestoreSrv.paging({
+      collectionName: "animals",
+    });
     this.cdr.detectChanges();
   }
 

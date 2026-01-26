@@ -133,7 +133,9 @@ export class NotesList extends AuthenticatedComponent implements OnInit {
       this.notes.splice(0, this.notes.length);
     }
     const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
-    const page = (await this.firestoreSrv.paging("note", searchable));
+    const page = (await this.firestoreSrv.paging({
+      collectionName: "note", searchText: searchable
+    }));
     this.notes.push(...(page as NoteDataType[]));
     this.cdr.detectChanges();
   }
