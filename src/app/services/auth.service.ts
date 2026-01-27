@@ -28,7 +28,7 @@ export class AuthService {
 
     constructor(private auth: Auth) {
         this.authSub = authState(this.auth).subscribe(async user => {
-            getAuth();
+            getAuth();//Without this line, firestore frontend operations did not include token
             this._user.set(user);
 
             this.authStateSubject.next(user);
