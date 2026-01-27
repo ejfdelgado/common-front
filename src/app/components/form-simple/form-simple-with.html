@@ -13,8 +13,8 @@
         </mat-form-field>
         } @else if (field.type=='contenteditable') {
         <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]" [placeholder]="field.label"
-            [maxHeight]="castContenteditableType(field).contenteditable?.maxHeight"
-            [minHeight]="castContenteditableType(field).contenteditable?.minHeight"></app-editable-input>
+            [maxHeight]="castContenteditableType(field).contenteditable.maxHeight"
+            [minHeight]="castContenteditableType(field).contenteditable.minHeight"></app-editable-input>
         } @else if (field.type=='toggle') {
         <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
         } @else if (field.type=='rating') {

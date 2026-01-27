@@ -40,7 +40,6 @@ const MODEL_NAME = "photogps";
     Statusbar,
     SearchInputComponent,
     CardDoc,
-    MatIcon,
   ],
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',

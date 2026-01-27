@@ -39,7 +39,7 @@ export class Playsound extends CommonSpeech {
     },
     {
       id: "city",
-      matches: { "en-US": ["city"] },
+      matches: { "en-US": ["big city"] },
       soundUrl: "sounds/city.mp3",
     },
     {
@@ -66,6 +66,16 @@ export class Playsound extends CommonSpeech {
       id: "rain",
       matches: { "en-US": ["rain"] },
       soundUrl: "sounds/rain.mp3",
+    },
+    {
+      id: "laughts",
+      matches: { "en-US": ["people laugh"] },
+      soundUrl: "sounds/laughts.mp3",
+    },
+    {
+      id: "circus",
+      matches: { "en-US": ["circus"] },
+      soundUrl: "sounds/circus.mp3",
     },
   ]
 

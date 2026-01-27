@@ -31,7 +31,6 @@ const MODEL_NAME = "photocollection";
   standalone: true,
   imports: [
     CommonModule,
-    SimpleMapComponent,
     MatButtonModule,
     Statusbar,
     SearchInputComponent,

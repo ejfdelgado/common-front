@@ -30,7 +30,6 @@ const MODEL_NAME = "note";
   standalone: true,
   imports: [
     CommonModule,
-    SimpleMapComponent,
     MatButtonModule,
     Statusbar,
     SearchInputComponent,
