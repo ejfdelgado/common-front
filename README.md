@@ -67,12 +67,10 @@ http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
 https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
-
-- Create an image gallery component.
+- Create comments component. -> suggest store in firebase (multiple users update).
 
 - Create an email field.
 - Create address widget with map and address search.
-- Create comments component. -> suggest store in firebase (multiple users update).
 - Create a drop down with search for multiple choices selected.
 - Create a drop down with search for single choice selected.
 

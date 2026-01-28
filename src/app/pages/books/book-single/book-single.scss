@@ -64,8 +64,12 @@
 }
 
 .grid_docs_found {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     padding: 0 10vw;
     gap: 20px;
+}
+
+app-photo-gallery {
+    width: 100%;
 }

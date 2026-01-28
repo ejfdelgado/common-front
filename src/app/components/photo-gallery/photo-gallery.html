@@ -1,5 +1,19 @@
 @if (mode=='embedded') {
 <div class="panel_embbed" [ngStyle]="{'height': height + 'px'}">
-    
+    <div class="big_image">
+        <div class="view_background" [style.background-image]="'url(' + getPhoto(img1) + ')'">
+
+        </div>
+        <div class="view" [style.background-image]="'url(' + getPhoto(img1) + ')'">
+
+        </div>
+    </div>
+    <div class="thumbnails_scroll">
+        <div class="thumbnails">
+            @for(photo of gallery; track photo; let i = $index) {
+            <img [src]="getThumbnailPhoto(photo)" (click)="gotTo(i)">
+            }
+        </div>
+    </div>
 </div>
 }
