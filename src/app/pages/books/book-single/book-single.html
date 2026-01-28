@@ -4,15 +4,14 @@
             <app-statusbar [options]="menuOptions" [title]="getTitle()"></app-statusbar>
             <div class="dynamic_content">
                 @if (collection) {
-                <p [innerHTML]="sanitizeText(collection.description)"></p>
+                <em class="header" [innerHTML]="sanitizeText(collection.description)"></em>
                 }
                 <div class="container_grid_docs_found">
                     <div class="container_grid_docs_found_scroll">
                         <div class="grid_docs_found">
                             @for(note of notes; track note.id) {
-                            <p [innerHTML]="sanitizeText(note.description)"></p>
-                            <span (click)="openDialog({'model': note})">(Editar)</span>
                             <app-photo-gallery [gallery]="note.gallery"></app-photo-gallery>
+                            <p [innerHTML]="sanitizeText(note.description)" (click)="openDialog({'model': note})"></p>
                             }
                         </div>
                     </div>

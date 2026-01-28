@@ -8,6 +8,7 @@
 
         </div>
     </div>
+    @if (gallery.length > 1) {
     <div class="thumbnails_scroll">
         <div class="thumbnails">
             @for(photo of gallery; track photo; let i = $index) {
@@ -15,5 +16,6 @@
             }
         </div>
     </div>
+    }
 </div>
 }
