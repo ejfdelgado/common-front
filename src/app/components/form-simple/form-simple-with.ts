@@ -51,6 +51,7 @@ export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
   }
 
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
+  @ViewChildren(ImageGalleryComponent) imageGallery!: QueryList<ImageGalleryComponent>;
   @ViewChildren(JsonField) jsons!: QueryList<JsonField>;
 
   constructor(
@@ -70,12 +71,9 @@ export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
 
   async saveAllChangedData() {
     const temp: ComponentBucketField[] = [];
-    this.images.forEach((el) => {
-      temp.push(el);
-    });
-    this.jsons.forEach((el) => {
-      temp.push(el);
-    });
+    this.images.forEach((el) => { temp.push(el); });
+    this.imageGallery.forEach((el) => { temp.push(el); });
+    this.jsons.forEach((el) => { temp.push(el); });
     for (let i = 0; i < temp.length; i++) {
       await temp[i].syncIfNeeded();
     }

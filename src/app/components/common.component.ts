@@ -3,7 +3,7 @@ import { getBucketFilePath } from "@tools/BucketPaths";
 import { isMobile } from "@tools/mobile";
 import moment from "moment";
 
-export class CommonComponent {
+export abstract class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};
     epochYearStart: number = moment().startOf('year').valueOf();
     onChangeList: Function[] = [];

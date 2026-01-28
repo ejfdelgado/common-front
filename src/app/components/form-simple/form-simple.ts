@@ -1,5 +1,6 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DifferedStore } from '@components/differedStore';
 import { Subject, Subscription } from 'rxjs';
 import {
   AllFieldsDataType,
@@ -14,7 +15,7 @@ import {
 
 export type FlatJsonDataType = { [key: string]: any };
 
-export abstract class FormSimple {
+export abstract class FormSimple implements DifferedStore {
   form: FormGroup;
   formControlMap: { [key: string]: FormControl } = {};
   fieldNames: string[] = [];
@@ -31,6 +32,8 @@ export abstract class FormSimple {
       dynamicFields: this.fb.array([]),
     });
   }
+
+  abstract saveAllChangedData(): Promise<void>;
 
   ngOnInitInternal(fields: AllFieldsDataType[], model: FlatJsonDataType): void {
     this.modelInternal = model;
@@ -77,8 +80,6 @@ export abstract class FormSimple {
   get dynamicFields() {
     return this.form.get('dynamicFields') as FormArray;
   }
-
-  public abstract saveAllChangedData(): Promise<void>;
 
   async save(): Promise<{
     valid: boolean,

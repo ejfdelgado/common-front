@@ -4,7 +4,8 @@
             <mat-icon class="custom_buttom custom_buttom_black add_button" (click)="add(0)">add</mat-icon>
         </div>
     </div>
-    <div class="row" *ngFor="let group of formArray.controls; let i = index" [formGroup]="group">
+    @for (group of formArray.controls; let i = $index; track group) {
+    <div class="row" [formGroup]="group">
         <div class="inputs">
             <app-image-field [formControl]="getFormControlNamed('image', group)" [config]="config"></app-image-field>
 
@@ -27,4 +28,5 @@
             <mat-icon class="custom_buttom custom_buttom_black add_button" (click)="add(i+1)">add</mat-icon>
         </div>
     </div>
+    }
 </div>

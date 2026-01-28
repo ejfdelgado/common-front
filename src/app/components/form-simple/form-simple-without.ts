@@ -49,6 +49,7 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
   }
 
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
+  @ViewChildren(ImageGalleryComponent) imageGallery!: QueryList<ImageGalleryComponent>;
 
   constructor(
     public override fb: FormBuilder,
@@ -67,9 +68,8 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
 
   async saveAllChangedData() {
     const temp: ComponentBucketField[] = [];
-    this.images.forEach((el) => {
-      temp.push(el);
-    });
+    this.images.forEach((el) => { temp.push(el); });
+    this.imageGallery.forEach((el) => { temp.push(el); });
     for (let i = 0; i < temp.length; i++) {
       await temp[i].syncIfNeeded();
     }

@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef, ElementRef, ViewChild, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, forwardRef, ElementRef, ViewChild, signal, ChangeDetectorRef, NgZone, ViewChildren, QueryList } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -15,10 +15,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { ImageGalleryConfigDataType } from 'types/fieldsTypes';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { EditableInput } from '../editable-input/editable-input';
 import { ImageFileComponent } from '../image-field/image-field';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
+import { ComponentBucketField } from 'types/ComponentBucketField';
+import { DifferedStore } from '@components/differedStore';
 
 export type ImageGalleryType = {
   image: string,
@@ -48,10 +50,13 @@ export type ImageGalleryType = {
   templateUrl: './image-gallery.html',
   styleUrl: './image-gallery.scss',
 })
-export class ImageGalleryComponent extends CommonComponent implements ControlValueAccessor {
+export class ImageGalleryComponent extends CommonComponent implements ControlValueAccessor, ComponentBucketField {
 
   @Input() label: string = "";
   @Input() config!: ImageGalleryConfigDataType;
+
+  @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
+
   readonly formArray = new FormArray<
     FormGroup<{
       image: FormControl<string>;
@@ -66,6 +71,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
     public override sanitizer: DomSanitizer,
     public confirmSrv: ConfirmDialogService,
     public cdr: ChangeDetectorRef,
+    private zone: NgZone,
   ) {
     super(sanitizer);
   }
@@ -119,12 +125,16 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
       title: "Está seguro?",
       message: "Al borrar no se podrá deshacer",
     });
-    if (confirm) {
+    if (!confirm) {
+      return;
+    }
+
+    queueMicrotask(() => {
       this.formArray.removeAt(index);
       this.onTouched();
       this.onChange(this.getInnerModel());
       this.cdr.detectChanges();
-    }
+    });
   }
 
   moveUp(index: number): void {
@@ -169,5 +179,15 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
   getInnerModel() {
     return this.formArray.getRawValue();
+  }
+
+  async syncIfNeeded() {
+    const temp: ComponentBucketField[] = [];
+    this.images.forEach((el) => {
+      temp.push(el);
+    });
+    for (let i = 0; i < temp.length; i++) {
+      await temp[i].syncIfNeeded();
+    }
   }
 }
