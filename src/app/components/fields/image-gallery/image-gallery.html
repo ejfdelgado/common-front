@@ -12,10 +12,14 @@
                 [placeholder]="'Descripción...'" [maxHeight]="6" [minHeight]="6"></app-editable-input>
         </div>
         <div class="bottom_controls">
+            @if (i != 0) {
             <mat-icon class="custom_buttom custom_buttom_black move_button" (click)="moveUp(i)">chevron_left</mat-icon>
+            }
             <div class="space"></div>
+            @if (i != formArray.controls.length - 1) {
             <mat-icon class="custom_buttom custom_buttom_black move_button"
                 (click)="moveDown(i)">chevron_right</mat-icon>
+            }
         </div>
 
         <mat-icon class="custom_buttom remove_button white_subtitle" (click)="remove(i)">close</mat-icon>
