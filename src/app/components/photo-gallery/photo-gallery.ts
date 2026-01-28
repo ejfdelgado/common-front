@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { getBucketFilePath, getThumbnailPath } from '@tools/BucketPaths';
@@ -10,6 +11,7 @@ import { ImageGalleryType } from 'types/fieldsTypes';
   standalone: true,
   imports: [
     CommonModule,
+    MatIconModule,
   ],
   templateUrl: './photo-gallery.html',
   styleUrl: './photo-gallery.scss',
@@ -40,11 +42,11 @@ export class PhotoGallery extends CommonComponent {
   }
 
   forward() {
-
+    this.gotTo(this.index + 1);
   }
 
   backward() {
-
+    this.gotTo(this.index - 1);
   }
 
   gotTo(i: number) {

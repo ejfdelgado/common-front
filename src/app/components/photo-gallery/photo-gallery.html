@@ -2,20 +2,28 @@
 <div class="panel_embbed" [ngStyle]="{'height': height + 'px'}">
     <div class="big_image">
         <div class="view_background" [style.background-image]="'url(' + getPhoto(img1) + ')'">
-
         </div>
         <div class="view" [style.background-image]="'url(' + getPhoto(img1) + ')'">
-
         </div>
-    </div>
-    @if (gallery.length > 1) {
-    <div class="thumbnails_scroll">
-        <div class="thumbnails">
-            @for(photo of gallery; track photo; let i = $index) {
-            <img [src]="getThumbnailPhoto(photo)" (click)="gotTo(i)">
-            }
+        @if (gallery.length > 1 && index > 0) {
+        <div class="control_panel left_control" (click)="backward()">
+            <mat-icon class="move_button white_subtitle">chevron_left</mat-icon>
         </div>
+        }
+        @if (gallery.length > 1 && index < gallery.length - 1) {
+            <div class="control_panel right_control" (click)="forward()">
+            <mat-icon class="move_button white_subtitle">chevron_right</mat-icon>
     </div>
     }
+</div>
+@if (gallery.length > 1) {
+<div class="thumbnails_scroll">
+    <div class="thumbnails">
+        @for(photo of gallery; track photo; let i = $index) {
+        <img [src]="getThumbnailPhoto(photo)" (click)="gotTo(i)">
+        }
+    </div>
+</div>
+}
 </div>
 }

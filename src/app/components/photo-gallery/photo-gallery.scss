@@ -52,3 +52,30 @@
     background-size: contain;
     background-position: center;
 }
+
+.control_panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.control_panel:hover {
+    cursor: pointer;
+}
+
+.left_control {
+    left: 0;
+}
+
+.right_control {
+    right: 0;
+}
+
+.control_panel mat-icon {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+}
