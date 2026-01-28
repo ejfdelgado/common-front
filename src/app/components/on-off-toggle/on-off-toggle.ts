@@ -10,6 +10,8 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
 
 export type OnOffDataType = boolean;
 
@@ -30,7 +32,7 @@ export type OnOffDataType = boolean;
     }
   ]
 })
-export class OnOffToggleComponent implements ControlValueAccessor {
+export class OnOffToggleComponent extends CommonComponent implements ControlValueAccessor {
 
   @Input() onImageUrl: string = "./assets/icons/heart.svg";
   @Input() offImageUrl: string = "./assets/icons/heart_off.svg";
@@ -40,28 +42,19 @@ export class OnOffToggleComponent implements ControlValueAccessor {
 
   constructor(
     public cdr: ChangeDetectorRef,
+    public override sanitizer: DomSanitizer,
   ) {
-
+    super(sanitizer);
   }
 
   /* ========= ControlValueAccessor API ========= */
 
-  private onChange: (value: OnOffDataType) => void = () => { };
-  private onTouched: () => void = () => { };
 
   writeValue(value: OnOffDataType | null): void {
     this.value = !!value;
     try {
       this.cdr.detectChanges();
-    } catch (err){}
-  }
-
-  registerOnChange(fn: (value: OnOffDataType) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+    } catch (err) { }
   }
 
   setDisabledState(isDisabled: boolean): void {

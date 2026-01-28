@@ -13,6 +13,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.component';
+import { CommonComponent } from '@components/common.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-editable-input',
@@ -30,7 +32,7 @@ import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.comp
   templateUrl: './editable-input.html',
   styleUrl: './editable-input.scss',
 })
-export class EditableInput implements ControlValueAccessor {
+export class EditableInput extends CommonComponent implements ControlValueAccessor {
   @ViewChild('editable', { static: true }) editable!: ElementRef<HTMLDivElement>;
   scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
@@ -51,8 +53,11 @@ export class EditableInput implements ControlValueAccessor {
   private composing = false;
   savedScroll: number = 0;
 
-  constructor(private dialog: MatDialog) {
-
+  constructor(
+    private dialog: MatDialog,
+    public override sanitizer: DomSanitizer,
+  ) {
+    super(sanitizer);
   }
 
   saveSelection() {
@@ -67,14 +72,6 @@ export class EditableInput implements ControlValueAccessor {
   writeValue(value: string): void {
     this.value = value ?? '';
     this.setText(this.value);
-  }
-
-  registerOnChange(fn: (value: string) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
   }
 
   setDisabledState(disabled: boolean): void {
@@ -186,9 +183,6 @@ export class EditableInput implements ControlValueAccessor {
       }
     });
   }
-
-  private onChange = (_: string) => { };
-  private onTouched = () => { };
 
   saveScrollPos() {
     const el = this.scrollContainer()?.nativeElement;

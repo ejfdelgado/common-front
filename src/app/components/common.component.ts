@@ -6,11 +6,47 @@ import moment from "moment";
 export class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};
     epochYearStart: number = moment().startOf('year').valueOf();
+    onChangeList: Function[] = [];
+    onTouchedList: Function[] = [];
 
     constructor(
         public sanitizer: DomSanitizer,
     ) {
 
+    }
+
+    onChange(value: any) {
+        this.onChangeList.forEach((el) => {
+            el(value);
+        });
+    };
+
+    onTouched() {
+        this.onTouchedList.forEach((el) => {
+            el();
+        });
+    };
+
+    registerOnChange(fn: (value: any) => void): Function {
+        const list = this.onChangeList;
+        list.push(fn);
+        return () => {
+            const ix = list.indexOf(fn);
+            if (ix >= 0) {
+                list.splice(ix, 1);
+            }
+        }
+    }
+
+    registerOnTouched(fn: () => void): Function {
+        const list = this.onTouchedList;
+        list.push(fn);
+        return () => {
+            const ix = list.indexOf(fn);
+            if (ix >= 0) {
+                list.splice(ix, 1);
+            }
+        }
     }
 
     public sanitizeText(text?: string | null, max?: number) {

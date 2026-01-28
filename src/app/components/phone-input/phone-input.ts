@@ -17,6 +17,8 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { CommonComponent } from '@components/common.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export interface PhoneValue {
   prefix: string;
@@ -48,7 +50,7 @@ export interface PhoneValue {
     }
   ]
 })
-export class PhoneInputComponent
+export class PhoneInputComponent extends CommonComponent
   implements ControlValueAccessor, Validator {
 
   @Input() label = 'Phone number';
@@ -65,12 +67,11 @@ export class PhoneInputComponent
 
   constructor(
     public cdr: ChangeDetectorRef,
+    public override sanitizer: DomSanitizer,
   ) {
-
+    super(sanitizer);
   }
 
-  private onChange: (value: PhoneValue) => void = () => { };
-  private onTouched: () => void = () => { };
   private onValidatorChange: () => void = () => { };
 
   private readonly phoneRegex = /^\d{10}$/;
@@ -79,14 +80,6 @@ export class PhoneInputComponent
     this.value = value
       ? { ...value }
       : { prefix: '', number: '' };
-  }
-
-  registerOnChange(fn: (value: PhoneValue) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
   }
 
   registerOnValidatorChange(fn: () => void): void {

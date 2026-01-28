@@ -17,6 +17,8 @@ import {
   NG_VALUE_ACCESSOR,
   ValidationErrors
 } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
 import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
@@ -54,7 +56,7 @@ export type ComponentDataType = string | null;
     },
   ]
 })
-export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, ComponentBucketField {
+export class JsonField extends CommonComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, ComponentBucketField {
   @ViewChild('inner_form') innerForm!: FormSimpleWithout;
 
   @Input() label: string = "";
@@ -64,8 +66,6 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
   disabled = false;
 
   model: any = {};
-  onChangeList: Function[] = [];
-  onTouchedList: Function[] = [];
 
   memento: string = "{}";
   mementoUrl: ComponentDataType = null;
@@ -76,8 +76,9 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
     private fileSrv: FileService,
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
+    public override sanitizer: DomSanitizer,
   ) {
-
+    super(sanitizer);
   }
 
   ngAfterViewInit(): void {
@@ -92,18 +93,6 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
   }
 
   /* ========= ControlValueAccessor API ========= */
-
-  private onChange(value: ComponentDataType) {
-    this.onChangeList.forEach((el) => {
-      el(value);
-    });
-  };
-
-  private onTouched() {
-    this.onTouchedList.forEach((el) => {
-      el();
-    });
-  };
 
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
@@ -168,28 +157,6 @@ export class JsonField implements ControlValueAccessor, OnInit, AfterViewInit, O
     this.value = nextPath;
     this.notifyChanges();
     return true;
-  }
-
-  registerOnChange(fn: (value: ComponentDataType) => void): Function {
-    const list = this.onChangeList;
-    list.push(fn);
-    return () => {
-      const ix = list.indexOf(fn);
-      if (ix >= 0) {
-        list.splice(ix, 1);
-      }
-    }
-  }
-
-  registerOnTouched(fn: () => void): Function {
-    const list = this.onTouchedList;
-    list.push(fn);
-    return () => {
-      const ix = list.indexOf(fn);
-      if (ix >= 0) {
-        list.splice(ix, 1);
-      }
-    }
   }
 
   setDisabledState(isDisabled: boolean): void {

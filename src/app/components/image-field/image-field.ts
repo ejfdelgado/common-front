@@ -13,6 +13,8 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
 import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
@@ -46,62 +48,30 @@ const squareMaxSizePixels = 1024;
     }
   ]
 })
-export class ImageFileComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
+export class ImageFileComponent extends CommonComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
   @Input() label: string = "";
   @Input() config!: ImageDetailDataType;
   value: ComponentDataType = null;
   disabled = false;
   temporalUrl: string | null = null;
   lastBlob: Blob | null = null;
-  onChangeList: Function[] = [];
-  onTouchedList: Function[] = [];
+
 
   constructor(
     private fileSrv: FileService,
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
+    public override sanitizer: DomSanitizer,
   ) {
-
+    super(sanitizer);
   }
 
   /* ========= ControlValueAccessor API ========= */
 
-  private onChange(value: ComponentDataType) {
-    this.onChangeList.forEach((el) => {
-      el(value);
-    });
-  };
-  private onTouched() {
-    this.onTouchedList.forEach((el) => {
-      el();
-    });
-  };
 
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
     this.cdr.detectChanges();
-  }
-
-  registerOnChange(fn: (value: ComponentDataType) => void): Function {
-    const list = this.onChangeList;
-    list.push(fn);
-    return () => {
-      const ix = list.indexOf(fn);
-      if (ix >= 0) {
-        list.splice(ix, 1);
-      }
-    }
-  }
-
-  registerOnTouched(fn: () => void): Function {
-    const list = this.onTouchedList;
-    list.push(fn);
-    return () => {
-      const ix = list.indexOf(fn);
-      if (ix >= 0) {
-        list.splice(ix, 1);
-      }
-    }
   }
 
   setDisabledState(isDisabled: boolean): void {

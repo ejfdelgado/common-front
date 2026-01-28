@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChipDetailDataType } from '@components/dialog-form/dialog-form.component';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
 
 @Component({
   selector: 'app-chip-select',
@@ -29,7 +31,7 @@ import { ChipDetailDataType } from '@components/dialog-form/dialog-form.componen
   templateUrl: './chip-select.component.html',
   styleUrls: ['./chip-select.component.scss']
 })
-export class ChipSelectComponent implements ControlValueAccessor {
+export class ChipSelectComponent extends CommonComponent implements ControlValueAccessor {
   @Input() label = 'Select Items';
   @Input() config!: ChipDetailDataType;
 
@@ -40,9 +42,11 @@ export class ChipSelectComponent implements ControlValueAccessor {
   selectedItems = signal<string[]>([]);
   disabled = false;
 
-  // Boilerplate for ControlValueAccessor
-  onChange: any = () => { };
-  onTouched: any = () => { };
+  constructor(
+    public override sanitizer: DomSanitizer,
+  ) {
+    super(sanitizer);
+  }
 
   writeValue(value: string[]): void {
     if (value) {
@@ -52,8 +56,6 @@ export class ChipSelectComponent implements ControlValueAccessor {
     }
   }
 
-  registerOnChange(fn: any): void { this.onChange = fn; }
-  registerOnTouched(fn: any): void { this.onTouched = fn; }
   setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
 
   // Logic methods
