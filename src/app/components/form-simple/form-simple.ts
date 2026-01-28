@@ -1,3 +1,4 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import {
@@ -24,6 +25,7 @@ export abstract class FormSimple {
 
   constructor(
     public fb: FormBuilder,
+    public cdr: ChangeDetectorRef,
   ) {
     this.form = this.fb.group({
       dynamicFields: this.fb.array([]),

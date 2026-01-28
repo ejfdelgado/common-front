@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -52,8 +52,9 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
 
   constructor(
     public override fb: FormBuilder,
+    public override cdr: ChangeDetectorRef,
   ) {
-    super(fb);
+    super(fb, cdr);
   }
 
   ngOnInit(): void {

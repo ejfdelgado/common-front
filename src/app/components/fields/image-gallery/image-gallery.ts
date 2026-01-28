@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef, ElementRef, ViewChild, signal } from '@angular/core';
+import { Component, Input, forwardRef, ElementRef, ViewChild, signal, ChangeDetectorRef } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -18,6 +18,7 @@ import { ImageGalleryConfigDataType } from 'types/fieldsTypes';
 import { Subscription } from 'rxjs';
 import { EditableInput } from '../editable-input/editable-input';
 import { ImageFileComponent } from '../image-field/image-field';
+import { ConfirmDialogService } from '@services/confirm-dialog.service';
 
 export type ImageGalleryType = {
   image: string,
@@ -63,6 +64,8 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
   constructor(
     public override sanitizer: DomSanitizer,
+    public confirmSrv: ConfirmDialogService,
+    public cdr: ChangeDetectorRef,
   ) {
     super(sanitizer);
   }
@@ -111,9 +114,17 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
     this.onTouched();
   }
 
-  remove(index: number): void {
-    this.formArray.removeAt(index);
-    this.onTouched();
+  async remove(index: number): Promise<void> {
+    const confirm = await this.confirmSrv.confirm({
+      title: "Está seguro?",
+      message: "Al borrar no se podrá deshacer",
+    });
+    if (confirm) {
+      this.formArray.removeAt(index);
+      this.onTouched();
+      this.onChange(this.getInnerModel());
+      this.cdr.detectChanges();
+    }
   }
 
   moveUp(index: number): void {
@@ -134,7 +145,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
     this.formArray.setControl(j, a);
 
     this.onTouched();
-    this.onChange(this.formArray.getRawValue());
+    this.onChange(this.getInnerModel());
   }
 
   private createGroup(item: ImageGalleryType) {
@@ -154,5 +165,9 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
       throw new Error("Misconfigured");
     }
     return temp as FormControl;
+  }
+
+  getInnerModel() {
+    return this.formArray.getRawValue();
   }
 }
