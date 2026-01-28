@@ -5,16 +5,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
-import { EditableInput } from '@components/editable-input/editable-input';
-import { OnOffToggleComponent } from '@components/on-off-toggle/on-off-toggle';
-import { RatingComponent } from '@components/rating/rating';
-import { ImageFileComponent } from '@components/image-field/image-field';
-import { JsonField } from '@components/json-field/json-field';
+import { EditableInput } from '@components/fields/editable-input/editable-input';
+import { OnOffToggleComponent } from '@components/fields/on-off-toggle/on-off-toggle';
+import { RatingComponent } from '@components/fields/rating/rating';
+import { ImageFileComponent } from '@components/fields/image-field/image-field';
+import { JsonField } from '@components/fields/json-field/json-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType, FormSimple } from './form-simple';
-import { PhoneInputComponent } from '@components/phone-input/phone-input';
-import { ChipSelectComponent } from '@components/chip-select/chip-select.component';
+import { PhoneInputComponent } from '@components/fields/phone-input/phone-input';
+import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.component';
 
 @Component({
   selector: 'app-form-simple-with',
