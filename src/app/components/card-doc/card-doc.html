@@ -13,7 +13,8 @@
     <div class="image_preview" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
   </div>
   }
-  <mat-card-content [ngClass]="{'with_image': !!model.image, 'without_image': !model.image}">
+  <mat-card-content
+    [ngClass]="{'with_image': config.hasImage, 'without_image': !config.hasImage}">
     <span class="text_date">{{ epochTo(model.created) }}</span>
     <p class="content_parent" [innerHTML]="sanitizeText(model.description, 256)"></p>
   </mat-card-content>

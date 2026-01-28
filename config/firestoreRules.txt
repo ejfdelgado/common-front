@@ -25,5 +25,9 @@ service cloud.firestore {
         allow read: if true;
       }
     }
+    match /pro-book_collection/{document=**} {
+      allow read: if
+        request.auth != null
+    }
   }
 }
