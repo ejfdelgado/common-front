@@ -12,7 +12,7 @@ import { ImageFileComponent } from '@components/image-field/image-field';
 import { JsonField } from '@components/json-field/json-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
-import { FormSimple } from './form-simple';
+import { FlatJsonDataType, FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/phone-input/phone-input';
 import { ChipSelectComponent } from '@components/chip-select/chip-select.component';
 
@@ -39,7 +39,14 @@ import { ChipSelectComponent } from '@components/chip-select/chip-select.compone
 export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
 
   @Input() fields!: AllFieldsDataType[];
-  @Input() model!: { [key: string]: any };
+  @Input()
+  get model(): FlatJsonDataType {
+    return this._model;
+  };
+
+  set model(val: FlatJsonDataType) {
+    this._model = val;
+  }
 
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
   @ViewChildren(JsonField) jsons!: QueryList<JsonField>;

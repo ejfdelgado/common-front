@@ -11,6 +11,7 @@ export abstract class FormSimple {
   modelInternal: FlatJsonDataType = {};
   changeSubscription: Subscription | null = null;
   changeSubject: Subject<FlatJsonDataType> = new Subject<FlatJsonDataType>();
+  _model: { [key: string]: any } = {};
 
   constructor(
     public fb: FormBuilder,
@@ -34,10 +35,12 @@ export abstract class FormSimple {
     }
     this.changeSubscription = this.form.valueChanges.subscribe(newValue => {
       const list = newValue.dynamicFields;
-      const model: FlatJsonDataType = {};
+      if (!this._model) {
+        this._model = {};
+      }
       for (let i = 0; i < list.length; i++) {
         const name = this.fieldNames[i];
-        model[name] = list[i];
+        this._model[name] = list[i];
       }
       this.changeSubject.next(model);
     });
