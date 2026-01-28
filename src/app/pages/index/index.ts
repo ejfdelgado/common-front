@@ -35,6 +35,7 @@ export class Index implements AfterViewInit {
   pageList: any[] = [];
   fields: AllFieldsDataType[] = [
     { label: "Título", type: "text", key: "title", required: true },
+    { label: "Descripción", type: "contenteditable", key: "description" },
   ];
   model: FlatJsonDataType = {
     "title": "Test",

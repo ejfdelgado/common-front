@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AllFieldsDataType, ChipDataType, ChipDetailDataType, ContenteditableDataType, FieldDataType, FieldImageDataType, FieldJSONDataType } from '@components/dialog-form/dialog-form.component';
+import { AllFieldsDataType, ChipDataType, ChipDetailDataType, ContenteditableDataType, ContentEditableDetailDataType, FieldDataType, FieldImageDataType, FieldJSONDataType } from '@components/dialog-form/dialog-form.component';
 import { Subject, Subscription } from 'rxjs';
 
 export type FlatJsonDataType = { [key: string]: any };
@@ -110,6 +110,14 @@ export abstract class FormSimple {
 
   castContenteditableType(el: FieldDataType): ContenteditableDataType {
     return (el as ContenteditableDataType);
+  }
+
+  getContentEditable(el: FieldDataType): ContentEditableDetailDataType {
+    const temp: any = this.castContenteditableType(el);
+    return Object.assign({
+      maxHeight: 6,
+      minHeight: 10,
+    }, temp.contenteditable);
   }
 
   castJSONType(el: FieldDataType): FieldJSONDataType {

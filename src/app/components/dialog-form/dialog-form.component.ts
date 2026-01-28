@@ -40,15 +40,17 @@ export interface ChipDetailDataType {
     stringOptions: string[];
 }
 
+export interface ContentEditableDetailDataType {
+    maxHeight?: number;
+    minHeight?: number;
+}
+
 export interface ChipDataType extends FieldDataType {
     chip: ChipDetailDataType;
 }
 
 export interface ContenteditableDataType extends FieldDataType {
-    contenteditable: {
-        maxHeight?: number;
-        minHeight?: number;
-    };
+    contenteditable: ContentEditableDetailDataType;
 }
 
 export type AllFieldsDataType = FieldDataType | FieldImageDataType | FieldJSONDataType | ChipDataType | ContenteditableDataType;
