@@ -1,5 +1,5 @@
 import { Component, Input, forwardRef, ElementRef, ViewChild, signal } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, FormArray, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -9,10 +9,11 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { ImageGalleryDetailDataType } from 'types/fieldsTypes';
+import { Subscription } from 'rxjs';
 
 export type ImageGalleryDataType = {
   image: string,
-  description?: string,
+  description: string,
 };
 
 @Component({
@@ -37,14 +38,14 @@ export type ImageGalleryDataType = {
   styleUrl: './image-gallery.scss',
 })
 export class ImageGalleryComponent extends CommonComponent implements ControlValueAccessor {
-  @Input() label = 'Selecciona';
-  @Input() config!: ImageGalleryDetailDataType;
+  readonly formArray = new FormArray<
+    FormGroup<{
+      image: FormControl<string>;
+      description: FormControl<string>;
+    }>
+  >([]);
 
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  readonly itemCtrl = new FormControl('');
-
-  // State management
-  selectedItems = signal<ImageGalleryDataType[]>([]);
+  private sub?: Subscription;
   disabled = false;
 
   constructor(
@@ -53,19 +54,83 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
     super(sanitizer);
   }
 
-  writeValue(value: ImageGalleryDataType[]): void {
-    if (value) {
-      this.selectedItems.set(value);
-    } else {
-      this.selectedItems.set([]);
-    }
+  ngOnInit(): void {
+    this.sub = this.formArray.valueChanges.subscribe(value => {
+      this.onChange(value as ImageGalleryDataType[]);
+    });
   }
 
-  setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
 
-  private updateValue(newList: ImageGalleryDataType[]) {
-    this.selectedItems.set(newList);
-    this.onChange(newList);
+  /* ===== CVA ===== */
+
+  writeValue(value: ImageGalleryDataType[] | null): void {
+    this.formArray.clear({ emitEvent: false });
+
+    if (!value?.length) {
+      return;
+    }
+
+    value.forEach(item =>
+      this.formArray.push(this.createGroup(item), {
+        emitEvent: false,
+      })
+    );
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+    isDisabled ? this.formArray.disable() : this.formArray.enable();
+  }
+
+  /* ===== Form helpers ===== */
+
+  add(item: Partial<ImageGalleryDataType> = {}): void {
+    this.formArray.push(
+      this.createGroup({
+        image: item.image ?? '',
+        description: item.description ?? '',
+      })
+    );
     this.onTouched();
+  }
+
+  remove(index: number): void {
+    this.formArray.removeAt(index);
+    this.onTouched();
+  }
+
+  moveUp(index: number): void {
+    if (index === 0) return;
+    this.swap(index, index - 1);
+  }
+
+  moveDown(index: number): void {
+    if (index >= this.formArray.length - 1) return;
+    this.swap(index, index + 1);
+  }
+
+  private swap(i: number, j: number): void {
+    const a = this.formArray.at(i);
+    const b = this.formArray.at(j);
+
+    this.formArray.setControl(i, b);
+    this.formArray.setControl(j, a);
+
+    this.onTouched();
+    this.onChange(this.formArray.getRawValue());
+  }
+
+  private createGroup(item: ImageGalleryDataType) {
+    return new FormGroup({
+      image: new FormControl(item.image, {
+        nonNullable: true,
+      }),
+      description: new FormControl(item.description, {
+        nonNullable: true,
+      }),
+    });
   }
 }

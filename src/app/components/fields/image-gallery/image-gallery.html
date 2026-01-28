@@ -1,1 +1,13 @@
-<p>image-gallery works!</p>
+<div class="list">
+    <div class="row" *ngFor="let group of formArray.controls; let i = index" [formGroup]="group">
+        <input type="text" formControlName="image" (blur)="onTouched()" placeholder="Image" />
+
+        <input type="text" formControlName="description" (blur)="onTouched()" placeholder="Description" />
+
+        <button type="button" (click)="moveUp(i)">↑</button>
+        <button type="button" (click)="moveDown(i)">↓</button>
+        <button type="button" (click)="remove(i)">✕</button>
+    </div>
+
+    <button type="button" (click)="add()">+ Add</button>
+</div>
