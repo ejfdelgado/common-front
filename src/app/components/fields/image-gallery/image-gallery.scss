@@ -32,6 +32,9 @@
 .list .row .inputs {
     flex: 1;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .bottom_controls {
