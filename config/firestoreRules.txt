@@ -29,5 +29,9 @@ service cloud.firestore {
       allow read: if
         request.auth != null
     }
+    match /pro-book/{document=**} {
+      allow read: if
+        request.auth != null
+    }
   }
 }

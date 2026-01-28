@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
@@ -191,7 +190,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       model = payload.model;
     }
     const formConfig: FormDataType = {
-      title: "Actualizar",
+      title: model ? "Actualizar" : "Crear",
       autoAuthor: true,
       modelName: this.getCollectionName(),
       searchFields: ["title", "description"],

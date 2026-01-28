@@ -1,1 +1,21 @@
-<p>book-single works!</p>
+<div class="main_container">
+    <div class="photo_container">
+        <div class="inner_photo_container">
+            <app-statusbar [options]="menuOptions" [title]="getTitle()"></app-statusbar>
+            <div class="dynamic_content">
+                @if (collection) {
+                <p [innerHTML]="sanitizeText(collection.description)"></p>
+                }
+                <div class="container_grid_docs_found">
+                    <div class="container_grid_docs_found_scroll">
+                        <div class="grid_docs_found">
+                            @for(note of notes; track note.id) {
+                            {{ note | json }}
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
