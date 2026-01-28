@@ -1,5 +1,12 @@
 import { Component, Input, forwardRef, ElementRef, ViewChild, signal } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule, FormArray, FormGroup } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  FormControl,
+  ReactiveFormsModule,
+  FormArray,
+  FormGroup
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -9,6 +16,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { ImageGalleryConfigDataType } from 'types/fieldsTypes';
 import { Subscription } from 'rxjs';
+import { EditableInput } from '../editable-input/editable-input';
+import { ImageFileComponent } from '../image-field/image-field';
 
 export type ImageGalleryType = {
   image: string,
@@ -25,6 +34,8 @@ export type ImageGalleryType = {
     MatAutocompleteModule,
     MatIconModule,
     MatFormFieldModule,
+    EditableInput,
+    ImageFileComponent,
   ],
   providers: [
     {
@@ -135,5 +146,13 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
         nonNullable: true,
       }),
     });
+  }
+
+  getFormControlNamed(name: string, group: FormGroup): FormControl {
+    const temp = group.get(name);
+    if (!temp) {
+      throw new Error("Misconfigured");
+    }
+    return temp as FormControl;
   }
 }

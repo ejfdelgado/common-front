@@ -13,7 +13,7 @@
 .list .row,
 .list .inter_row {
     position: relative;
-    height: 300px;
+    min-height: 70px;
 }
 
 .list .row {
@@ -25,8 +25,13 @@
     flex-direction: column;
 }
 
+.list .row .inputs>*:first-child {
+    flex: 1;
+}
+
 .list .row .inputs {
     flex: 1;
+    padding: 10px;
 }
 
 .bottom_controls {
@@ -67,15 +72,17 @@
 .list .row .remove_button,
 .list .inter_row .remove_button {
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 10px;
+    top: 10px;
     width: 25px;
     height: 25px;
     font-size: 25px;
+    color: white;
+    background-color: unset;
 }
 
-.list .row .custom_buttom:hover,
-.list .inter_row .custom_buttom:hover {
+.list .row .custom_buttom_black:hover,
+.list .inter_row .custom_buttom_black:hover {
     color: black;
 }
 

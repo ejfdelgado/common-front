@@ -62,7 +62,7 @@ export interface ImageGalleryDataType extends FieldDataType {
     gallery: ImageGalleryConfigDataType;
 }
 
-export interface ImageGalleryConfigDataType {
+export interface ImageGalleryConfigDataType extends ImageDetailDataType {
 
 }
 

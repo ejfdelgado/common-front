@@ -1,23 +1,26 @@
 <div class="list">
     <div class="inter_row first">
         <div class="container_centered">
-            <mat-icon class="custom_buttom add_button" (click)="add(0)">add</mat-icon>
+            <mat-icon class="custom_buttom custom_buttom_black add_button" (click)="add(0)">add</mat-icon>
         </div>
     </div>
     <div class="row" *ngFor="let group of formArray.controls; let i = index" [formGroup]="group">
         <div class="inputs">
-            <input type="text" formControlName="image" (blur)="onTouched()" placeholder="Image" />
-            <input type="text" formControlName="description" (blur)="onTouched()" placeholder="Description" />
+            <app-image-field [formControl]="getFormControlNamed('image', group)" [config]="config"></app-image-field>
+
+            <app-editable-input [discrete]="false" [formControl]="getFormControlNamed('description', group)"
+                [placeholder]="'Descripción...'" [maxHeight]="6" [minHeight]="6"></app-editable-input>
         </div>
         <div class="bottom_controls">
-            <mat-icon class="custom_buttom move_button" (click)="moveUp(i)">chevron_left</mat-icon>
+            <mat-icon class="custom_buttom custom_buttom_black move_button" (click)="moveUp(i)">chevron_left</mat-icon>
             <div class="space"></div>
-            <mat-icon class="custom_buttom move_button" (click)="moveDown(i)">chevron_right</mat-icon>
+            <mat-icon class="custom_buttom custom_buttom_black move_button"
+                (click)="moveDown(i)">chevron_right</mat-icon>
         </div>
 
-        <mat-icon class="custom_buttom remove_button" (click)="remove(i)">close</mat-icon>
+        <mat-icon class="custom_buttom remove_button white_subtitle" (click)="remove(i)">close</mat-icon>
         <div class="container_centered">
-            <mat-icon class="custom_buttom add_button" (click)="add(i+1)">add</mat-icon>
+            <mat-icon class="custom_buttom custom_buttom_black add_button" (click)="add(i+1)">add</mat-icon>
         </div>
     </div>
 </div>
