@@ -14,7 +14,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/fields/image-gallery
+npx ng generate component --standalone --skip-tests components/photo-gallery
 ```
 
 ```bash

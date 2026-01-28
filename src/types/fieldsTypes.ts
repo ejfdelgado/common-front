@@ -66,6 +66,11 @@ export interface ImageGalleryConfigDataType extends ImageDetailDataType {
 
 }
 
+export type ImageGalleryType = {
+    image: string,
+    description: string,
+};
+
 // JSON
 
 export interface FieldJSONDataType extends FieldDataType {

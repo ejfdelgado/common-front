@@ -14,18 +14,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
-import { ImageGalleryConfigDataType } from 'types/fieldsTypes';
+import { ImageGalleryConfigDataType, ImageGalleryType } from 'types/fieldsTypes';
 import { Subscription, take } from 'rxjs';
 import { EditableInput } from '../editable-input/editable-input';
 import { ImageFileComponent } from '../image-field/image-field';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { ComponentBucketField } from 'types/ComponentBucketField';
-import { DifferedStore } from '@components/differedStore';
-
-export type ImageGalleryType = {
-  image: string,
-  description: string,
-};
 
 @Component({
   selector: 'app-image-gallery',

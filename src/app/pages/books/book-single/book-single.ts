@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
+import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
@@ -17,12 +18,13 @@ import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
+import { ImageGalleryType } from 'types/fieldsTypes';
 
 const MODEL_NAME = "book";
 
 export interface BookDataType extends BasicDataType {
   description: string;
-  image: string;
+  gallery: ImageGalleryType[];
 };
 
 @Component({
@@ -33,6 +35,7 @@ export interface BookDataType extends BasicDataType {
     MatButtonModule,
     Statusbar,
     SearchInputComponent,
+    PhotoGallery,
   ],
   templateUrl: './book-single.html',
   styleUrl: './book-single.scss',
@@ -58,6 +61,7 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
     private router: Router,
+
   ) {
     super(sanitizer, authSrv, cdr);
 
