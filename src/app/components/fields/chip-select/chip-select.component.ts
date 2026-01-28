@@ -10,6 +10,8 @@ import { ChipDetailDataType } from '@components/dialog-form/dialog-form.componen
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 
+export type ChipSelectDataType = string[];
+
 @Component({
   selector: 'app-chip-select',
   standalone: true,
@@ -39,7 +41,7 @@ export class ChipSelectComponent extends CommonComponent implements ControlValue
   readonly itemCtrl = new FormControl('');
 
   // State management
-  selectedItems = signal<string[]>([]);
+  selectedItems = signal<ChipSelectDataType>([]);
   disabled = false;
 
   constructor(
@@ -48,7 +50,7 @@ export class ChipSelectComponent extends CommonComponent implements ControlValue
     super(sanitizer);
   }
 
-  writeValue(value: string[]): void {
+  writeValue(value: ChipSelectDataType): void {
     if (value) {
       this.selectedItems.set(value);
     } else {
@@ -80,7 +82,7 @@ export class ChipSelectComponent extends CommonComponent implements ControlValue
     this.itemCtrl.setValue(null);
   }
 
-  private updateValue(newList: string[]) {
+  private updateValue(newList: ChipSelectDataType) {
     this.selectedItems.set(newList);
     this.onChange(newList);
     this.onTouched();
