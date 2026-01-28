@@ -9,6 +9,8 @@ import { FileService, StorageType } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { LocationService } from '@services/location.service';
 import { AuthService } from '@services/auth.service';
+import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
+import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 
 @Component({
   selector: 'app-index',
@@ -16,6 +18,7 @@ import { AuthService } from '@services/auth.service';
   imports: [
     CommonModule,
     CameraCaptureComponent,
+    FormSimpleWithout,
   ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
@@ -29,6 +32,8 @@ export class Index implements AfterViewInit {
 
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
+  fields: AllFieldsDataType[] = [];
+  model: { [key: string]: any } = {};
 
   constructor(
     private indicatorSrv: IndicatorService,

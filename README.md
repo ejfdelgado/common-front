@@ -67,7 +67,6 @@ http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
 https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
-- Create single page for custom note.
 
 - Create an image gallery component.
 
@@ -91,15 +90,12 @@ https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=
     - bucket, permisos de usuario y tamanio
     - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.
 
-- Reload game (avoid win notification after finishing)
+- Reload Right/Left game (avoid win notification after finishing)
 - Fullscreen toggle
-- Notify: your device don't support
-- Creditos
-
+- Notify: your device don't support voice recognition
+- Creditos:
 https://sketchfab.com/3d-models/cute-bunny-7d30845d69c4474ebeddd177df6b7f02
-
 https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45
-
 https://sketchfab.com/3d-models/treasure-chest-773a2f35025b4e2e9ac48fd84c16b3ab
 
 

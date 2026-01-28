@@ -22,4 +22,7 @@
     <button (click)="firestoreCreateUpdate2()">Dynamic Create / Update</button>
     <button (click)="firestorePaginate()">Paginate</button>
 </div>
-<pre>{{ pageList | json }}</pre>
+<div>
+    <app-form-simple-without [model]="model" [fields]="fields"></app-form-simple-without>
+</div>
+<pre>{{ model | json }}</pre>
