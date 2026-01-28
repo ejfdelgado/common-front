@@ -10,7 +10,9 @@
                     <div class="container_grid_docs_found_scroll">
                         <div class="grid_docs_found">
                             @for(note of notes; track note.id) {
-                            {{ note | json }}
+                            <div (click)="openDialog({'model': note})">
+                                {{ note | json }}
+                            </div>
                             }
                         </div>
                     </div>

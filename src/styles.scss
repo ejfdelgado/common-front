@@ -51,6 +51,12 @@ html {
     font-family: "Comfortaa", "Helvetica Neue", sans-serif;
 }
 
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 //html,
 body {
     height: 100%;

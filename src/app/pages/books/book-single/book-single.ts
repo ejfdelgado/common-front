@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
@@ -16,10 +15,8 @@ import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
-import { getBucketPath, getSquarePath } from '@tools/BucketPaths';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
-import { Subscription } from 'rxjs';
 
 const MODEL_NAME = "book";
 
@@ -36,7 +33,6 @@ export interface BookDataType extends BasicDataType {
     MatButtonModule,
     Statusbar,
     SearchInputComponent,
-    CardDoc,
   ],
   templateUrl: './book-single.html',
   styleUrl: './book-single.scss',
@@ -48,13 +44,6 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
   liveMode: boolean = true;
   searchable: string = "";
   collection: BasicDataType | null = null;
-  markerSubscriptions: Subscription[] = [];
-  cardConfig: CardDocDataType = {
-    shareLink: true,
-    showAuthorImg: true,
-    shareQR: false,
-    hasImage: true,
-  };
   cardActions: string[] = [];
 
   constructor(
@@ -75,6 +64,14 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
     if (!this.isMobile()) {
       this.cardActions = ['location_on'];
     }
+
+    this.menuOptions.push({
+      label: "Agregar capítulo",
+      icon: "add",
+      callback: () => {
+        this.openDialog({});
+      },
+    });
 
     this.menuOptions.push({
       label: "Regresar a biblioteca",
@@ -133,15 +130,16 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
       title: model ? "Actualizar" : "Crear",
       autoAuthor: true,
       modelName: this.getCollectionName(),
-      searchFields: ["title", "description"],
+      searchFields: [],
       fields: [
-        { label: "Título", type: "text", key: "title", required: true },
         { label: "Descripción", type: "contenteditable", key: "description" },
+        {
+          label: "", type: "image-gallery", key: "gallery", required: true, gallery: {
+            template: "book/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+          }
+        },
       ],
-      model: {
-        title: '',
-        description: '',
-      }
+      model: {}
     };
     if (model) {
       formConfig.model = model;
