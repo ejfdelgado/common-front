@@ -21,14 +21,27 @@
     min-width: 300px;
     border: 1px solid lightgray;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.list .row .inputs {
+    flex: 1;
+}
+
+.bottom_controls {
+    display: flex;
+    flex-direction: row;
+}
+
+.bottom_controls .space {
+    flex: 1;
 }
 
 .list .row .custom_buttom,
 .list .inter_row .custom_buttom {
-    position: absolute;
     cursor: pointer;
     background-color: white;
-    border: 1px solid lightgray;
     border-radius: 100%;
     width: 30px;
     height: 30px;
@@ -48,11 +61,12 @@
 .list .row .add_button,
 .list .inter_row .add_button {
     position: relative;
-    
+    border: 1px solid lightgray;
 }
 
 .list .row .remove_button,
 .list .inter_row .remove_button {
+    position: absolute;
     right: 5px;
     top: 5px;
     width: 25px;
@@ -63,4 +77,8 @@
 .list .row .custom_buttom:hover,
 .list .inter_row .custom_buttom:hover {
     color: black;
+}
+
+.move_button {
+    margin-bottom: 5px;
 }
