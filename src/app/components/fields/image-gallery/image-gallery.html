@@ -1,4 +1,9 @@
 <div class="list">
+    <div class="inter_row first">
+        <div class="container_centered">
+            <mat-icon class="custom_buttom add_button" (click)="add(0)">add</mat-icon>
+        </div>
+    </div>
     <div class="row" *ngFor="let group of formArray.controls; let i = index" [formGroup]="group">
         <input type="text" formControlName="image" (blur)="onTouched()" placeholder="Image" />
 
@@ -6,8 +11,9 @@
 
         <button type="button" (click)="moveUp(i)">↑</button>
         <button type="button" (click)="moveDown(i)">↓</button>
-        <button type="button" (click)="remove(i)">✕</button>
+        <mat-icon class="custom_buttom remove_button" (click)="remove(i)">close</mat-icon>
+        <div class="container_centered">
+            <mat-icon class="custom_buttom add_button" (click)="add(i+1)">add</mat-icon>
+        </div>
     </div>
-
-    <button type="button" (click)="add()">+ Add</button>
 </div>

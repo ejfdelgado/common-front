@@ -24,7 +24,7 @@ export type ImageGalleryType = {
     MatChipsModule,
     MatAutocompleteModule,
     MatIconModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   providers: [
     {
@@ -89,8 +89,9 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
   /* ===== Form helpers ===== */
 
-  add(item: Partial<ImageGalleryType> = {}): void {
-    this.formArray.push(
+  add(index: number, item: Partial<ImageGalleryType> = {}): void {
+
+    this.formArray.insert(index,
       this.createGroup({
         image: item.image ?? '',
         description: item.description ?? '',
