@@ -34,6 +34,8 @@ export class Index implements AfterViewInit {
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
   fields: AllFieldsDataType[] = [
+    { label: "", type: "image-gallery", key: "gallery", required: true },
+    /*
     { label: "Título", type: "text", key: "title", required: true },
     {
       label: "Imagen", type: "image", key: "image", image: {
@@ -45,9 +47,10 @@ export class Index implements AfterViewInit {
     { label: "Calificación", type: "rating", key: "rate" },
     { label: "Teléfono", type: "phone", key: "phone", required: false },
     { label: "Categorías", type: "chip", key: "cathegory", required: false, chip: { stringOptions: ["Manzana", "Pera"] } },
+    */
   ];
   model: FlatJsonDataType = {
-    "title": "Test",
+    
   };
 
   constructor(

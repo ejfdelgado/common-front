@@ -5,13 +5,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
-import { ImageGalleryDetailDataType } from 'types/fieldsTypes';
+import { ImageGalleryConfigDataType } from 'types/fieldsTypes';
 import { Subscription } from 'rxjs';
 
-export type ImageGalleryDataType = {
+export type ImageGalleryType = {
   image: string,
   description: string,
 };
@@ -38,6 +37,9 @@ export type ImageGalleryDataType = {
   styleUrl: './image-gallery.scss',
 })
 export class ImageGalleryComponent extends CommonComponent implements ControlValueAccessor {
+
+  @Input() label: string = "";
+  @Input() config!: ImageGalleryConfigDataType;
   readonly formArray = new FormArray<
     FormGroup<{
       image: FormControl<string>;
@@ -56,7 +58,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
   ngOnInit(): void {
     this.sub = this.formArray.valueChanges.subscribe(value => {
-      this.onChange(value as ImageGalleryDataType[]);
+      this.onChange(value as ImageGalleryType[]);
     });
   }
 
@@ -66,7 +68,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
   /* ===== CVA ===== */
 
-  writeValue(value: ImageGalleryDataType[] | null): void {
+  writeValue(value: ImageGalleryType[] | null): void {
     this.formArray.clear({ emitEvent: false });
 
     if (!value?.length) {
@@ -87,7 +89,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
   /* ===== Form helpers ===== */
 
-  add(item: Partial<ImageGalleryDataType> = {}): void {
+  add(item: Partial<ImageGalleryType> = {}): void {
     this.formArray.push(
       this.createGroup({
         image: item.image ?? '',
@@ -123,7 +125,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
     this.onChange(this.formArray.getRawValue());
   }
 
-  private createGroup(item: ImageGalleryDataType) {
+  private createGroup(item: ImageGalleryType) {
     return new FormGroup({
       image: new FormControl(item.image, {
         nonNullable: true,

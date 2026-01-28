@@ -15,6 +15,7 @@ import { FlatJsonDataType, FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/fields/phone-input/phone-input';
 import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.component';
 import { AllFieldsDataType } from 'types/fieldsTypes';
+import { ImageGalleryComponent } from '@components/fields/image-gallery/image-gallery';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -32,6 +33,7 @@ import { AllFieldsDataType } from 'types/fieldsTypes';
     JsonField,
     PhoneInputComponent,
     ChipSelectComponent,
+    ImageGalleryComponent,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',

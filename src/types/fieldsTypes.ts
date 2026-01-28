@@ -4,13 +4,6 @@ export interface TemplateDetailDataType {
     template: string;
 }
 
-export interface ImageDetailDataType extends TemplateDetailDataType {
-    withThumbnail?: boolean;
-    maxSizePixels?: number;
-    thumbnailMaxSizePixels?: number;
-    squareMaxSizePixels?: number;
-}
-
 export interface FieldDataType {
     type:
     "chip" |
@@ -21,23 +14,41 @@ export interface FieldDataType {
     "rating" |
     "image" |
     "json" |
-    "phone"
+    "phone" |
+    "image-gallery"
     ;
     label: string;
     key: string;
     required?: boolean;
 };
 
+// Image
+
 export interface FieldImageDataType extends FieldDataType {
     image: ImageDetailDataType;
 }
 
-export interface FieldJSONDataType extends FieldDataType {
-    json: JSONDetailDataType;
+export interface ImageDetailDataType extends TemplateDetailDataType {
+    withThumbnail?: boolean;
+    maxSizePixels?: number;
+    thumbnailMaxSizePixels?: number;
+    squareMaxSizePixels?: number;
+}
+
+// Chip
+
+export interface ChipDataType extends FieldDataType {
+    chip: ChipDetailDataType;
 }
 
 export interface ChipDetailDataType {
     stringOptions: string[];
+}
+
+// Content editable
+
+export interface ContenteditableDataType extends FieldDataType {
+    contenteditable: ContentEditableDetailDataType;
 }
 
 export interface ContentEditableDetailDataType {
@@ -45,16 +56,20 @@ export interface ContentEditableDetailDataType {
     minHeight?: number;
 }
 
-export interface ChipDataType extends FieldDataType {
-    chip: ChipDetailDataType;
+// Image Gallery
+
+export interface ImageGalleryDataType extends FieldDataType {
+    gallery: ImageGalleryConfigDataType;
 }
 
-export interface ContenteditableDataType extends FieldDataType {
-    contenteditable: ContentEditableDetailDataType;
+export interface ImageGalleryConfigDataType {
+
 }
 
-export interface ImageGalleryDetailDataType {
+// JSON
 
+export interface FieldJSONDataType extends FieldDataType {
+    json: JSONDetailDataType;
 }
 
 export type AllFieldsDataType =
@@ -62,7 +77,8 @@ export type AllFieldsDataType =
     FieldImageDataType |
     FieldJSONDataType |
     ChipDataType |
-    ContenteditableDataType;
+    ContenteditableDataType |
+    ImageGalleryDataType;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
     fields: (
@@ -70,6 +86,7 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         FieldImageDataType |
         FieldJSONDataType |
         ChipDataType |
-        ContenteditableDataType
+        ContenteditableDataType |
+        ImageGalleryDataType
     )[],
 }

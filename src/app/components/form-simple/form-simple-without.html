@@ -28,6 +28,9 @@
         } @else if (field.type=='chip') {
         <app-chip-select [formControl]="formControlMap[field.key]" [label]="field.label"
             [config]="castChipType(field).chip"></app-chip-select>
+        } @else if (field.type=='image-gallery') {
+        <app-image-gallery [formControl]="formControlMap[field.key]"
+            [config]="castImageGalleryType(field).gallery"></app-image-gallery>
         }
         }
     </div>
