@@ -14,11 +14,11 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/fields/image-gallery
+npx ng generate component --standalone --skip-tests components/fields/image-gallery
 ```
 
 ```bash
-npx ng generate component --standalone pages/photo_gallery/collections
+npx ng generate component --standalone --skip-tests pages/books/book-single
 ```
 
 ```bash

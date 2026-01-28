@@ -23,10 +23,10 @@ export interface NoteDataType extends BasicDataType {
 
 };
 
-const MODEL_NAME = "photocollection";
+const MODEL_NAME = "book_collection";
 
 @Component({
-  selector: 'app-collections',
+  selector: 'app-book-collection',
   standalone: true,
   imports: [
     CommonModule,
@@ -35,10 +35,10 @@ const MODEL_NAME = "photocollection";
     SearchInputComponent,
     CardDoc,
   ],
-  templateUrl: './collections.html',
-  styleUrl: './collections.scss',
+  templateUrl: './book-collection.html',
+  styleUrl: './book-collection.scss',
 })
-export class CollectionsComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
+export class BookCollection extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
@@ -67,7 +67,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     super(sanitizer, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Agregar álbum",
+      label: "Agregar libro",
       icon: "add",
       callback: this.openDialog.bind(this),
     });
@@ -108,7 +108,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
         { label: "Título", type: "text", key: "title", required: true },
         {
           label: "Imagen", type: "image", key: "image", image: {
-            template: "photo_gallery/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "books_gallery/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
         { label: "Descripción", type: "contenteditable", key: "description", contenteditable: { minHeight: 10, maxHeight: 20 } },
@@ -181,7 +181,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: MODEL_NAME,
-      path: "/photo_gallery/this",
+      path: "/books_gallery/this",
       id,
       title,
       description,
@@ -190,7 +190,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
   }
 
   async openDocument(model: any) {
-    this.router.navigate([`photo_gallery/this`], {
+    this.router.navigate([`books_gallery/this`], {
       queryParams: { col: MODEL_NAME, id: model.id }
     });
   }

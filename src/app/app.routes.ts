@@ -46,6 +46,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/photo_gallery/voyage-photo/voyage-photo').then(m => m.VoyagePhoto),
     },
     {
+        path: 'books_gallery/all',
+        loadComponent: () => import('./pages/books/book-collection/book-collection').then(m => m.BookCollection),
+    },
+    {
+        path: 'books_gallery/this',
+        loadComponent: () => import('./pages/books/book-single/book-single').then(m => m.BookSingle),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
