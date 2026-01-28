@@ -14,7 +14,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone components/chip-select
+npx ng generate component --standalone components/fields/image-gallery
 ```
 
 ```bash

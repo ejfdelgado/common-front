@@ -15,12 +15,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
-import { ImageDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { getBucketPath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
 import { environment } from 'environments/environment';
 import { ComponentBucketField } from 'types/ComponentBucketField';
+import { ImageDetailDataType } from 'types/fieldsTypes';
 import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;

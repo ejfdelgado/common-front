@@ -10,10 +10,10 @@ import { OnOffToggleComponent } from '@components/fields/on-off-toggle/on-off-to
 import { RatingComponent } from '@components/fields/rating/rating';
 import { ImageFileComponent } from '@components/fields/image-field/image-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
-import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType, FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/fields/phone-input/phone-input';
 import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.component';
+import { AllFieldsDataType } from 'types/fieldsTypes';
 
 @Component({
   selector: 'app-form-simple-without',

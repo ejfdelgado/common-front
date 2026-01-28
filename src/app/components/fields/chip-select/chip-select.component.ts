@@ -6,9 +6,9 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ChipDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { ChipDetailDataType } from 'types/fieldsTypes';
 
 export type ChipSelectDataType = string[];
 

@@ -1,6 +1,6 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AllFieldsDataType, ChipDataType, ChipDetailDataType, ContenteditableDataType, ContentEditableDetailDataType, FieldDataType, FieldImageDataType, FieldJSONDataType } from '@components/dialog-form/dialog-form.component';
 import { Subject, Subscription } from 'rxjs';
+import { AllFieldsDataType, ChipDataType, ContenteditableDataType, ContentEditableDetailDataType, FieldDataType, FieldImageDataType, FieldJSONDataType } from 'types/fieldsTypes';
 
 export type FlatJsonDataType = { [key: string]: any };
 

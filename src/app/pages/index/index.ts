@@ -10,8 +10,8 @@ import { FirestoreService } from '@services/firestore.service';
 import { LocationService } from '@services/location.service';
 import { AuthService } from '@services/auth.service';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
-import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
+import { AllFieldsDataType } from 'types/fieldsTypes';
 
 @Component({
   selector: 'app-index',

@@ -19,7 +19,6 @@ import {
 } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
-import { JSONDetailDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { AuthService } from '@services/auth.service';
@@ -29,6 +28,7 @@ import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import { ComponentBucketField } from 'types/ComponentBucketField';
+import { JSONDetailDataType } from 'types/fieldsTypes';
 import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;

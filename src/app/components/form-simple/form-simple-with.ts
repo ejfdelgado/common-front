@@ -11,10 +11,10 @@ import { RatingComponent } from '@components/fields/rating/rating';
 import { ImageFileComponent } from '@components/fields/image-field/image-field';
 import { JsonField } from '@components/fields/json-field/json-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
-import { AllFieldsDataType } from '@components/dialog-form/dialog-form.component';
 import { FlatJsonDataType, FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/fields/phone-input/phone-input';
 import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.component';
+import { AllFieldsDataType } from 'types/fieldsTypes';
 
 @Component({
   selector: 'app-form-simple-with',
