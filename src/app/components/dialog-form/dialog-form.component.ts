@@ -46,7 +46,8 @@ export class DialogFormComponent {
         private firestoreSrv: FirestoreService,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
-        this.config = data;
+        // Make a copy to avoid modify original
+        this.config = JSON.parse(JSON.stringify(data));
     }
 
     close(): void {
