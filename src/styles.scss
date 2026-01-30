@@ -5,6 +5,10 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+:root {
+  --mat-dialog-container-max-width: 80vw; /* Set to your desired max-width value */
+}
+
 html {
     @include mat.theme((color: (primary: mat.$azure-palette,
                 tertiary: mat.$blue-palette,

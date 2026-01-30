@@ -136,7 +136,7 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
       fields: [
         { label: "Descripción", type: "contenteditable", key: "description" },
         {
-          label: "", type: "image-gallery", key: "gallery", required: true, gallery: {
+          label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
             thumbnailMaxSizePixels: 100,
             template: "book/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
@@ -148,7 +148,7 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
       formConfig.model = model;
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
-      width: '800px',
+      width: '1200px',
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: formConfig,

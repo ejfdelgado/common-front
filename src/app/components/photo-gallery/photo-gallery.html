@@ -1,4 +1,5 @@
 @if (mode=='embedded') {
+@if (gallery.length > 0) {
 <div class="panel_embbed" [ngStyle]="{'height': height + 'px'}">
     <div class="big_image">
         <div class="view_background" [style.background-image]="'url(' + getPhoto(img1) + ')'">
@@ -10,8 +11,11 @@
             <mat-icon class="move_button white_subtitle">chevron_left</mat-icon>
         </div>
         }
-        @if (gallery.length > 1 && index < gallery.length - 1) {
-            <div class="control_panel right_control" (click)="forward()">
+        <div class="description_container">
+            <p class="white_subtitle" [innerHTML]="sanitizeText(img1?.description)"></p>
+        </div>
+        @if (gallery.length > 1 && index < gallery.length - 1) { <div class="control_panel right_control"
+            (click)="forward()">
             <mat-icon class="move_button white_subtitle">chevron_right</mat-icon>
     </div>
     }
@@ -26,4 +30,5 @@
 </div>
 }
 </div>
+}
 }

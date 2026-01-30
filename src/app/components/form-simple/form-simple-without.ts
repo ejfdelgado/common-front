@@ -15,6 +15,7 @@ import { PhoneInputComponent } from '@components/fields/phone-input/phone-input'
 import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.component';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { ImageGalleryComponent } from '@components/fields/image-gallery/image-gallery';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-form-simple-without',
@@ -54,8 +55,9 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
   constructor(
     public override fb: FormBuilder,
     public override cdr: ChangeDetectorRef,
+    public override snackBar: MatSnackBar,
   ) {
-    super(fb, cdr);
+    super(fb, cdr, snackBar);
   }
 
   ngOnInit(): void {

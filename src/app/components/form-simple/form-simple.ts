@@ -1,5 +1,6 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DifferedStore } from '@components/differedStore';
 import { Subject, Subscription } from 'rxjs';
 import {
@@ -27,6 +28,7 @@ export abstract class FormSimple implements DifferedStore {
   constructor(
     public fb: FormBuilder,
     public cdr: ChangeDetectorRef,
+    public snackBar: MatSnackBar,
   ) {
     this.form = this.fb.group({
       dynamicFields: this.fb.array([]),
@@ -109,6 +111,11 @@ export abstract class FormSimple implements DifferedStore {
         valid: true,
         data,
       };
+    } else {
+      this.snackBar.open("Invalid form", 'Close', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
     }
     return {
       valid: false,
