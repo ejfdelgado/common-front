@@ -1,7 +1,9 @@
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-import { getBucketFilePath } from "@tools/BucketPaths";
+import { getBucketFilePath, getSquarePath, getThumbnailPath } from "@tools/BucketPaths";
 import { isMobile } from "@tools/mobile";
 import moment from "moment";
+
+export type ImageTypeData = "big" | "thumbnail" | "square";
 
 export abstract class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};
@@ -91,5 +93,15 @@ export abstract class CommonComponent {
 
     getBucketFilePath(value: string | null) {
         return getBucketFilePath(value);
+    }
+
+    getBucketFilePathWithType(value: string, type: ImageTypeData) {
+        if (type == "big") {
+            return getBucketFilePath(value);
+        } else if (type == "thumbnail") {
+            return getBucketFilePath(getThumbnailPath(value));
+        } else {
+            return getBucketFilePath(getSquarePath(value));
+        }
     }
 }

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonComponent } from '@components/common.component';
+import { CommonComponent, ImageTypeData } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
@@ -34,6 +34,7 @@ export class CardDoc extends CommonComponent {
   @Input() model: any;
   @Input() actions: string[] = [];
   @Input() user: User | null = null;
+  @Input() imageType: ImageTypeData = "big";
   @Output() createUpdate: EventEmitter<any> = new EventEmitter();
   @Output() share: EventEmitter<any> = new EventEmitter();
   @Output() delete: EventEmitter<any> = new EventEmitter();

@@ -9,12 +9,13 @@
   </mat-card-header>
   @if (config.hasImage) {
   <div class="image_preview_parent" (click)="openDocument.emit(model)">
-    <div class="image_preview_blur" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
-    <div class="image_preview" [style.background-image]="'url(' + getBucketFilePath(model.image) + ')'"></div>
+    <div class="image_preview_blur"
+      [style.background-image]="'url(' + getBucketFilePathWithType(model.image, imageType) + ')'"></div>
+    <div class="image_preview"
+      [style.background-image]="'url(' + getBucketFilePathWithType(model.image, imageType) + ')'"></div>
   </div>
   }
-  <mat-card-content
-    [ngClass]="{'with_image': config.hasImage, 'without_image': !config.hasImage}">
+  <mat-card-content [ngClass]="{'with_image': config.hasImage, 'without_image': !config.hasImage}">
     <span class="text_date">{{ epochTo(model.created) }}</span>
     <p class="content_parent" [innerHTML]="sanitizeText(model.description, 256)"></p>
   </mat-card-content>

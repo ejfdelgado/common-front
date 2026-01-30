@@ -108,6 +108,7 @@ export class BookCollection extends AuthenticatedComponent implements OnInit, On
         { label: "Título", type: "text", key: "title", required: true },
         {
           label: "Imagen", type: "image", key: "image", image: {
+            thumbnailMaxSizePixels: 200,
             template: "books_gallery/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
