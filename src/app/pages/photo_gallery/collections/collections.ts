@@ -108,7 +108,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
         { label: "Título", type: "text", key: "title", required: true },
         {
           label: "Imagen", type: "image", key: "image", image: {
-            template: "photo_gallery/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "photo_gallery/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
         { label: "Descripción", type: "contenteditable", key: "description", contenteditable: { minHeight: 10, maxHeight: 20 } },

@@ -147,7 +147,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
         collectionName: MODEL_NAME, searchText: searchable,
         orderColumn: "updated",
         orderDirection: "desc",
-        author: this.user?.email,
+        author: this.user?.uid,
         top: 20,
       };
       if (!startover) {

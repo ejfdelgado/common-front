@@ -137,7 +137,7 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
         { label: "Descripción", type: "contenteditable", key: "description" },
         {
           label: "", type: "image-gallery", key: "gallery", required: true, gallery: {
-            template: "book/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "book/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
       ],

@@ -133,7 +133,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       return;
     }
     try {
-      const template = "photo_gallery/${user.email}/${collection.id}/${date.year}-${date.month}-${date.day}/${random}.jpg";
+      const template = "photo_gallery/${user.uid}/${collection.id}/${date.year}-${date.month}-${date.day}/${random}.jpg";
       const nextPath = getBucketPath(template, "", {
         collection: this.collection,
         user: AuthService.userStatic,

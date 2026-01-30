@@ -68,9 +68,9 @@ http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
 
-- Permitir configurar generar o no los _xs y _square, ademas definir el tamanio.
+- Permitir configurar generar o no los _xs y _square, ademas definir el tamanio!
 - Bug when removing all the images from the gallery cause error.
-- Gallery: description
+- Gallery: description below or with withe subtitle.
 
 - Create comments component. -> suggest store in firebase (multiple users update).
 

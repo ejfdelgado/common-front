@@ -108,7 +108,7 @@ export class BookCollection extends AuthenticatedComponent implements OnInit, On
         { label: "Título", type: "text", key: "title", required: true },
         {
           label: "Imagen", type: "image", key: "image", image: {
-            template: "books_gallery/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "books_gallery/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
         { label: "Descripción", type: "contenteditable", key: "description", contenteditable: { minHeight: 10, maxHeight: 20 } },

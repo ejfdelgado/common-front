@@ -36,14 +36,14 @@ export class Index implements AfterViewInit {
   fields: AllFieldsDataType[] = [
     {
       label: "", type: "image-gallery", key: "gallery", required: true, gallery: {
-        template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+        template: "voyage_note/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
       }
     },
     /*
     { label: "Título", type: "text", key: "title", required: true },
     {
       label: "Imagen", type: "image", key: "image", image: {
-        template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+        template: "voyage_note/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
       }
     },
     { label: "Descripción", type: "contenteditable", key: "description" },

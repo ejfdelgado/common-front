@@ -16,7 +16,8 @@ service cloud.firestore {
     match /pro-note/{document=**} {
       allow read: if
         request.auth != null &&
-        resource.data.author == request.auth.token.email;
+        //resource.data.author == request.auth.token.uid;
+        resource.data.author == request.auth.uid;
     }
     match /pro-photocollection/{photoId} {
       allow read: if true;

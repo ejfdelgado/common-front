@@ -25,7 +25,7 @@
     @if (config.shareQR) {
     <button matButton (click)="localShare('qr')" class="icon_only"><mat-icon>qr_code</mat-icon></button>
     }
-    @if (user && user.email == model.author) {
+    @if (user && user.uid == model.author) {
     <button matButton (click)="openEdit()" class="icon_only"><mat-icon>edit</mat-icon></button>
     <button matButton (click)="askDelete()" class="icon_only"><mat-icon>delete_forever</mat-icon></button>
     }
