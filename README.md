@@ -70,8 +70,11 @@ http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
 - On swipe down avoid reload...
+- Place thumbnail scroll of gallery after next or previous button.
+- Add multilanguage, service, and pipe.
+- Add alert service with support of multilanguage, multiaction.
 
-- Create comments component. -> suggest store in firebase (multiple users update).
+- Create comments component. -> store in firebase (multiple users update).
 
 - Create an email field.
 - Create address widget with map and address search.
