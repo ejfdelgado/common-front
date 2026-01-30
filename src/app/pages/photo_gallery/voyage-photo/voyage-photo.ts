@@ -154,14 +154,13 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
       const model: any = {
         title: this.epochTo(Date.now()),
-        image: getSquarePath(nextPath),
-        thumbnail: nextPath,
+        image: nextPath,
         lat: pos.latitude,
         lon: pos.longitude,
       };
       const promesas: Promise<any>[] = [];
       promesas.push(this.fileSrv.upload(model.image, limitedBlob, "bucket"));
-      promesas.push(this.fileSrv.upload(model.thumbnail, squaredBlob, "bucket"));
+      promesas.push(this.fileSrv.upload(getSquarePath(nextPath), squaredBlob, "bucket"));
       await Promise.all(promesas);
 
       // Ask save

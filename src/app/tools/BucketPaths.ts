@@ -11,13 +11,15 @@ export function getBucketFilePath(value: string | null) {
     }
 }
 
-export function getThumbnailPath(value: string) {
+export function getThumbnailPath(value: string | null) {
+    if (!value) { return null; }
     return value.replace(/\.[a-z\?=\d]+$/ig, (extension: string) => {
         return "_xs" + extension;
     });
 }
 
 export function getSquarePath(value: string) {
+    if (!value) { return null; }
     return value.replace(/\.[a-z\?=\d]+$/ig, (extension: string) => {
         return "_square" + extension;
     });

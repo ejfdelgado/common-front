@@ -82,11 +82,14 @@ export class FileService {
     }
 
     upload(
-        path: string,
+        path: string | null,
         blob: Blob,
         type: StorageType = "bucket",
         options?: any,
     ): Promise<UploadResponse> {
+        if (!path) {
+            throw new Error("No url image");
+        }
         if (type == "bucket") {
             return this.bucketSrv.upload(path, blob, options);
         } else if (type == "hard_drive") {

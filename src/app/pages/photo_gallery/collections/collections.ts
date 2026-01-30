@@ -108,6 +108,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
         { label: "Título", type: "text", key: "title", required: true },
         {
           label: "Imagen", type: "image", key: "image", image: {
+            thumbnailMaxSizePixels: 200,
             template: "photo_gallery/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
