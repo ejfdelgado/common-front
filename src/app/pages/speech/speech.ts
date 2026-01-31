@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
-import { CommonSpeech, SelectOptionType } from "../commonSpeech";
+import { CommonSpeech } from "../commonSpeech";
 import { BooleanStateService } from "@services/boolean-state.service";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   standalone: true,
@@ -28,8 +28,9 @@ export class Speech extends CommonSpeech {
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
+    public override sanitizer: DomSanitizer,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

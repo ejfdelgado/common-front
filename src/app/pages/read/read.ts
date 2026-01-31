@@ -8,6 +8,7 @@ import { distinctUntilChanged, filter, map } from 'rxjs';
 import { IndicatorService } from "@services/indicator.service";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 import { BooleanStateService } from "@services/boolean-state.service";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   standalone: true,
@@ -28,8 +29,9 @@ export class Read extends CommonSpeech {
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
+    public override sanitizer: DomSanitizer,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
     const config: CommandConfigType = {

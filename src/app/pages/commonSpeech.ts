@@ -6,6 +6,8 @@ import { debounceTime } from 'rxjs/operators';
 import { Subscription } from "rxjs";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { getUrlQueryParams } from "@tools/UrlUtil";
+import { CommonComponent } from "@components/common.component";
+import { DomSanitizer } from "@angular/platform-browser";
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
 
@@ -32,7 +34,7 @@ export interface WordType {
     id: number;
 }
 
-export class CommonSpeech {
+export class CommonSpeech extends CommonComponent {
     tParam: string = "0";
     langs: SelectOptionType[] = [
         { id: "es-ES", label: "Español", icon: "🇪🇸" },
@@ -49,8 +51,10 @@ export class CommonSpeech {
         public speechSrv: SpeechSynthesisService,
         public indicatorSrv: IndicatorService,
         public booleanService: BooleanStateService,
+        public override sanitizer: DomSanitizer,
         preferedLang?: string,
     ) {
+        super(sanitizer);
         if (preferedLang) {
             this.currentLang = preferedLang;
         }

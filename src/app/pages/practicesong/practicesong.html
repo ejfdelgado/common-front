@@ -11,7 +11,8 @@
     <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="toggleSongFromBack()"
         #parentContainer>
         @for (verse of config?.lyric; track verse) {
-        <span class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true, 'editing': editing}" #child>
+        <span class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true, 'editing': editing}"
+            #child>
             <span (click)="playVerse1($event, verse)">💬</span>
             @if (editing) {
             <app-editable-input [discrete]="true" [(ngModel)]="verse.txt"></app-editable-input>
@@ -27,7 +28,7 @@
         }
     </div>
 
-    <div class="container_vertical padding_10">
+    <div class="container_vertical position_relative padding_10">
         <span class="words_space">
             @for (word of words; track word.id) {
             <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
@@ -48,6 +49,13 @@
             <h3 class="millis_button" [ngClass]="{'fade-white-to-black': isCopying}" (click)="copyMillis()">millis: {{
                 millisTime }}</h3>
         </div>
+        <div class="position_absolute bottom_right">
+            <button class="transparent" (click)="setFullScreen(true)" *ngIf="!isFullScreen">
+                <mat-icon class="white_subtitle">fullscreen</mat-icon>
+            </button>
+            <button class="transparent" (click)="setFullScreen(false)" *ngIf="isFullScreen">
+                <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
+            </button>
+        </div>
     </div>
-
 </div>

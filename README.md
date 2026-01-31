@@ -51,7 +51,7 @@ Configure branding at:
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=karma.json)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
 
-[love song](https://localhost:4200/#/practicesong?q=love_song_to_the_earth.json&t=1)
+[love song](https://localhost:4200/#/practicesong?q=love_song_to_the_earth.json)
 
 [Pano Game](https://stg-playtolearn.storage.googleapis.com/index.html#/panogame?q=2025-07%2F001)
 

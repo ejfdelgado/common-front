@@ -6,7 +6,8 @@
 @use '@angular/material' as mat;
 
 :root {
-  --mat-dialog-container-max-width: 80vw; /* Set to your desired max-width value */
+    --mat-dialog-container-max-width: 80vw;
+    /* Set to your desired max-width value */
 }
 
 html {
@@ -56,28 +57,19 @@ html {
 }
 
 html {
-    margin: 0;
-    padding: 0;
     overflow-x: hidden;
-    overscroll-behavior-y: contain;
-}
-
-//html,
-body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overscroll-behavior-y: contain;
 }
 
 body {
     background-color: #ffffff;
+    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
 }
 
+html,
 body {
+    height: 100%;
     margin: 0;
-    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
-    /* Esto evita actualizar cuando le dan scroll hacia abajo */
+    padding: 0;
     overscroll-behavior-y: contain;
 }
 
@@ -247,6 +239,25 @@ button.icon_only mat-icon {
     padding-bottom: 10px;
 }
 
+.position_absolute {
+    position: absolute;
+}
+
+.position_absolute.bottom_right {
+    right: 10px;
+    bottom: 10px;
+}
+
+.position_relative {
+    position: relative;
+}
+
+button.transparent {
+    background-color: transparent;
+    border: 0px;
+    cursor: pointer;
+}
+
 @media (max-width: 800px) {
     .nogalespopup {
         max-width: 90vw;
@@ -284,11 +295,6 @@ button.icon_only mat-icon {
         width: 100% !important;
         height: auto !important;
     }
-}
-
-html,
-body {
-    height: 100%;
 }
 
 body {

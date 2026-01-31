@@ -14,16 +14,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommonSpeech, SelectOptionType, VoiceQuery } from "../../../commonSpeech";
-import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommonSpeech, VoiceQuery } from "../../../commonSpeech";
+import { CommandConfigType, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { Question, QuestionDataType } from "../question/question";
 import { shuffleInPlace } from '@tools/ArrayUtil';
 import { BooleanStateService } from "@services/boolean-state.service";
 import { Statusbar } from "../statusbar/statusbar";
 import { isMobile } from '@tools/mobile';
-import { GyroReturnType } from './types';
 import { getUrlQueryParams } from '@tools/UrlUtil';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -58,7 +58,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   queryParam: string = "";
   viewState: "photo" | "map" | "print" = "photo";
   sceneCreated: PromiseEmitter = new PromiseEmitter();
-  isFullScreen: boolean = false;
   hasMobile: boolean;
   useStereo: boolean = false;
   isSystemListening: boolean = false;
@@ -112,8 +111,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
     public override booleanService: BooleanStateService,
+    public override sanitizer: DomSanitizer,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, "es-ES");
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, "es-ES");
     this.hasMobile = isMobile();
 
     this.voiceSrv.setInterimResults(true);
@@ -395,16 +395,6 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       (document as any).webkitExitFullscreen();
     } else if ((document as any).msExitFullscreen) { // IE11
       (document as any).msExitFullscreen();
-    }
-  }
-
-  setFullScreen(value: boolean) {
-    this.isFullScreen = value;
-    if (value) {
-      const elem = document.documentElement;
-      this.enterFullscreen(elem);
-    } else {
-      this.exitFullscreen();
     }
   }
 

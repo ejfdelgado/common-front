@@ -1,6 +1,7 @@
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { getBucketFilePath, getSquarePath, getThumbnailPath } from "@tools/BucketPaths";
 import { isMobile } from "@tools/mobile";
+import { enterFullscreen, exitFullscreen } from "@tools/ScreenUtils";
 import moment from "moment";
 
 export type ImageTypeData = "big" | "thumbnail" | "square";
@@ -10,6 +11,7 @@ export abstract class CommonComponent {
     epochYearStart: number = moment().startOf('year').valueOf();
     onChangeList: Function[] = [];
     onTouchedList: Function[] = [];
+    isFullScreen: boolean = false;
 
     constructor(
         public sanitizer: DomSanitizer,
@@ -102,6 +104,15 @@ export abstract class CommonComponent {
             return getBucketFilePath(getThumbnailPath(value));
         } else {
             return getBucketFilePath(getSquarePath(value));
+        }
+    }
+
+    setFullScreen(value: boolean) {
+        this.isFullScreen = value;
+        if (value) {
+            enterFullscreen();
+        } else {
+            exitFullscreen();
         }
     }
 }

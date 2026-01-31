@@ -11,6 +11,7 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { distinctUntilKeyChangedWithTTL } from '@tools/rxjsUtils';
 import { ModuloSonido } from '@services/sonido.service';
 import { getBucketFilePath } from '@tools/BucketPaths';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export interface SoundDataType {
   id: string;
@@ -85,8 +86,9 @@ export class Playsound extends CommonSpeech {
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
+    public override sanitizer: DomSanitizer,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, "en-US");
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, "en-US");
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

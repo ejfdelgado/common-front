@@ -11,6 +11,7 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { ClipboardUtil } from "@tools/Clipboard";
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { EditableInput } from '@components/fields/editable-input/editable-input';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -46,6 +47,7 @@ export class Practicesong extends CommonSpeech {
   isCopying: boolean = false;
   config: ConfigSong | null = null;
   editing: boolean = false;
+  lastTimeout: NodeJS.Timeout | null = null;
 
   @ViewChild('parentContainer', { read: ElementRef })
   parent!: ElementRef<HTMLElement>;
@@ -59,8 +61,9 @@ export class Practicesong extends CommonSpeech {
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
+    public override sanitizer: DomSanitizer,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 
@@ -151,12 +154,38 @@ export class Practicesong extends CommonSpeech {
 
   async playVerse2(event: MouseEvent, verse: Verse, stopIfPlaying: boolean = false) {
     event.stopPropagation();
+    this.clearLastTimeout();
     if (stopIfPlaying && this.isPlaying) {
       this.stopSong();
       return;
     }
+    if (this.config && !this.isPlaying && typeof verse.millis == "number") {
+      // Play with timer
+      // Is there a verse after this one?
+      const i1 = this.config.lyric.indexOf(verse);
+      if (this.config.lyric.length > i1 + 1) {
+        const verseNext = this.config.lyric[i1 + 1];
+        if (typeof verseNext.millis == "number") {
+          const millisGap = verseNext.millis - verse.millis;
+          if (millisGap > 0) {
+            this.startSong(verse.millis);
+            setTimeout(() => {
+              this.stopSong();
+              this.cdr.detectChanges();
+            }, millisGap);
+          }
+        }
+      }
+      return;
+    }
     if (typeof verse.millis == "number") {
       this.startSong(verse.millis);
+    }
+  }
+
+  clearLastTimeout() {
+    if (this.lastTimeout) {
+      clearTimeout(this.lastTimeout);
     }
   }
 

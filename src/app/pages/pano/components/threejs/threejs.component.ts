@@ -19,6 +19,8 @@ import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { Base64 } from "@tools/Base64";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommonComponent } from '@components/common.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 setOptions({ key: Base64.decode('QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j') });
 
@@ -43,7 +45,7 @@ export interface PanoConfig {
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
-export class ThreejsComponent implements OnInit, AfterViewInit {
+export class ThreejsComponent extends CommonComponent implements OnInit, AfterViewInit {
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   @ViewChild('qrcanvas') canvasQRRef!: ElementRef;
   @ViewChild('myprintcanvas') printCanvasRef!: ElementRef;
@@ -60,7 +62,6 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   map: any = null;
   markers: Array<any> = [];
   sceneCreated: PromiseEmitter = new PromiseEmitter();
-  isFullScreen: boolean = false;
   hasMobile: boolean;
   configuration: PanoConfig = {
     title: "Las mejores cosas de la vida",
@@ -146,7 +147,9 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
   constructor(
     private indicatorSrv: IndicatorService,
     private cdr: ChangeDetectorRef,
+    public override sanitizer: DomSanitizer,
   ) {
+    super(sanitizer);
     this.hasMobile = this.isMobile();
   }
 
@@ -396,15 +399,7 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  setFullScreen(value: boolean) {
-    this.isFullScreen = value;
-    if (value) {
-      const elem = document.documentElement;
-      this.enterFullscreen(elem);
-    } else {
-      this.exitFullscreen();
-    }
-  }
+
 
   async recreatePrinted(modelId: string) {
     const activity = this.indicatorSrv.start();
@@ -703,10 +698,5 @@ export class ThreejsComponent implements OnInit, AfterViewInit {
     pdf.save(`paper_model_${this.selectedExtension}_${this.dpi}dpi_${this.paperSelectedOption}_${modelId}.pdf`);
 
     activity.done();
-  }
-
-  isMobile() {
-    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-      .test(navigator.userAgent);
   }
 }
