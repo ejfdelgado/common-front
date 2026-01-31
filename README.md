@@ -3,7 +3,6 @@
 Songs:
 In the name of love
 Luca Disney song
-Love song to the earth: https://www.youtube.com/watch?v=pLCSTn6_uU0
 
 ```
 npx @angular/cli@20 new common-front
@@ -67,11 +66,7 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-http://localhost:8080/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
 
-https://pro-common-backend-1066977671859.us-central1.run.app/social?col=note&id=Szt6YABx5TEiGElFHpZB&path=/voyage_photo
-
-- On swipe down avoid reload...
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.
 - Add alert service with support of multilanguage, multiaction.
