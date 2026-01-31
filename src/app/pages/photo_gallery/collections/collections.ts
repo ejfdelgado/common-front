@@ -109,6 +109,7 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
         {
           label: "Imagen", type: "image", key: "image", image: {
             thumbnailMaxSizePixels: 200,
+            squareMaxSizePixels: 800,//For social
             template: "photo_gallery/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },

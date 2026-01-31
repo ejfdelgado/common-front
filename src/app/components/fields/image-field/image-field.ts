@@ -25,8 +25,7 @@ import { UploadResponse } from 'types/file';
 
 export type ComponentDataType = string | null;
 
-const maxSizePixels = 2048;
-const squareMaxSizePixels = 1024;
+const MAX_SIZE_PIXELS = 2048;
 
 @Component({
   selector: 'app-image-field',
@@ -106,7 +105,7 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
     }
 
     // Assure max images size
-    const side = this.config.maxSizePixels ? this.config.maxSizePixels : maxSizePixels;
+    const side = this.config.maxSizePixels ? this.config.maxSizePixels : MAX_SIZE_PIXELS;
     const resizedBlob = await this.fileSrv.resizeImageBlob(
       blob,
       side,
@@ -164,7 +163,7 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
       }
 
       if (this.config?.squareMaxSizePixels) {
-        const sideSquare = this.config?.squareMaxSizePixels ? this.config.squareMaxSizePixels : squareMaxSizePixels;
+        const sideSquare = this.config.squareMaxSizePixels;
         const squaredBlob = await this.fileSrv.squareImageCover(
           this.lastBlob,
           sideSquare,
