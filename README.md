@@ -49,6 +49,7 @@ Configure branding at:
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=hall_of_fame.json&t=1)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=unstopable.json&t=1)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=karma.json)
+[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
 
 [love song](https://localhost:4200/#/practicesong?q=love_song_to_the_earth.json&t=1)
 
