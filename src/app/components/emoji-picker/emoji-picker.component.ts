@@ -1016,7 +1016,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F480"
       ],
       "emoji": "💀",
-      "name": "skull",
+      "name": "skull skeleton bone",
       "category": "Smileys & Emotion",
       "subcategory": "face-negative"
     },
@@ -1025,7 +1025,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "2620"
       ],
       "emoji": "☠️",
-      "name": "skull and crossbones",
+      "name": "skull and crossbones skeleton",
       "category": "Smileys & Emotion",
       "subcategory": "face-negative"
     },
@@ -1034,7 +1034,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4A9"
       ],
       "emoji": "💩",
-      "name": "pile of poo",
+      "name": "pile poop shit",
       "category": "Smileys & Emotion",
       "subcategory": "face-costume"
     },
@@ -1052,7 +1052,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F479"
       ],
       "emoji": "👹",
-      "name": "ogre",
+      "name": "ogre evil satan",
       "category": "Smileys & Emotion",
       "subcategory": "face-costume"
     },
@@ -1079,7 +1079,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F47D"
       ],
       "emoji": "👽",
-      "name": "alien",
+      "name": "alien martian",
       "category": "Smileys & Emotion",
       "subcategory": "face-costume"
     },
@@ -1445,7 +1445,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F48B"
       ],
       "emoji": "💋",
-      "name": "kiss mark",
+      "name": "kiss mark mouth",
       "category": "Smileys & Emotion",
       "subcategory": "emotion"
     },
@@ -1490,7 +1490,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4A6"
       ],
       "emoji": "💦",
-      "name": "sweat droplets",
+      "name": "sweat droplets water",
       "category": "Smileys & Emotion",
       "subcategory": "emotion"
     },
@@ -1499,7 +1499,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4A8"
       ],
       "emoji": "💨",
-      "name": "dashing away",
+      "name": "dashing away wind",
       "category": "Smileys & Emotion",
       "subcategory": "emotion"
     },
@@ -1517,7 +1517,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4AC"
       ],
       "emoji": "💬",
-      "name": "speech balloon",
+      "name": "speech balloon bubble",
       "category": "Smileys & Emotion",
       "subcategory": "emotion"
     },
@@ -1557,7 +1557,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4AD"
       ],
       "emoji": "💭",
-      "name": "thought balloon",
+      "name": "thought balloon bubble think",
       "category": "Smileys & Emotion",
       "subcategory": "emotion"
     },
@@ -1566,7 +1566,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4A4"
       ],
       "emoji": "💤",
-      "name": "ZZZ",
+      "name": "ZZZ sleep",
       "category": "Smileys & Emotion",
       "subcategory": "emotion"
     },
@@ -1611,7 +1611,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F596"
       ],
       "emoji": "🖖",
-      "name": "vulcan salute",
+      "name": "vulcan salute hand",
       "category": "People & Body",
       "subcategory": "hand-fingers-open"
     },
@@ -1683,7 +1683,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F90C"
       ],
       "emoji": "🤌",
-      "name": "pinched fingers",
+      "name": "pinched fingers hand",
       "category": "People & Body",
       "subcategory": "hand-fingers-partial"
     },
@@ -1737,7 +1737,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F918"
       ],
       "emoji": "🤘",
-      "name": "sign of the horns",
+      "name": "sign of the horns hand",
       "category": "People & Body",
       "subcategory": "hand-fingers-partial"
     },
@@ -1962,7 +1962,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4AA"
       ],
       "emoji": "💪",
-      "name": "flexed biceps",
+      "name": "flexed biceps arm",
       "category": "People & Body",
       "subcategory": "body-parts"
     },
@@ -2115,7 +2115,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1FAE6"
       ],
       "emoji": "🫦",
-      "name": "biting lip",
+      "name": "biting lip mouth",
       "category": "People & Body",
       "subcategory": "body-parts"
     },
@@ -2125,7 +2125,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "👶",
       "name": "baby",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2134,7 +2134,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "🧒",
       "name": "child",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2143,7 +2143,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "👦",
       "name": "boy",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2152,7 +2152,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "👧",
       "name": "girl",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2161,7 +2161,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "🧑",
       "name": "person",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2170,7 +2170,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "👱",
       "name": "person: blond hair",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2179,7 +2179,7 @@ export class EmojiPickerComponent extends CommonComponent {
       ],
       "emoji": "👨",
       "name": "man",
-      "category": "People & Body",
+      "category": "People Body",
       "subcategory": "person"
     },
     {
@@ -2187,7 +2187,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9D4"
       ],
       "emoji": "🧔",
-      "name": "person: beard",
+      "name": "person beard",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2199,7 +2199,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "FE0F"
       ],
       "emoji": "🧔‍♂️",
-      "name": "man: beard",
+      "name": "man beard",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2211,7 +2211,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "FE0F"
       ],
       "emoji": "🧔‍♀️",
-      "name": "woman: beard",
+      "name": "woman beard",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2222,7 +2222,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B0"
       ],
       "emoji": "👨‍🦰",
-      "name": "man: red hair",
+      "name": "man red hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2233,7 +2233,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B1"
       ],
       "emoji": "👨‍🦱",
-      "name": "man: curly hair",
+      "name": "man curly hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2244,7 +2244,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B3"
       ],
       "emoji": "👨‍🦳",
-      "name": "man: white hair",
+      "name": "man white hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2255,7 +2255,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B2"
       ],
       "emoji": "👨‍🦲",
-      "name": "man: bald",
+      "name": "man bald",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2275,7 +2275,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B0"
       ],
       "emoji": "👩‍🦰",
-      "name": "woman: red hair",
+      "name": "woman red hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2286,7 +2286,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B0"
       ],
       "emoji": "🧑‍🦰",
-      "name": "person: red hair",
+      "name": "person red hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2297,7 +2297,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B1"
       ],
       "emoji": "👩‍🦱",
-      "name": "woman: curly hair",
+      "name": "woman curly hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2308,7 +2308,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B1"
       ],
       "emoji": "🧑‍🦱",
-      "name": "person: curly hair",
+      "name": "person curly hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2319,7 +2319,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B3"
       ],
       "emoji": "👩‍🦳",
-      "name": "woman: white hair",
+      "name": "woman white hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2330,7 +2330,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B3"
       ],
       "emoji": "🧑‍🦳",
-      "name": "person: white hair",
+      "name": "person white hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2341,7 +2341,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B2"
       ],
       "emoji": "👩‍🦲",
-      "name": "woman: bald",
+      "name": "woman bald",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2352,7 +2352,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9B2"
       ],
       "emoji": "🧑‍🦲",
-      "name": "person: bald",
+      "name": "person bald",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2364,7 +2364,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "FE0F"
       ],
       "emoji": "👱‍♀️",
-      "name": "woman: blond hair",
+      "name": "woman blond hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -2376,7 +2376,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "FE0F"
       ],
       "emoji": "👱‍♂️",
-      "name": "man: blond hair",
+      "name": "man blond hair",
       "category": "People & Body",
       "subcategory": "person"
     },
@@ -3739,7 +3739,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9D9"
       ],
       "emoji": "🧙",
-      "name": "mage",
+      "name": "mage wizard",
       "category": "People & Body",
       "subcategory": "person-fantasy"
     },
@@ -3838,7 +3838,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F9DC"
       ],
       "emoji": "🧜",
-      "name": "merperson",
+      "name": "merperson mermaid",
       "category": "People & Body",
       "subcategory": "person-fantasy"
     },
@@ -8435,7 +8435,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F30D"
       ],
       "emoji": "🌍",
-      "name": "globe showing Europe-Africa",
+      "name": "globe showing Europe-Africa earth world",
       "category": "Travel & Places",
       "subcategory": "place-map"
     },
@@ -8444,7 +8444,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F30E"
       ],
       "emoji": "🌎",
-      "name": "globe showing Americas",
+      "name": "globe showing Americas earth world",
       "category": "Travel & Places",
       "subcategory": "place-map"
     },
@@ -8453,7 +8453,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F30F"
       ],
       "emoji": "🌏",
-      "name": "globe showing Asia-Australia",
+      "name": "globe showing Asia-Australia earth world",
       "category": "Travel & Places",
       "subcategory": "place-map"
     },
@@ -8462,7 +8462,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F310"
       ],
       "emoji": "🌐",
-      "name": "globe with meridians",
+      "name": "globe with meridians earth world",
       "category": "Travel & Places",
       "subcategory": "place-map"
     },
@@ -10154,7 +10154,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F30C"
       ],
       "emoji": "🌌",
-      "name": "milky way",
+      "name": "milky way sky",
       "category": "Travel & Places",
       "subcategory": "sky & weather"
     },
@@ -11036,7 +11036,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "2665"
       ],
       "emoji": "♥️",
-      "name": "heart suit",
+      "name": "heart suit love",
       "category": "Activities",
       "subcategory": "game"
     },
@@ -11567,7 +11567,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F48D"
       ],
       "emoji": "💍",
-      "name": "ring",
+      "name": "ring diamond",
       "category": "Objects",
       "subcategory": "clothing"
     },
@@ -11576,7 +11576,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F48E"
       ],
       "emoji": "💎",
-      "name": "gem stone",
+      "name": "gem stone diamond",
       "category": "Objects",
       "subcategory": "clothing"
     },
@@ -12116,7 +12116,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F50D"
       ],
       "emoji": "🔍",
-      "name": "magnifying glass tilted left",
+      "name": "magnifying glass tilted left search",
       "category": "Objects",
       "subcategory": "light & video"
     },
@@ -12125,7 +12125,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F50E"
       ],
       "emoji": "🔎",
-      "name": "magnifying glass tilted right",
+      "name": "magnifying glass tilted right search",
       "category": "Objects",
       "subcategory": "light & video"
     },
@@ -12269,7 +12269,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4DC"
       ],
       "emoji": "📜",
-      "name": "scroll",
+      "name": "scroll poetry",
       "category": "Objects",
       "subcategory": "book-paper"
     },
@@ -12341,7 +12341,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1FA99"
       ],
       "emoji": "🪙",
-      "name": "coin",
+      "name": "coin money",
       "category": "Objects",
       "subcategory": "money"
     },
@@ -12359,7 +12359,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4B5"
       ],
       "emoji": "💵",
-      "name": "dollar banknote",
+      "name": "dollar banknote money",
       "category": "Objects",
       "subcategory": "money"
     },
@@ -12728,7 +12728,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F4CD"
       ],
       "emoji": "📍",
-      "name": "round pushpin",
+      "name": "round pushpin location",
       "category": "Objects",
       "subcategory": "office"
     },
@@ -12809,7 +12809,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F512"
       ],
       "emoji": "🔒",
-      "name": "locked",
+      "name": "locked keep",
       "category": "Objects",
       "subcategory": "lock"
     },
@@ -13016,7 +13016,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "2696"
       ],
       "emoji": "⚖️",
-      "name": "balance scale",
+      "name": "balance scale weight",
       "category": "Objects",
       "subcategory": "tool"
     },
@@ -13586,7 +13586,7 @@ export class EmojiPickerComponent extends CommonComponent {
         "1F6BA"
       ],
       "emoji": "🚺",
-      "name": "women’s room",
+      "name": "women's room",
       "category": "Symbols",
       "subcategory": "transport-sign"
     },
@@ -14224,7 +14224,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "25B6"
       ],
-      "emoji": "▶",
+      "emoji": "▶️",
       "name": "play button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14242,7 +14242,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23ED"
       ],
-      "emoji": "⏭",
+      "emoji": "⏭️",
       "name": "next track button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14251,7 +14251,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23EF"
       ],
-      "emoji": "⏯",
+      "emoji": "⏯️",
       "name": "play or pause button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14260,7 +14260,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "25C0"
       ],
-      "emoji": "◀",
+      "emoji": "◀️",
       "name": "reverse button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14278,7 +14278,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23EE"
       ],
-      "emoji": "⏮",
+      "emoji": "⏮️",
       "name": "last track button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14323,7 +14323,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23F8"
       ],
-      "emoji": "⏸",
+      "emoji": "⏸️",
       "name": "pause button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14332,7 +14332,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23F9"
       ],
-      "emoji": "⏹",
+      "emoji": "⏹️",
       "name": "stop button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14341,7 +14341,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23FA"
       ],
-      "emoji": "⏺",
+      "emoji": "⏺️",
       "name": "record button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14350,7 +14350,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "23CF"
       ],
-      "emoji": "⏏",
+      "emoji": "⏏️",
       "name": "eject button",
       "category": "Symbols",
       "subcategory": "av-symbol"
@@ -14422,7 +14422,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2640"
       ],
-      "emoji": "♀",
+      "emoji": "♀️",
       "name": "female sign",
       "category": "Symbols",
       "subcategory": "gender"
@@ -14431,7 +14431,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2642"
       ],
-      "emoji": "♂",
+      "emoji": "♂️",
       "name": "male sign",
       "category": "Symbols",
       "subcategory": "gender"
@@ -14440,7 +14440,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "26A7"
       ],
-      "emoji": "⚧",
+      "emoji": "⚧️",
       "name": "transgender symbol",
       "category": "Symbols",
       "subcategory": "gender"
@@ -14449,7 +14449,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2716"
       ],
-      "emoji": "✖",
+      "emoji": "✖️",
       "name": "multiply",
       "category": "Symbols",
       "subcategory": "math"
@@ -14494,7 +14494,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "267E"
       ],
-      "emoji": "♾",
+      "emoji": "♾️",
       "name": "infinity",
       "category": "Symbols",
       "subcategory": "math"
@@ -14503,7 +14503,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "203C"
       ],
-      "emoji": "‼",
+      "emoji": "‼️",
       "name": "double exclamation mark",
       "category": "Symbols",
       "subcategory": "punctuation"
@@ -14512,7 +14512,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2049"
       ],
-      "emoji": "⁉",
+      "emoji": "⁉️",
       "name": "exclamation question mark",
       "category": "Symbols",
       "subcategory": "punctuation"
@@ -14557,7 +14557,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "3030"
       ],
-      "emoji": "〰",
+      "emoji": "〰️",
       "name": "wavy dash",
       "category": "Symbols",
       "subcategory": "punctuation"
@@ -14584,7 +14584,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2695"
       ],
-      "emoji": "⚕",
+      "emoji": "⚕️",
       "name": "medical symbol",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14593,7 +14593,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "267B"
       ],
-      "emoji": "♻",
+      "emoji": "♻️",
       "name": "recycling symbol",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14602,7 +14602,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "269C"
       ],
-      "emoji": "⚜",
+      "emoji": "⚜️",
       "name": "fleur-de-lis",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14656,7 +14656,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2611"
       ],
-      "emoji": "☑",
+      "emoji": "☑️",
       "name": "check box with check",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14665,7 +14665,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2714"
       ],
-      "emoji": "✔",
+      "emoji": "✅",
       "name": "check mark",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14710,7 +14710,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "303D"
       ],
-      "emoji": "〽",
+      "emoji": "〽️",
       "name": "part alternation mark",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14719,7 +14719,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2733"
       ],
-      "emoji": "✳",
+      "emoji": "✳️",
       "name": "eight-spoked asterisk",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14728,7 +14728,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2734"
       ],
-      "emoji": "✴",
+      "emoji": "✴️",
       "name": "eight-pointed star",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14737,7 +14737,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2747"
       ],
-      "emoji": "❇",
+      "emoji": "❇️",
       "name": "sparkle",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14746,7 +14746,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "00A9"
       ],
-      "emoji": "©",
+      "emoji": "©️",
       "name": "copyright",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14755,7 +14755,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "00AE"
       ],
-      "emoji": "®",
+      "emoji": "®️",
       "name": "registered",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -14764,7 +14764,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2122"
       ],
-      "emoji": "™",
+      "emoji": "™️",
       "name": "trade mark",
       "category": "Symbols",
       "subcategory": "other-symbol"
@@ -15022,7 +15022,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "2139"
       ],
-      "emoji": "ℹ",
+      "emoji": "ℹ️",
       "name": "information",
       "category": "Symbols",
       "subcategory": "alphanum"
@@ -15040,7 +15040,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "24C2"
       ],
-      "emoji": "Ⓜ",
+      "emoji": "Ⓜ️",
       "name": "circled M",
       "category": "Symbols",
       "subcategory": "alphanum"
@@ -15130,7 +15130,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "1F202"
       ],
-      "emoji": "🈂",
+      "emoji": "🈂️",
       "name": "Japanese “service charge” button",
       "category": "Symbols",
       "subcategory": "alphanum"
@@ -15139,7 +15139,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "1F237"
       ],
-      "emoji": "🈷",
+      "emoji": "🈷️",
       "name": "Japanese “monthly amount” button",
       "category": "Symbols",
       "subcategory": "alphanum"
@@ -15238,7 +15238,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "3297"
       ],
-      "emoji": "㊗",
+      "emoji": "㊗️",
       "name": "Japanese “congratulations” button",
       "category": "Symbols",
       "subcategory": "alphanum"
@@ -15247,7 +15247,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "3299"
       ],
-      "emoji": "㊙",
+      "emoji": "㊙️",
       "name": "Japanese “secret” button",
       "category": "Symbols",
       "subcategory": "alphanum"
@@ -15436,7 +15436,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "25FC"
       ],
-      "emoji": "◼",
+      "emoji": "◼️",
       "name": "black medium square",
       "category": "Symbols",
       "subcategory": "geometric"
@@ -15445,7 +15445,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "25FB"
       ],
-      "emoji": "◻",
+      "emoji": "◻️",
       "name": "white medium square",
       "category": "Symbols",
       "subcategory": "geometric"
@@ -15472,7 +15472,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "25AA"
       ],
-      "emoji": "▪",
+      "emoji": "▪️",
       "name": "black small square",
       "category": "Symbols",
       "subcategory": "geometric"
@@ -15481,7 +15481,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "25AB"
       ],
-      "emoji": "▫",
+      "emoji": "▫️",
       "name": "white small square",
       "category": "Symbols",
       "subcategory": "geometric"
@@ -15616,7 +15616,7 @@ export class EmojiPickerComponent extends CommonComponent {
       "code": [
         "1F3F3"
       ],
-      "emoji": "🏳",
+      "emoji": "🏳️",
       "name": "white flag",
       "category": "Flags",
       "subcategory": "flag"

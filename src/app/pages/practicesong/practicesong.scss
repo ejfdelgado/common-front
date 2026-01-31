@@ -53,20 +53,41 @@
     display: inline;
 }
 
+.verse_higlight.editing {
+        display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 .millis_button {
     cursor: pointer;
 }
 
 .fade-white-to-black {
-  color: white;
-  animation: fadeText 1s ease-in-out forwards;
+    color: white;
+    animation: fadeText 1s ease-in-out forwards;
+}
+
+.millis_helper {
+    font-size: 1em;
+    padding: 3px;
+    border-radius: 5px;
+    width: 100px;
+}
+
+.button_simple.small mat-icon {
+    font-size: 25px;
 }
 
 @keyframes fadeText {
-  from {
-    color: white;
-  }
-  to {
-    color: black;
-  }
+    from {
+        color: white;
+    }
+
+    to {
+        color: black;
+    }
 }

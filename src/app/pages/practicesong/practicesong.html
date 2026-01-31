@@ -8,12 +8,21 @@
         }
     </div>
     }
-    <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="toggleSong()"
+    <div class="song_container full use_vertical_scroll container_vertical hcentered" (click)="toggleSongFromBack()"
         #parentContainer>
-        @for (verse of config?.lyric; track verse.txt) {
-        <span class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true}" #child>
+        @for (verse of config?.lyric; track verse) {
+        <span class="text_centered verse_higlight" [ngClass]="{'current': verse.selected === true, 'editing': editing}" #child>
             <span (click)="playVerse1($event, verse)">💬</span>
+            @if (editing) {
+            <app-editable-input [discrete]="true" [(ngModel)]="verse.txt"></app-editable-input>
+            <!--input class="millis_helper" (click)="inputClick($event)" type="number" [(ngModel)]="verse.millis"-->
+            <button class="button_simple small font_green" (click)="pinMillis(verse)"><mat-icon
+                    class="white">alarm_on</mat-icon></button>
+            <button class="button_simple small font_green" (click)="playVerse2($event, verse, true)"><mat-icon
+                    class="white">arrow_back_2</mat-icon></button>
+            } @else {
             <span (click)="playVerse2($event, verse)">{{ verse.txt }}</span>
+            }
         </span>
         }
     </div>
@@ -32,8 +41,13 @@
             <button class="button_simple font_red" (click)="toggleSong()"><mat-icon
                     class="white">pause</mat-icon></button>
             }
+            @if (editing) {
+            <button class="button_simple font_green" (click)="copyContent()"><mat-icon
+                    class="white">content_copy</mat-icon></button>
+            }
             <h3 class="millis_button" [ngClass]="{'fade-white-to-black': isCopying}" (click)="copyMillis()">millis: {{
                 millisTime }}</h3>
         </div>
     </div>
+
 </div>

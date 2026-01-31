@@ -62,7 +62,8 @@
 
 .editable-input.with_focus {
     min-height: 1em;
-    background-color: aliceblue;
+    background-color: aliceblue !important;
+    color: black !important;
     border-radius: 0 0 4px 4px;
 }
 

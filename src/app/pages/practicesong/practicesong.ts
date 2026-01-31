@@ -10,6 +10,7 @@ import { ModuloSonido } from '@services/sonido.service';
 import { BooleanStateService } from "@services/boolean-state.service";
 import { ClipboardUtil } from "@tools/Clipboard";
 import { getUrlQueryParams } from '@tools/UrlUtil';
+import { EditableInput } from '@components/fields/editable-input/editable-input';
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -32,6 +33,7 @@ export interface ConfigSong {
     CommonModule,
     FormsModule,
     MatIconModule,
+    EditableInput,
   ],
   templateUrl: './practicesong.html',
   styleUrl: './practicesong.scss',
@@ -43,6 +45,7 @@ export class Practicesong extends CommonSpeech {
   cronoInterval: NodeJS.Timeout | null = null;
   isCopying: boolean = false;
   config: ConfigSong | null = null;
+  editing: boolean = true;
 
   @ViewChild('parentContainer', { read: ElementRef })
   parent!: ElementRef<HTMLElement>;
@@ -113,16 +116,345 @@ export class Practicesong extends CommonSpeech {
     const q = params.get("q");
     if (q !== null) {
       // Fetch from bucket json
-      this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
-      /*
+      //this.config = await this.loadConfiguration(`${ROOT_PATH}${q}`);
+
       this.config = {
         "lang": "en-US",
-        "sound": "runaway.mp3",
+        "sound": "love_song_to_the_earth.mp3",
         "lyric": [
-          { "txt": "🎵", "millis": 1 },
+          {
+            "txt": "🎵",
+            "millis": 1,
+            "selected": false
+          },
+          {
+            "txt": "This is an open letter 💌 From you and me together 🧑‍🤝‍🧑",
+            "millis": 16903,
+            "selected": false
+          },
+          {
+            "txt": "Tomorrow's in our hands 🙌 now",
+            "millis": 20503,
+            "selected": false
+          },
+          {
+            "txt": "Find the words that matter say them out loud 👄",
+            "millis": 24103,
+            "selected": false
+          },
+          {
+            "txt": "And make it better 💪 somehow, hmm-mm",
+            "millis": 27103,
+            "selected": false
+          },
+          {
+            "txt": "Looking 🔍 down from up on the moon 🌙",
+            "millis": 30703,
+            "selected": false
+          },
+          {
+            "txt": "It's a tiny blue 🔵 marble",
+            "millis": 33703,
+            "selected": false
+          },
+          {
+            "txt": "Who'd have thought 💭 the ground 🌍 we stand on",
+            "millis": 37303,
+            "selected": false
+          },
+          {
+            "txt": "Could be so fragile 🍷",
+            "millis": 40903,
+            "selected": false
+          },
+          {
+            "txt": "This is a love ❤️ song 🎵 to the earth 🌏",
+            "millis": 43303,
+            "selected": false
+          },
+          {
+            "txt": "You're no ordinary world 🌎",
+            "millis": 46603,
+            "selected": false
+          },
+          {
+            "txt": "A diamond 💎 in the universe 🌌",
+            "millis": 50503,
+            "selected": false
+          },
+          {
+            "txt": "Heaven's poetry 📖 to us",
+            "millis": 53503,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 57403,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 61003,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 64303,
+            "selected": false
+          },
+          {
+            "txt": "'Cause it's our world 🌏",
+            "millis": 67903,
+            "selected": false
+          },
+          {
+            "txt": "It's our world 🌏",
+            "millis": 70003,
+            "selected": false
+          },
+          {
+            "txt": "It's not about possessions, money 💰 or religion ✝️",
+            "millis": 72103,
+            "selected": false
+          },
+          {
+            "txt": "How many years 🗓️ we might live",
+            "millis": 75103,
+            "selected": false
+          },
+          {
+            "txt": "When the only real question 🤷‍♂️ that matters is still",
+            "millis": 78103,
+            "selected": false
+          },
+          {
+            "txt": "A matter of perspective 🤔",
+            "millis": 81703,
+            "selected": false
+          },
+          {
+            "txt": "Looking 🔎 down from up on the moon 🌙",
+            "millis": 85304,
+            "selected": false
+          },
+          {
+            "txt": "You're a tiny blue 🔵 marble",
+            "millis": 88604,
+            "selected": false
+          },
+          {
+            "txt": "Who'd have thought 💭 the ground 🌎 we stand on",
+            "millis": 92803,
+            "selected": false
+          },
+          {
+            "txt": "Could be so fragile 🍷",
+            "millis": 95803,
+            "selected": false
+          },
+          {
+            "txt": "This is a love ❤️ song 🎶 to the earth 🌏",
+            "millis": 98204,
+            "selected": false
+          },
+          {
+            "txt": "You're no ordinary world 🌎",
+            "millis": 101503,
+            "selected": false
+          },
+          {
+            "txt": "Diamond 💎 in the universe 🌌",
+            "millis": 105403,
+            "selected": false
+          },
+          {
+            "txt": "Heaven's poetry 📖 to us",
+            "millis": 108703,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 112603,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 115004,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe (keep mama earth safe)",
+            "millis": 118904,
+            "selected": false
+          },
+          {
+            "txt": "'Cause it's our world 🌎",
+            "millis": 122204,
+            "selected": false
+          },
+          {
+            "txt": "It's our world 🌍",
+            "millis": 124004,
+            "selected": false
+          },
+          {
+            "txt": "See mama earth 🌏 is in a crazy mess 🤮",
+            "millis": 126104,
+            "selected": false
+          },
+          {
+            "txt": "It's time ⏰ for us to do our best 💪",
+            "millis": 128204,
+            "selected": false
+          },
+          {
+            "txt": "From deep sea 🌊 straight up to Everest 🏔️",
+            "millis": 130305,
+            "selected": false
+          },
+          {
+            "txt": "She's under crazy 😱 stress",
+            "millis": 133605,
+            "selected": false
+          },
+          {
+            "txt": "Unless you wanna be motherless",
+            "millis": 135105,
+            "selected": false
+          },
+          {
+            "txt": "Clean heart 🤍, green heart 💚 it's the way I stress",
+            "millis": 136906,
+            "selected": false
+          },
+          {
+            "txt": "Speediness, and too much greediness",
+            "millis": 140507,
+            "selected": false
+          },
+          {
+            "txt": "Six billion people 🧑‍🤝‍🧑 all want pettiness (it's our world)",
+            "millis": 143507,
+            "selected": false
+          },
+          {
+            "txt": "Some people think 💭 this is harmless (it's our world)",
+            "millis": 147407,
+            "selected": false
+          },
+          {
+            "txt": "But if we continue, there'll only be emptiness 🪹",
+            "millis": 150408,
+            "selected": false
+          },
+          {
+            "txt": "Oh, no-no-no-no",
+            "millis": 153708,
+            "selected": false
+          },
+          {
+            "txt": "This is a love ❤️ song to the earth",
+            "millis": 156408,
+            "selected": false
+          },
+          {
+            "txt": "You're no ordinary world 🌎",
+            "millis": 160009,
+            "selected": true
+          },
+          {
+            "txt": "A diamond 💎 in the universe 🌌",
+            "millis": 163309,
+            "selected": false
+          },
+          {
+            "txt": "Heaven's poetry 📖 to us (heaven's poetry to us)",
+            "millis": 166609,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah (keep it safe)",
+            "millis": 170510,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah (keep it safe)",
+            "millis": 173510,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah (special paradise)",
+            "millis": 176810,
+            "selected": false
+          },
+          {
+            "txt": "Let's keep 🔒 it safe",
+            "millis": 181910,
+            "selected": false
+          },
+          {
+            "txt": "This is a love ♥️ song 🎼 to the earth 🌍",
+            "millis": 184010,
+            "selected": false
+          },
+          {
+            "txt": "You're no ordinary world 🌏",
+            "millis": 187611,
+            "selected": false
+          },
+          {
+            "txt": "Diamond 💎 in the universe 🌌",
+            "millis": 190911,
+            "selected": false
+          },
+          {
+            "txt": "Heaven's poetry 📖 to us",
+            "millis": 194511,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 197811,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 201411,
+            "selected": false
+          },
+          {
+            "txt": "Keep 🔒 it safe, yeah, yeah",
+            "millis": 205011,
+            "selected": false
+          },
+          {
+            "txt": "It's our world 🌎 (keep it safe)",
+            "millis": 208011,
+            "selected": false
+          },
+          {
+            "txt": "It's our world 🌎",
+            "millis": 210412,
+            "selected": false
+          },
+          {
+            "txt": "It's our world 🌎",
+            "millis": 214312,
+            "selected": false
+          },
+          {
+            "txt": "It's our world 🌎",
+            "millis": 217912,
+            "selected": false
+          },
+          {
+            "txt": "'Cause it's our world 🌍",
+            "millis": 221812,
+            "selected": false
+          }
         ]
       };
-      */
+
       if (this.config) {
         this.defineLanguage(this.config.lang);
         this.cdr.detectChanges();
@@ -141,8 +473,12 @@ export class Practicesong extends CommonSpeech {
     await this.talk(verse.txt);
   }
 
-  async playVerse2(event: MouseEvent, verse: Verse) {
+  async playVerse2(event: MouseEvent, verse: Verse, stopIfPlaying: boolean = false) {
     event.stopPropagation();
+    if (stopIfPlaying && this.isPlaying) {
+      this.stopSong();
+      return;
+    }
     if (typeof verse.millis == "number") {
       this.startSong(verse.millis);
     }
@@ -212,6 +548,13 @@ export class Practicesong extends CommonSpeech {
     }
   }
 
+  toggleSongFromBack() {
+    if (this.editing == true) {
+      return;
+    }
+    this.toggleSong();
+  }
+
   toggleSong() {
     if (this.isPlaying) {
       this.stopSong();
@@ -244,5 +587,18 @@ export class Practicesong extends CommonSpeech {
       top: offset,
       behavior: 'smooth'
     });
+  }
+
+  inputClick($event: any) {
+    $event.preventDefault();
+  }
+
+  copyContent() {
+    const temp = JSON.stringify(this.config?.lyric, null, 4);
+    ClipboardUtil.writeText(temp);
+  }
+
+  pinMillis(verse: Verse) {
+    verse.millis = this.millisTime;
   }
 }
