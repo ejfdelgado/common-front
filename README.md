@@ -50,7 +50,7 @@ Configure branding at:
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=karma.json)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json&t=1)
 
-[love song](https://localhost:4200/#/practicesong?q=love_song_to_the_earth.json)
+[love song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
 
 [Pano Game](https://stg-playtolearn.storage.googleapis.com/index.html#/panogame?q=2025-07%2F001)
 
@@ -59,6 +59,9 @@ Configure branding at:
 [photo gallery](https://stg-playtolearn.storage.googleapis.com/index.html#/photo_gallery/all)
 [photo gallery](https://stg-playtolearn.storage.googleapis.com/index.html#/books_gallery/all)
 
+[photo gallery](https://stg-playtolearn.storage.googleapis.com/index.html#/notes)
+
+[Notes](https://localhost:4200/#/notes)
 
 ```
 gsutil cors get gs://pro-ejflab-assets
@@ -66,6 +69,11 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
+- Avoid to use execCommand on contenteditable
+- PDF using jspdf error on:
+  - links
+  - spaces
+  - font
 
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.
