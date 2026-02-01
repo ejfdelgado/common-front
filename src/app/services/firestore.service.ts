@@ -102,6 +102,7 @@ export class FirestoreService {
 
         if (snap.exists()) {
             const data = snap.data();
+            data['id'] = id;
             return data;
         }
         return null;

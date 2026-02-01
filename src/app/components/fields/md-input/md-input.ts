@@ -1,10 +1,12 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   forwardRef,
   HostListener,
   Input,
+  OnDestroy,
   Output,
   viewChild,
   ViewChild,
@@ -18,6 +20,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { marked } from 'marked';
 import { PDFService } from '@services/pdf.service';
 import { MatIconModule } from '@angular/material/icon';
+import { debounceTime, Subject, Subscription, tap } from 'rxjs';
 
 export type EditModeType = "edit" | "preview" | "both";
 
@@ -47,7 +50,7 @@ marked.use({ renderer });
   templateUrl: './md-input.html',
   styleUrl: './md-input.scss',
 })
-export class MDInput extends CommonComponent implements ControlValueAccessor {
+export class MDInput extends CommonComponent implements ControlValueAccessor, OnDestroy {
   @ViewChild('editable', { static: true }) editable!: ElementRef<HTMLDivElement>;
   scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
@@ -68,13 +71,25 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   private composing = false;
   savedScroll: number = 0;
   preview: string = "";
+  previewSubject: Subject<void> = new Subject();
+  previewSubscription!: Subscription;
 
   constructor(
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
     public pdfSrv: PDFService,
+    public cdr: ChangeDetectorRef,
   ) {
     super(sanitizer);
+    this.previewSubscription = this.previewSubject.pipe(
+      debounceTime(300),
+    ).subscribe(() => {
+      this.computePreviewRaw();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.previewSubscription.unsubscribe();
   }
 
   setEditMode(val: EditModeType) {
@@ -164,6 +179,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
 
   private setText(value: string): void {
     this.editable.nativeElement.innerText = value;
+    this.computePreview();
   }
 
   /* ---------------- Formatting ---------------- */
@@ -263,6 +279,8 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
 
           // 4. Update the saved range to be after the new emoji
           this.saveSelection();
+
+          this.onInput();
         }
         this.restoreScrollPos();
       }
@@ -282,12 +300,18 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   }
 
   async computePreview() {
-    this.preview = await marked.parse(this.getText());
+    this.previewSubject.next();
+  }
+
+  async computePreviewRaw() {
+    const input = this.value;
+    this.preview = await marked.parse(input);
+    this.cdr.detectChanges();
     return this.preview;
   }
 
   async exportPDF() {
-    const html = await this.computePreview();
+    const html = await this.computePreviewRaw();
     await this.pdfSrv.exportHtmlToPdf(html);
   }
 }

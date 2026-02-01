@@ -12,7 +12,7 @@ import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { BasicDataType, FirestoreService } from '@services/firestore.service';
+import { BasicDataType, FirestoreConfigDataType, FirestoreService } from '@services/firestore.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
@@ -40,6 +40,7 @@ export interface DocumentDataType extends BasicDataType {
   styleUrl: './document-single.scss',
 })
 export class DocumentSingle extends AuthenticatedComponent implements OnInit {
+  @ViewChild('inner_form') innerForm!: FormSimpleWith;
   menuOptions: MenuOptionType[] = [];
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
@@ -69,6 +70,14 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
     if (!this.isMobile()) {
       this.cardActions = ['location_on'];
     }
+
+    this.menuOptions.push({
+      label: "Guardar",
+      icon: "save",
+      callback: () => {
+        this.save();
+      },
+    });
 
     this.menuOptions.push({
       label: "Regresar a documentos",
@@ -110,5 +119,17 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
 
   getCollectionName() {
     return MODEL_NAME;
+  }
+
+  async save() {
+    const { valid, data } = await this.innerForm.save();
+    if (valid) {
+      const conf: FirestoreConfigDataType = {
+        autoAuthor: true,
+        searchFields: ["title"],
+      };
+      const complete = Object.assign({}, this.collection, data);
+      await this.firestoreSrv.createUpdate(MODEL_NAME, data, conf);
+    }
   }
 }
