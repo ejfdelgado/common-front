@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
+import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
@@ -17,7 +18,7 @@ import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
-import { ImageGalleryType } from 'types/fieldsTypes';
+import { AllFieldsDataType, ImageGalleryType } from 'types/fieldsTypes';
 
 const MODEL_NAME = "document";
 
@@ -33,19 +34,21 @@ export interface DocumentDataType extends BasicDataType {
     CommonModule,
     MatButtonModule,
     Statusbar,
-    PhotoGallery,
+    FormSimpleWith,
   ],
   templateUrl: './document-single.html',
   styleUrl: './document-single.scss',
 })
 export class DocumentSingle extends AuthenticatedComponent implements OnInit {
   menuOptions: MenuOptionType[] = [];
-  notes: DocumentDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
   searchable: string = "";
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
+  fields: AllFieldsDataType[] = [
+    { label: "Descripción", type: "md", key: "document", md: { maxHeight: 30, minHeight: 3 } },
+  ];
 
   constructor(
     private indicatorSrv: IndicatorService,

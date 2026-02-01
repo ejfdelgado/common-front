@@ -3,11 +3,12 @@
         <div class="inner_photo_container">
             <app-statusbar [options]="menuOptions" [title]="getTitle()"></app-statusbar>
             <div class="dynamic_content">
-                @if (collection) {
-                <em class="header" [innerHTML]="sanitizeText(collection.description)"></em>
-                }
                 <div class="container_grid_docs_found">
-
+                    <div class="container_grid_docs_found_scroll">
+                        @if (collection) {
+                        <app-form-simple-with #inner_form [fields]="fields" [model]="collection"></app-form-simple-with>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
