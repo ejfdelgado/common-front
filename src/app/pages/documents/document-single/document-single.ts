@@ -50,7 +50,7 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
       label: "Json", type: "json", key: "json", json: {
         template: "document/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
         fields: [
-          { label: "Descripción", type: "md", key: "document", md: { maxHeight: 30, minHeight: 3 } },
+          { label: "Descripción", type: "md", key: "document", md: { maxHeight: 50, minHeight: 3 } },
         ]
       },
     },
@@ -133,9 +133,7 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
         autoAuthor: true,
         searchFields: ["title"],
       };
-      //console.log(JSON.stringify(data, null, 4));
       const complete = Object.assign({}, this.collection, data);
-      //console.log(JSON.stringify(complete, null, 4));
       await this.firestoreSrv.createUpdate(MODEL_NAME, complete, conf);
     }
   }
