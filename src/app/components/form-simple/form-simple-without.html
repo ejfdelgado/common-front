@@ -32,7 +32,7 @@
         <app-image-gallery [formControl]="formControlMap[field.key]"
             [config]="castImageGalleryType(field).gallery"></app-image-gallery>
         } @else if (field.type=='md') {
-        <app-md-input [discrete]="false" [formControl]="formControlMap[field.key]" [placeholder]="field.label"
+        <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label"
             [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight"></app-md-input>
         }
         }

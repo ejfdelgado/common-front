@@ -136,8 +136,8 @@ export abstract class FormSimple implements DifferedStore {
   getContentEditable(el: FieldDataType): ContentEditableDetailDataType {
     const temp: any = this.castContenteditableType(el);
     return Object.assign({
-      maxHeight: 6,
-      minHeight: 10,
+      maxHeight: 10,
+      minHeight: 6,
     }, temp.contenteditable);
   }
 
@@ -148,9 +148,9 @@ export abstract class FormSimple implements DifferedStore {
   getMD(el: FieldDataType): MDDetailDataType {
     const temp: any = this.castMDType(el);
     return Object.assign({
-      maxHeight: 6,
-      minHeight: 10,
-    }, temp.contenteditable);
+      maxHeight: 10,
+      minHeight: 6,
+    }, temp.md);
   }
 
   castJSONType(el: FieldDataType): FieldJSONDataType {

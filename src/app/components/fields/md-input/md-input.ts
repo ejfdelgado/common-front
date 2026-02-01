@@ -41,7 +41,6 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   @Input() ariaLabel = 'Texto';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
-  @Input() discrete: boolean = true;
   @Input() minHeight: number | undefined = 6;
   @Input() maxHeight: number | undefined = 10;
 
@@ -181,9 +180,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
           // 4. Update the saved range to be after the new emoji
           this.saveSelection();
         }
-        if (!this.discrete) {
-          this.restoreScrollPos();
-        }
+        this.restoreScrollPos();
       }
     });
   }

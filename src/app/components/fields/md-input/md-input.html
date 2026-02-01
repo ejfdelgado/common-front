@@ -1,6 +1,5 @@
-<div class="editable-wrapper" [ngClass]="{'visible': !discrete, 'focused': focused}">
+<div class="editable-wrapper visible" [ngClass]="{'focused': focused}">
     <!-- Toolbar -->
-    @if (focused || !discrete) {
     <div class="toolbar">
         <button type="button" (mousedown)="format('bold', $event)" aria-label="Bold">
             <b>b</b>
@@ -14,9 +13,8 @@
             <span>😎</span>
         </button>
     </div>
-    }
     <div class="parent_preview"
-        [ngStyle]="{'min-height': discrete ? 'unset': (minHeight ? minHeight : 6)+'em', 'max-height': discrete ? 'unset': (maxHeight ? maxHeight : 10)+'em'}">
+        [ngStyle]="{'min-height': (minHeight ? minHeight : 6)+'em', 'max-height': (maxHeight ? maxHeight : 10)+'em'}">
         <div #scrollContainer class="parent_content fill_width">
             <div #editable [ngClass]="{'with_focus': focused}" class="editable-input" contenteditable="true"
                 role="textbox" aria-multiline="false" [attr.data-placeholder]="placeholder" [class.empty]="!value"
