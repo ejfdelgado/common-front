@@ -78,3 +78,9 @@ app-photo-gallery {
     padding: 0 10%;
     margin-bottom: 50px;
 }
+
+@media print {
+    .container_grid_docs_found_scroll {
+        overflow-y: unset;
+    }
+}
