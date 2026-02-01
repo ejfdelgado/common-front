@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.editable-wrapper.preview .parent_preview {
+    max-height: none !important;
+}
+
 .toolbar {
     display: flex;
     gap: 4px;
@@ -90,7 +94,7 @@
 .visible .parent_content {
     padding: 4px;
     border: 1px solid #828282;
-    border-radius: 0px 0px 4px 4px;
+    border-radius: 0px 0px 5px 5px;
     display: flex;
     flex-direction: column;
 }
@@ -110,6 +114,11 @@
     overflow-y: scroll;
     border: 1px solid #ccc;
     padding: 15px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.editable-wrapper.preview .preview_scroll_content {
+    overflow-y: unset !important;
 }
 
 .fill_width {

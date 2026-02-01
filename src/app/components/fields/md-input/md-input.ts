@@ -17,6 +17,8 @@ import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { marked } from 'marked';
 
+export type EditModeType = "edit" | "preview" | "both";
+
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
     return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
@@ -52,6 +54,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   @Input() allowEnter: boolean = true;
   @Input() minHeight: number | undefined = 6;
   @Input() maxHeight: number | undefined = 10;
+  @Input() editMode: EditModeType = "preview";
 
   @Output() enter = new EventEmitter<string>();
 
@@ -68,6 +71,10 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
     public override sanitizer: DomSanitizer,
   ) {
     super(sanitizer);
+  }
+
+  setEditMode(val: EditModeType) {
+    this.editMode = val;
   }
 
   saveSelection() {
@@ -141,7 +148,8 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   onPaste(event: ClipboardEvent): void {
     event.preventDefault();
     const text = event.clipboardData?.getData('text/plain') ?? '';
-    document.execCommand('insertText', false, text);
+    this.insertTextAtCursor(text);
+    this.onInput();
   }
 
   /* ---------------- Helpers ---------------- */
@@ -153,7 +161,6 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   private setText(value: string): void {
     this.editable.nativeElement.innerText = value;
   }
-
 
   /* ---------------- Formatting ---------------- */
 
@@ -170,7 +177,11 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
     range.deleteContents();
 
     // Insert wrapped text
-    const wrapped = document.createTextNode(`${chars}${selectedText}${chars}`);
+    let nextText = `${chars}${selectedText}${chars}`;
+    if (selectedText.startsWith(chars) && selectedText.endsWith(chars)) {
+      nextText = selectedText.substring(chars.length, selectedText.length - chars.length);
+    }
+    const wrapped = document.createTextNode(nextText);
     range.insertNode(wrapped);
 
     // Restore selection after insertion
@@ -189,6 +200,39 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
     } else if (command == 'italic') {
       this.wrapSelectionWith("*");
     }
+    this.onInput();
+  }
+
+  insertTextAtCursor(text: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const lines = text.split('\n');
+
+    let lastNode: Node | null = null;
+
+    lines.forEach((line, index) => {
+      if (index > 0) {
+        const br = document.createElement('br');
+        range.insertNode(br);
+        range.setStartAfter(br);
+        lastNode = br;
+      }
+
+      if (line.length > 0) {
+        const textNode = document.createTextNode(line);
+        range.insertNode(textNode);
+        range.setStartAfter(textNode);
+        lastNode = textNode;
+      }
+    });
+
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 
   openEmoticons() {
@@ -211,7 +255,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
           selection.addRange(this.savedRange);
 
           // 3. Execute the insert command
-          document.execCommand('insertText', false, result);
+          this.insertTextAtCursor(result);
 
           // 4. Update the saved range to be after the new emoji
           this.saveSelection();

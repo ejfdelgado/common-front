@@ -34,7 +34,7 @@ export class Index implements AfterViewInit {
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
   fields: AllFieldsDataType[] = [
-    { label: "Descripción", type: "md", key: "document", md: {maxHeight: 30, minHeight: 20} },
+    { label: "Descripción", type: "md", key: "document", md: {maxHeight: 30, minHeight: 3} },
     /*
     { label: "Descripción", type: "contenteditable", key: "description" },
     {

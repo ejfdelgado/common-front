@@ -1,21 +1,33 @@
-<div class="editable-wrapper visible" [ngClass]="{'focused': focused}">
+<div class="editable-wrapper visible" [ngClass]="{'focused': focused, 'preview':editMode=='preview'}">
     <!-- Toolbar -->
     <div class="toolbar">
+        @if (["preview"].indexOf(editMode) >= 0) {
+        <button type="button" (click)="setEditMode('both')" aria-label="Edit">
+            <span>✏️</span>
+        </button>
+        } @else {
+        <button type="button" (click)="setEditMode('preview')" aria-label="Edit">
+            <span>👁️</span>
+        </button>
+        }
+
+        @if (["edit", "both"].indexOf(editMode) >= 0) {
         <button type="button" (mousedown)="format('bold', $event)" aria-label="Bold">
             <b>b</b>
         </button>
-
         <button type="button" (mousedown)="format('italic', $event)" aria-label="Italic">
             <i>It</i>
         </button>
-
         <button type="button" (mousedown)="openEmoticons()" aria-label="Italic">
             <span>😎</span>
         </button>
+        }
     </div>
     <div class="parent_preview"
         [ngStyle]="{'min-height': (minHeight ? minHeight : 6)+'em', 'max-height': (maxHeight ? maxHeight : 10)+'em'}">
-        <div #scrollContainer class="parent_content fill_width">
+
+        <div #scrollContainer class="parent_content fill_width"
+            [ngClass]="{'invisible': ['preview'].indexOf(editMode) >= 0}">
             <div #editable [ngClass]="{'with_focus': focused}" class="editable-input" contenteditable="true"
                 role="textbox" aria-multiline="false" [attr.data-placeholder]="placeholder" [class.empty]="!value"
                 [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" (focus)="onFocus()" (blur)="onBlur()"
