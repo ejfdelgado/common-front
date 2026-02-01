@@ -48,7 +48,7 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
     shareLink: true,
     shareQR: true,
     showAuthorImg: true,
-    hasImage: true,
+    hasImage: false,
   };
 
   constructor(
@@ -147,6 +147,7 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
       const pagingOptions: PageDataType = {
         collectionName: MODEL_NAME, searchText: searchable,
         orderColumn: "updated",
+        author: this.user?.uid,
         orderDirection: "desc",
         top: 20,
       };
@@ -186,5 +187,12 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
     this.router.navigate([`docs/this`], {
       queryParams: { col: MODEL_NAME, id: model.id }
     });
+  }
+
+  async cardEvents($event: any) {
+    const { action, model } = $event;
+    if (action == "arrow_outward") {
+      this.openDocument(model);
+    }
   }
 }
