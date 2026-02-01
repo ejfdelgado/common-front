@@ -54,6 +54,16 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/books/book-single/book-single').then(m => m.BookSingle),
     },
     {
+        path: 'docs/all',
+        loadComponent: () => import('./pages/documents/document-collection/document-collection').then(m => m.DocumentCollection),
+    },
+    /*
+    {
+        path: 'docs/this',
+        loadComponent: () => import('./pages/documents/document-single/document-single').then(m => m.BookSingle),
+    },
+    */
+    {
         path: '**',
         redirectTo: '404',
     },

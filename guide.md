@@ -3,18 +3,6 @@
 
 ## The collection configuration
 
-After creating the component, configure:
-
-### App routing 
-Configure file common-front/src/app/app.routes.ts
-```
-{
-    path: 'books_gallery/all',
-    loadComponent: () => import('./pages/books/book-collection/book-collection').then(m => m.BookCollection),
-},
-```
-
-
 ### Firestore permissions:
 
 If collection can be read without authentication
@@ -34,13 +22,27 @@ match /pro-book_collection/{document=**} {
 
 If collection must be read only by the author
 ```
-match /pro-note/{document=**} {
+match /pro-document/{document=**} {
     allow read: if
     request.auth != null &&
-    resource.data.author == request.auth.token.email;
+    #resource.data.author == request.auth.token.email;
+    resource.data.author == request.auth.uid;
 }
 ```
 
 ### Add index to allow search
 
 [] search, updated (desc), __name__ (desc)
+
+## The Components
+
+After creating the component, configure:
+
+### App routing 
+Configure file common-front/src/app/app.routes.ts
+```
+{
+    path: 'books_gallery/all',
+    loadComponent: () => import('./pages/books/book-collection/book-collection').then(m => m.BookCollection),
+},
+```

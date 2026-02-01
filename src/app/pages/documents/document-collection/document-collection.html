@@ -1,0 +1,22 @@
+<div class="main_container">
+    <div class="inner_photo_container">
+        <app-statusbar [title]="'Documentos'" [options]="menuOptions"></app-statusbar>
+        <div class="dynamic_content">
+            <app-search-input (search)="search($event)" />
+            <div class="container_grid_docs_found">
+                <div class="container_grid_docs_found_scroll">
+                    <div class="grid_docs_found">
+                        @for(note of notes; track note.id) {
+                        <app-card-doc (openDocument)="openDocument($event)" [config]="cardConfig" [model]="note"
+                            [user]="user" (createUpdate)="openDialog($event)" (delete)="deleteNote($event)"
+                            (share)="localShare($event)" [imageType]="'thumbnail'"></app-card-doc>
+                        }
+                        <div class="see_more_parent" (click)="pageNotes(false)">
+                            <p>Ver más</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
