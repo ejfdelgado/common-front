@@ -66,6 +66,7 @@ export interface MDDataType extends FieldDataType {
 export interface MDDetailDataType {
     maxHeight?: string;
     minHeight?: string;
+    saveName?: string;
 }
 
 // Image Gallery

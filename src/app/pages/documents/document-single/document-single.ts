@@ -14,9 +14,10 @@ import { BasicDataType, FirestoreConfigDataType, FirestoreService } from '@servi
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
+import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
-import { AllFieldsDataType, ImageGalleryType } from 'types/fieldsTypes';
+import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType, MDDataType } from 'types/fieldsTypes';
 
 const MODEL_NAME = "document";
 
@@ -47,11 +48,16 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
   cardActions: string[] = [];
   fields: AllFieldsDataType[] = [
     {
-      label: "Json", type: "json", key: "json", json: {
+      label: "Json",
+      type: "json",
+      key: "json",
+      json: {
         template: "document/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
         fields: [
-          { label: "Descripción", type: "md", key: "document", 
-            md: { minHeight: "3em", maxHeight: "80vh" } },
+          {
+            label: "Descripción", type: "md", key: "document",
+            md: { minHeight: "3em", maxHeight: "80vh" }
+          },
         ]
       },
     },
@@ -116,6 +122,9 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
         this.collection = temp as BasicDataType;
+        const field1 = (this.fields[0] as FieldJSONDataType);
+        const field2 = (field1.json.fields[0] as MDDataType);
+        field2.md.saveName = this.collection.title + " - " + epochTo(this.collection.updated);
       } else {
         this.collection = null;
       }

@@ -10,7 +10,7 @@
             <app-image-field [formControl]="getFormControlNamed('image', group)" [config]="config"></app-image-field>
 
             <app-editable-input [discrete]="false" [formControl]="getFormControlNamed('description', group)"
-                [placeholder]="'Descripción...'" [maxHeight]="6" [minHeight]="6"></app-editable-input>
+                [placeholder]="'Descripción...'" [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
         </div>
         <div class="bottom_controls">
             @if (i != 0) {

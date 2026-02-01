@@ -1,4 +1,3 @@
-import { ClipboardUtil } from "./Clipboard";
 
 export type ShareDataType = {
     collection: string;

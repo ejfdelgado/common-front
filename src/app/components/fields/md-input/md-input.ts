@@ -58,9 +58,10 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
   @Input() ariaLabel = 'Texto';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
-  @Input() minHeight: string | null = null;
-  @Input() maxHeight: string | null = null;
+  @Input() minHeight?: string | null = null;
+  @Input() maxHeight?: string | null = null;
   @Input() editMode: EditModeType = "preview";
+  @Input() saveName?: string | null = "download.pdf";
 
   @Output() enter = new EventEmitter<string>();
 
@@ -312,6 +313,6 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
 
   async exportPDF() {
     const html = await this.computePreviewRaw();
-    await this.pdfSrv.exportHtmlToPdf(html);
+    await this.pdfSrv.exportHtmlToPdf(html, this.saveName ? this.saveName : "download.pdf");
   }
 }
