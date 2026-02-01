@@ -62,7 +62,14 @@
     margin-bottom: 0px;
 }
 
+.editable-input {
+    padding-left: 1px;
+    padding-top: 1px;
+}
+
 .editable-input.with_focus {
+    padding-left: 0px;
+    padding-top: 0px;
     min-height: 1em;
     background-color: aliceblue !important;
     color: black !important;

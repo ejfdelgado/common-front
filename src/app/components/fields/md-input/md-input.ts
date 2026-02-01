@@ -17,6 +17,15 @@ import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { marked } from 'marked';
 
+const renderer: any = {
+  link({ href, raw, text, tokens, type }: any) {
+    return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
+    return "";
+  }
+};
+
+marked.use({ renderer });
+
 @Component({
   selector: 'app-md-input',
   standalone: true,
@@ -148,11 +157,38 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
 
   /* ---------------- Formatting ---------------- */
 
+  wrapSelectionWith(chars: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    const selectedText = range.toString();
+
+    if (!selectedText) return;
+
+    // Remove selected content
+    range.deleteContents();
+
+    // Insert wrapped text
+    const wrapped = document.createTextNode(`${chars}${selectedText}${chars}`);
+    range.insertNode(wrapped);
+
+    // Restore selection after insertion
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(wrapped);
+    selection.addRange(newRange);
+  }
+
   format(command: 'bold' | 'italic', event: MouseEvent): void {
     event.preventDefault(); // keeps focus
     this.editable.nativeElement.focus();
 
-    //document.execCommand(command);
+    if (command == 'bold') {
+      this.wrapSelectionWith("**");
+    } else if (command == 'italic') {
+      this.wrapSelectionWith("*");
+    }
   }
 
   openEmoticons() {
