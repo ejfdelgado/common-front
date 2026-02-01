@@ -6,22 +6,25 @@
             <span>✏️</span>
         </button>
         } @else {
-        <button type="button" (click)="setEditMode('preview')" aria-label="Edit">
+        <button type="button" (click)="setEditMode('preview')" aria-label="Preview">
             <span>👁️</span>
         </button>
         }
 
         @if (["edit", "both"].indexOf(editMode) >= 0) {
         <button type="button" (mousedown)="format('bold', $event)" aria-label="Bold">
-            <b>b</b>
+            <b>B</b>
         </button>
         <button type="button" (mousedown)="format('italic', $event)" aria-label="Italic">
             <i>It</i>
         </button>
-        <button type="button" (mousedown)="openEmoticons()" aria-label="Italic">
+        <button type="button" (mousedown)="openEmoticons()" aria-label="Emoticon">
             <span>😎</span>
         </button>
         }
+        <button type="button" (mousedown)="exportPDF()" aria-label="Download pdf">
+            <span>🖨️</span>
+        </button>
     </div>
     <div class="parent_preview"
         [ngStyle]="{'min-height': (minHeight ? minHeight : 6)+'em', 'max-height': (maxHeight ? maxHeight : 10)+'em'}">

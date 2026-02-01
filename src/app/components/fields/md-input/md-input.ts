@@ -16,6 +16,8 @@ import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.comp
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { marked } from 'marked';
+import { PDFService } from '@services/pdf.service';
+import { MatIconModule } from '@angular/material/icon';
 
 export type EditModeType = "edit" | "preview" | "both";
 
@@ -40,6 +42,7 @@ marked.use({ renderer });
   ],
   imports: [
     CommonModule,
+    MatIconModule,
   ],
   templateUrl: './md-input.html',
   styleUrl: './md-input.scss',
@@ -69,6 +72,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
   constructor(
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
+    public pdfSrv: PDFService,
   ) {
     super(sanitizer);
   }
@@ -279,5 +283,11 @@ export class MDInput extends CommonComponent implements ControlValueAccessor {
 
   async computePreview() {
     this.preview = await marked.parse(this.getText());
+    return this.preview;
+  }
+
+  async exportPDF() {
+    const html = await this.computePreview();
+    await this.pdfSrv.exportHtmlToPdf(html);
   }
 }
