@@ -57,12 +57,10 @@ export const routes: Routes = [
         path: 'docs/all',
         loadComponent: () => import('./pages/documents/document-collection/document-collection').then(m => m.DocumentCollection),
     },
-    /*
     {
         path: 'docs/this',
-        loadComponent: () => import('./pages/documents/document-single/document-single').then(m => m.BookSingle),
+        loadComponent: () => import('./pages/documents/document-single/document-single').then(m => m.DocumentSingle),
     },
-    */
     {
         path: '**',
         redirectTo: '404',
