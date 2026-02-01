@@ -6,9 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
-import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
@@ -48,7 +46,14 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
   fields: AllFieldsDataType[] = [
-    { label: "Descripción", type: "md", key: "document", md: { maxHeight: 30, minHeight: 3 } },
+    {
+      label: "Json", type: "json", key: "json", json: {
+        template: "document/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
+        fields: [
+          { label: "Descripción", type: "md", key: "document", md: { maxHeight: 30, minHeight: 3 } },
+        ]
+      },
+    },
   ];
 
   constructor(
@@ -128,8 +133,10 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
         autoAuthor: true,
         searchFields: ["title"],
       };
+      //console.log(JSON.stringify(data, null, 4));
       const complete = Object.assign({}, this.collection, data);
-      await this.firestoreSrv.createUpdate(MODEL_NAME, data, conf);
+      //console.log(JSON.stringify(complete, null, 4));
+      await this.firestoreSrv.createUpdate(MODEL_NAME, complete, conf);
     }
   }
 }

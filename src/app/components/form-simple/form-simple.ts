@@ -22,10 +22,11 @@ export abstract class FormSimple implements DifferedStore {
   form: FormGroup;
   formControlMap: { [key: string]: FormControl } = {};
   fieldNames: string[] = [];
-  modelInternal: FlatJsonDataType = {};
   changeSubscription: Subscription | null = null;
   changeSubject: Subject<FlatJsonDataType> = new Subject<FlatJsonDataType>();
-  _model: { [key: string]: any } = {};
+
+
+  _model: FlatJsonDataType = {};
 
   constructor(
     public fb: FormBuilder,
@@ -40,7 +41,7 @@ export abstract class FormSimple implements DifferedStore {
   abstract saveAllChangedData(): Promise<void>;
 
   ngOnInitInternal(fields: AllFieldsDataType[], model: FlatJsonDataType): void {
-    this.modelInternal = model;
+    this._model = model;
     const dynamicFields = this.form.get('dynamicFields') as FormArray;
     for (const field of fields) {
       const newField = new FormControl(model[field.key]);
@@ -60,7 +61,7 @@ export abstract class FormSimple implements DifferedStore {
         const name = this.fieldNames[i];
         this._model[name] = list[i];
       }
-      this.changeSubject.next(model);
+      this.changeSubject.next(this._model);
     });
   }
 
@@ -95,8 +96,8 @@ export abstract class FormSimple implements DifferedStore {
       // Add id if provided
       const PASSTRHU = ["id"];
       PASSTRHU.forEach((key) => {
-        if (this.modelInternal[key] !== undefined) {
-          data[key] = this.modelInternal[key];
+        if (this._model[key] !== undefined) {
+          data[key] = this._model[key];
         }
       });
 
