@@ -34,6 +34,11 @@ match /pro-document/{document=**} {
 
 [] search, updated (desc), __name__ (desc)
 
+Important, when author is constrained, also add:
+
+author (asc), updated (desc), __name__ (desc)
+[] search, author (asc), updated (desc), __name__ (desc)
+
 ## The Components
 
 After creating the component, configure:
