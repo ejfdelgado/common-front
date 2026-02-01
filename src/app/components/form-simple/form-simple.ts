@@ -11,7 +11,9 @@ import {
   FieldDataType,
   FieldImageDataType,
   FieldJSONDataType,
-  ImageGalleryDataType
+  ImageGalleryDataType,
+  MDDataType,
+  MDDetailDataType
 } from 'types/fieldsTypes';
 
 export type FlatJsonDataType = { [key: string]: any };
@@ -133,6 +135,18 @@ export abstract class FormSimple implements DifferedStore {
 
   getContentEditable(el: FieldDataType): ContentEditableDetailDataType {
     const temp: any = this.castContenteditableType(el);
+    return Object.assign({
+      maxHeight: 6,
+      minHeight: 10,
+    }, temp.contenteditable);
+  }
+
+  castMDType(el: FieldDataType): MDDataType {
+    return (el as MDDataType);
+  }
+
+  getMD(el: FieldDataType): MDDetailDataType {
+    const temp: any = this.castMDType(el);
     return Object.assign({
       maxHeight: 6,
       minHeight: 10,

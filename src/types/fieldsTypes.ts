@@ -10,6 +10,7 @@ export interface FieldDataType {
     "text" |
     "textarea" |
     "contenteditable" |
+    "md" |
     "toggle" |
     "rating" |
     "image" |
@@ -56,6 +57,17 @@ export interface ContentEditableDetailDataType {
     minHeight?: number;
 }
 
+// MD
+
+export interface MDDataType extends FieldDataType {
+    md: MDDetailDataType;
+}
+
+export interface MDDetailDataType {
+    maxHeight?: number;
+    minHeight?: number;
+}
+
 // Image Gallery
 
 export interface ImageGalleryDataType extends FieldDataType {
@@ -83,6 +95,7 @@ export type AllFieldsDataType =
     FieldJSONDataType |
     ChipDataType |
     ContenteditableDataType |
+    MDDataType |
     ImageGalleryDataType;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
@@ -92,6 +105,7 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         FieldJSONDataType |
         ChipDataType |
         ContenteditableDataType |
+        MDDataType |
         ImageGalleryDataType
     )[],
 }

@@ -17,6 +17,7 @@ import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { ImageGalleryComponent } from '@components/fields/image-gallery/image-gallery';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MDInput } from '@components/fields/md-input/md-input';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -35,6 +36,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     PhoneInputComponent,
     ChipSelectComponent,
     ImageGalleryComponent,
+    MDInput,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',

@@ -9,7 +9,7 @@
     "build": "ng build",
     "build:prod": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
-    "custom_install": "npm install --legacy-peer-deps"
+    "myinstall": "npm install --legacy-peer-deps"
   },
   "prettier": {
     "printWidth": 100,
@@ -41,6 +41,7 @@
     "ejfdelgado-common-ts": "^1.1.4",
     "firebase": "^12.8.0",
     "jspdf": "^3.0.3",
+    "marked": "^17.0.1",
     "moment": "^2.30.1",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
