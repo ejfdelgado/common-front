@@ -41,8 +41,8 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
   @Input() discrete: boolean = true;
-  @Input() minHeight: number | undefined = 6;
-  @Input() maxHeight: number | undefined = 10;
+  @Input() minHeight: string | null = null;
+  @Input() maxHeight: string | null = null;
 
   @Output() enter = new EventEmitter<string>();
 

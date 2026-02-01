@@ -58,8 +58,8 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
   @Input() ariaLabel = 'Texto';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
-  @Input() minHeight: number | undefined = 6;
-  @Input() maxHeight: number | undefined = 10;
+  @Input() minHeight: string | null = null;
+  @Input() maxHeight: string | null = null;
   @Input() editMode: EditModeType = "preview";
 
   @Output() enter = new EventEmitter<string>();

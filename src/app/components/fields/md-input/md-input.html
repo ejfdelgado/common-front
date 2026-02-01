@@ -1,4 +1,5 @@
-<div class="editable-wrapper visible" [ngClass]="{'focused': focused, 'preview':editMode=='preview', 'both':editMode=='both'}">
+<div class="editable-wrapper visible"
+    [ngClass]="{'focused': focused, 'preview':editMode=='preview', 'both':editMode=='both'}">
     <!-- Toolbar -->
     <div class="toolbar">
         @if (["preview"].indexOf(editMode) >= 0) {
@@ -27,7 +28,7 @@
         </button>
     </div>
     <div class="parent_preview"
-        [ngStyle]="{'min-height': (minHeight ? minHeight : 6)+'em', 'max-height': (maxHeight ? maxHeight : 10)+'em'}">
+        [ngStyle]="{'min-height': (minHeight ? minHeight : 'unset'), 'max-height': (maxHeight ? maxHeight : 'unset')}">
 
         <div #scrollContainer class="parent_content fill_width"
             [ngClass]="{'invisible': ['preview'].indexOf(editMode) >= 0}">

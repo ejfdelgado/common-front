@@ -50,7 +50,8 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
       label: "Json", type: "json", key: "json", json: {
         template: "document/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
         fields: [
-          { label: "Descripción", type: "md", key: "document", md: { maxHeight: 50, minHeight: 3 } },
+          { label: "Descripción", type: "md", key: "document", 
+            md: { minHeight: "3em", maxHeight: "80vh" } },
         ]
       },
     },

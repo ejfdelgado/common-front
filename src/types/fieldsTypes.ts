@@ -53,8 +53,8 @@ export interface ContenteditableDataType extends FieldDataType {
 }
 
 export interface ContentEditableDetailDataType {
-    maxHeight?: number;
-    minHeight?: number;
+    maxHeight?: string;
+    minHeight?: string;
 }
 
 // MD
@@ -64,8 +64,8 @@ export interface MDDataType extends FieldDataType {
 }
 
 export interface MDDetailDataType {
-    maxHeight?: number;
-    minHeight?: number;
+    maxHeight?: string;
+    minHeight?: string;
 }
 
 // Image Gallery

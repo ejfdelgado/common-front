@@ -113,7 +113,10 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
             template: "photo_gallery/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
-        { label: "Descripción", type: "contenteditable", key: "description", contenteditable: { minHeight: 10, maxHeight: 20 } },
+        {
+          label: "Descripción", type: "contenteditable", key: "description",
+          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+        },
       ],
       model: {
         title: '',
