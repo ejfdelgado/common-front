@@ -19,6 +19,14 @@ html {
         ));
 }
 
+h1 {
+    line-height: 1em;
+}
+
+a {
+    word-break: break-all;
+}
+
 body {
     // Default the application to a light color theme. This can be changed to
     // `dark` to enable the dark color theme, or to `light dark` to defer to the

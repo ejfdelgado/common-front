@@ -57,11 +57,15 @@ Configure branding at:
 [Index](https://stg-playtolearn.storage.googleapis.com/index.html)
 
 [photo gallery](https://stg-playtolearn.storage.googleapis.com/index.html#/photo_gallery/all)
+
 [photo gallery](https://stg-playtolearn.storage.googleapis.com/index.html#/books_gallery/all)
 
-[photo gallery](https://stg-playtolearn.storage.googleapis.com/index.html#/notes)
+[Documents](https://stg-playtolearn.storage.googleapis.com/index.html#/docs/all)
 
-[Notes](https://localhost:4200/#/notes)
+[Notes](https://stg-playtolearn.storage.googleapis.com/index.html#/notes)
+
+[Play sound](https://stg-playtolearn.storage.googleapis.com/index.html#/playsound)
+
 
 ```
 gsutil cors get gs://pro-ejflab-assets
