@@ -125,3 +125,9 @@
 .fill_width {
     flex: 1;
 }
+
+@media (max-width: 900px) {
+    .both .preview_scroll_content {
+        display: none;
+    }
+}

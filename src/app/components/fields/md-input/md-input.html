@@ -1,4 +1,4 @@
-<div class="editable-wrapper visible" [ngClass]="{'focused': focused, 'preview':editMode=='preview'}">
+<div class="editable-wrapper visible" [ngClass]="{'focused': focused, 'preview':editMode=='preview', 'both':editMode=='both'}">
     <!-- Toolbar -->
     <div class="toolbar">
         @if (["preview"].indexOf(editMode) >= 0) {
