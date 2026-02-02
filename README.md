@@ -4,6 +4,10 @@ Songs:
 In the name of love
 Luca Disney song
 
+gsutil setmeta -h "Cache-Control:private, max-age=0, no-cache" gs://stg-playtolearn/index.html
+
+gsutil -m setmeta -r -h "Cache-Control:private, max-age=0, no-cache" gs://stg-playtolearn/
+
 ```
 npx @angular/cli@20 new common-front
 ```
