@@ -88,6 +88,7 @@ gsutil cors get gs://pro-ejflab-assets
 - Add alert service with support of multilanguage, multiaction.
 
 - Create comments component. -> store in firebase (multiple users update).
+- Create chat component.
 
 - Create an email field.
 - Create address widget with map and address search.
@@ -95,6 +96,8 @@ gsutil cors get gs://pro-ejflab-assets
 - Create a drop down with search for single choice selected.
 
 - Counters with event list strategy with time gap.
+
+- webrtc: https://webrtc.org/getting-started/firebase-rtc-codelab?hl=en
 
 - Add google analytics.
 

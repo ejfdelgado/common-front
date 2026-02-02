@@ -35,7 +35,9 @@ export class AuthService {
             AuthService.userStatic = user;
 
             if (user) {
-                const token = await user.getIdToken();
+                // Force a refresh to get the latest custom claims from the server
+                const forceRefresh = true;
+                const token = await user.getIdToken(forceRefresh);
                 this._token.set(token);
             } else {
                 this._token.set(null);
