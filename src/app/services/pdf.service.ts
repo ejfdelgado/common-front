@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
+
 @Injectable({
     providedIn: 'root'
 })
 export class PDFService {
-    exportHtmlToPdf = async (htmlText: string, fileName: string = "download.pdf"): Promise<void> => {
-
+    exportHtmlToPdf = async (element: HTMLElement, fileName: string = "download.pdf"): Promise<void> => {
         // 1. Initialize jsPDF (p = portrait, mm = millimeters, a4 = paper size)
         const doc = new jsPDF({
             orientation: "p",
@@ -17,7 +17,7 @@ export class PDFService {
 
         // 2. Use the .html() plugin
         // This automatically uses html2canvas under the hood if available
-        await doc.html(htmlText, {
+        await doc.html(element, {
             callback: function (doc) {
                 // 3. Save the PDF
                 doc.save(fileName);

@@ -32,6 +32,7 @@
               "src/assets/css/containers.css",
               "src/assets/css/forms.css",
               "src/assets/css/fonts.css",
+              "src/assets/css/custom_print.css",
               "src/styles.scss"
             ]
           },

@@ -38,7 +38,7 @@
                 (input)="onInput()" (keyup)="saveSelection()" (mouseup)="saveSelection()" (paste)="onPaste($event)">
             </div>
         </div>
-        <div class="preview_scroll_content fill_width" [innerHTML]="preview">
+        <div #printed_element class="preview_scroll_content fill_width" [innerHTML]="preview">
 
         </div>
     </div>

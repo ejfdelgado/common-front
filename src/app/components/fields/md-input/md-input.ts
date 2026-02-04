@@ -52,6 +52,8 @@ marked.use({ renderer });
 })
 export class MDInput extends CommonComponent implements ControlValueAccessor, OnDestroy {
   @ViewChild('editable', { static: true }) editable!: ElementRef<HTMLDivElement>;
+  @ViewChild('printed_element', { static: true }) printedVersion!: ElementRef<HTMLDivElement>;
+
   scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
   @Input() placeholder = '';
@@ -313,6 +315,10 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
 
   async exportPDF() {
     const html = await this.computePreviewRaw();
-    await this.pdfSrv.exportHtmlToPdf(html, this.saveName ? this.saveName : "download.pdf");
+    //const element = this.printedVersion.nativeElement;
+    const element = document.createElement('div');
+    element.innerHTML = html;
+    element.className = "preview_scroll_content printed";
+    await this.pdfSrv.exportHtmlToPdf(element, this.saveName ? this.saveName : "download.pdf");
   }
 }

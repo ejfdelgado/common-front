@@ -36,7 +36,9 @@ export interface DocumentDataType extends BasicDataType {
     FormSimpleWith,
   ],
   templateUrl: './document-single.html',
-  styleUrl: './document-single.scss',
+  styleUrls: [
+    './document-single.scss',
+  ],
 })
 export class DocumentSingle extends AuthenticatedComponent implements OnInit {
   @ViewChild('inner_form') innerForm!: FormSimpleWith;
@@ -124,7 +126,9 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
         this.collection = temp as BasicDataType;
         const field1 = (this.fields[0] as FieldJSONDataType);
         const field2 = (field1.json.fields[0] as MDDataType);
-        field2.md.saveName = this.collection.title + " - " + epochTo(this.collection.updated);
+        const title = this.collection.title + " - " + epochTo(this.collection.updated);
+        document.title = title;
+        field2.md.saveName = title;
       } else {
         this.collection = null;
       }

@@ -1,0 +1,40 @@
+:root {
+    --primary-color: rgb(0, 0, 186);
+    --primary-color-alt: rgb(0, 150, 230);
+}
+
+.preview_scroll_content * {
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: keep-all !important;
+}
+
+.preview_scroll_content h1,
+.preview_scroll_content h2,
+.preview_scroll_content h3,
+.preview_scroll_content h4 {
+    color: var(--primary-color);
+}
+
+.preview_scroll_content p {
+    text-align: justify;
+}
+
+.preview_scroll_content a {
+    text-decoration: underline;
+    color: var(--primary-color-alt) !important;
+}
+
+.preview_scroll_content strong {
+    color: var(--primary-color-alt);
+}
+
+.preview_scroll_content.printed {
+    font-size: 1.3em;
+    line-height: 1.3em;
+    margin: 10px 10px 10px 20px;
+}
+
+.preview_scroll_content.printed * {
+    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
+}
