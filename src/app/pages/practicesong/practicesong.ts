@@ -124,15 +124,14 @@ export class Practicesong extends CommonSpeech {
       /*
       this.config = {
         "lang": "en-US",
-        "sound": "love_song_to_the_earth.mp3",
+        "sound": "in_te_name_of_love.mp3",
         "lyric": [
-          {
-            "txt": "🎵",
-            "millis": 1 // null
-          }
+          { "txt": "🎵", "millis": 1 },
+          { "txt": "...", "millis": undefined }
         ]
       };
       */
+
 
       if (this.config) {
         this.defineLanguage(this.config.lang);
@@ -159,7 +158,7 @@ export class Practicesong extends CommonSpeech {
       this.stopSong();
       return;
     }
-    if (this.config && !this.isPlaying && typeof verse.millis == "number") {
+    if (this.config && typeof verse.millis == "number") {
       // Play with timer
       // Is there a verse after this one?
       const i1 = this.config.lyric.indexOf(verse);
@@ -169,14 +168,14 @@ export class Practicesong extends CommonSpeech {
           const millisGap = verseNext.millis - verse.millis;
           if (millisGap > 0) {
             this.startSong(verse.millis);
-            setTimeout(() => {
+            this.lastTimeout = setTimeout(() => {
               this.stopSong();
               this.cdr.detectChanges();
             }, millisGap);
           }
+          return;
         }
       }
-      return;
     }
     if (typeof verse.millis == "number") {
       this.startSong(verse.millis);
@@ -186,6 +185,7 @@ export class Practicesong extends CommonSpeech {
   clearLastTimeout() {
     if (this.lastTimeout) {
       clearTimeout(this.lastTimeout);
+      this.lastTimeout = null;
     }
   }
 
@@ -193,6 +193,7 @@ export class Practicesong extends CommonSpeech {
     if (!this.config) {
       return;
     }
+    this.clearLastTimeout();
     const promise = this.indicatorSrv.start();
     await ModuloSonido.play(ROOT_PATH + this.config.sound, false, 1, startingPoint);
     promise.done();
@@ -261,6 +262,7 @@ export class Practicesong extends CommonSpeech {
   }
 
   toggleSong() {
+    this.clearLastTimeout();
     if (this.isPlaying) {
       this.stopSong();
     } else {

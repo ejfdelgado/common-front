@@ -189,9 +189,14 @@ app-flowchart .mat-tab-body-wrapper {
     z-index: 10000000 !important;
 }
 
-.custom-emoji-picker .mat-mdc-dialog-container .mdc-dialog__surface {
+.custom-emoji-picker .mat-mdc-dialog-container .mdc-dialog__surface,
+.custom-emoji-picker-desktop .mat-mdc-dialog-container .mdc-dialog__surface {
     border-radius: 10px !important;
     overflow: hidden;
+}
+
+.custom-emoji-picker-desktop .emoji-grid {
+    grid-template-columns: repeat(10, 1fr) !important;
 }
 
 mat-form-field.full_height>div,

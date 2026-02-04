@@ -77,12 +77,6 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Avoid to use execCommand on contenteditable
-- PDF using jspdf error on:
-  - links
-  - spaces
-  - font
-
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.
 - Add alert service with support of multilanguage, multiaction.
@@ -120,6 +114,14 @@ https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45
 https://sketchfab.com/3d-models/treasure-chest-773a2f35025b4e2e9ac48fd84c16b3ab
 
 
+## Bugs
+
+- Avoid to use execCommand on contenteditable
+- PDF using jspdf error on:
+  - links
+  - spaces
+  - font
+
 css masonry
 
 .container {
@@ -151,7 +153,6 @@ css masonry
       modelName: "note",
       searchFields: ["title", "description", "cathegory"],
       fields: [
-
         {
           label: "Json", type: "json", key: "json", json: {
             template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.json",

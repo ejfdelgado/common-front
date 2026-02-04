@@ -155,9 +155,9 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   openEmoticons() {
     this.saveScrollPos();
     const dialogRef = this.dialog.open(EmojiPickerComponent, {
-      width: '350px',
+      width: this.isMobile() ? '350px' : '700px',
       autoFocus: false,
-      panelClass: 'custom-emoji-picker'
+      panelClass: this.isMobile() ? 'custom-emoji-picker' : 'custom-emoji-picker-desktop'
     });
 
     dialogRef.afterClosed().subscribe(result => {
