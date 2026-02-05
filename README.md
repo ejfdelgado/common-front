@@ -1,7 +1,15 @@
 # CommonFront
 
+<mat-menu #menu="matMenu">
+    @for(option of options; track option.label) {
+    <button mat-menu-item (click)="option.callback()">
+        <mat-icon>{{ option.icon }}</mat-icon>
+        <span>{{ option.label }}</span>
+    </button>
+    }
+</mat-menu>
+
 Songs:
-In the name of love
 Luca Disney song
 
 gsutil setmeta -h "Cache-Control:private, max-age=0, no-cache" gs://stg-playtolearn/index.html
@@ -17,7 +25,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/photo-gallery
+npx ng generate component --standalone --skip-tests components/side-menu
 ```
 
 ```bash

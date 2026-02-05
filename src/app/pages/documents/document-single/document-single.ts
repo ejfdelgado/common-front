@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
+import { SideMenu } from '@components/side-menu/side-menu';
 import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
@@ -34,6 +35,7 @@ export interface DocumentDataType extends BasicDataType {
     MatButtonModule,
     Statusbar,
     FormSimpleWith,
+    SideMenu,
   ],
   templateUrl: './document-single.html',
   styleUrls: [

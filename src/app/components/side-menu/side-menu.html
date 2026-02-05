@@ -1,0 +1,8 @@
+<div class="navigation_parent animated" [ngClass]="{'open': opened, 'close': !opened}">
+    <div class="logo_parent">
+        <div class="logo_parent_stretch">
+            <img [src]="logoImage">
+        </div>
+        <mat-icon class="close_icon" (click)="close()">close</mat-icon>
+    </div>
+</div>

@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '@services/auth.service';
+import { SideMenuService } from '@services/side-menu.service';
 
 export interface MenuOptionType {
   label: string;
@@ -37,6 +38,7 @@ export class Statusbar {
     public authSrv: AuthService,
     private http: HttpClient,
     public cdr: ChangeDetectorRef,
+    public sideMenuSrv: SideMenuService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       this.user = user;
@@ -44,5 +46,9 @@ export class Statusbar {
         this.cdr.detectChanges();
       } catch (err) { }
     });
+  }
+
+  toggleSideNav() {
+    this.sideMenuSrv.toggle();
   }
 }

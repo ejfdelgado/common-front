@@ -2,22 +2,15 @@
     @if(user !== null) {
     <div class="menu_container">
         @if (iconSmall) {
-        <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" aria-label="Open menu">
+        <button mat-icon-button color="primary" (click)="toggleSideNav()"
+            aria-label="Open menu">
             <mat-icon>menu</mat-icon>
         </button>
         } @else {
-        <button mat-fab color="primary" [matMenuTriggerFor]="menu" aria-label="Open menu">
+        <button mat-fab color="primary" (click)="toggleSideNav()" aria-label="Open menu">
             <mat-icon>menu</mat-icon>
         </button>
         }
-        <mat-menu #menu="matMenu">
-            @for(option of options; track option.label) {
-            <button mat-menu-item (click)="option.callback()">
-                <mat-icon>{{ option.icon }}</mat-icon>
-                <span>{{ option.label }}</span>
-            </button>
-            }
-        </mat-menu>
     </div>
     }
     <div class="title_content">
