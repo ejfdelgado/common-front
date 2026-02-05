@@ -5,4 +5,32 @@
         </div>
         <mat-icon class="close_icon" (click)="close()">close</mat-icon>
     </div>
+    <div class="items_scroll_parent">
+        <div class="items_parent">
+            <ul>
+                @for(option of options; track option.label) {
+                <li (click)="option.callback()">
+                    <div class="title">
+                        @if (option.icon) {
+                        <mat-icon>{{ option.icon }}</mat-icon>
+                        }
+                        <span>{{ option.label }}</span>
+                    </div>
+                    <ul class="second_level">
+                        @for(option2 of option.children; track option2.label) {
+                        <li (click)="option2.callback()">
+                            <div class="title higlight">
+                                @if (option2.icon) {
+                                <mat-icon>{{ option2.icon }}</mat-icon>
+                                }
+                                <span>{{ option2.label }}</span>
+                            </div>
+                        </li>
+                        }
+                    </ul>
+                </li>
+                }
+            </ul>
+        </div>
+    </div>
 </div>

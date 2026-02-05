@@ -89,23 +89,29 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
     }
 
     this.menuOptions.push({
-      label: "Guardar",
-      icon: "save",
-      children: [],
-      callback: () => {
-        this.save();
-      },
-    });
-
-    this.menuOptions.push({
-      label: "Regresar a documentos",
-      icon: "arrow_back",
-      children: [],
-      callback: () => {
-        this.router.navigate([`docs/all`], {
-          queryParams: {}
-        });
-      },
+      label: "OPCIONES",
+      icon: "",
+      children: [
+        {
+          label: "Guardar",
+          icon: "save",
+          children: [],
+          callback: () => {
+            this.save();
+          },
+        },
+        {
+          label: "Regresar a documentos",
+          icon: "arrow_back",
+          children: [],
+          callback: () => {
+            this.router.navigate([`docs/all`], {
+              queryParams: {}
+            });
+          },
+        }
+      ],
+      callback: () => { },
     });
   }
 

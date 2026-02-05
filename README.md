@@ -1,13 +1,6 @@
 # CommonFront
 
-<mat-menu #menu="matMenu">
-    @for(option of options; track option.label) {
-    <button mat-menu-item (click)="option.callback()">
-        <mat-icon>{{ option.icon }}</mat-icon>
-        <span>{{ option.label }}</span>
-    </button>
-    }
-</mat-menu>
+
 
 Songs:
 Luca Disney song
