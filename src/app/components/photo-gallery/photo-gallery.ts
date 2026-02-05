@@ -95,4 +95,13 @@ export class PhotoGallery extends CommonComponent {
   show() {
     this.visible = true;
   }
+
+  gotToId(id: string) {
+    const index = this._gallery.findIndex((el) => {
+      return el.id == id;
+    });
+    if (index >= 0) {
+      this.gotTo(index);
+    }
+  }
 }

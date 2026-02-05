@@ -109,6 +109,7 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
 
     this.formArray.insert(index,
       this.createGroup({
+        id: `${index}`,// it is ok?
         image: item.image ?? '',
         description: item.description ?? '',
       })

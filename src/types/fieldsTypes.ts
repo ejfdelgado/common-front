@@ -80,6 +80,7 @@ export interface ImageGalleryConfigDataType extends ImageDetailDataType {
 }
 
 export type ImageGalleryType = {
+    id: string,
     image: string,
     description: string,
 };

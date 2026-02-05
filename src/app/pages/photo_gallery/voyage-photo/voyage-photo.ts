@@ -382,11 +382,13 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.gallery.splice(0, this.gallery.length - 1);
     this.notes.forEach((item) => {
       const element: any = {
+        id: item.id,
         image: (item as any).image,
         description: item.description,
       };
       this.gallery.push(element);
     });
     this.localGallery.show();
+    this.localGallery.gotToId(event.id);
   }
 }
