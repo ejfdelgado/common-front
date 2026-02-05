@@ -9,6 +9,7 @@ import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
+import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
@@ -35,6 +36,7 @@ const MODEL_NAME = "book_collection";
     Statusbar,
     SearchInputComponent,
     CardDoc,
+    SideMenu,
   ],
   templateUrl: './book-collection.html',
   styleUrl: './book-collection.scss',

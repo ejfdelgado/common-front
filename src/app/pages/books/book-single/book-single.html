@@ -1,7 +1,8 @@
 <div class="main_container">
     <div class="photo_container">
+        <app-side-menu [options]="menuOptions"></app-side-menu>
         <div class="inner_photo_container">
-            <app-statusbar [options]="menuOptions" [title]="getTitle()"></app-statusbar>
+            <app-statusbar [title]="getTitle()"></app-statusbar>
             <div class="dynamic_content">
                 @if (collection) {
                 <em class="header" [innerHTML]="sanitizeText(collection.description)"></em>

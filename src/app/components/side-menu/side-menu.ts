@@ -46,6 +46,10 @@ export class SideMenu implements OnDestroy {
     if (item.callback) {
       item.callback();
     }
+    // Close if small window
+    if (window.innerWidth < 800) {
+      this.sideMenuSrv.close();
+    }
   }
 
   toggleChildren(item: MenuOptionType, event: any) {

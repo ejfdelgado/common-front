@@ -1,6 +1,7 @@
 # CommonFront
 
-
+SideMenu
+<app-side-menu [options]="menuOptions"></app-side-menu>
 
 Songs:
 Luca Disney song

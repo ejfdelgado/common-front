@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
+import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
@@ -35,6 +36,7 @@ export interface BookDataType extends BasicDataType {
     MatButtonModule,
     Statusbar,
     PhotoGallery,
+    SideMenu,
   ],
   templateUrl: './book-single.html',
   styleUrl: './book-single.scss',
