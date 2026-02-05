@@ -16,7 +16,7 @@
   </div>
   }
   <mat-card-content [ngClass]="{'with_image': config.hasImage, 'without_image': !config.hasImage}">
-    <span class="text_date">{{ epochTo(model.created) }}</span>
+    <span class="text_date">{{ epochTo(model.created, dateType) }}</span>
     <p class="content_parent" [innerHTML]="sanitizeText(model.description, 256)"></p>
   </mat-card-content>
   <mat-card-actions>

@@ -80,7 +80,7 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Enable the roles admin.
+- Enable the roles admin view.
 
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.
@@ -111,8 +111,8 @@ gsutil cors get gs://pro-ejflab-assets
     - firestore, permisos de escritura por usuario que solo puede modificar lo que fue el autor.
 
 - Reload Right/Left game (avoid win notification after finishing)
-- Fullscreen toggle
 - Notify: your device don't support voice recognition
+
 - Creditos:
 https://sketchfab.com/3d-models/cute-bunny-7d30845d69c4474ebeddd177df6b7f02
 https://sketchfab.com/3d-models/chessboard-da15b92a3a584a8387036ff688391d45

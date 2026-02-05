@@ -17,8 +17,8 @@
                             <div class="grid_docs_found">
                                 @for(note of notes; track note.id) {
                                 <app-card-doc [model]="note" [user]="user" (createUpdate)="openDialog($event)"
-                                    [imageType]="'square'" [config]="cardConfig" [actions]="cardActions"
-                                    (events)="cardEvents($event)" (delete)="deleteNote($event)"
+                                    [imageType]="'square'" [dateType]="'v4'" [config]="cardConfig"
+                                    [actions]="cardActions" (events)="cardEvents($event)" (delete)="deleteNote($event)"
                                     (share)="localShare($event)"></app-card-doc>
                                 }
                                 <div class="see_more_parent" (click)="pageNotesNoRealtime()">

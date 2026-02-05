@@ -4,6 +4,7 @@ import { getBucketFilePath, getSquarePath, getThumbnailPath } from "@tools/Bucke
 import { epochTo } from "@tools/DateUtils";
 import { isMobile } from "@tools/mobile";
 import { enterFullscreen, exitFullscreen } from "@tools/ScreenUtils";
+import { DateOptionType } from "types/DateTypes";
 
 export type ImageTypeData = "big" | "thumbnail" | "square";
 
@@ -74,8 +75,8 @@ export abstract class CommonComponent {
     public isMobile() {
         return isMobile();
     }
-
-    epochTo(millis: number, type: "v1" | "v2" | "v3" = "v1") {
+    
+    epochTo(millis: number, type: DateOptionType = "v1") {
         return epochTo(millis, type);
     }
 

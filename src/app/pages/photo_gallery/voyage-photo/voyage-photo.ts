@@ -259,11 +259,10 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
 
   async pageNotesNoRealtime() {
     if (this.liveMode) {
+      this.unsubscribeLiveUpdates();
       this.liveMode = false;
-      await this.pageNotes(true);
-    } else {
-      await this.pageNotes(false);
     }
+    await this.pageNotes(false);
     this.recomputeAllMarkers();
     this.cdr.detectChanges();
   }
@@ -282,11 +281,15 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  setRefreshMethod(live: boolean) {
-    this.liveMode = live;
+  unsubscribeLiveUpdates() {
     if (this.liveSubscription != null) {
       this.liveSubscription();
     }
+  }
+
+  setRefreshMethod(live: boolean) {
+    this.liveMode = live;
+    this.unsubscribeLiveUpdates();
     if (live) {
       this.liveSubscription = this.firestoreSrv.livePaging(this.getCollectionName(), (page: any) => {
         this.notes.splice(0, this.notes.length);

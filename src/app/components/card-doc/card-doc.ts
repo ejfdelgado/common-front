@@ -9,6 +9,7 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { User } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { FullscreenService } from '@services/fullscreen.service';
+import { DateOptionType } from 'types/DateTypes';
 
 export interface CardDocDataType {
   shareLink?: boolean;
@@ -35,6 +36,7 @@ export class CardDoc extends CommonComponent {
   @Input() actions: string[] = [];
   @Input() user: User | null = null;
   @Input() imageType: ImageTypeData = "big";
+  @Input() dateType: DateOptionType = "v1"
   @Output() createUpdate: EventEmitter<any> = new EventEmitter();
   @Output() share: EventEmitter<any> = new EventEmitter();
   @Output() delete: EventEmitter<any> = new EventEmitter();
