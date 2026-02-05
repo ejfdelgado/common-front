@@ -391,4 +391,17 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.localGallery.show();
     this.localGallery.gotToId(event.id);
   }
+
+  galleryCurrentImage(item: any) {
+    const { id } = item;
+    const index = this.notes.findIndex((el) => el.id == id);
+    if (index >= 0) {
+      const found = this.notes[index];
+      //console.log(`id=${id}`, JSON.stringify(found));
+      this.cardEvents({
+        action: 'location_on',
+        model: found,
+      });
+    }
+  }
 }

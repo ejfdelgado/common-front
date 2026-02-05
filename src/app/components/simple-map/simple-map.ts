@@ -62,7 +62,7 @@ export class SimpleMapComponent implements AfterViewInit {
       const mapOptions: google.maps.MapOptions = {
         center: { lat: 6.6062575, lng: -73.0541827 },
         mapTypeId: "satellite",//roadmap satellite hybrid terrain
-        zoom: 21,
+        zoom: 17,//lower becomes farder
         mapId: 'MAP_ID',
         disableDefaultUI: true,
       };

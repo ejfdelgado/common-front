@@ -27,7 +27,7 @@
 <div class="thumbnails_scroll">
     <div class="thumbnails">
         @for(photo of gallery; track photo; let i = $index) {
-        <img [src]="getThumbnailPhoto(photo)" (click)="gotTo(i)">
+        <img [src]="getThumbnailPhoto(photo)" [ngClass]="{'actual': i == index}" (click)="gotTo(i)">
         }
     </div>
 </div>

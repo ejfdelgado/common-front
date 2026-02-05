@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
@@ -38,6 +38,7 @@ export class PhotoGallery extends CommonComponent {
   get gallery() {
     return this._gallery;
   }
+  @Output() currentImage: EventEmitter<ImageGalleryType> = new EventEmitter();
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -74,6 +75,7 @@ export class PhotoGallery extends CommonComponent {
     if (index < size - 2) {
       this.img2 = this._gallery[index + 1];
     }
+    this.currentImage.emit(this._gallery[index]);
   }
 
   getThumbnailPhoto(item: ImageGalleryType) {

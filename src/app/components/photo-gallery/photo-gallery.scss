@@ -27,6 +27,8 @@
     max-width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
+    padding-bottom: 5px;
+    padding-left: 5px;
 }
 
 .thumbnails {
@@ -39,6 +41,11 @@
     height: 100px;
     border-radius: 5px;
     cursor: pointer;
+    opacity: 0.3;
+}
+
+.thumbnails img.actual {
+    opacity: 1;
 }
 
 .view_background {
