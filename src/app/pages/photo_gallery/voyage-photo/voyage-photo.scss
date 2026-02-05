@@ -47,20 +47,36 @@
     left: 0;
     right: 0;
     overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-.over_partent {
+.container_grid_docs_found_scroll .intermediate {
+    flex-shrink: 0;
+    width: auto;
+}
+
+.grid_docs_found {
+    display: grid;
+    /*It used the scroll in a wrong way*/
+    /*grid-template-columns: 1fr 1fr 1fr;*/
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.over_parent {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.over_partent .record_button {
+.over_parent .record_button {
     background-color: red;
     cursor: pointer;
     width: 4em;
@@ -69,17 +85,19 @@
     z-index: 2;
 }
 
-.grid_docs_found {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-}
-
 .description_parent {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
+}
+
+.see_more_parent {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 @media screen AND (max-width: 1400px) {

@@ -7,12 +7,12 @@
 
     <div class="controls">
         <button class="cancel rounded_button" (click)="cancel()"><mat-icon>close</mat-icon></button>
+        <button class="capture rounded_button" (click)="capture()"><mat-icon>photo_camera</mat-icon></button>
         @if (videoDevices.length > 1) {
         <button class="switch rounded_button" (click)="switchCamera()">
             <mat-icon>flip_camera_android</mat-icon>
         </button>
         }
-        <button class="capture rounded_button" (click)="capture()"><mat-icon>photo_camera</mat-icon></button>
     </div>
 </div>
 }

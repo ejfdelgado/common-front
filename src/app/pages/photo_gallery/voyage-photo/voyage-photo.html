@@ -13,20 +13,27 @@
                 <app-search-input (search)="search($event)" />
                 <div class="container_grid_docs_found">
                     <div class="container_grid_docs_found_scroll">
-                        <div class="grid_docs_found">
-                            @for(note of notes; track note.id) {
-                            <app-card-doc [model]="note" [user]="user" (createUpdate)="openDialog($event)"
-                                [imageType]="'square'" [config]="cardConfig" [actions]="cardActions"
-                                (events)="cardEvents($event)" (delete)="deleteNote($event)"
-                                (share)="localShare($event)"></app-card-doc>
-                            }
+                        <div class="intermediate">
+                            <div class="grid_docs_found">
+                                @for(note of notes; track note.id) {
+                                <app-card-doc [model]="note" [user]="user" (createUpdate)="openDialog($event)"
+                                    [imageType]="'square'" [config]="cardConfig" [actions]="cardActions"
+                                    (events)="cardEvents($event)" (delete)="deleteNote($event)"
+                                    (share)="localShare($event)"></app-card-doc>
+                                }
+                                <div class="see_more_parent" (click)="pageNotesNoRealtime()">
+                                    <p>Ver más</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="over_partent">
+                    @if (isMobile()) {
+                    <div class="over_parent no_mouse">
                         @if (collection) {
-                        <div class="record_button" (click)="capturePhoto()"></div>
+                        <div class="record_button si_mouse" (click)="capturePhoto()"></div>
                         }
                     </div>
+                    }
                 </div>
             </div>
         </div>

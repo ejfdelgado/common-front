@@ -106,11 +106,56 @@ export class CameraCaptureComponent implements OnDestroy {
     const video = this.videoRef.nativeElement;
 
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
     const ctx = canvas.getContext('2d')!;
-    ctx.drawImage(video, 0, 0);
+
+    const vw = video.videoWidth;
+    const vh = video.videoHeight;
+
+    const isMobile = 'orientation' in screen;
+    const angle =
+      (screen.orientation && screen.orientation.angle) ||
+      (window as any).orientation ||
+      0;
+
+    if (isMobile && angle !== 0) {
+      // Mobile device rotated
+      if (angle === 90 || angle === -270) {
+        // Landscape right
+        canvas.width = vh;
+        canvas.height = vw;
+
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(video, -vw / 2, -vh / 2, vw, vh);
+        ctx.restore();
+      } else if (angle === -90 || angle === 270) {
+        // Landscape left
+        canvas.width = vh;
+        canvas.height = vw;
+
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(Math.PI / 2);
+        ctx.drawImage(video, -vw / 2, -vh / 2, vw, vh);
+        ctx.restore();
+      } else if (angle === 180) {
+        // Upside down
+        canvas.width = vw;
+        canvas.height = vh;
+
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(Math.PI);
+        ctx.drawImage(video, -vw / 2, -vh / 2, vw, vh);
+        ctx.restore();
+      }
+    } else {
+      // Desktop OR normal mobile portrait
+      canvas.width = vw;
+      canvas.height = vh;
+      ctx.drawImage(video, 0, 0, vw, vh);
+    }
 
     canvas.toBlob((blob) => {
       if (blob && this.resolver) {

@@ -257,6 +257,17 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     }
   }
 
+  async pageNotesNoRealtime() {
+    if (this.liveMode) {
+      this.liveMode = false;
+      await this.pageNotes(true);
+    } else {
+      await this.pageNotes(false);
+    }
+    this.recomputeAllMarkers();
+    this.cdr.detectChanges();
+  }
+
   async pageNotes(startover: boolean = false) {
     if (startover && this.notes.length > 0) {
       this.notes.splice(0, this.notes.length);
@@ -265,6 +276,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     const page = (await this.firestoreSrv.paging({
       collectionName: this.getCollectionName(),
       searchText: searchable,
+      lastDoc: this.notes[this.notes.length - 1],
     }));
     this.notes.push(...(page as PhotoGPSDataType[]));
     this.cdr.detectChanges();
