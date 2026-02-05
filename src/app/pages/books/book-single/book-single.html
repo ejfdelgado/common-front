@@ -11,7 +11,7 @@
                     <div class="container_grid_docs_found_scroll">
                         <div class="grid_docs_found">
                             @for(note of notes; track note.id) {
-                            <app-photo-gallery [gallery]="note.gallery"></app-photo-gallery>
+                            <app-photo-gallery [gallery]="note.gallery" [height]="'50vh'"></app-photo-gallery>
                             <p [innerHTML]="sanitizeText(note.description)" (click)="openDialog({'model': note})"></p>
                             }
                         </div>

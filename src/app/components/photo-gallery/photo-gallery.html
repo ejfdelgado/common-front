@@ -1,6 +1,6 @@
 @if (gallery.length > 0 && (mode == 'embedded' || visible)) {
 <div class="panel_embbed" [ngClass]="{'full': mode == 'full', 'embedded': mode == 'embedded'}"
-    [ngStyle]="{'height': height + 'px'}">
+    [ngStyle]="{'height': height }">
     <div class="big_image">
         <div class="view_background" [style.background-image]="'url(' + getPhoto(img1) + ')'">
         </div>
@@ -19,9 +19,11 @@
             <mat-icon class="move_button white_subtitle">chevron_right</mat-icon>
     </div>
     }
+    @if (mode == 'full') {
     <div class="close_control" (click)="destroyGallery()">
         <mat-icon class="move_button white_subtitle">close</mat-icon>
     </div>
+    }
 </div>
 @if (gallery.length > 1) {
 <div class="thumbnails_scroll">

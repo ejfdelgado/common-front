@@ -28,7 +28,7 @@ export class PhotoGallery extends CommonComponent {
   visible: boolean = false;
 
   @Input() mode: "full" | "embedded" = "embedded";
-  @Input() height: number = 400;
+  @Input() height: string = "400px";
   @Input() thumbnailType: ImageTypeData = "thumbnail";
   @Input()
   set gallery(value: ImageGalleryType[]) {

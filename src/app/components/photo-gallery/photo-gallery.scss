@@ -38,7 +38,7 @@
 }
 
 .thumbnails img {
-    height: 100px;
+    height: 70px;
     border-radius: 5px;
     cursor: pointer;
     opacity: 0.3;
@@ -114,6 +114,10 @@
 
 .description_container p {
     text-align: center;
+}
+
+.panel_embbed.full .description_container p {
+    font-size: 1.5em;
 }
 
 .close_control {
