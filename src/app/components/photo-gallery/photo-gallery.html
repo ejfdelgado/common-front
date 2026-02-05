@@ -1,6 +1,6 @@
-@if (mode=='embedded') {
 @if (gallery.length > 0) {
-<div class="panel_embbed" [ngStyle]="{'height': height + 'px'}">
+<div class="panel_embbed" [ngClass]="{'full': mode == 'full', 'embedded': mode == 'embedded'}"
+    [ngStyle]="{'height': height + 'px'}">
     <div class="big_image">
         <div class="view_background" [style.background-image]="'url(' + getPhoto(img1) + ')'">
         </div>
@@ -30,5 +30,4 @@
 </div>
 }
 </div>
-}
 }

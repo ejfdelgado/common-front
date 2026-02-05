@@ -3,10 +3,8 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { getBucketFilePath, getSquarePath, getThumbnailPath } from "@tools/BucketPaths";
 import { epochTo } from "@tools/DateUtils";
 import { isMobile } from "@tools/mobile";
-import { enterFullscreen, exitFullscreen } from "@tools/ScreenUtils";
 import { DateOptionType } from "types/DateTypes";
-
-export type ImageTypeData = "big" | "thumbnail" | "square";
+import { ImageTypeData } from "types/ImageTypes";
 
 export abstract class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};

@@ -9,6 +9,7 @@ import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
+import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
@@ -24,6 +25,7 @@ import { getBucketPath, getSquarePath } from '@tools/BucketPaths';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
+import { ImageGalleryType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
 
 export interface PhotoGPSDataType extends BasicDataType {
@@ -45,6 +47,7 @@ const MODEL_NAME = "photogps";
     CardDoc,
     SideMenu,
     Fullscreen,
+    PhotoGallery,
   ],
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
@@ -65,6 +68,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     hasImage: true,
   };
   cardActions: string[] = [];
+  gallery: ImageGalleryType[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -371,5 +375,16 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         updated: 0,
       });
     }
+  }
+
+  openGallery(event: PhotoGPSDataType) {
+    this.gallery.splice(0, this.gallery.length - 1);
+    this.notes.forEach((item) => {
+      const element: any = {
+        image: (item as any).image,
+        description: item.description,
+      };
+      this.gallery.push(element);
+    });
   }
 }

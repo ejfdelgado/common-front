@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonComponent, ImageTypeData } from '@components/common.component';
+import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
@@ -10,6 +10,7 @@ import { User } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { FullscreenService } from '@services/fullscreen.service';
 import { DateOptionType } from 'types/DateTypes';
+import { ImageTypeData } from 'types/ImageTypes';
 
 export interface CardDocDataType {
   shareLink?: boolean;

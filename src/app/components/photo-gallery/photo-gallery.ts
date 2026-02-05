@@ -4,8 +4,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { FullscreenService } from '@services/fullscreen.service';
-import { getBucketFilePath, getThumbnailPath } from '@tools/BucketPaths';
+import { getBucketFilePath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
 import { ImageGalleryType } from 'types/fieldsTypes';
+import { ImageTypeData } from 'types/ImageTypes';
 
 @Component({
   selector: 'app-photo-gallery',
@@ -27,6 +28,7 @@ export class PhotoGallery extends CommonComponent {
 
   @Input() mode: "full" | "embedded" = "embedded";
   @Input() height: number = 400;
+  @Input() thumbnailType: ImageTypeData = "thumbnail";
   @Input()
   set gallery(value: ImageGalleryType[]) {
     this._gallery = value;
@@ -74,7 +76,11 @@ export class PhotoGallery extends CommonComponent {
   }
 
   getThumbnailPhoto(item: ImageGalleryType) {
-    return getBucketFilePath(getThumbnailPath(item.image));
+    if (this.thumbnailType == "square") {
+      return getBucketFilePath(getSquarePath(item.image));
+    } else {
+      return getBucketFilePath(getThumbnailPath(item.image));
+    }
   }
 
   getPhoto(item: ImageGalleryType | null) {
