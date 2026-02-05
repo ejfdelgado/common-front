@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { AutofocusDirective } from '@directives/autofocus.directive';
+import { FullscreenService } from '@services/fullscreen.service';
 
 @Component({
   standalone: true,
@@ -18297,9 +18298,10 @@ export class EmojiPickerComponent extends CommonComponent {
 
   constructor(
     private dialogRef: MatDialogRef<EmojiPickerComponent>,
+    public override fullScreenSrv: FullscreenService,
     public override sanitizer: DomSanitizer,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   get filteredEmojis() {

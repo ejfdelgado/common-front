@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -7,8 +7,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { User } from '@angular/fire/auth';
-import { environment } from 'environments/environment';
 import { CommonModule } from '@angular/common';
+import { FullscreenService } from '@services/fullscreen.service';
 
 export interface CardDocDataType {
   shareLink?: boolean;
@@ -49,9 +49,10 @@ export class CardDoc extends CommonComponent {
 
   constructor(
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
     public confirmSrv: ConfirmDialogService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   async openEdit() {

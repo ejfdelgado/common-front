@@ -8,6 +8,7 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { getUrlQueryParams } from "@tools/UrlUtil";
 import { CommonComponent } from "@components/common.component";
 import { DomSanitizer } from "@angular/platform-browser";
+import { FullscreenService } from "@services/fullscreen.service";
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
 
@@ -52,9 +53,10 @@ export class CommonSpeech extends CommonComponent {
         public indicatorSrv: IndicatorService,
         public booleanService: BooleanStateService,
         public override sanitizer: DomSanitizer,
+        public override fullScreenSrv: FullscreenService,
         preferedLang?: string,
     ) {
-        super(sanitizer);
+        super(sanitizer, fullScreenSrv);
         if (preferedLang) {
             this.currentLang = preferedLang;
         }

@@ -13,6 +13,8 @@ import { getUrlQueryParams } from '@tools/UrlUtil';
 import { EditableInput } from '@components/fields/editable-input/editable-input';
 import { DomSanitizer } from '@angular/platform-browser';
 import { OnOffToggleComponent } from '@components/fields/on-off-toggle/on-off-toggle';
+import { FullscreenService } from '@services/fullscreen.service';
+import { Fullscreen } from '@components/fullscreen/fullscreen';
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -37,6 +39,7 @@ export interface ConfigSong {
     MatIconModule,
     EditableInput,
     OnOffToggleComponent,
+    Fullscreen,
   ],
   templateUrl: './practicesong.html',
   styleUrl: './practicesong.scss',
@@ -68,8 +71,9 @@ export class Practicesong extends CommonSpeech {
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

@@ -21,6 +21,7 @@ import { marked } from 'marked';
 import { PDFService } from '@services/pdf.service';
 import { MatIconModule } from '@angular/material/icon';
 import { debounceTime, Subject, Subscription, tap } from 'rxjs';
+import { FullscreenService } from '@services/fullscreen.service';
 
 export type EditModeType = "edit" | "preview" | "both";
 
@@ -82,8 +83,10 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
     public override sanitizer: DomSanitizer,
     public pdfSrv: PDFService,
     public cdr: ChangeDetectorRef,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
+
     this.previewSubscription = this.previewSubject.pipe(
       debounceTime(300),
     ).subscribe(() => {

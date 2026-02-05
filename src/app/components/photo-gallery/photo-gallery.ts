@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketFilePath, getThumbnailPath } from '@tools/BucketPaths';
 import { ImageGalleryType } from 'types/fieldsTypes';
 
@@ -37,8 +38,9 @@ export class PhotoGallery extends CommonComponent {
 
   constructor(
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   forward() {

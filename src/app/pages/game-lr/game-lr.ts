@@ -9,6 +9,7 @@ import { ThreejsComponent } from "./threejs/threejs.component";
 import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 @Component({
   selector: 'app-game-lr',
@@ -36,8 +37,9 @@ export class GameLr extends CommonSpeech {
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer);
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

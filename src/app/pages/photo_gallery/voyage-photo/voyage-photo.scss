@@ -74,6 +74,12 @@
     gap: 20px;
 }
 
+.description_parent {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 @media screen AND (max-width: 1400px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr;

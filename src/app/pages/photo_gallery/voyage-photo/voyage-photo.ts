@@ -8,12 +8,15 @@ import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
+import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { SearchInputComponent } from '@components/search-input/search-input';
+import { SideMenu } from '@components/side-menu/side-menu';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
+import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
@@ -40,6 +43,8 @@ const MODEL_NAME = "photogps";
     Statusbar,
     SearchInputComponent,
     CardDoc,
+    SideMenu,
+    Fullscreen,
   ],
   templateUrl: './voyage-photo.html',
   styleUrl: './voyage-photo.scss',
@@ -73,8 +78,9 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
     private router: Router,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer, authSrv, cdr);
+    super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     if (!this.isMobile()) {
       this.cardActions = ['location_on'];
@@ -129,11 +135,19 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       this.authSrv.login();
       return;
     }
-    const pos = await this.locationSrv.getCurrentPosition();
-    const blob = await this.fileSrv.openCamera();
+    const posPromise = this.locationSrv.getCurrentPosition();
+    const blobPromise = this.fileSrv.openCamera();
+
+    const promises: Promise<any>[] = [];
+    promises.push(posPromise);
+    promises.push(blobPromise);
+
+    const blob = await blobPromise;
+
     if (!blob) {
       return;
     }
+    let activity = this.indicatorSrv.start();
     try {
       const template = "photo_gallery/${user.uid}/${collection.id}/${date.year}-${date.month}-${date.day}/${random}.jpg";
       const nextPath = getBucketPath(template, "", {
@@ -153,7 +167,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
         'image/jpeg',
         0.9
       );
-
+      const pos = await posPromise;
       const model: any = {
         title: this.epochTo(Date.now()),
         image: nextPath,
@@ -173,6 +187,8 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       this.pageNotes(true);
     } catch (err) {
       console.log(err);
+    } finally {
+      activity.done();
     }
   }
 
@@ -303,6 +319,9 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   recomputeAllMarkers() {
+    if (!this.simpleMap) {
+      return;
+    }
     this.simpleMap.clearOverlays();
     this.markerSubscriptions.forEach((subs) => {
       subs.unsubscribe();

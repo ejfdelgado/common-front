@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { FullscreenService } from '@services/fullscreen.service';
 import { generateHueColors } from '@tools/Colors';
 
 export interface OptionDataType {
@@ -38,8 +39,9 @@ export class Question extends CommonComponent implements OnInit {
 
   constructor(
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   ngOnInit() {

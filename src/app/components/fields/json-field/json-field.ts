@@ -23,6 +23,7 @@ import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
+import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath } from '@tools/BucketPaths';
 import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
@@ -77,8 +78,9 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   ngAfterViewInit(): void {

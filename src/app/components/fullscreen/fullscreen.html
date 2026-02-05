@@ -1,0 +1,8 @@
+<div class="">
+    <button class="transparent" (click)="setFullScreen(true)" *ngIf="!isFullScreen">
+        <mat-icon class="white_subtitle">fullscreen</mat-icon>
+    </button>
+    <button class="transparent" (click)="setFullScreen(false)" *ngIf="isFullScreen">
+        <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
+    </button>
+</div>

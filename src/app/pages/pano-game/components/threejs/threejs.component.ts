@@ -24,6 +24,7 @@ import { Statusbar } from "../statusbar/statusbar";
 import { isMobile } from '@tools/mobile';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -112,8 +113,9 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public override speechSrv: SpeechSynthesisService,
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, "es-ES");
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv, "es-ES");
     this.hasMobile = isMobile();
 
     this.voiceSrv.setInterimResults(true);

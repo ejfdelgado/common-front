@@ -9,10 +9,12 @@ import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
+import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
+import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
@@ -35,6 +37,7 @@ const MODEL_NAME = "photocollection";
     Statusbar,
     SearchInputComponent,
     CardDoc,
+    SideMenu,
   ],
   templateUrl: './collections.html',
   styleUrl: './collections.scss',
@@ -64,8 +67,9 @@ export class CollectionsComponent extends AuthenticatedComponent implements OnIn
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
     private router: Router,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer, authSrv, cdr);
+    super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
       label: "Agregar álbum",

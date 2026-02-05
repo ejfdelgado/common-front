@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 setOptions({ key: Base64.decode('QUl6YVN5Q0NoUUpEOXMweV9rVFVoZXVoN3NzdWJWc1dPSl9IaW9j') });
 
@@ -148,8 +149,10 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
     private indicatorSrv: IndicatorService,
     private cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
+
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
     this.hasMobile = this.isMobile();
   }
 

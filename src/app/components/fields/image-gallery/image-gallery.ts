@@ -20,6 +20,7 @@ import { EditableInput } from '../editable-input/editable-input';
 import { ImageFileComponent } from '../image-field/image-field';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { ComponentBucketField } from 'types/ComponentBucketField';
+import { FullscreenService } from '@services/fullscreen.service';
 
 @Component({
   selector: 'app-image-gallery',
@@ -66,8 +67,9 @@ export class ImageGalleryComponent extends CommonComponent implements ControlVal
     public confirmSrv: ConfirmDialogService,
     public cdr: ChangeDetectorRef,
     private zone: NgZone,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   ngOnInit(): void {

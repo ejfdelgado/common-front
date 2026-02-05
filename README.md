@@ -19,7 +19,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/side-menu
+npx ng generate component --standalone --skip-tests components/fullscreen
 ```
 
 ```bash

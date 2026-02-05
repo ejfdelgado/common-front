@@ -9,6 +9,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { ChipDetailDataType } from 'types/fieldsTypes';
+import { FullscreenService } from '@services/fullscreen.service';
 
 export type ChipSelectDataType = string[];
 
@@ -46,8 +47,9 @@ export class ChipSelectComponent extends CommonComponent implements ControlValue
 
   constructor(
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   writeValue(value: ChipSelectDataType): void {

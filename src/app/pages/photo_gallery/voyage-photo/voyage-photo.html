@@ -1,10 +1,13 @@
 <div class="main_container">
     <div class="photo_container">
+        <app-side-menu [options]="menuOptions"></app-side-menu>
         <div class="inner_photo_container">
-            <app-statusbar [options]="menuOptions" [title]="getAlbumTitle()"></app-statusbar>
+            <app-statusbar [title]="getAlbumTitle()"></app-statusbar>
             <div class="dynamic_content">
                 @if (collection) {
-                <p [innerHTML]="sanitizeText(collection.description)"></p>
+                <div class="description_parent">
+                    <p [innerHTML]="sanitizeText(collection.description)"></p>
+                </div>
                 }
                 <app-search-input (search)="search($event)" />
                 <div class="container_grid_docs_found">
@@ -33,3 +36,4 @@
     </div>
     }
 </div>
+<app-fullscreen class="position_absolute bottom_right"></app-fullscreen>

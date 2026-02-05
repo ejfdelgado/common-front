@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { FullscreenService } from '@services/fullscreen.service';
 
 export type OnOffDataType = boolean;
 
@@ -43,8 +44,9 @@ export class OnOffToggleComponent extends CommonComponent implements ControlValu
   constructor(
     public cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   /* ========= ControlValueAccessor API ========= */

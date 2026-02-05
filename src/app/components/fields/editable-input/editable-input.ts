@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.component';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 @Component({
   selector: 'app-editable-input',
@@ -56,8 +57,9 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   constructor(
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   saveSelection() {

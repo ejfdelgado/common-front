@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 @Component({
   standalone: true,
@@ -42,8 +43,9 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
     private indicatorSrv: IndicatorService,
     private cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
     this.hasMobile = this.isMobile();
   }
 

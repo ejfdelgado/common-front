@@ -17,6 +17,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
+import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
 import { environment } from 'environments/environment';
 import { ComponentBucketField } from 'types/ComponentBucketField';
@@ -60,8 +61,9 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   /* ========= ControlValueAccessor API ========= */

@@ -12,6 +12,7 @@ import { distinctUntilKeyChangedWithTTL } from '@tools/rxjsUtils';
 import { ModuloSonido } from '@services/sonido.service';
 import { getBucketFilePath } from '@tools/BucketPaths';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 export interface SoundDataType {
   id: string;
@@ -87,8 +88,9 @@ export class Playsound extends CommonSpeech {
     public override indicatorSrv: IndicatorService,
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, "en-US");
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv, "en-US");
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 

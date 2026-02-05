@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
 
 export interface PhoneValue {
   prefix: string;
@@ -68,8 +69,9 @@ export class PhoneInputComponent extends CommonComponent
   constructor(
     public cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer);
+    super(sanitizer, fullScreenSrv);
   }
 
   private onValidatorChange: () => void = () => { };

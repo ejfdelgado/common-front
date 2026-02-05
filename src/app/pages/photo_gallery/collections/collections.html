@@ -1,6 +1,7 @@
 <div class="main_container">
+    <app-side-menu [options]="menuOptions"></app-side-menu>
     <div class="inner_photo_container">
-        <app-statusbar [title]="'Álbumes'" [options]="menuOptions"></app-statusbar>
+        <app-statusbar [title]="'Álbumes'"></app-statusbar>
         <div class="dynamic_content">
             <app-search-input (search)="search($event)" />
             <div class="container_grid_docs_found">
@@ -8,8 +9,8 @@
                     <div class="grid_docs_found">
                         @for(note of notes; track note.id) {
                         <app-card-doc (openDocument)="openDocument($event)" [config]="cardConfig" [model]="note"
-                            [user]="user" [imageType]="'thumbnail'" (createUpdate)="openDialog($event)" (delete)="deleteNote($event)"
-                            (share)="localShare($event)"></app-card-doc>
+                            [user]="user" [imageType]="'thumbnail'" (createUpdate)="openDialog($event)"
+                            (delete)="deleteNote($event)" (share)="localShare($event)"></app-card-doc>
                         }
                         <div class="see_more_parent" (click)="pageNotes(false)">
                             <p>Ver más</p>

@@ -1,4 +1,5 @@
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { FullscreenService } from "@services/fullscreen.service";
 import { getBucketFilePath, getSquarePath, getThumbnailPath } from "@tools/BucketPaths";
 import { epochTo } from "@tools/DateUtils";
 import { isMobile } from "@tools/mobile";
@@ -14,6 +15,7 @@ export abstract class CommonComponent {
 
     constructor(
         public sanitizer: DomSanitizer,
+        public fullScreenSrv: FullscreenService,
     ) {
 
     }
@@ -94,9 +96,9 @@ export abstract class CommonComponent {
     setFullScreen(value: boolean) {
         this.isFullScreen = value;
         if (value) {
-            enterFullscreen();
+            this.fullScreenSrv.enterFullscreen();
         } else {
-            exitFullscreen();
+            this.fullScreenSrv.exitFullscreen();
         }
     }
 }

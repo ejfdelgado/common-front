@@ -36,7 +36,8 @@
         </span>
         <div class="container_horizontal centered vcentered">
             <app-on-off-toggle [onImageUrl]="'./assets/icons/star_on.svg'" [offImageUrl]="'./assets/icons/star_off.svg'"
-                [label]="'Practice!'" [(ngModel)]="isTrainingMode" (ngModelChange)="toggledTraining($event)"></app-on-off-toggle>
+                [label]="'Practice!'" [(ngModel)]="isTrainingMode"
+                (ngModelChange)="toggledTraining($event)"></app-on-off-toggle>
             @if (!isPlaying) {
             <button class="button_simple font_green" (click)="startSong(millisTime)"><mat-icon
                     class="white">play_arrow</mat-icon></button>
@@ -51,13 +52,6 @@
             <h3 class="millis_button" [ngClass]="{'fade-white-to-black': isCopying}" (click)="copyMillis()">millis: {{
                 millisTime }}</h3>
         </div>
-        <div class="position_absolute bottom_right">
-            <button class="transparent" (click)="setFullScreen(true)" *ngIf="!isFullScreen">
-                <mat-icon class="white_subtitle">fullscreen</mat-icon>
-            </button>
-            <button class="transparent" (click)="setFullScreen(false)" *ngIf="isFullScreen">
-                <mat-icon class="white_subtitle">fullscreen_exit</mat-icon>
-            </button>
-        </div>
+        <app-fullscreen class="position_absolute bottom_right"></app-fullscreen>
     </div>
 </div>

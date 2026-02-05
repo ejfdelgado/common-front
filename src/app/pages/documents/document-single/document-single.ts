@@ -12,6 +12,7 @@ import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreConfigDataType, FirestoreService } from '@services/firestore.service';
+import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
@@ -80,9 +81,9 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
     private router: Router,
-
+    public override fullScreenSrv: FullscreenService,
   ) {
-    super(sanitizer, authSrv, cdr);
+    super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     if (!this.isMobile()) {
       this.cardActions = ['location_on'];
