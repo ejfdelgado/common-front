@@ -174,10 +174,12 @@ export class Practicesong extends CommonSpeech {
           const millisGap = verseNext.millis - verse.millis;
           if (millisGap > 0) {
             this.startSong(verse.millis);
-            this.lastTimeout = setTimeout(() => {
-              this.stopSong();
-              this.cdr.detectChanges();
-            }, millisGap);
+            if (!this.isTrainingMode) {
+              this.lastTimeout = setTimeout(() => {
+                this.stopSong();
+                this.cdr.detectChanges();
+              }, millisGap);
+            }
           }
           return;
         }
