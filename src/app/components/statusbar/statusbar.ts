@@ -8,12 +8,7 @@ import { CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '@services/auth.service';
 import { SideMenuService } from '@services/side-menu.service';
-
-export interface MenuOptionType {
-  label: string;
-  icon: string;
-  callback: Function,
-}
+import { MenuOptionType } from 'types/StatusBar';
 
 @Component({
   selector: 'app-statusbar',

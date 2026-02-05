@@ -8,8 +8,7 @@ import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
-import { SimpleMapComponent } from '@components/simple-map/simple-map';
-import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
+import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
@@ -18,6 +17,7 @@ import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
+import { MenuOptionType } from 'types/StatusBar';
 
 export interface NoteDataType extends BasicDataType {
 
@@ -66,6 +66,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
     this.menuOptions.push({
       label: "Agregar nota",
       icon: "add",
+      children: [],
       callback: this.openDialog.bind(this),
     });
 

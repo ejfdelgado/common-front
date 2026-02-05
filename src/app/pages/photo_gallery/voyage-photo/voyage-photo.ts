@@ -10,7 +10,7 @@ import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { MarkType, SimpleMapComponent } from '@components/simple-map/simple-map';
-import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
+import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
@@ -21,6 +21,7 @@ import { getBucketPath, getSquarePath } from '@tools/BucketPaths';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
+import { MenuOptionType } from 'types/StatusBar';
 
 export interface PhotoGPSDataType extends BasicDataType {
   lat: number;
@@ -82,6 +83,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     this.menuOptions.push({
       label: "Regresar a álbumes",
       icon: "arrow_back",
+      children: [],
       callback: () => {
         this.router.navigate([`photo_gallery/all`], {
           queryParams: {}

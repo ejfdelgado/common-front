@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
-import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
+import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
@@ -18,6 +18,7 @@ import { ShareSrv } from '@services/share.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
 import { ImageGalleryType } from 'types/fieldsTypes';
+import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "book";
 
@@ -70,6 +71,7 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
     this.menuOptions.push({
       label: "Agregar capítulo",
       icon: "add",
+      children: [],
       callback: () => {
         this.openDialog({});
       },
@@ -78,6 +80,7 @@ export class BookSingle extends AuthenticatedComponent implements OnInit {
     this.menuOptions.push({
       label: "Regresar a biblioteca",
       icon: "arrow_back",
+      children: [],
       callback: () => {
         this.router.navigate([`books_gallery/all`], {
           queryParams: {}

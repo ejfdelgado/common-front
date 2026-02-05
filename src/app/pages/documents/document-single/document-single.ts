@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { SideMenu } from '@components/side-menu/side-menu';
-import { MenuOptionType, Statusbar } from '@components/statusbar/statusbar';
+import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreConfigDataType, FirestoreService } from '@services/firestore.service';
@@ -19,6 +19,7 @@ import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
 import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType, MDDataType } from 'types/fieldsTypes';
+import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "document";
 
@@ -90,6 +91,7 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
     this.menuOptions.push({
       label: "Guardar",
       icon: "save",
+      children: [],
       callback: () => {
         this.save();
       },
@@ -98,6 +100,7 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
     this.menuOptions.push({
       label: "Regresar a documentos",
       icon: "arrow_back",
+      children: [],
       callback: () => {
         this.router.navigate([`docs/all`], {
           queryParams: {}
