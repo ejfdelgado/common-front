@@ -5,18 +5,46 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+
 :root {
     --mat-dialog-container-max-width: 80vw;
-    /* Set to your desired max-width value */
+    --text-sm: 14px;
+    --text-sm--line-height: 15px;
+    --color-font-soft: #526b7a;
+    --color-font-softer: #dcdcdc;
+    --mat-card-title-text-font: "Comfortaa", "Helvetica Neue", sans-serif;
+    --mat-card-subtitle-text-font: "Comfortaa", "Helvetica Neue", sans-serif;
+}
+
+* {
+    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overscroll-behavior-y: contain;
 }
 
 html {
+    overflow-x: hidden;
     @include mat.theme((color: (primary: mat.$azure-palette,
                 tertiary: mat.$blue-palette,
             ),
             typography: Roboto,
             density: 0,
         ));
+}
+
+body {
+    background-color: #ffffff;
+    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
+    color-scheme: light;
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-body-medium);
 }
 
 h1 {
@@ -27,35 +55,6 @@ a {
     word-break: break-all;
 }
 
-body {
-    // Default the application to a light color theme. This can be changed to
-    // `dark` to enable the dark color theme, or to `light dark` to defer to the
-    // user's system settings.
-    color-scheme: light;
-
-    // Set a default background, font and text colors for the application using
-    // Angular Material's system-level CSS variables. Learn more about these
-    // variables at https://material.angular.dev/guide/system-variables
-    background-color: var(--mat-sys-surface);
-    color: var(--mat-sys-on-surface);
-    font: var(--mat-sys-body-medium);
-
-    // Reset the user agent margin.
-    margin: 0;
-}
-
-/* You can add global styles to this file, and also import other style files */
-
-/* styles.scss */
-html {
-    --mat-card-title-text-font: "Comfortaa", "Helvetica Neue", sans-serif;
-    --mat-card-subtitle-text-font: "Comfortaa", "Helvetica Neue", sans-serif;
-}
-
-* {
-    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
-}
-
 .mat-h1,
 .mat-headline-5,
 .mat-typography .mat-h1,
@@ -64,21 +63,9 @@ html {
     font-family: "Comfortaa", "Helvetica Neue", sans-serif;
 }
 
-html {
-    overflow-x: hidden;
-}
-
-body {
-    background-color: #ffffff;
-    font-family: "Comfortaa", "Helvetica Neue", sans-serif;
-}
-
-html,
-body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overscroll-behavior-y: contain;
+.text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
 }
 
 .nogalespopup.popup_1 mat-dialog-container {
@@ -308,9 +295,4 @@ button.transparent {
         width: 100% !important;
         height: auto !important;
     }
-}
-
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
 }

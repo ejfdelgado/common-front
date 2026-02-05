@@ -21,7 +21,7 @@
     </div>
     }
     <div class="title_content">
-        {{ title }}
+        <h1>{{ title }}</h1>
     </div>
     <div class="menu_container">
         @if (iconSmall) {
@@ -56,8 +56,15 @@
             </button>
             } @else {
             <button mat-menu-item>
-                <span>{{ user.displayName }}</span>
+                <div class="user_card">
+                    <img class="card_photo" [src]="user.photoURL">
+                    <div class="card_name_email">
+                        <h6 class="text-sm">{{ user.displayName }}</h6>
+                        <span class="email">{{ user.email }}</span>
+                    </div>
+                </div>
             </button>
+            <hr class="local_hr">
             <button mat-menu-item (click)="authSrv.logout()">
                 <mat-icon>logout</mat-icon>
                 <span>Salir</span>

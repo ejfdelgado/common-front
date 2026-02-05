@@ -28,6 +28,7 @@
               }
             ],
             "styles": [
+              "src/assets/css/popup_menu.scss",
               "src/assets/css/buttons.css",
               "src/assets/css/containers.css",
               "src/assets/css/forms.css",
