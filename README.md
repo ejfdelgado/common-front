@@ -52,7 +52,8 @@ Configure branding at:
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=hall_of_fame.json&t=1)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=unstopable.json&t=1)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=karma.json)
-[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json&t=1)
+[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
+[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=in_the_name_of_love2.json)
 
 [love song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
 
@@ -76,6 +77,8 @@ gsutil cors get gs://pro-ejflab-assets
 ```
 
 ## TODO
+
+- Enable the roles admin.
 
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.

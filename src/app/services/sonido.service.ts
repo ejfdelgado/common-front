@@ -14,7 +14,7 @@ export interface CreateSoundDataType {
 export class ModuloSonido {
 	static sonidos: { [key: string]: any } = {};
 	static sincId: string | null = null;
-	static createAudio(input: CreateSoundDataType) {
+	static createAudio(input: CreateSoundDataType): Promise<HTMLAudioElement> {
 		if (typeof input.volume !== "number") {
 			input.volume = 100;
 		}
@@ -31,7 +31,7 @@ export class ModuloSonido {
 			});
 			audio.addEventListener("loadeddata", () => {
 				let duration = audio.duration;
-				console.log(`duration:${duration}`);
+				//console.log(`duration:${duration}`);
 				resolve(audio);
 			});
 			audio.src = source;
@@ -58,12 +58,15 @@ export class ModuloSonido {
 		ModuloSonido.sincId = id;
 	}
 
-	static async play(llave: string, loop: boolean = false, volume: number = 1, startMillis: number | null = 0) {
-		let ref = null;
+	static async play(llave: string, loop: boolean = false, volume: number = 1, startMillis: number | null = 0): Promise<HTMLAudioElement> {
+		let ref: HTMLAudioElement | null = null;
 		if (llave in ModuloSonido.sonidos) {
 			ref = ModuloSonido.sonidos[llave];
 		} else {
 			ref = (await ModuloSonido.preload([llave]))[0];
+		}
+		if (!ref) {
+			throw new Error("Audio not loaded");
 		}
 		ref.volume = volume;
 		let isPlaying = ref.currentTime > 0 && !ref.paused && !ref.ended
@@ -82,6 +85,7 @@ export class ModuloSonido {
 				ref.currentTime = startMillis / 1000;
 			}
 		}
+		return ref;
 	};
 
 	static stop(llave: string) {

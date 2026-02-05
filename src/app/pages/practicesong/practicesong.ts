@@ -12,6 +12,7 @@ import { ClipboardUtil } from "@tools/Clipboard";
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { EditableInput } from '@components/fields/editable-input/editable-input';
 import { DomSanitizer } from '@angular/platform-browser';
+import { OnOffToggleComponent } from '@components/fields/on-off-toggle/on-off-toggle';
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -35,6 +36,7 @@ export interface ConfigSong {
     FormsModule,
     MatIconModule,
     EditableInput,
+    OnOffToggleComponent,
   ],
   templateUrl: './practicesong.html',
   styleUrl: './practicesong.scss',
@@ -48,6 +50,10 @@ export class Practicesong extends CommonSpeech {
   config: ConfigSong | null = null;
   editing: boolean = false;
   lastTimeout: NodeJS.Timeout | null = null;
+  audioRef: HTMLAudioElement | null = null;
+  isTrainingMode: boolean = false;
+  isYourTrainingTurn: boolean = false;
+  currentVerse: Verse | null = null;
 
   @ViewChild('parentContainer', { read: ElementRef })
   parent!: ElementRef<HTMLElement>;
@@ -189,13 +195,31 @@ export class Practicesong extends CommonSpeech {
     }
   }
 
+  getCurrentVolume() {
+    let volume: number = 1;
+    if (!this.isTrainingMode) {
+      return volume;
+    }
+    if (this.isYourTrainingTurn) {
+      volume = 0;
+    }
+    this.isYourTrainingTurn = !this.isYourTrainingTurn;
+    return volume;
+  }
+
   async startSong(startingPoint: number) {
     if (!this.config) {
       return;
     }
     this.clearLastTimeout();
     const promise = this.indicatorSrv.start();
-    await ModuloSonido.play(ROOT_PATH + this.config.sound, false, 1, startingPoint);
+
+    this.audioRef = await ModuloSonido.play(
+      ROOT_PATH + this.config.sound,
+      false,
+      this.getCurrentVolume(),
+      startingPoint
+    );
     promise.done();
     this.isPlaying = true;
     this.cdr.detectChanges();
@@ -251,6 +275,12 @@ export class Practicesong extends CommonSpeech {
       last.selected = true;
       const index = song.indexOf(last);
       this.scrollToIndex(index);
+      if (this.currentVerse != last) {
+        this.currentVerse = last;
+        if (this.audioRef) {
+          this.audioRef.volume = this.getCurrentVolume();
+        }
+      }
     }
   }
 
@@ -312,5 +342,16 @@ export class Practicesong extends CommonSpeech {
 
   pinMillis(verse: Verse) {
     verse.millis = this.millisTime;
+  }
+
+  toggledTraining(event: any) {
+    if (this.audioRef) {
+      if (event == false) {
+        this.audioRef.volume = 1;
+      } else {
+        this.isYourTrainingTurn = Math.random() > 0.5;
+        this.audioRef.volume = this.getCurrentVolume();
+      }
+    }
   }
 }
