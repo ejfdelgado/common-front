@@ -33,6 +33,7 @@ export class SimpleMapComponent implements AfterViewInit {
   libPromises!: Promise<any>;
   geocoder: any = null;
   markers: any[] = [];
+  mappingIds: { [key: string]: any } = {};
 
   constructor() {
     this.importLibraries();
@@ -83,6 +84,7 @@ export class SimpleMapComponent implements AfterViewInit {
   clearOverlays() {
     this.markers.forEach(m => m.setMap(null));
     this.markers = [];
+    this.mappingIds = {};
   }
 
   async addMarker(data: MarkType) {
@@ -105,6 +107,7 @@ export class SimpleMapComponent implements AfterViewInit {
       observable.next(data);
     });
     this.markers.push(marker);
+    this.mappingIds[data.id] = marker;
     // Center
     this.center(data.lat, data.lon);
     return observable.asObservable();
@@ -114,5 +117,16 @@ export class SimpleMapComponent implements AfterViewInit {
     this.map.setOptions({
       center: { lat: lat, lng: lon },
     });
+  }
+
+  removeMarkById(id: string) {
+    const old = this.mappingIds[id];
+    if (old) {
+      old.setMap(null);
+      const index = this.markers.indexOf(old);
+      if (index >= 0) {
+        this.markers.splice(index);
+      }
+    }
   }
 }

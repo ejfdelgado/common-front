@@ -127,7 +127,11 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   async transformMark(data: MarkType) {
-    return `<b class="white_subtitle" style="font-size: 2em;">📍</b>`;
+    if (data.id == "fake") {
+      return `<b class="white_subtitle" style="font-size: 2em;">⭐</b>`;
+    } else {
+      return `<b class="white_subtitle" style="font-size: 2em;">📍</b>`;
+    }
   }
 
   async capturePhoto() {
@@ -351,6 +355,21 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
     const { action, model } = $event;
     if (action == "location_on") {
       this.simpleMap.center(model.lat, model.lon);
+      // add a fake marker at this position
+      const FAKE_ID = "fake";
+      this.simpleMap.removeMarkById(FAKE_ID);
+      this.addSingleMarker({
+        id: FAKE_ID,
+        lat: model.lat,
+        lon: model.lon,
+        title: "",
+        description: "",
+        author: "",
+        author_name: "",
+        author_picture: "",
+        created: 0,
+        updated: 0,
+      });
     }
   }
 }
