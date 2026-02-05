@@ -25,6 +25,7 @@ export class PhotoGallery extends CommonComponent {
   img0: ImageGalleryType | null = null;
   img1: ImageGalleryType | null = null;
   img2: ImageGalleryType | null = null;
+  visible: boolean = false;
 
   @Input() mode: "full" | "embedded" = "embedded";
   @Input() height: number = 400;
@@ -85,5 +86,13 @@ export class PhotoGallery extends CommonComponent {
 
   getPhoto(item: ImageGalleryType | null) {
     return getBucketFilePath(item?.image ? item.image : null);
+  }
+
+  destroyGallery() {
+    this.visible = false;
+  }
+
+  show() {
+    this.visible = true;
   }
 }

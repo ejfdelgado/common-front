@@ -4,7 +4,7 @@ import { DateOptionType } from "types/DateTypes";
 const epochYearStart: number = moment().startOf('year').valueOf();
 
 export function epochTo(millis: number, type?: DateOptionType) {
-    if (!type) {
+    if (!type || type == "v1") {
         // Format: "17 de enero de 2026"
         if (millis > epochYearStart) {
             return moment(millis).format('D [de] MMMM');

@@ -36,7 +36,7 @@
                     }
                 </div>
             </div>
-            <app-photo-gallery [thumbnailType]="'square'" [gallery]="gallery" [mode]="'full'"></app-photo-gallery>
+            <app-photo-gallery #local_gallery [thumbnailType]="'square'" [gallery]="gallery" [mode]="'full'"></app-photo-gallery>
         </div>
     </div>
     @if (!isMobile()) {

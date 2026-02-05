@@ -1,4 +1,4 @@
-@if (gallery.length > 0) {
+@if (gallery.length > 0 && (mode == 'embedded' || visible)) {
 <div class="panel_embbed" [ngClass]="{'full': mode == 'full', 'embedded': mode == 'embedded'}"
     [ngStyle]="{'height': height + 'px'}">
     <div class="big_image">
@@ -17,6 +17,9 @@
         @if (gallery.length > 1 && index < gallery.length - 1) { <div class="control_panel right_control"
             (click)="forward()">
             <mat-icon class="move_button white_subtitle">chevron_right</mat-icon>
+    </div>
+    <div class="close_control" (click)="destroyGallery()">
+        <mat-icon class="move_button white_subtitle">close</mat-icon>
     </div>
     }
 </div>

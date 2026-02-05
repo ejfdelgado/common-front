@@ -54,6 +54,7 @@ const MODEL_NAME = "photogps";
 })
 export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   @ViewChild("simple_map") simpleMap!: SimpleMapComponent;
+  @ViewChild("local_gallery") localGallery!: PhotoGallery;
   menuOptions: MenuOptionType[] = [];
   notes: PhotoGPSDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
@@ -386,5 +387,6 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
       };
       this.gallery.push(element);
     });
+    this.localGallery.show();
   }
 }

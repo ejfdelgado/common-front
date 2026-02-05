@@ -91,6 +91,12 @@
     height: 60px;
 }
 
+.close_control mat-icon {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+}
+
 .description_container {
     position: absolute;
     bottom: 0;
@@ -101,4 +107,10 @@
 
 .description_container p {
     text-align: center;
+}
+
+.close_control {
+    position: absolute;
+    right: 20px;
+    top: 20px;
 }
