@@ -10,6 +10,7 @@ import { CommonSpeech, SelectOptionType } from "../commonSpeech";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
+import { Fullscreen } from '@components/fullscreen/fullscreen';
 
 @Component({
   selector: 'app-game-lr',
@@ -19,6 +20,7 @@ import { FullscreenService } from '@services/fullscreen.service';
     FormsModule,
     MatIconModule,
     ThreejsComponent,
+    Fullscreen,
   ],
   templateUrl: './game-lr.html',
   encapsulation: ViewEncapsulation.None,

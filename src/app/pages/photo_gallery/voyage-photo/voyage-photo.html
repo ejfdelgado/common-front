@@ -6,6 +6,7 @@
             <div class="dynamic_content">
                 @if (collection) {
                 <div class="description_parent">
+                    <app-fullscreen [useWhiteSubtitle]="false" class=""></app-fullscreen>
                     <p [innerHTML]="sanitizeText(collection.description)"></p>
                 </div>
                 }
@@ -36,4 +37,3 @@
     </div>
     }
 </div>
-<app-fullscreen class="position_absolute bottom_right"></app-fullscreen>

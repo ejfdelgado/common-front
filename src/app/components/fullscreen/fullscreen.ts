@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FullscreenService } from '@services/fullscreen.service';
 
@@ -14,7 +14,7 @@ import { FullscreenService } from '@services/fullscreen.service';
   styleUrl: './fullscreen.scss',
 })
 export class Fullscreen {
-
+  @Input() useWhiteSubtitle: boolean = true;
   isFullScreen: boolean = false;
   constructor(
     public fullScreenSrv: FullscreenService,

@@ -66,6 +66,7 @@
     width: 4em;
     height: 4em;
     border-radius: 100%;
+    z-index: 2;
 }
 
 .grid_docs_found {
@@ -77,6 +78,7 @@
 .description_parent {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 10px;
 }
 

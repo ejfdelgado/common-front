@@ -6,12 +6,17 @@ import {
   ChangeDetectorRef,
   Input
 } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { Observable, Subject } from 'rxjs';
+
+let currentDeviceIndex: number = 0;
 
 @Component({
   selector: 'app-camera-capture',
   standalone: true,
-  imports: [],
+  imports: [
+    MatIconModule,
+  ],
   templateUrl: './camera-capture.html',
   styleUrl: './camera-capture.scss',
 })
@@ -25,7 +30,6 @@ export class CameraCaptureComponent implements OnDestroy {
   private resolver?: (blob: Blob) => void;
   private rejecter?: (reason?: any) => void;
   public videoDevices: MediaDeviceInfo[] = [];
-  private currentDeviceIndex = 0;
   private result$ = new Subject<Blob>();
   isOpen = false;
 
@@ -55,8 +59,6 @@ export class CameraCaptureComponent implements OnDestroy {
         if (this.videoDevices.length === 0) {
           throw new Error('No camera devices found');
         }
-
-        this.currentDeviceIndex = 0;
         await this.startCamera();
 
       } catch (err) {
@@ -69,7 +71,7 @@ export class CameraCaptureComponent implements OnDestroy {
   private async startCamera(): Promise<void> {
     this.stopStream();
 
-    const deviceId = this.videoDevices[this.currentDeviceIndex].deviceId;
+    const deviceId = this.videoDevices[currentDeviceIndex].deviceId;
 
     this.stream = await navigator.mediaDevices.getUserMedia({
       video: { deviceId: { ideal: deviceId } },
@@ -95,8 +97,7 @@ export class CameraCaptureComponent implements OnDestroy {
       return;
     }
 
-    this.currentDeviceIndex =
-      (this.currentDeviceIndex + 1) % this.videoDevices.length;
+    currentDeviceIndex = (currentDeviceIndex + 1) % this.videoDevices.length;
 
     await this.startCamera();
   }

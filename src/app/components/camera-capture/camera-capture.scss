@@ -42,3 +42,13 @@ button {
     background: #2196f3;
     color: white;
 }
+
+.rounded_button {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
