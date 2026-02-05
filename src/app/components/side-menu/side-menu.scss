@@ -80,7 +80,12 @@
     cursor: pointer;
 }
 
-.navigation_parent.close .items_parent li span {
+.navigation_parent .items_parent li span {
+    flex: 1;
+}
+
+.navigation_parent.close .items_parent li span,
+.navigation_parent.close .toggle_children {
     display: none;
 }
 

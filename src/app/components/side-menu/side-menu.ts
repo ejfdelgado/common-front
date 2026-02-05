@@ -41,4 +41,16 @@ export class SideMenu implements OnDestroy {
   close() {
     this.sideMenuSrv.close();
   }
+
+  callItem(item: MenuOptionType) {
+    if (item.callback) {
+      item.callback();
+    }
+  }
+
+  toggleChildren(item: MenuOptionType, event: any) {
+    event.preventDefault();
+    item.opened = !item.opened;
+    this.callItem(item);
+  }
 }

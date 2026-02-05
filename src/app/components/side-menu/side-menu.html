@@ -6,11 +6,11 @@
         <mat-icon class="close_icon" (click)="close()">close</mat-icon>
     </div>
     <div class="items_scroll_parent">
-        <div class="items_parent">
+        <div class="items_parent noselect">
             <ul>
                 @for(option of options; track option.label) {
-                <li (click)="option.callback()">
-                    <div class="title">
+                <li>
+                    <div class="title" (click)="callItem(option)">
                         @if (option.icon) {
                         <mat-icon>{{ option.icon }}</mat-icon>
                         }
@@ -18,13 +18,34 @@
                     </div>
                     <ul class="second_level">
                         @for(option2 of option.children; track option2.label) {
-                        <li (click)="option2.callback()">
-                            <div class="title higlight">
+                        <li>
+                            <div class="title higlight" (click)="toggleChildren(option2, $event)">
                                 @if (option2.icon) {
                                 <mat-icon>{{ option2.icon }}</mat-icon>
                                 }
                                 <span>{{ option2.label }}</span>
+                                @if (option2.children && option2.children.length > 0) {
+                                @if (option2.opened) {
+                                <mat-icon class="toggle_children">keyboard_arrow_down</mat-icon>
+                                } @else {
+                                <mat-icon class="toggle_children">keyboard_arrow_up</mat-icon>
+                                }
+                                }
                             </div>
+                            @if (option2.opened) {
+                            <ul class="second_level">
+                                @for(option3 of option2.children; track option3.label) {
+                                <li>
+                                    <div class="title higlight" (click)="callItem(option3)">
+                                        @if (option3.icon) {
+                                        <mat-icon>{{ option3.icon }}</mat-icon>
+                                        }
+                                        <span>{{ option3.label }}</span>
+                                    </div>
+                                </li>
+                                }
+                            </ul>
+                            }
                         </li>
                         }
                     </ul>
