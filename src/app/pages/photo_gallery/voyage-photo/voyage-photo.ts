@@ -379,7 +379,7 @@ export class VoyagePhoto extends AuthenticatedComponent implements OnInit {
   }
 
   openGallery(event: PhotoGPSDataType) {
-    this.gallery.splice(0, this.gallery.length - 1);
+    this.gallery.splice(0, this.gallery.length);
     this.notes.forEach((item) => {
       const element: any = {
         id: item.id,

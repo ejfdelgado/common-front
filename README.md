@@ -80,6 +80,7 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
+- camera capture support for landscape and selfie weird!
 - Enable the roles admin view.
 
 - Place thumbnail scroll of gallery after next or previous button.
@@ -103,6 +104,10 @@ gsutil cors get gs://pro-ejflab-assets
 - On/Off allow: lock/unlock, eye see/hide, check/uncheck
 
 - Add url link capability to richtext editor.
+
+- Roles:
+- Map roles on token to bucket roles on backend.
+- Adjust backend service to allow use read without request, but with user.
 
 - Enable Sendgrid email service to welcome or send notifications with templates.
 
