@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
@@ -15,6 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { OnOffToggleComponent } from '@components/fields/on-off-toggle/on-off-toggle';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
+import { ShareSrv } from '@services/share.service';
 
 const ROOT_PATH = "https://storage.googleapis.com/pro-ejflab-assets/songs/";
 
@@ -51,7 +52,7 @@ export class Practicesong extends CommonSpeech {
   cronoInterval: NodeJS.Timeout | null = null;
   isCopying: boolean = false;
   config: ConfigSong | null = null;
-  editing: boolean = false;
+  editing: boolean = false;//To create a new song!
   lastTimeout: NodeJS.Timeout | null = null;
   audioRef: HTMLAudioElement | null = null;
   isTrainingMode: boolean = false;
@@ -72,6 +73,7 @@ export class Practicesong extends CommonSpeech {
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public shareSrv: ShareSrv,
   ) {
     super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv);
     this.voiceSrv.setInterimResults(true);
@@ -142,6 +144,9 @@ export class Practicesong extends CommonSpeech {
       };
       */
 
+      if (this.config?.lyric[0].millis) {
+        this.millisTime = this.config.lyric[0].millis;
+      }
 
       if (this.config) {
         this.defineLanguage(this.config.lang);
@@ -178,12 +183,14 @@ export class Practicesong extends CommonSpeech {
           const millisGap = verseNext.millis - verse.millis;
           if (millisGap > 0) {
             this.startSong(verse.millis);
+            /*
             if (!this.isTrainingMode) {
               this.lastTimeout = setTimeout(() => {
                 this.stopSong();
                 this.cdr.detectChanges();
               }, millisGap);
             }
+            */
           }
           return;
         }
@@ -359,5 +366,16 @@ export class Practicesong extends CommonSpeech {
         this.audioRef.volume = this.getCurrentVolume();
       }
     }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleGlobalKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      this.toggleSong();
+    }
+  }
+
+  async share() {
+    this.shareSrv.shareUrl(`${location.origin}/index.html${location.hash}`);
   }
 }

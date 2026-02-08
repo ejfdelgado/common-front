@@ -52,14 +52,25 @@ export class ShareSrv {
         }
     }
 
-    async shareUrl(data: ShareDataType) {
-        const url = this.getSharedURL(data);
-        const shareData: SharePayload = {
-            title: truncateString(50, data.title),
-            text: truncateString(120, data.description),
-            url,
-        };
-        this.shareOrCopy(shareData);
+    async shareUrl(data: ShareDataType | string) {
+        let url: string = "";
+        if (typeof data == "string") {
+            url = data;
+            const shareData: SharePayload = {
+                title: "",
+                text: "",
+                url,
+            };
+            this.shareOrCopy(shareData);
+        } else {
+            url = this.getSharedURL(data);
+            const shareData: SharePayload = {
+                title: truncateString(50, data.title),
+                text: truncateString(120, data.description),
+                url,
+            };
+            this.shareOrCopy(shareData);
+        }
     }
 
     async shareOrCopy(payload: SharePayload): Promise<void> {

@@ -4,7 +4,10 @@ SideMenu
 <app-side-menu [options]="menuOptions"></app-side-menu>
 
 Songs:
-Luca Disney song
+count_on_me.mp3
+colors.mp3
+what_a_wonderful_world.mp3
+
 
 gsutil setmeta -h "Cache-Control:private, max-age=0, no-cache" gs://stg-playtolearn/index.html
 
@@ -73,6 +76,7 @@ Configure branding at:
 
 [Play sound](https://stg-playtolearn.storage.googleapis.com/index.html#/playsound)
 
+https://localhost:4200/#/practicesong?q=count_on_me.json
 
 ```
 gsutil cors get gs://pro-ejflab-assets
