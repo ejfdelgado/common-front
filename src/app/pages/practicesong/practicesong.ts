@@ -370,6 +370,9 @@ export class Practicesong extends CommonSpeech {
 
   @HostListener('window:keydown', ['$event'])
   handleGlobalKeydown(event: KeyboardEvent): void {
+    if (this.editing) {
+      return;
+    }
     if (event.key === 'Enter' || event.key === ' ') {
       this.toggleSong();
     }

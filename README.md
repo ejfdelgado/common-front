@@ -47,7 +47,7 @@ Configure branding at:
 [Left right english](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=en-US&n=5)
 [Left right spanish](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=es-ES&n=5)
 
-[local song](http://localhost:4200/#/practicesong?q=runaway.json)
+[local song](https://localhost:4200/#/practicesong?q=runaway.json)
 
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=hall_of_fame.json&t=1)
 [stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=unstopable.json&t=1)
@@ -72,9 +72,13 @@ Configure branding at:
 [Play sound](https://stg-playtolearn.storage.googleapis.com/index.html#/playsound)
 
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth2.json
+
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=count_on_me.json
+
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=colors.json
+
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=what_a_wonderful_world.json
+
 
 
 ```
