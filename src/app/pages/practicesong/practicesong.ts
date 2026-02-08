@@ -139,7 +139,7 @@ export class Practicesong extends CommonSpeech {
         "sound": "in_te_name_of_love.mp3",
         "lyric": [
           { "txt": "🎵", "millis": 1 },
-          { "txt": "...", "millis": undefined }
+          { "txt": "...", "millis": undefined },
         ]
       };
       */
