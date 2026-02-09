@@ -31,8 +31,13 @@ export class ShareSrv {
         return url;
     }
 
-    async shareQR(data: ShareDataType) {
-        const url = this.getSharedURL(data);
+    async shareQR(data: ShareDataType | string) {
+        let url = "";
+        if (typeof data == "string") {
+            url = data
+        } else {
+            url = this.getSharedURL(data);
+        }
         const payload: QrDialogData = { url };
         return firstValueFrom(this.dialog
             .open(QrDialogComponent, {

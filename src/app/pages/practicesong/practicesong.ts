@@ -379,6 +379,6 @@ export class Practicesong extends CommonSpeech {
   }
 
   async share() {
-    this.shareSrv.shareUrl(`${location.origin}/index.html${location.hash}`);
+    this.shareSrv.shareQR(`${location.origin}/index.html${location.hash}`);
   }
 }
