@@ -155,6 +155,23 @@ export class Practicesong extends CommonSpeech {
     }
   }
 
+  get currentVerseWidth() {
+    if (this.config && this.currentVerse && this.currentVerse.millis) {
+      const starting = this.currentVerse.millis;
+      const i1 = this.config.lyric.indexOf(this.currentVerse);
+      if (this.config.lyric.length > i1 + 1) {
+        const verseNext = this.config.lyric[i1 + 1];
+        if (typeof verseNext.millis == "number") {
+          const end = verseNext.millis;
+          const actual = this.millisTime - starting;
+          const total = end - starting;
+          return `${(100 * actual / total).toFixed(0)}%`;
+        }
+      }
+    }
+    return "0%";
+  }
+
   async playVerse1(event: MouseEvent, verse: Verse) {
     event.stopPropagation();
     this.stopSong();

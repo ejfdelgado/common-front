@@ -13,6 +13,9 @@
         @for (verse of config?.lyric; track verse) {
         <span class="text_centered verse_higlight"
             [ngClass]="{'current': verse.selected === true, 'editing': editing, 'missed': !verse.millis}" #child>
+            <div class="back_color_parent">
+                <div class="back_color" [ngStyle]="{'width': currentVerseWidth}"></div>
+            </div>
             <span (click)="playVerse1($event, verse)">💬</span>
             @if (editing) {
             <app-editable-input [discrete]="true" [(ngModel)]="verse.txt"></app-editable-input>

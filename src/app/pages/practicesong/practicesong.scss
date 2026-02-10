@@ -25,6 +25,46 @@
     border-radius: 15px;
     background-color: aliceblue;
     padding: 15px;
+    position: relative;
+}
+
+.verse_higlight>* {
+    position: relative;
+    z-index: 2;
+}
+
+.back_color_parent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    overflow: hidden;
+}
+
+.verse_higlight > .back_color_parent {
+    position: absolute;
+    z-index: 1;
+    border-radius: 15px;
+    display: none;
+}
+
+.verse_higlight.current > .back_color_parent {
+    display: inline;
+}
+
+.back_color {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(0, 36, 68);
+    transition: width 0.3s linear;
+}
+
+.verse_higlight.current {
+    color: aliceblue;
+    background-color: rgb(0, 68, 127);
 }
 
 .verse_higlight.missed {
@@ -33,11 +73,6 @@
 
 .verse_higlight span {
     padding: 15px 5px;
-}
-
-.verse_higlight.current {
-    color: aliceblue;
-    background-color: rgb(0, 36, 68);
 }
 
 .song_container {
@@ -58,7 +93,7 @@
 }
 
 .verse_higlight.editing {
-        display: flex;
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
