@@ -79,7 +79,7 @@ https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=colors
 
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=what_a_wonderful_world.json
 
-
+https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=try_everything.json
 
 ```
 gsutil cors get gs://pro-ejflab-assets

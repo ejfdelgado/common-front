@@ -16,6 +16,7 @@ import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.comp
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
+import { escapeHtml } from '@tools/HtmlUtil';
 
 @Component({
   selector: 'app-editable-input',
@@ -72,7 +73,7 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   /* ---------------- CVA ---------------- */
 
   writeValue(value: string): void {
-    this.value = value ?? '';
+    this.value = escapeHtml(value ?? '');
     this.setText(this.value);
   }
 
