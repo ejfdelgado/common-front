@@ -307,7 +307,11 @@ button.transparent {
 }
 
 .mat-mdc-form-field .mat-mdc-form-field-infix {
-  padding: 9px 5px !important;
+    padding: 9px 5px !important;
+}
+
+app-search-input .mat-mdc-form-field-subscript-wrapper {
+    display: none;
 }
 
 @media (max-width: 800px) {
