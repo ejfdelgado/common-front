@@ -14,6 +14,8 @@ import { MenuOptionType } from 'types/StatusBar';
 import { User } from '@angular/fire/auth';
 import { SearchInputComponent } from '@components/search-input/search-input';
 
+const PAGE_SIZE = 20;
+
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -57,9 +59,10 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
     this.authSubscription = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
-
+        this.usersList = [];
+        this.cdr.detectChanges();
       } else {
-
+        this.pageUsers();
       }
     });
   }
@@ -76,7 +79,7 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
   async pageUsers(email?: string, reset: boolean = false) {
     const query: QueryUser = {
-      limit: 3,
+      limit: PAGE_SIZE,
     };
     if (reset) {
       this.usersList.splice(0, this.usersList.length);
