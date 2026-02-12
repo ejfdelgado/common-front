@@ -1,8 +1,5 @@
 # CommonFront
 
-SideMenu
-<app-side-menu [options]="menuOptions"></app-side-menu>
-
 
 gsutil setmeta -h "Cache-Control:private, max-age=0, no-cache" gs://stg-playtolearn/index.html
 
@@ -21,7 +18,7 @@ npx ng generate component --standalone --skip-tests components/fullscreen
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/books/book-single
+npx ng generate component --standalone --skip-tests pages/admin/users
 ```
 
 ```bash
@@ -87,8 +84,8 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- camera capture support for landscape and selfie weird!
 - Enable the roles admin view.
+- camera capture support for landscape and selfie weird!
 
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.

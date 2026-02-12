@@ -62,6 +62,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/documents/document-single/document-single').then(m => m.DocumentSingle),
     },
     {
+        path: 'admin/users',
+        loadComponent: () => import('./pages/admin/users/users').then(m => m.UsersView),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
