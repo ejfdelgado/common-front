@@ -15,6 +15,7 @@
     width: 100%;
     flex: 1;
     gap: 10px;
+    min-width: 0;
 }
 
 .dynamic_content {
@@ -25,9 +26,8 @@
     background-color: #f4f7fb;
     border-radius: 20px 20px 0 0;
     overflow-y: scroll;
+    min-width: 0;
 }
-
-/* content */
 
 .content_wraper {
     display: flex;
@@ -35,5 +35,67 @@
     gap: 30px;
     padding: 30px;
     margin: 0 10vw;
+    min-width: 0;
+    max-width: 80vw;
 }
 
+/* content */
+
+.profile_cell {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile_img {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    background-color: grey;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.profile_name {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+table.users_table {
+    width: 100%;
+}
+
+table.users_table h4 {
+    margin: 0;
+}
+
+table.users_table tbody td,
+table.users_table thead th {
+    padding: 16px;
+    text-align: left;
+}
+
+table.users_table tbody td {
+    border-top-color: var(--mat-table-row-item-outline-color, var(--mat-sys-outline, rgba(0, 0, 0, 0.12)));
+    border-top-width: var(--mat-table-row-item-outline-width, 1px);
+    border-top-style: solid;
+}
+
+.table-card {
+    min-width: 0;
+    width: 100%;
+}
+
+.padding_30 {
+    padding: 30px;
+}
+
+.panel_scrolled {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+}

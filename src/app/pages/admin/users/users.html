@@ -6,25 +6,43 @@
             <div class="content_wraper">
                 <mat-card class="mat-mdc-card mdc-card">
                     <mat-card-content>
-                        <button (click)="pageUsers()">Search</button>
-                        <p>
-                            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from
-                            Japan.
-                            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
-                            originally
-                            bred for hunting.
-                        </p>
+                        <app-search-input (search)="searchUsers($event)"></app-search-input>
                     </mat-card-content>
                 </mat-card>
-                <mat-card class="mat-mdc-card mdc-card">
-                    <mat-card-content>
-                        <p>
-                            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from
-                            Japan.
-                            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
-                            originally
-                            bred for hunting.
-                        </p>
+                <mat-card class="mat-mdc-card mdc-card table-card">
+                    <mat-card-content class="padding_30">
+                        <div class="panel_scrolled">
+                            <table class="users_table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Fecha creación</th>
+                                        <th>Último acceso</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (user of usersList; let i = $index; track user.uid) {
+                                    <tr>
+                                        <td>{{ i+1 }}</td>
+                                        <td>
+                                            <div class="profile_cell">
+                                                <div class="profile_img"
+                                                    [style.background-image]="'url(' + user.photoURL + ')'"></div>
+                                                <div class="profile_name">
+                                                    <h4>{{ user.displayName }}</h4>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.metadata?.creationTime }}</td>
+                                        <td>{{ user.metadata?.lastSignInTime }}</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </mat-card-content>
                 </mat-card>
             </div>

@@ -12,6 +12,7 @@ import { QueryUser, UsersService } from '@services/users.service';
 import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 import { User } from '@angular/fire/auth';
+import { SearchInputComponent } from '@components/search-input/search-input';
 
 @Component({
   selector: 'app-users',
@@ -22,6 +23,7 @@ import { User } from '@angular/fire/auth';
     Statusbar,
     SideMenu,
     MatCardModule,
+    SearchInputComponent,
   ],
   templateUrl: './users.html',
   styleUrl: './users.scss',
@@ -72,12 +74,15 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
   }
 
-  async pageUsers(reset: boolean = false) {
+  async pageUsers(email?: string, reset: boolean = false) {
     const query: QueryUser = {
       limit: 3,
     };
     if (reset) {
       this.usersList.splice(0, this.usersList.length);
+    }
+    if (email && email.trim().length > 0) {
+      query.email = email;
     }
     if (this.usersList.length > 0) {
       const lastOffset = this.usersList[this.usersList.length - 1].uid;
@@ -85,10 +90,13 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     }
     const response = await this.userSrv.pageUsers(query);
     if (response.success) {
-      this.usersList.push(response.data.list);
+      this.usersList.push(...response.data.list);
     }
-    console.log(JSON.stringify(this.usersList, null, 4));
     this.cdr.detectChanges();
+  }
+
+  async searchUsers(val: string) {
+    await this.pageUsers(val, true);
   }
 }
 

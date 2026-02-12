@@ -6,7 +6,8 @@ import { Subject } from "rxjs";
 })
 export class SideMenuService {
     state: Subject<boolean> = new Subject();
-    opened: boolean = window.innerWidth > 800;
+    //opened: boolean = window.innerWidth > 800;
+    opened: boolean = false;
 
     isOpened() {
         return this.opened;
