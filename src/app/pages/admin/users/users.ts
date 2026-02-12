@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
@@ -18,6 +19,7 @@ import { MenuOptionType } from 'types/StatusBar';
     MatButtonModule,
     Statusbar,
     SideMenu,
+    MatCardModule,
   ],
   templateUrl: './users.html',
   styleUrl: './users.scss',
