@@ -8,8 +8,10 @@ import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
+import { QueryUser, UsersService } from '@services/users.service';
 import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-users',
@@ -29,11 +31,14 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
 
+  usersList: User[] = [];
+
   constructor(
     public override authSrv: AuthService,
     public override cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public userSrv: UsersService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -66,4 +71,24 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
   ngOnInit(): void {
 
   }
+
+  async pageUsers(reset: boolean = false) {
+    const query: QueryUser = {
+      limit: 3,
+    };
+    if (reset) {
+      this.usersList.splice(0, this.usersList.length);
+    }
+    if (this.usersList.length > 0) {
+      const lastOffset = this.usersList[this.usersList.length - 1].uid;
+      query.offset = lastOffset;
+    }
+    const response = await this.userSrv.pageUsers(query);
+    if (response.success) {
+      this.usersList.push(response.data.list);
+    }
+    console.log(JSON.stringify(this.usersList, null, 4));
+    this.cdr.detectChanges();
+  }
 }
+
