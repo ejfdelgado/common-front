@@ -66,6 +66,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/admin/users/users').then(m => m.UsersView),
     },
     {
+        path: 'alterego/main',
+        loadComponent: () => import('./pages/alterego/main/main').then(m => m.AlterEgoMain),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
