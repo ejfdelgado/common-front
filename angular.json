@@ -35,7 +35,8 @@
               "src/assets/css/fonts.css",
               "src/assets/css/custom_print.css",
               "src/styles.scss"
-            ]
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
