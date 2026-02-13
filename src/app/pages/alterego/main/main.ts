@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { SearchInputComponent } from '@components/search-input/search-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AlterEgoService } from '@services/alterego.service';
@@ -22,7 +21,6 @@ import { MenuOptionType } from 'types/StatusBar';
     Statusbar,
     SideMenu,
     MatCardModule,
-    SearchInputComponent,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
