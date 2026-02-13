@@ -37,7 +37,6 @@ self.onmessage = async (e) => {
   }
 
   if (type === 'ECHO') {
-
+    self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
   }
-  self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
 };

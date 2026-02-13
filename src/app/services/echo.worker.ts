@@ -1,6 +1,8 @@
 /// <reference lib="webworker" />
 
-addEventListener('message', ({ data }) => {
-  const response = `worker response to ${data}`;
-  postMessage(response);
-});
+self.onmessage = async (e) => {
+  const { type, payload } = e.data;
+  if (type === 'ECHO') {
+    self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
+  }
+};
