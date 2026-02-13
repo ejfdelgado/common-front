@@ -4,9 +4,36 @@
         <app-statusbar [title]="'Alter Ego'"></app-statusbar>
         <div class="dynamic_content">
             <div class="content_wraper">
-                <button (click)="echo()">Echo</button>
-                <button (click)="initialize()">Initialize</button>
-                <button (click)="search()">Search</button>
+                <mat-card class="mat-mdc-card mdc-card">
+                    <mat-card-content class="flex_horizontal_gap_10">
+                        <button matButton="elevated" (click)="echo()">Echo</button>
+                        <button matButton="elevated" (click)="initialize()">Initialize</button>
+                        <button matButton="elevated" (click)="search()">Search</button>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
+                    <mat-sidenav-container>
+                        <mat-sidenav #sidenav mode="side" opened>
+                            <div class="left_parent">
+                                <div class="rearch_parent">
+                                    <app-search-input (search)="searchKnowledge($event)"></app-search-input>
+                                </div>
+                                <div class="scrollable_list">
+                                    Elementos
+                                </div>
+                            </div>
+                        </mat-sidenav>
+                        <mat-sidenav-content>
+                            <mat-toolbar>
+                                <button matIconButton aria-label="">
+                                    <mat-icon (click)="toggle()">menu</mat-icon>
+                                </button>
+                                <span class="full_width"></span>
+                                <button matButton="elevated">Add knowledge</button>
+                            </mat-toolbar>
+                        </mat-sidenav-content>
+                    </mat-sidenav-container>
+                </mat-card>
             </div>
         </div>
     </div>

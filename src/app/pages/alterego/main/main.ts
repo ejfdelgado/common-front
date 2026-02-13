@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,6 +11,10 @@ import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { SearchInputComponent } from '@components/search-input/search-input';
 
 @Component({
   selector: 'app-main',
@@ -21,11 +25,18 @@ import { MenuOptionType } from 'types/StatusBar';
     Statusbar,
     SideMenu,
     MatCardModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    SearchInputComponent,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
 })
 export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDestroy {
+
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
   language: SearchLangsType = "es";
@@ -50,6 +61,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   }
 
+  toggle() {
+    this.sidenav.toggle();
+  }
+
   async initialize() {
     const mockData = [
       { id: '1', title: 'Como cocinar un rollo de canela', url: "" },
@@ -68,5 +83,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async echo() {
     const response = await this.alterEgoSrv.echo();
     console.log(JSON.stringify(response));
+  }
+
+  async searchKnowledge(event: any) {
+
   }
 }
