@@ -1,16 +1,18 @@
 import { Injectable } from "@angular/core";
 import { IndicatorService } from "./indicator.service";
-
 import { pipeline, env, FeatureExtractionPipeline } from '@huggingface/transformers';
+import { Voy } from 'voy-search';
 
 env.allowLocalModels = false;
 env.useBrowserCache = true;
 
 let extractor: FeatureExtractionPipeline;
+let index: Voy;
 
 export interface ItemToSearchType {
     id: string;
     title: string;
+    url: string;
 }
 
 @Injectable({
@@ -24,7 +26,7 @@ export class AlterEgoService {
     ) {
 
         this.worker = new Worker(
-            new URL('./echo.worker', import.meta.url),
+            new URL('./search.worker', import.meta.url),
             { type: 'module' }
         );
 
@@ -50,6 +52,25 @@ export class AlterEgoService {
         });
     }
 
+    async searchWorker(payload: string) {
+        return new Promise((resolve, reject) => {
+            if (!this.worker) {
+                reject(new Error("Not loaded"));
+                return;
+            };
+
+            this.worker.onmessage = ({ data }) => {
+                console.log(JSON.stringify(data));
+                resolve(data);
+            };
+
+            this.worker.postMessage({
+                type: "SEARCH",
+                payload: payload,
+            });
+        });
+    }
+
     async initialize(payload: ItemToSearchType[]) {
         extractor = (await pipeline(
             'feature-extraction',
@@ -62,9 +83,15 @@ export class AlterEgoService {
             return { ...item, embeddings: Array.from(output.data as Float32Array) };
         }));
 
-        console.log(dataWithEmbeddings);
+        index = new Voy({ embeddings: dataWithEmbeddings });
+    }
 
-        //index = new Voy({ embeddings: dataWithEmbeddings });
+    async search(payload: string) {
+        const queryOutput = await extractor(payload, { pooling: 'mean', normalize: true });
+        const queryVector = new Float32Array(queryOutput.data as Float32Array);
+
+        const results = index.search(queryVector, 3);
+        return { type: 'SEARCH_RESULTS', payload: results.neighbors };
     }
 
     async echo() {

@@ -89,6 +89,8 @@ https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=what_a
 
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=try_everything.json
 
+https://stg-playtolearn.storage.googleapis.com/index.html#/alterego/main
+
 ```
 gsutil cors get gs://pro-ejflab-assets
 ```
