@@ -35,6 +35,11 @@
               "src/assets/css/fonts.css",
               "src/assets/css/custom_print.css",
               "src/styles.scss"
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json",
+            "externalDependencies": [
+              "@huggingface/transformers",
+              "voy-search"
             ]
           },
           "configurations": {
@@ -95,7 +100,8 @@
             ],
             "styles": [
               "src/styles.scss"
-            ]
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         }
       }

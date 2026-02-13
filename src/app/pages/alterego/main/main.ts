@@ -7,6 +7,7 @@ import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
+import { AlterEgoService } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Subscription } from 'rxjs';
@@ -35,6 +36,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     public override cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public alterEgoSrv: AlterEgoService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
   }
@@ -47,5 +49,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   ngOnInit(): void {
 
+  }
+
+  async echo() {
+    const response = await this.alterEgoSrv.echo();
+    console.log(JSON.stringify(response));
   }
 }
