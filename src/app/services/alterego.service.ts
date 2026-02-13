@@ -22,13 +22,32 @@ export class AlterEgoService {
     constructor(
         private indicatorSrv: IndicatorService,
     ) {
-        /*
+
         this.worker = new Worker(
-            new URL('./search.worker', import.meta.url),
+            new URL('./echo.worker', import.meta.url),
             { type: 'module' }
         );
-        */
+
         console.log("worker loaded...");
+    }
+
+    async initializeWorker(payload: ItemToSearchType[]) {
+        return new Promise((resolve, reject) => {
+            if (!this.worker) {
+                reject(new Error("Not loaded"));
+                return;
+            };
+
+            this.worker.onmessage = ({ data }) => {
+                console.log(JSON.stringify(data));
+                resolve(data);
+            };
+            console.log("initialize!");
+            this.worker.postMessage({
+                type: "INITIALIZE",
+                payload: payload,
+            });
+        });
     }
 
     async initialize(payload: ItemToSearchType[]) {
