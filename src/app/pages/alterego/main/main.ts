@@ -49,16 +49,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   }
 
-  async initializeWorker() {
-    const mockData = [
-      { id: '1', title: 'How to bake a chocolate cake', url: "" },
-      { id: '2', title: 'The history of Rome', url: "" },
-      { id: '3', title: 'Python programming for beginners', url: "" }
-    ];
-    const response = await this.alterEgoSrv.initializeWorker(mockData);
-    console.log(JSON.stringify(response));
-  }
-
   async initialize() {
     const mockData = [
       { id: '1', title: 'How to bake a chocolate cake', url: "" },
@@ -71,11 +61,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async search() {
     const response = await this.alterEgoSrv.search('cooking recipes');
-    console.log(JSON.stringify(response));
-  }
-
-  async searchWorker() {
-    const response = await this.alterEgoSrv.searchWorker('cooking recipes');
     console.log(JSON.stringify(response));
   }
 
