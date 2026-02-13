@@ -1,14 +1,8 @@
 # CommonFront
 
-angular.json line 38
-            "webWorkerTsConfig": "tsconfig.worker.json",
-            "externalDependencies": [
-              "@huggingface/transformers",
-              "voy-search"
-            ],
-            "allowedCommonJsDependencies": [
-              "@huggingface/transformers"
-            ]
+1. Allow an option in worker to preload model.
+2. Where I configure the VOY indexer for example to say the distance is cosine
+3. Allow host models on own url, not remote.
 
 https://matdash-angular-dark.netlify.app/apps/employee
 
