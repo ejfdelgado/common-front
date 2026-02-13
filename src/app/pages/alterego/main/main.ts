@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { AlterEgoService } from '@services/alterego.service';
+import { AlterEgoService, SearchLangsType } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Subscription } from 'rxjs';
@@ -28,6 +28,7 @@ import { MenuOptionType } from 'types/StatusBar';
 export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
+  language: SearchLangsType = "es";
 
   constructor(
     public override authSrv: AuthService,
@@ -51,17 +52,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async initialize() {
     const mockData = [
-      { id: '1', title: 'How to bake a chocolate cake', url: "" },
-      { id: '2', title: 'The history of Rome', url: "" },
-      { id: '3', title: 'Python programming for beginners', url: "" }
+      { id: '1', title: 'Como cocinar un rollo de canela', url: "" },
+      { id: '2', title: 'En la historia de Roma el personaje Constantino es relevante', url: "" },
+      { id: '3', title: 'Python es un excelente lenguaje de programacion para IA', url: "" }
     ];
-    const response = await this.alterEgoSrv.initialize(mockData);
-    console.log(JSON.stringify(response));
+    const response = await this.alterEgoSrv.initialize(mockData, this.language);
+    console.log(JSON.stringify(response, null, 4));
   }
 
   async search() {
-    const response = await this.alterEgoSrv.search('cooking recipes');
-    console.log(JSON.stringify(response));
+    const response = await this.alterEgoSrv.search('Necesito saber de desarrollo de software', this.language);
+    console.log(JSON.stringify(response, null, 4));
   }
 
   async echo() {

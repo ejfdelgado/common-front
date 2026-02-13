@@ -5,7 +5,9 @@ export interface ItemToSearchType {
     id: string;
     title: string;
     url: string;
-}
+};
+
+export type SearchLangsType = "en" | "es" | "multi";
 
 @Injectable({
     providedIn: 'root',
@@ -23,7 +25,7 @@ export class AlterEgoService {
         );
     }
 
-    async initialize(payload: ItemToSearchType[]) {
+    async initialize(payload: ItemToSearchType[], lang: SearchLangsType = "en") {
         const indicator = this.indicatorSrv.start();
         const promise = new Promise((resolve, reject) => {
             if (!this.worker) {
@@ -37,7 +39,7 @@ export class AlterEgoService {
                     resolve(data);
                 }
             };
-            this.worker.postMessage({ type: "INITIALIZE", payload });
+            this.worker.postMessage({ type: "INITIALIZE", payload, lang });
         });
         promise.finally(() => {
             indicator.done();
@@ -45,7 +47,7 @@ export class AlterEgoService {
         return promise;
     }
 
-    async search(payload: string) {
+    async search(payload: string, lang: SearchLangsType = "en") {
         const indicator = this.indicatorSrv.start();
         const promise = new Promise((resolve, reject) => {
             if (!this.worker) {
@@ -59,7 +61,7 @@ export class AlterEgoService {
                     resolve(data);
                 }
             };
-            this.worker.postMessage({ type: "SEARCH", payload });
+            this.worker.postMessage({ type: "SEARCH", payload, lang });
         });
         promise.finally(() => {
             indicator.done();
