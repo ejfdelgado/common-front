@@ -1,5 +1,15 @@
 # CommonFront
 
+angular.json line 38
+            "webWorkerTsConfig": "tsconfig.worker.json",
+            "externalDependencies": [
+              "@huggingface/transformers",
+              "voy-search"
+            ],
+            "allowedCommonJsDependencies": [
+              "@huggingface/transformers"
+            ]
+
 https://matdash-angular-dark.netlify.app/apps/employee
 
 gsutil setmeta -h "Cache-Control:private, max-age=0, no-cache" gs://stg-playtolearn/index.html

@@ -11,6 +11,10 @@ let index: Voy;
 self.onmessage = async (e) => {
   const { type, payload } = e.data;
 
+  if (type === 'ECHO') {
+    self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
+  }
+
   if (type === 'INITIALIZE') {
     // Load model
     extractor = (await pipeline(
@@ -34,9 +38,5 @@ self.onmessage = async (e) => {
 
     const results = index.search(queryVector, 3);
     self.postMessage({ type: 'SEARCH_RESULTS', payload: results.neighbors });
-  }
-
-  if (type === 'ECHO') {
-    self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
   }
 };

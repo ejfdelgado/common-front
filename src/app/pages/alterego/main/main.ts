@@ -51,6 +51,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   }
 
+  async initialize() {
+    const mockData = [
+      { id: '1', title: 'How to bake a chocolate cake' },
+      { id: '2', title: 'The history of Rome' },
+      { id: '3', title: 'Python programming for beginners' }
+    ];
+    const response = await this.alterEgoSrv.initialize(mockData);
+    console.log(JSON.stringify(response));
+  }
+
   async echo() {
     const response = await this.alterEgoSrv.echo();
     console.log(JSON.stringify(response));
