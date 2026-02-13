@@ -10,33 +10,31 @@ let index: Voy | null = null;
 
 self.onmessage = async (e) => {
   const { type, payload } = e.data;
+  const RESPONSE_ID = `${type}_RESULT`;
 
   if (type === 'ECHO') {
+    // Echo
     self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
-  }
-
-  if (type === 'INITIALIZE') {
+  } else if (type === 'INITIALIZE') {
+    // Initialize DB
     try {
-      // Load model
       extractor = (await pipeline(
         'feature-extraction',
         'Xenova/all-MiniLM-L6-v2'
       )) as unknown as FeatureExtractionPipeline;
 
-      // Generate embeddings for the initial data
       const dataWithEmbeddings = await Promise.all(payload.map(async (item: any) => {
         const output = await extractor(item.title, { pooling: 'mean', normalize: true });
         return { ...item, embeddings: Array.from(output.data as Float32Array) };
       }));
 
       index = new Voy({ embeddings: dataWithEmbeddings });
-      self.postMessage({ type: 'INITIALIZE_RESULT', success: true });
+      self.postMessage({ type: RESPONSE_ID, success: true });
     } catch (err) {
-      self.postMessage({ type: 'INITIALIZE_RESULT', success: false, payload: err });
+      self.postMessage({ type: RESPONSE_ID, success: false, payload: err });
     }
-  }
-
-  if (type === 'SEARCH') {
+  } else if (type === 'SEARCH') {
+    // Search DB
     try {
       const queryOutput = await extractor(payload, { pooling: 'mean', normalize: true });
       const queryVector = new Float32Array(queryOutput.data as Float32Array);
@@ -44,9 +42,9 @@ self.onmessage = async (e) => {
         throw new Error("index first!");
       }
       const results = index.search(queryVector, 3);
-      self.postMessage({ type: 'SEARCH_RESULTS', success: true, payload: results.neighbors });
+      self.postMessage({ type: RESPONSE_ID, success: true, payload: results.neighbors });
     } catch (err) {
-      self.postMessage({ type: 'SEARCH_RESULTS', success: false, payload: err });
+      self.postMessage({ type: RESPONSE_ID, success: false, payload: err });
     }
   }
 };
