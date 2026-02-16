@@ -74,6 +74,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   knowledge: KnowledgeDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
   collection: BasicDataType | null = null;
+  pendingToSave: KnowledgeDataType[] = [];
 
   fields: AllFieldsDataType[] = [];
   model: FlatJsonDataType = {
@@ -158,14 +159,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const isQuestion = this.currentSelected.type == 'question';
       this.fields = [
         { label: "Is question?", type: "toggle", key: "type" },
-        { label: "Knowledge", type: "md", key: "txt", md: { maxHeight: "200px", minHeight: "200px" } },
+        { label: "Knowledge", type: "md", key: "txtFormat", md: { maxHeight: "200px", minHeight: "200px" } },
       ];
       if (isQuestion) {
-        this.fields.push({ label: "Answer", type: "md", key: "answer", md: { maxHeight: "200px", minHeight: "200px" } },)
+        this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
       }
-      this.model["txt"] = this.currentSelected.txtFormat;
       this.model['type'] = isQuestion;
-      this.model["answer"] = this.currentSelected.answer;
+      this.model["txtFormat"] = this.currentSelected.txtFormat;
+      this.model["answerFormat"] = this.currentSelected.answerFormat;
       this.cdr.detectChanges();
     });
   }
@@ -278,19 +279,19 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async editionMade(event: ChangeFieldType) {
     let hasChanged: boolean = false;
 
-    if (event.name == "txt") {
+    if (event.name == "txtFormat") {
       const txt = event.val;
       const htmlText = await marked.parse(txt);
       if (this.currentSelected) {
-        this.currentSelected.txt = html2text(htmlText);
         this.currentSelected.txtFormat = txt;
+        this.currentSelected.txt = html2text(htmlText);
       }
-    } else if (event.name == "answer") {
+    } else if (event.name == "answerFormat") {
       const answer = event.val;
       const htmlAnswer = await marked.parse(answer);
       if (this.currentSelected) {
-        this.currentSelected.answer = html2text(htmlAnswer);
         this.currentSelected.answerFormat = answer;
+        this.currentSelected.answer = html2text(htmlAnswer);
       }
     } else if (event.name == 'type') {
       if (this.currentSelected) {
@@ -309,12 +310,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         }
       }
     }
-
+    if (this.currentSelected) {
+      if (this.pendingToSave.indexOf(this.currentSelected) < 0) {
+        this.pendingToSave.push(this.currentSelected);
+      }
+    }
     if (hasChanged) {
       if (this.currentSelected) {
         this.selectItem(this.knowledge.indexOf(this.currentSelected));
       }
     }
+
   }
 
   async pageFacts(startover: boolean = false) {
@@ -341,6 +347,20 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.uiNotificationSrv.show(err.message);
     } finally {
       indicator.done();
+    }
+  }
+
+  async savePending() {
+    try {
+      do {
+        const first = this.pendingToSave[0];
+        await this.firestoreSrv.createUpdate(this.getCollectionName(), first);
+        this.pendingToSave.splice(0, 1);
+      } while (this.pendingToSave.length > 0);
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 }

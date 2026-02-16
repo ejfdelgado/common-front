@@ -41,6 +41,9 @@
                                     <mat-icon (click)="toggle()">menu</mat-icon>
                                 </button>
                                 <span class="full_width"></span>
+                                @if (pendingToSave.length > 0) {
+                                <button matButton="elevated" (click)="savePending()">Save</button>
+                                }
                                 <button matButton="elevated" (click)="addKnowledge()">Add knowledge</button>
                             </mat-toolbar>
                             @if (currentSelected != null) {
