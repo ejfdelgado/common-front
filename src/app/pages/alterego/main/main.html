@@ -19,7 +19,19 @@
                                     <app-search-input (search)="searchKnowledge($event)"></app-search-input>
                                 </div>
                                 <div class="scrollable_list">
-                                    Elementos
+                                    <h4 class="text-base">All knowledge</h4>
+                                    @for (item of knowledge; track item.created) {
+                                    <span [ngClass]="{'selected': currentSelected == item}" class="item_parent text-xs"
+                                        (click)="selectThisKnowledge(item)">
+                                        <span class="txt">{{ item.txt }}</span>
+                                        <span class="button_elements">
+                                            <span class="date">{{ item.created | epochDate:'DD MMMM YYYY, HH:mm'
+                                                }}</span>
+                                            <mat-icon class="xs"
+                                                (click)="deleteKnowledge(item, $event)">delete</mat-icon>
+                                        </span>
+                                    </span>
+                                    }
                                 </div>
                             </div>
                         </mat-sidenav>
@@ -29,7 +41,7 @@
                                     <mat-icon (click)="toggle()">menu</mat-icon>
                                 </button>
                                 <span class="full_width"></span>
-                                <button matButton="elevated">Add knowledge</button>
+                                <button matButton="elevated" (click)="addKnowledge()">Add knowledge</button>
                             </mat-toolbar>
                         </mat-sidenav-content>
                     </mat-sidenav-container>

@@ -15,6 +15,21 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchInputComponent } from '@components/search-input/search-input';
+import { EpochDatePipe } from '@pipes/epoch-date.pipe';
+import { ConfirmDialogService } from '@services/confirm-dialog.service';
+
+export interface KnowledgeTagType {
+  id: string;
+  txt: string;
+};
+
+export interface KnowledgeDataType {
+  type: "fact" | "question";
+  txt: string;
+  answer?: string;
+  created: number;
+  tags: KnowledgeTagType[];
+};
 
 @Component({
   selector: 'app-main',
@@ -29,6 +44,7 @@ import { SearchInputComponent } from '@components/search-input/search-input';
     MatToolbarModule,
     MatIconModule,
     SearchInputComponent,
+    EpochDatePipe,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -40,6 +56,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
   language: SearchLangsType = "es";
+  knowledge: KnowledgeDataType[] = [];
+  currentSelected: KnowledgeDataType | null = null;
 
   constructor(
     public override authSrv: AuthService,
@@ -47,6 +65,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
     public alterEgoSrv: AlterEgoService,
+    public confirmSrv: ConfirmDialogService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
   }
@@ -58,7 +77,19 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   ngOnInit(): void {
-
+    this.knowledge.push({
+      type: 'fact',
+      txt: "Como cocinar un rollo de canela",
+      created: Date.now(),
+      tags: [],
+    });
+    this.knowledge.push({
+      type: 'fact',
+      txt: 'En la historia de Roma el personaje Constantino es relevante',
+      created: Date.now() + 1,
+      tags: [],
+    });
+    this.currentSelected = this.knowledge[0];
   }
 
   toggle() {
@@ -87,5 +118,29 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async searchKnowledge(event: any) {
 
+  }
+
+  selectThisKnowledge(item: KnowledgeDataType) {
+    this.currentSelected = item;
+  }
+
+  async deleteKnowledge(item: KnowledgeDataType, event: any) {
+    event.preventDefault();
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: "This action can't be undone",
+    });
+    if (!confirm) {
+      return;
+    }
+  }
+
+  addKnowledge() {
+    this.knowledge.unshift({
+      created: Date.now(),
+      tags: [],
+      txt: "",
+      type: 'fact',
+    });
   }
 }

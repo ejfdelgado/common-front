@@ -11,8 +11,12 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import moment from 'moment';
 import 'moment/locale/es';
 import { defaultFirebaseApp } from '@services/firebase';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
-moment.locale('es');
+const DATE_LOCALE = "es";
+
+moment.locale(DATE_LOCALE);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,5 +42,10 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding()
     ),
+    provideMomentDateAdapter(),
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: DATE_LOCALE
+    }
   ]
 };

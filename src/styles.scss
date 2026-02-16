@@ -47,6 +47,11 @@
     --mat-sys-level2: 0 15px 30px rgba(0, 0, 0, .12);
 
     --mat-form-field-container-height: 40px;
+
+    --text-base: 1rem;
+    --text-base--line-height: 1.5;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1/0.75);
 }
 
 * {
@@ -312,6 +317,22 @@ button.transparent {
 
 app-search-input .mat-mdc-form-field-subscript-wrapper {
     display: none;
+}
+
+.text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+}
+
+.text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+}
+
+mat-icon.xs {
+    font-size: 17px;
+    width: 17px;
+    height: 17px;
 }
 
 @media (max-width: 800px) {

@@ -3,6 +3,7 @@
 1. Allow an option in worker to preload model.
 2. Where I configure the VOY indexer for example to say the distance is cosine
 3. Allow host models on own url, not remote.
+4. Leer la distance para hacer filtro por distancia.
 
 https://matdash-angular-dark.netlify.app/apps/employee
 

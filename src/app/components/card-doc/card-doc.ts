@@ -68,9 +68,11 @@ export class CardDoc extends CommonComponent {
       title: "Está seguro?",
       message: "Al borrar no se podrá deshacer",
     });
-    if (confirm) {
-      await this.delete.emit({ model: this.model });
+    if (!confirm) {
+      return;
     }
+    await this.delete.emit({ model: this.model });
+
   }
 
   async localShare(type: "link" | "qr") {

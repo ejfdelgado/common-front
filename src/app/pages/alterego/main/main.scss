@@ -74,9 +74,51 @@
 .left_parent .scrollable_list {
     flex: 1;
     overflow-y: scroll;
-    padding: 15px;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 .mat-sidenav-container {
+    flex: 1;
+}
+
+.left_parent .scrollable_list h4 {
+    padding-bottom: 16px;
+    margin: 0;
+}
+
+.item_parent {
+    padding: 5px 16px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+
+    transition: all .1s ease-in 0s;
+    transform: scale(.95);
+}
+
+.item_parent.selected {
+    transform: scale(1);
+}
+
+.item_parent .txt {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.item_parent .button_elements {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0 10px 0;
+}
+
+.item_parent .button_elements .date {
     flex: 1;
 }
