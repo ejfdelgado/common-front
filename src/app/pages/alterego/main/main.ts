@@ -295,15 +295,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
     } else if (event.name == 'type') {
       if (this.currentSelected) {
-        if (event.val) {
+        if (event.val === true) {
           this.currentSelected.type = "question";
-          const index = this.indexOfNamedFieldAnswer("answer");
+          const index = this.indexOfNamedFieldAnswer("answerFormat");
           if (index < 0) {
             hasChanged = true;
           }
         } else {
           this.currentSelected.type = "fact";
-          const index = this.indexOfNamedFieldAnswer("answer");
+          const index = this.indexOfNamedFieldAnswer("answerFormat");
           if (index >= 0) {
             hasChanged = true;
           }

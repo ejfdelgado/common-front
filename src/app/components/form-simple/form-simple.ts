@@ -58,10 +58,11 @@ export abstract class FormSimple implements DifferedStore {
       this.fieldNames.push(field.key);
       this.formControlMap[field.key] = newField;
       this.fieldSubscriptions.push(newField.valueChanges.subscribe(nextVal => {
-        this.changeField.next({
+        const event = {
           name: field.key,
           val: nextVal,
-        });
+        };
+        this.changeField.next(event);
       }));
     });
 
