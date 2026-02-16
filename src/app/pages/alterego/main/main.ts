@@ -212,16 +212,22 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!confirm) {
       return;
     }
-    const index = this.knowledge.indexOf(item);
-    this.knowledge.splice(index, 1);
-    if (this.knowledge.length > 0) {
-      if (index == 0) {
-        this.selectItem(0);
+    try {
+      const index = this.knowledge.indexOf(item);
+      // Delete from database
+      await this.firestoreSrv.delete(this.getCollectionName(), item.id);
+      this.knowledge.splice(index, 1);
+      if (this.knowledge.length > 0) {
+        if (index == 0) {
+          this.selectItem(0);
+        } else {
+          this.selectItem(index - 1);
+        }
       } else {
-        this.selectItem(index - 1);
+        this.selectItem(-1);
       }
-    } else {
-      this.selectItem(-1);
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
     }
   }
 
