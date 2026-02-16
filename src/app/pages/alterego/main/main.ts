@@ -24,7 +24,7 @@ import { marked } from 'marked';
 import { html2text } from '@tools/HtmlUtil';
 import { Router } from '@angular/router';
 import { IndicatorService } from '@services/indicator.service';
-import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
+import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@services/firestore.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 
@@ -35,7 +35,7 @@ export interface KnowledgeTagType {
   txt: string;
 };
 
-export interface KnowledgeDataType extends BasicDataType {
+export interface KnowledgeDataType extends SimpleDataType {
   type: "fact" | "question";
   txt: string;
   txtFormat: string;
@@ -320,7 +320,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         }
       }
       const page = (await this.firestoreSrv.paging(pagingOptions));
-      this.knowledge.push(...(page as KnowledgeDataType[]));
+      this.knowledge.push(...(page as any[]));
       this.cdr.detectChanges();
     } catch (err) {
 
