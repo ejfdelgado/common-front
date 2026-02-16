@@ -23,20 +23,26 @@ import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-
 import { marked } from 'marked';
 import { html2text } from '@tools/HtmlUtil';
 import { Router } from '@angular/router';
+import { IndicatorService } from '@services/indicator.service';
+import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
+import { getUrlQueryParams } from '@tools/UrlUtil';
+import { UINotificationSrv } from '@services/uinotifications.service';
+
+const MODEL_NAME = "fact";
 
 export interface KnowledgeTagType {
   id: string;
   txt: string;
 };
 
-export interface KnowledgeDataType {
+export interface KnowledgeDataType extends BasicDataType {
   type: "fact" | "question";
   txt: string;
   txtFormat: string;
   answer?: string;
   answerFormat?: string;
   created: number;
-  tags: KnowledgeTagType[];
+  tags?: KnowledgeTagType[];
 };
 
 @Component({
@@ -67,6 +73,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   language: SearchLangsType = "es";
   knowledge: KnowledgeDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
+  collection: BasicDataType | null = null;
 
   fields: AllFieldsDataType[] = [];
   model: FlatJsonDataType = {
@@ -81,6 +88,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     public alterEgoSrv: AlterEgoService,
     public confirmSrv: ConfirmDialogService,
     private router: Router,
+    private indicatorSrv: IndicatorService,
+    private firestoreSrv: FirestoreService,
+    private uiNotificationSrv: UINotificationSrv,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -102,25 +112,37 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  ngOnInit(): void {
-    this.knowledge.push({
-      type: 'fact',
-      txt: "Como cocinar un rollo de canela",
-      txtFormat: "Como cocinar un rollo de canela",
-      created: Date.now(),
-      tags: [],
-    });
-    this.knowledge.push({
-      type: 'question',
-      txt: 'que sabemos de la historia?',
-      txtFormat: 'que sabemos de la historia?',
-      answer: 'En la historia de Roma el personaje Constantino es relevante',
-      answerFormat: 'En la historia de Roma el personaje Constantino es relevante',
-      created: Date.now() + 1,
-      tags: [],
-    });
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.loadCollection();
+      await this.pageFacts();
+      this.selectItem(0);
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    }
+  }
 
-    this.selectItem(0);
+  getTitle(): string {
+    if (!this.collection) {
+      return "Database";
+    } else {
+      return this.collection.title;
+    }
+  }
+
+  async loadCollection() {
+    const params = getUrlQueryParams();
+    const col = params.get("col");
+    const id = params.get("id");
+    if (col && id) {
+      const temp = await this.firestoreSrv.readById(col, id);
+      if (temp) {
+        this.collection = temp as BasicDataType;
+      } else {
+        this.collection = null;
+      }
+      this.cdr.detectChanges();
+    }
   }
 
   selectItem(index: number) {
@@ -203,7 +225,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  getCollectionName() {
+    const params = getUrlQueryParams();
+    const id = params.get("id");
+    if (!id) {
+      throw new Error("Missed parent");
+    }
+    return `knowledge/${id}/${MODEL_NAME}`;
+  }
+
   addKnowledge() {
+    /*
     this.knowledge.unshift({
       created: Date.now(),
       tags: [],
@@ -212,6 +244,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       type: 'fact',
     });
     this.selectItem(0);
+    */
   }
 
   updateCurrentModel() {
@@ -266,6 +299,33 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       if (this.currentSelected) {
         this.selectItem(this.knowledge.indexOf(this.currentSelected));
       }
+    }
+  }
+
+  async pageFacts(startover: boolean = false) {
+    const indicator = this.indicatorSrv.start();
+    try {
+      if (startover && this.knowledge.length > 0) {
+        this.knowledge.splice(0, this.knowledge.length);
+      }
+      const pagingOptions: PageDataType = {
+        collectionName: this.getCollectionName(),
+        orderColumn: "created",
+        orderDirection: "desc",
+        top: 20,
+      };
+      if (!startover) {
+        if (this.knowledge.length > 0) {
+          pagingOptions.lastDoc = this.knowledge[this.knowledge.length - 1];
+        }
+      }
+      const page = (await this.firestoreSrv.paging(pagingOptions));
+      this.knowledge.push(...(page as KnowledgeDataType[]));
+      this.cdr.detectChanges();
+    } catch (err) {
+
+    } finally {
+      indicator.done();
     }
   }
 }
