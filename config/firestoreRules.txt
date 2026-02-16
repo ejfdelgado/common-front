@@ -39,10 +39,15 @@ service cloud.firestore {
         request.auth != null &&
         resource.data.author == request.auth.token.email;
     }
-    match /pro-knowledge/{document=**} {
-        allow read: if
-        request.auth != null &&
-        resource.data.owners.hasAny([request.auth.uid]);
+    match /pro-knowledge/{knowledgeId} {
+      allow read: if request.auth != null
+                  && request.auth.uid in resource.data.owners;
+    }
+    match /pro-knowledge/{knowledgeId}/pro-fact/{factId} {
+      allow read: if request.auth != null
+                  && request.auth.uid in
+                    get(/databases/$(database)/documents/pro-knowledge/$(knowledgeId))
+                    .data.owners;
     }
   }
 }

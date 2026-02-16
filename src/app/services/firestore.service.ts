@@ -19,7 +19,9 @@ export interface PageDataType {
 };
 
 export interface FirestoreConfigDataType {
-    autoAuthor?: boolean;
+    autoAuthor?: boolean;// Allows to add data.author_picture & data.author_name
+    useAuthor?: boolean;// Allow to add data.author
+    autoOwner?: boolean;// Allow to add data.owners = [uid]
     searchFields?: string[],
 }
 

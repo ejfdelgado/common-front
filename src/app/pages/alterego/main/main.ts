@@ -234,17 +234,26 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     return `knowledge/${id}/${MODEL_NAME}`;
   }
 
-  addKnowledge() {
-    /*
-    this.knowledge.unshift({
-      created: Date.now(),
-      tags: [],
+  async addKnowledge() {
+    const created: KnowledgeDataType = {
+      created: 0,
+      updated: 0,
       txt: "This is a new knowledge",
       txtFormat: "This is a new knowledge",
       type: 'fact',
+      id: "",
+    };
+    // Call to create
+    const createdId = await this.firestoreSrv.createUpdate(this.getCollectionName(), created, {
+      autoAuthor: false,
+      useAuthor: false,
+      autoOwner: false,
+      searchFields: [],
     });
+    created.id = createdId.id;
+    this.knowledge.unshift(created);
     this.selectItem(0);
-    */
+
   }
 
   updateCurrentModel() {
@@ -312,7 +321,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         collectionName: this.getCollectionName(),
         orderColumn: "created",
         orderDirection: "desc",
-        top: 20,
+        top: 100,
       };
       if (!startover) {
         if (this.knowledge.length > 0) {
@@ -322,8 +331,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const page = (await this.firestoreSrv.paging(pagingOptions));
       this.knowledge.push(...(page as any[]));
       this.cdr.detectChanges();
-    } catch (err) {
-
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
     } finally {
       indicator.done();
     }
