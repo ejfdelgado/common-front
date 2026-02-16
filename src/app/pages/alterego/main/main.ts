@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { AlterEgoService, ItemToSearchType, SearchLangsType } from '@services/alterego.service';
+import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Subscription } from 'rxjs';
@@ -70,11 +70,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
-  language: SearchLangsType = "es";
+  language: SearchLangsType = "en";
   knowledge: KnowledgeDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
   collection: BasicDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
+  searchedResult: SearchAnswerDataType | null = null;
 
   fields: AllFieldsDataType[] = [];
   model: FlatJsonDataType = {
@@ -196,9 +197,31 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const response = await this.alterEgoSrv.initialize(mockData, this.language);
   }
 
-  async search() {
-    const response = await this.alterEgoSrv.search('Necesito saber de desarrollo de software', this.language);
-    console.log(JSON.stringify(response, null, 4));
+  async search(searchedText: string) {
+    if (searchedText.length == 0) {
+      this.searchedResult = null;
+    } else {
+      this.searchedResult = await this.alterEgoSrv.search(searchedText, this.language);
+      if (this.searchedResult.success && this.searchedResult.payload.length > 0) {
+        const first = this.searchedResult.payload[0];
+        const founds = this.knowledge.filter((o) => o.id == first.id);
+        const index = this.knowledge.indexOf(founds[0]);
+        this.selectItem(index);
+      }
+    }
+    this.cdr.detectChanges();
+  }
+
+  get knowledgeFiltered(): KnowledgeDataType[] {
+    if (!this.searchedResult) {
+      return this.knowledge;
+    } else {
+      const temp = this.searchedResult.payload.map((el: any) => {
+        const found = this.knowledge.filter((o) => o.id == el.id);
+        return found[0];
+      });
+      return temp;
+    }
   }
 
   async echo() {

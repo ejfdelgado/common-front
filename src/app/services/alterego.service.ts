@@ -9,6 +9,12 @@ export interface ItemToSearchType {
 
 export type SearchLangsType = "en" | "es" | "multi";
 
+export interface SearchAnswerDataType {
+    type: string;
+    success: boolean;
+    payload: ItemToSearchType[];
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -47,9 +53,9 @@ export class AlterEgoService {
         return promise;
     }
 
-    async search(payload: string, lang: SearchLangsType = "en") {
+    async search(payload: string, lang: SearchLangsType = "en"): Promise<SearchAnswerDataType> {
         const indicator = this.indicatorSrv.start();
-        const promise = new Promise((resolve, reject) => {
+        const promise = new Promise<SearchAnswerDataType>((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not loaded"));
                 return;

@@ -6,7 +6,7 @@
             <div class="content_wraper">
                 <mat-card class="mat-mdc-card mdc-card">
                     <mat-card-content class="flex_horizontal_gap_10">
-                        <button matButton="elevated" (click)="search()">Search</button>
+                        <app-search-input class="full_width" (search)="search($event)"></app-search-input>
                     </mat-card-content>
                 </mat-card>
                 <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
@@ -14,13 +14,13 @@
                         <mat-sidenav #sidenav mode="side" opened>
                             <div class="left_parent">
                                 <div class="rearch_parent">
-                                    <app-search-input (search)="searchKnowledge($event)"></app-search-input>
+                                    <h4 class="text-base">All knowledge</h4>
                                 </div>
                                 <div class="scrollable_list">
-                                    <h4 class="text-base">All knowledge</h4>
-                                    @for (item of knowledge; track item.created) {
-                                    <span [ngClass]="{'selected': currentSelected == item}" class="item_parent text-xs"
-                                        (click)="selectThisKnowledge(item)">
+                                    @for (item of knowledgeFiltered; track item.created) {
+                                    <span
+                                        [ngClass]="{'selected': currentSelected == item, 'question': item.type=='question'}"
+                                        class="item_parent text-xs" (click)="selectThisKnowledge(item)">
                                         <span class="txt">{{ item.txt }}</span>
                                         <span class="button_elements">
                                             <span class="date">{{ item.created | epochDate:'DD MMMM YYYY, HH:mm'

@@ -98,8 +98,8 @@ mat-toolbar {
     gap: 5px;
 }
 
-.left_parent .scrollable_list h4 {
-    padding-bottom: 16px;
+.left_parent .rearch_parent h4 {
+    padding: 15px 0 0 0;
     margin: 0;
 }
 
@@ -122,12 +122,24 @@ mat-toolbar {
     background-color: rgb(214, 236, 255);
 }
 
+.item_parent.question {
+    background-color: rgb(255, 249, 212);
+}
+
+.item_parent.selected.question {
+    background-color: rgb(255, 245, 183);
+}
+
 .item_parent .txt {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     margin-top: 10px;
     color: var(--mat-sys-primary);
+}
+
+.item_parent.question .txt {
+    color: rgb(177, 95, 0);
 }
 
 .item_parent .button_elements {
