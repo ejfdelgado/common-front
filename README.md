@@ -24,7 +24,7 @@ npx ng generate component --standalone --skip-tests components/fullscreen
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/alterego/main
+npx ng generate component --standalone --skip-tests pages/alterego/index
 ```
 
 ```bash

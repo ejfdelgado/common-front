@@ -71,6 +71,9 @@ mat-card-content.with_image .text_date {
     filter: blur(5px);
 }
 
+mat-card-actions {
+    gap: 5px;
+}
 
 @media screen AND (max-width: 400px) {
 

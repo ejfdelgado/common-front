@@ -14,6 +14,7 @@ export interface PageDataType {
     orderColumn?: string;
     orderDirection?: "asc" | "desc";
     author?: string | null;
+    owner?: string | null;
     top?: number;
 };
 
@@ -117,6 +118,7 @@ export class FirestoreService {
             lastDoc: null,
             orderColumn: "created",
             orderDirection: "desc",
+            searchTextSingle: false,
             top: 10
         }, requestIn);
 
@@ -133,6 +135,10 @@ export class FirestoreService {
 
         if (typeof request.author == "string") {
             constraints.push(where('author', '==', request.author));
+        }
+
+        if (typeof request.owner == "string") {
+            constraints.push(where('owners', 'array-contains', request.owner));
         }
 
         if (request.lastDoc) {

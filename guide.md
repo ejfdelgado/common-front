@@ -30,14 +30,30 @@ match /pro-document/{document=**} {
 }
 ```
 
+If the collection must be read only by owners
+```
+match /pro-knowledge/{document=**} {
+    allow read: if
+    request.auth != null && request.auth.uid in resource.data.owners;
+}
+```
+
 ### Add index to allow search
 
 [] search, updated (desc), __name__ (desc)
 
 Important, when author is constrained, also add:
-
+```
 author (asc), updated (desc), __name__ (desc)
 [] search, author (asc), updated (desc), __name__ (desc)
+```
+
+Whe using owners
+
+```
+[] owners, search (asc), updated (desc), __name__ (desc)
+[] owners, updated (desc), __name__ (desc)
+```
 
 ## The Components
 
