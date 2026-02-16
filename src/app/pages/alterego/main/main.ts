@@ -251,9 +251,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       searchFields: [],
     });
     created.id = createdId.id;
+    created.created = createdId.created;
     this.knowledge.unshift(created);
     this.selectItem(0);
-
   }
 
   updateCurrentModel() {

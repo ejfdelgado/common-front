@@ -27,10 +27,10 @@ export interface FirestoreConfigDataType {
 
 export interface UpdatedEntityType {
     id: string;
+    created: number;
 }
 
 export interface SimpleDataType extends UpdatedEntityType {
-    created: number;
     updated: number;
 }
 
@@ -72,7 +72,10 @@ export class FirestoreService {
         };
         const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + this.uploadUrl, payload));
         if (typeof response.data.id == "string") {
-            return { id: response.data.id };
+            return {
+                id: response.data.id,
+                created: response.data.created
+            };
         } else {
             throw new Error("No id found");
         }
