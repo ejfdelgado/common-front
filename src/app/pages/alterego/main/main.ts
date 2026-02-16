@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { AlterEgoService, SearchLangsType } from '@services/alterego.service';
+import { AlterEgoService, ItemToSearchType, SearchLangsType } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Subscription } from 'rxjs';
@@ -105,6 +105,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         });
       },
     });
+
+    this.menuOptions.push({
+      label: "Train model",
+      icon: "psychology",
+      children: [],
+      callback: () => {
+        this.initialize();
+      },
+    });
   }
 
   ngOnDestroy(): void {
@@ -116,7 +125,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async ngOnInit(): Promise<void> {
     try {
       await this.loadCollection();
-      await this.pageFacts();
+      await this.pageAll();
       this.selectItem(0);
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
@@ -176,13 +185,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async initialize() {
-    const mockData = [
-      { id: '1', title: 'Como cocinar un rollo de canela', url: "" },
-      { id: '2', title: 'En la historia de Roma el personaje Constantino es relevante', url: "" },
-      { id: '3', title: 'Python es un excelente lenguaje de programacion para IA', url: "" }
-    ];
+    const mockData = this.knowledge.map((elem) => {
+      const temp: ItemToSearchType = {
+        id: elem.id,
+        title: elem.txt,
+        url: elem.type == "question" && elem.answer ? elem.answer : "",
+      };
+      return temp;
+    });
     const response = await this.alterEgoSrv.initialize(mockData, this.language);
-    console.log(JSON.stringify(response, null, 4));
   }
 
   async search() {
@@ -323,7 +334,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   }
 
-  async pageFacts(startover: boolean = false) {
+  async pageAll() {
+    let isFirstTime: boolean = true;
+    let responses: BasicDataType[] = [];
+    const LIMIT = 100;
+    do {
+      responses = await this.pageFacts(LIMIT, isFirstTime);
+      isFirstTime = false;
+    } while (responses.length > 0);
+  }
+
+  async pageFacts(limit: number, startover: boolean = false): Promise<BasicDataType[]> {
     const indicator = this.indicatorSrv.start();
     try {
       if (startover && this.knowledge.length > 0) {
@@ -333,7 +354,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         collectionName: this.getCollectionName(),
         orderColumn: "created",
         orderDirection: "desc",
-        top: 100,
+        top: limit,
       };
       if (!startover) {
         if (this.knowledge.length > 0) {
@@ -343,8 +364,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const page = (await this.firestoreSrv.paging(pagingOptions));
       this.knowledge.push(...(page as any[]));
       this.cdr.detectChanges();
+      return page;
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
+      return [];
     } finally {
       indicator.done();
     }

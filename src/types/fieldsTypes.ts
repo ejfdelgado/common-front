@@ -91,6 +91,18 @@ export interface FieldJSONDataType extends FieldDataType {
     json: JSONDetailDataType;
 }
 
+// Toggle
+
+export interface FieldToggleDataType extends FieldDataType {
+    toggle: FieldToggleDetailDataType;
+}
+
+export interface FieldToggleDetailDataType {
+    iconName: string;
+}
+
+// Finish
+
 export type AllFieldsDataType =
     FieldDataType |
     FieldImageDataType |
@@ -98,7 +110,8 @@ export type AllFieldsDataType =
     ChipDataType |
     ContenteditableDataType |
     MDDataType |
-    ImageGalleryDataType;
+    ImageGalleryDataType |
+    FieldToggleDataType;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
     fields: (
@@ -108,6 +121,7 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         ChipDataType |
         ContenteditableDataType |
         MDDataType |
-        ImageGalleryDataType
+        ImageGalleryDataType |
+        FieldToggleDataType
     )[],
 }
