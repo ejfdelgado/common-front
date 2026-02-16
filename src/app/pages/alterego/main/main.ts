@@ -133,6 +133,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!confirm) {
       return;
     }
+    const index = this.knowledge.indexOf(item);
+    this.knowledge.splice(index, 1);
+    if (this.knowledge.length > 0) {
+      if (index == 0) {
+        this.currentSelected = this.knowledge[0];
+      } else {
+        this.currentSelected = this.knowledge[index - 1];
+      }
+    }
   }
 
   addKnowledge() {
@@ -142,5 +151,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       txt: "",
       type: 'fact',
     });
+    this.currentSelected = this.knowledge[0];
   }
 }
