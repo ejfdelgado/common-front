@@ -20,6 +20,8 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
+import { marked } from 'marked';
+import { html2text } from '@tools/HtmlUtil';
 
 export interface KnowledgeTagType {
   id: string;
@@ -192,5 +194,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   updateCurrentModel() {
 
+  }
+
+  async editionMade(event: any) {
+    if ('txt' in event) {
+      const actual = event['txt'];
+      const htmlText = await marked.parse(actual);
+      if (this.currentSelected) {
+        this.currentSelected.txt = html2text(htmlText);
+        this.currentSelected.txtFormat = actual;
+      }
+    }
   }
 }

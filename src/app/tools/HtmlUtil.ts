@@ -3,3 +3,9 @@ export function escapeHtml(value: string): string {
   div.textContent = value;
   return div.innerHTML;
 }
+
+export function html2text(value: string): string {
+  const div = document.createElement('div');
+  div.innerHTML = value;
+  return div.innerText;
+}

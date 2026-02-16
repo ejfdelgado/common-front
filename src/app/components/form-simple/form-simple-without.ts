@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,6 +17,7 @@ import { AllFieldsDataType } from 'types/fieldsTypes';
 import { ImageGalleryComponent } from '@components/fields/image-gallery/image-gallery';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MDInput } from '@components/fields/md-input/md-input';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-form-simple-without',
@@ -46,6 +47,8 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
   get model(): FlatJsonDataType {
     return this._model;
   };
+  changedSubscription!: Subscription;
+  @Output() innerModelChanged: EventEmitter<any> = new EventEmitter();
 
   set model(val: FlatJsonDataType) {
     this._model = val;
@@ -64,10 +67,14 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     super.ngOnInitInternal(this.fields, this.model);
+    this.changedSubscription = this.changeSubject.subscribe((event) => {
+      this.innerModelChanged.emit(event);
+    });
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroyInternal();
+    this.changedSubscription.unsubscribe();
   }
 
   async saveAllChangedData() {
