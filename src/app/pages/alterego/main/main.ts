@@ -98,9 +98,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       tags: [],
     });
     this.knowledge.push({
-      type: 'fact',
-      txt: 'En la historia de Roma el personaje Constantino es relevante',
-      txtFormat: 'En la historia de Roma el personaje Constantino es relevante',
+      type: 'question',
+      txt: 'que sabemos de la historia?',
+      txtFormat: 'que sabemos de la historia?',
+      answer: 'En la historia de Roma el personaje Constantino es relevante',
+      answerFormat: 'En la historia de Roma el personaje Constantino es relevante',
       created: Date.now() + 1,
       tags: [],
     });
