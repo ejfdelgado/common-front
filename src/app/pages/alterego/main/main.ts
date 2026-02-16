@@ -17,6 +17,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { EpochDatePipe } from '@pipes/epoch-date.pipe';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
+import { AllFieldsDataType } from 'types/fieldsTypes';
+import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
+import { FlatJsonDataType } from '@components/form-simple/form-simple';
 
 export interface KnowledgeTagType {
   id: string;
@@ -26,7 +29,9 @@ export interface KnowledgeTagType {
 export interface KnowledgeDataType {
   type: "fact" | "question";
   txt: string;
+  txtFormat: string;
   answer?: string;
+  answerFormat?: string;
   created: number;
   tags: KnowledgeTagType[];
 };
@@ -45,6 +50,7 @@ export interface KnowledgeDataType {
     MatIconModule,
     SearchInputComponent,
     EpochDatePipe,
+    FormSimpleWithout,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -58,6 +64,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   language: SearchLangsType = "es";
   knowledge: KnowledgeDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
+
+  fields: AllFieldsDataType[] = [];
+  model: FlatJsonDataType = {
+    "txt": []
+  };
 
   constructor(
     public override authSrv: AuthService,
@@ -80,16 +91,37 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.knowledge.push({
       type: 'fact',
       txt: "Como cocinar un rollo de canela",
+      txtFormat: "Como cocinar un rollo de canela",
       created: Date.now(),
       tags: [],
     });
     this.knowledge.push({
       type: 'fact',
       txt: 'En la historia de Roma el personaje Constantino es relevante',
+      txtFormat: 'En la historia de Roma el personaje Constantino es relevante',
       created: Date.now() + 1,
       tags: [],
     });
-    this.currentSelected = this.knowledge[0];
+
+    this.selectItem(0);
+  }
+
+  selectItem(index: number) {
+    this.currentSelected = null;
+    this.fields = [];
+    if (this.knowledge.length <= index || index < 0) {
+      this.cdr.detectChanges();
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      this.currentSelected = this.knowledge[index];
+      this.fields = [
+        { label: "Knowledge", type: "md", key: "txt", md: { maxHeight: "200px", minHeight: "200px" } },
+      ];
+      this.model["txt"] = this.currentSelected.txtFormat;
+      this.cdr.detectChanges();
+    });
   }
 
   toggle() {
@@ -121,7 +153,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   selectThisKnowledge(item: KnowledgeDataType) {
-    this.currentSelected = item;
+    const index = this.knowledge.indexOf(item);
+    this.selectItem(index);
   }
 
   async deleteKnowledge(item: KnowledgeDataType, event: any) {
@@ -137,10 +170,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.knowledge.splice(index, 1);
     if (this.knowledge.length > 0) {
       if (index == 0) {
-        this.currentSelected = this.knowledge[0];
+        this.selectItem(0);
       } else {
-        this.currentSelected = this.knowledge[index - 1];
+        this.selectItem(index - 1);
       }
+    } else {
+      this.selectItem(-1);
     }
   }
 
@@ -149,8 +184,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       created: Date.now(),
       tags: [],
       txt: "This is a new knowledge",
+      txtFormat: "This is a new knowledge",
       type: 'fact',
     });
-    this.currentSelected = this.knowledge[0];
+    this.selectItem(0);
+  }
+
+  updateCurrentModel() {
+
   }
 }

@@ -134,3 +134,9 @@ mat-toolbar {
 .item_parent .button_elements .date {
     flex: 1;
 }
+
+.editor_parent {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
