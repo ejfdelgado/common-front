@@ -83,6 +83,16 @@
     flex: 1;
 }
 
+mat-sidenav {
+    border-right: 1px solid var(--color-font-softer);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+mat-toolbar {
+    border-bottom: 1px solid var(--color-font-softer);
+}
+
 .left_parent .scrollable_list h4 {
     padding-bottom: 16px;
     margin: 0;
@@ -99,11 +109,12 @@
     cursor: pointer;
 
     transition: all .1s ease-in 0s;
-    transform: scale(.95);
+    transform: scale(1);
 }
 
 .item_parent.selected {
-    transform: scale(1);
+    transform: scale(1.02);
+    background-color: rgb(214, 236, 255);
 }
 
 .item_parent .txt {
@@ -111,6 +122,7 @@
     white-space: nowrap;
     overflow: hidden;
     margin-top: 10px;
+    color: var(--mat-sys-primary);
 }
 
 .item_parent .button_elements {

@@ -148,7 +148,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.knowledge.unshift({
       created: Date.now(),
       tags: [],
-      txt: "",
+      txt: "This is a new knowledge",
       type: 'fact',
     });
     this.currentSelected = this.knowledge[0];
