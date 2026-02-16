@@ -16,7 +16,7 @@
             [maxHeight]="getContentEditable(field).maxHeight"
             [minHeight]="getContentEditable(field).minHeight"></app-editable-input>
         } @else if (field.type=='toggle') {
-        <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
+        <app-on-off-toggle [label]="field.label" [formControl]="formControlMap[field.key]"></app-on-off-toggle>
         } @else if (field.type=='rating') {
         <app-rating [formControl]="formControlMap[field.key]"></app-rating>
         } @else if (field.type=='image') {

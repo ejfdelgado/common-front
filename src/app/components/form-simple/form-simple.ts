@@ -18,13 +18,19 @@ import {
 
 export type FlatJsonDataType = { [key: string]: any };
 
+export type ChangeFieldType = {
+  name: string,
+  val: any,
+};
+
 export abstract class FormSimple implements DifferedStore {
   form: FormGroup;
   formControlMap: { [key: string]: FormControl } = {};
   fieldNames: string[] = [];
   changeSubscription: Subscription | null = null;
+  fieldSubscriptions: Subscription[] = [];
   changeSubject: Subject<FlatJsonDataType> = new Subject<FlatJsonDataType>();
-
+  changeField: Subject<ChangeFieldType> = new Subject<ChangeFieldType>();
 
   _model: FlatJsonDataType = {};
 
@@ -43,7 +49,7 @@ export abstract class FormSimple implements DifferedStore {
   ngOnInitInternal(fields: AllFieldsDataType[], model: FlatJsonDataType): void {
     this._model = model;
     const dynamicFields = this.form.get('dynamicFields') as FormArray;
-    for (const field of fields) {
+    fields.forEach((field) => {
       const newField = new FormControl(model[field.key]);
       if (field.required === true) {
         newField.addValidators(Validators.required);
@@ -51,7 +57,14 @@ export abstract class FormSimple implements DifferedStore {
       dynamicFields.push(newField);
       this.fieldNames.push(field.key);
       this.formControlMap[field.key] = newField;
-    }
+      this.fieldSubscriptions.push(newField.valueChanges.subscribe(nextVal => {
+        this.changeField.next({
+          name: field.key,
+          val: nextVal,
+        });
+      }));
+    });
+
     this.changeSubscription = this.form.valueChanges.subscribe(newValue => {
       const list = newValue.dynamicFields;
       if (!this._model) {
@@ -74,6 +87,7 @@ export abstract class FormSimple implements DifferedStore {
     if (this.changeSubscription) {
       this.changeSubscription.unsubscribe();
     }
+    this.fieldSubscriptions.forEach(el => el.unsubscribe());
   }
 
   setFormValue(key: string, value: any) {

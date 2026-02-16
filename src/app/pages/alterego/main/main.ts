@@ -19,7 +19,7 @@ import { EpochDatePipe } from '@pipes/epoch-date.pipe';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
-import { FlatJsonDataType } from '@components/form-simple/form-simple';
+import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-simple';
 import { marked } from 'marked';
 import { html2text } from '@tools/HtmlUtil';
 
@@ -118,10 +118,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     requestAnimationFrame(() => {
       this.currentSelected = this.knowledge[index];
+      const isQuestion = this.currentSelected.type == 'question';
       this.fields = [
+        { label: "Is question?", type: "toggle", key: "type" },
         { label: "Knowledge", type: "md", key: "txt", md: { maxHeight: "200px", minHeight: "200px" } },
       ];
+      if (isQuestion) {
+        this.fields.push({ label: "Answer", type: "md", key: "answer", md: { maxHeight: "200px", minHeight: "200px" } },)
+      }
       this.model["txt"] = this.currentSelected.txtFormat;
+      this.model['type'] = isQuestion;
+      this.model["answer"] = this.currentSelected.answer;
       this.cdr.detectChanges();
     });
   }
@@ -196,13 +203,53 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   }
 
-  async editionMade(event: any) {
-    if ('txt' in event) {
-      const actual = event['txt'];
-      const htmlText = await marked.parse(actual);
+  indexOfNamedFieldAnswer(name: string) {
+    const el = this.fields.filter((el) => el.key == name);
+    if (el.length > 0) {
+      return this.fields.indexOf(el[0]);
+    } else {
+      return -1;
+    }
+  }
+
+  async editionMade(event: ChangeFieldType) {
+    let hasChanged: boolean = false;
+
+    if (event.name == "txt") {
+      const txt = event.val;
+      const htmlText = await marked.parse(txt);
       if (this.currentSelected) {
         this.currentSelected.txt = html2text(htmlText);
-        this.currentSelected.txtFormat = actual;
+        this.currentSelected.txtFormat = txt;
+      }
+    } else if (event.name == "answer") {
+      const answer = event.val;
+      const htmlAnswer = await marked.parse(answer);
+      if (this.currentSelected) {
+        this.currentSelected.answer = html2text(htmlAnswer);
+        this.currentSelected.answerFormat = answer;
+      }
+    } else if (event.name == 'type') {
+      if (this.currentSelected) {
+        if (event.val) {
+          this.currentSelected.type = "question";
+          const index = this.indexOfNamedFieldAnswer("answer");
+          if (index < 0) {
+            hasChanged = true;
+          }
+        } else {
+          this.currentSelected.type = "fact";
+          const index = this.indexOfNamedFieldAnswer("answer");
+          if (index >= 0) {
+            hasChanged = true;
+          }
+        }
+      }
+    }
+
+    if (hasChanged) {
+      if (this.currentSelected) {
+        this.selectItem(this.knowledge.indexOf(this.currentSelected));
       }
     }
   }

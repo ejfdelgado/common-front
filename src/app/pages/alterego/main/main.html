@@ -45,7 +45,8 @@
                             </mat-toolbar>
                             @if (currentSelected != null) {
                             <div class="editor_parent">
-                                <app-form-simple-without (innerModelChanged)="editionMade($event)" [model]="model" [fields]="fields"></app-form-simple-without>
+                                <app-form-simple-without (innerFieldChanged)="editionMade($event)" [model]="model"
+                                    [fields]="fields"></app-form-simple-without>
                             </div>
                             }
                         </mat-sidenav-content>

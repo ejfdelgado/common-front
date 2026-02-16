@@ -35,8 +35,7 @@ export type OnOffDataType = boolean;
 })
 export class OnOffToggleComponent extends CommonComponent implements ControlValueAccessor {
 
-  @Input() onImageUrl: string = "./assets/icons/heart.svg";
-  @Input() offImageUrl: string = "./assets/icons/heart_off.svg";
+  @Input() iconName: string = "heart";
   @Input() label: string = "Añadir a favorito";
   value: OnOffDataType = false;
   disabled = false;
@@ -51,6 +50,13 @@ export class OnOffToggleComponent extends CommonComponent implements ControlValu
 
   /* ========= ControlValueAccessor API ========= */
 
+  get onImageUrl() {
+    return `./assets/icons/${this.iconName}.svg`;
+  }
+
+  get offImageUrl() {
+    return `./assets/icons/${this.iconName}_off.svg`;
+  }
 
   writeValue(value: OnOffDataType | null): void {
     this.value = !!value;

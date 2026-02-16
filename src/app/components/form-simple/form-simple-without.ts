@@ -10,7 +10,7 @@ import { OnOffToggleComponent } from '@components/fields/on-off-toggle/on-off-to
 import { RatingComponent } from '@components/fields/rating/rating';
 import { ImageFileComponent } from '@components/fields/image-field/image-field';
 import { ComponentBucketField } from 'types/ComponentBucketField';
-import { FlatJsonDataType, FormSimple } from './form-simple';
+import { ChangeFieldType, FlatJsonDataType, FormSimple } from './form-simple';
 import { PhoneInputComponent } from '@components/fields/phone-input/phone-input';
 import { ChipSelectComponent } from '@components/fields/chip-select/chip-select.component';
 import { AllFieldsDataType } from 'types/fieldsTypes';
@@ -48,7 +48,9 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
     return this._model;
   };
   changedSubscription!: Subscription;
+  fieldSubscription!: Subscription;
   @Output() innerModelChanged: EventEmitter<any> = new EventEmitter();
+  @Output() innerFieldChanged: EventEmitter<ChangeFieldType> = new EventEmitter();
 
   set model(val: FlatJsonDataType) {
     this._model = val;
@@ -70,11 +72,15 @@ export class FormSimpleWithout extends FormSimple implements OnInit, OnDestroy {
     this.changedSubscription = this.changeSubject.subscribe((event) => {
       this.innerModelChanged.emit(event);
     });
+    this.fieldSubscription = this.changeField.subscribe((event) => {
+      this.innerFieldChanged.emit(event);
+    });
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroyInternal();
     this.changedSubscription.unsubscribe();
+    this.fieldSubscription.unsubscribe();
   }
 
   async saveAllChangedData() {
