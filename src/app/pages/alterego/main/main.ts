@@ -22,6 +22,7 @@ import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-simple';
 import { marked } from 'marked';
 import { html2text } from '@tools/HtmlUtil';
+import { Router } from '@angular/router';
 
 export interface KnowledgeTagType {
   id: string;
@@ -79,8 +80,20 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     public override fullScreenSrv: FullscreenService,
     public alterEgoSrv: AlterEgoService,
     public confirmSrv: ConfirmDialogService,
+    private router: Router,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
+
+    this.menuOptions.push({
+      label: "Back to databases",
+      icon: "arrow_back",
+      children: [],
+      callback: () => {
+        this.router.navigate([`alterego/index`], {
+          queryParams: {}
+        });
+      },
+    });
   }
 
   ngOnDestroy(): void {

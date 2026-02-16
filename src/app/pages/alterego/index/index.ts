@@ -4,10 +4,10 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@ang
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { CardDoc, CardDocDataType } from '@components/card-doc/card-doc';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
-import { SearchInputComponent } from '@components/search-input/search-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
@@ -34,7 +34,6 @@ const MODEL_NAME = "knowledge";
     CommonModule,
     MatButtonModule,
     Statusbar,
-    SearchInputComponent,
     CardDoc,
     SideMenu,
   ],
@@ -51,6 +50,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
     shareLink: true,
     shareQR: true,
     hasImage: true,
+    showAuthorImg: true,
   };
 
   constructor(
@@ -64,6 +64,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
+    private router: Router,
     public override fullScreenSrv: FullscreenService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
@@ -197,5 +198,11 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
       description,
       updated,
     }, type);
+  }
+
+  async openDocument(model: any) {
+    this.router.navigate([`alterego/main`], {
+      queryParams: { col: MODEL_NAME, id: model.id }
+    });
   }
 }
