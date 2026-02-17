@@ -14,7 +14,7 @@
                                     <mat-icon (click)="toggle()">close</mat-icon>
                                 </div>
                                 <div class="scrollable_list">
-                                    @for (item of knowledgeFiltered; track item.created) {
+                                    @for (item of knowledgeFiltered; track item.created; let i = $index) {
                                     <span
                                         [ngClass]="{'selected': currentSelected == item, 'question': item.type=='question'}"
                                         class="item_parent text-xs" (click)="selectThisKnowledge(item)">
@@ -25,8 +25,8 @@
                                             <mat-icon class="xs"
                                                 (click)="deleteKnowledge(item, $event)">delete</mat-icon>
                                         </span>
-                                        @if (item.distance) {
-                                        <span class="distance">{{ (100*item.distance).toFixed(0)+'%' }}</span>
+                                        @if (getDistanceFromIndex(i) > 0) {
+                                        <span class="distance">{{ (100*getDistanceFromIndex(i)).toFixed(0)+'%' }}</span>
                                         }
                                     </span>
                                     }

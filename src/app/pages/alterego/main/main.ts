@@ -45,7 +45,6 @@ export interface KnowledgeDataType extends SimpleDataType {
   answerFormat?: string;
   created: number;
   tags?: KnowledgeTagType[];
-  distance?: number;
 };
 
 @Component({
@@ -236,11 +235,20 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } else {
       const temp = this.searchedResult.payload.map((el: ItemToSearchType) => {
         const found = this.knowledge.filter((o) => o.id == el.id);
-        found[0].distance = el.distance;
         return found[0];
       });
       return temp;
     }
+  }
+
+  getDistanceFromIndex(index: number): number {
+    if (!this.searchedResult) {
+      return 0;
+    }
+    if (this.searchedResult.payload[index].distance) {
+      return this.searchedResult.payload[index].distance;
+    }
+    return 0;
   }
 
   async echo() {
