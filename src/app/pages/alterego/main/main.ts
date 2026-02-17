@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -93,6 +93,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private indicatorSrv: IndicatorService,
     private firestoreSrv: FirestoreService,
     private uiNotificationSrv: UINotificationSrv,
+    private ngZone: NgZone,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -159,8 +160,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   selectItem(index: number) {
     this.currentSelected = null;
     this.fields = [];
+    this.cdr.detectChanges();
     if (this.knowledge.length <= index || index < 0) {
-      this.cdr.detectChanges();
       return;
     }
 
@@ -200,6 +201,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async search(searchedText: string) {
     if (searchedText.length == 0) {
       this.searchedResult = null;
+      this.selectItem(0);
     } else {
       this.searchedResult = await this.alterEgoSrv.search(searchedText, this.language);
       if (this.searchedResult.success && this.searchedResult.payload.length > 0) {
@@ -227,10 +229,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async echo() {
     const response = await this.alterEgoSrv.echo();
     console.log(JSON.stringify(response));
-  }
-
-  async searchKnowledge(event: any) {
-
   }
 
   selectThisKnowledge(item: KnowledgeDataType) {
@@ -294,7 +292,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     created.id = createdId.id;
     created.created = createdId.created;
     this.knowledge.unshift(created);
-    this.selectItem(0);
+    requestAnimationFrame(() => {
+      this.selectItem(0);
+    })
   }
 
   updateCurrentModel() {
@@ -408,5 +408,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } finally {
       this.cdr.detectChanges();
     }
+  }
+
+  private runInZone(fn: () => void) {
+    this.ngZone.run(fn);
   }
 }
