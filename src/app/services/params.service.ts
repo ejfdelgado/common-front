@@ -80,7 +80,7 @@ export class ParamsService {
                     .pipe(
                         map((buffer: any) => {
                             const rawData: any = decode(new Uint8Array(buffer));
-                            const decripted = this.decryptAES(rawData, ParamsService.tempPass);
+                            const decripted = this.decryptAES(rawData, (ParamsService.tempPass + "a").split('').reverse().join(''));
                             return JSON.parse(decripted);
                         })
                     )
