@@ -5,6 +5,7 @@ export interface ItemToSearchType {
     id: string;
     title: string;
     url: string;
+    distance?: number;
 };
 
 export type SearchLangsType = "en" | "es" | "multi";
@@ -53,7 +54,7 @@ export class AlterEgoService {
         return promise;
     }
 
-    async search(payload: string, lang: SearchLangsType = "en"): Promise<SearchAnswerDataType> {
+    async search(payload: string, top: number = 10, distance: number = 0.3, lang: SearchLangsType = "en"): Promise<SearchAnswerDataType> {
         const indicator = this.indicatorSrv.start();
         const promise = new Promise<SearchAnswerDataType>((resolve, reject) => {
             if (!this.worker) {
@@ -71,8 +72,8 @@ export class AlterEgoService {
                 type: "SEARCH",
                 payload,
                 lang,
-                top: 2,
-                distance: 0.3,
+                top,
+                distance,
             });
         });
         promise.finally(() => {

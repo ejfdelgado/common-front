@@ -45,6 +45,7 @@ export interface KnowledgeDataType extends SimpleDataType {
   answerFormat?: string;
   created: number;
   tags?: KnowledgeTagType[];
+  distance?: number;
 };
 
 @Component({
@@ -73,6 +74,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
   language: SearchLangsType = "en";
+  top: number = 3;
+  distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
   collection: BasicDataType | null = null;
@@ -216,7 +219,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.searchedResult = null;
       this.selectItem(0);
     } else {
-      this.searchedResult = await this.alterEgoSrv.search(searchedText, this.language);
+      this.searchedResult = await this.alterEgoSrv.search(searchedText, this.top, this.distance / 100, this.language);
       if (this.searchedResult.success && this.searchedResult.payload.length > 0) {
         const first = this.searchedResult.payload[0];
         const founds = this.knowledge.filter((o) => o.id == first.id);
@@ -231,8 +234,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!this.searchedResult) {
       return this.knowledge;
     } else {
-      const temp = this.searchedResult.payload.map((el: any) => {
+      const temp = this.searchedResult.payload.map((el: ItemToSearchType) => {
         const found = this.knowledge.filter((o) => o.id == el.id);
+        found[0].distance = el.distance;
         return found[0];
       });
       return temp;

@@ -25,6 +25,9 @@
                                             <mat-icon class="xs"
                                                 (click)="deleteKnowledge(item, $event)">delete</mat-icon>
                                         </span>
+                                        @if (item.distance) {
+                                        <span class="distance">{{ (100*item.distance).toFixed(0)+'%' }}</span>
+                                        }
                                     </span>
                                     }
                                 </div>
