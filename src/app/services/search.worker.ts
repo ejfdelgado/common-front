@@ -22,6 +22,13 @@ const getModelId = function (lang: string) {
   return MODELS[lang];
 }
 
+function cosineSimilarity(a: Float32Array, b: Float32Array) {
+  const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
+  const normA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const normB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  return dot / (normA * normB);
+}
+
 const getExtractor = async function (lang: string): Promise<FeatureExtractionPipeline> {
   if (lang != lastLang || extractor === null) {
     extractor = (await pipeline(
@@ -63,8 +70,26 @@ self.onmessage = async (e) => {
       if (!index) {
         throw new Error("index first!");
       }
-      const results = index.search(queryVector, 3);
-      self.postMessage({ type: RESPONSE_ID, success: true, payload: results.neighbors });
+      const { top, distance } = e.data;
+      const results = index.search(queryVector, top);
+
+      const promises = results.neighbors.map((el) => { return el.title }).map((texts: string) => {
+        return localExtractor(texts, { pooling: 'mean', normalize: true });
+      });
+      const resolved = await Promise.all(promises);
+
+      const neighborsVectors = resolved.map((queryOutput: any) => {
+        return new Float32Array(queryOutput.data as Float32Array)
+      }).map((vector: Float32Array) => {
+        return cosineSimilarity(vector, queryVector)
+      });
+      results.neighbors.forEach((el, index) => {
+        (el as any).distance = neighborsVectors[index];
+      });
+      const filtered = results.neighbors.filter((el) => {
+        return (el as any).distance >= distance;
+      });
+      self.postMessage({ type: RESPONSE_ID, success: true, payload: filtered });
     } catch (err) {
       self.postMessage({ type: RESPONSE_ID, success: false, payload: err });
     }

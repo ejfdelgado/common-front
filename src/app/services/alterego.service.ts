@@ -67,7 +67,13 @@ export class AlterEgoService {
                     resolve(data);
                 }
             };
-            this.worker.postMessage({ type: "SEARCH", payload, lang });
+            this.worker.postMessage({
+                type: "SEARCH",
+                payload,
+                lang,
+                top: 2,
+                distance: 0.3,
+            });
         });
         promise.finally(() => {
             indicator.done();
