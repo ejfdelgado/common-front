@@ -9,9 +9,9 @@ import { Statusbar } from '@components/statusbar/statusbar';
 import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
-import { Subscription } from 'rxjs';
+import { map, Observable, shareReplay, Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawerMode, MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchInputComponent } from '@components/search-input/search-input';
@@ -27,6 +27,7 @@ import { IndicatorService } from '@services/indicator.service';
 import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@services/firestore.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 const MODEL_NAME = "fact";
 
@@ -77,6 +78,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   pendingToSave: KnowledgeDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
 
+  isHandset$!: Observable<boolean>;
+
   fields: AllFieldsDataType[] = [];
   model: FlatJsonDataType = {
     "txt": []
@@ -93,9 +96,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private indicatorSrv: IndicatorService,
     private firestoreSrv: FirestoreService,
     private uiNotificationSrv: UINotificationSrv,
-    private ngZone: NgZone,
+    private breakpointObserver: BreakpointObserver
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
+
+    this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
+      .pipe(
+        map(result => result.matches),
+        shareReplay()
+      );
 
     this.menuOptions.push({
       label: "Back to databases",
@@ -408,9 +417,5 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } finally {
       this.cdr.detectChanges();
     }
-  }
-
-  private runInZone(fn: () => void) {
-    this.ngZone.run(fn);
   }
 }

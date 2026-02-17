@@ -4,17 +4,14 @@
         <app-statusbar [title]="getTitle()"></app-statusbar>
         <div class="dynamic_content">
             <div class="content_wraper">
-                <mat-card class="mat-mdc-card mdc-card">
-                    <mat-card-content class="flex_horizontal_gap_10">
-                        <app-search-input class="full_width" (search)="search($event)"></app-search-input>
-                    </mat-card-content>
-                </mat-card>
                 <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
                     <mat-sidenav-container>
-                        <mat-sidenav #sidenav mode="side" opened>
+                        <mat-sidenav #sidenav [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                            [opened]="(isHandset$ | async) === false">
                             <div class="left_parent">
                                 <div class="rearch_parent">
                                     <h4 class="text-base">All knowledge</h4>
+                                    <mat-icon (click)="toggle()">close</mat-icon>
                                 </div>
                                 <div class="scrollable_list">
                                     @for (item of knowledgeFiltered; track item.created) {
@@ -52,6 +49,11 @@
                             }
                         </mat-sidenav-content>
                     </mat-sidenav-container>
+                </mat-card>
+                <mat-card class="mat-mdc-card mdc-card">
+                    <mat-card-content class="flex_horizontal_gap_10">
+                        <app-search-input class="full_width" (search)="search($event)"></app-search-input>
+                    </mat-card-content>
                 </mat-card>
             </div>
         </div>
