@@ -28,12 +28,20 @@
     min-width: 0;
 }
 
+.parent_content_wraper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px;
+    margin: 0 0vw;
+    min-width: 0;
+    flex: 1;
+}
+
 .content_wraper {
     display: flex;
     flex-direction: row;
     gap: 30px;
-    padding: 30px;
-    margin: 0 0vw;
     min-width: 0;
     flex: 1;
 }

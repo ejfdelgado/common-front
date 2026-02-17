@@ -3,61 +3,87 @@
     <div class="secondary_container">
         <app-statusbar [title]="getTitle()"></app-statusbar>
         <div class="dynamic_content">
-            <div class="content_wraper">
-                <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
-                    <mat-sidenav-container>
-                        <mat-sidenav #sidenav [mode]="(isHandset$ | async) ? 'over' : 'side'"
-                            [opened]="(isHandset$ | async) === false">
-                            <div class="left_parent">
-                                <div class="rearch_parent">
-                                    <h4 class="text-base">All knowledge</h4>
-                                    <mat-icon (click)="toggle()">close</mat-icon>
-                                </div>
-                                <div class="scrollable_list">
-                                    @for (item of knowledgeFiltered; track item.created; let i = $index) {
-                                    <span
-                                        [ngClass]="{'selected': currentSelected == item, 'question': item.type=='question'}"
-                                        class="item_parent text-xs" (click)="selectThisKnowledge(item)">
-                                        <span class="txt">{{ item.txt }}</span>
-                                        <span class="button_elements">
-                                            <span class="date">{{ item.created | epochDate:'DD MMMM YYYY, HH:mm'
-                                                }}</span>
-                                            <mat-icon class="xs"
-                                                (click)="deleteKnowledge(item, $event)">delete</mat-icon>
-                                        </span>
-                                        @if (getDistanceFromIndex(i) > 0) {
-                                        <span class="distance">{{ (100*getDistanceFromIndex(i)).toFixed(0)+'%' }}</span>
-                                        }
-                                    </span>
-                                    }
-                                </div>
-                            </div>
-                        </mat-sidenav>
-                        <mat-sidenav-content>
-                            <mat-toolbar>
-                                <button matIconButton aria-label="">
-                                    <mat-icon (click)="toggle()">menu</mat-icon>
-                                </button>
-                                <span class="full_width"></span>
-                                @if (pendingToSave.length > 0) {
-                                <button matButton="elevated" (click)="savePending()">Save</button>
-                                }
-                                <button matButton="elevated" (click)="addKnowledge()">Add knowledge</button>
-                            </mat-toolbar>
-                            @if (currentSelected != null) {
-                            <div class="editor_parent">
-                                <app-form-simple-without (innerFieldChanged)="editionMade($event)" [model]="model"
-                                    [fields]="fields"></app-form-simple-without>
-                            </div>
-                            }
-                        </mat-sidenav-content>
-                    </mat-sidenav-container>
-                </mat-card>
+            <div class="parent_content_wraper">
                 <mat-card class="mat-mdc-card mdc-card">
                     <mat-card-content class="flex_horizontal_gap_10">
-                        <app-search-input class="full_width" (search)="search($event)"></app-search-input>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Language</mat-label>
+                            <mat-select [(ngModel)]="language" name="selectedOption">
+                                <mat-option *ngFor="let option of languageOptions" [value]="option.val">
+                                    {{ option.txt }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Max matches</mat-label>
+                            <input matInput type="number" [(ngModel)]="top" name="top" min="0" />
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Min % similarity</mat-label>
+                            <input matInput type="number" [(ngModel)]="distance" name="distance" min="0" max="100" />
+                        </mat-form-field>
                     </mat-card-content>
                 </mat-card>
+                <div class="content_wraper">
+                    <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
+                        <mat-sidenav-container>
+                            <mat-sidenav #sidenav [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                                [opened]="(isHandset$ | async) === false">
+                                <div class="left_parent">
+                                    <div class="rearch_parent">
+                                        <h4 class="text-base">Facts</h4>
+                                        <mat-icon (click)="toggle()">close</mat-icon>
+                                    </div>
+                                    <div class="scrollable_list">
+                                        @for (item of knowledgeFiltered; track item.created; let i = $index) {
+                                        <span
+                                            [ngClass]="{'selected': currentSelected == item, 'question': item.type=='question'}"
+                                            class="item_parent text-xs" (click)="selectThisKnowledge(item)">
+                                            <span class="txt">
+                                                @if (getDistanceFromIndex(i) > 0) {
+                                                <strong class="distance">{{ (100*getDistanceFromIndex(i)).toFixed(0)+'%
+                                                    - '
+                                                    }}</strong>
+                                                }
+                                                <span>{{ item.txt }}</span>
+                                            </span>
+                                            <span class="button_elements">
+                                                <span class="date">{{ item.created | epochDate:'DD MMMM YYYY, HH:mm'
+                                                    }}</span>
+                                                <mat-icon class="xs"
+                                                    (click)="deleteKnowledge(item, $event)">delete</mat-icon>
+                                            </span>
+                                        </span>
+                                        }
+                                    </div>
+                                </div>
+                            </mat-sidenav>
+                            <mat-sidenav-content>
+                                <mat-toolbar>
+                                    <button matIconButton aria-label="">
+                                        <mat-icon (click)="toggle()">menu</mat-icon>
+                                    </button>
+                                    <span class="full_width"></span>
+                                    @if (pendingToSave.length > 0) {
+                                    <button matButton="elevated" (click)="savePending()">Save</button>
+                                    }
+                                    <button matButton="elevated" (click)="addKnowledge()">Add knowledge</button>
+                                </mat-toolbar>
+                                @if (currentSelected != null) {
+                                <div class="editor_parent">
+                                    <app-form-simple-without (innerFieldChanged)="editionMade($event)" [model]="model"
+                                        [fields]="fields"></app-form-simple-without>
+                                </div>
+                                }
+                            </mat-sidenav-content>
+                        </mat-sidenav-container>
+                    </mat-card>
+                    <mat-card class="mat-mdc-card mdc-card">
+                        <mat-card-content class="flex_horizontal_gap_10">
+                            <app-search-input class="full_width" (search)="search($event)"></app-search-input>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
             </div>
         </div>
     </div>

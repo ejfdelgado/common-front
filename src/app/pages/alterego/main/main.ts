@@ -29,12 +29,21 @@ import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ParamsService } from '@services/params.service';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 const MODEL_NAME = "fact";
 
 export interface KnowledgeTagType {
   id: string;
   txt: string;
+};
+
+export interface DropDownOptionDataType {
+  txt: string;
+  val: string;
 };
 
 export interface KnowledgeDataType extends SimpleDataType {
@@ -62,6 +71,10 @@ export interface KnowledgeDataType extends SimpleDataType {
     SearchInputComponent,
     EpochDatePipe,
     FormSimpleWithout,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -72,6 +85,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
+  languageOptions: DropDownOptionDataType[] = [
+    { txt: "English", val: "en" },
+    { txt: "Español", val: "es" },
+  ];
   language: SearchLangsType = "en";
   top: number = 3;
   distance: number = 10;
@@ -224,6 +241,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         const founds = this.knowledge.filter((o) => o.id == first.id);
         const index = this.knowledge.indexOf(founds[0]);
         this.selectItem(index);
+      } else {
+        // Nothing found
+        this.selectItem(-1);
       }
     }
     this.cdr.detectChanges();
