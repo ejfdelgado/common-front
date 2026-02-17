@@ -88,6 +88,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   languageOptions: DropDownOptionDataType[] = [
     { txt: "English", val: "en" },
     { txt: "Español", val: "es" },
+    { txt: "Agnostic", val: "multi" },
   ];
   language: SearchLangsType = "en";
   top: number = 3;
