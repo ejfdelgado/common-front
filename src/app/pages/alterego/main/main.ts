@@ -28,6 +28,7 @@ import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ParamsService } from '@services/params.service';
 
 const MODEL_NAME = "fact";
 
@@ -96,7 +97,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private indicatorSrv: IndicatorService,
     private firestoreSrv: FirestoreService,
     private uiNotificationSrv: UINotificationSrv,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private paramsSrv: ParamsService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -125,6 +127,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.initialize();
       },
     });
+
+    this.paramsSrv.read();
   }
 
   ngOnDestroy(): void {
