@@ -40,8 +40,11 @@ import {
   AssistantDataType,
   KnowledgeDataType
 } from 'types/ragTypes';
+import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const MODEL_NAME = "fact";
+const MODEL_NAME_PARENT = "knowledge";
 
 @Component({
   selector: 'app-main',
@@ -112,6 +115,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private firestoreSrv: FirestoreService,
     private uiNotificationSrv: UINotificationSrv,
     private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -120,6 +124,28 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         map(result => result.matches),
         shareReplay()
       );
+
+    this.menuOptions.push({
+      label: "Edit",
+      icon: "edit",
+      children: [],
+      callback: () => {
+        this.openDialog({
+          model: this.collection,
+        }, "general");
+      },
+    });
+
+    this.menuOptions.push({
+      label: "Options",
+      icon: "percent",
+      children: [],
+      callback: () => {
+        this.openDialog({
+          model: this.collection,
+        }, "maths");
+      },
+    });
 
     this.menuOptions.push({
       label: "Back to databases",
@@ -438,5 +464,77 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } finally {
       this.cdr.detectChanges();
     }
+  }
+
+  async openDialog(payload: any, type: string) {
+    let model: any = null;
+    if (payload) {
+      model = payload.model;
+    }
+
+    let fields: AllFieldsDataType[] = [];
+    if (type == "general") {
+      fields = [
+        { label: "Title", type: "text", key: "title", required: true },
+        {
+          label: "Language", type: "select", key: "language", required: true,
+          select: {
+            options: [
+              { txt: "English", val: "en" },
+              { txt: "Español", val: "es" },
+              { txt: "Agnostic", val: "multi" },
+            ]
+          }
+        },
+        {
+          label: "Imagen", type: "image", key: "image", image: {
+            thumbnailMaxSizePixels: 200,
+            squareMaxSizePixels: 800,//For social
+            template: "knowledge_database/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+          }
+        },
+        {
+          label: "Description", type: "contenteditable", key: "description",
+          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+        },
+      ];
+    } else if (type == "maths") {
+      fields = [
+        { label: "Max matches", type: "number", key: "top", required: true },
+        { label: "Min % similarity", type: "number", key: "distance", required: true },
+      ];
+    }
+
+    const DEF_MODEL = {
+      title: '',
+      description: '',
+      language: 'en',
+      top: 3,
+      distance: 0.3,
+    };
+
+    const formConfig: FormDataType = {
+      title: model ? "Update" : "Create",
+      autoAuthor: true,
+      modelName: MODEL_NAME_PARENT,
+      searchFields: ["title", "description"],
+      fields: fields,
+      model: DEF_MODEL,
+    };
+    if (model) {
+      formConfig.model = Object.assign(DEF_MODEL, model);
+    }
+    const dialogRef = this.dialog.open(DialogFormComponent, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: formConfig,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        Object.assign(this.collection as any, result);
+      }
+    });
   }
 }
