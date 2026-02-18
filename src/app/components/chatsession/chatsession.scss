@@ -25,6 +25,7 @@
 .vertical_flex .scrolled_messages_parent {
     flex: 1;
     position: relative;
+    min-height: 200px;
 }
 
 .scrolled_messages {

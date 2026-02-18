@@ -131,15 +131,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         });
       },
     });
-
-    this.menuOptions.push({
-      label: "Train model",
-      icon: "psychology",
-      children: [],
-      callback: () => {
-        this.initialize();
-      },
-    });
   }
 
   ngOnDestroy(): void {
