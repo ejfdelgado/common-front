@@ -19,6 +19,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .vertical_flex .scrolled_messages_parent {
@@ -40,6 +41,12 @@
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    border-top: 1px solid var(--color-font-softer);
+    padding-top: 10px;
+}
+
+.botton_controls mat-form-field.query_field {
+    flex: 1;
 }
 
 mat-toolbar {

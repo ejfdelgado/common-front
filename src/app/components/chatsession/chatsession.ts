@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,6 +26,9 @@ import { AssistantDataType } from 'app/pages/alterego/main/main';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',
@@ -33,6 +39,7 @@ export class Chatsession extends CommonComponent {
   @Input() assistant!: AssistantDataType;
   private history: any[] = [];
   private initialized: boolean = false;
+  query: string = '';
 
   constructor(
     public override sanitizer: DomSanitizer,

@@ -315,7 +315,8 @@ button.transparent {
     padding: 9px 5px !important;
 }
 
-app-search-input .mat-mdc-form-field-subscript-wrapper {
+app-search-input .mat-mdc-form-field-subscript-wrapper,
+mat-form-field.no_subscript .mat-mdc-form-field-subscript-wrapper {
     display: none;
 }
 
