@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,11 +10,18 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
-import { GenerateContentConfig } from '@google/genai';
+import { Content, GenerateContentConfig } from '@google/genai';
 import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
+import { IndicatorService } from '@services/indicator.service';
 import { AssistantDataType } from 'app/pages/alterego/main/main';
+
+export interface MessageLocalDataType {
+  date: number;
+  role: string;
+  txt: string;
+};
 
 @Component({
   selector: 'app-chatsession',
@@ -37,7 +44,8 @@ export class Chatsession extends CommonComponent {
 
   @Input() config!: GenerateContentConfig;
   @Input() assistant!: AssistantDataType;
-  private history: any[] = [];
+  public history: any[] = [];
+  public visualHistory: MessageLocalDataType[] = [];
   private initialized: boolean = false;
   query: string = '';
 
@@ -46,28 +54,62 @@ export class Chatsession extends CommonComponent {
     public override fullScreenSrv: FullscreenService,
     public confirmSrv: ConfirmDialogService,
     public chatSrv: ChatGeminiService,
+    public cdr: ChangeDetectorRef,
+    private indicatorSrv: IndicatorService,
   ) {
     super(sanitizer, fullScreenSrv);
   }
 
+  processVisualInput(input: Content) {
+    this.history.push(input);
+    if (input.parts) {
+      input.parts.forEach((el, index) => {
+        this.visualHistory.push({
+          date: Date.now() + index,
+          role: input.role ? input.role : "na",
+          txt: el.text ? el.text : "",
+        });
+      });
+    }
+  }
+
   async sendMessageInternal(userInput: string): Promise<string | null> {
-    if (!this.initialized) {
-      await this.chatSrv.initialize();
-    }
-    // Add user message to local history
-    this.history.push({ role: "user", parts: [{ text: userInput }] });
+    const indicator = this.indicatorSrv.start();
+    try {
+      if (!this.initialized) {
+        await this.chatSrv.initialize();
+      }
+      // Add user message to local history
+      const userInputRaw = { role: "user", parts: [{ text: userInput }] };
+      this.processVisualInput(userInputRaw);
 
-    const result = await this.chatSrv.generateContent(this.history, this.config);
+      const result = await this.chatSrv.generateContent(this.history, this.config);
 
-    if (result && result.text) {
-      const textResponse = result.text;
-      return textResponse;
+      if (result && result.text) {
+        const textResponse = result.text;
+        const assistantMessage: Content = {
+          role: "model",
+          parts: [{ text: textResponse }]
+        };
+        this.processVisualInput(assistantMessage);
+        this.query = "";
+        return textResponse;
+      }
+      return null;
+    } catch (err: any) {
+      throw err;
+    } finally {
+      indicator.done();
     }
-    return null;
   }
 
   async sendMessage() {
-
+    if (this.query.trim().length == 0) {
+      return;
+    }
+    const response = await this.sendMessageInternal(this.query);
+    console.log(response);
+    this.cdr.detectChanges();
   }
 
   async handleTools() {

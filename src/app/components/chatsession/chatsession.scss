@@ -34,6 +34,36 @@
     top: 0;
     bottom: 0;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    justify-content: end;
+}
+
+.single_msg {}
+
+.single_msg.rol_model {
+    padding-right: 50px;
+}
+
+.single_msg.rol_user {
+    padding-left: 50px;
+}
+
+.single_msg .text {
+    padding: 8px;
+    border-radius: 10px;
+    display: block;
+}
+
+.single_msg.rol_model .text {
+    background-color: #f2f6fa;
+}
+
+.single_msg.rol_user .text {
+    background-color: rgb(214, 236, 255);
 }
 
 .botton_controls {

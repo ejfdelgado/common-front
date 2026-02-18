@@ -24,12 +24,16 @@
         </mat-toolbar>
         <div class="scrolled_messages_parent">
             <div #scrolled_container class="scrolled_messages">
-
+                @for (message of visualHistory; track message.date) {
+                <div class="single_msg" [ngClass]="'rol_'+message.role">
+                    <span class="text">{{ message.txt }}</span>
+                </div>
+                }
             </div>
         </div>
         <div class="botton_controls">
             <mat-form-field appearance="outline" class="query_field no_subscript">
-                <textarea matInput [(ngModel)]="query" name="query"></textarea>
+                <textarea matInput [(ngModel)]="query" name="query" (keydown.enter)="sendMessage()"></textarea>
             </mat-form-field>
             <button matIconButton aria-label="">
                 <mat-icon (click)="sendMessage()">send</mat-icon>
