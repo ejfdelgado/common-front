@@ -148,6 +148,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
+      label: "Role",
+      icon: "chat",
+      children: [],
+      callback: () => {
+        this.openDialog({
+          model: this.collection,
+        }, "chat");
+      },
+    });
+
+    this.menuOptions.push({
       label: "Back to databases",
       icon: "arrow_back",
       children: [],
@@ -495,13 +506,20 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
         {
           label: "Description", type: "contenteditable", key: "description",
-          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+          md: { minHeight: "10em", maxHeight: "20em" }
         },
       ];
     } else if (type == "maths") {
       fields = [
         { label: "Max matches", type: "number", key: "top", required: true },
         { label: "Min % similarity", type: "number", key: "distance", required: true },
+      ];
+    } else if (type == "chat") {
+      fields = [
+        {
+          label: "Role description", type: "md", key: "instruct",
+          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+        },
       ];
     }
 
@@ -511,6 +529,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       language: 'en',
       top: 3,
       distance: 0.3,
+      instruct: "You are an assistant giving some information",
     };
 
     const formConfig: FormDataType = {
