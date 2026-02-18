@@ -1,11 +1,9 @@
 # CommonFront
 
-Update matched results at left.
+Upload the model knowledge to the bucket.
+Clone into a public collection
 
-
-2. Where I configure the VOY indexer for example to say the distance is cosine
-3. Allow host models on own url, not remote.
-
+Allow host models on own url, not remote.
 
 https://matdash-angular-dark.netlify.app/apps/employee
 

@@ -42,6 +42,7 @@ import {
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PublishDialogComponent } from '@components/publish-dialog/publish-dialog';
 
 const MODEL_NAME = "fact";
 const MODEL_NAME_PARENT = "knowledge";
@@ -159,6 +160,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.openDialog({
           model: this.collection,
         }, "chat");
+      },
+    });
+
+    this.menuOptions.push({
+      label: "Publish",
+      icon: "share",
+      children: [],
+      callback: () => {
+        this.openExportDialog();
       },
     });
 
@@ -468,6 +478,23 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } finally {
       this.cdr.detectChanges();
     }
+  }
+
+  async openExportDialog() {
+    const dialogRef = this.dialog.open(PublishDialogComponent, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: {
+        title: "Confirm publish",
+        message: "The assistant will be updated"
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.accept) {
+        console.log("Do the job");
+      }
+    });
   }
 
   async openDialog(payload: any, type: string) {
