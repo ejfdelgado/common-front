@@ -43,7 +43,7 @@ export class Chatsession extends CommonComponent {
     super(sanitizer, fullScreenSrv);
   }
 
-  async sendMessage(userInput: string): Promise<string | null> {
+  async sendMessageInternal(userInput: string): Promise<string | null> {
     if (!this.initialized) {
       await this.chatSrv.initialize();
     }
@@ -57,6 +57,10 @@ export class Chatsession extends CommonComponent {
       return textResponse;
     }
     return null;
+  }
+
+  async sendMessage() {
+
   }
 
   async handleTools() {

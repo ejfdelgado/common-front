@@ -7,21 +7,39 @@
 }
 
 .profile_detail .logo_image {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    border-radius: 100%;
 }
 
 .vertical_flex {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
 }
 
-.vertical_flex .scrolled_messages {
+.vertical_flex .scrolled_messages_parent {
     flex: 1;
+    position: relative;
+}
+
+.scrolled_messages {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     overflow-y: scroll;
+}
+
+.botton_controls {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
 }
 
 mat-toolbar {
