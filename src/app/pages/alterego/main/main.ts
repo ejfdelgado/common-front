@@ -86,6 +86,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
+  lastModified: number = 0;
 
   isHandset$!: Observable<boolean>;
 
@@ -295,6 +296,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       } else {
         this.selectItem(-1);
       }
+      this.lastModified += 1;
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
     }
@@ -439,6 +441,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         await this.firestoreSrv.createUpdate(this.getCollectionName(), first);
         this.pendingToSave.splice(0, 1);
       } while (this.pendingToSave.length > 0);
+      this.lastModified += 1;
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
     } finally {
