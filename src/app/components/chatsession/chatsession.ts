@@ -125,6 +125,8 @@ export class Chatsession extends CommonComponent {
       await this.ensureLastTrained();
       // Fecth closest facts
       let retrievedFacts: string[] = [];
+      //console.log(`top: ${this.top} distance: ${this.distance} language: ${this.language}`);
+      //console.log(JSON.stringify(this.config, null, 4));
       const searchedResult = await this.alterEgoSrv.search(userInput, this.top, this.distance / 100, this.language);
       if (searchedResult.payload.length > 0) {
         retrievedFacts = searchedResult.payload.map((el) => {

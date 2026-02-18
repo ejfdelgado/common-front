@@ -46,6 +46,15 @@ import { MatDialog } from '@angular/material/dialog';
 const MODEL_NAME = "fact";
 const MODEL_NAME_PARENT = "knowledge";
 
+const DEF_MODEL = {
+  title: '',
+  description: '',
+  language: 'en',
+  top: 3,
+  distance: 0.3,
+  instruct: "You are an assistant giving some information",
+};
+
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -526,15 +535,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       ];
     }
 
-    const DEF_MODEL = {
-      title: '',
-      description: '',
-      language: 'en',
-      top: 3,
-      distance: 0.3,
-      instruct: "You are an assistant giving some information",
-    };
-
     const formConfig: FormDataType = {
       title: model ? "Update" : "Create",
       autoAuthor: true,
@@ -544,7 +544,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       model: DEF_MODEL,
     };
     if (model) {
-      formConfig.model = Object.assign(DEF_MODEL, model);
+      formConfig.model = Object.assign({}, DEF_MODEL, model);
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '800px',
@@ -562,11 +562,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   updateProperties() {
-    if (this.collection) {
-      this.top = this.collection.top;
-      this.distance = this.collection.distance;
-      this.language = this.collection.language;
-      this.chatConfig.systemInstruction = this.collection.instruct;
-    }
+    const withDefaults = Object.assign({}, DEF_MODEL, this.collection);
+
+    this.top = withDefaults.top;
+    this.distance = withDefaults.distance;
+    this.language = withDefaults.language;
+    this.chatConfig.systemInstruction = withDefaults.instruct;
   }
 }
