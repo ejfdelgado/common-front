@@ -22,7 +22,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/fullscreen
+npx ng generate component --standalone --skip-tests components/chatsession
 ```
 
 ```bash

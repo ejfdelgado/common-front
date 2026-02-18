@@ -28,11 +28,11 @@ import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ParamsService } from '@services/params.service';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { Chatsession } from '@components/chatsession/chatsession';
 
 const MODEL_NAME = "fact";
 
@@ -75,6 +75,7 @@ export interface KnowledgeDataType extends SimpleDataType {
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    Chatsession,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -118,7 +119,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private firestoreSrv: FirestoreService,
     private uiNotificationSrv: UINotificationSrv,
     private breakpointObserver: BreakpointObserver,
-    private paramsSrv: ParamsService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -147,8 +147,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.initialize();
       },
     });
-
-    this.paramsSrv.read();
   }
 
   ngOnDestroy(): void {

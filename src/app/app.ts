@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
 import { IndicatorComponent } from "@components/indicator/indicator.component";
 import { FileService } from '@services/file.srv';
+import { ParamsService } from '@services/params.service';
 
 @Component({
   standalone: true,
@@ -21,8 +22,9 @@ export class App implements AfterViewInit {
 
   constructor(
     private fileSrv: FileService,
+    private paramsSrv: ParamsService,
   ) {
-
+    paramsSrv.readOnce();
   }
 
   ngAfterViewInit(): void {

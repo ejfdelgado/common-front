@@ -8,6 +8,8 @@ import { decode } from '@msgpack/msgpack';
 import { JSEncrypt } from "jsencrypt";
 import * as CryptoJS from 'crypto-js';
 
+export type ParameterDataType = { [key: string]: any };
+
 @Injectable({
     providedIn: 'root',
 })
@@ -15,6 +17,8 @@ export class ParamsService {
 
     static publicKey: string | null = null;
     static tempPass: string = ParamsService.generateKey();
+
+    latestResponse: Promise<ParameterDataType> | null = null;
 
     constructor(
         private http: HttpClient,
@@ -68,8 +72,28 @@ export class ParamsService {
         }
     }
 
-    async read(
-    ): Promise<any> {
+    async readOnce(): Promise<ParameterDataType> {
+        if (this.latestResponse == null) {
+            this.latestResponse = this.read();
+        }
+        return new Promise((resolve) => {
+            if (this.latestResponse) {
+                this.latestResponse.then(resolve).catch((err: any) => {
+                    this.latestResponse = null;
+                    setTimeout(async () => {
+                        try {
+                            const response = await this.readOnce();
+                            resolve(response)
+                        } catch (err2) { }
+
+                    }, 1000);
+                });
+            }
+        });
+    }
+
+    private async read(
+    ): Promise<ParameterDataType> {
         const indicator = this.indicatorSrv.start();
         try {
             const encriptedKey = await this.getEncriptedKey();
@@ -85,7 +109,7 @@ export class ParamsService {
                         })
                     )
             );
-            return response;
+            return response.data;
         } catch (err) {
             throw err;
         } finally {
