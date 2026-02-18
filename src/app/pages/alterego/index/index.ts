@@ -26,6 +26,7 @@ export interface NoteDataType extends BasicDataType {
 };
 
 const MODEL_NAME = "knowledge";
+const MODEL_NAME_CLONE = "pubknowledge";
 
 @Component({
   selector: 'app-alterego-index',
@@ -201,7 +202,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
   async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
     const { id, title, description, updated } = model;
     this.shareSrv.share({
-      collection: MODEL_NAME,
+      collection: MODEL_NAME_CLONE,
       path: "/alterego/use",
       id,
       title,

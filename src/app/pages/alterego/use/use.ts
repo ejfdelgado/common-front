@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './use.html',
   styleUrl: './use.scss',
 })
-export class Use {
+export class AlterEgoUse {
 
 }

@@ -74,6 +74,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
     },
     {
+        path: 'alterego/use',
+        loadComponent: () => import('./pages/alterego/use/use').then(m => m.AlterEgoUse),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
