@@ -43,9 +43,14 @@ import {
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PublishDialogComponent } from '@components/publish-dialog/publish-dialog';
+import { getBucketPath } from '@tools/BucketPaths';
+import { encode } from '@msgpack/msgpack';
+import { FileService } from '@services/file.srv';
+import { BucketOptionsType } from '@services/bucket.service';
 
 const MODEL_NAME = "fact";
 const MODEL_NAME_PARENT = "knowledge";
+const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
 const DEF_MODEL = {
   title: '',
@@ -121,6 +126,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private uiNotificationSrv: UINotificationSrv,
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
+    private fileSrv: FileService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -481,6 +487,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async openExportDialog() {
+    if (!this.collection) {
+      return;
+    }
     const dialogRef = this.dialog.open(PublishDialogComponent, {
       width: '800px',
       panelClass: 'custom-emoji-picker',
@@ -490,9 +499,45 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         message: "The assistant will be updated"
       },
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result.accept) {
-        console.log("Do the job");
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result && result.accept && this.collection) {
+
+        let publication: any = null
+        // 1. Read the old cloned colletion
+        publication = await this.firestoreSrv.readById(MODEL_NAME_PARENT_CLONE, this.collection.id);
+
+        // 2. If it not exist, create a brand new
+        if (!publication) {
+          publication = { ...this.collection };//A real clone
+          delete publication.owners;
+          delete publication.search;
+          // Add the knowledge path
+          publication.knowledge_path = "";
+          await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
+        }
+
+        // 3. Define the urlpath for the published buquet file
+        publication.knowledge_path = getBucketPath(
+          "alterego/${user.uid}/${random}.bin",
+          publication.knowledge_path ? publication.knowledge_path : "",
+          {
+            user: AuthService.userStatic,
+          },
+          true,
+        );
+
+        // 5. Take all the knowledge and convert it into binary
+        const binary = encode(this.knowledge);
+
+        // 6. Upload the knowledge to the bucket
+        const options: BucketOptionsType = {
+          //makePublic: true,//not needed, it is already public
+        };
+        const blob = new Blob([binary], { type: 'application/octet-stream' });
+        await this.fileSrv.upload(publication.knowledge_path.replace(/\?.*$/, ""), blob, "bucket", options);
+
+        // 7. Update the cloned collection
+        await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
       }
     });
   }

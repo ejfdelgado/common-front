@@ -1,7 +1,7 @@
 # CommonFront
 
-Upload the model knowledge to the bucket.
-Clone into a public collection
+
+Allow to configure with the url query param, set the size of the shared url.
 
 Allow host models on own url, not remote.
 
