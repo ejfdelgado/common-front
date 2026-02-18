@@ -81,7 +81,8 @@
                     @if (collection) {
                     <mat-card class="mat-mdc-card mdc-card">
                         <mat-card-content class="flex_horizontal_gap_10 full_height">
-                            <app-chatsession [config]="chatConfig" [language]="language" [knowledge]="knowledge"
+                            <app-chatsession [config]="chatConfig" [language]="language" [top]="top"
+                                [distance]="distance" [knowledge]="knowledge"
                                 [assistant]="collection"></app-chatsession>
                         </mat-card-content>
                     </mat-card>

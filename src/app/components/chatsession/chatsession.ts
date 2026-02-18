@@ -58,6 +58,8 @@ export class Chatsession extends CommonComponent {
   @Input() lastModified: number = 0;
   @Input() knowledge: KnowledgeDataType[] = [];
   @Input() language: SearchLangsType = "en";
+  @Input() top: number = 5;
+  @Input() distance: number = 0.3;
   public history: any[] = [];
   public visualHistory: MessageLocalDataType[] = [];
   private initialized: boolean = false;
@@ -109,6 +111,7 @@ export class Chatsession extends CommonComponent {
         return temp;
       });
       const response = await this.alterEgoSrv.initialize(mockData, this.language);
+      this.lastTrained = this.lastModified;
     }
   }
 
@@ -121,13 +124,17 @@ export class Chatsession extends CommonComponent {
 
       await this.ensureLastTrained();
       // Fecth closest facts
-
+      let retrievedFacts: string[] = [];
+      const searchedResult = await this.alterEgoSrv.search(userInput, this.top, this.distance / 100, this.language);
+      if (searchedResult.payload.length > 0) {
+        retrievedFacts = searchedResult.payload.map((el) => {
+          return el.title;
+        });
+      }
 
       // Add user message to local history
       const userInputRaw = { role: "user", parts: [{ text: userInput }] };
       this.processVisualInput(userInputRaw);
-
-      const retrievedFacts: string[] = [];
 
       const contextBlock = retrievedFacts.length > 0
         ? `[CONTEXT DATA]\n${retrievedFacts.join("\n")}\n\n[USER QUESTION]\n`

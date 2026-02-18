@@ -95,7 +95,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   };
 
   chatConfig: GenerateContentConfig = {
-    systemInstruction: "You are a helpful office assistant.",
+    systemInstruction: "You are an assistant giving information about a company called Casa de la Familia",
     tools: [],
   }
 
