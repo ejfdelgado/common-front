@@ -12,6 +12,11 @@
                                 <div class="left_parent">
                                     <div class="rearch_parent">
                                         <h4 class="text-base">Facts</h4>
+                                        <div class="filter_parent">
+                                            @if (searchedResult != null) {
+                                            <mat-icon (click)="clearFilter()">restart_alt</mat-icon>
+                                            }
+                                        </div>
                                         <mat-icon (click)="toggle()">close</mat-icon>
                                     </div>
                                     <div class="scrollable_list">
@@ -63,7 +68,7 @@
                         <mat-card-content class="flex_horizontal_gap_10 full_height">
                             <app-chatsession [config]="chatConfig" [language]="language" [top]="top"
                                 [distance]="distance" [knowledge]="knowledge" [lastModified]="lastModified"
-                                [assistant]="collection"></app-chatsession>
+                                [assistant]="collection" (foundFacts)="receiveSearch($event)"></app-chatsession>
                         </mat-card-content>
                     </mat-card>
                     }

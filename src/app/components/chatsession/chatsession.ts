@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +17,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { AssistantDataType, KnowledgeDataType } from 'types/ragTypes';
 import { marked } from 'marked';
-import { AlterEgoService, ItemToSearchType, SearchLangsType } from '@services/alterego.service';
+import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -60,6 +60,9 @@ export class Chatsession extends CommonComponent {
   @Input() language: SearchLangsType = "en";
   @Input() top: number = 5;
   @Input() distance: number = 0.3;
+
+  @Output() foundFacts: EventEmitter<SearchAnswerDataType> = new EventEmitter();
+
   public history: any[] = [];
   public visualHistory: MessageLocalDataType[] = [];
   private initialized: boolean = false;
@@ -128,6 +131,7 @@ export class Chatsession extends CommonComponent {
       //console.log(`top: ${this.top} distance: ${this.distance} language: ${this.language}`);
       //console.log(JSON.stringify(this.config, null, 4));
       const searchedResult = await this.alterEgoSrv.search(userInput, this.top, this.distance / 100, this.language);
+      this.foundFacts.emit(searchedResult);
       if (searchedResult.payload.length > 0) {
         retrievedFacts = searchedResult.payload.map((el) => {
           return el.title;

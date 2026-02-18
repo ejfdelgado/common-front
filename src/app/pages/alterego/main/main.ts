@@ -263,25 +263,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const response = await this.alterEgoSrv.initialize(mockData, this.language);
   }
 
-  async search(searchedText: string) {
-    if (searchedText.length == 0) {
-      this.searchedResult = null;
-      this.selectItem(0);
-    } else {
-      this.searchedResult = await this.alterEgoSrv.search(searchedText, this.top, this.distance / 100, this.language);
-      if (this.searchedResult.success && this.searchedResult.payload.length > 0) {
-        const first = this.searchedResult.payload[0];
-        const founds = this.knowledge.filter((o) => o.id == first.id);
-        const index = this.knowledge.indexOf(founds[0]);
-        this.selectItem(index);
-      } else {
-        // Nothing found
-        this.selectItem(-1);
-      }
-    }
-    this.cdr.detectChanges();
-  }
-
   get knowledgeFiltered(): KnowledgeDataType[] {
     if (!this.searchedResult) {
       return this.knowledge;
@@ -568,5 +549,32 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.distance = withDefaults.distance;
     this.language = withDefaults.language;
     this.chatConfig.systemInstruction = withDefaults.instruct;
+  }
+
+  async updateSearch() {
+    if (this.searchedResult == null) {
+      this.selectItem(0);
+    } else {
+      if (this.searchedResult.success && this.searchedResult.payload.length > 0) {
+        const first = this.searchedResult.payload[0];
+        const founds = this.knowledge.filter((o) => o.id == first.id);
+        const index = this.knowledge.indexOf(founds[0]);
+        this.selectItem(index);
+      } else {
+        // Nothing found
+        this.selectItem(-1);
+      }
+    }
+    this.cdr.detectChanges();
+  }
+
+  clearFilter() {
+    this.searchedResult = null;
+    this.updateSearch();
+  }
+
+  receiveSearch(search: SearchAnswerDataType | null) {
+    this.searchedResult = search;
+    this.updateSearch();
   }
 }
