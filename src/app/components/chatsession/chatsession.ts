@@ -1,23 +1,46 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonComponent } from '@components/common.component';
 import { GenerateContentConfig } from '@google/genai';
 import { ChatGeminiService } from '@services/chat-gemini.service';
+import { ConfirmDialogService } from '@services/confirm-dialog.service';
+import { FullscreenService } from '@services/fullscreen.service';
+import { AssistantDataType } from 'app/pages/alterego/main/main';
 
 @Component({
   selector: 'app-chatsession',
-  imports: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+  ],
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',
 })
-export class Chatsession {
+export class Chatsession extends CommonComponent {
 
   @Input() config!: GenerateContentConfig;
+  @Input() assistant!: AssistantDataType;
   private history: any[] = [];
   private initialized: boolean = false;
 
   constructor(
+    public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
+    public confirmSrv: ConfirmDialogService,
     public chatSrv: ChatGeminiService,
   ) {
-
+    super(sanitizer, fullScreenSrv);
   }
 
   async sendMessage(userInput: string): Promise<string | null> {

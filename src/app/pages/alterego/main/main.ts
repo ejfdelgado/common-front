@@ -33,6 +33,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { Chatsession } from '@components/chatsession/chatsession';
+import { GenerateContentConfig } from '@google/genai';
 
 const MODEL_NAME = "fact";
 
@@ -45,6 +46,10 @@ export interface DropDownOptionDataType {
   txt: string;
   val: string;
 };
+
+export interface AssistantDataType extends BasicDataType {
+  image: string;
+}
 
 export interface KnowledgeDataType extends SimpleDataType {
   type: "fact" | "question";
@@ -96,7 +101,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
-  collection: BasicDataType | null = null;
+  collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
 
@@ -106,6 +111,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   model: FlatJsonDataType = {
     "txt": []
   };
+
+  chatConfig: GenerateContentConfig = {
+    systemInstruction: "You are a helpful office assistant.",
+    tools: [],
+  }
 
   constructor(
     public override authSrv: AuthService,
@@ -180,7 +190,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (col && id) {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
-        this.collection = temp as BasicDataType;
+        this.collection = temp as AssistantDataType;
       } else {
         this.collection = null;
       }

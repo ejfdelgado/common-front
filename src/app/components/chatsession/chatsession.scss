@@ -1,0 +1,20 @@
+.profile_detail {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile_detail .logo_image {
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+mat-toolbar {
+    border-bottom: 1px solid var(--color-font-softer);
+    gap: 10px;
+}

@@ -1,1 +1,24 @@
-<p>chatsession works!</p>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav [mode]="'over'" [opened]="false">
+
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar>
+            @if (assistant) {
+            <div class="profile_detail">
+                <div class="logo_image" [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'thumbnail') + ')'"></div>
+                <div class="profile_title">{{ assistant.title }}</div>
+            </div>
+            }
+            <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu2="matMenu">
+                <button mat-menu-item>
+                    <mat-icon>book_3</mat-icon>
+                    <span>About us</span>
+                </button>
+            </mat-menu>
+        </mat-toolbar>
+    </mat-sidenav-content>
+</mat-sidenav-container>
