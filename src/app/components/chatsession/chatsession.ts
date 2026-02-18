@@ -15,8 +15,9 @@ import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
-import { AssistantDataType } from 'app/pages/alterego/main/main';
+import { AssistantDataType, KnowledgeDataType } from 'types/ragTypes';
 import { marked } from 'marked';
+import { AlterEgoService, ItemToSearchType, SearchLangsType } from '@services/alterego.service';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -54,10 +55,14 @@ export class Chatsession extends CommonComponent {
 
   @Input() config!: GenerateContentConfig;
   @Input() assistant!: AssistantDataType;
+  @Input() lastModified: number = 0;
+  @Input() knowledge: KnowledgeDataType[] = [];
+  @Input() language: SearchLangsType = "en";
   public history: any[] = [];
   public visualHistory: MessageLocalDataType[] = [];
   private initialized: boolean = false;
   query: string = '';
+  lastTrained: number = -1;
 
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
@@ -68,6 +73,7 @@ export class Chatsession extends CommonComponent {
     public chatSrv: ChatGeminiService,
     public cdr: ChangeDetectorRef,
     private indicatorSrv: IndicatorService,
+    public alterEgoSrv: AlterEgoService,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -91,6 +97,21 @@ export class Chatsession extends CommonComponent {
     this.visualHistory = [];
   }
 
+  async ensureLastTrained() {
+    if (this.lastTrained != this.lastModified) {
+      //train
+      const mockData = this.knowledge.map((elem) => {
+        const temp: ItemToSearchType = {
+          id: elem.id,
+          title: elem.txt,
+          url: elem.type == "question" && elem.answer ? elem.answer : "",
+        };
+        return temp;
+      });
+      const response = await this.alterEgoSrv.initialize(mockData, this.language);
+    }
+  }
+
   async sendMessageInternal(userInput: string): Promise<string | null> {
     const indicator = this.indicatorSrv.start();
     try {
@@ -98,8 +119,7 @@ export class Chatsession extends CommonComponent {
         await this.chatSrv.initialize();
       }
 
-      // Verify embbed model is loaded
-      // Verify voy indexer is indexed, otherwise index using last modified
+      await this.ensureLastTrained();
       // Fecth closest facts
 
 

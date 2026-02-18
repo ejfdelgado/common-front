@@ -34,32 +34,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { Chatsession } from '@components/chatsession/chatsession';
 import { GenerateContentConfig } from '@google/genai';
+import {
+  DropDownOptionDataType,
+  KnowledgeTagType,
+  AssistantDataType,
+  KnowledgeDataType
+} from 'types/ragTypes';
 
 const MODEL_NAME = "fact";
-
-export interface KnowledgeTagType {
-  id: string;
-  txt: string;
-};
-
-export interface DropDownOptionDataType {
-  txt: string;
-  val: string;
-};
-
-export interface AssistantDataType extends BasicDataType {
-  image: string;
-}
-
-export interface KnowledgeDataType extends SimpleDataType {
-  type: "fact" | "question";
-  txt: string;
-  txtFormat: string;
-  answer?: string;
-  answerFormat?: string;
-  created: number;
-  tags?: KnowledgeTagType[];
-};
 
 @Component({
   selector: 'app-main',

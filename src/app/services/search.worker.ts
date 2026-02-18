@@ -46,7 +46,18 @@ self.onmessage = async (e) => {
 
   if (type === 'ECHO') {
     // Echo
-    self.postMessage({ type: 'ECHO_RESULTS', payload: payload });
+    try {
+      self.postMessage({ type: RESPONSE_ID, payload: payload });
+    } catch (err) {
+      self.postMessage({ type: RESPONSE_ID, success: false, payload: err });
+    }
+  } else if (type === 'LOAD_MODEL') {
+    try {
+      const localExtractor = await getExtractor(lang);
+      self.postMessage({ type: RESPONSE_ID, payload: {} });
+    } catch (err) {
+      self.postMessage({ type: RESPONSE_ID, success: false, payload: err });
+    }
   } else if (type === 'INITIALIZE') {
     // Initialize DB
     try {
