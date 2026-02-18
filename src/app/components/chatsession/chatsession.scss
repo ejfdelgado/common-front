@@ -14,7 +14,21 @@
     background-position: center;
 }
 
+.vertical_flex {
+    display: flex;
+    flex-direction: column;
+}
+
+.vertical_flex .scrolled_messages {
+    flex: 1;
+    overflow-y: scroll;
+}
+
 mat-toolbar {
     border-bottom: 1px solid var(--color-font-softer);
     gap: 10px;
+}
+
+mat-sidenav-container {
+    height: 100%;
 }
