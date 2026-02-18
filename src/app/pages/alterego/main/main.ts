@@ -47,6 +47,7 @@ import { getBucketPath } from '@tools/BucketPaths';
 import { encode } from '@msgpack/msgpack';
 import { FileService } from '@services/file.srv';
 import { BucketOptionsType } from '@services/bucket.service';
+import { ShareSrv } from '@services/share.service';
 
 const MODEL_NAME = "fact";
 const MODEL_NAME_PARENT = "knowledge";
@@ -127,6 +128,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
     private fileSrv: FileService,
+    public shareSrv: ShareSrv,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -175,6 +177,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       children: [],
       callback: () => {
         this.openExportDialog();
+      },
+    });
+
+    this.menuOptions.push({
+      label: "QR Code",
+      icon: "qr_code",
+      children: [],
+      callback: () => {
+        this.localShare();
       },
     });
 
@@ -648,5 +659,20 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   receiveSearch(search: SearchAnswerDataType | null) {
     this.searchedResult = search;
     this.updateSearch();
+  }
+
+  async localShare() {
+    if (!this.collection) {
+      return;
+    }
+    const { id, title, description, updated } = this.collection;
+    this.shareSrv.share({
+      collection: MODEL_NAME_PARENT_CLONE,
+      path: "/alterego/use",
+      id,
+      title,
+      description,
+      updated,
+    }, "qr");
   }
 }

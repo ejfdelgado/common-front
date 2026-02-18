@@ -202,7 +202,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: MODEL_NAME,
-      path: "/alterego/main",
+      path: "/alterego/use",
       id,
       title,
       description,

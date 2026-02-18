@@ -6,8 +6,12 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
+    <button mat-flat-button color="secondary" (click)="open()">
+        <mat-icon>arrow_outward</mat-icon>
+        Open
+    </button>
     <button mat-flat-button color="primary" (click)="accept()">
         <mat-icon>check</mat-icon>
-        {{ 'Ok' }}
+        Ok
     </button>
 </mat-dialog-actions>

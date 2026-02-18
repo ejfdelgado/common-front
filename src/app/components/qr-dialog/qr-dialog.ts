@@ -38,4 +38,8 @@ export class QrDialogComponent implements AfterViewInit {
   accept(): void {
     this.dialogRef.close(true);
   }
+
+  open() {
+    window.open(this.data.url, "_black");
+  }
 }
