@@ -1,6 +1,16 @@
 # CommonFront
 
+
+
+
+Input knowledge.
+Input lastModified.
+Format md and use sanitize text
+
+Allow configure instructions text in collection.
+
 Save general options into main firestore collection.
+
 
 1. Allow an option in worker to preload model.
 2. Where I configure the VOY indexer for example to say the distance is cosine

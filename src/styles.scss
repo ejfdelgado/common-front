@@ -320,6 +320,10 @@ mat-form-field.no_subscript .mat-mdc-form-field-subscript-wrapper {
     display: none;
 }
 
+app-chatsession .single_msg .text p {
+    margin: 0;
+}
+
 .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));

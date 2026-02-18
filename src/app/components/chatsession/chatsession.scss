@@ -39,7 +39,10 @@
     gap: 16px;
     padding-top: 10px;
     padding-bottom: 10px;
-    justify-content: end;
+}
+
+.fill_height {
+    flex: 1;
 }
 
 .single_msg {}

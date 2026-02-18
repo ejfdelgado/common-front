@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { Content, GenerateContentConfig } from '@google/genai';
 import { ChatGeminiService } from '@services/chat-gemini.service';
@@ -16,11 +16,21 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { AssistantDataType } from 'app/pages/alterego/main/main';
+import { marked } from 'marked';
+
+const renderer: any = {
+  link({ href, raw, text, tokens, type }: any) {
+    return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
+    return "";
+  }
+};
+
+marked.use({ renderer });
 
 export interface MessageLocalDataType {
   date: number;
   role: string;
-  txt: string;
+  txt: SafeHtml;
 };
 
 @Component({
@@ -49,6 +59,8 @@ export class Chatsession extends CommonComponent {
   private initialized: boolean = false;
   query: string = '';
 
+  @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
+
   constructor(
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
@@ -63,14 +75,21 @@ export class Chatsession extends CommonComponent {
   processVisualInput(input: Content) {
     this.history.push(input);
     if (input.parts) {
-      input.parts.forEach((el, index) => {
+      input.parts.forEach(async (el, index) => {
+        let textMD = el.text ? el.text : "";
+        const formated = await marked.parse(textMD);
         this.visualHistory.push({
           date: Date.now() + index,
           role: input.role ? input.role : "na",
-          txt: el.text ? el.text : "",
+          txt: this.sanitizeText(formated),
         });
       });
     }
+  }
+
+  clearHistory() {
+    this.history = [];
+    this.visualHistory = [];
   }
 
   async sendMessageInternal(userInput: string): Promise<string | null> {
@@ -100,6 +119,9 @@ export class Chatsession extends CommonComponent {
       throw err;
     } finally {
       indicator.done();
+      requestAnimationFrame(() => {
+        this.scrollToBottom();
+      });
     }
   }
 
@@ -110,6 +132,11 @@ export class Chatsession extends CommonComponent {
     const response = await this.sendMessageInternal(this.query);
     console.log(response);
     this.cdr.detectChanges();
+  }
+
+  scrollToBottom(): void {
+    const element = this.scrollContainer.nativeElement;
+    element.scrollTop = element.scrollHeight;
   }
 
   async handleTools() {

@@ -20,13 +20,18 @@
                     <mat-icon>book_3</mat-icon>
                     <span>About us</span>
                 </button>
+                <button mat-menu-item (click)="clearHistory()">
+                    <mat-icon>delete</mat-icon>
+                    <span>Clear history</span>
+                </button>
             </mat-menu>
         </mat-toolbar>
         <div class="scrolled_messages_parent">
             <div #scrolled_container class="scrolled_messages">
+                <div class="fill_height"></div>
                 @for (message of visualHistory; track message.date) {
                 <div class="single_msg" [ngClass]="'rol_'+message.role">
-                    <span class="text">{{ message.txt }}</span>
+                    <span class="text" [innerHTML]="message.txt"></span>
                 </div>
                 }
             </div>
