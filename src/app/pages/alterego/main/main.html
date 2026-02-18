@@ -4,26 +4,6 @@
         <app-statusbar [title]="getTitle()"></app-statusbar>
         <div class="dynamic_content">
             <div class="parent_content_wraper">
-                <mat-card class="mat-mdc-card mdc-card">
-                    <mat-card-content class="flex_horizontal_gap_10">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Language</mat-label>
-                            <mat-select [(ngModel)]="language" name="selectedOption">
-                                <mat-option *ngFor="let option of languageOptions" [value]="option.val">
-                                    {{ option.txt }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Max matches</mat-label>
-                            <input matInput type="number" [(ngModel)]="top" name="top" min="0" />
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Min % similarity</mat-label>
-                            <input matInput type="number" [(ngModel)]="distance" name="distance" min="0" max="100" />
-                        </mat-form-field>
-                    </mat-card-content>
-                </mat-card>
                 <div class="content_wraper">
                     <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
                         <mat-sidenav-container>

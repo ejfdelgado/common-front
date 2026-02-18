@@ -76,11 +76,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
-  languageOptions: DropDownOptionDataType[] = [
-    { txt: "English", val: "en" },
-    { txt: "Español", val: "es" },
-    { txt: "Agnostic", val: "multi" },
-  ];
   language: SearchLangsType = "en";
   top: number = 3;
   distance: number = 10;
@@ -99,7 +94,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   };
 
   chatConfig: GenerateContentConfig = {
-    systemInstruction: "You are an assistant giving information about a company called Casa de la Familia",
+    systemInstruction: "You are an assistant giving some information",
     tools: [],
   }
 
@@ -202,6 +197,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
         this.collection = temp as AssistantDataType;
+        this.updateProperties();
       } else {
         this.collection = null;
       }
@@ -553,7 +549,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         Object.assign(this.collection as any, result);
+        this.updateProperties();
       }
     });
+  }
+
+  updateProperties() {
+    if (this.collection) {
+      this.top = this.collection.top;
+      this.distance = this.collection.distance;
+      this.language = this.collection.language;
+      this.chatConfig.systemInstruction = this.collection.instruct;
+    }
   }
 }

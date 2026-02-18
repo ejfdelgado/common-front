@@ -1,3 +1,4 @@
+import { SearchLangsType } from "@services/alterego.service";
 import { BasicDataType, SimpleDataType } from "@services/firestore.service";
 
 export interface KnowledgeTagType {
@@ -12,6 +13,10 @@ export interface DropDownOptionDataType {
 
 export interface AssistantDataType extends BasicDataType {
     image: string;
+    top: number;
+    distance: number;
+    language: SearchLangsType;
+    instruct: string;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
