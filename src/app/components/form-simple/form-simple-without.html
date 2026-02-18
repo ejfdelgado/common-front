@@ -6,6 +6,20 @@
             <mat-label>{{ field.label }}</mat-label>
             <input matInput [formControl]="formControlMap[field.key]" />
         </mat-form-field>
+        } @else if (field.type=='number') {
+        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput type="number" [formControl]="formControlMap[field.key]" />
+        </mat-form-field>
+        } @else if (field.type=='select') {
+        <mat-form-field appearance="outline">
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-select [formControl]="formControlMap[field.key]">
+                <mat-option *ngFor="let option of getSelect(field).options" [value]="option.val">
+                    {{ option.txt }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
         } @else if (field.type=='textarea') {
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.label }}</mat-label>
@@ -16,7 +30,8 @@
             [maxHeight]="getContentEditable(field).maxHeight"
             [minHeight]="getContentEditable(field).minHeight"></app-editable-input>
         } @else if (field.type=='toggle') {
-        <app-on-off-toggle [label]="field.label" [iconName]="getToggle(field).iconName" [formControl]="formControlMap[field.key]"></app-on-off-toggle>
+        <app-on-off-toggle [label]="field.label" [iconName]="getToggle(field).iconName"
+            [formControl]="formControlMap[field.key]"></app-on-off-toggle>
         } @else if (field.type=='rating') {
         <app-rating [formControl]="formControlMap[field.key]"></app-rating>
         } @else if (field.type=='image') {

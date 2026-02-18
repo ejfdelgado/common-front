@@ -1,3 +1,4 @@
+import { DropDownOptionDataType } from "./ragTypes";
 
 
 export interface TemplateDetailDataType {
@@ -8,6 +9,8 @@ export interface FieldDataType {
     type:
     "chip" |
     "text" |
+    "number" |
+    "select" |
     "textarea" |
     "contenteditable" |
     "md" |
@@ -101,6 +104,16 @@ export interface FieldToggleDetailDataType {
     iconName: string;
 }
 
+// Select
+
+export interface FieldSelectDataType extends FieldDataType {
+    select: FieldSelectDetailDataType;
+}
+
+export interface FieldSelectDetailDataType {
+    options: DropDownOptionDataType[]
+}
+
 // Finish
 
 export type AllFieldsDataType =
@@ -111,7 +124,9 @@ export type AllFieldsDataType =
     ContenteditableDataType |
     MDDataType |
     ImageGalleryDataType |
-    FieldToggleDataType;
+    FieldToggleDataType |
+    FieldSelectDataType
+    ;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
     fields: (
@@ -122,6 +137,7 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         ContenteditableDataType |
         MDDataType |
         ImageGalleryDataType |
-        FieldToggleDataType
+        FieldToggleDataType |
+        FieldSelectDataType
     )[],
 }

@@ -19,11 +19,14 @@ import { ImageGalleryComponent } from '@components/fields/image-gallery/image-ga
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MDInput } from '@components/fields/md-input/md-input';
 import { Subscription } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-form-simple-with',
   standalone: true,
   imports: [
+    CommonModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
@@ -38,6 +41,7 @@ import { Subscription } from 'rxjs';
     ChipSelectComponent,
     ImageGalleryComponent,
     MDInput,
+    MatSelectModule,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',

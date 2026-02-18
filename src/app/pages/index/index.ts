@@ -34,8 +34,18 @@ export class Index implements AfterViewInit {
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
   fields: AllFieldsDataType[] = [
-    { label: "Descripción", type: "md", key: "document", md: { maxHeight: "30em", minHeight: "3em" } },
+    { label: "Título", type: "text", key: "title", required: true },
+    { label: "Numero", type: "number", key: "age", required: true },
+    {
+      label: "Color", type: "select", key: "color", required: true, select: {
+        options: [
+          { txt: "Rojo", val: "red" },
+          { txt: "Amarillo", val: "yellow" },
+        ]
+      }
+    },
     /*
+    { label: "Descripción", type: "md", key: "document", md: { maxHeight: "30em", minHeight: "3em" } },
     { label: "Descripción", type: "contenteditable", key: "description" },
     {
       label: "", type: "image-gallery", key: "gallery", required: true, gallery: {

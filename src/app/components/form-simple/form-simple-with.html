@@ -6,6 +6,20 @@
             <mat-label>{{ field.label }}</mat-label>
             <input matInput [formControl]="formControlMap[field.key]" />
         </mat-form-field>
+        } @else if (field.type=='number') {
+        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput type="number" [formControl]="formControlMap[field.key]" />
+        </mat-form-field>
+        } @else if (field.type=='select') {
+        <mat-form-field appearance="outline">
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-select [formControl]="formControlMap[field.key]">
+                <mat-option *ngFor="let option of getSelect(field).options" [value]="option.val">
+                    {{ option.txt }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
         } @else if (field.type=='textarea') {
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ field.label }}</mat-label>

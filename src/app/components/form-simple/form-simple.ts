@@ -11,6 +11,8 @@ import {
   FieldDataType,
   FieldImageDataType,
   FieldJSONDataType,
+  FieldSelectDataType,
+  FieldSelectDetailDataType,
   FieldToggleDataType,
   FieldToggleDetailDataType,
   ImageGalleryDataType,
@@ -189,8 +191,19 @@ export abstract class FormSimple implements DifferedStore {
     }, temp.toggle);
   }
 
+  getSelect(el: FieldDataType): FieldSelectDetailDataType {
+    const temp: any = this.castSelectType(el);
+    return Object.assign({
+      options: [],
+    }, temp.select);
+  }
+
   castToggleType(el: FieldDataType): FieldToggleDataType {
     return (el as FieldToggleDataType);
+  }
+
+  castSelectType(el: FieldDataType): FieldSelectDataType {
+    return (el as FieldSelectDataType);
   }
 
   getForm() {
