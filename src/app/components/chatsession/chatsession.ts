@@ -73,7 +73,6 @@ export class Chatsession extends CommonComponent {
   }
 
   processVisualInput(input: Content) {
-    this.history.push(input);
     if (input.parts) {
       input.parts.forEach(async (el, index) => {
         let textMD = el.text ? el.text : "";
@@ -98,11 +97,34 @@ export class Chatsession extends CommonComponent {
       if (!this.initialized) {
         await this.chatSrv.initialize();
       }
+
+      // Verify embbed model is loaded
+      // Verify voy indexer is indexed, otherwise index using last modified
+      // Fecth closest facts
+
+
       // Add user message to local history
       const userInputRaw = { role: "user", parts: [{ text: userInput }] };
       this.processVisualInput(userInputRaw);
 
-      const result = await this.chatSrv.generateContent(this.history, this.config);
+      const retrievedFacts: string[] = [];
+
+      const contextBlock = retrievedFacts.length > 0
+        ? `[CONTEXT DATA]\n${retrievedFacts.join("\n")}\n\n[USER QUESTION]\n`
+        : "";
+      const userMessage: Content = {
+        role: "user",
+        parts: [{ text: contextBlock + userInput }]
+      };
+
+      const usedHistory = [...this.history, userMessage];
+
+      const result = await this.chatSrv.generateContent(usedHistory, this.config);
+
+      this.history.push({
+        role: "user",
+        parts: [{ text: userInput }]
+      });
 
       if (result && result.text) {
         const textResponse = result.text;
@@ -111,6 +133,7 @@ export class Chatsession extends CommonComponent {
           parts: [{ text: textResponse }]
         };
         this.processVisualInput(assistantMessage);
+        this.history.push(assistantMessage);
         this.query = "";
         return textResponse;
       }
@@ -130,7 +153,6 @@ export class Chatsession extends CommonComponent {
       return;
     }
     const response = await this.sendMessageInternal(this.query);
-    console.log(response);
     this.cdr.detectChanges();
   }
 

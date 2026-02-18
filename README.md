@@ -1,11 +1,7 @@
 # CommonFront
 
-
-
-
 Input knowledge.
 Input lastModified.
-Format md and use sanitize text
 
 Allow configure instructions text in collection.
 
