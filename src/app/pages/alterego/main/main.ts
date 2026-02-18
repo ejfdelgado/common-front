@@ -217,13 +217,21 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.currentSelected = this.knowledge[index];
       const isQuestion = this.currentSelected.type == 'question';
       this.fields = [
-        { label: "Is question?", type: "toggle", key: "type" },
+        {
+          label: "Type", type: "select", key: "type",
+          select: {
+            options: [
+              { txt: "Question", val: "question" },
+              { txt: "Fact", val: "fact" },
+            ]
+          }
+        },
         { label: "Knowledge", type: "md", key: "txtFormat", md: { maxHeight: "200px", minHeight: "200px" } },
       ];
       if (isQuestion) {
         this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
       }
-      this.model['type'] = isQuestion;
+      this.model['type'] = this.currentSelected.type;
       this.model["txtFormat"] = this.currentSelected.txtFormat;
       this.model["answerFormat"] = this.currentSelected.answerFormat;
       this.cdr.detectChanges();
@@ -391,14 +399,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
     } else if (event.name == 'type') {
       if (this.currentSelected) {
-        if (event.val === true) {
-          this.currentSelected.type = "question";
+        this.currentSelected.type = event.val;
+        if (event.val === "question") {
           const index = this.indexOfNamedFieldAnswer("answerFormat");
           if (index < 0) {
             hasChanged = true;
           }
         } else {
-          this.currentSelected.type = "fact";
           const index = this.indexOfNamedFieldAnswer("answerFormat");
           if (index >= 0) {
             hasChanged = true;

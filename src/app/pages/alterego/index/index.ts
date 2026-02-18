@@ -111,6 +111,16 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
       fields: [
         { label: "Title", type: "text", key: "title", required: true },
         {
+          label: "Language", type: "select", key: "language", required: true,
+          select: {
+            options: [
+              { txt: "English", val: "en" },
+              { txt: "Español", val: "es" },
+              { txt: "Agnostic", val: "multi" },
+            ]
+          }
+        },
+        {
           label: "Imagen", type: "image", key: "image", image: {
             thumbnailMaxSizePixels: 200,
             squareMaxSizePixels: 800,//For social
