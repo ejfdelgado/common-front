@@ -184,12 +184,21 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.language,
         this.useIndicator,
       );
+
+      //console.log(JSON.stringify(searchedResult, null, 4));
+
       this.foundFacts.emit(searchedResult);
       if (searchedResult.payload.length > 0) {
-        retrievedFacts = searchedResult.payload.map((el) => {
-          return el.title;
+
+        const ids = searchedResult.payload.map((el) => el.id);
+        const completeData = this.knowledge.filter(el => ids.indexOf(el.id) >= 0);
+
+        retrievedFacts = completeData.map((el) => {
+          return el.txtFormat;//this is the md version
         });
       }
+
+      console.log(JSON.stringify(retrievedFacts, null, 4));
 
       // Add user message to local history
       const userInputRaw = { role: "user", parts: [{ text: userInput }] };
