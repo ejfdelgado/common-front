@@ -55,7 +55,11 @@ export class ChatGeminiService {
             config,
             pass: this.GEMINI_PASS,
         };
-        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "gemini/query", payload));
+        const response = await firstValueFrom(
+            this.http.post<ApiResponse>(environment.apiUrl + "gemini/query",
+                payload, {
+                headers: { '--noload': '1' }
+            }));
         if (!response.success) {
             throw new Error(response.message);
         }

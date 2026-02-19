@@ -16,24 +16,30 @@ import { IndicatorService } from '@services/indicator.service';
 export class LoadingInterceptor implements HttpInterceptor {
   private totalRequests = 0;
 
-  constructor(private loadingService: IndicatorService) {}
+  constructor(private loadingService: IndicatorService) { }
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    this.totalRequests++;
-    const promise = this.loadingService.start();
-
-    return next.handle(request).pipe(
-      tap(event => {
-        if (event instanceof HttpResponse) {
+    const useIndicator = request.headers.get("--noload") != "1";
+    if (useIndicator) {
+      this.totalRequests++;
+      const promise = this.loadingService.start();
+      return next.handle(request).pipe(
+        tap(event => {
+          if (event instanceof HttpResponse) {
+            promise.done();
+          }
+        }),
+        finalize(() => {
           promise.done();
-        }
-      }),
-      finalize(() => {
-        promise.done();
-      })
-    );
+        })
+      );
+    } else {
+      return next.handle(request).pipe(
+        finalize(() => { })
+      );
+    }
   }
 }
