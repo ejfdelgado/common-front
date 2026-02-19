@@ -65,6 +65,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   @Output() foundFacts: EventEmitter<SearchAnswerDataType> = new EventEmitter();
 
+  loading: number = 0;
+
   public history: any[] = [];
   public visualHistory: MessageLocalDataType[] = [];
   private initialized: boolean = false;
@@ -91,6 +93,16 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       }, 2000);
       this.cdr.detectChanges();
     }
+  }
+
+  incrementLoading() {
+    this.loading += 1;
+    this.cdr.detectChanges();
+  }
+
+  decrementLoading() {
+    this.loading -= 1;
+    this.cdr.detectChanges();
   }
 
   processVisualInput(input: Content) {
@@ -135,6 +147,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   async setup() {
     try {
+      this.incrementLoading();
       if (!this.initialized) {
         await this.chatSrv.initialize();
       }
@@ -142,6 +155,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     } catch (err: any) {
       console.log(err);
       throw err;
+    } finally {
+      this.decrementLoading();
     }
   }
 
@@ -151,6 +166,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       indicator = this.indicatorSrv.start();
     }
     try {
+      this.incrementLoading();
       await this.setup();
       // Fecth closest facts
       let retrievedFacts: string[] = [];
@@ -206,6 +222,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       if (indicator) {
         indicator.done();
       }
+      this.decrementLoading();
       requestAnimationFrame(() => {
         this.scrollToBottom();
       });

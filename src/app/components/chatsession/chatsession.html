@@ -43,6 +43,9 @@
             <button matIconButton aria-label="">
                 <mat-icon (click)="sendMessage()">send</mat-icon>
             </button>
+            @if (loading > 0) {
+            <div class="indicator">Processing...</div>
+            }
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
