@@ -1,5 +1,8 @@
 # CommonFront
 
+Credits to:
+https://loading.io/
+
 Mostrar un popup con el logo y la descripción y un botón para iniciar.
 
 Allow to configure with the url query param, set the size of the shared url.

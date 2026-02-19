@@ -48,7 +48,9 @@
                 <mat-icon (click)="sendMessage()">send</mat-icon>
             </button>
             @if (loading > 0) {
-            <div class="indicator">Processing...</div>
+            <div class="indicator">
+                <img src="/assets/img/loading4.gif">
+            </div>
             }
         </div>
     </mat-sidenav-content>
