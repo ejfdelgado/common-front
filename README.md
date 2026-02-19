@@ -1,14 +1,15 @@
 # CommonFront
 
-hacer un frontend con solo el chat.
-leer el collection publicado.
-leer los facts.
-cargar automaticamente el modelo. warm.
-mostrar un popup con el logo y la descripción y un botón para iniciar
+Change indicator to somethink less invasive.
+Warm from begining while persons read popup.
+
+Mostrar un popup con el logo y la descripción y un botón para iniciar.
 
 Allow to configure with the url query param, set the size of the shared url.
 
 Allow host models on own url, not remote.
+
+Create tools like to redirect to whatsapp with some specific message.
 
 https://matdash-angular-dark.netlify.app/apps/employee
 

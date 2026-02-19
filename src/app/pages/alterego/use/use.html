@@ -1,7 +1,7 @@
 <div class="parent_container">
-    @if (collection) {
+    @if (collection && knowledge.length > 0) {
     <app-chatsession [config]="chatConfig" [language]="language" [top]="top" [distance]="distance"
         [knowledge]="knowledge" [lastModified]="lastModified" [assistant]="collection"
-        (foundFacts)="receiveSearch($event)"></app-chatsession>
+        (foundFacts)="receiveSearch($event)" [autowarm]="true" [useIndicator]="false"></app-chatsession>
     }
 </div>

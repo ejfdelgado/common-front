@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IndicatorService } from "./indicator.service";
+import { IndicatorService, Wait } from "./indicator.service";
 
 export interface ItemToSearchType {
     id: string;
@@ -32,8 +32,11 @@ export class AlterEgoService {
         );
     }
 
-    async initialize(payload: ItemToSearchType[], lang: SearchLangsType = "en") {
-        const indicator = this.indicatorSrv.start();
+    async initialize(payload: ItemToSearchType[], lang: SearchLangsType = "en", useIndicator: boolean = true) {
+        let indicator: Wait | null = null;
+        if (useIndicator) {
+            indicator = this.indicatorSrv.start();
+        }
         const promise = new Promise((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not loaded"));
@@ -49,13 +52,18 @@ export class AlterEgoService {
             this.worker.postMessage({ type: "INITIALIZE", payload, lang });
         });
         promise.finally(() => {
-            indicator.done();
+            if (indicator) {
+                indicator.done();
+            }
         });
         return promise;
     }
 
-    async search(payload: string, top: number = 10, distance: number = 0.3, lang: SearchLangsType = "en"): Promise<SearchAnswerDataType> {
-        const indicator = this.indicatorSrv.start();
+    async search(payload: string, top: number = 10, distance: number = 0.3, lang: SearchLangsType = "en", useIndicator: boolean = true): Promise<SearchAnswerDataType> {
+        let indicator: Wait | null;
+        if (useIndicator) {
+            indicator = this.indicatorSrv.start();
+        }
         const promise = new Promise<SearchAnswerDataType>((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not loaded"));
@@ -77,7 +85,9 @@ export class AlterEgoService {
             });
         });
         promise.finally(() => {
-            indicator.done();
+            if (indicator) {
+                indicator.done();
+            }
         });
         return promise;
     }

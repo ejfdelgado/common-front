@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +14,7 @@ import { Content, GenerateContentConfig } from '@google/genai';
 import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
-import { IndicatorService } from '@services/indicator.service';
+import { IndicatorService, Wait } from '@services/indicator.service';
 import { AssistantDataType, KnowledgeDataType } from 'types/ragTypes';
 import { marked } from 'marked';
 import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
@@ -51,7 +51,7 @@ export interface MessageLocalDataType {
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',
 })
-export class Chatsession extends CommonComponent {
+export class Chatsession extends CommonComponent implements AfterViewInit {
 
   @Input() config!: GenerateContentConfig;
   @Input() assistant!: AssistantDataType;
@@ -60,6 +60,8 @@ export class Chatsession extends CommonComponent {
   @Input() language: SearchLangsType = "en";
   @Input() top: number = 5;
   @Input() distance: number = 0.3;
+  @Input() autowarm: boolean = false;
+  @Input() useIndicator: boolean = true;
 
   @Output() foundFacts: EventEmitter<SearchAnswerDataType> = new EventEmitter();
 
@@ -81,6 +83,14 @@ export class Chatsession extends CommonComponent {
     public alterEgoSrv: AlterEgoService,
   ) {
     super(sanitizer, fullScreenSrv);
+  }
+  async ngAfterViewInit(): Promise<void> {
+    if (this.autowarm) {
+      setTimeout(async () => {
+        await this.setup();
+      }, 2000);
+      this.cdr.detectChanges();
+    }
   }
 
   processVisualInput(input: Content) {
@@ -113,24 +123,46 @@ export class Chatsession extends CommonComponent {
         };
         return temp;
       });
-      const response = await this.alterEgoSrv.initialize(mockData, this.language);
+      try {
+        const response = await this.alterEgoSrv.initialize(mockData, this.language, this.useIndicator);
+      } catch (err: any) {
+        console.log(err);
+        throw err;
+      }
       this.lastTrained = this.lastModified;
     }
   }
 
-  async sendMessageInternal(userInput: string): Promise<void> {
-    const indicator = this.indicatorSrv.start();
+  async setup() {
     try {
       if (!this.initialized) {
         await this.chatSrv.initialize();
       }
-
       await this.ensureLastTrained();
+    } catch (err: any) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async sendMessageInternal(userInput: string): Promise<void> {
+    let indicator: Wait | null = null;
+    if (this.useIndicator) {
+      indicator = this.indicatorSrv.start();
+    }
+    try {
+      await this.setup();
       // Fecth closest facts
       let retrievedFacts: string[] = [];
       //console.log(`top: ${this.top} distance: ${this.distance} language: ${this.language}`);
       //console.log(JSON.stringify(this.config, null, 4));
-      const searchedResult = await this.alterEgoSrv.search(userInput, this.top, this.distance / 100, this.language);
+      const searchedResult = await this.alterEgoSrv.search(
+        userInput,
+        this.top,
+        this.distance / 100,
+        this.language,
+        this.useIndicator,
+      );
       this.foundFacts.emit(searchedResult);
       if (searchedResult.payload.length > 0) {
         retrievedFacts = searchedResult.payload.map((el) => {
@@ -171,7 +203,9 @@ export class Chatsession extends CommonComponent {
     } catch (err: any) {
       throw err;
     } finally {
-      indicator.done();
+      if (indicator) {
+        indicator.done();
+      }
       requestAnimationFrame(() => {
         this.scrollToBottom();
       });
