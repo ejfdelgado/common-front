@@ -18,6 +18,7 @@ import { IndicatorService, Wait } from '@services/indicator.service';
 import { AssistantDataType, KnowledgeDataType } from 'types/ragTypes';
 import { marked } from 'marked';
 import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
+import { UINotificationSrv } from '@services/uinotifications.service';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -83,6 +84,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     public cdr: ChangeDetectorRef,
     private indicatorSrv: IndicatorService,
     public alterEgoSrv: AlterEgoService,
+    private uinotificationSrv: UINotificationSrv,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -135,12 +137,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         };
         return temp;
       });
-      try {
-        const response = await this.alterEgoSrv.initialize(mockData, this.language, this.useIndicator);
-      } catch (err: any) {
-        console.log(err);
-        throw err;
-      }
+      const response = await this.alterEgoSrv.initialize(mockData, this.language, this.useIndicator);
       this.lastTrained = this.lastModified;
     }
   }
@@ -153,7 +150,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       }
       await this.ensureLastTrained();
     } catch (err: any) {
-      console.log(err);
+      this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
     } finally {
       this.decrementLoading();
@@ -217,6 +214,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.query = "";
       }
     } catch (err: any) {
+      this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
     } finally {
       if (indicator) {
@@ -233,7 +231,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     if (this.query.trim().length == 0) {
       return;
     }
-    const response = await this.sendMessageInternal(this.query);
+    await this.sendMessageInternal(this.query);
     this.cdr.detectChanges();
   }
 
