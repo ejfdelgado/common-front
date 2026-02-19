@@ -1,7 +1,6 @@
 # CommonFront
 
-Change indicator to somethink less invasive.
-Warm from begining while persons read popup.
+Warm from begining while persons read popup. (bug)
 
 Mostrar un popup con el logo y la descripción y un botón para iniciar.
 
