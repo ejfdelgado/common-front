@@ -90,9 +90,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   }
   async ngAfterViewInit(): Promise<void> {
     if (this.autowarm) {
-      setTimeout(async () => {
-        await this.setup();
-      }, 2000);
+      await this.setup();
       this.cdr.detectChanges();
     }
   }

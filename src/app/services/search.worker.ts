@@ -106,3 +106,5 @@ self.onmessage = async (e) => {
     }
   }
 };
+
+self.postMessage({ type: 'READY' });

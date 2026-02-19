@@ -22,6 +22,7 @@ export interface SearchAnswerDataType {
 export class AlterEgoService {
 
     worker!: Worker;
+    ready!: Promise<void>;
 
     constructor(
         private indicatorSrv: IndicatorService,
@@ -30,6 +31,16 @@ export class AlterEgoService {
             new URL('./search.worker', import.meta.url),
             { type: 'module' }
         );
+        this.ready = new Promise((resolve, reject) => {
+            this.worker.onmessage = (event) => {
+                if (event.data.type === 'READY') {
+                    resolve();
+                }
+            };
+            this.worker.onerror = (err: any) => {
+                reject(err);
+            }
+        });
     }
 
     async initialize(payload: ItemToSearchType[], lang: SearchLangsType = "en", useIndicator: boolean = true) {
@@ -37,6 +48,7 @@ export class AlterEgoService {
         if (useIndicator) {
             indicator = this.indicatorSrv.start();
         }
+        await this.ready;
         const promise = new Promise((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not loaded"));
@@ -64,6 +76,7 @@ export class AlterEgoService {
         if (useIndicator) {
             indicator = this.indicatorSrv.start();
         }
+        await this.ready;
         const promise = new Promise<SearchAnswerDataType>((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not loaded"));
@@ -93,6 +106,7 @@ export class AlterEgoService {
     }
 
     async echo() {
+        await this.ready;
         return new Promise((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not loaded"));

@@ -1,7 +1,5 @@
 # CommonFront
 
-Warm from begining while persons read popup. (bug)
-
 Mostrar un popup con el logo y la descripción y un botón para iniciar.
 
 Allow to configure with the url query param, set the size of the shared url.
