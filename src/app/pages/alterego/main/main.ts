@@ -35,10 +35,9 @@ import { MatInputModule } from '@angular/material/input';
 import { Chatsession } from '@components/chatsession/chatsession';
 import { GenerateContentConfig } from '@google/genai';
 import {
-  DropDownOptionDataType,
-  KnowledgeTagType,
   AssistantDataType,
-  KnowledgeDataType
+  KnowledgeDataType,
+  DEF_ASSISTANT_MODEL
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -53,14 +52,7 @@ const MODEL_NAME = "fact";
 const MODEL_NAME_PARENT = "knowledge";
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
-const DEF_MODEL = {
-  title: '',
-  description: '',
-  language: 'en',
-  top: 3,
-  distance: 0.3,
-  instruct: "You are an assistant giving some information",
-};
+
 
 @Component({
   selector: 'app-main',
@@ -605,10 +597,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       modelName: MODEL_NAME_PARENT,
       searchFields: ["title", "description"],
       fields: fields,
-      model: DEF_MODEL,
+      model: DEF_ASSISTANT_MODEL,
     };
     if (model) {
-      formConfig.model = Object.assign({}, DEF_MODEL, model);
+      formConfig.model = Object.assign({}, DEF_ASSISTANT_MODEL, model);
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '800px',
@@ -626,7 +618,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   updateProperties() {
-    const withDefaults = Object.assign({}, DEF_MODEL, this.collection);
+    const withDefaults = Object.assign({}, DEF_ASSISTANT_MODEL, this.collection);
 
     this.top = withDefaults.top;
     this.distance = withDefaults.distance;

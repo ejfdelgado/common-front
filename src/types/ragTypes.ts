@@ -28,3 +28,12 @@ export interface KnowledgeDataType extends SimpleDataType {
     created: number;
     tags?: KnowledgeTagType[];
 };
+
+export const DEF_ASSISTANT_MODEL = {
+  title: '',
+  description: '',
+  language: 'en',
+  top: 3,
+  distance: 0.3,
+  instruct: "You are an assistant giving some information",
+};

@@ -1,1 +1,7 @@
-<p>use works!</p>
+<div class="parent_container">
+    @if (collection) {
+    <app-chatsession [config]="chatConfig" [language]="language" [top]="top" [distance]="distance"
+        [knowledge]="knowledge" [lastModified]="lastModified" [assistant]="collection"
+        (foundFacts)="receiveSearch($event)"></app-chatsession>
+    }
+</div>
