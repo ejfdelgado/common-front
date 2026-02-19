@@ -2,11 +2,13 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Chatsession } from '@components/chatsession/chatsession';
 import { GenerateContentConfig } from '@google/genai';
 import { SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
+import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { getUrlQueryParams } from "@tools/UrlUtil";
 import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType } from 'types/ragTypes';
+import { decode } from '@msgpack/msgpack';
 
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -35,6 +37,7 @@ export class AlterEgoUse implements OnInit {
     public cdr: ChangeDetectorRef,
     private firestoreSrv: FirestoreService,
     private uinotificationSrv: UINotificationSrv,
+    private fileSrv: FileService,
   ) {
 
   }
@@ -46,7 +49,15 @@ export class AlterEgoUse implements OnInit {
         throw new Error("Invalid assistant");
       }
       this.collection = (await this.firestoreSrv.readById(MODEL_NAME_PARENT_CLONE, id) as any);
+      if (!this.collection) {
+        throw new Error("The assistant is not published yet");
+      }
       this.updateProperties();
+      if (!this.collection.knowledge_path) {
+        throw new Error("The assistant is not well configured");
+      }
+      const knowledgeBin = await this.fileSrv.getBinary(this.collection.knowledge_path);
+      this.knowledge = decode(knowledgeBin) as any;
       this.cdr.detectChanges();
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);

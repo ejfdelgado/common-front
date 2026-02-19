@@ -17,6 +17,7 @@ export interface AssistantDataType extends BasicDataType {
     distance: number;
     language: SearchLangsType;
     instruct: string;
+    knowledge_path?: string;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
@@ -30,10 +31,10 @@ export interface KnowledgeDataType extends SimpleDataType {
 };
 
 export const DEF_ASSISTANT_MODEL = {
-  title: '',
-  description: '',
-  language: 'en',
-  top: 3,
-  distance: 0.3,
-  instruct: "You are an assistant giving some information",
+    title: '',
+    description: '',
+    language: 'en',
+    top: 3,
+    distance: 0.3,
+    instruct: "You are an assistant giving some information",
 };

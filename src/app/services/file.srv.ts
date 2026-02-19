@@ -5,6 +5,7 @@ import { ApiResponse, UploadResponse } from "types/file";
 import { CameraCaptureComponent } from "@components/camera-capture/camera-capture";
 import { firstValueFrom, map } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { getBucketFilePath } from "@tools/BucketPaths";
 
 export type StorageType = "bucket" | "hard_drive";
 
@@ -240,13 +241,16 @@ export class FileService {
         });
     }
 
-
     getJSON(url: string): Promise<any> {
         return firstValueFrom(this.http.get(url, { responseType: 'text' }).pipe(
             map(res => {
                 return JSON.parse(res);
             })
         ));
+    }
+
+    getBinary(path: string) {
+        return firstValueFrom(this.http.get(getBucketFilePath(path), { responseType: 'arraybuffer' }));
     }
 
 }
