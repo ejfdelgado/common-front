@@ -118,7 +118,7 @@ export class Chatsession extends CommonComponent {
     }
   }
 
-  async sendMessageInternal(userInput: string): Promise<string | null> {
+  async sendMessageInternal(userInput: string): Promise<void> {
     const indicator = this.indicatorSrv.start();
     try {
       if (!this.initialized) {
@@ -159,18 +159,15 @@ export class Chatsession extends CommonComponent {
         parts: [{ text: userInput }]
       });
 
-      if (result && result.text) {
-        const textResponse = result.text;
+      if (result && result.candidates && result.candidates.length > 0) {
         const assistantMessage: Content = {
           role: "model",
-          parts: [{ text: textResponse }]
+          parts: result.candidates[0].content?.parts?.map((el) => el),
         };
         this.processVisualInput(assistantMessage);
         this.history.push(assistantMessage);
         this.query = "";
-        return textResponse;
       }
-      return null;
     } catch (err: any) {
       throw err;
     } finally {
