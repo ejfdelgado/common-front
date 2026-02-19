@@ -16,10 +16,6 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu2="matMenu">
-                <button mat-menu-item>
-                    <mat-icon>book_3</mat-icon>
-                    <span>About us</span>
-                </button>
                 <button mat-menu-item (click)="clearHistory()">
                     <mat-icon>delete</mat-icon>
                     <span>Clear history</span>
@@ -29,6 +25,14 @@
         <div class="scrolled_messages_parent">
             <div #scrolled_container class="scrolled_messages">
                 <div class="fill_height"></div>
+                @if (showSplash) {
+                <div class="intro_splash">
+                    <div class="profile_img"
+                        [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'big') + ')'">
+                    </div>
+                    <div class="profile_me" [innerHTML]="assistantDescription"></div>
+                </div>
+                }
                 @for (message of visualHistory; track message.date) {
                 <div class="single_msg" [ngClass]="'rol_'+message.role">
                     <span class="text" [innerHTML]="message.txt"></span>

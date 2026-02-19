@@ -63,6 +63,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() distance: number = 0.3;
   @Input() autowarm: boolean = false;
   @Input() useIndicator: boolean = true;
+  @Input() showSplash: boolean = false;
 
   @Output() foundFacts: EventEmitter<SearchAnswerDataType> = new EventEmitter();
 
@@ -73,6 +74,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   private initialized: boolean = false;
   query: string = '';
   lastTrained: number = -1;
+  mdAssistanteDescription: string = "";
 
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
@@ -98,6 +100,14 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   incrementLoading() {
     this.loading += 1;
     this.cdr.detectChanges();
+  }
+
+  get assistantDescription() {
+    if (this.assistant) {
+      const html = marked.parse(this.assistant.description) as string;
+      return this.sanitizeText(html);
+    }
+    return "";
   }
 
   decrementLoading() {

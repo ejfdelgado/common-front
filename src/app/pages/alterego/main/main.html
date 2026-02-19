@@ -68,7 +68,7 @@
                         <mat-card-content class="flex_horizontal_gap_10 full_height">
                             <app-chatsession [config]="chatConfig" [language]="language" [top]="top"
                                 [distance]="distance" [knowledge]="knowledge" [lastModified]="lastModified"
-                                [assistant]="collection" (foundFacts)="receiveSearch($event)"></app-chatsession>
+                                [assistant]="collection" (foundFacts)="receiveSearch($event)" [useIndicator]="false"></app-chatsession>
                         </mat-card-content>
                     </mat-card>
                     }

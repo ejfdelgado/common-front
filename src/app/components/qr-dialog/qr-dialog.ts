@@ -40,6 +40,6 @@ export class QrDialogComponent implements AfterViewInit {
   }
 
   open() {
-    window.open(this.data.url, "_black");
+    window.open(this.data.url, "_blank");
   }
 }
