@@ -18,6 +18,11 @@ export interface AssistantDataType extends BasicDataType {
     language: SearchLangsType;
     instruct: string;
     knowledge_path?: string;
+    instagram?: string;
+    facebook?: string;
+    youtube?: string;
+    tiktok?: string;
+    linkedin?: string;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {

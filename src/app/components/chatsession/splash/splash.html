@@ -2,5 +2,22 @@
     <div class="profile_img"
         [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'big') + ')'">
     </div>
+    <div class="social_parent">
+        @if (assistant.instagram) {
+            <a [href]="assistant.instagram" target="_blank"><img src="/assets/img/instagram.svg"></a>
+        }
+        @if (assistant.facebook) {
+            <a [href]="assistant.facebook" target="_blank"><img src="/assets/img/facebook.svg"></a>
+        }
+        @if (assistant.youtube) {
+            <a [href]="assistant.youtube" target="_blank"><img src="/assets/img/youtube.svg"></a>
+        }
+        @if (assistant.linkedin) {
+            <a [href]="assistant.linkedin" target="_blank"><img src="/assets/img/linkedin.svg"></a>
+        }
+        @if (assistant.tiktok) {
+            <a [href]="assistant.tiktok" target="_blank"><img src="/assets/img/tiktok.svg"></a>
+        }
+    </div>
     <div class="profile_me" [innerHTML]="assistantDescription"></div>
 </div>

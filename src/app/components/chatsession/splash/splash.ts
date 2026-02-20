@@ -23,7 +23,7 @@ export class AlterEgoSplash extends CommonComponent implements AfterViewInit {
     super(sanitizer, fullScreenSrv);
   }
   ngAfterViewInit(): void {
-    console.log(JSON.stringify(this.assistant, null, 4));
+    
   }
 
   get assistantDescription() {

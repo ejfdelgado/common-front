@@ -1,7 +1,6 @@
 .intro_splash {
     display: flex;
     flex-direction: column;
-    gap: 30px;
     padding: 0 10vw 18px 10vw;
     align-items: center;
 }
@@ -15,10 +14,22 @@
     border-radius: 100%;
     border: 1px solid;
     border-color: #e1e1e1;
+    margin-bottom: 30px;
 }
 
 .profile_me p {
     margin: 0;
+}
+
+.social_parent {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.social_parent a {
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @media (max-width: 400px) {
