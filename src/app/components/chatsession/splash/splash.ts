@@ -24,7 +24,7 @@ export class AlterEgoSplash extends CommonComponent implements AfterViewInit {
     super(sanitizer, fullScreenSrv);
   }
   ngAfterViewInit(): void {
-
+    console.log(JSON.stringify(this.assistant, null, 4));
   }
 
   get assistantDescription() {
@@ -33,5 +33,10 @@ export class AlterEgoSplash extends CommonComponent implements AfterViewInit {
       return this.sanitizeText(html);
     }
     return "";
+  }
+
+  openWhatsapp() {
+    const url = `https://wa.me/${this.assistant.whatsapp.prefix}${this.assistant.whatsapp.number}?text=${encodeURIComponent(this.assistant.whatsapp_msg ? this.assistant.whatsapp_msg : "Hello...")}`;
+    window.open(url, "_blank");
   }
 }

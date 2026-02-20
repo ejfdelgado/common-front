@@ -23,6 +23,8 @@ export interface AssistantDataType extends BasicDataType {
     youtube?: string;
     tiktok?: string;
     linkedin?: string;
+    whatsapp?: any;
+    whatsapp_msg?: string;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {

@@ -3,6 +3,9 @@
         [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'big') + ')'">
     </div>
     <div class="social_parent">
+        @if (assistant.whatsapp && assistant.whatsapp_msg) {
+        <a (click)="openWhatsapp()"><img src="/assets/img/icons8-whatsapp.svg"></a>
+        }
         @if (assistant.instagram) {
         <a [href]="assistant.instagram" target="_blank"><img src="/assets/img/instagram.svg"></a>
         }
