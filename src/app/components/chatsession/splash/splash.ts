@@ -15,6 +15,7 @@ import { marked } from 'marked';
 export class AlterEgoSplash extends CommonComponent implements AfterViewInit {
 
   @Input() assistant!: AssistantDataType;
+  @Input() loading: boolean = false;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -23,7 +24,7 @@ export class AlterEgoSplash extends CommonComponent implements AfterViewInit {
     super(sanitizer, fullScreenSrv);
   }
   ngAfterViewInit(): void {
-    
+
   }
 
   get assistantDescription() {

@@ -32,6 +32,10 @@
     cursor: pointer;
 }
 
+.indicator img {
+    height: 70px;
+}
+
 @media (max-width: 400px) {
     .profile_img {
         width: 50vw;
