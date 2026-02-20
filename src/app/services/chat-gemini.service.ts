@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ParamsService } from "./params.service";
 import { GenerateContentResponse, GoogleGenAI, type GenerateContentConfig } from "@google/genai";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "environments/environment";
 import { ApiResponse } from "types/file";
@@ -11,55 +11,37 @@ import { ApiResponse } from "types/file";
 })
 export class ChatGeminiService {
 
-    GEMINI_API_KEY: string = "";
-    GEMINI_MODEL: string = "";
-    GEMINI_PASS: string = "";
-
-    private client_: GoogleGenAI | null = null;
+    static tempPass: string = ParamsService.generateKey();
 
     constructor(
         private paramsSrv: ParamsService,
         private http: HttpClient,
     ) {
-
-    }
-
-    getClient(): GoogleGenAI {
-        if (!this.client_) {
-            this.client_ = new GoogleGenAI({ apiKey: this.GEMINI_API_KEY });
-        }
-        return this.client_;
     }
 
     async initialize() {
-        const params = await this.paramsSrv.readOnce();
-        this.GEMINI_API_KEY = params['GEMINI_API_KEY'];
-        this.GEMINI_MODEL = params['GEMINI_MODEL'];
-        this.GEMINI_PASS = params['GEMINI_PASS'];
-        this.getClient();
-    }
-
-    async generateContentDirect(history: any[], config: GenerateContentConfig): Promise<GenerateContentResponse> {
-        const client = this.getClient();
-        const response = await client.models.generateContent({
-            model: this.GEMINI_MODEL,
-            contents: history,
-            config: config
-        });
-        return response;
+        this.paramsSrv.getPublicKey();
     }
 
     async generateContent(history: any[], config: GenerateContentConfig): Promise<GenerateContentResponse> {
         const payload = {
             history,
             config,
-            pass: this.GEMINI_PASS,
+            pass: await this.paramsSrv.getEncriptedKey(ChatGeminiService.tempPass),
         };
-        const response = await firstValueFrom(
-            this.http.post<ApiResponse>(environment.apiUrl + "gemini/query",
-                payload, {
-                headers: { '--noload': '1' }
-            }));
+        const response: ApiResponse = await firstValueFrom(
+            this.http.post(environment.apiUrl + "gemini/query",
+                payload,
+                {
+                    responseType: 'text',
+                    headers: { '--noload': '1' },
+                }
+            ).pipe(
+                map((rawData: any) => {
+                    const decripted = ParamsService.decryptAES(rawData, (ChatGeminiService.tempPass + "a").split('').reverse().join(''));
+                    return JSON.parse(decripted);
+                })
+            ));
         if (!response.success) {
             throw new Error(response.message);
         }

@@ -47,16 +47,16 @@ export class ParamsService {
         return ParamsService.publicKey;
     }
 
-    async getEncriptedKey() {
+    async getEncriptedKey(pass: string) {
         let publicKey = await this.getPublicKey();
         publicKey = publicKey.replace('\n', '');
         const rsaEncrypt = new JSEncrypt();
         rsaEncrypt.setPublicKey(publicKey);
-        const encryptedKey = rsaEncrypt.encrypt(ParamsService.tempPass);
+        const encryptedKey = rsaEncrypt.encrypt(pass);
         return encryptedKey;
     }
 
-    decryptAES(encryptedText: string, passphrase: string): string {
+    static decryptAES(encryptedText: string, passphrase: string): string {
         try {
             const bytes = CryptoJS.AES.decrypt(encryptedText, passphrase);
             const decryptedText = bytes.toString(CryptoJS.enc.Utf8);
@@ -96,7 +96,7 @@ export class ParamsService {
     ): Promise<ParameterDataType> {
         const indicator = this.indicatorSrv.start();
         try {
-            const encriptedKey = await this.getEncriptedKey();
+            const encriptedKey = await this.getEncriptedKey(ParamsService.tempPass);
             const response = await firstValueFrom(
                 this.http.post(`${environment.apiUrl}params/all`, {
                     pass: encriptedKey,
@@ -104,7 +104,7 @@ export class ParamsService {
                     .pipe(
                         map((buffer: any) => {
                             const rawData: any = decode(new Uint8Array(buffer));
-                            const decripted = this.decryptAES(rawData, (ParamsService.tempPass + "a").split('').reverse().join(''));
+                            const decripted = ParamsService.decryptAES(rawData, (ParamsService.tempPass + "a").split('').reverse().join(''));
                             return JSON.parse(decripted);
                         })
                     )

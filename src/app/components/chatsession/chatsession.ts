@@ -192,7 +192,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         });
       }
 
-      console.log(JSON.stringify(retrievedFacts, null, 4));
+      //console.log(JSON.stringify(retrievedFacts, null, 4));
 
       // Add user message to local history
       const userInputRaw = { role: "user", parts: [{ text: userInput }] };

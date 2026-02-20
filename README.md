@@ -3,12 +3,7 @@
 Credits to:
 https://loading.io/
 
-add splash intro while loading
-Mostrar un popup con el logo y la descripción y un botón para iniciar.
-
 allow configure max tokens response beside instruct.
-encript response
-remove gemini initialization an secrets
 add publish permission
 alterego_publisher
 alterego_editor
