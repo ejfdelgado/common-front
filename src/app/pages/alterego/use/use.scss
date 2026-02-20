@@ -6,3 +6,19 @@
     bottom: 0;
     padding: 10px;
 }
+
+.parent_container.with_splash {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.overflow_parent {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}

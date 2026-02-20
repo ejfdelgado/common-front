@@ -15,13 +15,11 @@ alterego_editor
 add superadmin
 
 tools configure in frontend
-whatsapp contact
 
 Allow to configure with the url query param, set the size of the shared url.
 
 Allow host models on own url, not remote.
 
-Create tools like to redirect to whatsapp with some specific message.
 
 https://matdash-angular-dark.netlify.app/apps/employee
 

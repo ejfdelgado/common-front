@@ -4,11 +4,12 @@ import { GenerateContentConfig } from '@google/genai';
 import { SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
-import { FullscreenService } from '@services/fullscreen.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { getUrlQueryParams } from "@tools/UrlUtil";
 import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType } from 'types/ragTypes';
 import { decode } from '@msgpack/msgpack';
+import { AlterEgoSplash } from '@components/chatsession/splash/splash';
+import { CommonModule } from '@angular/common';
 
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -16,7 +17,9 @@ const MODEL_NAME_PARENT_CLONE = "pubknowledge";
   selector: 'app-use',
   standalone: true,
   imports: [
+    CommonModule,
     Chatsession,
+    AlterEgoSplash,
   ],
   templateUrl: './use.html',
   styleUrl: './use.scss',

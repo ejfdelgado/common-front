@@ -1,7 +1,13 @@
-<div class="parent_container">
-    @if (collection && knowledge.length > 0) {
+<div class="parent_container" [ngClass]="{'with_splash': knowledge.length == 0}">
+    @if (collection) {
+    @if (knowledge.length > 0) {
     <app-chatsession [config]="chatConfig" [language]="language" [top]="top" [distance]="distance"
         [knowledge]="knowledge" [lastModified]="lastModified" [assistant]="collection" [showSplash]="true"
         (foundFacts)="receiveSearch($event)" [autowarm]="true" [useIndicator]="false"></app-chatsession>
+    } @else {
+    <div class="overflow_parent">
+        <app-splash [assistant]="collection" [loading]="true"></app-splash>
+    </div>
+    }
     }
 </div>
