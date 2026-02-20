@@ -1,6 +1,6 @@
-<div class="profile_detail">
-    <div class="logo_image"
-        [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'square') + ')'">
+<div class="intro_splash">
+    <div class="profile_img"
+        [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'big') + ')'">
     </div>
-    <div class="profile_title">{{ assistant.title }}</div>
+    <div class="profile_me" [innerHTML]="assistantDescription"></div>
 </div>

@@ -104,14 +104,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  get assistantDescription() {
-    if (this.assistant) {
-      const html = marked.parse(this.assistant.description) as string;
-      return this.sanitizeText(html);
-    }
-    return "";
-  }
-
   decrementLoading() {
     this.loading -= 1;
     this.cdr.detectChanges();

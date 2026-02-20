@@ -5,7 +5,12 @@
     <mat-sidenav-content class="vertical_flex">
         <mat-toolbar>
             @if (assistant) {
-            <app-splash [assistant]="assistant"></app-splash>
+            <div class="profile_detail">
+                <div class="logo_image"
+                    [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'square') + ')'">
+                </div>
+                <div class="profile_title">{{ assistant.title }}</div>
+            </div>
             }
             <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
                 <mat-icon>more_vert</mat-icon>
@@ -20,13 +25,8 @@
         <div class="scrolled_messages_parent">
             <div #scrolled_container class="scrolled_messages">
                 <div class="fill_height"></div>
-                @if (showSplash) {
-                <div class="intro_splash">
-                    <div class="profile_img"
-                        [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'big') + ')'">
-                    </div>
-                    <div class="profile_me" [innerHTML]="assistantDescription"></div>
-                </div>
+                @if (showSplash && assistant) {
+                <app-splash [assistant]="assistant"></app-splash>
                 }
                 @for (message of visualHistory; track message.date) {
                 <div class="single_msg" [ngClass]="'rol_'+message.role">

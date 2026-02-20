@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { FullscreenService } from '@services/fullscreen.service';
 import { AssistantDataType } from 'types/ragTypes';
+import { marked } from 'marked';
 
 @Component({
   selector: 'app-splash',
@@ -20,5 +21,13 @@ export class AlterEgoSplash extends CommonComponent {
     public override fullScreenSrv: FullscreenService,
   ) {
     super(sanitizer, fullScreenSrv);
+  }
+
+  get assistantDescription() {
+    if (this.assistant) {
+      const html = marked.parse(this.assistant.description) as string;
+      return this.sanitizeText(html);
+    }
+    return "";
   }
 }

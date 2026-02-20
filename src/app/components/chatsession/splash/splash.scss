@@ -1,0 +1,29 @@
+.intro_splash {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0 10vw 18px 10vw;
+    align-items: center;
+}
+
+.profile_img {
+    width: 200px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 100%;
+    border: 1px solid;
+    border-color: #e1e1e1;
+}
+
+.profile_me p {
+    margin: 0;
+}
+
+@media (max-width: 400px) {
+    .profile_img {
+        width: 50vw;
+        height: 50vw;
+    }
+}
