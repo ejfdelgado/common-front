@@ -164,6 +164,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
+      label: "Social links",
+      icon: "link",
+      children: [],
+      callback: () => {
+        this.openDialog({
+          model: this.collection,
+        }, "links");
+      },
+    });
+
+    this.menuOptions.push({
       label: "Publish",
       icon: "share",
       children: [],
@@ -581,6 +592,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       fields = [
         { label: "Max matches", type: "number", key: "top", required: true },
         { label: "Min % similarity", type: "number", key: "distance", required: true },
+      ];
+    } else if (type == "links") {
+      fields = [
+        { label: "Instagram", type: "text", key: "instagram", required: false },
+        { label: "Facebook", type: "text", key: "facebook", required: false },
+        { label: "Youtube", type: "text", key: "youtube", required: false },
+        { label: "Tik Tok", type: "text", key: "tiktok", required: false },
+        { label: "LinkedIn", type: "text", key: "linkedin", required: false },
       ];
     } else if (type == "chat") {
       fields = [
