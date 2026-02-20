@@ -154,12 +154,23 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     this.menuOptions.push({
       label: "Role",
-      icon: "chat",
+      icon: "psychology_alt",
       children: [],
       callback: () => {
         this.openDialog({
           model: this.collection,
         }, "chat");
+      },
+    });
+
+    this.menuOptions.push({
+      label: "Whatsapp",
+      icon: "sms",
+      children: [],
+      callback: () => {
+        this.openDialog({
+          model: this.collection,
+        }, "whatsapp");
       },
     });
 
@@ -604,6 +615,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         { label: "Youtube", type: "text", key: "youtube", required: false },
         { label: "Tik Tok", type: "text", key: "tiktok", required: false },
         { label: "LinkedIn", type: "text", key: "linkedin", required: false },
+      ];
+    } else if (type == "whatsapp") {
+      fields = [
+        { label: "Phone", type: "phone", key: "whatsapp", required: false },
+        { label: "Message", type: "text", key: "whatsapp_msg", required: false },
       ];
     } else if (type == "chat") {
       fields = [

@@ -4,7 +4,8 @@ Credits to:
 https://loading.io/
 
 add splash intro while loading
-add social icons
+Mostrar un popup con el logo y la descripción y un botón para iniciar.
+
 allow configure max tokens response beside instruct.
 encript response
 remove gemini initialization an secrets
@@ -15,8 +16,6 @@ add superadmin
 
 tools configure in frontend
 whatsapp contact
-
-Mostrar un popup con el logo y la descripción y un botón para iniciar.
 
 Allow to configure with the url query param, set the size of the shared url.
 
