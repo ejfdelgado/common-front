@@ -44,4 +44,6 @@ export const DEF_ASSISTANT_MODEL = {
     top: 3,
     distance: 0.3,
     instruct: "You are an assistant giving some information",
+    maxOutputTokens: 10000,
+    temperature: 1
 };

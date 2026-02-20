@@ -3,6 +3,7 @@
 Credits to:
 https://loading.io/
 
+Allow to configure with the url query param, set the size of the shared url.
 allow configure max tokens response beside instruct.
 add publish permission
 alterego_publisher
@@ -10,8 +11,6 @@ alterego_editor
 add superadmin
 
 tools configure in frontend
-
-Allow to configure with the url query param, set the size of the shared url.
 
 Allow host models on own url, not remote.
 

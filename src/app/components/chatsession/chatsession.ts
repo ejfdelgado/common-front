@@ -188,7 +188,12 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         const completeData = this.knowledge.filter(el => ids.indexOf(el.id) >= 0);
 
         retrievedFacts = completeData.map((el) => {
-          return el.txtFormat;//this is the md version
+          //this is the md version
+          if (el.type == "question") {
+            return el.answerFormat ? el.answerFormat : el.txtFormat;
+          } else {
+            return el.txtFormat;
+          }
         });
       }
 

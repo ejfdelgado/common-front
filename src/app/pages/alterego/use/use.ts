@@ -74,6 +74,8 @@ export class AlterEgoUse implements OnInit {
     this.distance = withDefaults.distance;
     this.language = withDefaults.language;
     this.chatConfig.systemInstruction = withDefaults.instruct;
+    this.chatConfig.maxOutputTokens = withDefaults.maxOutputTokens;
+    this.chatConfig.temperature = withDefaults.temperature;
   }
 
   receiveSearch(search: SearchAnswerDataType | null) {

@@ -605,8 +605,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       ];
     } else if (type == "maths") {
       fields = [
-        { label: "Max matches", type: "number", key: "top", required: true },
-        { label: "Min % similarity", type: "number", key: "distance", required: true },
+        { label: "Max. matches", type: "number", key: "top", required: true },
+        { label: "Min. % similarity", type: "number", key: "distance", required: true },
       ];
     } else if (type == "links") {
       fields = [
@@ -623,9 +623,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       ];
     } else if (type == "chat") {
       fields = [
+        { label: "Max. matches", type: "number", key: "maxOutputTokens", required: true },
+        { label: "Temperature", type: "number", key: "temperature", required: true },
         {
           label: "Role description", type: "md", key: "instruct",
-          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+          contenteditable: { minHeight: "10em", maxHeight: "20em" },
         },
       ];
     }
@@ -658,11 +660,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   updateProperties() {
     const withDefaults = Object.assign({}, DEF_ASSISTANT_MODEL, this.collection);
-
     this.top = withDefaults.top;
     this.distance = withDefaults.distance;
     this.language = withDefaults.language;
     this.chatConfig.systemInstruction = withDefaults.instruct;
+    this.chatConfig.maxOutputTokens = withDefaults.maxOutputTokens;
+    this.chatConfig.temperature = withDefaults.temperature;
   }
 
   async updateSearch() {
