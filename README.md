@@ -3,6 +3,19 @@
 Credits to:
 https://loading.io/
 
+add splash intro while loading
+add social icons
+allow configure max tokens response beside instruct.
+encript response
+remove gemini initialization an secrets
+add publish permission
+alterego_publisher
+alterego_editor
+add superadmin
+
+tools configure in frontend
+whatsapp contact
+
 Mostrar un popup con el logo y la descripción y un botón para iniciar.
 
 Allow to configure with the url query param, set the size of the shared url.
@@ -30,7 +43,7 @@ npx ng generate component --standalone --skip-tests components/chatsession
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/alterego/use
+npx ng generate component --standalone --skip-tests pages/alterego/use/splash
 ```
 
 ```bash

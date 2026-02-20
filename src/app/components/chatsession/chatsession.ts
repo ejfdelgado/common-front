@@ -19,6 +19,7 @@ import { AssistantDataType, KnowledgeDataType } from 'types/ragTypes';
 import { marked } from 'marked';
 import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
+import { AlterEgoSplash } from './splash/splash';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -48,6 +49,7 @@ export interface MessageLocalDataType {
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    AlterEgoSplash,
   ],
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',
