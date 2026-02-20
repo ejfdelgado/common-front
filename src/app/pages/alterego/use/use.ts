@@ -55,6 +55,7 @@ export class AlterEgoUse implements OnInit {
       if (!this.collection) {
         throw new Error("The assistant is not published yet");
       }
+      this.cdr.detectChanges();
       this.updateProperties();
       if (!this.collection.knowledge_path) {
         throw new Error("The assistant is not well configured");

@@ -97,6 +97,8 @@ https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=try_ev
 
 https://stg-playtolearn.storage.googleapis.com/index.html#/alterego/index
 
+https://stg-playtolearn.storage.googleapis.com/index.html#/alterego/use?col=pubknowledge&id=A0Awcqw4y26UXLVsOcxh
+
 ```
 gsutil cors get gs://pro-ejflab-assets
 ```
