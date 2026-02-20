@@ -176,7 +176,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     this.menuOptions.push({
       label: "Publish",
-      icon: "share",
+      icon: "upload",
       children: [],
       callback: () => {
         this.openExportDialog();
@@ -528,6 +528,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           // Add the knowledge path
           publication.knowledge_path = "";
           await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
+        } else {
+          Object.assign(publication, { ...this.collection });
+          delete publication.owners;
+          delete publication.search;
         }
 
         // 3. Define the urlpath for the published buquet file

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { FullscreenService } from '@services/fullscreen.service';
@@ -12,7 +12,7 @@ import { marked } from 'marked';
   templateUrl: './splash.html',
   styleUrl: './splash.scss',
 })
-export class AlterEgoSplash extends CommonComponent {
+export class AlterEgoSplash extends CommonComponent implements AfterViewInit {
 
   @Input() assistant!: AssistantDataType;
 
@@ -21,6 +21,9 @@ export class AlterEgoSplash extends CommonComponent {
     public override fullScreenSrv: FullscreenService,
   ) {
     super(sanitizer, fullScreenSrv);
+  }
+  ngAfterViewInit(): void {
+    console.log(JSON.stringify(this.assistant, null, 4));
   }
 
   get assistantDescription() {
