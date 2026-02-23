@@ -47,6 +47,7 @@ import { encode } from '@msgpack/msgpack';
 import { FileService } from '@services/file.srv';
 import { BucketOptionsType } from '@services/bucket.service';
 import { ShareSrv } from '@services/share.service';
+import { MatTabsModule } from '@angular/material/tabs';
 
 const MODEL_NAME = "fact";
 const MODEL_NAME_PARENT = "knowledge";
@@ -74,6 +75,7 @@ const MODEL_NAME_PARENT_CLONE = "pubknowledge";
     MatSelectModule,
     MatInputModule,
     Chatsession,
+    MatTabsModule,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',

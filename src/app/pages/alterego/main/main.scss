@@ -182,6 +182,16 @@ app-chatsession {
     width: 100%;
 }
 
+mat-tab-group {
+    flex: 1;
+}
+
+.tab_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 @media (max-width: 800px) {
     .content_wraper {
         padding: 30px 0;
