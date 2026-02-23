@@ -37,7 +37,8 @@ export interface KnowledgeDataType extends SimpleDataType {
 };
 
 export interface ArgumentDataType {
-    description: string;
+    type: string;
+    desc: string;
     required: boolean;
 }
 // Tool

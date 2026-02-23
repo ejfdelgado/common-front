@@ -37,7 +37,8 @@ import {
   KnowledgeDataType,
   DEF_ASSISTANT_MODEL,
   ItemToSearchType, SearchAnswerDataType, SearchLangsType, SearchToolDataType,
-  ToolDataType
+  ToolDataType,
+  ArgumentDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -903,5 +904,34 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       description,
       updated,
     }, "qr");
+  }
+
+  addArgument() {
+    if (!this.currentToolSelected) {
+      return;
+    }
+    this.currentToolSelected.args.push({
+      type: "string",
+      desc: "Argument description",
+      required: true,
+    });
+  }
+
+  async removeArgument(arg: ArgumentDataType) {
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: "This action can't be undone",
+    });
+    if (!confirm) {
+      return;
+    }
+    if (!this.currentToolSelected) {
+      return;
+    }
+    const index = this.currentToolSelected.args.indexOf(arg);
+    if (index >= 0) {
+      this.currentToolSelected.args.splice(index, 1);
+      this.cdr.detectChanges();
+    }
   }
 }
