@@ -50,6 +50,7 @@ import { ShareSrv } from '@services/share.service';
 import { MatTabsModule } from '@angular/material/tabs';
 
 const MODEL_NAME = "fact";
+const MODEL_TOOL_NAME = "tool";
 const MODEL_NAME_PARENT = "knowledge";
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -418,6 +419,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     return `knowledge/${id}/${MODEL_NAME}`;
   }
 
+  getToolsCollectionName() {
+    const params = getUrlQueryParams();
+    const id = params.get("id");
+    if (!id) {
+      throw new Error("Missed parent");
+    }
+    return `knowledge/${id}/${MODEL_TOOL_NAME}`;
+  }
+
   async addKnowledge() {
     const created: KnowledgeDataType = {
       created: 0,
@@ -441,8 +451,28 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     })
   }
 
-  updateCurrentModel() {
-
+  async addTool() {
+    const created: ToolDataType = {
+      created: 0,
+      updated: 0,
+      desc: "This is the description",
+      type: 'content',
+      id: "",
+      args: [],
+    };
+    // Call to create
+    const createdId = await this.firestoreSrv.createUpdate(this.getToolsCollectionName(), created, {
+      autoAuthor: false,
+      useAuthor: false,
+      autoOwner: false,
+      searchFields: [],
+    });
+    created.id = createdId.id;
+    created.created = createdId.created;
+    this.tools.unshift(created);
+    requestAnimationFrame(() => {
+      this.selectToolItem(0);
+    })
   }
 
   indexOfNamedFieldAnswer(name: string) {
