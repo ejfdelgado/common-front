@@ -9,7 +9,7 @@
                         <mat-tab-group class="with_flex_column">
                             <mat-tab label="Facts">
                                 <div class="tab_content">
-                                    <mat-sidenav-container>
+                                    <mat-sidenav-container autosize>
                                         <mat-sidenav #sidenav [mode]="(isHandset$ | async) ? 'over' : 'side'"
                                             [opened]="(isHandset$ | async) === false">
                                             <div class="left_parent">
@@ -77,14 +77,14 @@
                             <!-- Tools tab -->
                             <mat-tab label="Tools">
                                 <div class="tab_content">
-                                    <mat-sidenav-container>
+                                    <mat-sidenav-container autosize>
                                         <mat-sidenav #sidenavTools [mode]="(isHandset$ | async) ? 'over' : 'side'"
                                             [opened]="(isHandset$ | async) === false">
                                             <div class="left_parent">
                                                 <div class="rearch_parent">
                                                     <h4 class="text-base">Tools list</h4>
                                                     <div class="filter_parent">
-                                                        @if (searchedToolsResult.length == 0) {
+                                                        @if (searchedToolsResult.length > 0) {
                                                         <mat-icon (click)="clearFilter()">restart_alt</mat-icon>
                                                         }
                                                     </div>
