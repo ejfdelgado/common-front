@@ -146,7 +146,7 @@
                                                     <mat-form-field appearance="outline" class="w-full"
                                                         subscriptSizing="dynamic">
                                                         <mat-label>Description</mat-label>
-                                                        <input matInput [(ngModel)]="arg.desc"
+                                                        <input matInput [(ngModel)]="arg.desc" required
                                                             (ngModelChange)="refreshArguments()" />
                                                     </mat-form-field>
                                                     <mat-icon class="delete_action"

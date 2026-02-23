@@ -917,9 +917,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
     this.currentToolSelected.args.push({
       type: "string",
-      desc: "Argument description",
+      desc: "",
       required: true,
     });
+    this.refreshArguments();
   }
 
   async removeArgument(arg: ArgumentDataType) {
@@ -936,6 +937,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const index = this.currentToolSelected.args.indexOf(arg);
     if (index >= 0) {
       this.currentToolSelected.args.splice(index, 1);
+      this.refreshArguments();
       this.cdr.detectChanges();
     }
   }
