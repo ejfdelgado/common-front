@@ -235,8 +235,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async ngOnInit(): Promise<void> {
     try {
       await this.loadCollection();
-      await this.pageAll();
+      const promises: Promise<any>[] = [];
+      promises.push(this.pageAll());
+      promises.push(this.pageAllTools());
+      await Promise.all(promises);
       this.selectItem(0);
+      this.selectToolItem(0);
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
     }
@@ -565,6 +569,45 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  async pageAllTools() {
+    let isFirstTime: boolean = true;
+    let responses: BasicDataType[] = [];
+    const LIMIT = 100;
+    do {
+      responses = await this.pageTools(LIMIT, isFirstTime);
+      isFirstTime = false;
+    } while (responses.length > 0);
+  }
+
+  async pageTools(limit: number, startover: boolean = false): Promise<BasicDataType[]> {
+    const indicator = this.indicatorSrv.start();
+    try {
+      if (startover && this.tools.length > 0) {
+        this.tools.splice(0, this.tools.length);
+      }
+      const pagingOptions: PageDataType = {
+        collectionName: this.getToolsCollectionName(),
+        orderColumn: "created",
+        orderDirection: "desc",
+        top: limit,
+      };
+      if (!startover) {
+        if (this.tools.length > 0) {
+          pagingOptions.lastDoc = this.tools[this.tools.length - 1];
+        }
+      }
+      const page = (await this.firestoreSrv.paging(pagingOptions));
+      this.tools.push(...(page as any[]));
+      this.cdr.detectChanges();
+      return page;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+      return [];
+    } finally {
+      indicator.done();
+    }
+  }
+
   async savePending() {
     try {
       do {
@@ -589,7 +632,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: {
-        title: "Confirm publish",
+        title: "Do you confirm publish now?",
         message: "The assistant will be updated"
       },
     });
@@ -781,6 +824,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   receiveSearch(search: SearchAnswerDataType | null) {
     this.searchedResult = search;
     this.updateSearch();
+  }
+
+  receiveToolSearch(search: SearchToolDataType[]) {
+    this.searchedToolsResult = search;
+    this.updateToolsSearch();
   }
 
   async localShare() {
