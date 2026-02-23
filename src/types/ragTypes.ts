@@ -40,10 +40,10 @@ export interface ArgumentDataType {
     description: string;
     required: boolean;
 }
-
+// Tool
 export interface ToolDataType extends SimpleDataType {
     type: "mail" | "content";
-    txt: string;
+    desc: string;
     args: ArgumentDataType[];
 
 };

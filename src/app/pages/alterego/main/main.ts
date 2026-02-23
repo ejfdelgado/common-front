@@ -36,7 +36,8 @@ import {
   AssistantDataType,
   KnowledgeDataType,
   DEF_ASSISTANT_MODEL,
-  ItemToSearchType, SearchAnswerDataType, SearchLangsType, SearchToolDataType
+  ItemToSearchType, SearchAnswerDataType, SearchLangsType, SearchToolDataType,
+  ToolDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -82,6 +83,7 @@ const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDestroy {
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  @ViewChild('sidenavTools') sidenavTools!: MatSidenav;
 
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
@@ -89,7 +91,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   top: number = 3;
   distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
+  tools: ToolDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
+  currentToolSelected: ToolDataType | null = null;
   collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
@@ -99,8 +103,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   isHandset$!: Observable<boolean>;
 
   fields: AllFieldsDataType[] = [];
+  toolFields: AllFieldsDataType[] = [];
   model: FlatJsonDataType = {
-    "txt": []
+
+  };
+  toolModel: FlatJsonDataType = {
+
   };
 
   chatConfig: GenerateContentConfig = {
@@ -290,8 +298,42 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
   }
 
+  selectToolItem(index: number) {
+    this.currentToolSelected = null;
+    this.toolFields = [];
+    this.cdr.detectChanges();
+    if (this.tools.length <= index || index < 0) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      this.currentToolSelected = this.tools[index];
+
+      this.toolFields = [
+        {
+          label: "Type", type: "select", key: "type",
+          select: {
+            options: [
+              { txt: "Content", val: "content" },
+              { txt: "Email", val: "mail" },
+            ]
+          }
+        },
+        { label: "Description", type: "md", key: "desc", md: { maxHeight: "200px", minHeight: "200px" } },
+      ];
+      if (this.currentToolSelected.type == 'mail') {
+        this.toolFields.push({ label: "To", type: "text", key: "to" },);
+      }
+      this.toolModel['type'] = this.currentToolSelected.type;
+      this.toolModel["desc"] = this.currentToolSelected.desc;
+
+      this.cdr.detectChanges();
+    });
+  }
+
   toggle() {
     this.sidenav.toggle();
+    this.sidenavTools.toggle();
   }
 
   get knowledgeFiltered(): KnowledgeDataType[] {
@@ -682,9 +724,28 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.cdr.detectChanges();
   }
 
+  async updateToolsSearch() {
+    if (this.searchedToolsResult.length == 0) {
+      this.selectToolItem(0);
+    } else {
+      if (this.searchedToolsResult.length > 0) {
+        const first = this.searchedToolsResult[0];
+        const founds = this.tools.filter((o) => o.id == first.id);
+        const index = this.tools.indexOf(founds[0]);
+        this.selectToolItem(index);
+      } else {
+        // Nothing found
+        this.selectToolItem(-1);
+      }
+    }
+    this.cdr.detectChanges();
+  }
+
   clearFilter() {
     this.searchedResult = null;
+    this.searchedToolsResult = [];
     this.updateSearch();
+    this.updateToolsSearch();
   }
 
   receiveSearch(search: SearchAnswerDataType | null) {
