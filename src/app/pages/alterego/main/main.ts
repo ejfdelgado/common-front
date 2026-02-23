@@ -31,14 +31,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { Chatsession } from '@components/chatsession/chatsession';
-import { GenerateContentConfig } from '@google/genai';
+import { GenerateContentConfig, Type } from '@google/genai';
 import {
   AssistantDataType,
   KnowledgeDataType,
   DEF_ASSISTANT_MODEL,
   ItemToSearchType, SearchAnswerDataType, SearchLangsType, SearchToolDataType,
   ToolDataType,
-  ArgumentDataType
+  ArgumentDataType,
+  DropDownOptionDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -104,6 +105,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   searchedResult: SearchAnswerDataType | null = null;
   searchedToolsResult: SearchToolDataType[] = [];
   lastModified: number = 0;
+
+  argumentTypes: DropDownOptionDataType[] = [
+    { val: Type.STRING, txt: "Text" },
+  ]
 
   isHandset$!: Observable<boolean>;
 
@@ -320,7 +325,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
       this.toolFields = [
         {
-          label: "Type", type: "select", key: "type",
+          label: "Type", type: "select", key: "type", required: true,
           select: {
             options: [
               { txt: "Content", val: "content" },
@@ -328,11 +333,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
             ]
           }
         },
-        { label: "Name", type: "text", key: "name" },
+        { label: "Name", type: "text", key: "name", required: true, },
         { label: "Description", type: "md", key: "desc", md: { maxHeight: "200px", minHeight: "200px" } },
       ];
       if (this.currentToolSelected.type == 'mail') {
-        this.toolFields.push({ label: "To", type: "text", key: "to" },);
+        this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
       }
       this.toolModel['type'] = this.currentToolSelected.type;
       this.toolModel["desc"] = this.currentToolSelected.desc;
@@ -906,7 +911,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return;
     }
     this.currentToolSelected.args.push({
-      type: "string",
+      type: Type.STRING,
       name: "",
       desc: "",
       required: true,
