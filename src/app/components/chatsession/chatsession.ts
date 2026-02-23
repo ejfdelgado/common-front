@@ -213,7 +213,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       const usedHistory = [...this.history, userMessage];
 
-      const result = await this.chatSrv.generateContent(usedHistory, this.config);
+      const result = await this.chatSrv.generateContent(usedHistory, this.config, this.assistant.author);
 
       this.history.push({
         role: "user",

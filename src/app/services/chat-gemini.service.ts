@@ -23,10 +23,11 @@ export class ChatGeminiService {
         this.paramsSrv.getPublicKey();
     }
 
-    async generateContent(history: any[], config: GenerateContentConfig): Promise<GenerateContentResponse> {
+    async generateContent(history: any[], config: GenerateContentConfig, author: string): Promise<GenerateContentResponse> {
         const payload = {
             history,
             config,
+            author,
             pass: await this.paramsSrv.getEncriptedKey(ChatGeminiService.tempPass),
         };
         const response: ApiResponse = await firstValueFrom(
