@@ -11,6 +11,7 @@ export interface EmailDataType {
         replyTo?: string;
         template: string;
         params: any,
+        bucketName?: string,
     }
 }
 
@@ -26,7 +27,7 @@ export class EmailService {
     }
 
     async send(config: EmailDataType) {
-        const response = await firstValueFrom(this.http.post(environment.apiUrl + "gemini/query",
+        const response = await firstValueFrom(this.http.post(environment.apiUrl + "srv/email/send",
             config,
         ));
         console.log(JSON.stringify(response, null, 4));
