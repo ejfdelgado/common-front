@@ -56,10 +56,13 @@
                                                 </button>
                                                 <span class="full_width"></span>
                                                 @if (pendingToSave.length > 0) {
-                                                <button matButton="elevated" (click)="savePending()">Save</button>
+                                                <button matButton="elevated" (click)="savePending()">
+                                                    <mat-icon>save</mat-icon>
+                                                    Save</button>
                                                 }
-                                                <button matButton="elevated" (click)="addKnowledge()">Add
-                                                    knowledge</button>
+                                                <button matButton="elevated" (click)="addKnowledge()">
+                                                    <mat-icon>add</mat-icon>
+                                                    Add fact</button>
                                             </mat-toolbar>
                                             @if (currentSelected != null) {
                                             <div class="editor_parent">

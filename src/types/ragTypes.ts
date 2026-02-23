@@ -37,6 +37,18 @@ export interface KnowledgeDataType extends SimpleDataType {
     tags?: KnowledgeTagType[];
 };
 
+export interface ArgumentDataType {
+    description: string;
+    required: boolean;
+}
+
+export interface ToolDataType extends SimpleDataType {
+    type: "mail" | "content";
+    txt: string;
+    args: ArgumentDataType[];
+
+};
+
 export const DEF_ASSISTANT_MODEL = {
     title: '',
     description: '',
