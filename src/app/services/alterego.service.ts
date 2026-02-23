@@ -1,20 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IndicatorService, Wait } from "./indicator.service";
-
-export interface ItemToSearchType {
-    id: string;
-    title: string;
-    url: string;
-    distance?: number;
-};
-
-export type SearchLangsType = "en" | "es" | "multi";
-
-export interface SearchAnswerDataType {
-    type: string;
-    success: boolean;
-    payload: ItemToSearchType[];
-}
+import { ItemToSearchType, SearchAnswerDataType, SearchLangsType } from "types/ragTypes";
 
 @Injectable({
     providedIn: 'root',

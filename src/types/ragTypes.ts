@@ -1,5 +1,6 @@
-import { SearchLangsType } from "@services/alterego.service";
 import { BasicDataType, SimpleDataType } from "@services/firestore.service";
+
+export type SearchLangsType = "en" | "es" | "multi";
 
 export interface KnowledgeTagType {
     id: string;
@@ -57,3 +58,20 @@ export const DEF_ASSISTANT_MODEL = {
     maxOutputTokens: 10000,
     temperature: 1
 };
+
+export interface ItemToSearchType {
+    id: string;
+    title: string;
+    url: string;
+    distance?: number;
+};
+
+export interface SearchAnswerDataType {
+    type: string;
+    success: boolean;
+    payload: ItemToSearchType[];
+}
+
+export interface SearchToolDataType {
+    id: string;
+}

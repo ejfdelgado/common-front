@@ -1,12 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Chatsession } from '@components/chatsession/chatsession';
 import { GenerateContentConfig } from '@google/genai';
-import { SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { getUrlQueryParams } from "@tools/UrlUtil";
-import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType } from 'types/ragTypes';
+import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType, SearchAnswerDataType, SearchLangsType } from 'types/ragTypes';
 import { decode } from '@msgpack/msgpack';
 import { AlterEgoSplash } from '@components/chatsession/splash/splash';
 import { CommonModule } from '@angular/common';

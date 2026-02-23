@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
+import { AlterEgoService } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { map, Observable, shareReplay, Subscription } from 'rxjs';
@@ -35,7 +35,8 @@ import { GenerateContentConfig } from '@google/genai';
 import {
   AssistantDataType,
   KnowledgeDataType,
-  DEF_ASSISTANT_MODEL
+  DEF_ASSISTANT_MODEL,
+  ItemToSearchType, SearchAnswerDataType, SearchLangsType, SearchToolDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -92,6 +93,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
+  searchedToolsResult: SearchToolDataType[] = [];
   lastModified: number = 0;
 
   isHandset$!: Observable<boolean>;
@@ -297,6 +299,18 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return this.knowledge;
     } else {
       const temp = this.searchedResult.payload.map((el: ItemToSearchType) => {
+        const found = this.knowledge.filter((o) => o.id == el.id);
+        return found[0];
+      });
+      return temp;
+    }
+  }
+
+  get toolsFiltered(): KnowledgeDataType[] {
+    if (!this.searchedToolsResult) {
+      return this.knowledge;
+    } else {
+      const temp = this.searchedToolsResult.map((el: SearchToolDataType) => {
         const found = this.knowledge.filter((o) => o.id == el.id);
         return found[0];
       });
