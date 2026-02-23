@@ -97,6 +97,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   currentToolSelected: ToolDataType | null = null;
   collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
+  toolsPendingToSave: ToolDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
   searchedToolsResult: SearchToolDataType[] = [];
   lastModified: number = 0;
@@ -354,7 +355,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   get toolsFiltered(): ToolDataType[] {
-    if (!this.searchedToolsResult) {
+    if (this.searchedToolsResult.length == 0) {
       return this.tools;
     } else {
       const temp = this.searchedToolsResult.map((el: SearchToolDataType) => {
@@ -523,49 +524,41 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async toolEditionMade(event: ChangeFieldType) {
-
+    let shouldRefresh: boolean = false;
+    if (this.currentToolSelected) {
+      if (event.name == "desc") {
+        this.currentToolSelected.desc = event.val;
+      } else if (event.name == 'type') {
+        this.currentToolSelected.type = event.val;
+        shouldRefresh = true;
+      }
+      if (this.toolsPendingToSave.indexOf(this.currentToolSelected) < 0) {
+        this.toolsPendingToSave.push(this.currentToolSelected);
+      }
+      if (shouldRefresh) {
+        this.selectToolItem(this.tools.indexOf(this.currentToolSelected));
+      }
+    }
   }
 
   async editionMade(event: ChangeFieldType) {
-    let hasChanged: boolean = false;
-
-    if (event.name == "txtFormat") {
-      const txt = event.val;
-      if (this.currentSelected) {
-        this.currentSelected.txtFormat = txt;
-      }
-    } else if (event.name == "answerFormat") {
-      const answer = event.val;
-      if (this.currentSelected) {
-        this.currentSelected.answerFormat = answer;
-      }
-    } else if (event.name == 'type') {
-      if (this.currentSelected) {
-        this.currentSelected.type = event.val;
-        if (event.val === "question") {
-          const index = this.indexOfNamedFieldAnswer("answerFormat");
-          if (index < 0) {
-            hasChanged = true;
-          }
-        } else {
-          const index = this.indexOfNamedFieldAnswer("answerFormat");
-          if (index >= 0) {
-            hasChanged = true;
-          }
-        }
-      }
-    }
+    let shouldRefresh: boolean = false;
     if (this.currentSelected) {
+      if (event.name == "txtFormat") {
+        this.currentSelected.txtFormat = event.val;
+      } else if (event.name == "answerFormat") {
+        this.currentSelected.answerFormat = event.val;
+      } else if (event.name == 'type') {
+        this.currentSelected.type = event.val;
+        shouldRefresh = true;
+      }
       if (this.pendingToSave.indexOf(this.currentSelected) < 0) {
         this.pendingToSave.push(this.currentSelected);
       }
-    }
-    if (hasChanged) {
-      if (this.currentSelected) {
+      if (shouldRefresh) {
         this.selectItem(this.knowledge.indexOf(this.currentSelected));
       }
     }
-
   }
 
   async pageAll() {
@@ -647,12 +640,40 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async savePending() {
+    await Promise.all([
+      this.saveKnowledgePending(),
+      this.saveToolsPending(),
+    ]);
+  }
+
+  async saveKnowledgePending() {
     try {
+      if (this.pendingToSave.length == 0) {
+        return;
+      }
       do {
         const first = this.pendingToSave[0];
         await this.firestoreSrv.createUpdate(this.getCollectionName(), first);
         this.pendingToSave.splice(0, 1);
       } while (this.pendingToSave.length > 0);
+      this.lastModified += 1;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    } finally {
+      this.cdr.detectChanges();
+    }
+  }
+
+  async saveToolsPending() {
+    try {
+      if (this.toolsPendingToSave.length == 0) {
+        return;
+      }
+      do {
+        const first = this.toolsPendingToSave[0];
+        await this.firestoreSrv.createUpdate(this.getToolsCollectionName(), first);
+        this.toolsPendingToSave.splice(0, 1);
+      } while (this.toolsPendingToSave.length > 0);
       this.lastModified += 1;
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
