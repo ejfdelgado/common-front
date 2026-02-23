@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,7 +11,7 @@ import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { map, Observable, shareReplay, Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
-import { MatDrawerMode, MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchInputComponent } from '@components/search-input/search-input';
@@ -20,8 +20,6 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-simple';
-import { marked } from 'marked';
-import { html2text } from '@tools/HtmlUtil';
 import { Router } from '@angular/router';
 import { IndicatorService } from '@services/indicator.service';
 import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@services/firestore.service';
@@ -294,18 +292,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.sidenav.toggle();
   }
 
-  async initialize() {
-    const mockData = this.knowledge.map((elem) => {
-      const temp: ItemToSearchType = {
-        id: elem.id,
-        title: elem.txt,
-        url: elem.type == "question" && elem.answer ? elem.answer : "",
-      };
-      return temp;
-    });
-    const response = await this.alterEgoSrv.initialize(mockData, this.language);
-  }
-
   get knowledgeFiltered(): KnowledgeDataType[] {
     if (!this.searchedResult) {
       return this.knowledge;
@@ -380,7 +366,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const created: KnowledgeDataType = {
       created: 0,
       updated: 0,
-      txt: "This is a new knowledge",
       txtFormat: "This is a new knowledge",
       type: 'fact',
       id: "",
@@ -418,17 +403,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     if (event.name == "txtFormat") {
       const txt = event.val;
-      const htmlText = await marked.parse(txt);
       if (this.currentSelected) {
         this.currentSelected.txtFormat = txt;
-        this.currentSelected.txt = html2text(htmlText);
       }
     } else if (event.name == "answerFormat") {
       const answer = event.val;
-      const htmlAnswer = await marked.parse(answer);
       if (this.currentSelected) {
         this.currentSelected.answerFormat = answer;
-        this.currentSelected.answer = html2text(htmlAnswer);
       }
     } else if (event.name == 'type') {
       if (this.currentSelected) {

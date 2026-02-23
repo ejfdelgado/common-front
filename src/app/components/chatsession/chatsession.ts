@@ -20,6 +20,7 @@ import { marked } from 'marked';
 import { AlterEgoService, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from '@services/alterego.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
+import { html2text } from '@tools/HtmlUtil';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -128,14 +129,21 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     this.visualHistory = [];
   }
 
+  md2plain(md: string) {
+    const htmlText = marked.parse(md) as string;
+    const plainText = html2text(htmlText);
+    return plainText;
+  }
+
   async ensureLastTrained() {
     if (this.lastTrained != this.lastModified) {
       //train
       const mockData = this.knowledge.map((elem) => {
+
         const temp: ItemToSearchType = {
           id: elem.id,
-          title: elem.txt,
-          url: elem.type == "question" && elem.answer ? elem.answer : "",
+          title: this.md2plain(elem.txtFormat),
+          url: elem.type == "question" && elem.answerFormat ? this.md2plain(elem.answerFormat) : "",
         };
         return temp;
       });

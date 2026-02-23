@@ -29,9 +29,7 @@ export interface AssistantDataType extends BasicDataType {
 
 export interface KnowledgeDataType extends SimpleDataType {
     type: "fact" | "question";
-    txt: string;
     txtFormat: string;
-    answer?: string;
     answerFormat?: string;
     created: number;
     tags?: KnowledgeTagType[];
