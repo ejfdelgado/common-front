@@ -1,23 +1,24 @@
 # CommonFront
 
-Create admin UI for tools, classify it in actions:
-- Email.
-- Show photo / catalog.
+Allow display matched tools
+Allow display matched arguments.
+
+Format email with:
+- Parameters found
+- Chat history
+
 Allow to edit owners of given collection, use firestore console...
-
-Credits to:
-https://loading.io/
-
-Allow to configure with the url query param, set the size of the shared url.
 add publish permission
 alterego_publisher
 alterego_editor
 add superadmin
 
-tools configure in frontend
+Allow to configure with the url query param, set the size of the shared url.
+
+Credits to:
+https://loading.io/
 
 Allow host models on own url, not remote.
-
 
 https://matdash-angular-dark.netlify.app/apps/employee
 
