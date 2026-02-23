@@ -157,17 +157,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
-      label: "Options",
-      icon: "percent",
-      children: [],
-      callback: () => {
-        this.openDialog({
-          model: this.collection,
-        }, "maths");
-      },
-    });
-
-    this.menuOptions.push({
       label: "Role",
       icon: "psychology_alt",
       children: [],
@@ -197,6 +186,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.openDialog({
           model: this.collection,
         }, "links");
+      },
+    });
+
+    this.menuOptions.push({
+      label: "Options",
+      icon: "percent",
+      children: [],
+      callback: () => {
+        this.openDialog({
+          model: this.collection,
+        }, "maths");
       },
     });
 
@@ -800,12 +800,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       ];
     } else if (type == "chat") {
       fields = [
-        { label: "Max. matches", type: "number", key: "maxOutputTokens", required: true },
-        { label: "Temperature", type: "number", key: "temperature", required: true },
         {
           label: "Role description", type: "md", key: "instruct",
           contenteditable: { minHeight: "10em", maxHeight: "20em" },
         },
+        { label: "Max. tokens", type: "number", key: "maxOutputTokens", required: true },
+        { label: "Temperature", type: "number", key: "temperature", required: true },
       ];
     }
 
