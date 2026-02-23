@@ -353,12 +353,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  get toolsFiltered(): KnowledgeDataType[] {
+  get toolsFiltered(): ToolDataType[] {
     if (!this.searchedToolsResult) {
-      return this.knowledge;
+      return this.tools;
     } else {
       const temp = this.searchedToolsResult.map((el: SearchToolDataType) => {
-        const found = this.knowledge.filter((o) => o.id == el.id);
+        const found = this.tools.filter((o) => o.id == el.id);
         return found[0];
       });
       return temp;
@@ -385,6 +385,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.selectItem(index);
   }
 
+  selectThisTool(item: ToolDataType) {
+    const index = this.tools.indexOf(item);
+    this.selectToolItem(index);
+  }
+
   async deleteKnowledge(item: KnowledgeDataType, event: any) {
     event.preventDefault();
     const confirm = await this.confirmSrv.confirm({
@@ -407,6 +412,35 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         }
       } else {
         this.selectItem(-1);
+      }
+      this.lastModified += 1;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    }
+  }
+
+  async deleteTool(item: ToolDataType, event: any) {
+    event.preventDefault();
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: "This action can't be undone",
+    });
+    if (!confirm) {
+      return;
+    }
+    try {
+      const index = this.tools.indexOf(item);
+      // Delete from database
+      await this.firestoreSrv.delete(this.getToolsCollectionName(), item.id);
+      this.tools.splice(index, 1);
+      if (this.tools.length > 0) {
+        if (index == 0) {
+          this.selectToolItem(0);
+        } else {
+          this.selectToolItem(index - 1);
+        }
+      } else {
+        this.selectToolItem(-1);
       }
       this.lastModified += 1;
     } catch (err: any) {
@@ -486,6 +520,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } else {
       return -1;
     }
+  }
+
+  async toolEditionMade(event: ChangeFieldType) {
+
   }
 
   async editionMade(event: ChangeFieldType) {
