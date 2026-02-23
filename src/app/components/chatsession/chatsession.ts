@@ -15,7 +15,7 @@ import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService, Wait } from '@services/indicator.service';
-import { AssistantDataType, KnowledgeDataType, ItemToSearchType, SearchAnswerDataType, SearchLangsType } from 'types/ragTypes';
+import { AssistantDataType, KnowledgeDataType, ItemToSearchType, SearchAnswerDataType, SearchLangsType, ToolDataType } from 'types/ragTypes';
 import { marked } from 'marked';
 import { AlterEgoService } from '@services/alterego.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
@@ -61,6 +61,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() assistant!: AssistantDataType;
   @Input() lastModified: number = 0;
   @Input() knowledge: KnowledgeDataType[] = [];
+  @Input() tools: ToolDataType[] = [];
   @Input() language: SearchLangsType = "en";
   @Input() top: number = 5;
   @Input() distance: number = 0.3;
@@ -221,7 +222,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       const usedHistory = [...this.history, userMessage];
 
-      const result = await this.chatSrv.generateContent(usedHistory, this.config, this.assistant.author);
+      const result = await this.chatSrv.generateContent(usedHistory, this.config, this.assistant.author, this.tools);
 
       this.history.push({
         role: "user",

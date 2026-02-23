@@ -5,7 +5,7 @@ import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { getUrlQueryParams } from "@tools/UrlUtil";
-import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType, SearchAnswerDataType, SearchLangsType } from 'types/ragTypes';
+import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType, SearchAnswerDataType, SearchLangsType, ToolDataType } from 'types/ragTypes';
 import { decode } from '@msgpack/msgpack';
 import { AlterEgoSplash } from '@components/chatsession/splash/splash';
 import { CommonModule } from '@angular/common';
@@ -28,6 +28,7 @@ export class AlterEgoUse implements OnInit {
   top: number = 3;
   distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
+  tools: ToolDataType[] = [];
   collection: AssistantDataType | null = null;
   lastModified: number = 0;
   chatConfig: GenerateContentConfig = {
@@ -60,7 +61,9 @@ export class AlterEgoUse implements OnInit {
         throw new Error("The assistant is not well configured");
       }
       const knowledgeBin = await this.fileSrv.getBinary(this.collection.knowledge_path);
-      this.knowledge = decode(knowledgeBin) as any;
+      const { knowledge, tools } = decode(knowledgeBin) as any;
+      this.knowledge = knowledge;
+      this.tools = tools;
       this.cdr.detectChanges();
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);

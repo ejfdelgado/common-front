@@ -38,12 +38,14 @@ export interface KnowledgeDataType extends SimpleDataType {
 
 export interface ArgumentDataType {
     type: string;
+    name: string;
     desc: string;
     required: boolean;
 }
 // Tool
 export interface ToolDataType extends SimpleDataType {
     type: "mail" | "content";
+    name: string;
     desc: string;
     to?: string;
     args: ArgumentDataType[];

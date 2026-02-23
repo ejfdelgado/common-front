@@ -5,6 +5,7 @@ import { firstValueFrom, map } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "environments/environment";
 import { ApiResponse } from "types/file";
+import { ToolDataType } from "types/ragTypes";
 
 @Injectable({
     providedIn: 'root',
@@ -23,11 +24,17 @@ export class ChatGeminiService {
         this.paramsSrv.getPublicKey();
     }
 
-    async generateContent(history: any[], config: GenerateContentConfig, author: string): Promise<GenerateContentResponse> {
+    async generateContent(
+        history: any[],
+        config: GenerateContentConfig,
+        author: string,
+        tools: ToolDataType[]
+    ): Promise<GenerateContentResponse> {
         const payload = {
             history,
             config,
             author,
+            tools,
             pass: await this.paramsSrv.getEncriptedKey(ChatGeminiService.tempPass),
         };
         const response: ApiResponse = await firstValueFrom(

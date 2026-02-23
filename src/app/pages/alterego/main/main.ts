@@ -328,6 +328,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
             ]
           }
         },
+        { label: "Name", type: "text", key: "name" },
         { label: "Description", type: "md", key: "desc", md: { maxHeight: "200px", minHeight: "200px" } },
       ];
       if (this.currentToolSelected.type == 'mail') {
@@ -336,6 +337,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.toolModel['type'] = this.currentToolSelected.type;
       this.toolModel["desc"] = this.currentToolSelected.desc;
       this.toolModel["to"] = this.currentToolSelected.to;
+      this.toolModel["name"] = this.currentToolSelected.name;
 
       this.cdr.detectChanges();
     });
@@ -498,6 +500,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const created: ToolDataType = {
       created: 0,
       updated: 0,
+      name: "",
       desc: "This is the description",
       type: 'content',
       id: "",
@@ -528,40 +531,24 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async toolEditionMade(event: ChangeFieldType) {
-    let shouldRefresh: boolean = false;
     if (this.currentToolSelected) {
-      if (event.name == "desc") {
-        this.currentToolSelected.desc = event.val;
-      } else if (event.name == 'type') {
-        this.currentToolSelected.type = event.val;
-        shouldRefresh = true;
-      } else if (event.name == 'to') {
-        this.currentToolSelected.to = event.val;
-      }
+      (this.currentToolSelected as any)[event.name] = event.val;
       if (this.toolsPendingToSave.indexOf(this.currentToolSelected) < 0) {
         this.toolsPendingToSave.push(this.currentToolSelected);
       }
-      if (shouldRefresh) {
+      if (event.name == 'type') {
         this.selectToolItem(this.tools.indexOf(this.currentToolSelected));
       }
     }
   }
 
   async editionMade(event: ChangeFieldType) {
-    let shouldRefresh: boolean = false;
     if (this.currentSelected) {
-      if (event.name == "txtFormat") {
-        this.currentSelected.txtFormat = event.val;
-      } else if (event.name == "answerFormat") {
-        this.currentSelected.answerFormat = event.val;
-      } else if (event.name == 'type') {
-        this.currentSelected.type = event.val;
-        shouldRefresh = true;
-      }
+      (this.currentSelected as any)[event.name] = event.val;
       if (this.pendingToSave.indexOf(this.currentSelected) < 0) {
         this.pendingToSave.push(this.currentSelected);
       }
-      if (shouldRefresh) {
+      if (event.name == 'type') {
         this.selectItem(this.knowledge.indexOf(this.currentSelected));
       }
     }
@@ -733,7 +720,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         );
 
         // 5. Take all the knowledge and convert it into binary
-        const binary = encode(this.knowledge);
+        const binary = encode({
+          knowledge: this.knowledge,
+          tools: this.tools,
+        });
 
         // 6. Upload the knowledge to the bucket
         const options: BucketOptionsType = {
@@ -917,6 +907,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
     this.currentToolSelected.args.push({
       type: "string",
+      name: "",
       desc: "",
       required: true,
     });

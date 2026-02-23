@@ -195,6 +195,12 @@ mat-tab-group {
     flex-direction: column;
 }
 
+.argument_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .argument_pair {
     display: flex;
     flex-direction: row;
@@ -202,9 +208,7 @@ mat-tab-group {
     gap: 10px;
 }
 
-.argument_pair .type {}
-
-.argument_pair .name {
+.argument_pair .fill_width {
     flex: 1;
 }
 

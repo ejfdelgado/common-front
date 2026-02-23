@@ -132,25 +132,36 @@
                                                     [model]="toolModel" [fields]="toolFields"></app-form-simple-without>
                                                 <h2>Arguments:</h2>
                                                 @for(arg of currentToolSelected.args; track arg;) {
-                                                <div class="argument_pair">
-                                                    <mat-checkbox [(ngModel)]="arg.required" (ngModelChange)="refreshArguments()">
-                                                        Required
-                                                    </mat-checkbox>
-                                                    <mat-form-field appearance="outline" class="type">
-                                                        <mat-label>Type</mat-label>
-                                                        <mat-select [(ngModel)]="arg.type"
+                                                <div class="argument_container">
+                                                    <div class="argument_pair">
+                                                        <mat-checkbox [(ngModel)]="arg.required"
                                                             (ngModelChange)="refreshArguments()">
-                                                            <mat-option [value]="'string'">Text</mat-option>
-                                                        </mat-select>
-                                                    </mat-form-field>
-                                                    <mat-form-field appearance="outline" class="w-full"
-                                                        subscriptSizing="dynamic">
-                                                        <mat-label>Description</mat-label>
-                                                        <input matInput [(ngModel)]="arg.desc" required
-                                                            (ngModelChange)="refreshArguments()" />
-                                                    </mat-form-field>
-                                                    <mat-icon class="delete_action"
-                                                        (click)="removeArgument(arg)">delete</mat-icon>
+                                                            Required
+                                                        </mat-checkbox>
+                                                        <mat-form-field appearance="outline" class="">
+                                                            <mat-label>Type</mat-label>
+                                                            <mat-select [(ngModel)]="arg.type"
+                                                                (ngModelChange)="refreshArguments()">
+                                                                <mat-option [value]="'string'">Text</mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                        <mat-form-field appearance="outline" class="w-full fill_width"
+                                                            subscriptSizing="dynamic">
+                                                            <mat-label>Name</mat-label>
+                                                            <input matInput [(ngModel)]="arg.name" required
+                                                                (ngModelChange)="refreshArguments()" />
+                                                        </mat-form-field>
+                                                        <mat-icon class="delete_action"
+                                                            (click)="removeArgument(arg)">delete</mat-icon>
+                                                    </div>
+                                                    <div class="argument_pair">
+                                                        <mat-form-field appearance="outline" class="w-full"
+                                                            subscriptSizing="dynamic">
+                                                            <mat-label>Description</mat-label>
+                                                            <input matInput [(ngModel)]="arg.desc" required
+                                                                (ngModelChange)="refreshArguments()" />
+                                                        </mat-form-field>
+                                                    </div>
                                                 </div>
                                                 }
                                                 <button matButton="elevated" (click)="addArgument()">
@@ -169,9 +180,9 @@
                     <mat-card class="mat-mdc-card mdc-card">
                         <mat-card-content class="flex_horizontal_gap_10 full_height">
                             <app-chatsession [config]="chatConfig" [language]="language" [top]="top"
-                                [distance]="distance" [knowledge]="knowledge" [lastModified]="lastModified"
-                                [assistant]="collection" (foundFacts)="receiveSearch($event)"
-                                [useIndicator]="false"></app-chatsession>
+                                [distance]="distance" [knowledge]="knowledge" [tools]="tools"
+                                [lastModified]="lastModified" [assistant]="collection"
+                                (foundFacts)="receiveSearch($event)" [useIndicator]="false"></app-chatsession>
                         </mat-card-content>
                     </mat-card>
                     }
