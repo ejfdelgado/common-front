@@ -49,6 +49,7 @@ import { FileService } from '@services/file.srv';
 import { BucketOptionsType } from '@services/bucket.service';
 import { ShareSrv } from '@services/share.service';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
@@ -78,6 +79,7 @@ const MODEL_NAME_PARENT_CLONE = "pubknowledge";
     MatInputModule,
     Chatsession,
     MatTabsModule,
+    MatCheckboxModule
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -333,6 +335,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       this.toolModel['type'] = this.currentToolSelected.type;
       this.toolModel["desc"] = this.currentToolSelected.desc;
+      this.toolModel["to"] = this.currentToolSelected.to;
 
       this.cdr.detectChanges();
     });
@@ -532,6 +535,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       } else if (event.name == 'type') {
         this.currentToolSelected.type = event.val;
         shouldRefresh = true;
+      } else if (event.name == 'to') {
+        this.currentToolSelected.to = event.val;
       }
       if (this.toolsPendingToSave.indexOf(this.currentToolSelected) < 0) {
         this.toolsPendingToSave.push(this.currentToolSelected);
@@ -932,6 +937,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (index >= 0) {
       this.currentToolSelected.args.splice(index, 1);
       this.cdr.detectChanges();
+    }
+  }
+
+  refreshArguments() {
+    if (!this.currentToolSelected) {
+      return;
+    }
+    if (this.toolsPendingToSave.indexOf(this.currentToolSelected) < 0) {
+      this.toolsPendingToSave.push(this.currentToolSelected);
     }
   }
 }

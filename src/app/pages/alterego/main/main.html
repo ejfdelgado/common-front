@@ -133,16 +133,21 @@
                                                 <h2>Arguments:</h2>
                                                 @for(arg of currentToolSelected.args; track arg;) {
                                                 <div class="argument_pair">
+                                                    <mat-checkbox [(ngModel)]="arg.required" (ngModelChange)="refreshArguments()">
+                                                        Required
+                                                    </mat-checkbox>
                                                     <mat-form-field appearance="outline" class="type">
                                                         <mat-label>Type</mat-label>
-                                                        <mat-select [(ngModel)]="arg.type">
+                                                        <mat-select [(ngModel)]="arg.type"
+                                                            (ngModelChange)="refreshArguments()">
                                                             <mat-option [value]="'string'">Text</mat-option>
                                                         </mat-select>
                                                     </mat-form-field>
                                                     <mat-form-field appearance="outline" class="w-full"
                                                         subscriptSizing="dynamic">
                                                         <mat-label>Description</mat-label>
-                                                        <input matInput [(ngModel)]="arg.desc" />
+                                                        <input matInput [(ngModel)]="arg.desc"
+                                                            (ngModelChange)="refreshArguments()" />
                                                     </mat-form-field>
                                                     <mat-icon class="delete_action"
                                                         (click)="removeArgument(arg)">delete</mat-icon>
