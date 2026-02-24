@@ -704,49 +704,56 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result && result.accept && this.collection) {
 
-        let publication: any = null
-        // 1. Read the old cloned colletion
-        publication = await this.firestoreSrv.readById(MODEL_NAME_PARENT_CLONE, this.collection.id);
+        const indicator = this.indicatorSrv.start();
+        try {
+          let publication: any = null
+          // 1. Read the old cloned colletion
+          publication = await this.firestoreSrv.readById(MODEL_NAME_PARENT_CLONE, this.collection.id);
 
-        // 2. If it not exist, create a brand new
-        if (!publication) {
-          publication = { ...this.collection };//A real clone
-          delete publication.owners;
-          delete publication.search;
-          // Add the knowledge path
-          publication.knowledge_path = "";
+          // 2. If it not exist, create a brand new
+          if (!publication) {
+            publication = { ...this.collection };//A real clone
+            delete publication.owners;
+            delete publication.search;
+            // Add the knowledge path
+            publication.knowledge_path = "";
+            await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
+          } else {
+            Object.assign(publication, { ...this.collection });
+            delete publication.owners;
+            delete publication.search;
+          }
+
+          // 3. Define the urlpath for the published buquet file
+          publication.knowledge_path = getBucketPath(
+            "alterego/${user.uid}/${random}.bin",
+            publication.knowledge_path ? publication.knowledge_path : "",
+            {
+              user: AuthService.userStatic,
+            },
+            true,
+          );
+
+          // 5. Take all the knowledge and convert it into binary
+          const binary = encode({
+            knowledge: this.knowledge,
+            tools: this.tools,
+          });
+
+          // 6. Upload the knowledge to the bucket
+          const options: BucketOptionsType = {
+            //makePublic: true,//not needed, it is already public
+          };
+          const blob = new Blob([binary], { type: 'application/octet-stream' });
+          await this.fileSrv.upload(publication.knowledge_path.replace(/\?.*$/, ""), blob, "bucket", options);
+
+          // 7. Update the cloned collection
           await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
-        } else {
-          Object.assign(publication, { ...this.collection });
-          delete publication.owners;
-          delete publication.search;
+        } catch (err: any) {
+          this.uiNotificationSrv.show(err.message);
+        } finally {
+          indicator.done();
         }
-
-        // 3. Define the urlpath for the published buquet file
-        publication.knowledge_path = getBucketPath(
-          "alterego/${user.uid}/${random}.bin",
-          publication.knowledge_path ? publication.knowledge_path : "",
-          {
-            user: AuthService.userStatic,
-          },
-          true,
-        );
-
-        // 5. Take all the knowledge and convert it into binary
-        const binary = encode({
-          knowledge: this.knowledge,
-          tools: this.tools,
-        });
-
-        // 6. Upload the knowledge to the bucket
-        const options: BucketOptionsType = {
-          //makePublic: true,//not needed, it is already public
-        };
-        const blob = new Blob([binary], { type: 'application/octet-stream' });
-        await this.fileSrv.upload(publication.knowledge_path.replace(/\?.*$/, ""), blob, "bucket", options);
-
-        // 7. Update the cloned collection
-        await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
       }
     });
   }
