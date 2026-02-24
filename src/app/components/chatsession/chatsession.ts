@@ -15,12 +15,21 @@ import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService, Wait } from '@services/indicator.service';
-import { AssistantDataType, KnowledgeDataType, ItemToSearchType, SearchAnswerDataType, SearchLangsType, ToolDataType } from 'types/ragTypes';
+import {
+  AssistantDataType,
+  KnowledgeDataType,
+  ItemToSearchType,
+  SearchAnswerDataType,
+  SearchLangsType,
+  ToolDataType,
+  ToolMatchType,
+} from 'types/ragTypes';
 import { marked } from 'marked';
 import { AlterEgoService } from '@services/alterego.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
+import { normalizeName } from '@tools/Texts';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -70,6 +79,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() showSplash: boolean = false;
 
   @Output() foundFacts: EventEmitter<SearchAnswerDataType> = new EventEmitter();
+  @Output() foundTools: EventEmitter<ToolDataType[]> = new EventEmitter();
+  @Output() startSearch: EventEmitter<void> = new EventEmitter();
 
   loading: number = 0;
 
@@ -111,17 +122,51 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     this.cdr.detectChanges();
   }
 
+  searchNamedTool(simpleName: string): ToolDataType | null {
+    for (let i = 0; i < this.tools.length; i++) {
+      const tool = this.tools[i];
+      const normalizedName = normalizeName(tool.name);
+      if (normalizedName == simpleName) {
+        return tool;
+      }
+    }
+    return null;
+  }
+
   processVisualInput(input: Content) {
     if (input.parts) {
+      const toolsFired: ToolDataType[] = [];
       input.parts.forEach(async (el, index) => {
-        let textMD = el.text ? el.text : "";
-        const formated = await marked.parse(textMD);
-        this.visualHistory.push({
-          date: Date.now() + index,
-          role: input.role ? input.role : "na",
-          txt: this.sanitizeText(formated),
-        });
+        if (el.functionCall) {
+          // Search on tools what to answer
+          const name = el.functionCall.name;
+          const args = el.functionCall.args;
+          if (name && args) {
+            const toolRef = this.searchNamedTool(name);
+            if (toolRef) {
+              // Set found values
+              Object.keys(args).forEach((key) => {
+                const argsFound = toolRef.args.filter((arg) => normalizeName(arg.name) == key);
+                if (argsFound.length > 0) {
+                  argsFound[0].val = args[key];
+                }
+              });
+              toolsFired.push(toolRef);
+            }
+          }
+        }
+        if (el.text) {
+          let textMD = el.text;
+          const formated = await marked.parse(textMD);
+          this.visualHistory.push({
+            date: Date.now() + index,
+            role: input.role ? input.role : "na",
+            txt: this.sanitizeText(formated),
+          });
+        }
       });
+      // Tools could be empty, but it needs to be fired
+      this.foundTools.emit(toolsFired);
     }
   }
 
@@ -174,6 +219,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       indicator = this.indicatorSrv.start();
     }
     try {
+      this.startSearch.emit();
       this.incrementLoading();
       await this.setup();
       // Fecth closest facts
@@ -238,6 +284,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.history.push(assistantMessage);
         this.query = "";
       }
+
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;

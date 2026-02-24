@@ -5,5 +5,5 @@ export function removeAccents(text: string): string {
 };
 
 export function normalizeName(name: string) {
-    return removeAccents(name.toLowerCase()).replace(/^[a-z]/g, "_");
+    return removeAccents(name.toLowerCase()).replace(/[^a-z]/g, "_");
 }

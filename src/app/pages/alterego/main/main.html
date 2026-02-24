@@ -97,7 +97,7 @@
                                                         [ngClass]="{'selected': currentToolSelected == item, 'mail': item.type=='mail'}"
                                                         class="item_parent text-xs" (click)="selectThisTool(item)">
                                                         <span class="txt">
-                                                            <span>{{ item.desc }}</span>
+                                                            <span>{{ item.name }}</span>
                                                         </span>
                                                         <span class="button_elements">
                                                             <span class="date">{{ item.created | epochDate:'DD MMMM
@@ -163,6 +163,11 @@
                                                                 (ngModelChange)="refreshArguments()" />
                                                         </mat-form-field>
                                                     </div>
+                                                    @if (arg.val !== undefined) {
+                                                    <div class="tool_arg_val">
+                                                        <pre>{{ arg.val | json }}</pre>
+                                                    </div>
+                                                    }
                                                 </div>
                                                 }
                                                 <button matButton="elevated" (click)="addArgument()">
@@ -183,7 +188,8 @@
                             <app-chatsession [config]="chatConfig" [language]="language" [top]="top"
                                 [distance]="distance" [knowledge]="knowledge" [tools]="tools"
                                 [lastModified]="lastModified" [assistant]="collection"
-                                (foundFacts)="receiveSearch($event)" [useIndicator]="false"></app-chatsession>
+                                (foundFacts)="receiveSearch($event)" (foundTools)="receiveToolSearch($event)"
+                                (startSearch)="receiveStartSearching()" [useIndicator]="false"></app-chatsession>
                         </mat-card-content>
                     </mat-card>
                     }

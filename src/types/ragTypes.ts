@@ -41,6 +41,7 @@ export interface ArgumentDataType {
     name: string;
     desc: string;
     required: boolean;
+    val?: any;//transient data
 }
 // Tool
 export interface ToolDataType extends SimpleDataType {
@@ -49,7 +50,11 @@ export interface ToolDataType extends SimpleDataType {
     desc: string;
     to?: string;
     args: ArgumentDataType[];
+};
 
+export interface ToolMatchType {
+    name: string;
+    args: { [key: string]: any },
 };
 
 export const DEF_ASSISTANT_MODEL = {
@@ -74,8 +79,4 @@ export interface SearchAnswerDataType {
     type: string;
     success: boolean;
     payload: ItemToSearchType[];
-}
-
-export interface SearchToolDataType {
-    id: string;
 }

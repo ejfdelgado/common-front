@@ -36,7 +36,7 @@ import {
   AssistantDataType,
   KnowledgeDataType,
   DEF_ASSISTANT_MODEL,
-  ItemToSearchType, SearchAnswerDataType, SearchLangsType, SearchToolDataType,
+  ItemToSearchType, SearchAnswerDataType, SearchLangsType,
   ToolDataType,
   ArgumentDataType,
   DropDownOptionDataType
@@ -103,11 +103,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   pendingToSave: KnowledgeDataType[] = [];
   toolsPendingToSave: ToolDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
-  searchedToolsResult: SearchToolDataType[] = [];
+  searchedToolsResult: ToolDataType[] = [];
   lastModified: number = 0;
 
   argumentTypes: DropDownOptionDataType[] = [
     { val: Type.STRING, txt: "Text" },
+    { val: Type.BOOLEAN, txt: "Yes/No" },
+    { val: Type.INTEGER, txt: "Integer" },
+    { val: Type.NUMBER, txt: "Number" },
   ]
 
   isHandset$!: Observable<boolean>;
@@ -328,8 +331,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           label: "Type", type: "select", key: "type", required: true,
           select: {
             options: [
-              { txt: "Content", val: "content" },
               { txt: "Email", val: "mail" },
+              { txt: "Content", val: "content" },
             ]
           }
         },
@@ -369,11 +372,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (this.searchedToolsResult.length == 0) {
       return this.tools;
     } else {
-      const temp = this.searchedToolsResult.map((el: SearchToolDataType) => {
-        const found = this.tools.filter((o) => o.id == el.id);
-        return found[0];
-      });
-      return temp;
+      return this.searchedToolsResult;
     }
   }
 
@@ -506,8 +505,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       created: 0,
       updated: 0,
       name: "",
-      desc: "This is the description",
-      type: 'content',
+      desc: "",
+      type: 'mail',
       id: "",
       args: [],
     };
@@ -662,11 +661,20 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  deleteTransientToolData() {
+    this.tools.forEach((tool) => {
+      tool.args.forEach((arg) => {
+        delete arg.val;
+      })
+    });
+  }
+
   async saveToolsPending() {
     try {
       if (this.toolsPendingToSave.length == 0) {
         return;
       }
+      this.deleteTransientToolData();
       do {
         const first = this.toolsPendingToSave[0];
         await this.firestoreSrv.createUpdate(this.getToolsCollectionName(), first);
@@ -863,8 +871,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } else {
       if (this.searchedToolsResult.length > 0) {
         const first = this.searchedToolsResult[0];
-        const founds = this.tools.filter((o) => o.id == first.id);
-        const index = this.tools.indexOf(founds[0]);
+        const index = this.tools.indexOf(first);
         this.selectToolItem(index);
       } else {
         // Nothing found
@@ -875,10 +882,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   clearFilter() {
+    this.deleteTransientToolData();
     this.searchedResult = null;
     this.searchedToolsResult = [];
     this.updateSearch();
     this.updateToolsSearch();
+  }
+
+  receiveStartSearching() {
+    this.deleteTransientToolData();
   }
 
   receiveSearch(search: SearchAnswerDataType | null) {
@@ -886,7 +898,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.updateSearch();
   }
 
-  receiveToolSearch(search: SearchToolDataType[]) {
+  receiveToolSearch(search: ToolDataType[]) {
+    // First clear old values...
     this.searchedToolsResult = search;
     this.updateToolsSearch();
   }

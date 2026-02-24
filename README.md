@@ -1,8 +1,5 @@
 # CommonFront
 
-Allow display matched tools
-Allow display matched arguments.
-
 Format email with:
 - Parameters found
 - Chat history
@@ -12,6 +9,8 @@ add publish permission
 alterego_publisher
 alterego_editor
 add superadmin
+
+Cifrar el epoch con el pass y que eso sirva de password
 
 Allow to configure with the url query param, set the size of the shared url.
 
