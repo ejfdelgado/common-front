@@ -1,7 +1,5 @@
 # CommonFront
 
-Dar respuesta cuando hay match con una tool
-
 Format email with:
 - Parameters found
 - Chat history
