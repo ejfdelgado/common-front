@@ -12,6 +12,7 @@ import { AuthService } from '@services/auth.service';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { AllFieldsDataType } from 'types/fieldsTypes';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-index',
@@ -30,6 +31,7 @@ export class Index implements AfterViewInit {
   @ViewChild("camera_capture_harddrive") cameraHarddrive!: CameraCaptureComponent;
 
   openCamera$ = new Subject<void>();
+  html: SafeHtml = "";
 
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
@@ -77,6 +79,7 @@ export class Index implements AfterViewInit {
     private firestoreSrv: FirestoreService,
     public cdr: ChangeDetectorRef,
     public locationSrv: LocationService,
+    public sanitizer: DomSanitizer,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -162,5 +165,11 @@ export class Index implements AfterViewInit {
 
   async logout() {
     this.authSrv.logout();
+  }
+
+  async loadTemplate() {
+    const text = await this.fileSrv.getText("/assets/templates/emails/chat_history_orig.html");
+    this.html = this.sanitizer.bypassSecurityTrustHtml(text);
+    this.cdr.detectChanges();
   }
 }

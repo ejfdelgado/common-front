@@ -26,3 +26,5 @@
     <app-form-simple-without [model]="model" [fields]="fields"></app-form-simple-without>
 </div>
 <pre>{{ model | json }}</pre>
+<button (click)="loadTemplate()">Load template</button>
+<div [innerHTML]="html"></div>

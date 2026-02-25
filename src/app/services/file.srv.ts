@@ -241,6 +241,10 @@ export class FileService {
         });
     }
 
+    getText(url: string): Promise<any> {
+        return firstValueFrom(this.http.get(url, { responseType: 'text' }));
+    }
+
     getJSON(url: string): Promise<any> {
         return firstValueFrom(this.http.get(url, { responseType: 'text' }).pipe(
             map(res => {
