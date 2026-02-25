@@ -1,4 +1,7 @@
 <div class="editable-wrapper" [ngClass]="{'visible': !discrete, 'focused': focused}">
+    @if (label) {
+    <span>{{ label }}:</span>
+    }
     <!-- Toolbar -->
     @if (focused || !discrete) {
     <div class="toolbar">

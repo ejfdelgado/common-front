@@ -65,6 +65,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
   @Input() maxHeight?: string | null = null;
   @Input() editMode: EditModeType = "preview";
   @Input() saveName?: string | null = "download.pdf";
+  @Input() label?: string;
 
   @Output() enter = new EventEmitter<string>();
 

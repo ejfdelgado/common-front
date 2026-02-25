@@ -1,5 +1,8 @@
 <div class="editable-wrapper visible"
     [ngClass]="{'focused': focused, 'preview':editMode=='preview', 'both':editMode=='both'}">
+    @if (label) {
+    <span>{{ label }}:</span>
+    }
     <!-- Toolbar -->
     <div class="toolbar">
         @if (["preview"].indexOf(editMode) >= 0) {

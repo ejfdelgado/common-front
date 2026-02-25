@@ -337,7 +337,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           }
         },
         { label: "Name", type: "text", key: "name", required: true, },
-        { label: "Description", type: "md", key: "desc", md: { maxHeight: "200px", minHeight: "200px" } },
+        { label: "Description", type: "text", key: "desc", required: false, },
+        { label: "Response", type: "md", key: "resp", md: { maxHeight: "200px", minHeight: "200px" } },
       ];
       if (this.currentToolSelected.type == 'mail') {
         this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);

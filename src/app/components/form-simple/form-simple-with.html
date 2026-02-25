@@ -27,7 +27,7 @@
         </mat-form-field>
         } @else if (field.type=='contenteditable') {
         <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]" [placeholder]="field.label"
-            [maxHeight]="getContentEditable(field).maxHeight"
+            [maxHeight]="getContentEditable(field).maxHeight" [label]="field.label"
             [minHeight]="getContentEditable(field).minHeight"></app-editable-input>
         } @else if (field.type=='toggle') {
         <app-on-off-toggle [formControl]="formControlMap[field.key]"></app-on-off-toggle>
@@ -49,7 +49,7 @@
             [config]="castImageGalleryType(field).gallery"></app-image-gallery>
         } @else if (field.type=='md') {
         <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label"
-            [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight"
+            [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight" [label]="field.label"
             [saveName]="getMD(field).saveName"></app-md-input>
         }
         }

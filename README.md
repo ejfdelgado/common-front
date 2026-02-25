@@ -5,11 +5,15 @@ Format email with:
 - Chat history
 
 Allow to edit owners of given collection, use firestore console...
+
 add publish permission
 alterego_publisher
 alterego_editor
 add superadmin
 
+dar respuesta cuando hay match con una tool
+
+Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password
 
 Allow to configure with the url query param, set the size of the shared url.
