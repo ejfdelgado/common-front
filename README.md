@@ -1,17 +1,17 @@
 # CommonFront
 
+Dar respuesta cuando hay match con una tool
+
 Format email with:
 - Parameters found
 - Chat history
-
-Allow to edit owners of given collection, use firestore console...
 
 add publish permission
 alterego_publisher
 alterego_editor
 add superadmin
 
-dar respuesta cuando hay match con una tool
+Allow to edit owners of given collection, use firestore console...
 
 Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password

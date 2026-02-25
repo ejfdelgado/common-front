@@ -23,6 +23,7 @@ import {
   SearchLangsType,
   ToolDataType,
   ToolMatchType,
+  ToolResponseType,
 } from 'types/ragTypes';
 import { marked } from 'marked';
 import { AlterEgoService } from '@services/alterego.service';
@@ -155,6 +156,19 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
             }
           }
         }
+        if (el.functionResponse) {
+          const response = el.functionResponse.response;
+          if (response) {
+            const result = response['result'];
+            if (typeof result == "string") {
+              this.visualHistory.push({
+                date: Date.now() + index,
+                role: input.role ? input.role : "na",
+                txt: this.sanitizeText(result),
+              });
+            }
+          }
+        }
         if (el.text) {
           let textMD = el.text;
           const formated = await marked.parse(textMD);
@@ -166,7 +180,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         }
       });
       // Tools could be empty, but it needs to be fired
-      this.foundTools.emit(toolsFired);
+      requestAnimationFrame(() => {
+        this.foundTools.emit(toolsFired);
+      });
     }
   }
 
@@ -268,7 +284,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       const usedHistory = [...this.history, userMessage];
 
-      const result = await this.chatSrv.generateContent(usedHistory, this.config, this.assistant.author, this.tools);
+      const { result, toolsStatus } = await this.chatSrv.generateContent(usedHistory, this.config, this.assistant.author, this.tools);
 
       this.history.push({
         role: "user",
@@ -282,6 +298,24 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         };
         this.processVisualInput(assistantMessage);
         this.history.push(assistantMessage);
+        // Add response and process visual Input
+        // Is it necesary to keep assistantMessage.parts[0].thoughtSignature ??
+        toolsStatus.forEach((tool: ToolResponseType) => {
+          const standardName = normalizeName(tool.name);
+          const toolMessage: Content = {
+            role: "tool",
+            parts: [{
+              functionResponse: {
+                name: standardName,
+                response: { result: tool.message }
+              }
+            }]
+          };
+          this.processVisualInput(toolMessage);
+          this.history.push(toolMessage);
+
+        });
+
         this.query = "";
       }
 

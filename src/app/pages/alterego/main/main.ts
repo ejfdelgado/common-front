@@ -338,7 +338,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
         { label: "Name", type: "text", key: "name", required: true, },
         { label: "Description", type: "text", key: "desc", required: false, },
-        { label: "Response", type: "md", key: "resp", md: { maxHeight: "200px", minHeight: "200px" } },
+        { label: "Response (Ok)", type: "text", key: "ok", required: true, },
+        { label: "Response (Error)", type: "text", key: "error", required: true, },
       ];
       if (this.currentToolSelected.type == 'mail') {
         this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
@@ -347,6 +348,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.toolModel["desc"] = this.currentToolSelected.desc;
       this.toolModel["to"] = this.currentToolSelected.to;
       this.toolModel["name"] = this.currentToolSelected.name;
+      this.toolModel["ok"] = this.currentToolSelected.ok;
+      this.toolModel["error"] = this.currentToolSelected.error;
 
       this.cdr.detectChanges();
     });

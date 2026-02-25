@@ -46,7 +46,8 @@
     flex: 1;
 }
 
-.single_msg.rol_model {
+.single_msg.rol_model,
+.single_msg.rol_tool {
     padding-right: 50px;
 }
 
@@ -60,7 +61,8 @@
     display: block;
 }
 
-.single_msg.rol_model .text {
+.single_msg.rol_model .text,
+.single_msg.rol_tool .text {
     background-color: #f2f6fa;
 }
 

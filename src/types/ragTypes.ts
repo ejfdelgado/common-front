@@ -49,6 +49,8 @@ export interface ToolDataType extends SimpleDataType {
     name: string;
     desc: string;
     to?: string;
+    ok?: string;
+    error?: string;
     args: ArgumentDataType[];
 };
 
@@ -79,4 +81,10 @@ export interface SearchAnswerDataType {
     type: string;
     success: boolean;
     payload: ItemToSearchType[];
+}
+
+export interface ToolResponseType {
+    name: string;
+    message: string;
+    success?: boolean;
 }

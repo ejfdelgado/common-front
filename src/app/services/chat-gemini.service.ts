@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ParamsService } from "./params.service";
-import { GenerateContentResponse, GoogleGenAI, type GenerateContentConfig } from "@google/genai";
+import { GenerateContentResponse, type GenerateContentConfig } from "@google/genai";
 import { firstValueFrom, map } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "environments/environment";
 import { ApiResponse } from "types/file";
-import { ToolDataType } from "types/ragTypes";
+import { ToolDataType, ToolResponseType } from "types/ragTypes";
 
 @Injectable({
     providedIn: 'root',
@@ -29,7 +29,10 @@ export class ChatGeminiService {
         config: GenerateContentConfig,
         author: string,
         tools: ToolDataType[]
-    ): Promise<GenerateContentResponse> {
+    ): Promise<{
+        result: GenerateContentResponse,
+        toolsStatus: ToolResponseType[],
+    }> {
         const payload = {
             history,
             config,
