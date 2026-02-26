@@ -123,10 +123,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   fields: AllFieldsDataType[] = [];
   toolFields: AllFieldsDataType[] = [];
+  articleFields: AllFieldsDataType[] = [];
   model: FlatJsonDataType = {
 
   };
   toolModel: FlatJsonDataType = {
+
+  };
+  articleModel: FlatJsonDataType = {
 
   };
 
@@ -363,7 +367,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   selectArticleItem(index: number) {
     this.currentArticleSelected = null;
-    this.toolFields = [];
+    this.articleFields = [];
     this.cdr.detectChanges();
     if (this.tools.length <= index || index < 0) {
       return;
@@ -371,12 +375,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     requestAnimationFrame(() => {
       this.currentArticleSelected = this.articles[index];
-      this.toolFields = [
+      this.articleFields = [
         { label: "Keywords", type: "text", key: "keywords", required: true, },
-        { label: "Description", type: "text", key: "desc", required: false, },
+        { label: "Description", type: "md", key: "desc", required: false, },
       ];
-      this.toolModel['keywords'] = this.currentArticleSelected.keywords;
-      this.toolModel["desc"] = this.currentArticleSelected.desc;
+      this.articleModel['keywords'] = this.currentArticleSelected.keywords;
+      this.articleModel["desc"] = this.currentArticleSelected.desc;
 
       this.cdr.detectChanges();
     });
@@ -609,6 +613,29 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     })
   }
 
+  async addArticle() {
+    const created: ArticleDataType = {
+      created: 0,
+      updated: 0,
+      desc: "",
+      id: "",
+      keywords: "",
+    };
+    // Call to create
+    const createdId = await this.firestoreSrv.createUpdate(this.getArticlesCollectionName(), created, {
+      autoAuthor: false,
+      useAuthor: false,
+      autoOwner: false,
+      searchFields: [],
+    });
+    created.id = createdId.id;
+    created.created = createdId.created;
+    this.articles.unshift(created);
+    requestAnimationFrame(() => {
+      this.selectArticleItem(0);
+    })
+  }
+
   indexOfNamedFieldAnswer(name: string) {
     const el = this.fields.filter((el) => el.key == name);
     if (el.length > 0) {
@@ -626,6 +653,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       if (event.name == 'type') {
         this.selectToolItem(this.tools.indexOf(this.currentToolSelected));
+      }
+    }
+  }
+
+  async articleEditionMade(event: ChangeFieldType) {
+    if (this.currentArticleSelected) {
+      (this.currentArticleSelected as any)[event.name] = event.val;
+      if (this.articlesPendingToSave.indexOf(this.currentArticleSelected) < 0) {
+        this.articlesPendingToSave.push(this.currentArticleSelected);
       }
     }
   }
@@ -724,6 +760,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     await Promise.all([
       this.saveKnowledgePending(),
       this.saveToolsPending(),
+      this.saveArticlesPending(),
     ]);
   }
 
@@ -764,6 +801,24 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         await this.firestoreSrv.createUpdate(this.getToolsCollectionName(), first);
         this.toolsPendingToSave.splice(0, 1);
       } while (this.toolsPendingToSave.length > 0);
+      this.lastModified += 1;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    } finally {
+      this.cdr.detectChanges();
+    }
+  }
+
+  async saveArticlesPending() {
+    try {
+      if (this.articlesPendingToSave.length == 0) {
+        return;
+      }
+      do {
+        const first = this.articlesPendingToSave[0];
+        await this.firestoreSrv.createUpdate(this.getArticlesCollectionName(), first);
+        this.articlesPendingToSave.splice(0, 1);
+      } while (this.articlesPendingToSave.length > 0);
       this.lastModified += 1;
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);

@@ -55,7 +55,8 @@
                                                     <mat-icon (click)="toggle()">menu</mat-icon>
                                                 </button>
                                                 <span class="full_width"></span>
-                                                @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0) {
+                                                @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
+                                                articlesPendingToSave.length > 0) {
                                                 <button matButton="elevated" (click)="savePending()">
                                                     <mat-icon>save</mat-icon>
                                                     Save</button>
@@ -117,7 +118,8 @@
                                                     <mat-icon (click)="toggle()">menu</mat-icon>
                                                 </button>
                                                 <span class="full_width"></span>
-                                                @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0) {
+                                                @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
+                                                articlesPendingToSave.length > 0) {
                                                 <button matButton="elevated" (click)="savePending()">
                                                     <mat-icon>save</mat-icon>
                                                     Save</button>
@@ -173,6 +175,70 @@
                                                 <button matButton="elevated" (click)="addArgument()">
                                                     <mat-icon>add</mat-icon>
                                                     Add argument</button>
+                                            </div>
+                                            }
+                                        </mat-sidenav-content>
+                                    </mat-sidenav-container>
+                                </div>
+                            </mat-tab>
+                            <!-- Catalog tab -->
+                            <mat-tab label="Articles">
+                                <div class="tab_content">
+                                    <mat-sidenav-container autosize>
+                                        <mat-sidenav #sidenavTools [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                                            [opened]="(isHandset$ | async) === false">
+                                            <div class="left_parent">
+                                                <div class="rearch_parent">
+                                                    <h4 class="text-base">Article list</h4>
+                                                    <div class="filter_parent">
+                                                        @if (searchedArticleResult.length > 0) {
+                                                        <mat-icon (click)="clearFilter()">restart_alt</mat-icon>
+                                                        }
+                                                    </div>
+                                                    <mat-icon (click)="toggle()">close</mat-icon>
+                                                </div>
+                                                <div class="scrollable_list">
+                                                    @for (item of articlesFiltered; track item.created; let i = $index)
+                                                    {
+                                                    <span [ngClass]="{'selected': currentArticleSelected == item}"
+                                                        class="item_parent text-xs" (click)="selectThisArticle(item)">
+                                                        <span class="txt">
+                                                            <span>{{ item.desc }}</span>
+                                                        </span>
+                                                        <span class="button_elements">
+                                                            <span class="date">{{ item.created | epochDate:'DD MMMM
+                                                                YYYY, HH:mm'
+                                                                }}</span>
+                                                            <mat-icon class="xs"
+                                                                (click)="deleteArticle(item, $event)">delete</mat-icon>
+                                                        </span>
+                                                    </span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </mat-sidenav>
+                                        <mat-sidenav-content>
+                                            <mat-toolbar>
+                                                <button matIconButton aria-label="">
+                                                    <mat-icon (click)="toggle()">menu</mat-icon>
+                                                </button>
+                                                <span class="full_width"></span>
+                                                @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
+                                                articlesPendingToSave.length > 0) {
+                                                <button matButton="elevated" (click)="savePending()">
+                                                    <mat-icon>save</mat-icon>
+                                                    Save</button>
+                                                }
+                                                <button matButton="elevated" (click)="addArticle()">
+                                                    <mat-icon>add</mat-icon>
+                                                    Add tool</button>
+                                            </mat-toolbar>
+                                            @if (currentArticleSelected != null) {
+                                            <div class="editor_parent">
+                                                <app-form-simple-without
+                                                    (innerFieldChanged)="articleEditionMade($event)"
+                                                    [model]="articleModel"
+                                                    [fields]="articleFields"></app-form-simple-without>
                                             </div>
                                             }
                                         </mat-sidenav-content>
