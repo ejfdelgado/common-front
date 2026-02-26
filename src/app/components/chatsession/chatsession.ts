@@ -134,7 +134,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return null;
   }
 
-  processVisualInput(input: Content) {
+  processVisualInput(input: Content, emitTools: boolean = true) {
     if (input.parts) {
       const toolsFired: ToolDataType[] = [];
       input.parts.forEach(async (el, index) => {
@@ -180,9 +180,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         }
       });
       // Tools could be empty, but it needs to be fired
-      requestAnimationFrame(() => {
-        this.foundTools.emit(toolsFired);
-      });
+      if (emitTools) {
+        requestAnimationFrame(() => {
+          this.foundTools.emit(toolsFired);
+        });
+      }
     }
   }
 
@@ -311,7 +313,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               }
             }]
           };
-          this.processVisualInput(toolMessage);
+          this.processVisualInput(toolMessage, false);
           this.history.push(toolMessage);
 
         });

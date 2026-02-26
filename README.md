@@ -1,9 +1,5 @@
 # CommonFront
 
-Format email with:
-- Parameters found
-- Chat history
-
 add publish permission
 alterego_publisher
 alterego_editor
