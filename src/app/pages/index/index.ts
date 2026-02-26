@@ -13,6 +13,7 @@ import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MyTemplate } from "ejfdelgado-common-ts";
 
 @Component({
   selector: 'app-index',
@@ -168,7 +169,45 @@ export class Index implements AfterViewInit {
   }
 
   async loadTemplate() {
-    const text = await this.fileSrv.getText("/assets/templates/emails/chat_history_orig.html");
+    const contenido = await this.fileSrv.getText("/assets/templates/emails/chat_history_orig.html");
+
+    const renderer = new MyTemplate();
+    const text = renderer.render(
+      contenido,//template
+      {
+        tool: {
+          "args": [
+            {
+              "type": "STRING",
+              "desc": "",
+              "name": "User contact info",
+              "val": "edgar@gmail.com",
+            }
+          ],
+          "to": "edgar.jose.fernando.delgado@gmail.com",
+          "name": "Notify user contact information",
+        },
+        history: [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Do you provide immigration services?"
+              }
+            ]
+          },
+          {
+            "role": "model",
+            "parts": [
+              {
+                "text": "The response"
+              }
+            ]
+          },
+        ]
+      }
+    );
+
     this.html = this.sanitizer.bypassSecurityTrustHtml(text);
     this.cdr.detectChanges();
   }
