@@ -39,7 +39,8 @@ import {
   ItemToSearchType, SearchAnswerDataType, SearchLangsType,
   ToolDataType,
   ArgumentDataType,
-  DropDownOptionDataType
+  DropDownOptionDataType,
+  ArticleDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -54,6 +55,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
+const MODEL_ARTICLE_NAME = "article";
 const MODEL_NAME_PARENT = "knowledge";
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -97,13 +99,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
   tools: ToolDataType[] = [];
+  articles: ArticleDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
   currentToolSelected: ToolDataType | null = null;
+  currentArticleSelected: ArticleDataType | null = null;
   collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
   toolsPendingToSave: ToolDataType[] = [];
+  articlesPendingToSave: ArticleDataType[] = [];
   searchedResult: SearchAnswerDataType | null = null;
   searchedToolsResult: ToolDataType[] = [];
+  searchedArticleResult: ArticleDataType[] = [];
   lastModified: number = 0;
 
   argumentTypes: DropDownOptionDataType[] = [
@@ -355,6 +361,27 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
   }
 
+  selectArticleItem(index: number) {
+    this.currentArticleSelected = null;
+    this.toolFields = [];
+    this.cdr.detectChanges();
+    if (this.tools.length <= index || index < 0) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      this.currentArticleSelected = this.articles[index];
+      this.toolFields = [
+        { label: "Keywords", type: "text", key: "keywords", required: true, },
+        { label: "Description", type: "text", key: "desc", required: false, },
+      ];
+      this.toolModel['keywords'] = this.currentArticleSelected.keywords;
+      this.toolModel["desc"] = this.currentArticleSelected.desc;
+
+      this.cdr.detectChanges();
+    });
+  }
+
   toggle() {
     this.sidenav.toggle();
     this.sidenavTools.toggle();
@@ -380,6 +407,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  get articlesFiltered(): ArticleDataType[] {
+    if (this.searchedArticleResult.length == 0) {
+      return this.articles;
+    } else {
+      return this.searchedArticleResult;
+    }
+  }
+
   getDistanceFromIndex(index: number): number {
     if (!this.searchedResult) {
       return 0;
@@ -402,6 +437,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   selectThisTool(item: ToolDataType) {
     const index = this.tools.indexOf(item);
+    this.selectToolItem(index);
+  }
+
+  selectThisArticle(item: ArticleDataType) {
+    const index = this.articles.indexOf(item);
     this.selectToolItem(index);
   }
 
@@ -463,6 +503,35 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  async deleteArticle(item: ArticleDataType, event: any) {
+    event.preventDefault();
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: "This action can't be undone",
+    });
+    if (!confirm) {
+      return;
+    }
+    try {
+      const index = this.articles.indexOf(item);
+      // Delete from database
+      await this.firestoreSrv.delete(this.getArticlesCollectionName(), item.id);
+      this.articles.splice(index, 1);
+      if (this.articles.length > 0) {
+        if (index == 0) {
+          this.selectArticleItem(0);
+        } else {
+          this.selectArticleItem(index - 1);
+        }
+      } else {
+        this.selectArticleItem(-1);
+      }
+      this.lastModified += 1;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    }
+  }
+
   getCollectionName() {
     const params = getUrlQueryParams();
     const id = params.get("id");
@@ -479,6 +548,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       throw new Error("Missed parent");
     }
     return `knowledge/${id}/${MODEL_TOOL_NAME}`;
+  }
+
+  getArticlesCollectionName() {
+    const params = getUrlQueryParams();
+    const id = params.get("id");
+    if (!id) {
+      throw new Error("Missed parent");
+    }
+    return `knowledge/${id}/${MODEL_ARTICLE_NAME}`;
   }
 
   async addKnowledge() {
@@ -894,12 +972,30 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.cdr.detectChanges();
   }
 
+  async updateArticlesSearch() {
+    if (this.searchedArticleResult.length == 0) {
+      this.selectArticleItem(0);
+    } else {
+      if (this.searchedArticleResult.length > 0) {
+        const first = this.searchedArticleResult[0];
+        const index = this.articles.indexOf(first);
+        this.selectArticleItem(index);
+      } else {
+        // Nothing found
+        this.selectArticleItem(-1);
+      }
+    }
+    this.cdr.detectChanges();
+  }
+
   clearFilter() {
     this.deleteTransientToolData();
     this.searchedResult = null;
     this.searchedToolsResult = [];
+    this.searchedArticleResult = [];
     this.updateSearch();
     this.updateToolsSearch();
+    this.updateArticlesSearch();
   }
 
   receiveStartSearching() {

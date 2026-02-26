@@ -55,6 +55,12 @@ service cloud.firestore {
                     get(/databases/$(database)/documents/pro-knowledge/$(knowledgeId))
                     .data.owners;
     }
+    match /pro-knowledge/{knowledgeId}/pro-article/{articleId} {
+      allow read: if request.auth != null
+                  && request.auth.uid in
+                    get(/databases/$(database)/documents/pro-knowledge/$(knowledgeId))
+                    .data.owners;
+    }
     match /pro-pubknowledge/{knowledgeId} {
       allow read: if true;
     }

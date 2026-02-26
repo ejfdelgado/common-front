@@ -53,6 +53,11 @@ export interface ToolDataType extends SimpleDataType {
     error?: string;
     args: ArgumentDataType[];
 };
+// Article
+export interface ArticleDataType extends SimpleDataType {
+    keywords: string;
+    desc: string;
+};
 
 export interface ToolMatchType {
     name: string;
