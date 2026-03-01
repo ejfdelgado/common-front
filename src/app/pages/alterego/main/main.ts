@@ -6,7 +6,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { AlterEgoService } from '@services/alterego.service';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { map, Observable, shareReplay, Subscription } from 'rxjs';
@@ -144,7 +143,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     public override cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
-    public alterEgoSrv: AlterEgoService,
     public alterEgo2Srv: AlterEgo2Service,
     public confirmSrv: ConfirmDialogService,
     private router: Router,
@@ -430,11 +428,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     return 0;
   }
 
-  async echo() {
-    const response = await this.alterEgoSrv.echo();
-    console.log(JSON.stringify(response));
-  }
-
   selectThisKnowledge(item: KnowledgeDataType) {
     const index = this.knowledge.indexOf(item);
     this.selectItem(index);
@@ -678,7 +671,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async pageAll() {
     let isFirstTime: boolean = true;
     let responses: KnowledgeDataType[] = [];
-    const LIMIT = 5;
+    const LIMIT = 50;
     do {
       responses = await this.pageFacts(LIMIT, isFirstTime);
       isFirstTime = false;
