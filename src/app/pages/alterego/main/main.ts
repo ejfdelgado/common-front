@@ -863,7 +863,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       do {
         const first = this.articlesPendingToSave[0];
-        await this.firestoreSrv.createUpdate(this.getArticlesCollectionName(), first);
+        const parent = this.getParentId();
+        await this.alterEgo2Srv.createUpdateArticles(first, parent);
         this.articlesPendingToSave.splice(0, 1);
       } while (this.articlesPendingToSave.length > 0);
       this.lastModified += 1;
