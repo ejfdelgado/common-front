@@ -103,6 +103,7 @@ export class AlterEgo2Service {
         if (indicator != null) {
             indicator.done();
         }
+        return response;
     }
 
     async pageArticles(parent: string, limit: number, cursor?: FactCursorDataType | null) {

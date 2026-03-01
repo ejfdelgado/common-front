@@ -1190,9 +1190,23 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  async searchFact(txt: string) {
+    if (txt.trim().length == 0) {
+      this.clearFilter();
+    } else {
+      const parent = this.getParentId();
+      const result = await this.alterEgo2Srv.search(txt, parent, this.top, this.distance, this.language, true);
+      this.receiveSearch(result.data);
+    }
+  }
+
   async searchArticle(txt: string) {
-    const parent = this.getParentId();
-    const result = await this.alterEgo2Srv.searchArticles(txt, parent);
-    this.receiveArticleSearch(result);
+    if (txt.trim().length == 0) {
+      this.clearFilter();
+    } else {
+      const parent = this.getParentId();
+      const result = await this.alterEgo2Srv.searchArticles(txt, parent);
+      this.receiveArticleSearch(result);
+    }
   }
 }
