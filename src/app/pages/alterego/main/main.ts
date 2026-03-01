@@ -462,7 +462,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     try {
       const index = this.knowledge.indexOf(item);
       // Delete from database
-      await this.firestoreSrv.delete(this.getCollectionName(), item.id);
+      const parent = this.getParentId();
+      await this.alterEgo2Srv.delete(item.id, parent);
       this.knowledge.splice(index, 1);
       if (this.knowledge.length > 0) {
         if (index == 0) {
@@ -681,6 +682,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     do {
       responses = await this.pageFacts(LIMIT, isFirstTime);
       isFirstTime = false;
+      if (responses.length < LIMIT) {
+        break;
+      }
     } while (responses.length > 0);
   }
 
@@ -777,7 +781,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       do {
         const first = this.pendingToSave[0];
-        await this.firestoreSrv.createUpdate(this.getCollectionName(), first);
+        const parent = this.getParentId();
+        await this.alterEgo2Srv.createUpdate(first, parent);
+
         this.pendingToSave.splice(0, 1);
       } while (this.pendingToSave.length > 0);
       this.lastModified += 1;
