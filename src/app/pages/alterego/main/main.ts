@@ -40,7 +40,8 @@ import {
   ArgumentDataType,
   DropDownOptionDataType,
   ArticleDataType,
-  FactCursorDataType
+  FactCursorDataType,
+  FoundKnowledge
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -106,7 +107,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   pendingToSave: KnowledgeDataType[] = [];
   toolsPendingToSave: ToolDataType[] = [];
   articlesPendingToSave: ArticleDataType[] = [];
-  searchedResult: SearchAnswerDataType | null = null;
+  searchedResult: FoundKnowledge[] = [];
   searchedToolsResult: ToolDataType[] = [];
   searchedArticleResult: ArticleDataType[] = [];
   lastModified: number = 0;
@@ -391,14 +392,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   get knowledgeFiltered(): KnowledgeDataType[] {
-    if (!this.searchedResult) {
+    if (this.searchedResult.length == 0) {
       return this.knowledge;
     } else {
-      const temp = this.searchedResult.payload.map((el: ItemToSearchType) => {
-        const found = this.knowledge.filter((o) => o.id == el.id);
-        return found[0];
-      });
-      return temp;
+      // In this way, is it not necessary to load all knowledge in the begining
+      return this.searchedResult.map(el => el.metadata);
     }
   }
 
@@ -419,11 +417,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   getDistanceFromIndex(index: number): number {
-    if (!this.searchedResult) {
+    if (this.searchedResult.length == 0) {
       return 0;
     }
-    if (this.searchedResult.payload[index].distance) {
-      return this.searchedResult.payload[index].distance;
+    if (this.searchedResult[index].distance) {
+      return this.searchedResult[index].distance;
     }
     return 0;
   }
@@ -1003,9 +1001,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (this.searchedResult == null) {
       this.selectItem(0);
     } else {
-      if (this.searchedResult.success && this.searchedResult.payload.length > 0) {
-        const first = this.searchedResult.payload[0];
-        const founds = this.knowledge.filter((o) => o.id == first.id);
+      if (this.searchedResult.length > 0) {
+        const first = this.searchedResult[0];
+        const founds = this.knowledge.filter((o) => o.id == first.metadata.id);
         const index = this.knowledge.indexOf(founds[0]);
         this.selectItem(index);
       } else {
@@ -1050,7 +1048,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   clearFilter() {
     this.deleteTransientToolData();
-    this.searchedResult = null;
+    this.searchedResult = [];
     this.searchedToolsResult = [];
     this.searchedArticleResult = [];
     this.updateSearch();
@@ -1062,7 +1060,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.deleteTransientToolData();
   }
 
-  receiveSearch(search: SearchAnswerDataType | null) {
+  receiveSearch(search: FoundKnowledge[]) {
     this.searchedResult = search;
     this.updateSearch();
   }

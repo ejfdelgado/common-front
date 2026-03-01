@@ -36,6 +36,11 @@ export interface KnowledgeDataType extends SimpleDataType {
     tags?: KnowledgeTagType[];
 };
 
+export interface FoundKnowledge {
+    distance: number;
+    metadata: KnowledgeDataType;
+};
+
 export interface ArgumentDataType {
     type: string;
     name: string;
@@ -97,4 +102,12 @@ export interface ToolResponseType {
 export interface FactCursorDataType {
     createdAt: number;
     id: string;
+}
+
+export interface QueryChatType {
+    q: string;
+    assistantId: string,
+    top: number,
+    distance: number;
+    language: string;
 }

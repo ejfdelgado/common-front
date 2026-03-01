@@ -4,6 +4,7 @@ import { environment } from "environments/environment";
 import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "types/file";
 import { FactCursorDataType, KnowledgeDataType } from "types/ragTypes";
+import { IndicatorService, Wait } from "./indicator.service";
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +12,7 @@ import { FactCursorDataType, KnowledgeDataType } from "types/ragTypes";
 export class AlterEgo2Service {
     constructor(
         private http: HttpClient,
+        private indicatorSrv: IndicatorService,
     ) { }
 
     getIndexedText(fact: KnowledgeDataType) {
@@ -76,5 +78,32 @@ export class AlterEgo2Service {
             rows,
             next,
         };
+    }
+
+    async search(
+        userInput: string,
+        parent: string,
+        top: number,
+        distance: number,
+        language: string,
+        useIndicator: boolean,
+    ) {
+        let indicator: Wait | null = null;
+        if (useIndicator) {
+            indicator = this.indicatorSrv.start();
+        }
+        const payload = {
+            q: userInput,
+            parent,
+            distance,
+            n: top,
+        };
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "supabase/search",
+            payload,
+        ));
+        //supabase/search
+        if (indicator != null) {
+            indicator.done();
+        }
     }
 }

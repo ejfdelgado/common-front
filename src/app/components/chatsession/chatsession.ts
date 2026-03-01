@@ -24,13 +24,15 @@ import {
   ToolDataType,
   ToolMatchType,
   ToolResponseType,
+  QueryChatType,
+  FoundKnowledge,
 } from 'types/ragTypes';
 import { marked } from 'marked';
-import { AlterEgoService } from '@services/alterego.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
 import { normalizeName } from '@tools/Texts';
+import { AlterEgo2Service } from '@services/alteregov2.service';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -79,7 +81,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() useIndicator: boolean = true;
   @Input() showSplash: boolean = false;
 
-  @Output() foundFacts: EventEmitter<SearchAnswerDataType> = new EventEmitter();
+  @Output() foundFacts: EventEmitter<FoundKnowledge[]> = new EventEmitter();
   @Output() foundTools: EventEmitter<ToolDataType[]> = new EventEmitter();
   @Output() startSearch: EventEmitter<void> = new EventEmitter();
 
@@ -100,8 +102,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     public confirmSrv: ConfirmDialogService,
     public chatSrv: ChatGeminiService,
     public cdr: ChangeDetectorRef,
+    public alterEgo2Srv: AlterEgo2Service,
     private indicatorSrv: IndicatorService,
-    public alterEgoSrv: AlterEgoService,
     private uinotificationSrv: UINotificationSrv,
   ) {
     super(sanitizer, fullScreenSrv);
@@ -199,30 +201,13 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return plainText;
   }
 
-  async ensureLastTrained() {
-    if (this.lastTrained != this.lastModified) {
-      //train
-      const mockData = this.knowledge.map((elem) => {
-
-        const temp: ItemToSearchType = {
-          id: elem.id,
-          title: this.md2plain(elem.txtFormat),
-          url: elem.type == "question" && elem.answerFormat ? this.md2plain(elem.answerFormat) : "",
-        };
-        return temp;
-      });
-      const response = await this.alterEgoSrv.initialize(mockData, this.language, this.useIndicator);
-      this.lastTrained = this.lastModified;
-    }
-  }
-
   async setup() {
     try {
       this.incrementLoading();
       if (!this.initialized) {
         await this.chatSrv.initialize();
       }
-      await this.ensureLastTrained();
+
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
@@ -241,52 +226,22 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       this.incrementLoading();
       await this.setup();
       // Fecth closest facts
-      let retrievedFacts: string[] = [];
-      //console.log(`top: ${this.top} distance: ${this.distance} language: ${this.language}`);
-      //console.log(JSON.stringify(this.config, null, 4));
-      const searchedResult = await this.alterEgoSrv.search(
-        userInput,
-        this.top,
-        this.distance / 100,
-        this.language,
-        this.useIndicator,
-      );
-
-      //console.log(JSON.stringify(searchedResult, null, 4));
-
-      this.foundFacts.emit(searchedResult);
-      if (searchedResult.payload.length > 0) {
-
-        const ids = searchedResult.payload.map((el) => el.id);
-        const completeData = this.knowledge.filter(el => ids.indexOf(el.id) >= 0);
-
-        retrievedFacts = completeData.map((el) => {
-          //this is the md version
-          if (el.type == "question") {
-            return el.answerFormat ? el.answerFormat : el.txtFormat;
-          } else {
-            return el.txtFormat;
-          }
-        });
-      }
-
-      //console.log(JSON.stringify(retrievedFacts, null, 4));
 
       // Add user message to local history
       const userInputRaw = { role: "user", parts: [{ text: userInput }] };
       this.processVisualInput(userInputRaw);
 
-      const contextBlock = retrievedFacts.length > 0
-        ? `[CONTEXT DATA]\n${retrievedFacts.join("\n")}\n\n[USER QUESTION]\n`
-        : "";
-      const userMessage: Content = {
-        role: "user",
-        parts: [{ text: contextBlock + userInput }]
+      const extra: QueryChatType = {
+        q: userInput,
+        assistantId: this.assistant.id,
+        distance: this.distance / 100,
+        language: this.language,
+        top: this.top,
       };
 
-      const usedHistory = [...this.history, userMessage];
+      const { result, toolsStatus, searchedResult } = await this.chatSrv.generateContent(this.history, extra, this.config, this.assistant.author, this.tools);
 
-      const { result, toolsStatus } = await this.chatSrv.generateContent(usedHistory, this.config, this.assistant.author, this.tools);
+      this.foundFacts.emit(searchedResult);
 
       this.history.push({
         role: "user",
@@ -321,6 +276,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.query = "";
       }
 
+
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
@@ -346,38 +302,5 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   scrollToBottom(): void {
     const element = this.scrollContainer.nativeElement;
     element.scrollTop = element.scrollHeight;
-  }
-
-  async handleTools() {
-    /*
-    const candidate = response.candidates[0];
-
-    // 3. Handle Tool Calls (Function Calls)
-    const call = candidate.content.parts.find(p => p.function_call);
-
-    if (call?.function_call) {
-      const { name, args } = call.function_call;
-
-      if (name === "send_email") {
-        const { recipient, subject, body } = args as any;
-        this.openMailClient(recipient, subject, body);
-
-        // Add the tool call and its response to history to maintain context
-        this.history.push(candidate.content);
-        this.history.push({
-          role: "tool",
-          parts: [{
-            function_response: {
-              name: "send_email",
-              response: { result: "Success: Mail client opened." }
-            }
-          }]
-        });
-
-        return `I've opened your email app to message ${recipient}.`;
-      }
-    }
-    this.history.push(candidate.content);
-    */
   }
 }

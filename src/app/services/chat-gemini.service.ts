@@ -5,7 +5,7 @@ import { firstValueFrom, map } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "environments/environment";
 import { ApiResponse } from "types/file";
-import { ToolDataType, ToolResponseType } from "types/ragTypes";
+import { FoundKnowledge, KnowledgeDataType, QueryChatType, ToolDataType, ToolResponseType } from "types/ragTypes";
 
 @Injectable({
     providedIn: 'root',
@@ -26,18 +26,21 @@ export class ChatGeminiService {
 
     async generateContent(
         history: any[],
+        extra: QueryChatType,
         config: GenerateContentConfig,
         author: string,
         tools: ToolDataType[]
     ): Promise<{
         result: GenerateContentResponse,
         toolsStatus: ToolResponseType[],
+        searchedResult: FoundKnowledge[],
     }> {
         const payload = {
             history,
             config,
             author,
             tools,
+            extra,
             pass: await this.paramsSrv.getEncriptedKey(ChatGeminiService.tempPass),
         };
         const response: ApiResponse = await firstValueFrom(

@@ -5,7 +5,7 @@ import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { getUrlQueryParams } from "@tools/UrlUtil";
-import { AssistantDataType, DEF_ASSISTANT_MODEL, KnowledgeDataType, SearchAnswerDataType, SearchLangsType, ToolDataType } from 'types/ragTypes';
+import { AssistantDataType, DEF_ASSISTANT_MODEL, FoundKnowledge, KnowledgeDataType, SearchAnswerDataType, SearchLangsType, ToolDataType } from 'types/ragTypes';
 import { decode } from '@msgpack/msgpack';
 import { AlterEgoSplash } from '@components/chatsession/splash/splash';
 import { CommonModule } from '@angular/common';
@@ -80,7 +80,7 @@ export class AlterEgoUse implements OnInit {
     this.chatConfig.temperature = withDefaults.temperature;
   }
 
-  receiveSearch(search: SearchAnswerDataType | null) {
+  receiveSearch(search: FoundKnowledge[]) {
 
   }
 }
