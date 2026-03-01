@@ -1,5 +1,11 @@
 # CommonFront
 
+Use the search text:
+1. as laboratory.
+2. as tool.
+
+Cual es el max length del embeeding text?
+
 add publish permission
 alterego_publisher
 alterego_editor
@@ -11,8 +17,6 @@ Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password
 
 QR add color and emoji.
-Add gallery with cathegory.
-Cual es el max length del embeeding text?
 
 Allow to configure with the url query param, set the size of the shared url.
 

@@ -91,6 +91,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('sidenavTools') sidenavTools!: MatSidenav;
+  @ViewChild('article_form') articleForm!: FormSimpleWithout;
 
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
@@ -380,9 +381,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.articleFields = [
         { label: "Keywords", type: "text", key: "keywords", required: true, },
         { label: "Description", type: "md", key: "desc", required: false, },
+        {
+          label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
+            thumbnailMaxSizePixels: 100,
+            template: "alterego/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
+          }
+        },
       ];
       this.articleModel['keywords'] = this.currentArticleSelected.keywords;
       this.articleModel["desc"] = this.currentArticleSelected.desc;
+      this.articleModel["gallery"] = this.currentArticleSelected.gallery;
 
       this.cdr.detectChanges();
     });
@@ -442,9 +450,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.selectToolItem(index);
   }
 
-  selectThisArticle(item: ArticleDataType) {
+  async selectThisArticle(item: ArticleDataType) {
+    // First, neet to save
+    await this.articleForm.saveAllChangedData();
     const index = this.articles.indexOf(item);
-    this.selectToolItem(index);
+    this.selectArticleItem(index);
   }
 
   async deleteKnowledge(item: KnowledgeDataType, event: any) {
@@ -862,6 +872,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         return;
       }
       do {
+        await this.articleForm.saveAllChangedData();
         const first = this.articlesPendingToSave[0];
         const parent = this.getParentId();
         await this.alterEgo2Srv.createUpdateArticles(first, parent);

@@ -235,7 +235,7 @@
                                             </mat-toolbar>
                                             @if (currentArticleSelected != null) {
                                             <div class="editor_parent">
-                                                <app-form-simple-without
+                                                <app-form-simple-without #article_form
                                                     (innerFieldChanged)="articleEditionMade($event)"
                                                     [model]="articleModel"
                                                     [fields]="articleFields"></app-form-simple-without>

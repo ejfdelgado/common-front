@@ -62,6 +62,7 @@ export interface ToolDataType extends SimpleDataType {
 export interface ArticleDataType extends SimpleDataType {
     keywords: string;
     desc: string;
+    gallery?: any;
 };
 
 export interface ToolMatchType {
