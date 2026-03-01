@@ -93,3 +93,8 @@ export interface ToolResponseType {
     message: string;
     success?: boolean;
 }
+
+export interface FactCursorDataType {
+    createdAt: number;
+    id: string;
+}
