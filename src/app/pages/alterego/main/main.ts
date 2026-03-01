@@ -21,7 +21,7 @@ import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-simple';
 import { Router } from '@angular/router';
 import { IndicatorService } from '@services/indicator.service';
-import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@services/firestore.service';
+import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -35,7 +35,7 @@ import {
   AssistantDataType,
   KnowledgeDataType,
   DEF_ASSISTANT_MODEL,
-  ItemToSearchType, SearchAnswerDataType, SearchLangsType,
+  SearchLangsType,
   ToolDataType,
   ArgumentDataType,
   DropDownOptionDataType,
@@ -260,9 +260,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const promises: Promise<any>[] = [];
       promises.push(this.pageAll());
       promises.push(this.pageAllTools());
+      promises.push(this.pageAllArticles());
       await Promise.all(promises);
       this.selectItem(0);
       this.selectToolItem(0);
+      this.selectArticleItem(0);
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
     }
@@ -516,7 +518,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     try {
       const index = this.articles.indexOf(item);
       // Delete from database
-      await this.firestoreSrv.delete(this.getArticlesCollectionName(), item.id);
+      const parent = this.getParentId();
+      await this.alterEgo2Srv.deleteArticles(item.id, parent);
       this.articles.splice(index, 1);
       if (this.articles.length > 0) {
         if (index == 0) {
@@ -614,14 +617,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       keywords: "",
     };
     // Call to create
-    const createdId = await this.firestoreSrv.createUpdate(this.getArticlesCollectionName(), created, {
-      autoAuthor: false,
-      useAuthor: false,
-      autoOwner: false,
-      searchFields: [],
-    });
-    created.id = createdId.id;
-    created.created = createdId.created;
+    const parent = this.getParentId();
+    await this.alterEgo2Srv.createUpdateArticles(created, parent);
     this.articles.unshift(created);
     requestAnimationFrame(() => {
       this.selectArticleItem(0);
@@ -670,6 +667,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  getParentId() {
+    const params = getUrlQueryParams();
+    const parent = params.get("id");
+    if (!parent) {
+      throw new Error("No parent");
+    }
+    return parent;
+  }
+
   async pageAll() {
     let isFirstTime: boolean = true;
     let responses: KnowledgeDataType[] = [];
@@ -681,15 +687,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         break;
       }
     } while (responses.length > 0);
-  }
-
-  getParentId() {
-    const params = getUrlQueryParams();
-    const parent = params.get("id");
-    if (!parent) {
-      throw new Error("No parent");
-    }
-    return parent;
   }
 
   async pageFacts(limit: number, startover: boolean = false): Promise<KnowledgeDataType[]> {
@@ -751,6 +748,49 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       const page = (await this.firestoreSrv.paging(pagingOptions));
       this.tools.push(...(page as any[]));
+      this.cdr.detectChanges();
+      return page;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+      return [];
+    } finally {
+      indicator.done();
+    }
+  }
+
+  async pageAllArticles() {
+    let isFirstTime: boolean = true;
+    let responses: ArticleDataType[] = [];
+    const LIMIT = 50;
+    do {
+      responses = await this.pageArticles(LIMIT, isFirstTime);
+      isFirstTime = false;
+      if (responses.length < LIMIT) {
+        break;
+      }
+    } while (responses.length > 0);
+  }
+
+  async pageArticles(limit: number, startover: boolean = false): Promise<ArticleDataType[]> {
+    const indicator = this.indicatorSrv.start();
+    try {
+      if (startover && this.articles.length > 0) {
+        this.articles.splice(0, this.articles.length);
+      }
+      // parent
+      const parent = this.getParentId();
+      // paging
+      let cursor: FactCursorDataType | null = null;
+      if (!startover) {
+        const last = this.articles[this.articles.length - 1];
+        cursor = {
+          createdAt: last.created,
+          id: last.id,
+        }
+      }
+      const pageResult = await this.alterEgo2Srv.pageArticles(parent, limit, cursor);
+      const page = pageResult.rows;
+      this.articles.push(...(page as any[]));
       this.cdr.detectChanges();
       return page;
     } catch (err: any) {

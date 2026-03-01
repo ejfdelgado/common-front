@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
 import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "types/file";
-import { FactCursorDataType, KnowledgeDataType } from "types/ragTypes";
+import { ArticleDataType, FactCursorDataType, KnowledgeDataType } from "types/ragTypes";
 import { IndicatorService, Wait } from "./indicator.service";
 
 @Injectable({
@@ -38,7 +38,6 @@ export class AlterEgo2Service {
         const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "supabase/crud",
             payload,
         ));
-        console.log(response);
         if (response.success === true) {
             fact.id = response.data.id;
             if (response.data.created_at) {
@@ -55,7 +54,6 @@ export class AlterEgo2Service {
         const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "supabase/crud",
             payload,
         ));
-        console.log(response);
     }
 
     async pageFacts(parent: string, limit: number, cursor?: FactCursorDataType | null) {
@@ -105,5 +103,56 @@ export class AlterEgo2Service {
         if (indicator != null) {
             indicator.done();
         }
+    }
+
+    async pageArticles(parent: string, limit: number, cursor?: FactCursorDataType | null) {
+        const payload = {
+            cursor,
+            parent,
+            limit,
+        };
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "articles/page",
+            payload,
+        ));
+        const rows: ArticleDataType[] = (response.data.rows as any[]).map((row) => {
+            const metadata = row.metadata as ArticleDataType;
+            metadata.id = row.id;
+            metadata.created = parseInt(row.created_at);
+            return metadata;
+        });
+        const next = response.data.nextCursor;
+        return {
+            rows,
+            next,
+        };
+    }
+
+    async createUpdateArticles(fact: ArticleDataType, parent: string) {
+        const payload = {
+            id: fact.id,
+            parent,
+            q: fact.keywords,
+            metadata: fact,
+        };
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "articles/crud",
+            payload,
+        ));
+
+        if (response.success === true) {
+            fact.id = response.data.id;
+            if (response.data.created_at) {
+                fact.created = response.data.created_at;
+            }
+        }
+    }
+
+    async deleteArticles(id: string, parent: string) {
+        const payload = {
+            id,
+            parent,
+        };
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "articles/crud",
+            payload,
+        ));
     }
 }
