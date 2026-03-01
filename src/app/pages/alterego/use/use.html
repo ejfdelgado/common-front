@@ -1,10 +1,9 @@
-<div class="parent_container" [ngClass]="{'with_splash': knowledge.length == 0}">
+<div class="parent_container" [ngClass]="{'with_splash': tools === null}">
     @if (collection) {
-    @if (knowledge.length > 0) {
-    <app-chatsession [config]="chatConfig" [language]="language" [top]="top" [distance]="distance"
-        [knowledge]="knowledge" [tools]="tools" [lastModified]="lastModified" [assistant]="collection"
-        [showSplash]="true" (foundFacts)="receiveSearch($event)" [autowarm]="true"
-        [useIndicator]="false"></app-chatsession>
+    @if (tools !== null) {
+    <app-chatsession [config]="chatConfig" [language]="language" [top]="top" [distance]="distance" [tools]="tools"
+        [lastModified]="lastModified" [assistant]="collection" [showSplash]="true" (foundFacts)="receiveSearch($event)"
+        [autowarm]="true" [useIndicator]="false"></app-chatsession>
     } @else {
     <div class="overflow_parent">
         <app-splash [assistant]="collection" [loading]="true"></app-splash>

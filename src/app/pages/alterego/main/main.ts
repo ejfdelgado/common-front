@@ -396,7 +396,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return this.knowledge;
     } else {
       // In this way, is it not necessary to load all knowledge in the begining
-      return this.searchedResult.map(el => el.metadata);
+      return this.searchedResult.map((el) => {
+        const found = el.metadata;
+        const matches = this.knowledge.find((k) => { return k.id == found.id });
+        return matches;
+      }).filter((el) => el != undefined);
     }
   }
 
@@ -878,7 +882,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
           // 5. Take all the knowledge and convert it into binary
           const binary = encode({
-            knowledge: this.knowledge,
             tools: this.tools,
           });
 

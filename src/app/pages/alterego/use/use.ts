@@ -28,7 +28,7 @@ export class AlterEgoUse implements OnInit {
   top: number = 3;
   distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
-  tools: ToolDataType[] = [];
+  tools: ToolDataType[] | null = null;
   collection: AssistantDataType | null = null;
   lastModified: number = 0;
   chatConfig: GenerateContentConfig = {
@@ -61,8 +61,7 @@ export class AlterEgoUse implements OnInit {
         throw new Error("The assistant is not well configured");
       }
       const knowledgeBin = await this.fileSrv.getBinary(this.collection.knowledge_path);
-      const { knowledge, tools } = decode(knowledgeBin) as any;
-      this.knowledge = knowledge;
+      const { tools } = decode(knowledgeBin) as any;
       this.tools = tools;
       this.cdr.detectChanges();
     } catch (err: any) {
