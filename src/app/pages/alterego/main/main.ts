@@ -345,18 +345,22 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           select: {
             options: [
               { txt: "Email", val: "mail" },
-              { txt: "Content", val: "content" },
+              { txt: "Article", val: "article" },
             ]
           }
         },
         { label: "Name", type: "text", key: "name", required: true, },
         { label: "Description", type: "text", key: "desc", required: false, },
-        { label: "Response (Ok)", type: "text", key: "ok", required: true, },
-        { label: "Response (Error)", type: "text", key: "error", required: true, },
       ];
       if (this.currentToolSelected.type == 'mail') {
         this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
+        this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, },);
+        this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, },);
+      } else if (this.currentToolSelected.type == 'article') {
+        this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, },);
+        this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, },);
       }
+
       this.toolModel['type'] = this.currentToolSelected.type;
       this.toolModel["desc"] = this.currentToolSelected.desc;
       this.toolModel["to"] = this.currentToolSelected.to;

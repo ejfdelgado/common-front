@@ -1,10 +1,7 @@
 # CommonFront
 
 Use the search text:
-1. as laboratory.
 2. as tool.
-
-Cual es el max length del embeeding text?
 
 add publish permission
 alterego_publisher
@@ -15,6 +12,8 @@ Allow to edit owners of given collection, use firestore console...
 
 Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password
+
+Cual es el max length del embeeding text?
 
 QR add color and emoji.
 
