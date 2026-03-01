@@ -16,7 +16,7 @@
                                                 <div class="rearch_parent">
                                                     <h4 class="text-base">Facts list</h4>
                                                     <div class="filter_parent">
-                                                        @if (searchedResult != null) {
+                                                        @if (searchedResult.length > 0) {
                                                         <mat-icon (click)="clearFilter()">restart_alt</mat-icon>
                                                         }
                                                     </div>
