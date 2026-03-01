@@ -29,9 +29,15 @@
                 <app-splash [assistant]="assistant"></app-splash>
                 }
                 @for (message of visualHistory; track message.date) {
+                @if (message.gallery) {
+                <div class="single_msg">
+                    <app-photo-gallery [gallery]="message.gallery"></app-photo-gallery>
+                </div>
+                } @else {
                 <div class="single_msg" [ngClass]="'rol_'+message.role">
                     <span class="text" [innerHTML]="message.txt"></span>
                 </div>
+                }
                 }
             </div>
         </div>

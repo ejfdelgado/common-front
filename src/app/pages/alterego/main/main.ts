@@ -367,6 +367,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.toolModel["name"] = this.currentToolSelected.name;
       this.toolModel["ok"] = this.currentToolSelected.ok;
       this.toolModel["error"] = this.currentToolSelected.error;
+      this.toolModel["keywords"] = this.currentToolSelected.keywords;
 
       this.cdr.detectChanges();
     });

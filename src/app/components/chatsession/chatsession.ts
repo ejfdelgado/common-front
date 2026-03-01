@@ -18,14 +18,12 @@ import { IndicatorService, Wait } from '@services/indicator.service';
 import {
   AssistantDataType,
   KnowledgeDataType,
-  ItemToSearchType,
-  SearchAnswerDataType,
   SearchLangsType,
   ToolDataType,
-  ToolMatchType,
   ToolResponseType,
   QueryChatType,
   FoundKnowledge,
+  ArticleDataType,
 } from 'types/ragTypes';
 import { marked } from 'marked';
 import { UINotificationSrv } from '@services/uinotifications.service';
@@ -33,6 +31,8 @@ import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
 import { normalizeName } from '@tools/Texts';
 import { AlterEgo2Service } from '@services/alteregov2.service';
+import { ImageGalleryType } from 'types/fieldsTypes';
+import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -47,6 +47,7 @@ export interface MessageLocalDataType {
   date: number;
   role: string;
   txt: SafeHtml;
+  gallery?: ImageGalleryType[];
 };
 
 @Component({
@@ -63,6 +64,7 @@ export interface MessageLocalDataType {
     MatFormFieldModule,
     MatInputModule,
     AlterEgoSplash,
+    PhotoGallery,
   ],
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',
@@ -83,6 +85,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   @Output() foundFacts: EventEmitter<FoundKnowledge[]> = new EventEmitter();
   @Output() foundTools: EventEmitter<ToolDataType[]> = new EventEmitter();
+  @Output() foundArticles: EventEmitter<ArticleDataType[]> = new EventEmitter();
   @Output() startSearch: EventEmitter<void> = new EventEmitter();
 
   loading: number = 0;
@@ -268,6 +271,21 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               }
             }]
           };
+          //const toolRef = this.searchNamedTool(standardName);
+          //console.log(JSON.stringify(toolRef, null, 4));
+          if (tool.articles) {
+            this.foundArticles.emit(tool.articles);
+            tool.articles.forEach((article) => {
+              if (article.gallery && article.gallery.length > 0) {
+                this.visualHistory.push({
+                  date: Date.now() - 1,
+                  role: "tool",
+                  txt: "",
+                  gallery: article.gallery
+                });
+              }
+            });
+          }
           this.processVisualInput(toolMessage, false);
           this.history.push(toolMessage);
 

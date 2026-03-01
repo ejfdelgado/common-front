@@ -56,6 +56,7 @@ export interface ToolDataType extends SimpleDataType {
     to?: string;
     ok?: string;
     error?: string;
+    keywords?: string;
     args: ArgumentDataType[];
 };
 // Article
@@ -98,6 +99,7 @@ export interface ToolResponseType {
     name: string;
     message: string;
     success?: boolean;
+    articles?: ArticleDataType[];
 }
 
 export interface FactCursorDataType {

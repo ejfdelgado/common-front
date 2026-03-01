@@ -225,7 +225,8 @@
                                                     <mat-icon (click)="toggle()">menu</mat-icon>
                                                 </button>
                                                 <span class="full_width">
-                                                    <app-search-input (search)="searchArticle($event)"></app-search-input>
+                                                    <app-search-input
+                                                        (search)="searchArticle($event)"></app-search-input>
                                                 </span>
                                                 @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
                                                 articlesPendingToSave.length > 0) {
@@ -259,7 +260,8 @@
                                 [distance]="distance" [knowledge]="knowledge" [tools]="tools"
                                 [lastModified]="lastModified" [assistant]="collection"
                                 (foundFacts)="receiveSearch($event)" (foundTools)="receiveToolSearch($event)"
-                                (startSearch)="receiveStartSearching()" [useIndicator]="false"></app-chatsession>
+                                (foundArticles)="receiveArticleSearch($event)" (startSearch)="receiveStartSearching()"
+                                [useIndicator]="false"></app-chatsession>
                         </mat-card-content>
                     </mat-card>
                     }
