@@ -68,7 +68,7 @@ export class AlterEgo2Service {
         const rows: KnowledgeDataType[] = (response.data.rows as any[]).map((row) => {
             const metadata = row.metadata as KnowledgeDataType;
             metadata.id = row.id;
-            metadata.created = row.created_at;
+            metadata.created = parseInt(row.created_at);
             return metadata;
         });
         const next = response.data.nextCursor;

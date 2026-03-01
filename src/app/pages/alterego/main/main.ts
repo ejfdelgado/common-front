@@ -573,14 +573,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       id: "",
     };
     // Call to create
-    const createdId = await this.firestoreSrv.createUpdate(this.getCollectionName(), created, {
-      autoAuthor: false,
-      useAuthor: false,
-      autoOwner: false,
-      searchFields: [],
-    });
-    created.id = createdId.id;
-    created.created = createdId.created;
+    const parent = this.getParentId();
+    await this.alterEgo2Srv.createUpdate(created, parent);
+
     this.knowledge.unshift(created);
     requestAnimationFrame(() => {
       this.selectItem(0);
@@ -689,19 +684,24 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } while (responses.length > 0);
   }
 
+  getParentId() {
+    const params = getUrlQueryParams();
+    const parent = params.get("id");
+    if (!parent) {
+      throw new Error("No parent");
+    }
+    return parent;
+  }
+
   async pageFacts(limit: number, startover: boolean = false): Promise<KnowledgeDataType[]> {
     const indicator = this.indicatorSrv.start();
     try {
       if (startover && this.knowledge.length > 0) {
         this.knowledge.splice(0, this.knowledge.length);
       }
-      // parent?
-      const params = getUrlQueryParams();
-      const parent = params.get("id");
-      if (!parent) {
-        throw new Error("No parent");
-      }
-      // paging?
+      // parent
+      const parent = this.getParentId();
+      // paging
       let cursor: FactCursorDataType | null = null;
       if (!startover) {
         const last = this.knowledge[this.knowledge.length - 1];
