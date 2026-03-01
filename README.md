@@ -1,8 +1,5 @@
 # CommonFront
 
-Use the search text:
-2. as tool.
-
 add publish permission
 alterego_publisher
 alterego_editor
