@@ -372,7 +372,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.currentArticleSelected = null;
     this.articleFields = [];
     this.cdr.detectChanges();
-    if (this.tools.length <= index || index < 0) {
+    if (this.articles.length <= index || index < 0) {
       return;
     }
 
@@ -451,8 +451,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async selectThisArticle(item: ArticleDataType) {
-    // First, neet to save
-    await this.articleForm.saveAllChangedData();
+    // First, need to save
+    if (this.articleForm) {
+      await this.articleForm.saveAllChangedData();
+    }
     const index = this.articles.indexOf(item);
     this.selectArticleItem(index);
   }
@@ -1091,7 +1093,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } else {
       if (this.searchedArticleResult.length > 0) {
         const first = this.searchedArticleResult[0];
-        const index = this.articles.indexOf(first);
+        const founds = this.articles.filter((o) => o.id == first.id);
+        const index = this.articles.indexOf(founds[0]);
         this.selectArticleItem(index);
       } else {
         // Nothing found
@@ -1124,6 +1127,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     // First clear old values...
     this.searchedToolsResult = search;
     this.updateToolsSearch();
+  }
+
+  receiveArticleSearch(search: ArticleDataType[]) {
+    this.searchedArticleResult = search;
+    this.updateArticlesSearch();
   }
 
   async localShare() {
@@ -1180,5 +1188,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (this.toolsPendingToSave.indexOf(this.currentToolSelected) < 0) {
       this.toolsPendingToSave.push(this.currentToolSelected);
     }
+  }
+
+  async searchArticle(txt: string) {
+    const parent = this.getParentId();
+    const result = await this.alterEgo2Srv.searchArticles(txt, parent);
+    this.receiveArticleSearch(result);
   }
 }

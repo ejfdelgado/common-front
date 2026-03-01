@@ -222,7 +222,9 @@
                                                 <button matIconButton aria-label="">
                                                     <mat-icon (click)="toggle()">menu</mat-icon>
                                                 </button>
-                                                <span class="full_width"></span>
+                                                <span class="full_width">
+                                                    <app-search-input (search)="searchArticle($event)"></app-search-input>
+                                                </span>
                                                 @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
                                                 articlesPendingToSave.length > 0) {
                                                 <button matButton="elevated" (click)="savePending()">

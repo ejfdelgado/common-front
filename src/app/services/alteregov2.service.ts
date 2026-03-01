@@ -155,4 +155,15 @@ export class AlterEgo2Service {
             payload,
         ));
     }
+
+    async searchArticles(q: string, parent: string): Promise<ArticleDataType[]> {
+        const payload = {
+            q,
+            parent,
+        };
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "articles/search",
+            payload,
+        ));
+        return response.data;
+    }
 }
