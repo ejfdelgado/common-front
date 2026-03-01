@@ -8,7 +8,7 @@ import { FactCursorDataType, KnowledgeDataType } from "types/ragTypes";
 @Injectable({
     providedIn: 'root',
 })
-export class AlterEgoService {
+export class AlterEgo2Service {
     constructor(
         private http: HttpClient,
     ) { }
@@ -33,12 +33,15 @@ export class AlterEgoService {
             q,
             metadata: fact,
         };
-        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "/supabase/crud",
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "supabase/crud",
             payload,
         ));
         console.log(response);
         if (response.success === true) {
             fact.id = response.data.id;
+            if (response.data.created_at) {
+                fact.created = response.data.created_at;
+            }
         }
     }
 
@@ -47,24 +50,25 @@ export class AlterEgoService {
             id,
             parent,
         };
-        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "/supabase/crud",
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "supabase/crud",
             payload,
         ));
         console.log(response);
     }
 
-    async pageFacts(parent: string, cursor?: FactCursorDataType) {
+    async pageFacts(parent: string, limit: number, cursor?: FactCursorDataType | null) {
         const payload = {
             cursor,
             parent,
+            limit,
         };
-        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "/supabase/page",
+        const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "supabase/page",
             payload,
         ));
         const rows: KnowledgeDataType[] = (response.data.rows as any[]).map((row) => {
-            const id = row.id;
             const metadata = row.metadata as KnowledgeDataType;
-            metadata.id = id;
+            metadata.id = row.id;
+            metadata.created = row.created_at;
             return metadata;
         });
         const next = response.data.nextCursor;

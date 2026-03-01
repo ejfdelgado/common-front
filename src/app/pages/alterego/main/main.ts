@@ -40,7 +40,8 @@ import {
   ToolDataType,
   ArgumentDataType,
   DropDownOptionDataType,
-  ArticleDataType
+  ArticleDataType,
+  FactCursorDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,14 +53,13 @@ import { BucketOptionsType } from '@services/bucket.service';
 import { ShareSrv } from '@services/share.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { AlterEgo2Service } from '@services/alteregov2.service';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
 const MODEL_ARTICLE_NAME = "article";
 const MODEL_NAME_PARENT = "knowledge";
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
-
-
 
 @Component({
   selector: 'app-main',
@@ -145,6 +145,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
     public alterEgoSrv: AlterEgoService,
+    public alterEgo2Srv: AlterEgo2Service,
     public confirmSrv: ConfirmDialogService,
     private router: Router,
     private indicatorSrv: IndicatorService,
@@ -680,32 +681,37 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async pageAll() {
     let isFirstTime: boolean = true;
-    let responses: BasicDataType[] = [];
-    const LIMIT = 100;
+    let responses: KnowledgeDataType[] = [];
+    const LIMIT = 5;
     do {
       responses = await this.pageFacts(LIMIT, isFirstTime);
       isFirstTime = false;
     } while (responses.length > 0);
   }
 
-  async pageFacts(limit: number, startover: boolean = false): Promise<BasicDataType[]> {
+  async pageFacts(limit: number, startover: boolean = false): Promise<KnowledgeDataType[]> {
     const indicator = this.indicatorSrv.start();
     try {
       if (startover && this.knowledge.length > 0) {
         this.knowledge.splice(0, this.knowledge.length);
       }
-      const pagingOptions: PageDataType = {
-        collectionName: this.getCollectionName(),
-        orderColumn: "created",
-        orderDirection: "desc",
-        top: limit,
-      };
+      // parent?
+      const params = getUrlQueryParams();
+      const parent = params.get("id");
+      if (!parent) {
+        throw new Error("No parent");
+      }
+      // paging?
+      let cursor: FactCursorDataType | null = null;
       if (!startover) {
-        if (this.knowledge.length > 0) {
-          pagingOptions.lastDoc = this.knowledge[this.knowledge.length - 1];
+        const last = this.knowledge[this.knowledge.length - 1];
+        cursor = {
+          createdAt: last.created,
+          id: last.id,
         }
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
+      const pageResult = await this.alterEgo2Srv.pageFacts(parent, limit, cursor);
+      const page = pageResult.rows;
       this.knowledge.push(...(page as any[]));
       this.cdr.detectChanges();
       return page;
