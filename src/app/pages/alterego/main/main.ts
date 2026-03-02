@@ -54,7 +54,7 @@ import { ShareSrv } from '@services/share.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AlterEgo2Service } from '@services/alteregov2.service';
-import { SearchUser } from 'app/pages/admin/users/search-user/search-user';
+import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
@@ -1229,13 +1229,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!this.collection) {
       return;
     }
-    const dialogRef = this.dialog.open(SearchUser, {
+    const dialogRef = this.dialog.open(SharedWith, {
       width: '800px',
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: {
+        id: this.collection.id,
+        collection: MODEL_NAME_PARENT,
       },
     });
-    dialogRef.afterClosed().subscribe(async (result) => { });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      console.log(result);
+    });
   }
 }
