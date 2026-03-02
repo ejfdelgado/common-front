@@ -26,6 +26,7 @@
     flex: 1;
     position: relative;
     min-height: 200px;
+    background-image: url("/assets/img/leaves_256.jpg");
 }
 
 .scrolled_messages {
@@ -40,6 +41,8 @@
     gap: 16px;
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 .fill_height {
@@ -78,6 +81,9 @@
     border-top: 1px solid var(--color-font-softer);
     padding-top: 10px;
     position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
 }
 
 .botton_controls .indicator {
