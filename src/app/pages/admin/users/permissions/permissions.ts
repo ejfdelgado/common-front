@@ -7,6 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
+import { UsersService } from '@services/users.service';
 
 @Component({
   selector: 'app-permissions',
@@ -28,7 +29,8 @@ export class UserPermissions {
 
   constructor(
     private dialogRef: MatDialogRef<DialogFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public userSrv: UsersService,
   ) {
     // Make a copy to avoid modify original
     this.config = JSON.parse(JSON.stringify(data));
@@ -49,7 +51,7 @@ export class UserPermissions {
   }
 
   async internalSave(data: { [key: string]: any }) {
-    console.log("internalSave...");
+    await this.userSrv.writeRoles(this.config.model['user'], data['roles']);
   }
 
   isInvalid() {

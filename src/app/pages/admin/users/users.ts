@@ -124,7 +124,10 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
       modelName: "",
       searchFields: [],
       fields: fields,
-      model: {},
+      model: {
+        user: user,
+        roles: await this.userSrv.listRoles(user),
+      },
     };
     const dialogRef = this.dialog.open(UserPermissions, {
       width: '800px',
@@ -135,7 +138,7 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log(result);
+
       }
     });
   }
