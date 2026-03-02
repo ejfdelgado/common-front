@@ -1,14 +1,9 @@
 # CommonFront
 
-Allow to edit owners of given collection, use firestore console...
-
+QR add color and emoji
 Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password
-
 Cual es el max length del embeeding text?
-
-QR add color and emoji.
-
 Allow to configure with the url query param, set the size of the shared url.
 
 Credits to:

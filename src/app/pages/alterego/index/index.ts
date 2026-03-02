@@ -57,8 +57,6 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
   constructor(
     private indicatorSrv: IndicatorService,
     public override authSrv: AuthService,
-    private http: HttpClient,
-    private fileSrv: FileService,
     private firestoreSrv: FirestoreService,
     public override cdr: ChangeDetectorRef,
     public locationSrv: LocationService,
