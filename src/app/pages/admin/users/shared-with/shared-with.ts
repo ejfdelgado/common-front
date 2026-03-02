@@ -53,6 +53,14 @@ export class SharedWith extends CommonComponent {
       data: {
       },
     });
-    dialogRef.afterClosed().subscribe(async (result) => { });
+    dialogRef.afterClosed().subscribe(async (result: User | undefined) => {
+      if (result) {
+        const exists = this.users.find(u => u.uid == result.uid)
+        if (!exists) {
+          this.users.push(result);
+          this.cdr.detectChanges();
+        }
+      }
+    });
   }
 }
