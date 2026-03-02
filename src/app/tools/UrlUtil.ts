@@ -6,6 +6,7 @@ export type ShareDataType = {
     title?: string;
     description?: string;
     updated?: number;
+    emoji?: string;
 }
 
 export type SharePayload = {

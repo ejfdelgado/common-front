@@ -19,6 +19,7 @@ import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
+import { AssistantDataType } from 'types/ragTypes';
 import { MenuOptionType } from 'types/StatusBar';
 
 export interface NoteDataType extends BasicDataType {
@@ -43,7 +44,7 @@ const MODEL_NAME_CLONE = "pubknowledge";
 })
 export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
-  notes: NoteDataType[] = [];
+  notes: AssistantDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
   searchable: string = "";
   authSubscription: Subscription | null = null;
@@ -130,6 +131,10 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
           label: "Description", type: "contenteditable", key: "description",
           contenteditable: { minHeight: "10em", maxHeight: "20em" }
         },
+        {
+          label: "QR Emoji", type: "contenteditable", key: "emoji",
+          contenteditable: { minHeight: "20px", maxHeight: "20px" }
+        },
       ],
       model: {
         title: '',
@@ -183,7 +188,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
         }
       }
       const page = (await this.firestoreSrv.paging(pagingOptions));
-      this.notes.push(...(page as NoteDataType[]));
+      this.notes.push(...(page as AssistantDataType[]));
       this.cdr.detectChanges();
     } catch (err) {
 
@@ -198,7 +203,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
   }
 
   async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
-    const { id, title, description, updated } = model;
+    const { id, title, description, updated, emoji } = model;
     this.shareSrv.share({
       collection: MODEL_NAME_CLONE,
       path: "/alterego/use",
@@ -206,6 +211,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
       title,
       description,
       updated,
+      emoji,
     }, type);
   }
 

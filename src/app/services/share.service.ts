@@ -39,6 +39,9 @@ export class ShareSrv {
             url = this.getSharedURL(data);
         }
         const payload: QrDialogData = { url };
+        if ((data as ShareDataType).emoji) {
+            payload.emoji = (data as ShareDataType).emoji;
+        }
         return firstValueFrom(this.dialog
             .open(QrDialogComponent, {
                 width: '400px',

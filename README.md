@@ -1,6 +1,5 @@
 # CommonFront
 
-QR add color and emoji
 Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password
 Cual es el max length del embeeding text?
@@ -90,9 +89,9 @@ https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=what_a
 
 https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=try_everything.json
 
-https://stg-playtolearn.storage.googleapis.com/index2.html#/alterego/index
+https://stg-playtolearn.storage.googleapis.com/index.html#/alterego/index
 
-https://stg-playtolearn.storage.googleapis.com/index2.html#/alterego/use?col=pubknowledge&id=A0Awcqw4y26UXLVsOcxh
+https://stg-playtolearn.storage.googleapis.com/index.html#/alterego/use?col=pubknowledge&id=A0Awcqw4y26UXLVsOcxh
 
 ```
 gsutil cors get gs://pro-ejflab-assets

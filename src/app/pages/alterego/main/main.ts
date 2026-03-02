@@ -1003,6 +1003,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           label: "Description", type: "contenteditable", key: "description",
           md: { minHeight: "10em", maxHeight: "20em" }
         },
+        {
+          label: "QR Emoji", type: "contenteditable", key: "emoji",
+          contenteditable: { minHeight: "20px", maxHeight: "20px" }
+        },
       ];
     } else if (type == "maths") {
       fields = [
@@ -1153,7 +1157,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!this.collection) {
       return;
     }
-    const { id, title, description, updated } = this.collection;
+    const { id, title, description, updated, emoji } = this.collection;
     this.shareSrv.share({
       collection: MODEL_NAME_PARENT_CLONE,
       path: "/alterego/use",
@@ -1161,6 +1165,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       title,
       description,
       updated,
+      emoji,
     }, "qr");
   }
 

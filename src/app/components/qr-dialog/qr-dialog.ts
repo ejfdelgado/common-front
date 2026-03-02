@@ -7,6 +7,7 @@ import { toCanvas } from 'qrcode';
 
 export interface QrDialogData {
   url: string;
+  emoji?: string;
 }
 
 @Component({
@@ -29,10 +30,51 @@ export class QrDialogComponent implements AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: QrDialogData
   ) { }
 
+  drawCenteredText(
+    canvas: HTMLCanvasElement,
+    text: string,
+    fontSizePx: number,
+    sideLength: number,
+    fontFamily: string = "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+  ): void {
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+      throw new Error("Canvas 2D context not supported.");
+    }
+
+    // Optional: improve sharpness on high DPI screens
+    /*
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    */
+
+    // Clear canvas
+    const emojiBackSize = fontSizePx * 1.3;
+    const padding = (sideLength - emojiBackSize) / 2;
+    ctx.clearRect(padding, padding, emojiBackSize, emojiBackSize);
+
+    // Set font
+    ctx.font = `${fontSizePx}px ${fontFamily}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    // Optional: smooth text rendering
+    ctx.imageSmoothingEnabled = true;
+
+    // Draw centered text
+    ctx.fillText(text.trim(), sideLength / 2, sideLength / 2);
+  }
+
   async ngAfterViewInit(): Promise<void> {
-    const qrCodeSide = 256;
+    const qrCodeSide = 300;
     const canvasQR = this.canvasQRRef.nativeElement;
     await toCanvas(canvasQR, this.data.url, { width: qrCodeSide, });
+    if (this.data.emoji) {
+      this.drawCenteredText(canvasQR, this.data.emoji, 34, qrCodeSide);
+    }
   }
 
   accept(): void {

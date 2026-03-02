@@ -26,6 +26,7 @@ export interface AssistantDataType extends BasicDataType {
     linkedin?: string;
     whatsapp?: any;
     whatsapp_msg?: string;
+    emoji?: string;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
