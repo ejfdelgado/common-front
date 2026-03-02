@@ -50,6 +50,27 @@ export class AuthService {
     readonly token = computed(() => this._token());
     readonly isAuthenticated = computed(() => !!this._user());
 
+    async waitForToken() {
+        return new Promise<boolean>((resolve) => {
+            let resolved = false;
+            const interval = setInterval(() => {
+                if (this.token()) {
+                    resolved = true;
+                    clearInterval(interval);
+                    clearTimeout(timeout);
+                    resolve(true);
+                }
+            }, 500);
+            const timeout = setTimeout(() => {
+                if (!resolved) {
+                    resolve(false);
+                }
+                clearInterval(interval);
+                clearTimeout(timeout);
+            }, 5000);
+        });
+    }
+
     async login() {
         await this.loginWithGoogle();
     }

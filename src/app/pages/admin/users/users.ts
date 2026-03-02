@@ -64,11 +64,12 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     });
     */
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscription = this.authSrv.authState$.subscribe(async (user) => {
       if (!user) {
         this.usersList = [];
         this.cdr.detectChanges();
       } else {
+        await this.authSrv.waitForToken();
         this.pageUsers();
       }
     });
@@ -114,7 +115,13 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     fields = [
       {
         label: "Title", type: "chip", key: "roles", required: false, chip: {
-          stringOptions: ["superadmin", "alterego_publisher", "alterego_editor"]
+          stringOptions: [
+            "superadmin",
+            "alterego_publisher",
+            "alterego_editor",
+            "alterego_viewer",
+            "developer"
+          ]
         }
       },
     ];

@@ -1,11 +1,5 @@
 # CommonFront
 
-Finish user role administration:
-add publish permission
-alterego_publisher
-alterego_editor
-add superadmin
-
 Allow to edit owners of given collection, use firestore console...
 
 Ofuscar la peticion
