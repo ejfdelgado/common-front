@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,7 +46,6 @@ import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
     return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
-    return "";
   }
 };
 

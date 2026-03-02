@@ -13,6 +13,11 @@ import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 import { User } from '@angular/fire/auth';
 import { SearchInputComponent } from '@components/search-input/search-input';
+import { MatIconModule } from '@angular/material/icon';
+import { FormDataType } from '@components/dialog-form/dialog-form.component';
+import { MatDialog } from '@angular/material/dialog';
+import { UserPermissions } from './permissions/permissions';
+import { AllFieldsDataType } from 'types/fieldsTypes';
 
 const PAGE_SIZE = 20;
 
@@ -26,6 +31,7 @@ const PAGE_SIZE = 20;
     SideMenu,
     MatCardModule,
     SearchInputComponent,
+    MatIconModule,
   ],
   templateUrl: './users.html',
   styleUrl: './users.scss',
@@ -43,6 +49,7 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
     public userSrv: UsersService,
+    private dialog: MatDialog,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -100,6 +107,37 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
   async searchUsers(val: string) {
     await this.pageUsers(val, true);
+  }
+
+  async editRoles(user: User) {
+    let fields: AllFieldsDataType[] = [];
+    fields = [
+      {
+        label: "Title", type: "chip", key: "roles", required: false, chip: {
+          stringOptions: ["superadmin", "alterego_publisher", "alterego_editor"]
+        }
+      },
+    ];
+    const formConfig: FormDataType = {
+      title: "Edit roles",
+      autoAuthor: true,
+      modelName: "",
+      searchFields: [],
+      fields: fields,
+      model: {},
+    };
+    const dialogRef = this.dialog.open(UserPermissions, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: formConfig,
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        console.log(result);
+      }
+    });
   }
 }
 

@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ config.title }}</h2>
+<mat-dialog-content>
+    <app-form-simple-with #inner_form [fields]="config.fields" [model]="config.model"></app-form-simple-with>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    <button mat-flat-button color="primary" (click)="save()" [disabled]="isInvalid()">
+        <mat-icon>check</mat-icon>Guardar
+    </button>
+</mat-dialog-actions>

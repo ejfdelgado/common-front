@@ -13,6 +13,10 @@ export class AlterEgoService {
     constructor(
         private indicatorSrv: IndicatorService,
     ) {
+        //this.warmUp();
+    }
+
+    async warmUp() {
         this.worker = new Worker(
             new URL('./search.worker', import.meta.url),
             { type: 'module' }

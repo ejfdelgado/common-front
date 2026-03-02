@@ -41,7 +41,7 @@ npx ng generate component --standalone --skip-tests components/chatsession
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/alterego/use/splash
+npx ng generate component --standalone --skip-tests pages/admin/users/permissions
 ```
 
 ```bash
