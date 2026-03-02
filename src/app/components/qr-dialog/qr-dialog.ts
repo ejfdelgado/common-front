@@ -85,4 +85,26 @@ export class QrDialogComponent implements AfterViewInit {
   open() {
     window.open(this.data.url, "_blank");
   }
+
+  async download() {
+    const canvas = this.canvasQRRef.nativeElement;
+    const fileName = "qrcode.png";
+    // Ensure filename ends with .png
+    const finalName = fileName.toLowerCase().endsWith(".png")
+      ? fileName
+      : `${fileName}.png`;
+
+    // Convert canvas to PNG data URL
+    const dataUrl = canvas.toDataURL("image/png");
+
+    // Create temporary download link
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = finalName;
+
+    // Append, trigger click, and clean up
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }
