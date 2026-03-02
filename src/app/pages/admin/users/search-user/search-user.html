@@ -1,6 +1,19 @@
 <h2 mat-dialog-title>Search users</h2>
 <mat-dialog-content>
     <app-search-input (search)="searchUser($event)"></app-search-input>
+    <div class="users_container_scrolled">
+        <div class="users_container">
+            @for (user of usersMatched; track user.uid) {
+            <div class="user_card" (click)="selectUser(user)">
+                <img class="card_photo" [src]="user.photoURL">
+                <div class="card_name_email">
+                    <h6 class="text-sm">{{ user.displayName }}</h6>
+                    <span class="email">{{ user.email }}</span>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
