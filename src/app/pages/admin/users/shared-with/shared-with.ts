@@ -24,6 +24,8 @@ import { FullscreenService } from '@services/fullscreen.service';
 })
 export class SharedWith extends CommonComponent {
   users: User[] = [];
+  collection: string = "";
+  id: string = "";
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -35,6 +37,13 @@ export class SharedWith extends CommonComponent {
     private dialog: MatDialog,
   ) {
     super(sanitizer, fullScreenSrv);
+    const config = JSON.parse(JSON.stringify(data));
+    this.collection = config.collection;
+    this.id = config.id;
+    this.userSrv.getSharedUsers(this.collection, this.id).then((users) => {
+      this.users = users;
+      this.cdr.detectChanges();
+    }).catch((err) => { });
   }
 
   close(): void {

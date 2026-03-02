@@ -54,4 +54,18 @@ export class UsersService {
             throw new Error(response.message);
         }
     }
+
+    async getSharedUsers(collection: string, id: string): Promise<User[]> {
+        const queryParams = new URLSearchParams({
+            collection,
+            id,
+        }).toString();
+        const response = await firstValueFrom(this.http.get<ApiResponse>(environment.apiUrl + "admin/user/shared_with?" + queryParams));
+        if (response.success) {
+            return response.data;
+        } else {
+            throw new Error(response.message);
+        }
+
+    }
 }
