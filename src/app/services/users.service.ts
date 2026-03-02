@@ -66,6 +66,19 @@ export class UsersService {
         } else {
             throw new Error(response.message);
         }
+    }
 
+    async writeSharedUsers(collection: string, id: string, owners: string[]): Promise<User[]> {
+        const model = {
+            collection,
+            id,
+            owners,
+        };
+        const response = await firstValueFrom(this.http.put<ApiResponse>(environment.apiUrl + "admin/user/shared_with", model));
+        if (response.success) {
+            return response.data;
+        } else {
+            throw new Error(response.message);
+        }
     }
 }
