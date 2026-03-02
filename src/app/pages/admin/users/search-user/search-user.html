@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>Search users</h2>
+<mat-dialog-content>
+    <app-search-input (search)="searchUser($event)"></app-search-input>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+</mat-dialog-actions>

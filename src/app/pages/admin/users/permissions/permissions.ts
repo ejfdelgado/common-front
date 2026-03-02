@@ -5,12 +5,13 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
+import { FormDataType } from '@components/dialog-form/dialog-form.component';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { UsersService } from '@services/users.service';
 
 @Component({
   selector: 'app-permissions',
+  standalone: true,
   imports: [
     MatDialogModule,
     MatFormFieldModule,
@@ -28,7 +29,7 @@ export class UserPermissions {
   config!: FormDataType;
 
   constructor(
-    private dialogRef: MatDialogRef<DialogFormComponent>,
+    private dialogRef: MatDialogRef<UserPermissions>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public userSrv: UsersService,
   ) {

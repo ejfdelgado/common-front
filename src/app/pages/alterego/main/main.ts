@@ -54,6 +54,7 @@ import { ShareSrv } from '@services/share.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AlterEgo2Service } from '@services/alteregov2.service';
+import { SearchUser } from 'app/pages/admin/users/search-user/search-user';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
@@ -234,6 +235,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       children: [],
       callback: () => {
         this.localShare();
+      },
+    });
+
+    this.menuOptions.push({
+      label: "Permissions",
+      icon: "lock",
+      children: [],
+      callback: () => {
+        this.openPermissions();
       },
     });
 
@@ -1213,5 +1223,19 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const result = await this.alterEgo2Srv.searchArticles(txt, parent);
       this.receiveArticleSearch(result);
     }
+  }
+
+  async openPermissions() {
+    if (!this.collection) {
+      return;
+    }
+    const dialogRef = this.dialog.open(SearchUser, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: {
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => { });
   }
 }

@@ -35,7 +35,7 @@ npx ng generate component --standalone --skip-tests components/chatsession
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/admin/users/permissions
+npx ng generate component --standalone --skip-tests pages/admin/users/search-user
 ```
 
 ```bash
