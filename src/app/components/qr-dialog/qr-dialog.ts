@@ -54,7 +54,8 @@ export class QrDialogComponent implements AfterViewInit {
     // Clear canvas
     const emojiBackSize = fontSizePx * 1.3;
     const padding = (sideLength - emojiBackSize) / 2;
-    ctx.clearRect(padding, padding, emojiBackSize, emojiBackSize);
+    ctx.fillStyle = 'white';
+    ctx.fillRect(padding, padding, emojiBackSize, emojiBackSize);
 
     // Set font
     ctx.font = `${fontSizePx}px ${fontFamily}`;
