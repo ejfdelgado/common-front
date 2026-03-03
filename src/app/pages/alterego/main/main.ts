@@ -297,6 +297,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
         this.collection = temp as AssistantDataType;
+        document.title = this.collection.title;
         this.updateProperties();
       } else {
         this.collection = null;

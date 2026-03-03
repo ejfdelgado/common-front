@@ -1,5 +1,7 @@
 # CommonFront
 
+Adjust the title of the chat after loading the collection on all places.
+
 Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password
 Cual es el max length del embeeding text?

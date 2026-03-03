@@ -9,8 +9,10 @@ handlers:
 - url: /
   static_files: public/index.html
   upload: public/index.html
+  secure: always
 
 # 3. Catch-all for any other files in 'public' (optional)
 - url: /(.*)
   static_files: public/\1
   upload: public/(.*)
+  secure: always
