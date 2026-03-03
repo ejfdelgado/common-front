@@ -33,6 +33,7 @@
                                                     [style.background-image]="'url(' + user.photoURL + ')'"></div>
                                                 <div class="profile_name">
                                                     <h4>{{ user.displayName }}</h4>
+                                                    <span class="small_text">{{ user.uid }} <mat-icon (click)="copyUID(user)">content_copy</mat-icon></span>
                                                 </div>
                                             </div>
                                         </td>

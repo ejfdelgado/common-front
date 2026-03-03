@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [
+const routes: Routes = [
     {
-        path: '',
+        path: 'index',
         loadComponent: () => import('./pages/index/index').then(m => m.Index),
     },
     {
@@ -82,3 +82,42 @@ export const routes: Routes = [
         redirectTo: '404',
     },
 ];
+
+if (["localhost"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/index/index').then(m => m.Index),
+    });
+} else if (["pais.tv", "chat.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
+    });
+} else if (["admin.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/admin/users/users').then(m => m.UsersView),
+    });
+} else if (["docs.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/documents/document-collection/document-collection').then(m => m.DocumentCollection),
+    });
+} else if (["lrgame.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/game-lr/game-lr').then(m => m.GameLr),
+    });
+} else if (["music.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/practicesong/practicesong').then(m => m.Practicesong),
+    });
+} else if (["notes.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/notes/notes-list/notes-list').then(m => m.NotesList),
+    });
+}
+
+export { routes };

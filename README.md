@@ -1,6 +1,10 @@
 # CommonFront
 
-Adjust the title of the chat after loading the collection on all places.
+Paginar usuarios.
+
+https://admin.pais.tv
+https://docs.pais.tv
+https://music.pais.tv
 
 Ofuscar la peticion
 Cifrar el epoch con el pass y que eso sirva de password

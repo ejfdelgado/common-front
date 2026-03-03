@@ -18,6 +18,8 @@ import { FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserPermissions } from './permissions/permissions';
 import { AllFieldsDataType } from 'types/fieldsTypes';
+import { ClipboardUtil } from '@tools/Clipboard';
+import { UINotificationSrv } from '@services/uinotifications.service';
 
 const PAGE_SIZE = 20;
 
@@ -50,6 +52,7 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     public override fullScreenSrv: FullscreenService,
     public userSrv: UsersService,
     private dialog: MatDialog,
+    private uiNotificationSrv: UINotificationSrv,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -148,6 +151,11 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
       }
     });
+  }
+
+  async copyUID(user: User) {
+    ClipboardUtil.writeText(user.uid);
+    this.uiNotificationSrv.show("copied!");
   }
 }
 
