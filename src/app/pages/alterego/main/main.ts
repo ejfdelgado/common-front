@@ -400,7 +400,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         {
           label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
             thumbnailMaxSizePixels: 100,
-            template: "alterego/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
       ];

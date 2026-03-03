@@ -1,12 +1,16 @@
 # CommonFront
 
+Usar chat en español.
 Agregar un miniformulario para capturar clientes potenciales.
 
-Integrar histórico:
+History:
 - Correos enviados.
 - Contenido no encontrado.
 - Agregar en el tab, un indicador que muestre que hubo match.
 - Permitir paginar sin cargar todo.
+
+Hacer el servicio de borrar todo.
+agregar max length a text, md, texarea y rich text.
 
 Integrar google analytics.
 eventos: correo enviado.
@@ -15,12 +19,6 @@ Paginar usuarios.
 
 capturar mejor la foto o permitir rotar.
 Ajustar el back white del QR al dominio.
-
-agregar author a la ruta de gallery
-poner igual la ruta de la foto de knowledge.
-
-Hacer el servicio de borrar todo.
-agregar max length a text, md, texarea y rich text.
 
 Quitar padding o margin en mobil, alterego/main
 
@@ -49,7 +47,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/chatsession
+npx ng generate component --standalone --skip-tests components/contact-us
 ```
 
 ```bash
@@ -123,15 +121,11 @@ gsutil cors get gs://pro-ejflab-assets
 
 ## TODO
 
-- Enable the roles admin view.
-- camera capture support for landscape and selfie weird!
+- camera capture support for landscape and selfie weird! or use rotate, mirror.
 
 - Place thumbnail scroll of gallery after next or previous button.
 - Add multilanguage, service, and pipe.
 - Add alert service with support of multilanguage, multiaction.
-
-- Create comments component. -> store in firebase (multiple users update).
-- Create chat component.
 
 - Create an email field.
 - Create address widget with map and address search.
@@ -144,15 +138,7 @@ gsutil cors get gs://pro-ejflab-assets
 
 - Add google analytics.
 
-- On/Off allow: lock/unlock, eye see/hide, check/uncheck
-
 - Add url link capability to richtext editor.
-
-- Roles:
-- Map roles on token to bucket roles on backend.
-- Adjust backend service to allow use read without request, but with user.
-
-- Enable Sendgrid email service to welcome or send notifications with templates.
 
 - Configuration over convention: Add env variables to force entities:
     - bucket, permisos de usuario y tamanio

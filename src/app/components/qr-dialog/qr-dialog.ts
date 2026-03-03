@@ -44,7 +44,7 @@ export class QrDialogComponent implements AfterViewInit {
     }
 
     // Clear canvas
-    const emojiBackSize = fontSizePx * 1.3;
+    const emojiBackSize = fontSizePx * 1.4;
     const padding = (sideLength - emojiBackSize) / 2;
     ctx.fillStyle = 'white';
     ctx.fillRect(padding, padding, emojiBackSize, emojiBackSize);
@@ -58,7 +58,7 @@ export class QrDialogComponent implements AfterViewInit {
     ctx.imageSmoothingEnabled = true;
 
     // Draw centered text
-    ctx.fillText(text.trim().substring(0, 1), sideLength / 2, sideLength / 2);
+    ctx.fillText(text.trim().substring(0, 2), sideLength / 2, sideLength / 2);
   }
 
   async ngAfterViewInit(): Promise<void> {

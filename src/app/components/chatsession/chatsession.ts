@@ -42,6 +42,8 @@ import { normalizeName } from '@tools/Texts';
 import { AlterEgo2Service } from '@services/alteregov2.service';
 import { ImageGalleryType } from 'types/fieldsTypes';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
+import { MatDialog } from '@angular/material/dialog';
+import { ContactUs } from '@components/contact-us/contact-us';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -116,6 +118,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     public alterEgo2Srv: AlterEgo2Service,
     private indicatorSrv: IndicatorService,
     private uinotificationSrv: UINotificationSrv,
+    private dialog: MatDialog,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -328,5 +331,21 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   scrollToBottom(): void {
     const element = this.scrollContainer.nativeElement;
     element.scrollTop = element.scrollHeight;
+  }
+
+  contactUs() {
+    const dialogRef = this.dialog.open(ContactUs, {
+      width: '400px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: {
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (sent) => {
+      // Show a notification
+      if (sent) {
+        this.uinotificationSrv.show("Gracias por contactarnos!");
+      }
+    });
   }
 }

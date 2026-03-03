@@ -124,7 +124,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
           label: "Imagen", type: "image", key: "image", image: {
             thumbnailMaxSizePixels: 200,
             squareMaxSizePixels: 800,//For social
-            template: "knowledge_database/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "alterego/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
         {

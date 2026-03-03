@@ -12,6 +12,7 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 
 @Component({
   selector: 'app-shared-with',
+  standalone: true,
   imports: [
     MatDialogModule,
     MatButtonModule,
