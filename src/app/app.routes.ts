@@ -118,6 +118,11 @@ if (["localhost"].indexOf(location.hostname) >= 0) {
         path: '',
         loadComponent: () => import('./pages/notes/notes-list/notes-list').then(m => m.NotesList),
     });
+} else if (["photogallery.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/photo_gallery/collections/collections').then(m => m.CollectionsComponent),
+    });
 }
 
 export { routes };

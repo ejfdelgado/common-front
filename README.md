@@ -2,11 +2,18 @@
 
 Paginar usuarios.
 
-https://admin.pais.tv
-https://docs.pais.tv
-https://music.pais.tv
+capturar mejor la foto o permitir rotar.
+Ajustar el back white del QR al dominio.
 
-Ofuscar la peticion
+agregar author a la ruta de gallery
+poner igual la ruta de la foto de knowledge.
+
+Hacer el servicio de borrar todo.
+agregar max length a text, md, texarea y rich text.
+
+Quitar padding o margin en mobil, alterego/main
+
+Ofuscar la peticion a gemini
 Cifrar el epoch con el pass y que eso sirva de password
 Cual es el max length del embeeding text?
 Allow to configure with the url query param, set the size of the shared url.

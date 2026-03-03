@@ -43,14 +43,6 @@ export class QrDialogComponent implements AfterViewInit {
       throw new Error("Canvas 2D context not supported.");
     }
 
-    // Optional: improve sharpness on high DPI screens
-    /*
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-    */
-
     // Clear canvas
     const emojiBackSize = fontSizePx * 1.3;
     const padding = (sideLength - emojiBackSize) / 2;
@@ -66,14 +58,14 @@ export class QrDialogComponent implements AfterViewInit {
     ctx.imageSmoothingEnabled = true;
 
     // Draw centered text
-    ctx.fillText(text.trim(), sideLength / 2, sideLength / 2);
+    ctx.fillText(text.trim().substring(0, 1), sideLength / 2, sideLength / 2);
   }
 
   async ngAfterViewInit(): Promise<void> {
     const qrCodeSide = 300;
     const canvasQR = this.canvasQRRef.nativeElement;
     await toCanvas(canvasQR, this.data.url, { width: qrCodeSide, });
-    if (this.data.emoji) {
+    if (typeof this.data.emoji == "string" && this.data.emoji.trim().length > 0) {
       this.drawCenteredText(canvasQR, this.data.emoji, 34, qrCodeSide);
     }
   }
