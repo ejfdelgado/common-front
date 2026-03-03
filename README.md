@@ -1,5 +1,16 @@
 # CommonFront
 
+Agregar un miniformulario para capturar clientes potenciales.
+
+Integrar histórico:
+- Correos enviados.
+- Contenido no encontrado.
+- Agregar en el tab, un indicador que muestre que hubo match.
+- Permitir paginar sin cargar todo.
+
+Integrar google analytics.
+eventos: correo enviado.
+
 Paginar usuarios.
 
 capturar mejor la foto o permitir rotar.
@@ -70,13 +81,13 @@ Configure branding at:
 
 [local song](https://localhost:4200/#/practicesong?q=runaway.json)
 
-[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=hall_of_fame.json&t=1)
-[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=unstopable.json&t=1)
-[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=karma.json)
-[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
-[stage song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=in_the_name_of_love2.json)
+[stage song](https://music.pais.tv/#/?q=hall_of_fame.json&t=1)
+[stage song](https://music.pais.tv/#/?q=unstopable.json&t=1)
+[stage song](https://music.pais.tv/#/?q=karma.json)
+[stage song](https://music.pais.tv/#/?q=love_song_to_the_earth.json)
+[stage song](https://music.pais.tv/#/?q=in_the_name_of_love2.json)
 
-[love song](https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth.json)
+[love song](https://music.pais.tv/#/?q=love_song_to_the_earth.json)
 
 [Pano Game](https://stg-playtolearn.storage.googleapis.com/index.html#/panogame?q=2025-07%2F001)
 
@@ -92,19 +103,19 @@ Configure branding at:
 
 [Play sound](https://stg-playtolearn.storage.googleapis.com/index.html#/playsound)
 
-https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=love_song_to_the_earth2.json
+https://music.pais.tv/#/?q=love_song_to_the_earth2.json
 
-https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=count_on_me.json
+https://music.pais.tv/#/?q=count_on_me.json
 
-https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=colors.json
+https://music.pais.tv/#/?q=colors.json
 
-https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=what_a_wonderful_world.json
+https://music.pais.tv/#/?q=what_a_wonderful_world.json
 
-https://stg-playtolearn.storage.googleapis.com/index.html#/practicesong?q=try_everything.json
+https://music.pais.tv/#/?q=try_everything.json
 
-https://stg-playtolearn.storage.googleapis.com/index3.html#/alterego/index
+https://chat.pais.tv
 
-https://stg-playtolearn.storage.googleapis.com/index3.html#/alterego/use?col=pubknowledge&id=A0Awcqw4y26UXLVsOcxh
+https://chat.pais.tv#/alterego/use?col=pubknowledge&id=A0Awcqw4y26UXLVsOcxh
 
 ```
 gsutil cors get gs://pro-ejflab-assets
