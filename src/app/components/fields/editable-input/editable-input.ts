@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -60,6 +61,7 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
     private dialog: MatDialog,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public cdr: ChangeDetectorRef,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -180,6 +182,16 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
 
           // 4. Update the saved range to be after the new emoji
           this.saveSelection();
+        } else {
+          // Add at the end
+          if (!(typeof this.value == "string")) {
+            this.value = result;
+          } else {
+            this.value = this.value + result;
+          }
+          this.setText(this.value);
+          this.onChange(this.value);
+          this.cdr.detectChanges();
         }
         if (!this.discrete) {
           this.restoreScrollPos();

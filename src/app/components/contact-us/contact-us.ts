@@ -38,7 +38,7 @@ export class ContactUs extends CommonComponent {
         ]
       }
     },
-    { label: "Mensaje", type: "contenteditable", key: "desc" },
+    { label: "Datos de contácto", type: "contenteditable", key: "desc" },
   ];
 
   constructor(
