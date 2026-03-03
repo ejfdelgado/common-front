@@ -8,6 +8,10 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { CommonModule } from '@angular/common';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { AllFieldsDataType } from 'types/fieldsTypes';
+import { UINotificationSrv } from '@services/uinotifications.service';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-contact-us',
@@ -47,6 +51,8 @@ export class ContactUs extends CommonComponent {
     private dialogRef: MatDialogRef<ContactUs>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public cdr: ChangeDetectorRef,
+    private uinotificationSrv: UINotificationSrv,
+    private http: HttpClient,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -55,7 +61,16 @@ export class ContactUs extends CommonComponent {
     this.dialogRef.close(false);
   }
 
-  send(): void {
+  async send(): Promise<void> {
+    if (!(typeof this.model.desc == "string") || this.model.desc.trim().length == 0) {
+      this.uinotificationSrv.show("No olvides ingresar tu dato de contacto.");
+      return;
+    }
+    await firstValueFrom(this.http.post(environment.apiUrl + "srv/email/contact_us",
+      {
+        form: this.model
+      },
+    ));
     this.dialogRef.close(true);
   }
 }

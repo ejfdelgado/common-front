@@ -1,8 +1,5 @@
 # CommonFront
 
-Usar chat en español.
-Agregar un miniformulario para capturar clientes potenciales.
-
 History:
 - Correos enviados.
 - Contenido no encontrado.

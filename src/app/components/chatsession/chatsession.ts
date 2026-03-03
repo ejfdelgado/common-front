@@ -344,7 +344,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe(async (sent) => {
       // Show a notification
       if (sent) {
-        this.uinotificationSrv.show("Gracias por contactarnos!");
+        this.uinotificationSrv.show("Te estaremos contactando!");
       }
     });
   }
