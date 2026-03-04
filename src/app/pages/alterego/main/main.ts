@@ -377,7 +377,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           },
           { label: "Name", type: "text", key: "name", required: true, },
           { label: "Description", type: "text", key: "desc", required: false, },
-          { label: "Custom template?", type: "text", key: "template", required: false, },
           { label: "Use states?", type: "toggle", key: "useStates", required: false, },
         ];
 
@@ -387,12 +386,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         }
 
         if (this.currentToolSelected.type == 'mail') {
-          this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
-          this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, },);
-          this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, },);
+          this.toolFields.push({ label: "Custom template?", type: "text", key: "template", required: false, });
+          this.toolFields.push({ label: "To", type: "text", key: "to", required: true, });
+          this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, });
+          this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, });
         } else if (this.currentToolSelected.type == 'article') {
-          this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, },);
-          this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, },);
+          this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
+          this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
         }
 
         this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
