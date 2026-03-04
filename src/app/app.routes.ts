@@ -86,7 +86,8 @@ const routes: Routes = [
 if (["localhost"].indexOf(location.hostname) >= 0) {
     routes.unshift({
         path: '',
-        loadComponent: () => import('./pages/index/index').then(m => m.Index),
+        //loadComponent: () => import('./pages/index/index').then(m => m.Index),
+        loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
     });
 } else if (["pais.tv", "chat.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
