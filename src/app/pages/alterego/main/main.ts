@@ -274,7 +274,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     try {
       await this.loadCollection();
       const promises: Promise<any>[] = [];
-      promises.push(this.pageAll());
+      promises.push(this.pageAllFacts());
       promises.push(this.pageAllTools());
       promises.push(this.pageAllArticles());
       await Promise.all(promises);
@@ -791,17 +791,31 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     return parent;
   }
 
-  async pageAll() {
-    let isFirstTime: boolean = true;
+  pageAllFactsIsFirstTime: boolean = true;
+  pageAllFactsCursor: FactCursorDataType | null = null;
+
+  async pageAllFacts() {
     let responses: KnowledgeDataType[] = [];
-    const LIMIT = 50;
-    do {
-      responses = await this.pageFacts(LIMIT, isFirstTime);
-      isFirstTime = false;
-      if (responses.length < LIMIT) {
-        break;
-      }
-    } while (responses.length > 0);
+    const LIMIT = 2;
+    responses = await this.pageFacts(LIMIT, this.pageAllFactsIsFirstTime);
+    if (responses.length > 0) {
+      const last = responses[responses.length - 1];
+      this.pageAllFactsCursor = {
+        createdAt: last.created,
+        id: last.id,
+      };
+    }
+    this.pageAllFactsIsFirstTime = false;
+  }
+
+  mixFacts(incoming: KnowledgeDataType[]) {
+    const ids = this.knowledge.map(f => f.id);
+    // Filter
+    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    // Add
+    this.knowledge.push(...news);
+    // Sort
+    this.knowledge.sort((a, b) => b.created - a.created);
   }
 
   async pageFacts(limit: number, startover: boolean = false): Promise<KnowledgeDataType[]> {
@@ -815,15 +829,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       // paging
       let cursor: FactCursorDataType | null = null;
       if (!startover) {
-        const last = this.knowledge[this.knowledge.length - 1];
-        cursor = {
-          createdAt: last.created,
-          id: last.id,
-        }
+        cursor = this.pageAllFactsCursor;
       }
       const pageResult = await this.alterEgo2Srv.pageFacts(parent, limit, cursor);
       const page = pageResult.rows;
-      this.knowledge.push(...(page as any[]));
+      this.mixFacts((page as any[]));
       this.cdr.detectChanges();
       return page;
     } catch (err: any) {

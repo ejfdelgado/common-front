@@ -7,6 +7,7 @@
                 <div class="content_wraper">
                     <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
                         <mat-tab-group class="with_flex_column">
+                            <!-- Facts tab -->
                             <mat-tab label="Facts">
                                 <div class="tab_content">
                                     <mat-sidenav-container autosize>
@@ -46,6 +47,7 @@
                                                         </span>
                                                     </span>
                                                     }
+                                                    <span class="load_more_action" (click)="pageAllFacts()">Load more...</span>
                                                 </div>
                                             </div>
                                         </mat-sidenav>
