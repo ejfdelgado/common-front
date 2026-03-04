@@ -300,6 +300,65 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       const articleUnion: ArticleDataType[] = [];
       const toolsUnion: ToolDataType[] = [];
+      toolsStatus.forEach((tool: ToolResponseType) => {
+        const standardName = normalizeName(tool.name);
+        const toolMessage: Content = {
+          role: "tool",
+          parts: [{
+            functionResponse: {
+              name: standardName,
+              response: { result: tool.message }
+            }
+          }]
+        };
+        // Display gallery if needed
+        if (tool.articles) {
+          tool.articles.forEach((article) => {
+            articleUnion.push(article);
+            if (article.gallery && article.gallery.length > 0) {
+              this.visualHistory.push({
+                date: Date.now() - 1,
+                role: "tool",
+                txt: "",
+                gallery: article.gallery
+              });
+            }
+          });
+        }
+        // Display text if needed & assign val on args
+        if (typeof tool.message == "string" && tool.message.length > 0) {
+          this.processVisualInput(toolMessage);
+          this.history.push(toolMessage);
+        }
+        // Adjust state
+        const toolRef = this.searchNamedTool(standardName);
+        //console.log(tool.name, standardName, toolRef);
+        if (toolRef) {
+          if (toolRef.useStates === true) {
+            if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
+              // Apply next state
+              this.toolState = toolRef.nextState.trim();
+            }
+          }
+          if (toolRef.affectModel === true) {
+            // Adjust model
+            toolRef.args.forEach((arg) => {
+              const path = arg.modelPath;
+              if (path && path.trim().length > 0) {
+                if (arg.modelIsArray === true) {
+                  // First read to get index where to place the val
+                  const old = SimpleObj.getValue(this.toolModel, path, []);
+                  console.log("Adjust model", `${path}.${old.length}`, arg.val);
+                  SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
+                } else {
+                  // Just write
+                  SimpleObj.recreate(this.toolModel, path, arg.val);
+                }
+              }
+            });
+          }
+        }
+      });
       result.forEach((result) => {
         if (result && result.candidates && result.candidates.length > 0) {
           const assistantMessage: Content = {
@@ -310,62 +369,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           toolsUnion.push(...temp);
           this.history.push(assistantMessage);
           // Add response and process visual Input
-          toolsStatus.forEach((tool: ToolResponseType) => {
-            const standardName = normalizeName(tool.name);
-            const toolMessage: Content = {
-              role: "tool",
-              parts: [{
-                functionResponse: {
-                  name: standardName,
-                  response: { result: tool.message }
-                }
-              }]
-            };
-            // Display gallery if needed
-            if (tool.articles) {
-              tool.articles.forEach((article) => {
-                articleUnion.push(article);
-                if (article.gallery && article.gallery.length > 0) {
-                  this.visualHistory.push({
-                    date: Date.now() - 1,
-                    role: "tool",
-                    txt: "",
-                    gallery: article.gallery
-                  });
-                }
-              });
-            }
-            // Display text if needed & assign val on args
-            this.processVisualInput(toolMessage);
-
-            this.history.push(toolMessage);
-            // Adjust state
-            const toolRef = this.searchNamedTool(standardName);
-            if (toolRef) {
-              if (toolRef.useStates === true) {
-                if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
-                  // Apply next state
-                  this.toolState = toolRef.nextState.trim();
-                }
-              }
-              if (toolRef.affectModel === true) {
-                // Adjust model
-                toolRef.args.forEach((arg) => {
-                  const path = arg.modelPath;
-                  if (path && path.trim().length > 0) {
-                    if (arg.modelIsArray === true) {
-                      // First read to get index where to place the val
-                      const old = SimpleObj.getValue(this.toolModel, path, []);
-                      SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
-                    } else {
-                      // Just write
-                      SimpleObj.recreate(this.toolModel, path, arg.val);
-                    }
-                  }
-                });
-              }
-            }
-          });
         }
       });
       // emit

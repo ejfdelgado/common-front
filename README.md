@@ -1,5 +1,7 @@
 # CommonFront
 
+tool name max 64 characters
+
 Avoid redirect to itself on the contact us form.
 
 Create an alternative to, but for canvas.

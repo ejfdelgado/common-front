@@ -714,8 +714,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       desc: "",
       type: 'basic',
       id: "",
-      ok: "Thank you for your message",
-      error: "Please try again later",
+      ok: "",
+      error: "",
       args: [],
     };
     // Call to create
