@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
-import { map, Observable, shareReplay, Subscription } from 'rxjs';
+import { firstValueFrom, map, Observable, shareReplay, Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -56,6 +56,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AlterEgo2Service } from '@services/alteregov2.service';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
+import { HttpClient } from '@angular/common/http';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
@@ -146,6 +147,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     tools: [],
   }
 
+  reportHTML: SafeHtml | null = null;
+
   constructor(
     public override authSrv: AuthService,
     public override cdr: ChangeDetectorRef,
@@ -161,6 +164,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private dialog: MatDialog,
     private fileSrv: FileService,
     public shareSrv: ShareSrv,
+    private http: HttpClient,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -436,10 +440,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     requestAnimationFrame(() => {
       this.currentHistorySelected = this.history[index];
+      // Load the html to display...
+      const url = this.getBucketFilePath(this.currentHistorySelected.reportId);
+      firstValueFrom(this.http.get(url, { responseType: 'text' })).then((content) => {
+        this.reportHTML = this.sanitizeText(content);
+        this.cdr.detectChanges();
+      });
       this.historyFields = [
         { label: "Checked", type: "toggle", key: "checked", required: false, },
       ];
-      this.articleModel['checked'] = this.currentHistorySelected.checked;
+      this.historyModel = Object.assign({}, this.currentHistorySelected);
 
       this.cdr.detectChanges();
     });
