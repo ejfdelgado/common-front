@@ -158,9 +158,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return null;
   }
 
-  processVisualInput(input: Content, emitTools: boolean = true) {
+  processVisualInput(input: Content): ToolDataType[] {
+    const toolsFired: ToolDataType[] = [];
     if (input.parts) {
-      const toolsFired: ToolDataType[] = [];
       input.parts.forEach(async (el, index) => {
         if (el.functionCall) {
           // Search on tools what to answer
@@ -203,13 +203,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           });
         }
       });
-      // Tools could be empty, but it needs to be fired
-      if (emitTools) {
-        requestAnimationFrame(() => {
-          this.foundTools.emit(toolsFired);
-        });
-      }
     }
+    return toolsFired;
   }
 
   clearHistory() {
@@ -275,6 +270,10 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         top: this.top,
       };
 
+      // Clean
+      this.foundArticles.emit([]);
+      this.foundTools.emit([]);
+
       const {
         result,
         toolsStatus,
@@ -299,74 +298,85 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         parts: [{ text: userInput }]
       });
 
-      if (result && result.candidates && result.candidates.length > 0) {
-        const assistantMessage: Content = {
-          role: "model",
-          parts: result.candidates[0].content?.parts?.map((el) => el),
-        };
-        this.processVisualInput(assistantMessage);
-        this.history.push(assistantMessage);
-        // Add response and process visual Input
-        // Is it necesary to keep assistantMessage.parts[0].thoughtSignature ??
-        toolsStatus.forEach((tool: ToolResponseType) => {
-          const standardName = normalizeName(tool.name);
-          const toolMessage: Content = {
-            role: "tool",
-            parts: [{
-              functionResponse: {
-                name: standardName,
-                response: { result: tool.message }
-              }
-            }]
+      const articleUnion: ArticleDataType[] = [];
+      const toolsUnion: ToolDataType[] = [];
+      result.forEach((result) => {
+        if (result && result.candidates && result.candidates.length > 0) {
+          const assistantMessage: Content = {
+            role: "model",
+            parts: result.candidates[0].content?.parts?.map((el) => el),
           };
-          // Display gallery if needed
-          if (tool.articles) {
-            this.foundArticles.emit(tool.articles);
-            tool.articles.forEach((article) => {
-              if (article.gallery && article.gallery.length > 0) {
-                this.visualHistory.push({
-                  date: Date.now() - 1,
-                  role: "tool",
-                  txt: "",
-                  gallery: article.gallery
-                });
-              }
-            });
-          }
-          // Display text if needed & foundTools emit! & assign val on args
-          this.processVisualInput(toolMessage, false);
-          this.history.push(toolMessage);
-          // Adjust state
-          const toolRef = this.searchNamedTool(standardName);
-          if (toolRef) {
-            if (toolRef.useStates === true) {
-              if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
-                // Apply next state
-                this.toolState = toolRef.nextState.trim();
-              }
-            }
-            if (toolRef.affectModel === true) {
-              // Adjust model
-              toolRef.args.forEach((arg) => {
-                const path = arg.modelPath;
-                if (path && path.trim().length > 0) {
-                  if (arg.modelIsArray === true) {
-                    // First read to get index where to place the val
-                    const old = SimpleObj.getValue(this.toolModel, path, []);
-                    SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
-                  } else {
-                    // Just write
-                    SimpleObj.recreate(this.toolModel, path, arg.val);
-                  }
+          const temp = this.processVisualInput(assistantMessage);
+          toolsUnion.push(...temp);
+          this.history.push(assistantMessage);
+          // Add response and process visual Input
+          toolsStatus.forEach((tool: ToolResponseType) => {
+            const standardName = normalizeName(tool.name);
+            const toolMessage: Content = {
+              role: "tool",
+              parts: [{
+                functionResponse: {
+                  name: standardName,
+                  response: { result: tool.message }
+                }
+              }]
+            };
+            // Display gallery if needed
+            if (tool.articles) {
+              tool.articles.forEach((article) => {
+                articleUnion.push(article);
+                if (article.gallery && article.gallery.length > 0) {
+                  this.visualHistory.push({
+                    date: Date.now() - 1,
+                    role: "tool",
+                    txt: "",
+                    gallery: article.gallery
+                  });
                 }
               });
             }
-          }
-        });
+            // Display text if needed & assign val on args
+            this.processVisualInput(toolMessage);
 
-        this.query = "";
+            this.history.push(toolMessage);
+            // Adjust state
+            const toolRef = this.searchNamedTool(standardName);
+            if (toolRef) {
+              if (toolRef.useStates === true) {
+                if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
+                  // Apply next state
+                  this.toolState = toolRef.nextState.trim();
+                }
+              }
+              if (toolRef.affectModel === true) {
+                // Adjust model
+                toolRef.args.forEach((arg) => {
+                  const path = arg.modelPath;
+                  if (path && path.trim().length > 0) {
+                    if (arg.modelIsArray === true) {
+                      // First read to get index where to place the val
+                      const old = SimpleObj.getValue(this.toolModel, path, []);
+                      SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
+                    } else {
+                      // Just write
+                      SimpleObj.recreate(this.toolModel, path, arg.val);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+      // emit
+      if (articleUnion.length > 0) {
+        this.foundArticles.emit(articleUnion);
+      }
+      if (toolsUnion.length > 0) {
+        this.foundTools.emit(toolsUnion);
       }
 
+      this.query = "";
 
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
