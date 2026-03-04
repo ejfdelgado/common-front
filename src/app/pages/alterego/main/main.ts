@@ -41,7 +41,8 @@ import {
   DropDownOptionDataType,
   ArticleDataType,
   FactCursorDataType,
-  FoundKnowledge
+  FoundKnowledge,
+  HistoryDataType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -59,6 +60,7 @@ import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
 const MODEL_ARTICLE_NAME = "article";
+const MODEL_HISTORY_NAME = "history";
 const MODEL_NAME_PARENT = "knowledge";
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -93,6 +95,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('sidenavTools') sidenavTools!: MatSidenav;
   @ViewChild('sidenavArticles') sidenavArticles!: MatSidenav;
+  @ViewChild('sidenavHistory') sidenavHistory!: MatSidenav;
 
   @ViewChild('article_form') articleForm!: FormSimpleWithout;
 
@@ -104,13 +107,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   knowledge: KnowledgeDataType[] = [];
   tools: ToolDataType[] = [];
   articles: ArticleDataType[] = [];
+  history: HistoryDataType[] = [];
   currentSelected: KnowledgeDataType | null = null;
   currentToolSelected: ToolDataType | null = null;
   currentArticleSelected: ArticleDataType | null = null;
+  currentHistorySelected: HistoryDataType | null = null;
   collection: AssistantDataType | null = null;
   pendingToSave: KnowledgeDataType[] = [];
   toolsPendingToSave: ToolDataType[] = [];
   articlesPendingToSave: ArticleDataType[] = [];
+  historyPendingToSave: HistoryDataType[] = [];
   searchedResult: FoundKnowledge[] = [];
   searchedToolsResult: ToolDataType[] = [];
   searchedArticleResult: ArticleDataType[] = [];
@@ -128,15 +134,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   fields: AllFieldsDataType[] = [];
   toolFields: AllFieldsDataType[] = [];
   articleFields: AllFieldsDataType[] = [];
-  model: FlatJsonDataType = {
+  historyFields: AllFieldsDataType[] = [];
 
-  };
-  toolModel: FlatJsonDataType = {
-
-  };
-  articleModel: FlatJsonDataType = {
-
-  };
+  model: FlatJsonDataType = {};
+  toolModel: FlatJsonDataType = {};
+  articleModel: FlatJsonDataType = {};
+  historyModel: FlatJsonDataType = {};
 
   chatConfig: GenerateContentConfig = {
     systemInstruction: "You are an assistant giving some information",
@@ -414,10 +417,30 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
   }
 
+  selectHistoryItem(index: number) {
+    this.currentHistorySelected = null;
+    this.historyFields = [];
+    this.cdr.detectChanges();
+    if (this.history.length <= index || index < 0) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      this.currentHistorySelected = this.history[index];
+      this.historyFields = [
+        { label: "Checked", type: "toggle", key: "checked", required: false, },
+      ];
+      this.articleModel['checked'] = this.currentHistorySelected.checked;
+
+      this.cdr.detectChanges();
+    });
+  }
+
   toggle() {
     this.sidenav.toggle();
     this.sidenavTools.toggle();
     this.sidenavArticles.toggle();
+    this.sidenavHistory.toggle();
   }
 
   get knowledgeFiltered(): KnowledgeDataType[] {
@@ -449,6 +472,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  get historyFiltered(): HistoryDataType[] {
+    return this.history;
+  }
+
   getDistanceFromIndex(index: number): number {
     if (this.searchedResult.length == 0) {
       return 0;
@@ -476,6 +503,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
     const index = this.articles.indexOf(item);
     this.selectArticleItem(index);
+  }
+
+  async selectThisHistory(item: HistoryDataType) {
+    const index = this.history.indexOf(item);
+    this.selectHistoryItem(index);
   }
 
   async deleteKnowledge(item: KnowledgeDataType, event: any) {
@@ -567,6 +599,35 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  async deleteHistory(item: HistoryDataType, event: any) {
+    event.preventDefault();
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: "This action can't be undone",
+    });
+    if (!confirm) {
+      return;
+    }
+    try {
+      const index = this.history.indexOf(item);
+      // Delete from database
+      await this.firestoreSrv.delete(this.getHistoryCollectionName(), item.id);
+      this.history.splice(index, 1);
+      if (this.history.length > 0) {
+        if (index == 0) {
+          this.selectHistoryItem(0);
+        } else {
+          this.selectHistoryItem(index - 1);
+        }
+      } else {
+        this.selectHistoryItem(-1);
+      }
+      this.lastModified += 1;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    }
+  }
+
   getCollectionName() {
     const params = getUrlQueryParams();
     const id = params.get("id");
@@ -592,6 +653,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       throw new Error("Missed parent");
     }
     return `knowledge/${id}/${MODEL_ARTICLE_NAME}`;
+  }
+
+  getHistoryCollectionName() {
+    const params = getUrlQueryParams();
+    const id = params.get("id");
+    if (!id) {
+      throw new Error("Missed parent");
+    }
+    return `knowledge/${id}/${MODEL_HISTORY_NAME}`;
   }
 
   async addKnowledge() {
@@ -682,6 +752,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       (this.currentArticleSelected as any)[event.name] = event.val;
       if (this.articlesPendingToSave.indexOf(this.currentArticleSelected) < 0) {
         this.articlesPendingToSave.push(this.currentArticleSelected);
+      }
+    }
+  }
+
+  async historyEditionMade(event: ChangeFieldType) {
+    if (this.currentHistorySelected) {
+      (this.currentHistorySelected as any)[event.name] = event.val;
+      if (this.historyPendingToSave.indexOf(this.currentHistorySelected) < 0) {
+        this.historyPendingToSave.push(this.currentHistorySelected);
       }
     }
   }
@@ -837,6 +916,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.saveKnowledgePending(),
       this.saveToolsPending(),
       this.saveArticlesPending(),
+      this.saveHistoryPending(),
     ]);
   }
 
@@ -899,6 +979,24 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         await this.alterEgo2Srv.createUpdateArticles(first, parent);
         this.articlesPendingToSave.splice(0, 1);
       } while (this.articlesPendingToSave.length > 0);
+      this.lastModified += 1;
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+    } finally {
+      this.cdr.detectChanges();
+    }
+  }
+
+  async saveHistoryPending() {
+    try {
+      if (this.historyPendingToSave.length == 0) {
+        return;
+      }
+      do {
+        const first = this.historyPendingToSave[0];
+        await this.firestoreSrv.createUpdate(this.getHistoryCollectionName(), first);
+        this.historyPendingToSave.splice(0, 1);
+      } while (this.historyPendingToSave.length > 0);
       this.lastModified += 1;
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);

@@ -121,7 +121,7 @@
                                                 </button>
                                                 <span class="full_width"></span>
                                                 @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
-                                                articlesPendingToSave.length > 0) {
+                                                articlesPendingToSave.length > 0 || historyPendingToSave.length > 0) {
                                                 <button matButton="elevated" (click)="savePending()">
                                                     <mat-icon>save</mat-icon>
                                                     Save</button>
@@ -229,7 +229,7 @@
                                                         (search)="searchArticle($event)"></app-search-input>
                                                 </span>
                                                 @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
-                                                articlesPendingToSave.length > 0) {
+                                                articlesPendingToSave.length > 0 || historyPendingToSave.length > 0) {
                                                 <button matButton="elevated" (click)="savePending()">
                                                     <mat-icon>save</mat-icon>
                                                     Save</button>
@@ -244,6 +244,64 @@
                                                     (innerFieldChanged)="articleEditionMade($event)"
                                                     [model]="articleModel"
                                                     [fields]="articleFields"></app-form-simple-without>
+                                            </div>
+                                            }
+                                        </mat-sidenav-content>
+                                    </mat-sidenav-container>
+                                </div>
+                            </mat-tab>
+                            <!-- History tab -->
+                            <mat-tab label="History">
+                                <div class="tab_content">
+                                    <mat-sidenav-container autosize>
+                                        <mat-sidenav #sidenavHistory [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                                            [opened]="(isHandset$ | async) === false">
+                                            <div class="left_parent">
+                                                <div class="rearch_parent">
+                                                    <h4 class="text-base">History list</h4>
+                                                    <div class="filter_parent"></div>
+                                                    <mat-icon (click)="toggle()">close</mat-icon>
+                                                </div>
+                                                <div class="scrollable_list">
+                                                    @for (item of historyFiltered; track item.created; let i = $index)
+                                                    {
+                                                    <span [ngClass]="{'selected': currentHistorySelected == item}"
+                                                        class="item_parent text-xs" (click)="selectThisHistory(item)">
+                                                        <span class="txt">
+                                                            <span>{{ item.desc }}</span>
+                                                        </span>
+                                                        <span class="button_elements">
+                                                            <span class="date">{{ item.created | epochDate:'DD MMMM
+                                                                YYYY, HH:mm'
+                                                                }}</span>
+                                                            <mat-icon class="xs"
+                                                                (click)="deleteHistory(item, $event)">delete</mat-icon>
+                                                        </span>
+                                                    </span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </mat-sidenav>
+                                        <mat-sidenav-content>
+                                            <mat-toolbar>
+                                                <button matIconButton aria-label="">
+                                                    <mat-icon (click)="toggle()">menu</mat-icon>
+                                                </button>
+                                                <span class="full_width">
+                                                </span>
+                                                @if (pendingToSave.length > 0 || toolsPendingToSave.length > 0 ||
+                                                articlesPendingToSave.length > 0 || historyPendingToSave.length > 0) {
+                                                <button matButton="elevated" (click)="savePending()">
+                                                    <mat-icon>save</mat-icon>
+                                                    Save</button>
+                                                }
+                                            </mat-toolbar>
+                                            @if (currentHistorySelected != null) {
+                                            <div class="editor_parent">
+                                                <app-form-simple-without
+                                                    (innerFieldChanged)="historyEditionMade($event)"
+                                                    [model]="historyModel"
+                                                    [fields]="historyFields"></app-form-simple-without>
                                             </div>
                                             }
                                         </mat-sidenav-content>

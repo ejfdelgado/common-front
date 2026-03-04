@@ -67,6 +67,12 @@ export interface ArticleDataType extends SimpleDataType {
     gallery?: any;
 };
 
+//History
+export interface HistoryDataType extends SimpleDataType {
+    desc: string;
+    checked: boolean;
+};
+
 export interface ToolMatchType {
     name: string;
     args: { [key: string]: any },
