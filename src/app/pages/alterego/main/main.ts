@@ -171,7 +171,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       );
 
     this.menuOptions.push({
-      label: "Edit",
+      label: "General information",
       icon: "edit",
       children: [],
       callback: () => {
@@ -182,7 +182,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
-      label: "Role",
+      label: "Role identity",
       icon: "psychology_alt",
       children: [],
       callback: () => {
@@ -215,7 +215,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
-      label: "Options",
+      label: "Vector properties",
       icon: "percent",
       children: [],
       callback: () => {
@@ -365,9 +365,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
         { label: "Name", type: "text", key: "name", required: true, },
         { label: "Description", type: "text", key: "desc", required: false, },
-        { label: "Enabled if state matches (comma separated)", type: "text", key: "useInState", required: false, },
-        { label: "Next state", type: "text", key: "nextState", required: false, },
+        { label: "Use states?", type: "toggle", key: "useStates", required: false, },
       ];
+
+      if (this.currentToolSelected.useStates === true) {
+        this.toolFields.push({ label: "Activated in States", type: "text", key: "useInState", required: false, });
+        this.toolFields.push({ label: "Next state", type: "text", key: "nextState", required: false, });
+      }
+
       if (this.currentToolSelected.type == 'mail') {
         this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
         this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, },);
@@ -376,6 +381,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, },);
         this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, },);
       }
+
+      this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
+
       this.toolModel = Object.assign({}, this.currentToolSelected);
       this.cdr.detectChanges();
     });
@@ -731,7 +739,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       if (this.toolsPendingToSave.indexOf(this.currentToolSelected) < 0) {
         this.toolsPendingToSave.push(this.currentToolSelected);
       }
-      if (event.name == 'type') {
+      if (['type', 'useStates', 'affectModel'].indexOf(event.name) >= 0) {
         this.selectToolItem(this.tools.indexOf(this.currentToolSelected));
       }
     }
@@ -1109,7 +1117,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         { label: "Min. % similarity", type: "number", key: "distance", required: true },
       ];
     } else if (type == "links") {
-      modelTitle = "Social properties";
+      modelTitle = "Social links";
       fields = [
         { label: "Instagram", type: "text", key: "instagram", required: false },
         { label: "Facebook", type: "text", key: "facebook", required: false },
@@ -1118,13 +1126,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         { label: "LinkedIn", type: "text", key: "linkedin", required: false },
       ];
     } else if (type == "whatsapp") {
-      modelTitle = "WhatsApp properties";
+      modelTitle = "WhatsApp";
       fields = [
         { label: "Phone", type: "phone", key: "whatsapp", required: false },
         { label: "Message", type: "text", key: "whatsapp_msg", required: false },
       ];
     } else if (type == "chat") {
-      modelTitle = "Assistante identity";
+      modelTitle = "Role identity";
       fields = [
         {
           label: "Role description", type: "md", key: "instruct",

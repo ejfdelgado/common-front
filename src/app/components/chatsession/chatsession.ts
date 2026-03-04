@@ -376,8 +376,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   }
 
   parseStates(t: ToolDataType): string[] {
-    if (t.useInState === undefined || t.useInState == null) {
-      return [];
+    if (t.useInState === undefined || t.useInState == null || t.useStates !== true) {
+      return [""];
     }
     return t.useInState.split(/[,;]/).map(a => a.trim());
   }

@@ -49,6 +49,8 @@ export interface ArgumentDataType {
     desc: string;
     required: boolean;
     val?: any;//transient data
+    modelPath?: string;
+    modelIsArray?: boolean;
 }
 // Tool
 export interface ToolDataType extends SimpleDataType {
@@ -61,6 +63,8 @@ export interface ToolDataType extends SimpleDataType {
     keywords?: string;
     useInState?: string;
     nextState?: string;
+    useStates?: boolean;
+    affectModel?: boolean;
     args: ArgumentDataType[];
 };
 // Article

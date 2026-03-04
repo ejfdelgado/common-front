@@ -142,7 +142,7 @@
                                                             (ngModelChange)="refreshArguments()">
                                                             Required
                                                         </mat-checkbox>
-                                                        <mat-form-field appearance="outline" class="">
+                                                        <mat-form-field appearance="outline" class="full_height">
                                                             <mat-label>Type</mat-label>
                                                             <mat-select [(ngModel)]="arg.type"
                                                                 (ngModelChange)="refreshArguments()">
@@ -167,6 +167,20 @@
                                                                 (ngModelChange)="refreshArguments()" />
                                                         </mat-form-field>
                                                     </div>
+                                                    @if (currentToolSelected.affectModel === true) {
+                                                    <div class="argument_pair">
+                                                        <mat-form-field appearance="outline" class="w-full fill_width"
+                                                            subscriptSizing="dynamic">
+                                                            <mat-label>Model path</mat-label>
+                                                            <input matInput [(ngModel)]="arg.modelPath" required
+                                                                (ngModelChange)="refreshArguments()" />
+                                                        </mat-form-field>
+                                                        <mat-checkbox [(ngModel)]="arg.modelIsArray"
+                                                            (ngModelChange)="refreshArguments()">
+                                                            Is multiple?
+                                                        </mat-checkbox>
+                                                    </div>
+                                                    }
                                                     @if (arg.val !== undefined) {
                                                     <div class="tool_arg_val">
                                                         <pre>{{ arg.val | json }}</pre>

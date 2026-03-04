@@ -231,7 +231,8 @@ mat-form-field.full_height>div>div>div>textarea {
     height: 100%;
 }
 
-mat-form-field.full_height .mat-form-field-subscript-wrapper {
+mat-form-field.full_height .mat-form-field-subscript-wrapper,
+mat-form-field.full_height .mat-mdc-form-field-subscript-wrapper {
     display: none;
 }
 
