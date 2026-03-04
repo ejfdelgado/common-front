@@ -16,13 +16,13 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu2="matMenu">
-                <button mat-menu-item (click)="contactUs()">
-                    <mat-icon>bolt</mat-icon>
-                    <span>¿Cómo funciona este asistente?</span>
-                </button>
                 <button mat-menu-item (click)="clearHistory()">
                     <mat-icon>delete</mat-icon>
                     <span>Borrar historial</span>
+                </button>
+                <button mat-menu-item (click)="contactUs()">
+                    <mat-icon>question_mark</mat-icon>
+                    <span>¿Cómo funciona este asistente?</span>
                 </button>
             </mat-menu>
         </mat-toolbar>
