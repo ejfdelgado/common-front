@@ -1,8 +1,5 @@
 # CommonFront
 
-Habilitar paginado lazy, no eager! mix on new data arrived.
-Keep track of latest cursor loaded.
-
 Send the model on generate Gemini, because maybe it will be needed when sending email.
 
 History:

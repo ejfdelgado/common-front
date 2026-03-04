@@ -273,13 +273,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async ngOnInit(): Promise<void> {
     try {
       await this.loadCollection();
+      const promises: Promise<any>[] = [];
+      promises.push(this.pageAllTools());
       if (location.hostname != "localhost") {
-        const promises: Promise<any>[] = [];
         promises.push(this.pageAllFacts());
-        promises.push(this.pageAllTools());
         promises.push(this.pageAllArticles());
-        await Promise.all(promises);
+        promises.push(this.pageAllHistory());
       }
+      await Promise.all(promises);
 
       this.selectItem(0);
       this.selectToolItem(0);
@@ -849,12 +850,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async pageAllTools() {
     let responses: ToolDataType[] = [];
-    const LIMIT = 10;
-    responses = await this.pageTools(LIMIT, this.pageAllToolsIsFirstTime);
-    if (responses.length > 0) {
-      this.pageAllToolsCursor = responses[responses.length - 1];
-    }
-    this.pageAllToolsIsFirstTime = false;
+    const LIMIT = 50;
+    do {
+      responses = await this.pageTools(LIMIT, this.pageAllToolsIsFirstTime);
+      if (responses.length > 0) {
+        this.pageAllToolsCursor = responses[responses.length - 1];
+      }
+      this.pageAllToolsIsFirstTime = false;
+    } while (responses.length > 0);
   }
 
   mixTools(incoming: ToolDataType[]) {
