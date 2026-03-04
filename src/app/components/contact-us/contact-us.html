@@ -1,10 +1,11 @@
 <h2 mat-dialog-title>¿Cómo funciona este asistente?</h2>
 <mat-dialog-content>
     <p>Organizamos tú contenido para encontrar las mejores respuestas. ✨<br><br>
-    <strong>¿Quieres crear un asistente?</strong> déjanos tu contacto:</p>
-     <app-form-simple-with #inner_form [fields]="fields" [model]="model"></app-form-simple-with>
+        <strong>¿Quieres crear un asistente?</strong>
+    </p>
+    <button mat-flat-button color="primary" (click)="startNewClientAssistant()">Chatea con nosotros para descubrir cómo
+        te ofrecemos valor</button>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
-    <button mat-flat-button color="primary" (click)="send()"><mat-icon>mail</mat-icon>Enviar</button>
 </mat-dialog-actions>

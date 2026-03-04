@@ -73,4 +73,8 @@ export class ContactUs extends CommonComponent {
     ));
     this.dialogRef.close(true);
   }
+
+  startNewClientAssistant() {
+    window.open("https://chat.pais.tv/#/alterego/use?col=pubknowledge&id=Oa408ZZ7aLFmw3NMohci", "_blank");
+  }
 }
