@@ -16,7 +16,9 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="openSearchUser()"><mat-icon>add</mat-icon>Add user</button>
-    <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    <button mat-flat-button color="primary" (click)="openSearchUser()"><mat-icon>add</mat-icon>Add user</button>
+    @if (changesCount > 0) {
+    <button mat-flat-button color="primary" (click)="save()"><mat-icon>save</mat-icon>Save</button>
+    }
 </mat-dialog-actions>

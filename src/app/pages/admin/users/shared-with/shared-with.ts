@@ -25,6 +25,7 @@ export class SharedWith extends CommonComponent {
   users: User[] = [];
   collection: string = "";
   id: string = "";
+  changesCount: number = 0;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -71,6 +72,7 @@ export class SharedWith extends CommonComponent {
     const index = this.users.indexOf(user);
     if (index >= 0) {
       this.users.splice(index, 1);
+      this.changesCount++;
       this.cdr.detectChanges();
     }
   }
@@ -88,6 +90,7 @@ export class SharedWith extends CommonComponent {
         const exists = this.users.find(u => u.uid == result.uid)
         if (!exists) {
           this.users.push(result);
+          this.changesCount++;
           this.cdr.detectChanges();
         }
       }

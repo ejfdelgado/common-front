@@ -92,6 +92,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('sidenavTools') sidenavTools!: MatSidenav;
+  @ViewChild('sidenavArticles') sidenavArticles!: MatSidenav;
+
   @ViewChild('article_form') articleForm!: FormSimpleWithout;
 
   menuOptions: MenuOptionType[] = [];
@@ -415,6 +417,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   toggle() {
     this.sidenav.toggle();
     this.sidenavTools.toggle();
+    this.sidenavArticles.toggle();
   }
 
   get knowledgeFiltered(): KnowledgeDataType[] {

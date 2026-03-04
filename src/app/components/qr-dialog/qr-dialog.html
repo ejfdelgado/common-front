@@ -6,16 +6,16 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-button color="secondary" (click)="open()">
+    <button mat-button color="primary" (click)="accept()">
+        <mat-icon>close</mat-icon>
+        Close
+    </button>
+    <button mat-flat-button color="secondary" (click)="open()">
         <mat-icon>arrow_outward</mat-icon>
         Open
     </button>
     <button mat-flat-button color="primary" (click)="download()">
         <mat-icon>download</mat-icon>
-        Download
-    </button>
-    <button mat-flat-button color="primary" (click)="accept()">
-        <mat-icon>check</mat-icon>
-        Ok
+        Save
     </button>
 </mat-dialog-actions>

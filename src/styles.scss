@@ -359,6 +359,10 @@ mat-icon.xs {
         max-width: 90vw;
         max-height: 90vh;
     }
+
+    app-search-input .mat-mdc-form-field-infix {
+        width: auto !important;
+    }
 }
 
 @media (orientation: landscape) {
