@@ -31,6 +31,7 @@ export class ChatGeminiService {
         author: string,
         tools: ToolDataType[],
         state: AssistantStateType,
+        useFacts?: boolean,
     ): Promise<{
         result: GenerateContentResponse,
         toolsStatus: ToolResponseType[],
@@ -43,6 +44,7 @@ export class ChatGeminiService {
             tools,
             extra,
             state,
+            useFacts,
             pass: await this.paramsSrv.getEncriptedKey(ChatGeminiService.tempPass),
         };
         const response: ApiResponse = await firstValueFrom(

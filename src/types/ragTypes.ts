@@ -29,6 +29,7 @@ export interface AssistantDataType extends BasicDataType {
     whatsapp_msg?: string;
     emoji?: string;
     maxHistory: number;
+    useFacts?: boolean;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
@@ -55,7 +56,7 @@ export interface ArgumentDataType {
 }
 // Tool
 export interface ToolDataType extends SimpleDataType {
-    type: "mail" | "article";
+    type: "mail" | "article" | "basic";
     name: string;
     desc: string;
     to?: string;
@@ -102,6 +103,7 @@ export const DEF_ASSISTANT_MODEL = {
     maxOutputTokens: 10000,
     temperature: 1,
     maxHistory: 30,
+    useFacts: true,
 };
 
 export interface ItemToSearchType {

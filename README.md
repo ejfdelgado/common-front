@@ -1,5 +1,7 @@
 # CommonFront
 
+Avoid redirect to itself on the contact us form.
+
 Create an alternative to, but for canvas.
 mails/chat_history_orig.html
 

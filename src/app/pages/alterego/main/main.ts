@@ -187,7 +187,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     this.menuOptions.push({
       label: "Role identity",
-      icon: "psychology_alt",
+      icon: "face",
       children: [],
       callback: () => {
         this.openDialog({
@@ -219,8 +219,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
-      label: "Vector properties",
-      icon: "percent",
+      label: "Facts database",
+      icon: "import_contacts",
       children: [],
       callback: () => {
         this.openDialog({
@@ -369,6 +369,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
             label: "Type", type: "select", key: "type", required: true,
             select: {
               options: [
+                { txt: "Basic", val: "basic" },
                 { txt: "Email", val: "mail" },
                 { txt: "Article", val: "article" },
               ]
@@ -711,7 +712,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       updated: 0,
       name: "",
       desc: "",
-      type: 'mail',
+      type: 'basic',
       id: "",
       ok: "Thank you for your message",
       error: "Please try again later",
@@ -1207,8 +1208,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
       ];
     } else if (type == "maths") {
-      modelTitle = "Vector properties";
+      modelTitle = "Facts database";
       fields = [
+        { label: "Use fact database?", type: "toggle", key: "useFacts", required: true, toggle: { iconName: "checkbox" } },
         { label: "Max. matches", type: "number", key: "top", required: true },
         { label: "Min. % similarity", type: "number", key: "distance", required: true },
       ];
@@ -1234,13 +1236,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           label: "Role description", type: "md", key: "instruct",
           contenteditable: { minHeight: "10em", maxHeight: "20em" },
         },
-        { label: "Max. messages to remember", type: "number", key: "maxHistory", required: true },
-        { label: "Max. tokens", type: "number", key: "maxOutputTokens", required: true },
-        { label: "Temperature", type: "number", key: "temperature", required: true },
         {
           label: "First message", type: "md", key: "startConversation",
           contenteditable: { minHeight: "10em", maxHeight: "20em" },
         },
+        { label: "Max. messages to remember", type: "number", key: "maxHistory", required: true },
+        { label: "Max. tokens", type: "number", key: "maxOutputTokens", required: true },
+        { label: "Temperature", type: "number", key: "temperature", required: true },
       ];
     }
 

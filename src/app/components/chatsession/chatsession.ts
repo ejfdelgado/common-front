@@ -231,8 +231,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       this.incrementLoading();
       if (!this.initialized) {
         await this.chatSrv.initialize();
+        this.useFirstMessage();
+        this.initialized = true;
       }
-      this.useFirstMessage();
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
@@ -287,7 +288,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         {
           model: this.toolModel,
           state: this.toolState,
-        }
+        },
+        this.assistant.useFacts,
       );
 
       this.foundFacts.emit(searchedResult);
