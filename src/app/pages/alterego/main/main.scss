@@ -152,9 +152,34 @@ mat-toolbar {
     background-color: rgb(255, 245, 183);
 }
 
+.item_parent.not_found {
+    background-color: rgb(255, 188, 188);
+}
+
+.item_parent.selected.not_found {
+    background-color: rgb(255, 148, 148);
+}
+
 .item_parent.question .txt,
 .item_parent.mail .txt {
     color: rgb(177, 95, 0);
+}
+
+.item_parent.not_found .txt {
+    color: red;
+}
+
+.item_parent.checked {
+    background-color: rgb(215, 215, 215);
+}
+
+.item_parent.checked.selected {
+    background-color: rgb(175, 175, 175);
+}
+
+.item_parent.checked .txt,
+.item_parent.checked.selected .txt {
+    color: black;
 }
 
 .item_parent .txt {
@@ -242,6 +267,18 @@ mat-tab-group {
     padding: 20px;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.report_html_template {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.report_not_found {
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 @media (max-width: 800px) {

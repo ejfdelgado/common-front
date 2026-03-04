@@ -1,16 +1,12 @@
 # CommonFront
 
-History:
-- Correos enviados (mostrar rendered html).
-- Contenido no encontrado.
+Create an alternative to, but for canvas.
+mails/chat_history_orig.html
 
-Allow configure custom template url on tool.
+Allow filter history given the type.
 
 Hacer el servicio de borrar todo en supabase y firestore.
 agregar max length a text, md, texarea y rich text.
-
-Integrar google analytics.
-eventos: correo enviado.
 
 Paginar usuarios.
 

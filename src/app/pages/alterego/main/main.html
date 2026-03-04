@@ -280,13 +280,16 @@
                                             <div class="left_parent">
                                                 <div class="rearch_parent">
                                                     <h4 class="text-base">History list</h4>
-                                                    <div class="filter_parent"></div>
+                                                    <div class="filter_parent">
+                                                        <mat-icon (click)="recomputeHistory()">restart_alt</mat-icon>
+                                                    </div>
                                                     <mat-icon (click)="toggle()">close</mat-icon>
                                                 </div>
                                                 <div class="scrollable_list">
                                                     @for (item of historyFiltered; track item.created; let i = $index)
                                                     {
-                                                    <span [ngClass]="{'selected': currentHistorySelected == item}"
+                                                    <span
+                                                        [ngClass]="{'selected': currentHistorySelected == item, 'checked': item.checked === true, 'mail': item.type=='mail', 'not_found': item.type=='not_found'}"
                                                         class="item_parent text-xs" (click)="selectThisHistory(item)">
                                                         <span class="txt">
                                                             <span>{{ item.desc }}</span>
@@ -325,7 +328,18 @@
                                                     (innerFieldChanged)="historyEditionMade($event)"
                                                     [model]="historyModel"
                                                     [fields]="historyFields"></app-form-simple-without>
-                                                <div [innerHTML]="reportHTML"></div>
+                                                @if (currentHistorySelected.type=="mail") {
+                                                <div class="report_html_template" [innerHTML]="reportHTML"></div>
+                                                } @else if (currentHistorySelected.type=="not_found") {
+                                                <div class="report_not_found">
+                                                    <em>The system did not find any article for:</em>
+                                                    <span>Tool Name: "{{ currentHistorySelected.desc }}"</span>
+                                                    <span>User message: <strong>"{{ currentHistorySelected.userQuery
+                                                            }}"</strong></span>
+                                                    <span>Searched text: <strong>"{{ currentHistorySelected.searchText
+                                                            }}"</strong></span>
+                                                </div>
+                                                }
                                             </div>
                                             }
                                         </mat-sidenav-content>

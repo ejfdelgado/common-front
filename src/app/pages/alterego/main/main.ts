@@ -376,6 +376,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           },
           { label: "Name", type: "text", key: "name", required: true, },
           { label: "Description", type: "text", key: "desc", required: false, },
+          { label: "Custom template?", type: "text", key: "template", required: false, },
           { label: "Use states?", type: "toggle", key: "useStates", required: false, },
         ];
 
@@ -430,28 +431,31 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
   }
 
-  selectHistoryItem(index: number) {
+  async selectHistoryItem(index: number): Promise<void> {
     this.currentHistorySelected = null;
     this.historyFields = [];
+    this.reportHTML = null;
     this.cdr.detectChanges();
     if (this.history.length <= index || index < 0) {
       return;
     }
 
-    requestAnimationFrame(() => {
-      this.currentHistorySelected = this.history[index];
-      // Load the html to display...
-      const url = this.getBucketFilePath(this.currentHistorySelected.reportId);
-      firstValueFrom(this.http.get(url, { responseType: 'text' })).then((content) => {
-        this.reportHTML = this.sanitizeText(content);
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        this.currentHistorySelected = this.history[index];
+        // Load the html to display...
+        const url = this.getBucketFilePath(this.currentHistorySelected.reportId);
+        firstValueFrom(this.http.get(url, { responseType: 'text' })).then((content) => {
+          this.reportHTML = this.sanitizeText(content);
+          this.cdr.detectChanges();
+        });
+        this.historyFields = [
+          { label: "Checked", type: "toggle", key: "checked", required: false, },
+        ];
+        this.historyModel = Object.assign({}, this.currentHistorySelected);
+        resolve();
         this.cdr.detectChanges();
       });
-      this.historyFields = [
-        { label: "Checked", type: "toggle", key: "checked", required: false, },
-      ];
-      this.historyModel = Object.assign({}, this.currentHistorySelected);
-
-      this.cdr.detectChanges();
     });
   }
 
@@ -1453,5 +1457,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     dialogRef.afterClosed().subscribe(async (result) => {
       console.log(result);
     });
+  }
+
+  async recomputeHistory() {
+    this.pageAllHistoryIsFirstTime = true;
+    await this.pageAllHistory();
   }
 }

@@ -66,6 +66,7 @@ export interface ToolDataType extends SimpleDataType {
     nextState?: string;
     useStates?: boolean;
     affectModel?: boolean;
+    template?: string;
     args: ArgumentDataType[];
 };
 // Article
@@ -78,9 +79,11 @@ export interface ArticleDataType extends SimpleDataType {
 //History
 export interface HistoryDataType extends SimpleDataType {
     desc: string;
-    type: string;
+    type: "not_found" | "mail";
     checked: boolean;
-    reportId: string;
+    reportId: string;//for emails
+    searchText?: string;//for not_found
+    userQuery?: string;
 };
 
 export interface ToolMatchType {
