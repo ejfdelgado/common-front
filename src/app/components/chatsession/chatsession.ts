@@ -93,6 +93,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() useIndicator: boolean = true;
   @Input() showSplash: boolean = false;
 
+  @Input() maxHistoryLength: number = 25;
+
   @Output() foundFacts: EventEmitter<FoundKnowledge[]> = new EventEmitter();
   @Output() foundTools: EventEmitter<ToolDataType[]> = new EventEmitter();
   @Output() foundArticles: EventEmitter<ArticleDataType[]> = new EventEmitter();
@@ -276,7 +278,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         toolsStatus,
         searchedResult,
       } = await this.chatSrv.generateContent(
-        this.history,
+        this.getLimitedHistory(),
         extra,
         this.config,
         this.assistant.author,
@@ -402,5 +404,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         return states.indexOf(this.toolState) >= 0;
       }
     });
+  }
+
+  getLimitedHistory() {
+    return this.history.slice(-1 * this.assistant.maxHistory);
   }
 }

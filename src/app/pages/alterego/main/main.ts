@@ -1138,6 +1138,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           label: "Role description", type: "md", key: "instruct",
           contenteditable: { minHeight: "10em", maxHeight: "20em" },
         },
+        { label: "Max. messages to remember", type: "number", key: "maxHistory", required: true },
         { label: "Max. tokens", type: "number", key: "maxOutputTokens", required: true },
         { label: "Temperature", type: "number", key: "temperature", required: true },
         {

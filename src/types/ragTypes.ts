@@ -28,6 +28,7 @@ export interface AssistantDataType extends BasicDataType {
     whatsapp?: any;
     whatsapp_msg?: string;
     emoji?: string;
+    maxHistory: number;
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
@@ -94,7 +95,8 @@ export const DEF_ASSISTANT_MODEL = {
     instruct: "You are an assistant giving some information",
     startConversation: "",
     maxOutputTokens: 10000,
-    temperature: 1
+    temperature: 1,
+    maxHistory: 30,
 };
 
 export interface ItemToSearchType {
