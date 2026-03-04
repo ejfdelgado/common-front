@@ -3,15 +3,13 @@
 Habilitar paginado lazy, no eager! mix on new data arrived.
 Keep track of latest cursor loaded.
 
+Send the model on generate Gemini, because maybe it will be needed when sending email.
+
 History:
 - Correos enviados.
 - Contenido no encontrado.
 - Agregar en el tab, un indicador que muestre que hubo match.
 - Permitir paginar sin cargar todo.
-
-Usar el startConversation desde el chatbot.
-Usar useInState & nextState en los tools con toolState.
-if affectModel is true, after a tool is matched, then affect model using args.modelPath and modelIsArray.
 
 Hacer el servicio de borrar todo en supabase y firestore.
 agregar max length a text, md, texarea y rich text.

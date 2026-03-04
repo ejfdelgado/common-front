@@ -44,6 +44,7 @@ import { ImageGalleryType } from 'types/fieldsTypes';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactUs } from '@components/contact-us/contact-us';
+import { SimpleObj } from 'ejfdelgado-common-ts';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -312,8 +313,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               }
             }]
           };
-          //const toolRef = this.searchNamedTool(standardName);
-          //console.log(JSON.stringify(toolRef, null, 4));
+          // Display gallery if needed
           if (tool.articles) {
             this.foundArticles.emit(tool.articles);
             tool.articles.forEach((article) => {
@@ -327,9 +327,35 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               }
             });
           }
+          // Display text if needed & foundTools emit! & assign val on args
           this.processVisualInput(toolMessage, false);
           this.history.push(toolMessage);
-
+          // Adjust state
+          const toolRef = this.searchNamedTool(standardName);
+          if (toolRef) {
+            if (toolRef.useStates === true) {
+              if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
+                // Apply next state
+                this.toolState = toolRef.nextState.trim();
+              }
+            }
+            if (toolRef.affectModel === true) {
+              // Adjust model
+              toolRef.args.forEach((arg) => {
+                const path = arg.modelPath;
+                if (path && path.trim().length > 0) {
+                  if (arg.modelIsArray === true) {
+                    // First read to get index where to place the val
+                    const old = SimpleObj.getValue(this.toolModel, path, []);
+                    SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
+                  } else {
+                    // Just write
+                    SimpleObj.recreate(this.toolModel, path, arg.val);
+                  }
+                }
+              });
+            }
+          }
         });
 
         this.query = "";

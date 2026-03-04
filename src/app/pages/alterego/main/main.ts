@@ -311,7 +311,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  selectItem(index: number) {
+  async selectItem(index: number): Promise<void> {
     this.currentSelected = null;
     this.fields = [];
     this.cdr.detectChanges();
@@ -319,30 +319,33 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return;
     }
 
-    requestAnimationFrame(() => {
-      this.currentSelected = this.knowledge[index];
-      const isQuestion = this.currentSelected.type == 'question';
-      this.fields = [
-        {
-          label: "Type", type: "select", key: "type",
-          select: {
-            options: [
-              { txt: "Question", val: "question" },
-              { txt: "Fact", val: "fact" },
-            ]
-          }
-        },
-        { label: "Knowledge", type: "md", key: "txtFormat", md: { maxHeight: "200px", minHeight: "200px" } },
-      ];
-      if (isQuestion) {
-        this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
-      }
-      this.model = Object.assign({}, this.currentSelected);
-      this.cdr.detectChanges();
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        this.currentSelected = this.knowledge[index];
+        const isQuestion = this.currentSelected.type == 'question';
+        this.fields = [
+          {
+            label: "Type", type: "select", key: "type",
+            select: {
+              options: [
+                { txt: "Question", val: "question" },
+                { txt: "Fact", val: "fact" },
+              ]
+            }
+          },
+          { label: "Knowledge", type: "md", key: "txtFormat", md: { maxHeight: "200px", minHeight: "200px" } },
+        ];
+        if (isQuestion) {
+          this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
+        }
+        this.model = Object.assign({}, this.currentSelected);
+        this.cdr.detectChanges();
+        resolve();
+      });
     });
   }
 
-  selectToolItem(index: number) {
+  async selectToolItem(index: number): Promise<void> {
     this.currentToolSelected = null;
     this.toolFields = [];
     this.cdr.detectChanges();
@@ -350,46 +353,48 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return;
     }
 
-    requestAnimationFrame(() => {
-      this.currentToolSelected = this.tools[index];
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        this.currentToolSelected = this.tools[index];
+        this.toolFields = [
+          {
+            label: "Type", type: "select", key: "type", required: true,
+            select: {
+              options: [
+                { txt: "Email", val: "mail" },
+                { txt: "Article", val: "article" },
+              ]
+            }
+          },
+          { label: "Name", type: "text", key: "name", required: true, },
+          { label: "Description", type: "text", key: "desc", required: false, },
+          { label: "Use states?", type: "toggle", key: "useStates", required: false, },
+        ];
 
-      this.toolFields = [
-        {
-          label: "Type", type: "select", key: "type", required: true,
-          select: {
-            options: [
-              { txt: "Email", val: "mail" },
-              { txt: "Article", val: "article" },
-            ]
-          }
-        },
-        { label: "Name", type: "text", key: "name", required: true, },
-        { label: "Description", type: "text", key: "desc", required: false, },
-        { label: "Use states?", type: "toggle", key: "useStates", required: false, },
-      ];
+        if (this.currentToolSelected.useStates === true) {
+          this.toolFields.push({ label: "Activated in States", type: "text", key: "useInState", required: false, });
+          this.toolFields.push({ label: "Next state", type: "text", key: "nextState", required: false, });
+        }
 
-      if (this.currentToolSelected.useStates === true) {
-        this.toolFields.push({ label: "Activated in States", type: "text", key: "useInState", required: false, });
-        this.toolFields.push({ label: "Next state", type: "text", key: "nextState", required: false, });
-      }
+        if (this.currentToolSelected.type == 'mail') {
+          this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
+          this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, },);
+          this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, },);
+        } else if (this.currentToolSelected.type == 'article') {
+          this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, },);
+          this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, },);
+        }
 
-      if (this.currentToolSelected.type == 'mail') {
-        this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
-        this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, },);
-        this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, },);
-      } else if (this.currentToolSelected.type == 'article') {
-        this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, },);
-        this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, },);
-      }
+        this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
 
-      this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
-
-      this.toolModel = Object.assign({}, this.currentToolSelected);
-      this.cdr.detectChanges();
+        this.toolModel = Object.assign({}, this.currentToolSelected);
+        this.cdr.detectChanges();
+        resolve();
+      });
     });
   }
 
-  selectArticleItem(index: number) {
+  async selectArticleItem(index: number): Promise<void> {
     this.currentArticleSelected = null;
     this.articleFields = [];
     this.cdr.detectChanges();
@@ -397,21 +402,23 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return;
     }
 
-    requestAnimationFrame(() => {
-      this.currentArticleSelected = this.articles[index];
-      this.articleFields = [
-        { label: "Keywords", type: "text", key: "keywords", required: true, },
-        { label: "Description", type: "md", key: "desc", required: false, },
-        {
-          label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
-            thumbnailMaxSizePixels: 100,
-            template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
-          }
-        },
-      ];
-      this.articleModel = Object.assign({}, this.currentArticleSelected);
-
-      this.cdr.detectChanges();
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        this.currentArticleSelected = this.articles[index];
+        this.articleFields = [
+          { label: "Keywords", type: "text", key: "keywords", required: true, },
+          { label: "Description", type: "md", key: "desc", required: false, },
+          {
+            label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
+              thumbnailMaxSizePixels: 100,
+              template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            }
+          },
+        ];
+        this.articleModel = Object.assign({}, this.currentArticleSelected);
+        this.cdr.detectChanges();
+        resolve();
+      });
     });
   }
 
@@ -484,14 +491,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     return 0;
   }
 
-  selectThisKnowledge(item: KnowledgeDataType) {
+  async selectThisKnowledge(item: KnowledgeDataType) {
     const index = this.knowledge.indexOf(item);
-    this.selectItem(index);
+    await this.selectItem(index);
   }
 
-  selectThisTool(item: ToolDataType) {
+  async selectThisTool(item: ToolDataType) {
     const index = this.tools.indexOf(item);
-    this.selectToolItem(index);
+    await this.selectToolItem(index);
   }
 
   async selectThisArticle(item: ArticleDataType) {
@@ -500,7 +507,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       await this.articleForm.saveAllChangedData();
     }
     const index = this.articles.indexOf(item);
-    this.selectArticleItem(index);
+    await this.selectArticleItem(index);
   }
 
   async selectThisHistory(item: HistoryDataType) {
@@ -525,12 +532,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.knowledge.splice(index, 1);
       if (this.knowledge.length > 0) {
         if (index == 0) {
-          this.selectItem(0);
+          await this.selectItem(0);
         } else {
-          this.selectItem(index - 1);
+          await this.selectItem(index - 1);
         }
       } else {
-        this.selectItem(-1);
+        await this.selectItem(-1);
       }
       this.lastModified += 1;
     } catch (err: any) {
@@ -554,12 +561,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.tools.splice(index, 1);
       if (this.tools.length > 0) {
         if (index == 0) {
-          this.selectToolItem(0);
+          await this.selectToolItem(0);
         } else {
-          this.selectToolItem(index - 1);
+          await this.selectToolItem(index - 1);
         }
       } else {
-        this.selectToolItem(-1);
+        await this.selectToolItem(-1);
       }
       this.lastModified += 1;
     } catch (err: any) {
@@ -584,12 +591,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.articles.splice(index, 1);
       if (this.articles.length > 0) {
         if (index == 0) {
-          this.selectArticleItem(0);
+          await this.selectArticleItem(0);
         } else {
-          this.selectArticleItem(index - 1);
+          await this.selectArticleItem(index - 1);
         }
       } else {
-        this.selectArticleItem(-1);
+        await this.selectArticleItem(-1);
       }
       this.lastModified += 1;
     } catch (err: any) {
@@ -1186,16 +1193,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async updateSearch() {
     if (this.searchedResult == null) {
-      this.selectItem(0);
+      await this.selectItem(0);
     } else {
       if (this.searchedResult.length > 0) {
         const first = this.searchedResult[0];
         const founds = this.knowledge.filter((o) => o.id == first.metadata.id);
         const index = this.knowledge.indexOf(founds[0]);
-        this.selectItem(index);
+        await this.selectItem(index);
       } else {
         // Nothing found
-        this.selectItem(-1);
+        await this.selectItem(-1);
       }
     }
     this.cdr.detectChanges();
@@ -1203,15 +1210,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async updateToolsSearch() {
     if (this.searchedToolsResult.length == 0) {
-      this.selectToolItem(0);
+      await this.selectToolItem(0);
     } else {
       if (this.searchedToolsResult.length > 0) {
         const first = this.searchedToolsResult[0];
         const index = this.tools.indexOf(first);
-        this.selectToolItem(index);
+        await this.selectToolItem(index);
       } else {
         // Nothing found
-        this.selectToolItem(-1);
+        await this.selectToolItem(-1);
       }
     }
     this.cdr.detectChanges();
@@ -1219,16 +1226,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async updateArticlesSearch() {
     if (this.searchedArticleResult.length == 0) {
-      this.selectArticleItem(0);
+      await this.selectArticleItem(0);
     } else {
       if (this.searchedArticleResult.length > 0) {
         const first = this.searchedArticleResult[0];
         const founds = this.articles.filter((o) => o.id == first.id);
         const index = this.articles.indexOf(founds[0]);
-        this.selectArticleItem(index);
+        await this.selectArticleItem(index);
       } else {
         // Nothing found
-        this.selectArticleItem(-1);
+        await this.selectArticleItem(-1);
       }
     }
     this.cdr.detectChanges();
