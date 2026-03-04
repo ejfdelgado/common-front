@@ -21,7 +21,7 @@ import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-simple';
 import { Router } from '@angular/router';
 import { IndicatorService } from '@services/indicator.service';
-import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
+import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@services/firestore.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -273,11 +273,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async ngOnInit(): Promise<void> {
     try {
       await this.loadCollection();
-      const promises: Promise<any>[] = [];
-      promises.push(this.pageAllFacts());
-      promises.push(this.pageAllTools());
-      promises.push(this.pageAllArticles());
-      await Promise.all(promises);
+      if (location.hostname != "localhost") {
+        const promises: Promise<any>[] = [];
+        promises.push(this.pageAllFacts());
+        promises.push(this.pageAllTools());
+        promises.push(this.pageAllArticles());
+        await Promise.all(promises);
+      }
+
       this.selectItem(0);
       this.selectToolItem(0);
       this.selectArticleItem(0);
@@ -796,7 +799,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async pageAllFacts() {
     let responses: KnowledgeDataType[] = [];
-    const LIMIT = 2;
+    const LIMIT = 10;
     responses = await this.pageFacts(LIMIT, this.pageAllFactsIsFirstTime);
     if (responses.length > 0) {
       const last = responses[responses.length - 1];
@@ -810,11 +813,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   mixFacts(incoming: KnowledgeDataType[]) {
     const ids = this.knowledge.map(f => f.id);
-    // Filter
     const news = incoming.filter(f => ids.indexOf(f.id) < 0);
-    // Add
     this.knowledge.push(...news);
-    // Sort
     this.knowledge.sort((a, b) => b.created - a.created);
   }
 
@@ -844,17 +844,27 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  pageAllToolsIsFirstTime: boolean = true;
+  pageAllToolsCursor: ToolDataType | null = null;
+
   async pageAllTools() {
-    let isFirstTime: boolean = true;
-    let responses: BasicDataType[] = [];
-    const LIMIT = 100;
-    do {
-      responses = await this.pageTools(LIMIT, isFirstTime);
-      isFirstTime = false;
-    } while (responses.length > 0);
+    let responses: ToolDataType[] = [];
+    const LIMIT = 2;
+    responses = await this.pageTools(LIMIT, this.pageAllToolsIsFirstTime);
+    if (responses.length > 0) {
+      this.pageAllToolsCursor = responses[responses.length - 1];
+    }
+    this.pageAllToolsIsFirstTime = false;
   }
 
-  async pageTools(limit: number, startover: boolean = false): Promise<BasicDataType[]> {
+  mixTools(incoming: ToolDataType[]) {
+    const ids = this.tools.map(f => f.id);
+    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    this.tools.push(...news);
+    this.tools.sort((a, b) => b.created - a.created);
+  }
+
+  async pageTools(limit: number, startover: boolean = false): Promise<ToolDataType[]> {
     const indicator = this.indicatorSrv.start();
     try {
       if (startover && this.tools.length > 0) {
@@ -867,14 +877,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         top: limit,
       };
       if (!startover) {
-        if (this.tools.length > 0) {
-          pagingOptions.lastDoc = this.tools[this.tools.length - 1];
-        }
+        pagingOptions.lastDoc = this.pageAllToolsCursor;
       }
       const page = (await this.firestoreSrv.paging(pagingOptions));
-      this.tools.push(...(page as any[]));
+      this.mixTools((page as any[]));
       this.cdr.detectChanges();
-      return page;
+      return page as any[];
     } catch (err: any) {
       this.uiNotificationSrv.show(err.message);
       return [];
@@ -924,6 +932,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } finally {
       indicator.done();
     }
+  }
+
+  async pageAllHistory() {
+
   }
 
   async savePending() {
@@ -1267,12 +1279,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   receiveSearch(search: FoundKnowledge[]) {
     this.searchedResult = search;
+    const facts = search.map(s => s.metadata);
+    this.mixFacts(facts);
     this.updateSearch();
   }
 
   receiveToolSearch(search: ToolDataType[]) {
     // First clear old values...
     this.searchedToolsResult = search;
+    this.mixTools(search);
     this.updateToolsSearch();
   }
 
