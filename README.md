@@ -1,12 +1,10 @@
 # CommonFront
 
-Send the model on generate Gemini, because maybe it will be needed when sending email.
-
 History:
-- Correos enviados.
+- Correos enviados (mostrar rendered html).
 - Contenido no encontrado.
-- Agregar en el tab, un indicador que muestre que hubo match.
-- Permitir paginar sin cargar todo.
+
+Allow configure custom template url on tool.
 
 Hacer el servicio de borrar todo en supabase y firestore.
 agregar max length a text, md, texarea y rich text.

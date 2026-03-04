@@ -78,7 +78,9 @@ export interface ArticleDataType extends SimpleDataType {
 //History
 export interface HistoryDataType extends SimpleDataType {
     desc: string;
+    type: string;
     checked: boolean;
+    reportId: string;
 };
 
 export interface ToolMatchType {
