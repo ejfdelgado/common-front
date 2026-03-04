@@ -21,7 +21,7 @@ export class ChatGeminiService {
     }
 
     async initialize() {
-        this.paramsSrv.getPublicKey();
+        await this.paramsSrv.getPublicKey();
     }
 
     async generateContent(

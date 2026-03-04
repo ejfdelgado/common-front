@@ -1,18 +1,17 @@
 # CommonFront
 
+Habilitar paginado lazy, no eager! mix on new data arrived.
+Keep track of latest cursor loaded.
+
 History:
 - Correos enviados.
 - Contenido no encontrado.
 - Agregar en el tab, un indicador que muestre que hubo match.
 - Permitir paginar sin cargar todo.
 
-Habilitar paginado lazy, no eager! mix on new data arrived.
-Keep track of latest cursor loaded.
-
-Usar useInState & nextState en los tools con toolState.
 Usar el startConversation desde el chatbot.
-
-Agregar un tipo de tool, que afecta un modelo con los argumentos, se debe especificar la ruta y si es múltiple o no.
+Usar useInState & nextState en los tools con toolState.
+if affectModel is true, after a tool is matched, then affect model using args.modelPath and modelIsArray.
 
 Hacer el servicio de borrar todo en supabase y firestore.
 agregar max length a text, md, texarea y rich text.

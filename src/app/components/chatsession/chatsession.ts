@@ -89,7 +89,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() language: SearchLangsType = "en";
   @Input() top: number = 5;
   @Input() distance: number = 0.3;
-  @Input() autowarm: boolean = false;
+  @Input() autowarm: boolean = true;
   @Input() useIndicator: boolean = true;
   @Input() showSplash: boolean = false;
 
@@ -214,6 +214,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     this.visualHistory = [];
     this.toolState = null;
     this.toolModel = {};
+    this.useFirstMessage();
   }
 
   md2plain(md: string) {
@@ -228,12 +229,22 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       if (!this.initialized) {
         await this.chatSrv.initialize();
       }
-
+      this.useFirstMessage();
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
     } finally {
       this.decrementLoading();
+    }
+  }
+
+  useFirstMessage() {
+    if (typeof this.assistant.startConversation == "string" && this.assistant.startConversation.trim().length > 0) {
+      this.visualHistory.push({
+        date: Date.now() - 1,
+        role: "tool",
+        txt: this.assistant.startConversation,
+      });
     }
   }
 
