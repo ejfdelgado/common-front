@@ -18,6 +18,7 @@ export interface AssistantDataType extends BasicDataType {
     distance: number;
     language: SearchLangsType;
     instruct: string;
+    startConversation?: string;
     knowledge_path?: string;
     instagram?: string;
     facebook?: string;
@@ -58,6 +59,8 @@ export interface ToolDataType extends SimpleDataType {
     ok?: string;
     error?: string;
     keywords?: string;
+    useInState?: string;
+    nextState?: string;
     args: ArgumentDataType[];
 };
 // Article
@@ -85,6 +88,7 @@ export const DEF_ASSISTANT_MODEL = {
     top: 3,
     distance: 0.3,
     instruct: "You are an assistant giving some information",
+    startConversation: "",
     maxOutputTokens: 10000,
     temperature: 1
 };

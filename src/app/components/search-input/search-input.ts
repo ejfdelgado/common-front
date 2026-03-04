@@ -4,6 +4,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { AutofocusDirective } from '@directives/autofocus.directive';
+import { CommonComponent } from '@components/common.component';
+import { FullscreenService } from '@services/fullscreen.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-search-input',
@@ -14,14 +18,22 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    AutofocusDirective,
   ],
   templateUrl: './search-input.html',
   styleUrl: './search-input.scss',
 })
-export class SearchInputComponent {
+export class SearchInputComponent extends CommonComponent {
 
   @Output() search = new EventEmitter<string>();
   searchCtrl = new FormControl('');
+
+  constructor(
+    public override fullScreenSrv: FullscreenService,
+    public override sanitizer: DomSanitizer,
+  ) {
+    super(sanitizer, fullScreenSrv);
+  }
 
   onSearch(): void {
     const value = this.searchCtrl.value?.trim();

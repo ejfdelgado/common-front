@@ -337,9 +337,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       if (isQuestion) {
         this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
       }
-      this.model['type'] = this.currentSelected.type;
-      this.model["txtFormat"] = this.currentSelected.txtFormat;
-      this.model["answerFormat"] = this.currentSelected.answerFormat;
+      this.model = Object.assign({}, this.currentSelected);
       this.cdr.detectChanges();
     });
   }
@@ -367,6 +365,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
         { label: "Name", type: "text", key: "name", required: true, },
         { label: "Description", type: "text", key: "desc", required: false, },
+        { label: "Enabled if state matches (comma separated)", type: "text", key: "useInState", required: false, },
+        { label: "Next state", type: "text", key: "nextState", required: false, },
       ];
       if (this.currentToolSelected.type == 'mail') {
         this.toolFields.push({ label: "To", type: "text", key: "to", required: true, },);
@@ -376,15 +376,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, },);
         this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, },);
       }
-
-      this.toolModel['type'] = this.currentToolSelected.type;
-      this.toolModel["desc"] = this.currentToolSelected.desc;
-      this.toolModel["to"] = this.currentToolSelected.to;
-      this.toolModel["name"] = this.currentToolSelected.name;
-      this.toolModel["ok"] = this.currentToolSelected.ok;
-      this.toolModel["error"] = this.currentToolSelected.error;
-      this.toolModel["keywords"] = this.currentToolSelected.keywords;
-
+      this.toolModel = Object.assign({}, this.currentToolSelected);
       this.cdr.detectChanges();
     });
   }
@@ -409,9 +401,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           }
         },
       ];
-      this.articleModel['keywords'] = this.currentArticleSelected.keywords;
-      this.articleModel["desc"] = this.currentArticleSelected.desc;
-      this.articleModel["gallery"] = this.currentArticleSelected.gallery;
+      this.articleModel = Object.assign({}, this.currentArticleSelected);
 
       this.cdr.detectChanges();
     });
@@ -1080,8 +1070,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       model = payload.model;
     }
 
+    let modelTitle = "Update";
     let fields: AllFieldsDataType[] = [];
     if (type == "general") {
+      modelTitle = "General information";
       fields = [
         { label: "Title", type: "text", key: "title", required: true },
         {
@@ -1098,7 +1090,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           label: "Imagen", type: "image", key: "image", image: {
             thumbnailMaxSizePixels: 200,
             squareMaxSizePixels: 800,//For social
-            template: "knowledge_database/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            template: "alterego/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
         {
@@ -1111,11 +1103,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
       ];
     } else if (type == "maths") {
+      modelTitle = "Vector properties";
       fields = [
         { label: "Max. matches", type: "number", key: "top", required: true },
         { label: "Min. % similarity", type: "number", key: "distance", required: true },
       ];
     } else if (type == "links") {
+      modelTitle = "Social properties";
       fields = [
         { label: "Instagram", type: "text", key: "instagram", required: false },
         { label: "Facebook", type: "text", key: "facebook", required: false },
@@ -1124,11 +1118,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         { label: "LinkedIn", type: "text", key: "linkedin", required: false },
       ];
     } else if (type == "whatsapp") {
+      modelTitle = "WhatsApp properties";
       fields = [
         { label: "Phone", type: "phone", key: "whatsapp", required: false },
         { label: "Message", type: "text", key: "whatsapp_msg", required: false },
       ];
     } else if (type == "chat") {
+      modelTitle = "Assistante identity";
       fields = [
         {
           label: "Role description", type: "md", key: "instruct",
@@ -1136,11 +1132,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         },
         { label: "Max. tokens", type: "number", key: "maxOutputTokens", required: true },
         { label: "Temperature", type: "number", key: "temperature", required: true },
+        {
+          label: "First message", type: "md", key: "startConversation",
+          contenteditable: { minHeight: "10em", maxHeight: "20em" },
+        },
       ];
     }
 
     const formConfig: FormDataType = {
-      title: model ? "Update" : "Create",
+      title: modelTitle,
       autoAuthor: true,
       modelName: MODEL_NAME_PARENT,
       searchFields: ["title", "description"],

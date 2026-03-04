@@ -1,7 +1,7 @@
 <mat-form-field appearance="outline" class="search-field">
     <mat-icon matPrefix>search</mat-icon>
 
-    <input matInput autofocus type="text" placeholder="Buscar..." [formControl]="searchCtrl" (keydown.enter)="onSearch()"
+    <input matInput [appAutofocus]="!isMobile()" type="text" placeholder="Buscar..." [formControl]="searchCtrl" (keydown.enter)="onSearch()"
         aria-label="Buscar..." />
 
     @if (searchCtrl.value) {

@@ -97,6 +97,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   @Output() foundTools: EventEmitter<ToolDataType[]> = new EventEmitter();
   @Output() foundArticles: EventEmitter<ArticleDataType[]> = new EventEmitter();
   @Output() startSearch: EventEmitter<void> = new EventEmitter();
+  @Output() toolStateChange: EventEmitter<string | null> = new EventEmitter();
+  @Output() toolModelChange: EventEmitter<any> = new EventEmitter();
 
   loading: number = 0;
 
@@ -106,6 +108,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   query: string = '';
   lastTrained: number = -1;
   mdAssistanteDescription: string = "";
+
+  toolModel: any = {};
+  toolState: string | null = null;
 
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
@@ -207,6 +212,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   clearHistory() {
     this.history = [];
     this.visualHistory = [];
+    this.toolState = null;
+    this.toolModel = {};
   }
 
   md2plain(md: string) {
@@ -253,7 +260,17 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         top: this.top,
       };
 
-      const { result, toolsStatus, searchedResult } = await this.chatSrv.generateContent(this.history, extra, this.config, this.assistant.author, this.tools);
+      const {
+        result,
+        toolsStatus,
+        searchedResult,
+      } = await this.chatSrv.generateContent(
+        this.history,
+        extra,
+        this.config,
+        this.assistant.author,
+        this.getEnabledTools(),
+      );
 
       this.foundFacts.emit(searchedResult);
 
@@ -345,6 +362,33 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       // Show a notification
       if (sent) {
         this.uinotificationSrv.show("Te estaremos contactando!");
+      }
+    });
+  }
+
+  setToolState(state: string | null) {
+    this.toolState = state;
+    this.toolStateChange.emit(state);
+  }
+
+  notifyToolModelChange() {
+    this.toolModelChange.emit(this.toolModel);
+  }
+
+  parseStates(t: ToolDataType): string[] {
+    if (t.useInState === undefined || t.useInState == null) {
+      return [];
+    }
+    return t.useInState.split(/[,;]/).map(a => a.trim());
+  }
+
+  getEnabledTools() {
+    return this.tools.filter((t) => {
+      const states = this.parseStates(t);
+      if (this.toolState == null) {
+        return states.indexOf("") >= 0;
+      } else {
+        return states.indexOf(this.toolState) >= 0;
       }
     });
   }
