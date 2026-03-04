@@ -131,3 +131,8 @@ export interface QueryChatType {
     distance: number;
     language: string;
 }
+
+export interface AssistantStateType {
+    model: any;
+    state: string | null;
+}

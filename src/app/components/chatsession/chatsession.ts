@@ -284,6 +284,10 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.config,
         this.assistant.author,
         this.getEnabledTools(),
+        {
+          model: this.toolModel,
+          state: this.toolState,
+        }
       );
 
       this.foundFacts.emit(searchedResult);
