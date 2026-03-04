@@ -849,7 +849,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async pageAllTools() {
     let responses: ToolDataType[] = [];
-    const LIMIT = 2;
+    const LIMIT = 10;
     responses = await this.pageTools(LIMIT, this.pageAllToolsIsFirstTime);
     if (responses.length > 0) {
       this.pageAllToolsCursor = responses[responses.length - 1];
@@ -891,17 +891,28 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
+  pageAllArticlesIsFirstTime: boolean = true;
+  pageAllArticlesCursor: FactCursorDataType | null = null;
+
   async pageAllArticles() {
-    let isFirstTime: boolean = true;
     let responses: ArticleDataType[] = [];
-    const LIMIT = 50;
-    do {
-      responses = await this.pageArticles(LIMIT, isFirstTime);
-      isFirstTime = false;
-      if (responses.length < LIMIT) {
-        break;
-      }
-    } while (responses.length > 0);
+    const LIMIT = 10;
+    responses = await this.pageArticles(LIMIT, this.pageAllArticlesIsFirstTime);
+    if (responses.length > 0) {
+      const last = responses[responses.length - 1];
+      this.pageAllArticlesCursor = {
+        createdAt: last.created,
+        id: last.id,
+      };
+    }
+    this.pageAllArticlesIsFirstTime = false;
+  }
+
+  mixArticles(incoming: ArticleDataType[]) {
+    const ids = this.articles.map(f => f.id);
+    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    this.articles.push(...news);
+    this.articles.sort((a, b) => b.created - a.created);
   }
 
   async pageArticles(limit: number, startover: boolean = false): Promise<ArticleDataType[]> {
@@ -915,15 +926,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       // paging
       let cursor: FactCursorDataType | null = null;
       if (!startover) {
-        const last = this.articles[this.articles.length - 1];
-        cursor = {
-          createdAt: last.created,
-          id: last.id,
-        }
+        cursor = this.pageAllArticlesCursor;
       }
       const pageResult = await this.alterEgo2Srv.pageArticles(parent, limit, cursor);
       const page = pageResult.rows;
-      this.articles.push(...(page as any[]));
+      this.mixArticles(page);
       this.cdr.detectChanges();
       return page;
     } catch (err: any) {
@@ -1293,6 +1300,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   receiveArticleSearch(search: ArticleDataType[]) {
     this.searchedArticleResult = search;
+    this.mixArticles(search);
     this.updateArticlesSearch();
   }
 
