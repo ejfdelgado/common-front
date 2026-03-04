@@ -941,8 +941,51 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  async pageAllHistory() {
+  pageAllHistoryIsFirstTime: boolean = true;
+  pageAllHistoryCursor: HistoryDataType | null = null;
 
+  async pageAllHistory() {
+    let responses: HistoryDataType[] = [];
+    const LIMIT = 10;
+    responses = await this.pageHistory(LIMIT, this.pageAllHistoryIsFirstTime);
+    if (responses.length > 0) {
+      this.pageAllHistoryCursor = responses[responses.length - 1];
+    }
+    this.pageAllHistoryIsFirstTime = false;
+  }
+
+  mixHistory(incoming: HistoryDataType[]) {
+    const ids = this.history.map(f => f.id);
+    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    this.history.push(...news);
+    this.history.sort((a, b) => b.created - a.created);
+  }
+
+  async pageHistory(limit: number, startover: boolean = false): Promise<HistoryDataType[]> {
+    const indicator = this.indicatorSrv.start();
+    try {
+      if (startover && this.history.length > 0) {
+        this.history.splice(0, this.history.length);
+      }
+      const pagingOptions: PageDataType = {
+        collectionName: this.getHistoryCollectionName(),
+        orderColumn: "created",
+        orderDirection: "desc",
+        top: limit,
+      };
+      if (!startover) {
+        pagingOptions.lastDoc = this.pageAllHistoryCursor;
+      }
+      const page = (await this.firestoreSrv.paging(pagingOptions));
+      this.mixHistory((page as any[]));
+      this.cdr.detectChanges();
+      return page as any[];
+    } catch (err: any) {
+      this.uiNotificationSrv.show(err.message);
+      return [];
+    } finally {
+      indicator.done();
+    }
   }
 
   async savePending() {
