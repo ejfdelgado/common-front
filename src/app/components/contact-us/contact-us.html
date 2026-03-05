@@ -3,9 +3,13 @@
     <p>Organizamos tú contenido para encontrar las mejores respuestas. ✨<br><br>
         <strong>¿Quieres crear un asistente?</strong>
     </p>
+    @if(allowOpen) {
     <button mat-flat-button color="primary" (click)="startNewClientAssistant()">Chatea con nosotros para descubrir cómo
         te ofrecemos valor</button>
+    } @else {
+    <p>Continúa hablando con este asistente y te contactaremos. 🚀</p>
+    }
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cerrar</button>
 </mat-dialog-actions>

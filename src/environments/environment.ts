@@ -8,5 +8,6 @@ export const environment = {
   DEFAULT_BUCKET: "pro-ejflab-assets",
   check_token_expiration: false,
   env: "pro",
+  contactUsAssistant: "Oa408ZZ7aLFmw3NMohci",
 };
 

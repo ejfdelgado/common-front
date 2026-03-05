@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
@@ -21,29 +21,13 @@ import { environment } from 'environments/environment';
     MatDialogModule,
     MatButtonModule,
     MatIcon,
-    FormSimpleWith,
   ],
   templateUrl: './contact-us.html',
   styleUrl: './contact-us.scss',
 })
 export class ContactUs extends CommonComponent {
 
-  model: any = {
-    domain: "personal",
-  };
-  fields: AllFieldsDataType[] = [
-    {
-      label: "Interés", type: "select", key: "domain", required: true,
-      select: {
-        options: [
-          { txt: "Personal", val: "personal" },
-          { txt: "Emprendimiento", val: "emprendimiento" },
-          { txt: "Empresarial", val: "empresarial" },
-        ]
-      }
-    },
-    { label: "Datos de contácto", type: "contenteditable", key: "desc" },
-  ];
+  allowOpen: boolean = true;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -55,26 +39,14 @@ export class ContactUs extends CommonComponent {
     private http: HttpClient,
   ) {
     super(sanitizer, fullScreenSrv);
+    this.allowOpen = data.allowOpen === true;
   }
 
   close(): void {
     this.dialogRef.close(false);
   }
 
-  async send(): Promise<void> {
-    if (!(typeof this.model.desc == "string") || this.model.desc.trim().length == 0) {
-      this.uinotificationSrv.show("No olvides ingresar tu dato de contacto.");
-      return;
-    }
-    await firstValueFrom(this.http.post(environment.apiUrl + "srv/email/contact_us",
-      {
-        form: this.model
-      },
-    ));
-    this.dialogRef.close(true);
-  }
-
   startNewClientAssistant() {
-    window.open("https://chat.pais.tv/#/alterego/use?col=pubknowledge&id=Oa408ZZ7aLFmw3NMohci", "_blank");
+    window.open(`https://chat.pais.tv/#/alterego/use?col=pubknowledge&id=${environment.contactUsAssistant}`, "_blank");
   }
 }

@@ -45,6 +45,7 @@ import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactUs } from '@components/contact-us/contact-us';
 import { SimpleObj } from 'ejfdelgado-common-ts';
+import { environment } from 'environments/environment';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -440,6 +441,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: {
+        allowOpen: this.assistant.id != environment.contactUsAssistant,
       },
     });
     dialogRef.afterClosed().subscribe(async (sent) => {

@@ -1,8 +1,16 @@
 # CommonFront
 
+Avoid redirect to itself on the contact us form.
+
+Limitar con permisos, la creación de nuevos asistentes.
+
 tool name max 64 characters
 
-Avoid redirect to itself on the contact us form.
+Create a tab for model.
+
+Pagar Supabase
+Parar Sendgrid IP privada.
+Mostrar página cuando no está publicado.
 
 Create an alternative to, but for canvas.
 mails/chat_history_orig.html
