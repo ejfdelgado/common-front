@@ -1,18 +1,16 @@
 # CommonFront
 
-Verificar qué ocurre si para al medio, cómo evitar eso?
-
-Limitar con permisos, la creación de nuevos asistentes.
-
 tool name max 64 characters.
 
 Create a tab for model.
+
+Verificar qué ocurre si pase detiene en el medio, cómo evitar eso?
 
 Pagar Supabase
 Parar Sendgrid IP privada.
 Mostrar página cuando no está publicado.
 
-Create an alternative to, but for canvas.
+Create an alternative email template, but for canvas user profile.
 mails/chat_history_orig.html
 
 Allow filter history given the type.
