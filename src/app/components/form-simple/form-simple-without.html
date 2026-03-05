@@ -3,7 +3,7 @@
         @for (field of fields; track field.key) {
         @if (field.type=='text') {
         <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
-            <mat-label>{{ field.label }}</mat-label>
+            <mat-label>{{ field.label }} ({{ charCount(formControlMap[field.key]) }})</mat-label>
             <input matInput [formControl]="formControlMap[field.key]" />
         </mat-form-field>
         } @else if (field.type=='number') {
@@ -22,7 +22,7 @@
         </mat-form-field>
         } @else if (field.type=='textarea') {
         <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ field.label }}</mat-label>
+            <mat-label>{{ field.label }} ({{ charCount(formControlMap[field.key]) }})</mat-label>
             <textarea matInput rows="4" [formControl]="formControlMap[field.key]"></textarea>
         </mat-form-field>
         } @else if (field.type=='contenteditable') {

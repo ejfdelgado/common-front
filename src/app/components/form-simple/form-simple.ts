@@ -209,4 +209,8 @@ export abstract class FormSimple implements DifferedStore {
   getForm() {
     return this.form;
   }
+
+  charCount(control: FormControl): number {
+    return control.value?.length || 0;
+  }
 }

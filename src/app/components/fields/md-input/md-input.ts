@@ -325,4 +325,8 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
     element.className = "preview_scroll_content printed";
     await this.pdfSrv.exportHtmlToPdf(element, this.saveName ? this.saveName : "download.pdf");
   }
+
+  charCount(): number {
+    return this.value?.length || 0;
+  }
 }

@@ -1,6 +1,6 @@
 <div class="editable-wrapper" [ngClass]="{'visible': !discrete, 'focused': focused}">
     @if (label) {
-    <span>{{ label }}:</span>
+    <span>{{ label }} ({{charCount()}}):</span>
     }
     <!-- Toolbar -->
     @if (focused || !discrete) {

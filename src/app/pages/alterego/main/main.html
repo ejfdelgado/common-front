@@ -157,7 +157,7 @@
                                                         </mat-form-field>
                                                         <mat-form-field appearance="outline" class="w-full fill_width"
                                                             subscriptSizing="dynamic">
-                                                            <mat-label>Name</mat-label>
+                                                            <mat-label>Name ({{ arg.name ? arg.name.length : 0 }})</mat-label>
                                                             <input matInput [(ngModel)]="arg.name" required
                                                                 (ngModelChange)="refreshArguments()" />
                                                         </mat-form-field>
@@ -167,7 +167,7 @@
                                                     <div class="argument_pair">
                                                         <mat-form-field appearance="outline" class="w-full"
                                                             subscriptSizing="dynamic">
-                                                            <mat-label>Description</mat-label>
+                                                            <mat-label>Description ({{ arg.desc ? arg.desc.length : 0 }})</mat-label>
                                                             <input matInput [(ngModel)]="arg.desc"
                                                                 (ngModelChange)="refreshArguments()" />
                                                         </mat-form-field>
@@ -176,7 +176,7 @@
                                                     <div class="argument_pair">
                                                         <mat-form-field appearance="outline" class="w-full fill_width"
                                                             subscriptSizing="dynamic">
-                                                            <mat-label>Model path</mat-label>
+                                                            <mat-label>Model path ({{ arg.modelPath ? arg.modelPath.length : 0 }})</mat-label>
                                                             <input matInput [(ngModel)]="arg.modelPath" required
                                                                 (ngModelChange)="refreshArguments()" />
                                                         </mat-form-field>

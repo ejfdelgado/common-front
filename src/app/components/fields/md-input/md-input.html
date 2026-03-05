@@ -1,7 +1,7 @@
 <div class="editable-wrapper visible"
     [ngClass]="{'focused': focused, 'preview':editMode=='preview', 'both':editMode=='both'}">
     @if (label) {
-    <span>{{ label }}:</span>
+    <span>{{ label }} ({{charCount()}}):</span>
     }
     <!-- Toolbar -->
     <div class="toolbar">

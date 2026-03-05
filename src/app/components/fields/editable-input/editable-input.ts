@@ -211,4 +211,8 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
       el.scrollTop = this.savedScroll;
     }
   }
+
+  charCount(): number {
+    return this.value?.length || 0;
+  }
 }

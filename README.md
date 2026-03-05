@@ -1,7 +1,5 @@
 # CommonFront
 
-tool name max 64 characters.
-
 Create a tab for model.
 
 Verificar qué ocurre si pase detiene en el medio, cómo evitar eso?
