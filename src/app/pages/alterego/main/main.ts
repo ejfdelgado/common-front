@@ -1468,7 +1468,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async toolModelChange(model: any) {
-    console.log(JSON.stringify(model, null, 4));
     this.dynamicModel = model;
   }
 }
