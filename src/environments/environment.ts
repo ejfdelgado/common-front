@@ -9,5 +9,6 @@ export const environment = {
   check_token_expiration: false,
   env: "pro",
   contactUsAssistant: "Oa408ZZ7aLFmw3NMohci",
+  roles: "superadmin,alterego_publisher,alterego_editor,alterego_viewer,developer,knowledge_create",
 };
 

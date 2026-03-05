@@ -1,10 +1,10 @@
 # CommonFront
 
-Avoid redirect to itself on the contact us form.
+Verificar qué ocurre si para al medio, cómo evitar eso?
 
 Limitar con permisos, la creación de nuevos asistentes.
 
-tool name max 64 characters
+tool name max 64 characters.
 
 Create a tab for model.
 

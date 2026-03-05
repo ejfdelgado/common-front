@@ -20,6 +20,7 @@ import { UserPermissions } from './permissions/permissions';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { ClipboardUtil } from '@tools/Clipboard';
 import { UINotificationSrv } from '@services/uinotifications.service';
+import { environment } from 'environments/environment';
 
 const PAGE_SIZE = 20;
 
@@ -118,13 +119,7 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     fields = [
       {
         label: "Title", type: "chip", key: "roles", required: false, chip: {
-          stringOptions: [
-            "superadmin",
-            "alterego_publisher",
-            "alterego_editor",
-            "alterego_viewer",
-            "developer"
-          ]
+          stringOptions: environment.roles.split(/[,;]/).map(e => e.trim()).filter(e => e.length > 0),
         }
       },
     ];

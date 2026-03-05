@@ -10,6 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { FirestoreConfigDataType, FirestoreService } from '@services/firestore.service';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { AllFieldsDataType } from 'types/fieldsTypes';
+import { UINotificationSrv } from '@services/uinotifications.service';
 
 
 
@@ -44,7 +45,8 @@ export class DialogFormComponent {
     constructor(
         private dialogRef: MatDialogRef<DialogFormComponent>,
         private firestoreSrv: FirestoreService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private uiNotif: UINotificationSrv,
     ) {
         // Make a copy to avoid modify original
         this.config = JSON.parse(JSON.stringify(data));
@@ -69,7 +71,12 @@ export class DialogFormComponent {
             autoAuthor: this.config.autoAuthor,
             searchFields: this.config.searchFields,
         };
-        await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
+        try {
+            await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
+        } catch (err: any) {
+            this.uiNotif.show(err.message);
+            throw err;
+        }
     }
 
     isInvalid() {
