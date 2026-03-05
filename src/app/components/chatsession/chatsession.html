@@ -9,22 +9,24 @@
                 <div class="logo_image"
                     [style.background-image]="'url(' + getBucketFilePathWithType(assistant.image, 'square') + ')'">
                 </div>
-                <div class="profile_title">{{ assistant.title }}</div>
+                <div class="profile_title"><span>{{ assistant.title }}</span></div>
             </div>
             }
-            <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu2="matMenu">
-                <button mat-menu-item (click)="clearHistory()">
-                    <mat-icon>delete</mat-icon>
-                    <span>Borrar historial</span>
+            <div class="right_button">
+                <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
+                    <mat-icon>more_vert</mat-icon>
                 </button>
-                <button mat-menu-item (click)="contactUs()">
-                    <mat-icon>question_mark</mat-icon>
-                    <span>¿Cómo funciona este asistente?</span>
-                </button>
-            </mat-menu>
+                <mat-menu #menu2="matMenu">
+                    <button mat-menu-item (click)="clearHistory()">
+                        <mat-icon>delete</mat-icon>
+                        <span>Borrar historial</span>
+                    </button>
+                    <button mat-menu-item (click)="contactUs()">
+                        <mat-icon>question_mark</mat-icon>
+                        <span>¿Cómo funciona este asistente?</span>
+                    </button>
+                </mat-menu>
+            </div>
         </mat-toolbar>
         <div class="scrolled_messages_parent">
             <div #scrolled_container class="scrolled_messages">

@@ -115,6 +115,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   toolModel: any = {};
   toolState: string | null = null;
 
+  timeOffset: number = 0;
+
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
   constructor(
@@ -158,7 +160,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return null;
   }
 
-  processVisualInput(input: Content): ToolDataType[] {
+  processFiredTools(input: Content): ToolDataType[] {
     const toolsFired: ToolDataType[] = [];
     if (input.parts) {
       input.parts.forEach(async (el, index) => {
@@ -180,13 +182,21 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
             }
           }
         }
+      });
+    }
+    return toolsFired;
+  }
+
+  processVisualInput(input: Content): void {
+    if (input.parts) {
+      input.parts.forEach(async (el, index) => {
         if (el.functionResponse) {
           const response = el.functionResponse.response;
           if (response) {
             const result = response['result'];
             if (typeof result == "string") {
               this.visualHistory.push({
-                date: Date.now() + index,
+                date: Date.now() + index + this.timeOffset,
                 role: input.role ? input.role : "na",
                 txt: this.sanitizeText(result),
               });
@@ -204,7 +214,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         }
       });
     }
-    return toolsFired;
   }
 
   clearHistory() {
@@ -253,6 +262,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       indicator = this.indicatorSrv.start();
     }
     try {
+      this.timeOffset = 0;
       this.startSearch.emit();
       this.incrementLoading();
       await this.setup();
@@ -300,6 +310,20 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       const articleUnion: ArticleDataType[] = [];
       const toolsUnion: ToolDataType[] = [];
+
+      // Gater tools matches...
+      result.forEach((result) => {
+        if (result && result.candidates && result.candidates.length > 0) {
+          const assistantMessage: Content = {
+            role: "model",
+            parts: result.candidates[0].content?.parts?.map((el) => el),
+          };
+          const temp = this.processFiredTools(assistantMessage);
+          toolsUnion.push(...temp);
+        }
+      });
+
+      // Interpret tools
       toolsStatus.forEach((tool: ToolResponseType) => {
         const standardName = normalizeName(tool.name);
         const toolMessage: Content = {
@@ -327,6 +351,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         }
         // Display text if needed & assign val on args
         if (typeof tool.message == "string" && tool.message.length > 0) {
+          this.timeOffset++;
           this.processVisualInput(toolMessage);
           this.history.push(toolMessage);
         }
@@ -348,10 +373,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
                 if (arg.modelIsArray === true) {
                   // First read to get index where to place the val
                   const old = SimpleObj.getValue(this.toolModel, path, []);
-                  console.log("Adjust model", `${path}.${old.length}`, arg.val);
+                  //console.log("Adjust model", `${path}.${old.length}`, arg.val);
                   SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
                 } else {
                   // Just write
+                  //console.log("Adjust model", path, arg.val);
                   SimpleObj.recreate(this.toolModel, path, arg.val);
                 }
               }
@@ -359,16 +385,16 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           }
         }
       });
+      // Display messages
       result.forEach((result) => {
         if (result && result.candidates && result.candidates.length > 0) {
           const assistantMessage: Content = {
             role: "model",
             parts: result.candidates[0].content?.parts?.map((el) => el),
           };
-          const temp = this.processVisualInput(assistantMessage);
-          toolsUnion.push(...temp);
+          this.timeOffset++;
+          this.processVisualInput(assistantMessage);
           this.history.push(assistantMessage);
-          // Add response and process visual Input
         }
       });
       // emit

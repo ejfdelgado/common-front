@@ -4,10 +4,13 @@
     flex: 1;
     align-items: center;
     gap: 10px;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .profile_detail .logo_image {
     width: 40px;
+    min-width: 40px;
     height: 40px;
     background-repeat: no-repeat;
     background-size: cover;
@@ -106,6 +109,20 @@
 
 .botton_controls mat-form-field.query_field {
     flex: 1;
+}
+
+.profile_title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.profile_title span {
+
+}
+
+.right_button {
+    min-width: 40px;
 }
 
 mat-toolbar {
