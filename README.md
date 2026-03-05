@@ -1,20 +1,16 @@
 # CommonFront
 
-Create a tab for model.
-
-Verificar qué ocurre si pase detiene en el medio, cómo evitar eso?
 
 Pagar Supabase
 Parar Sendgrid IP privada.
 Mostrar página cuando no está publicado.
 
 Create an alternative email template, but for canvas user profile.
-mails/chat_history_orig.html
 
 Allow filter history given the type.
 
 Hacer el servicio de borrar todo en supabase y firestore.
-agregar max length a text, md, texarea y rich text.
+Agregar max length a text, md, texarea y rich text.
 
 Paginar usuarios.
 
