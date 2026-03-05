@@ -170,7 +170,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           const name = el.functionCall.name;
           const args = el.functionCall.args;
           if (name && args) {
-            const toolRef = this.searchNamedTool(name);
+            // Make a copy of the tool
+            const toolRef = JSON.parse(JSON.stringify(this.searchNamedTool(name))) as ToolDataType | null;
             if (toolRef) {
               // Set found values
               Object.keys(args).forEach((key) => {
@@ -324,6 +325,28 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           };
           const temp = this.processFiredTools(assistantMessage);
           toolsUnion.push(...temp);
+          temp.forEach((toolRef) => {
+            if (toolRef.affectModel === true) {
+              // Adjust model
+              toolRef.args.forEach((arg) => {
+                const path = arg.modelPath;
+                if (path && path.trim().length > 0) {
+                  if (arg.modelIsArray === true) {
+                    // First read to get index where to place the val
+                    const old = SimpleObj.getValue(this.toolModel, path, []);
+                    //console.log("Adjust model", `${path}.${old.length}`, arg.val);
+                    SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
+                    modelChanges++;
+                  } else {
+                    // Just write
+                    //console.log("Adjust model", path, arg.val);
+                    SimpleObj.recreate(this.toolModel, path, arg.val);
+                    modelChanges++;
+                  }
+                }
+              });
+            }
+          });
         }
       });
 
@@ -368,26 +391,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               // Apply next state
               this.toolState = toolRef.nextState.trim();
             }
-          }
-          if (toolRef.affectModel === true) {
-            // Adjust model
-            toolRef.args.forEach((arg) => {
-              const path = arg.modelPath;
-              if (path && path.trim().length > 0) {
-                if (arg.modelIsArray === true) {
-                  // First read to get index where to place the val
-                  const old = SimpleObj.getValue(this.toolModel, path, []);
-                  //console.log("Adjust model", `${path}.${old.length}`, arg.val);
-                  SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
-                  modelChanges++;
-                } else {
-                  // Just write
-                  //console.log("Adjust model", path, arg.val);
-                  SimpleObj.recreate(this.toolModel, path, arg.val);
-                  modelChanges++;
-                }
-              }
-            });
           }
         }
       });

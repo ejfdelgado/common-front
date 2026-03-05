@@ -354,17 +354,21 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
   }
 
-  async selectToolItem(index: number): Promise<void> {
+  async selectToolItem(index: number, list?: ToolDataType[]): Promise<void> {
     this.currentToolSelected = null;
     this.toolFields = [];
+    let tools = this.tools;
+    if (list) {
+      tools = list;
+    }
     this.cdr.detectChanges();
-    if (this.tools.length <= index || index < 0) {
+    if (tools.length <= index || index < 0) {
       return;
     }
 
     return new Promise((resolve) => {
       requestAnimationFrame(() => {
-        this.currentToolSelected = this.tools[index];
+        this.currentToolSelected = tools[index];
         this.toolFields = [
           {
             label: "Type", type: "select", key: "type", required: true,
@@ -517,8 +521,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async selectThisTool(item: ToolDataType) {
-    const index = this.tools.indexOf(item);
-    await this.selectToolItem(index);
+    let index = -1;
+    if (this.searchedToolsResult.length > 0) {
+      index = this.searchedToolsResult.indexOf(item);
+      await this.selectToolItem(index, this.searchedToolsResult);
+    } else {
+      index = this.tools.indexOf(item);
+      await this.selectToolItem(index);
+    }
   }
 
   async selectThisArticle(item: ArticleDataType) {
@@ -1306,8 +1316,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     } else {
       if (this.searchedToolsResult.length > 0) {
         const first = this.searchedToolsResult[0];
-        const index = this.tools.indexOf(first);
-        await this.selectToolItem(index);
+        const index = this.searchedToolsResult.indexOf(first);
+        await this.selectToolItem(index, this.searchedToolsResult);
       } else {
         // Nothing found
         await this.selectToolItem(-1);
