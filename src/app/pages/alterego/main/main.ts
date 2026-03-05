@@ -148,6 +148,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   reportHTML: SafeHtml | null = null;
+  dynamicModel: any = null;
 
   constructor(
     public override authSrv: AuthService,
@@ -1464,5 +1465,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async recomputeHistory() {
     this.pageAllHistoryIsFirstTime = true;
     await this.pageAllHistory();
+  }
+
+  async toolModelChange(model: any) {
+    console.log(JSON.stringify(model, null, 4));
+    this.dynamicModel = model;
   }
 }

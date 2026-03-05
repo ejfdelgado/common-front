@@ -223,6 +223,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     this.toolState = null;
     this.toolModel = {};
     this.useFirstMessage();
+    this.notifyToolModelChange();
   }
 
   md2plain(md: string) {
@@ -237,6 +238,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       if (!this.initialized) {
         await this.chatSrv.initialize();
         this.useFirstMessage();
+        this.notifyToolModelChange();
         this.initialized = true;
       }
     } catch (err: any) {
@@ -311,6 +313,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       const articleUnion: ArticleDataType[] = [];
       const toolsUnion: ToolDataType[] = [];
+      let modelChanges: number = 0;
 
       // Gater tools matches...
       result.forEach((result) => {
@@ -376,10 +379,12 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
                   const old = SimpleObj.getValue(this.toolModel, path, []);
                   //console.log("Adjust model", `${path}.${old.length}`, arg.val);
                   SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
+                  modelChanges++;
                 } else {
                   // Just write
                   //console.log("Adjust model", path, arg.val);
                   SimpleObj.recreate(this.toolModel, path, arg.val);
+                  modelChanges++;
                 }
               }
             });
@@ -404,6 +409,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       }
       if (toolsUnion.length > 0) {
         this.foundTools.emit(toolsUnion);
+      }
+      if (modelChanges > 0) {
+        this.notifyToolModelChange();
       }
 
       this.query = "";
