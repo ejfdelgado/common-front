@@ -1,5 +1,6 @@
 # CommonFront
 
+Permitir embeber el chat en una página.
 
 Pagar Supabase
 Parar Sendgrid IP privada.
@@ -14,7 +15,7 @@ Agregar max length a text, md, texarea y rich text.
 
 Paginar usuarios.
 
-capturar mejor la foto o permitir rotar.
+Capturar mejor la foto o permitir rotar.
 
 Ofuscar la peticion a gemini
 Cifrar el epoch con el pass y que eso sirva de password
