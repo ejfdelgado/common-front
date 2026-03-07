@@ -1,6 +1,27 @@
 # CommonFront
 
-Permitir embeber el chat en una página.
+agregar share en chat.
+
+simpolificar url de share.
+
+Add a notification message. When fired or when unchecked items exists.
+
+Enviar un correo de onboarding que lo redirija a la página principal.
+Cuando llegue, lo primero es que le pida logearse con un popup fancy:
+La seguridad y privacidad es importante para todos.
+Por eso necesitamos que te autentiques para ingresar.
+
+Después de logearse, un asistente le pedirá que 
+reserve un horario para una reunión
+de bienvenida y explicación.
+
+// Tools
+generalizar los tools
+1. Cómo saber qué opciones de fecha y horario tengo yo? -> google calendar.
+2. Cómo reservar una de esas opciones? -> google calendar.
+3. Cómo permitir que el usuario cree en su calendario una referencia a esa meeting?
+
+Permitir embeber el chat en una página externa.
 
 Pagar Supabase
 Parar Sendgrid IP privada.

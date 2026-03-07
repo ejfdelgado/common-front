@@ -17,6 +17,10 @@
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu2="matMenu">
+                    <button mat-menu-item (click)="shareFun()">
+                        <mat-icon>share</mat-icon>
+                        <span>Compartir</span>
+                    </button>
                     <button mat-menu-item (click)="clearHistory()">
                         <mat-icon>delete</mat-icon>
                         <span>Borrar historial</span>

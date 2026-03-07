@@ -10,6 +10,10 @@ import { QrDialogComponent, QrDialogData } from '@components/qr-dialog/qr-dialog
 @Injectable({ providedIn: 'root' })
 export class ShareSrv {
 
+    SIMPLIFY_MAP: { [key: string]: number } = {
+        "pubknowledge": 1,
+    };
+
     constructor(
         public snackBar: MatSnackBar,
         private dialog: MatDialog,
@@ -18,13 +22,18 @@ export class ShareSrv {
     }
 
     getSharedURL(data: ShareDataType) {
-        const payload: Record<string, string> = {
+        const payload: Record<string, any> = {
             col: data.collection,
             id: data.id,
             path: data.path,
         };
         if (data.updated) {
             payload["t"] = `${data.updated}`;
+        }
+        // Simplify here
+        if (payload["col"] in this.SIMPLIFY_MAP) {
+            payload["col"] = this.SIMPLIFY_MAP[payload["col"]];
+            delete payload["path"];
         }
         const params = new URLSearchParams(payload);
         const url = `${environment.apiUrl}social?${params.toString()}`;

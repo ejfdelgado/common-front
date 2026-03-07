@@ -46,6 +46,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ContactUs } from '@components/contact-us/contact-us';
 import { SimpleObj } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
+import { ShareSrv } from '@services/share.service';
+import { ShareDataType } from '@tools/UrlUtil';
+
+const MODEL_NAME_CLONE = "pubknowledge";
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
@@ -130,6 +134,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     private indicatorSrv: IndicatorService,
     private uinotificationSrv: UINotificationSrv,
     private dialog: MatDialog,
+    public shareSrv: ShareSrv,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -492,5 +497,14 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   getLimitedHistory() {
     return this.history.slice(-1 * this.assistant.maxHistory);
+  }
+
+  shareFun() {
+    const temp: any = {
+      collection: MODEL_NAME_CLONE,
+      path: "/alterego/use",
+      ...this.assistant
+    };
+    this.shareSrv.share(temp, "link");
   }
 }
