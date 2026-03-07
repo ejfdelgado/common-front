@@ -9,7 +9,7 @@ import {
     HttpErrorResponse,
     HttpResponse
 } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'environments/environment';

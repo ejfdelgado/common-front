@@ -10,7 +10,11 @@ import {
     signOut,
 } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
-import { BehaviorSubject, from, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, from, Observable, Subscription } from 'rxjs';
+import { UINotificationSrv } from './uinotifications.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+import { ApiResponse } from 'types/file';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -26,7 +30,11 @@ export class AuthService {
     readonly authState$: Observable<User | null> =
         this.authStateSubject.asObservable();
 
-    constructor(private auth: Auth) {
+    constructor(
+        private auth: Auth,
+        private notifSrv: UINotificationSrv,
+        private http: HttpClient,
+    ) {
         this.authSub = authState(this.auth).subscribe(async user => {
             getAuth();//Without this line, firestore frontend operations did not include token
             this._user.set(user);
@@ -100,5 +108,64 @@ export class AuthService {
 
     ngOnDestroy() {
         this.authSub?.unsubscribe();
+    }
+
+    askForOfflineCalendarScope() {
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+
+        // 1. Add the specific Calendar scope
+        provider.addScope('https://www.googleapis.com/auth/calendar.events');
+
+        // 2. IMPORTANT: Force Google to provide a Refresh Token
+        provider.setCustomParameters({
+            access_type: 'offline',
+            prompt: 'consent'
+        });
+
+        /*
+        const login2 = async () => {
+            const client = google.accounts.oauth2.initCodeClient({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID',
+                scope: 'https://www.googleapis.com/auth/calendar.events',
+                ux_mode: 'popup', // A popup appears for the user
+                callback: (response) => {
+                    // THIS IS IT! 
+                    // Google sends the 'code' into this response object.
+                    const authorizationCode = response.code;
+
+                    // Now you send it to your Node.js server
+                    sendCodeToBackend(authorizationCode);
+                },
+            });
+
+            client.requestCode();
+        }
+        */
+
+        const loginWithGoogle = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                // This credential contains the ONE-TIME code or temporary token
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                if (credential) {
+                    const payload = {
+                        credential
+                    };
+                    const response = await firstValueFrom(this.http.put<ApiResponse>(environment.apiUrl + "admin/user/tokens",
+                        payload,
+                    ));
+                } else {
+                    throw new Error("No token found");
+                }
+
+                // Note: Firebase doesn't always put the refresh_token in the 'result' object.
+                // You usually need to handle the 'code' exchange on your Node.js server.
+            } catch (error: any) {
+                this.notifSrv.show(error.message);
+            }
+        };
+
+        loginWithGoogle();
     }
 }

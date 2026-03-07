@@ -249,6 +249,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
+      label: "Calendar",
+      icon: "edit_calendar",
+      children: [],
+      callback: () => {
+        this.authSrv.askForOfflineCalendarScope();
+      },
+    });
+
+    this.menuOptions.push({
       label: "Permissions",
       icon: "lock",
       children: [],
@@ -256,6 +265,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.openPermissions();
       },
     });
+
+    //askForOfflineCalendarScope
 
     this.menuOptions.push({
       label: "Back to databases",

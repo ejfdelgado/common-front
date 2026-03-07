@@ -1,9 +1,5 @@
 # CommonFront
 
-agregar share en chat.
-
-simpolificar url de share.
-
 Add a notification message. When fired or when unchecked items exists.
 
 Enviar un correo de onboarding que lo redirija a la página principal.
