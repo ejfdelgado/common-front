@@ -422,6 +422,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         } else if (this.currentToolSelected.type == 'article') {
           this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
           this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
+        } else if (this.currentToolSelected.type == 'calendar') {
+          this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
         }
 
         this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
@@ -1568,6 +1570,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!this.currentToolSelected) {
       return;
     }
-    this.calendarSrv.search(MODEL_NAME_PARENT + "/" + this.getParentId() + "/" + MODEL_TOOL_NAME, this.currentToolSelected.id, "sample");
+    this.calendarSrv.search(this.getParentId(), this.currentToolSelected.id, this.currentToolSelected.calendarKeyword);
   }
 }

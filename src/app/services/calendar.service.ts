@@ -15,12 +15,14 @@ export class CalendarService {
 
     }
 
-    async search(parent: string, toolId: string, text: string) {
-        const payload = {
+    async search(parent: string, toolId: string, text?: string) {
+        const payload: any = {
             parent,
             toolId,
-            text,
         };
+        if (text) {
+            payload.text = text;
+        }
         const response: ApiResponse = await firstValueFrom(
             this.http.post<ApiResponse>(environment.apiUrl + "calendar/search",
                 payload,

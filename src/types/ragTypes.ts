@@ -72,6 +72,7 @@ export interface ToolDataType extends SimpleDataType {
     template?: string;
     args: ArgumentDataType[];
     calendarUser?: User | null,
+    calendarKeyword?: string;
 };
 // Article
 export interface ArticleDataType extends SimpleDataType {
