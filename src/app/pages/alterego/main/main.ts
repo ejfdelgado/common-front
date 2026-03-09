@@ -424,6 +424,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
         } else if (this.currentToolSelected.type == 'calendar') {
           this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
+          this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: true, });
         }
 
         this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
@@ -1570,6 +1571,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!this.currentToolSelected) {
       return;
     }
-    this.calendarSrv.search(this.getParentId(), this.currentToolSelected.id, this.currentToolSelected.calendarKeyword);
+    this.calendarSrv.search(
+      this.getParentId(),
+      this.currentToolSelected.id,
+      3,// Maybe some default
+      this.currentToolSelected.calendarMinHoursGap,
+      this.currentToolSelected.calendarKeyword,
+    );
   }
 }

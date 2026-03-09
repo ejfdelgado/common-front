@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
 import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "types/file";
+import { CalendarEventType } from "types/ragTypes";
 
 
 @Injectable({
@@ -15,10 +16,12 @@ export class CalendarService {
 
     }
 
-    async search(parent: string, toolId: string, text?: string) {
+    async search(parent: string, toolId: string, max: number = 3, hoursGap: number = 0, text?: string) {
         const payload: any = {
             parent,
             toolId,
+            max,
+            hoursGap,
         };
         if (text) {
             payload.text = text;
@@ -27,6 +30,9 @@ export class CalendarService {
             this.http.post<ApiResponse>(environment.apiUrl + "calendar/search",
                 payload,
             ));
-        console.log(JSON.stringify(response, null, 4));
+        if (response.success) {
+            const events: CalendarEventType[] = response.data;
+
+        }
     }
 }

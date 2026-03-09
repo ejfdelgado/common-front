@@ -73,6 +73,7 @@ export interface ToolDataType extends SimpleDataType {
     args: ArgumentDataType[];
     calendarUser?: User | null,
     calendarKeyword?: string;
+    calendarMinHoursGap?: number;
 };
 // Article
 export interface ArticleDataType extends SimpleDataType {
@@ -146,4 +147,14 @@ export interface QueryChatType {
 export interface AssistantStateType {
     model: any;
     state: string | null;
+}
+
+export interface CalendarEventType {
+    "id": string;
+    "htmlLink": string;
+    "summary": string;
+    "start": {
+        "dateTime": string;//2026-03-12T14:30:00-05:00
+        "timeZone": string;
+    };
 }
