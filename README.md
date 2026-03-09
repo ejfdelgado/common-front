@@ -9,12 +9,6 @@ Después de logearse, un asistente le pedirá que
 reserve un horario para una reunión
 de bienvenida y explicación.
 
-// Tools
-generalizar los tools
-1. Cómo saber qué opciones de fecha y horario tengo yo? -> google calendar.
-2. Cómo reservar una de esas opciones? -> google calendar.
-3. Cómo permitir que el usuario cree en su calendario una referencia a esa meeting?
-
 Permitir embeber el chat en una página externa.
 
 Pagar Supabase
