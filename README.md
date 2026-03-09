@@ -1,7 +1,5 @@
 # CommonFront
 
-Add a notification message. When fired or when unchecked items exists.
-
 Enviar un correo de onboarding que lo redirija a la página principal.
 Cuando llegue, lo primero es que le pida logearse con un popup fancy:
 La seguridad y privacidad es importante para todos.

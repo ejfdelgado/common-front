@@ -26,6 +26,8 @@ export class SharedWith extends CommonComponent {
   collection: string = "";
   id: string = "";
   changesCount: number = 0;
+  mode: string = "";
+  title: string = "Shared with";
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -41,6 +43,10 @@ export class SharedWith extends CommonComponent {
     const config = JSON.parse(JSON.stringify(data));
     this.collection = config.collection;
     this.id = config.id;
+    this.mode = config.mode;
+    if (config.title) {
+      this.title = config.title;
+    }
     this.userSrv.getSharedUsers(this.collection, this.id).then((users) => {
       this.users = users;
       this.cdr.detectChanges();
@@ -95,5 +101,11 @@ export class SharedWith extends CommonComponent {
         }
       }
     });
+  }
+
+  async pickThis(user: User) {
+    if (this.mode == "pick_one") {
+      this.dialogRef.close(user);
+    }
   }
 }

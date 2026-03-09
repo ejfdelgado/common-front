@@ -285,6 +285,16 @@ mat-tab-group {
     gap: 15px;
 }
 
+.user_picker_container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.user_picker_container .detail {
+    flex: 1;
+}
+
 @media (max-width: 800px) {
     .content_wraper {
         padding: 30px 0;

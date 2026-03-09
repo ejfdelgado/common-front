@@ -56,7 +56,7 @@ export interface ArgumentDataType {
 }
 // Tool
 export interface ToolDataType extends SimpleDataType {
-    type: "mail" | "article" | "basic";
+    type: "mail" | "article" | "basic" | "calendar";
     name: string;
     desc: string;
     to?: string;

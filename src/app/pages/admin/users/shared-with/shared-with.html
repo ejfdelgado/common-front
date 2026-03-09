@@ -3,13 +3,15 @@
     <div class="users_container_scrolled">
         <div class="users_container">
             @for (user of users; track user.uid) {
-            <div class="user_card">
+            <div class="user_card" (click)="pickThis(user)">
                 <img class="card_photo" [src]="user.photoURL">
                 <div class="card_name_email">
                     <h6 class="text-sm">{{ user.displayName }}</h6>
                     <span class="email">{{ user.email }}</span>
                 </div>
+                @if (mode == "normal") {
                 <mat-icon (click)="removeUser(user)">delete</mat-icon>
+                }
             </div>
             }
         </div>
@@ -17,8 +19,10 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    @if (mode == "normal") {
     <button mat-flat-button color="primary" (click)="openSearchUser()"><mat-icon>add</mat-icon>Add user</button>
     @if (changesCount > 0) {
     <button mat-flat-button color="primary" (click)="save()"><mat-icon>save</mat-icon>Save</button>
+    }
     }
 </mat-dialog-actions>

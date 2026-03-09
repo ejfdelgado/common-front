@@ -139,6 +139,14 @@
                                             <div class="editor_parent">
                                                 <app-form-simple-without (innerFieldChanged)="toolEditionMade($event)"
                                                     [model]="toolModel" [fields]="toolFields"></app-form-simple-without>
+                                                <div class="user_picker_container">
+                                                    <button matButton="elevated" (click)="assignCalendarUser()">
+                                                        <mat-icon>edit_calendar</mat-icon>
+                                                        Select user calendar</button>
+                                                    <div class="detail">
+                                                        Edgar Delgado
+                                                    </div>
+                                                </div>
                                                 <h2>Arguments:</h2>
                                                 @for(arg of currentToolSelected.args; track arg;) {
                                                 <div class="argument_container">

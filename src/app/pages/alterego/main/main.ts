@@ -252,7 +252,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       label: "Calendar",
       icon: "edit_calendar",
       children: [],
-      callback: () => {
+      callback: async () => {
+        const confirmed = await this.confirmSrv.confirm({
+          title: "Google Calendar permission",
+          message: "Do you allow the assistant read/write on your Google Calendar?"
+        });
+        if (!confirmed) {
+          return;
+        }
         this.authSrv.askForOfflineCalendarScope();
       },
     });
@@ -388,6 +395,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
                 { txt: "Basic", val: "basic" },
                 { txt: "Email", val: "mail" },
                 { txt: "Article", val: "article" },
+                { txt: "Calendar", val: "calendar" },
               ]
             }
           },
@@ -1476,10 +1484,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       data: {
         id: this.collection.id,
         collection: MODEL_NAME_PARENT,
+        mode: "normal",
       },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      console.log(result);
+      //console.log(result);
     });
   }
 
@@ -1506,7 +1515,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         return "Tools";
       }
     } else if (type == "article") {
-      if (this.searchedToolsResult.length > 0) {
+      if (this.searchedArticleResult.length > 0) {
         return "Articles 🔴";
       } else {
         return "Articles";
@@ -1520,5 +1529,26 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
     }
     return "";
+  }
+
+  async assignCalendarUser() {
+    // Show users involved in this assisstant
+    if (!this.collection) {
+      return;
+    }
+    const dialogRef = this.dialog.open(SharedWith, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: {
+        id: this.collection.id,
+        collection: MODEL_NAME_PARENT,
+        mode: "pick_one",
+        title: "Select a user",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      console.log(result);
+    });
   }
 }
