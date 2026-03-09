@@ -59,6 +59,7 @@ import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { HttpClient } from '@angular/common/http';
 import { User } from '@angular/fire/auth';
 import { UserCard } from 'app/pages/admin/users/user-card/user-card';
+import { CalendarService } from '@services/calendar.service';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
@@ -169,6 +170,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     private fileSrv: FileService,
     public shareSrv: ShareSrv,
     private http: HttpClient,
+    private calendarSrv: CalendarService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -1560,5 +1562,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.cdr.detectChanges();
       }
     });
+  }
+
+  async queryCalendar() {
+    if (!this.currentToolSelected) {
+      return;
+    }
+    this.calendarSrv.search(MODEL_NAME_PARENT + "/" + this.getParentId() + "/" + MODEL_TOOL_NAME, this.currentToolSelected.id, "sample");
   }
 }

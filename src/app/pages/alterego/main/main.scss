@@ -292,7 +292,10 @@ mat-tab-group {
 }
 
 .user_picker_container .detail {
+    display: flex;
+    flex-direction: column;
     flex: 1;
+    gap: 15px;
 }
 
 @media (max-width: 800px) {

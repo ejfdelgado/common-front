@@ -145,6 +145,9 @@
                                                         <app-user-card [user]="currentToolSelected.calendarUser"
                                                             [icon]="'edit_calendar'"
                                                             (action)="assignCalendarUser()"></app-user-card>
+                                                        <button matButton="elevated" (click)="queryCalendar()">
+                                                            <mat-icon>play_arrow</mat-icon>
+                                                            Test calendar</button>
                                                         } @else {
                                                         <button matButton="elevated" (click)="assignCalendarUser()">
                                                             <mat-icon>edit_calendar</mat-icon>
