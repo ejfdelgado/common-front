@@ -5,6 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { SearchInputComponent } from '@components/search-input/search-input';
 import { UsersService } from '@services/users.service';
 import { User } from '@angular/fire/auth';
+import { UserCard } from '../user-card/user-card';
 
 @Component({
   selector: 'app-search-user',
@@ -14,6 +15,7 @@ import { User } from '@angular/fire/auth';
     MatButtonModule,
     MatIcon,
     SearchInputComponent,
+    UserCard,
   ],
   templateUrl: './search-user.html',
   styleUrl: './search-user.scss',

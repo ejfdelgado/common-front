@@ -1,4 +1,4 @@
-<div class="user_card">
+<div class="user_card" (click)="pickThis.emit(user)">
     <img class="card_photo" [src]="user.photoURL">
     <div class="card_name_email">
         <h6 class="text-sm">{{ user.displayName }}</h6>

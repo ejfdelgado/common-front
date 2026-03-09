@@ -16,4 +16,5 @@ export class UserCard {
   @Input() icon?: string;
 
   @Output() action: EventEmitter<User> = new EventEmitter();
+  @Output() pickThis: EventEmitter<User> = new EventEmitter();
 }

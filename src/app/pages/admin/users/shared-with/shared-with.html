@@ -3,16 +3,8 @@
     <div class="users_container_scrolled">
         <div class="users_container">
             @for (user of users; track user.uid) {
-            <div class="user_card" (click)="pickThis(user)">
-                <img class="card_photo" [src]="user.photoURL">
-                <div class="card_name_email">
-                    <h6 class="text-sm">{{ user.displayName }}</h6>
-                    <span class="email">{{ user.email }}</span>
-                </div>
-                @if (mode == "normal") {
-                <mat-icon (click)="removeUser(user)">delete</mat-icon>
-                }
-            </div>
+            <app-user-card [user]="user" [icon]="mode == 'normal' ? 'delete' : ''"
+                (action)="removeUser(user)" (pickThis)="pickThis(user)"></app-user-card>
             }
         </div>
     </div>

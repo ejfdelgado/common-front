@@ -9,6 +9,7 @@ import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
+import { UserCard } from '../user-card/user-card';
 
 @Component({
   selector: 'app-shared-with',
@@ -17,6 +18,7 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
     MatDialogModule,
     MatButtonModule,
     MatIcon,
+    UserCard,
   ],
   templateUrl: './shared-with.html',
   styleUrl: './shared-with.scss',
