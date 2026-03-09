@@ -32,7 +32,8 @@ export class CalendarService {
             ));
         if (response.success) {
             const events: CalendarEventType[] = response.data;
-
+            return events;
         }
+        return null;
     }
 }

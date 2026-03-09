@@ -17,9 +17,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
-import { Content, GenerateContentConfig } from '@google/genai';
+import { Content, GenerateContentConfig, GenerateContentResponse } from '@google/genai';
 import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FullscreenService } from '@services/fullscreen.service';
@@ -33,6 +33,8 @@ import {
   QueryChatType,
   FoundKnowledge,
   ArticleDataType,
+  MessageLocalDataType,
+  CalendarEventType,
 } from 'types/ragTypes';
 import { marked } from 'marked';
 import { UINotificationSrv } from '@services/uinotifications.service';
@@ -40,14 +42,14 @@ import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
 import { normalizeName } from '@tools/Texts';
 import { AlterEgo2Service } from '@services/alteregov2.service';
-import { ImageGalleryType } from 'types/fieldsTypes';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactUs } from '@components/contact-us/contact-us';
 import { SimpleObj } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
 import { ShareSrv } from '@services/share.service';
-import { ShareDataType } from '@tools/UrlUtil';
+import { CalendarEvent } from '@components/calendar-event/calendar-event';
+import { epochTo } from '@tools/DateUtils';
 
 const MODEL_NAME_CLONE = "pubknowledge";
 
@@ -59,12 +61,6 @@ const renderer: any = {
 
 marked.use({ renderer });
 
-export interface MessageLocalDataType {
-  date: number;
-  role: string;
-  txt: SafeHtml;
-  gallery?: ImageGalleryType[];
-};
 
 @Component({
   selector: 'app-chatsession',
@@ -81,6 +77,7 @@ export interface MessageLocalDataType {
     MatInputModule,
     AlterEgoSplash,
     PhotoGallery,
+    CalendarEvent,
   ],
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',
@@ -310,119 +307,12 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.assistant.useFacts,
       );
 
-      this.foundFacts.emit(searchedResult);
-
       this.history.push({
         role: "user",
         parts: [{ text: userInput }]
       });
 
-      const articleUnion: ArticleDataType[] = [];
-      const toolsUnion: ToolDataType[] = [];
-      let modelChanges: number = 0;
-
-      // Gater tools matches...
-      result.forEach((result) => {
-        if (result && result.candidates && result.candidates.length > 0) {
-          const assistantMessage: Content = {
-            role: "model",
-            parts: result.candidates[0].content?.parts?.map((el) => el),
-          };
-          const temp = this.processFiredTools(assistantMessage);
-          toolsUnion.push(...temp);
-          temp.forEach((toolRef) => {
-            if (toolRef.affectModel === true) {
-              // Adjust model
-              toolRef.args.forEach((arg) => {
-                const path = arg.modelPath;
-                if (path && path.trim().length > 0) {
-                  if (arg.modelIsArray === true) {
-                    // First read to get index where to place the val
-                    const old = SimpleObj.getValue(this.toolModel, path, []);
-                    //console.log("Adjust model", `${path}.${old.length}`, arg.val);
-                    SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
-                    modelChanges++;
-                  } else {
-                    // Just write
-                    //console.log("Adjust model", path, arg.val);
-                    SimpleObj.recreate(this.toolModel, path, arg.val);
-                    modelChanges++;
-                  }
-                }
-              });
-            }
-          });
-        }
-      });
-
-      // Interpret tools
-      toolsStatus.forEach((tool: ToolResponseType) => {
-        const standardName = normalizeName(tool.name);
-        const toolMessage: Content = {
-          role: "tool",
-          parts: [{
-            functionResponse: {
-              name: standardName,
-              response: { result: tool.message }
-            }
-          }]
-        };
-        // Display gallery if needed
-        if (tool.articles) {
-          tool.articles.forEach((article) => {
-            articleUnion.push(article);
-            if (article.gallery && article.gallery.length > 0) {
-              this.visualHistory.push({
-                date: Date.now() - 1,
-                role: "tool",
-                txt: "",
-                gallery: article.gallery
-              });
-            }
-          });
-        }
-        // Display text if needed & assign val on args
-        if (typeof tool.message == "string" && tool.message.length > 0) {
-          this.timeOffset++;
-          this.processVisualInput(toolMessage);
-          this.history.push(toolMessage);
-        }
-        // Adjust state
-        const toolRef = this.searchNamedTool(standardName);
-        //console.log(tool.name, standardName, toolRef);
-        if (toolRef) {
-          if (toolRef.useStates === true) {
-            if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
-              // Apply next state
-              this.toolState = toolRef.nextState.trim();
-            }
-          }
-        }
-      });
-      // Display messages
-      result.forEach((result) => {
-        if (result && result.candidates && result.candidates.length > 0) {
-          const assistantMessage: Content = {
-            role: "model",
-            parts: result.candidates[0].content?.parts?.map((el) => el),
-          };
-          this.timeOffset++;
-          this.processVisualInput(assistantMessage);
-          this.history.push(assistantMessage);
-        }
-      });
-      // emit
-      if (articleUnion.length > 0) {
-        this.foundArticles.emit(articleUnion);
-      }
-      if (toolsUnion.length > 0) {
-        this.foundTools.emit(toolsUnion);
-      }
-      if (modelChanges > 0) {
-        this.notifyToolModelChange();
-      }
-
-      this.query = "";
+      await this.interpretThis(result, toolsStatus, searchedResult);
 
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
@@ -436,6 +326,131 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         this.scrollToBottom();
       });
     }
+  }
+
+  async interpretThis(
+    result: GenerateContentResponse[],
+    toolsStatus: ToolResponseType[],
+    searchedResult: FoundKnowledge[],
+  ) {
+    this.foundFacts.emit(searchedResult);
+
+    const articleUnion: ArticleDataType[] = [];
+    const toolsUnion: ToolDataType[] = [];
+    let modelChanges: number = 0;
+
+    // Gater tools matches...
+    result.forEach((result) => {
+      if (result && result.candidates && result.candidates.length > 0) {
+        const assistantMessage: Content = {
+          role: "model",
+          parts: result.candidates[0].content?.parts?.map((el) => el),
+        };
+        // Assign values
+        const temp = this.processFiredTools(assistantMessage);
+        toolsUnion.push(...temp);
+        temp.forEach((toolRef) => {
+          if (toolRef.affectModel === true) {
+            // Adjust model
+            toolRef.args.forEach((arg) => {
+              const path = arg.modelPath;
+              if (path && path.trim().length > 0) {
+                if (arg.modelIsArray === true) {
+                  // First read to get index where to place the val
+                  const old = SimpleObj.getValue(this.toolModel, path, []);
+                  //console.log("Adjust model", `${path}.${old.length}`, arg.val);
+                  SimpleObj.recreate(this.toolModel, `${path}.${old.length}`, arg.val);
+                  modelChanges++;
+                } else {
+                  // Just write
+                  //console.log("Adjust model", path, arg.val);
+                  SimpleObj.recreate(this.toolModel, path, arg.val);
+                  modelChanges++;
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+
+    // Interpret tools
+    toolsStatus.forEach((tool: ToolResponseType) => {
+      const standardName = normalizeName(tool.name);
+      const toolMessage: Content = {
+        role: "tool",
+        parts: [{
+          functionResponse: {
+            name: standardName,
+            response: { result: tool.message }
+          }
+        }]
+      };
+      // Display gallery if needed
+      if (tool.articles) {
+        tool.articles.forEach((article) => {
+          articleUnion.push(article);
+          if (article.gallery && article.gallery.length > 0) {
+            this.visualHistory.push({
+              date: Date.now() - 1,
+              role: "tool",
+              txt: "",
+              gallery: article.gallery
+            });
+          }
+        });
+      }
+      // Display events if needed
+      if (tool.events) {
+        this.visualHistory.push({
+          date: Date.now() - 1,
+          role: "tool",
+          txt: "",
+          events: tool.events,
+        });
+      }
+      // Display text if needed & assign val on args
+      if (typeof tool.message == "string" && tool.message.length > 0) {
+        this.timeOffset++;
+        this.processVisualInput(toolMessage);
+        this.history.push(toolMessage);
+      }
+      // Adjust state
+      const toolRef = this.searchNamedTool(standardName);
+      //console.log(tool.name, standardName, toolRef);
+      if (toolRef) {
+        if (toolRef.useStates === true) {
+          if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
+            // Apply next state
+            this.toolState = toolRef.nextState.trim();
+          }
+        }
+      }
+    });
+    // Display messages
+    result.forEach((result) => {
+      if (result && result.candidates && result.candidates.length > 0) {
+        const assistantMessage: Content = {
+          role: "model",
+          parts: result.candidates[0].content?.parts?.map((el) => el),
+        };
+        this.timeOffset++;
+        this.processVisualInput(assistantMessage);
+        this.history.push(assistantMessage);
+      }
+    });
+    // emit
+    if (articleUnion.length > 0) {
+      this.foundArticles.emit(articleUnion);
+    }
+    if (toolsUnion.length > 0) {
+      this.foundTools.emit(toolsUnion);
+    }
+    if (modelChanges > 0) {
+      this.notifyToolModelChange();
+    }
+
+    this.query = "";
   }
 
   async sendMessage() {
@@ -506,5 +521,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       ...this.assistant
     };
     this.shareSrv.share(temp, "link");
+  }
+
+  selectThisEvent(event: CalendarEventType) {
+    const millis = new Date(event.start.dateTime).getTime();
+    const texto = epochTo(millis, "v5");
+    this.sendMessageInternal(`**${texto}** id: *${event.id}*`);
   }
 }

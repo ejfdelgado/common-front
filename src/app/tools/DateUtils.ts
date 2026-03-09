@@ -24,6 +24,13 @@ export function epochTo(millis: number, type?: DateOptionType) {
         } else {
             return moment(millis).format('YYYY D [de] MMMM - h:mm a');
         }
+    } else if (type == "v5") {
+        // Format: "sabado, 17 de enero de 2026"
+        if (millis > epochYearStart) {
+            return moment(millis).format('dddd, D [de] MMMM - h:mm a');
+        } else {
+            return moment(millis).format('dddd, YYYY, D [de] MMMM - h:mm a');
+        }
     } else {
         throw new Error(`Type ${type} not exist`);
     }

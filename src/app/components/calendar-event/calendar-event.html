@@ -1,0 +1,4 @@
+<div class="card" (click)="selectThis.emit(event)">
+    <h3>{{ formatDate(event.start.dateTime) }}</h3>
+    <strong>{{ event.start.timeZone}}</strong>
+</div>

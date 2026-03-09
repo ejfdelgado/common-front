@@ -117,12 +117,14 @@
     white-space: nowrap;
 }
 
-.profile_title span {
-
-}
-
 .right_button {
     min-width: 40px;
+}
+
+.events_panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 mat-toolbar {

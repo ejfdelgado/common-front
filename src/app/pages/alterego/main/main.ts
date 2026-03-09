@@ -30,7 +30,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { Chatsession } from '@components/chatsession/chatsession';
-import { GenerateContentConfig, Type } from '@google/genai';
+import { GenerateContentConfig, GenerateContentResponse, Type } from '@google/genai';
 import {
   AssistantDataType,
   KnowledgeDataType,
@@ -42,7 +42,8 @@ import {
   ArticleDataType,
   FactCursorDataType,
   FoundKnowledge,
-  HistoryDataType
+  HistoryDataType,
+  ToolResponseType
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -103,6 +104,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   @ViewChild('sidenavHistory') sidenavHistory!: MatSidenav;
 
   @ViewChild('article_form') articleForm!: FormSimpleWithout;
+  @ViewChild('chat_session') chatSession!: Chatsession;
+
 
   menuOptions: MenuOptionType[] = [];
   authSubscription: Subscription | null = null;
@@ -425,6 +428,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         } else if (this.currentToolSelected.type == 'calendar') {
           this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
           this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: true, });
+          this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, });
+          this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, });
         }
 
         this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
@@ -1571,7 +1576,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     if (!this.currentToolSelected) {
       return;
     }
-    this.calendarSrv.search(
+    const events = await this.calendarSrv.search(
       this.getParentId(),
       this.currentToolSelected.id,
       3,// Maybe some default

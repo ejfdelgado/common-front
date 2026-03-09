@@ -1,5 +1,7 @@
 import { User } from "@angular/fire/auth";
 import { BasicDataType, SimpleDataType } from "@services/firestore.service";
+import { ImageGalleryType } from "./fieldsTypes";
+import { SafeHtml } from "@angular/platform-browser";
 
 export type SearchLangsType = "en" | "es" | "multi";
 
@@ -124,11 +126,20 @@ export interface SearchAnswerDataType {
     payload: ItemToSearchType[];
 }
 
+export interface MessageLocalDataType {
+    date: number;
+    role: string;
+    txt: SafeHtml;
+    gallery?: ImageGalleryType[];
+    events?: CalendarEventType[];
+};
+
 export interface ToolResponseType {
     name: string;
     message: string;
     success?: boolean;
     articles?: ArticleDataType[];
+    events?: CalendarEventType[];
 }
 
 export interface FactCursorDataType {

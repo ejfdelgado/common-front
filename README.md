@@ -57,7 +57,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/contact-us
+npx ng generate component --standalone --skip-tests components/calendar-event
 ```
 
 ```bash

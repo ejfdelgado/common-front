@@ -379,7 +379,7 @@
                     @if (collection) {
                     <mat-card class="mat-mdc-card mdc-card">
                         <mat-card-content class="flex_horizontal_gap_10 full_height">
-                            <app-chatsession [config]="chatConfig" [language]="language" [top]="top"
+                            <app-chatsession #chat_session [config]="chatConfig" [language]="language" [top]="top"
                                 [distance]="distance" [knowledge]="knowledge" [tools]="tools"
                                 [lastModified]="lastModified" [assistant]="collection"
                                 (foundFacts)="receiveSearch($event)" (foundTools)="receiveToolSearch($event)"
