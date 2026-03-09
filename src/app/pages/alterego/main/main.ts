@@ -57,6 +57,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AlterEgo2Service } from '@services/alteregov2.service';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { HttpClient } from '@angular/common/http';
+import { User } from '@angular/fire/auth';
+import { UserCard } from 'app/pages/admin/users/user-card/user-card';
 
 const MODEL_NAME = "fact";
 const MODEL_TOOL_NAME = "tool";
@@ -86,7 +88,8 @@ const MODEL_NAME_PARENT_CLONE = "pubknowledge";
     MatInputModule,
     Chatsession,
     MatTabsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    UserCard,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -1533,7 +1536,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async assignCalendarUser() {
     // Show users involved in this assisstant
-    if (!this.collection) {
+    if (!this.collection || !this.currentToolSelected) {
       return;
     }
     const dialogRef = this.dialog.open(SharedWith, {
@@ -1547,8 +1550,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         title: "Select a user",
       },
     });
-    dialogRef.afterClosed().subscribe(async (result) => {
-      console.log(result);
+    dialogRef.afterClosed().subscribe(async (result: User | null) => {
+      // {displayName, email, photoURL, uid}
+      if (this.currentToolSelected && result) {
+        this.toolEditionMade({
+          name: "calendarUser",
+          val: result,
+        });
+        this.cdr.detectChanges();
+      }
     });
   }
 }

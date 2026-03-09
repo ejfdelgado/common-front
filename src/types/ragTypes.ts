@@ -1,3 +1,4 @@
+import { User } from "@angular/fire/auth";
 import { BasicDataType, SimpleDataType } from "@services/firestore.service";
 
 export type SearchLangsType = "en" | "es" | "multi";
@@ -54,6 +55,7 @@ export interface ArgumentDataType {
     modelPath?: string;
     modelIsArray?: boolean;
 }
+
 // Tool
 export interface ToolDataType extends SimpleDataType {
     type: "mail" | "article" | "basic" | "calendar";
@@ -69,6 +71,7 @@ export interface ToolDataType extends SimpleDataType {
     affectModel?: boolean;
     template?: string;
     args: ArgumentDataType[];
+    calendarUser?: User | null,
 };
 // Article
 export interface ArticleDataType extends SimpleDataType {

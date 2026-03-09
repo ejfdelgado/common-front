@@ -61,7 +61,7 @@ npx ng generate component --standalone --skip-tests components/contact-us
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/admin/users/search-user
+npx ng generate component --standalone --skip-tests pages/admin/users/user_card
 ```
 
 ```bash

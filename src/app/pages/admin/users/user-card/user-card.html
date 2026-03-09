@@ -1,0 +1,10 @@
+<div class="user_card">
+    <img class="card_photo" [src]="user.photoURL">
+    <div class="card_name_email">
+        <h6 class="text-sm">{{ user.displayName }}</h6>
+        <span class="email">{{ user.email }}</span>
+    </div>
+    @if (icon) {
+    <mat-icon (click)="action.emit(user)">{{ icon }}</mat-icon>
+    }
+</div>
