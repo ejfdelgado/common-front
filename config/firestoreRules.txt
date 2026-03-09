@@ -70,5 +70,10 @@ service cloud.firestore {
     match /pro-pubknowledge/{knowledgeId} {
       allow read: if true;
     }
+    match /pro-personal/{document=**} {
+      allow read: if
+        request.auth != null &&
+        resource.data.author == request.auth.uid;
+    }
   }
 }

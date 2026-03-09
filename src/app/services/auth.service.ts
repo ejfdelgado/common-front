@@ -110,62 +110,9 @@ export class AuthService {
         this.authSub?.unsubscribe();
     }
 
-    askForOfflineCalendarScope() {
-        const auth = getAuth();
-        const provider = new GoogleAuthProvider();
-
-        // 1. Add the specific Calendar scope
-        provider.addScope('https://www.googleapis.com/auth/calendar.events');
-
-        // 2. IMPORTANT: Force Google to provide a Refresh Token
-        provider.setCustomParameters({
-            access_type: 'offline',
-            prompt: 'consent'
-        });
-
-        /*
-        const login2 = async () => {
-            const client = google.accounts.oauth2.initCodeClient({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID',
-                scope: 'https://www.googleapis.com/auth/calendar.events',
-                ux_mode: 'popup', // A popup appears for the user
-                callback: (response) => {
-                    // THIS IS IT! 
-                    // Google sends the 'code' into this response object.
-                    const authorizationCode = response.code;
-
-                    // Now you send it to your Node.js server
-                    sendCodeToBackend(authorizationCode);
-                },
-            });
-
-            client.requestCode();
-        }
-        */
-
-        const loginWithGoogle = async () => {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                // This credential contains the ONE-TIME code or temporary token
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                if (credential) {
-                    const payload = {
-                        credential
-                    };
-                    const response = await firstValueFrom(this.http.put<ApiResponse>(environment.apiUrl + "admin/user/tokens",
-                        payload,
-                    ));
-                } else {
-                    throw new Error("No token found");
-                }
-
-                // Note: Firebase doesn't always put the refresh_token in the 'result' object.
-                // You usually need to handle the 'code' exchange on your Node.js server.
-            } catch (error: any) {
-                this.notifSrv.show(error.message);
-            }
-        };
-
-        loginWithGoogle();
+    async askForOfflineCalendarScope() {
+        const currentUrl = window.location.href;
+        const res = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "admin/user/calendar/allow", { currentUrl }));
+        window.location.href = res.data.url;
     }
 }
