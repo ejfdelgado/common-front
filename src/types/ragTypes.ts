@@ -60,7 +60,7 @@ export interface ArgumentDataType {
 
 // Tool
 export interface ToolDataType extends SimpleDataType {
-    type: "mail" | "article" | "basic" | "calendar";
+    type: "mail" | "article" | "basic" | "calendar" | "select_event";
     name: string;
     desc: string;
     to?: string;
@@ -137,6 +137,7 @@ export interface MessageLocalDataType {
 export interface ToolResponseType {
     name: string;
     message: string;
+    hidden?: boolean;
     success?: boolean;
     articles?: ArticleDataType[];
     events?: CalendarEventType[];

@@ -139,6 +139,8 @@
                                             <div class="editor_parent">
                                                 <app-form-simple-without (innerFieldChanged)="toolEditionMade($event)"
                                                     [model]="toolModel" [fields]="toolFields"></app-form-simple-without>
+                                                @if (['select_event', 'calendar'].indexOf(currentToolSelected.type) >=
+                                                0){
                                                 <div class="user_picker_container">
                                                     <div class="detail">
                                                         @if (currentToolSelected.calendarUser) {
@@ -155,6 +157,7 @@
                                                         }
                                                     </div>
                                                 </div>
+                                                }
                                                 <h2>Arguments:</h2>
                                                 @for(arg of currentToolSelected.args; track arg;) {
                                                 <div class="argument_container">

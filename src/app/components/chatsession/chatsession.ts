@@ -412,7 +412,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       // Display text if needed & assign val on args
       if (typeof tool.message == "string" && tool.message.length > 0) {
         this.timeOffset++;
-        this.processVisualInput(toolMessage);
+        if (tool.hidden !== true) {
+          this.processVisualInput(toolMessage);
+        }
         this.history.push(toolMessage);
       }
       // Adjust state
