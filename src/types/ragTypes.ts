@@ -76,6 +76,8 @@ export interface ToolDataType extends SimpleDataType {
     calendarUser?: User | null,
     calendarKeyword?: string;
     calendarMinHoursGap?: number;
+    calendarEmptyEvents?: boolean;
+    calendarMaxEvents?: number;
 };
 // Article
 export interface ArticleDataType extends SimpleDataType {
