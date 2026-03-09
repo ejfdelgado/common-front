@@ -259,6 +259,10 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         role: "tool",
         txt: this.assistant.startConversation,
       });
+      this.history.push({
+        role: "model",
+        parts: [{ text: this.assistant.startConversation }]
+      });
     }
   }
 
@@ -457,6 +461,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   async sendMessage() {
     if (this.query.trim().length == 0) {
+      return;
+    }
+    if (this.loading > 0) {
       return;
     }
     await this.sendMessageInternal(this.query);

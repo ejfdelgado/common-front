@@ -49,7 +49,7 @@
                     <app-calendar-event (selectThis)="selectThisEvent($event)" [event]="event"></app-calendar-event>
                     }
                 </div>
-                } @else if (!(message.hidden === true)) {
+                } @else {
                 <div class="single_msg" [ngClass]="'rol_'+message.role">
                     <span class="text" [innerHTML]="message.txt"></span>
                 </div>
