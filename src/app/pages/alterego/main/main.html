@@ -8,7 +8,7 @@
                     <mat-card class="mat-mdc-card mdc-card full_height overflow_hidden">
                         <mat-tab-group class="with_flex_column">
                             <!-- Facts tab -->
-                            <mat-tab label="Facts">
+                            <mat-tab [label]="getTabTitle('fact')">
                                 <div class="tab_content">
                                     <mat-sidenav-container autosize>
                                         <mat-sidenav #sidenav [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -81,7 +81,7 @@
                                 </div>
                             </mat-tab>
                             <!-- Tools tab -->
-                            <mat-tab label="Tools">
+                            <mat-tab [label]="getTabTitle('tool')">
                                 <div class="tab_content">
                                     <mat-sidenav-container autosize>
                                         <mat-sidenav #sidenavTools [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -206,7 +206,7 @@
                                 </div>
                             </mat-tab>
                             <!-- Catalog tab -->
-                            <mat-tab label="Articles">
+                            <mat-tab [label]="getTabTitle('article')">
                                 <div class="tab_content">
                                     <mat-sidenav-container autosize>
                                         <mat-sidenav #sidenavArticles [mode]="(isHandset$ | async) ? 'over' : 'side'"

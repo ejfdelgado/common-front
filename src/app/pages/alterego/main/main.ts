@@ -1491,4 +1491,34 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async toolModelChange(model: any) {
     this.dynamicModel = model;
   }
+
+  getTabTitle(type: string) {
+    if (type == "fact") {
+      if (this.searchedResult.length > 0) {
+        return "Facts 🔴";
+      } else {
+        return "Facts";
+      }
+    } else if (type == "tool") {
+      if (this.searchedToolsResult.length > 0) {
+        return "Tools 🔴";
+      } else {
+        return "Tools";
+      }
+    } else if (type == "article") {
+      if (this.searchedToolsResult.length > 0) {
+        return "Articles 🔴";
+      } else {
+        return "Articles";
+      }
+    } else if (type == "history") {
+      const found = this.historyFiltered.find(a => a.checked === false);
+      if (found !== undefined) {
+        return "History 🔴";
+      } else {
+        return "History";
+      }
+    }
+    return "";
+  }
 }
