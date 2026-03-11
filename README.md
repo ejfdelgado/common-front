@@ -1,9 +1,7 @@
 # CommonFront
 
-Probar si el agente obtiene el id si le escribo, "reserva la del martes".
 Permitir renderizar algunas variables del modelo en los textos.
 Crear una accion de calendario para quitar a la persona de una reunion.
-Ajustar el nombre del tool "calendar read".
 
 Agregar al historial el evento reservado, quien, cuando.
 
@@ -33,8 +31,6 @@ Paginar usuarios.
 
 Capturar mejor la foto o permitir rotar.
 
-Ofuscar la peticion a gemini
-Cifrar el epoch con el pass y que eso sirva de password
 Cual es el max length del embeeding text?
 Allow to configure with the url query param, set the size of the shared url.
 
