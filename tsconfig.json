@@ -21,15 +21,31 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "@tools/*": ["app/tools/*"],
-      "@services/*": ["app/services/*"],
-      "@components/*": ["app/components/*"],
-      "@interceptors/*": ["app/interceptors/*"],
-      "@directives/*": ["app/directives/*"],
-      "@pipes/*": ["app/pipes/*"],
-      
+      "@tools/*": [
+        "app/tools/*"
+      ],
+      "@services/*": [
+        "app/services/*"
+      ],
+      "@components/*": [
+        "app/components/*"
+      ],
+      "@interceptors/*": [
+        "app/interceptors/*"
+      ],
+      "@directives/*": [
+        "app/directives/*"
+      ],
+      "@pipes/*": [
+        "app/pipes/*"
+      ],
+      "@types/*": [
+        "types/*"
+      ],
     },
-    "types": ["three"]
+    "types": [
+      "three"
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

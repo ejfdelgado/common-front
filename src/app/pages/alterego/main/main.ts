@@ -403,8 +403,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
                 { txt: "Basic", val: "basic" },
                 { txt: "Email", val: "mail" },
                 { txt: "Article", val: "article" },
-                { txt: "Calendar", val: "calendar" },
-                { txt: "Event select", val: "select_event" },
+                { txt: "Calendar - Search", val: "calendar_search" },
+                { txt: "Calendar - Add guest", val: "calendar_add_guest" },
               ]
             }
           },
@@ -426,13 +426,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         } else if (this.currentToolSelected.type == 'article') {
           this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
           this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
-        } else if (this.currentToolSelected.type == 'calendar') {
+        } else if (this.currentToolSelected.type == 'calendar_search') {
           this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
           this.toolFields.push({ label: "Max. Guests", type: "number", key: "calendarMaxGuests", required: true, });
           this.toolFields.push({ label: "Max. events", type: "number", key: "calendarMaxEvents", required: false, });
           this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: false, });
           this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
-        } else if (this.currentToolSelected.type == 'select_event') {
+        } else if (this.currentToolSelected.type == 'calendar_add_guest') {
           this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, });
           this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, });
         }
