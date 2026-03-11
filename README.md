@@ -1,5 +1,12 @@
 # CommonFront
 
+Probar si el agente obtiene el id si le escribo, "reserva la del martes".
+Permitir renderizar algunas variables del modelo en los textos.
+Crear una accion de calendario para quitar a la persona de una reunion.
+Ajustar el nombre del tool "calendar read".
+
+Agregar al historial el evento reservado, quien, cuando.
+
 Enviar un correo de onboarding que lo redirija a la página principal.
 Cuando llegue, lo primero es que le pida logearse con un popup fancy:
 La seguridad y privacidad es importante para todos.
