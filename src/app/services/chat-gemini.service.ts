@@ -5,7 +5,9 @@ import { firstValueFrom, map } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "environments/environment";
 import { ApiResponse } from "types/file";
+import { encode } from "@msgpack/msgpack";
 import { FoundKnowledge, QueryChatType, ToolDataType, ToolResponseType, AssistantStateType } from "types/ragTypes";
+import { Buffer } from 'buffer';
 
 @Injectable({
     providedIn: 'root',
@@ -47,9 +49,11 @@ export class ChatGeminiService {
             useFacts,
             pass: await this.paramsSrv.getEncriptedKey(ChatGeminiService.tempPass),
         };
+        const encoded: Uint8Array = encode(JSON.stringify(payload));
+        const buffer = Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength);
         const response: ApiResponse = await firstValueFrom(
             this.http.post(environment.apiUrl + "gemini/query",
-                payload,
+                buffer,
                 {
                     responseType: 'text',
                     headers: { '--noload': '1' },
