@@ -435,8 +435,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: false, });
           this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
         } else if (this.currentToolSelected.type == 'calendar_add_guest') {
-          this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, });
-          this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, });
+          //
         }
 
         this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });

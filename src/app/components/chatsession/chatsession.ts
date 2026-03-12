@@ -35,6 +35,7 @@ import {
   ArticleDataType,
   MessageLocalDataType,
   CalendarEventType,
+  InnerToolResponseType,
 } from 'types/ragTypes';
 import { marked } from 'marked';
 import { UINotificationSrv } from '@services/uinotifications.service';
@@ -414,7 +415,10 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
         });
       }
       // Display text if needed & assign val on args
-      if (typeof tool.message == "string" && tool.message.length > 0) {
+      if (
+        (typeof tool.message == "string" && tool.message.length > 0)
+        || (tool.message as InnerToolResponseType).data != undefined
+      ) {
         this.timeOffset++;
         if (tool.hidden !== true) {
           this.processVisualInput(toolMessage);
