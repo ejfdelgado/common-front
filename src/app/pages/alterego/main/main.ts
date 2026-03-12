@@ -21,7 +21,7 @@ import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { ChangeFieldType, FlatJsonDataType } from '@components/form-simple/form-simple';
 import { Router } from '@angular/router';
 import { IndicatorService } from '@services/indicator.service';
-import { BasicDataType, FirestoreService, PageDataType, SimpleDataType } from '@services/firestore.service';
+import { FirestoreService, PageDataType } from '@services/firestore.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -1571,6 +1571,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async assignCalendarUser() {
+    await this.assignSelectedUser("calendarUser");
+  }
+
+  async assignSelectedUser(attrName: string) {
     // Show users involved in this assisstant
     if (!this.collection || !this.currentToolSelected) {
       return;
@@ -1590,7 +1594,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       // {displayName, email, photoURL, uid}
       if (this.currentToolSelected && result) {
         this.toolEditionMade({
-          name: "calendarUser",
+          name: attrName,
           val: result,
         });
         this.cdr.detectChanges();
@@ -1615,5 +1619,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       data: events,
     };
     this.cdr.detectChanges();
+  }
+
+  async testGmail() {
+
+  }
+
+  async assignGmailUser() {
+    await this.assignSelectedUser("gmailUser");
   }
 }

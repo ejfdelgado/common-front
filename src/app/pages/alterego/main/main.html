@@ -158,6 +158,24 @@
                                                         }
                                                     </div>
                                                 </div>
+                                                } @else if (['mail'].indexOf(currentToolSelected.type) >=
+                                                0){
+                                                <div class="user_picker_container">
+                                                    <div class="detail">
+                                                        @if (currentToolSelected.gmailUser) {
+                                                        <app-user-card [user]="currentToolSelected.gmailUser"
+                                                            [icon]="'contact_mail'"
+                                                            (action)="assignGmailUser()"></app-user-card>
+                                                        <button matButton="elevated" (click)="testGmail()">
+                                                            <mat-icon>play_arrow</mat-icon>
+                                                            Test gmail</button>
+                                                        } @else {
+                                                        <button matButton="elevated" (click)="assignGmailUser()">
+                                                            <mat-icon>contact_mail</mat-icon>
+                                                            Select sender</button>
+                                                        }
+                                                    </div>
+                                                </div>
                                                 }
                                                 <h2>Arguments:</h2>
                                                 @for(arg of currentToolSelected.args; track arg;) {

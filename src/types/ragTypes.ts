@@ -78,6 +78,7 @@ export interface ToolDataType extends SimpleDataType {
     calendarMinHoursGap?: number;
     calendarMaxGuests?: number;
     calendarMaxEvents?: number;
+    gmailUser?: User | null,
     message?: string | InnerToolResponseType;
     action?: string;
 };
