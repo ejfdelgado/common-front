@@ -1,7 +1,15 @@
 # CommonFront
 
+Permitir que el tool responda un json, no un texto.
+{
+  "success": true,
+  "data": {...},
+  "error": null
+}
 Permitir renderizar algunas variables del modelo en los textos.
-Crear una accion de calendario para quitar a la persona de una reunion.
+Crear un tool de calendario para quitar a un correo de los eventos siguientes.
+
+Hacer un backend para ingesta de un archivo.
 
 Agregar al historial el evento reservado, quien, cuando.
 
