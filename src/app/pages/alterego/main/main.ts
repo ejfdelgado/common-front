@@ -427,8 +427,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         if (this.currentToolSelected.type == 'mail') {
           this.toolFields.push({ label: "Custom template?", type: "text", key: "template", required: false, });
           this.toolFields.push({ label: "To", type: "text", key: "to", required: true, });
-          this.toolFields.push({ label: "Response (Ok)", type: "text", key: "ok", required: true, });
-          this.toolFields.push({ label: "Response (Error)", type: "text", key: "error", required: true, });
         } else if (this.currentToolSelected.type == 'article') {
           this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
           this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
@@ -1623,6 +1621,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async testGmail() {
 
+  }
+
+  async deleteGmailUser() {
+    this.toolEditionMade({
+      name: "gmailUser",
+      val: null,
+    });
+    this.cdr.detectChanges();
   }
 
   async assignGmailUser() {

@@ -164,8 +164,9 @@
                                                     <div class="detail">
                                                         @if (currentToolSelected.gmailUser) {
                                                         <app-user-card [user]="currentToolSelected.gmailUser"
-                                                            [icon]="'contact_mail'"
-                                                            (action)="assignGmailUser()"></app-user-card>
+                                                            [icon]="'delete'"
+                                                            (action)="deleteGmailUser()"
+                                                            (pickThis)="assignGmailUser()"></app-user-card>
                                                         <button matButton="elevated" (click)="testGmail()">
                                                             <mat-icon>play_arrow</mat-icon>
                                                             Test gmail</button>
