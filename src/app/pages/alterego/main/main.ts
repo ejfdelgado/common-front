@@ -1093,7 +1093,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   deleteTransientToolData() {
-    this.tools.forEach((tool) => {
+    const all: ToolDataType[] = [];
+    all.push(...this.tools);
+    all.push(...this.toolsPendingToSave);
+    all.forEach((tool) => {
       delete tool.message;
       tool.args.forEach((arg) => {
         delete arg.val;
@@ -1602,6 +1605,11 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.currentToolSelected.calendarMinHoursGap,
       this.currentToolSelected.calendarKeyword,
     );
-    console.log(JSON.stringify(events, null, 4));
+    this.currentToolSelected.message = {
+      success: true,
+      error: null,
+      data: events,
+    };
+    this.cdr.detectChanges();
   }
 }
