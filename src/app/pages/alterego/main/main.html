@@ -139,7 +139,8 @@
                                             <div class="editor_parent">
                                                 <app-form-simple-without (innerFieldChanged)="toolEditionMade($event)"
                                                     [model]="toolModel" [fields]="toolFields"></app-form-simple-without>
-                                                @if (['select_event', 'calendar'].indexOf(currentToolSelected.type) >=
+                                                @if (['calendar_add_guest',
+                                                'calendar_search'].indexOf(currentToolSelected.type) >=
                                                 0){
                                                 <div class="user_picker_container">
                                                     <div class="detail">
@@ -218,6 +219,9 @@
                                                 <button matButton="elevated" (click)="addArgument()">
                                                     <mat-icon>add</mat-icon>
                                                     Add argument</button>
+                                                @if (currentToolSelected.message) {
+                                                <pre>{{ currentToolSelected.message | json }}</pre>
+                                                }
                                             </div>
                                             }
                                         </mat-sidenav-content>

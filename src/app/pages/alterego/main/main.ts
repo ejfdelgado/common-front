@@ -433,7 +433,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.toolFields.push({ label: "Max. Guests", type: "number", key: "calendarMaxGuests", required: true, });
           this.toolFields.push({ label: "Max. events", type: "number", key: "calendarMaxEvents", required: false, });
           this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: false, });
-          this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
         } else if (this.currentToolSelected.type == 'calendar_add_guest') {
           //
         }
@@ -1086,9 +1085,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   deleteTransientToolData() {
     this.tools.forEach((tool) => {
+      delete tool.message;
       tool.args.forEach((arg) => {
         delete arg.val;
-      })
+      });
     });
   }
 
@@ -1589,5 +1589,6 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.currentToolSelected.calendarMinHoursGap,
       this.currentToolSelected.calendarKeyword,
     );
+    console.log(JSON.stringify(events, null, 4));
   }
 }

@@ -78,6 +78,7 @@ export interface ToolDataType extends SimpleDataType {
     calendarMinHoursGap?: number;
     calendarMaxGuests?: number;
     calendarMaxEvents?: number;
+    message?: string | InnerToolResponseType;
 };
 // Article
 export interface ArticleDataType extends SimpleDataType {

@@ -164,11 +164,16 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return null;
   }
 
-  processFiredTools(input: Content): ToolDataType[] {
+  processFiredTools(
+    input: Content,
+    toolsStatus: ToolResponseType[],
+  ): ToolDataType[] {
     const toolsFired: ToolDataType[] = [];
+    let toolsStatusIndex = 0;
     if (input.parts) {
       input.parts.forEach(async (el, index) => {
         if (el.functionCall) {
+          const responseRef = toolsStatus[toolsStatusIndex];
           // Search on tools what to answer
           const name = el.functionCall.name;
           const args = el.functionCall.args;
@@ -176,6 +181,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
             // Make a copy of the tool
             const toolRef = JSON.parse(JSON.stringify(this.searchNamedTool(name))) as ToolDataType | null;
             if (toolRef) {
+              // Set message
+              if (responseRef) {
+                toolRef.message = responseRef.message;
+              }
+
               // Set found values
               Object.keys(args).forEach((key) => {
                 const argsFound = toolRef.args.filter((arg) => normalizeName(arg.name) == key);
@@ -186,6 +196,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               toolsFired.push(toolRef);
             }
           }
+          toolsStatusIndex++;
         }
       });
     }
@@ -351,9 +362,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           role: "model",
           parts: result.candidates[0].content?.parts?.map((el) => el),
         };
-        // Assign values
-        const temp = this.processFiredTools(assistantMessage);
+        // Assign val on args
+        const temp = this.processFiredTools(assistantMessage, toolsStatus);
         toolsUnion.push(...temp);
+
+        // Affect inner model...
         temp.forEach((toolRef) => {
           if (toolRef.affectModel === true) {
             // Adjust model
@@ -414,13 +427,14 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           events: tool.events,
         });
       }
-      // Display text if needed & assign val on args
+
       if (
         (typeof tool.message == "string" && tool.message.length > 0)
         || (tool.message as InnerToolResponseType).data != undefined
       ) {
         this.timeOffset++;
         if (tool.hidden !== true) {
+          // Display text if needed
           this.processVisualInput(toolMessage);
         }
         this.history.push(toolMessage);
@@ -539,6 +553,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   selectThisEvent(event: CalendarEventType) {
     const millis = new Date(event.start.dateTime).getTime();
     const texto = epochTo(millis, "v5");
-    this.sendMessageInternal(`**${texto}** id: *${event.id}*`);
+    this.sendMessageInternal(`**${texto}**`);
   }
 }
