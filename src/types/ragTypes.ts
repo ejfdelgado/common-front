@@ -136,13 +136,19 @@ export interface MessageLocalDataType {
     events?: CalendarEventType[];
 };
 
+export interface InnerToolResponseType {
+    success: boolean;
+    data: any,
+    error: null | string;
+}
+
 export interface ToolResponseType {
     name: string;
-    message: string;
+    message: string | InnerToolResponseType;
     hidden?: boolean;
     success?: boolean;
     articles?: ArticleDataType[];
-    events?: CalendarEventType[];
+    events?: CalendarEventType[] | null;
 }
 
 export interface FactCursorDataType {

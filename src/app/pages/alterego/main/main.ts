@@ -135,6 +135,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     { val: Type.BOOLEAN, txt: "Yes/No" },
     { val: Type.INTEGER, txt: "Integer" },
     { val: Type.NUMBER, txt: "Number" },
+    { val: Type.ARRAY, txt: "Array" },
+    { val: Type.OBJECT, txt: "Object" },
   ]
 
   isHandset$!: Observable<boolean>;
