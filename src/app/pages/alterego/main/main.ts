@@ -30,7 +30,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { Chatsession } from '@components/chatsession/chatsession';
-import { GenerateContentConfig, GenerateContentResponse, Type } from '@google/genai';
+import { GenerateContentConfig, Type } from '@google/genai';
 import {
   AssistantDataType,
   KnowledgeDataType,
@@ -264,13 +264,17 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       children: [],
       callback: async () => {
         const confirmed = await this.confirmSrv.confirm({
-          title: "Google Calendar permission",
-          message: "Do you allow the assistant read/write on your Google Calendar?"
+          title: "Grant permissions",
+          message: "Do you allow the assistant read/write on your Google Calendar and Gmail send emails on behalf of you?"
         });
         if (!confirmed) {
           return;
         }
-        this.authSrv.askForOfflineCalendarScope();
+        const scopes = [
+          "calendar",
+          "gmail",
+        ];
+        this.authSrv.askForOfflineGrantScope(scopes);
       },
     });
 
@@ -1323,7 +1327,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       formConfig.model = Object.assign({}, DEF_ASSISTANT_MODEL, model);
     }
     const dialogRef = this.dialog.open(DialogFormComponent, {
-      width: '800px',
+      width: '1000px',
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: formConfig,

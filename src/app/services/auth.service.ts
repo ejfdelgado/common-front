@@ -110,9 +110,13 @@ export class AuthService {
         this.authSub?.unsubscribe();
     }
 
-    async askForOfflineCalendarScope() {
+    async askForOfflineGrantScope(scopes: string[]) {
         const currentUrl = window.location.href;
-        const res = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "admin/user/calendar/allow", { currentUrl }));
+        const body = {
+            currentUrl,
+            scopes,
+        };
+        const res = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "admin/user/calendar/allow", body));
         window.location.href = res.data.url;
     }
 }
