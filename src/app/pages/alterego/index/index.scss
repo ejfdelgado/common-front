@@ -60,6 +60,12 @@ app-card-doc {
     text-decoration: underline;
 }
 
+app-card-doc {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
 @media screen AND (max-width: 1400px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr 1fr 1fr;
