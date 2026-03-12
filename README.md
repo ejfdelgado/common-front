@@ -1,7 +1,5 @@
 # CommonFront
 
-Display tool response.
-
 Crear un tool de calendario para quitar a un correo de los eventos siguientes.
 
 Permitir renderizar algunas variables del modelo en los textos.

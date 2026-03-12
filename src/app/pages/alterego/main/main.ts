@@ -406,7 +406,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
                 { txt: "Email", val: "mail" },
                 { txt: "Article", val: "article" },
                 { txt: "Calendar - Search", val: "calendar_search" },
-                { txt: "Calendar - Add guest", val: "calendar_add_guest" },
+                { txt: "Calendar - Modify guest", val: "calendar_write_guest" },
               ]
             }
           },
@@ -433,8 +433,16 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.toolFields.push({ label: "Max. Guests", type: "number", key: "calendarMaxGuests", required: true, });
           this.toolFields.push({ label: "Max. events", type: "number", key: "calendarMaxEvents", required: false, });
           this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: false, });
-        } else if (this.currentToolSelected.type == 'calendar_add_guest') {
-          //
+        } else if (this.currentToolSelected.type == 'calendar_write_guest') {
+          this.toolFields.push({
+            label: "Action", type: "select", key: "action", required: true,
+            select: {
+              options: [
+                { txt: "Add", val: "add" },
+                { txt: "Remove", val: "remove" },
+              ]
+            }
+          });
         }
 
         this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
@@ -1072,7 +1080,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         const first = this.pendingToSave[0];
         const parent = this.getParentId();
         await this.alterEgo2Srv.createUpdate(first, parent);
-
+        // Merge original refs
+        this.knowledge.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));
         this.pendingToSave.splice(0, 1);
       } while (this.pendingToSave.length > 0);
       this.lastModified += 1;
@@ -1101,6 +1110,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       do {
         const first = this.toolsPendingToSave[0];
         await this.firestoreSrv.createUpdate(this.getToolsCollectionName(), first);
+        // Merge original refs
+        this.tools.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));
         this.toolsPendingToSave.splice(0, 1);
       } while (this.toolsPendingToSave.length > 0);
       this.lastModified += 1;
@@ -1121,6 +1132,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         const first = this.articlesPendingToSave[0];
         const parent = this.getParentId();
         await this.alterEgo2Srv.createUpdateArticles(first, parent);
+        // Merge original refs
+        this.articles.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));
         this.articlesPendingToSave.splice(0, 1);
       } while (this.articlesPendingToSave.length > 0);
       this.lastModified += 1;

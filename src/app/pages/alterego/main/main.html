@@ -139,7 +139,7 @@
                                             <div class="editor_parent">
                                                 <app-form-simple-without (innerFieldChanged)="toolEditionMade($event)"
                                                     [model]="toolModel" [fields]="toolFields"></app-form-simple-without>
-                                                @if (['calendar_add_guest',
+                                                @if (['calendar_write_guest',
                                                 'calendar_search'].indexOf(currentToolSelected.type) >=
                                                 0){
                                                 <div class="user_picker_container">
