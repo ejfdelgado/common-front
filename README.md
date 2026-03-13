@@ -1,6 +1,23 @@
 # CommonFront
 
-Crear un tool de calendario para quitar a un correo de los eventos siguientes.
+En el mail, permitir que antes de quitar al usuario sender, confirme.
+
+Poder filtrar por nombre de calendario, uno tiene varios.
+
+Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
+
+Allow search articles to confirm the person talking with, no gallery, but content, but hidden.
+Add a checkbox for hidden.
+Include:
+- Name:
+- Business:
+- Email: 
+
+Hacer una pagina con dos diagramas:
+1. Perfil del cliente.
+2. Circulo dorado.
+
+Allow extend article to use a json object to organize data, intented for hidden tool responses.
 
 Permitir renderizar algunas variables del modelo en los textos.
 

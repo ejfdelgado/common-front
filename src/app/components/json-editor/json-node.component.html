@@ -1,0 +1,120 @@
+<div class="node">
+
+    <!-- OBJECT -->
+
+    <ng-container *ngIf="isObject(node)">
+
+        <div class="header">
+            <button (click)="toggle()">
+                {{ collapsed ? '+' : '-' }}
+            </button>
+
+            <span *ngIf="key !== null">{{key}}</span> { }
+        </div>
+
+        <div *ngIf="!collapsed" class="children">
+
+            <div *ngFor="let k of objectKeys()" class="row">
+
+                <!-- SAFE KEY RENAME -->
+
+                <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
+
+                <!-- PRIMITIVE VALUE -->
+
+                <ng-container *ngIf="isPrimitive(node[k])">
+
+                    <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
+
+                </ng-container>
+
+                <!-- TYPE SELECT -->
+
+                <select [ngModel]="detectType(node[k])" (ngModelChange)="changeType(node, k, $event)">
+                    <option value="string">string</option>
+                    <option value="number">number</option>
+                    <option value="boolean">boolean</option>
+                    <option value="object">object</option>
+                    <option value="array">array</option>
+                    <option value="null">null</option>
+                </select>
+
+                <button (click)="removeProperty(k)">
+                    delete
+                </button>
+
+                <!-- CHILD NODE -->
+
+                <json-node *ngIf="isObject(node[k]) || isArray(node[k])" [node]="node[k]" [key]="k"
+                    (nodeChange)="nodeChange.emit()">
+                </json-node>
+
+            </div>
+
+            <button (click)="addProperty()">
+                + property
+            </button>
+
+        </div>
+
+    </ng-container>
+
+
+    <!-- ARRAY -->
+
+    <ng-container *ngIf="isArray(node)">
+
+        <div class="header">
+
+            <button (click)="toggle()">
+                {{ collapsed ? '+' : '-' }}
+            </button>
+
+            <span *ngIf="key !== null">{{key}}</span> [ ]
+
+        </div>
+
+        <div *ngIf="!collapsed" class="children">
+
+            <div *ngFor="let item of node; let i = index" class="row">
+
+                <span>{{i}}</span>
+
+                <!-- PRIMITIVE VALUE -->
+
+                <ng-container *ngIf="isPrimitive(item)">
+
+                    <input [ngModel]="item" (ngModelChange)="updatePrimitive(node, i, $event)" />
+
+                </ng-container>
+
+                <!-- TYPE -->
+
+                <select [ngModel]="detectType(item)" (ngModelChange)="changeType(node, i, $event)">
+                    <option value="string">string</option>
+                    <option value="number">number</option>
+                    <option value="boolean">boolean</option>
+                    <option value="object">object</option>
+                    <option value="array">array</option>
+                    <option value="null">null</option>
+                </select>
+
+                <button (click)="removeArrayItem(i)">
+                    delete
+                </button>
+
+                <json-node *ngIf="isObject(item) || isArray(item)" [node]="item" [key]="i"
+                    (nodeChange)="nodeChange.emit()">
+                </json-node>
+
+            </div>
+
+            <button (click)="addArrayItem()">
+                + item
+            </button>
+
+        </div>
+
+    </ng-container>
+
+</div>
