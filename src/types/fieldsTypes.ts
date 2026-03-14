@@ -18,6 +18,7 @@ export interface FieldDataType {
     "rating" |
     "image" |
     "json" |
+    "json_raw" |
     "phone" |
     "image-gallery"
     ;
@@ -94,6 +95,10 @@ export interface FieldJSONDataType extends FieldDataType {
     json: JSONDetailDataType;
 }
 
+export interface FieldJSONRawDataType extends FieldDataType {
+
+}
+
 // Toggle
 
 export interface FieldToggleDataType extends FieldDataType {
@@ -120,6 +125,7 @@ export type AllFieldsDataType =
     FieldDataType |
     FieldImageDataType |
     FieldJSONDataType |
+    FieldJSONRawDataType |
     ChipDataType |
     ContenteditableDataType |
     MDDataType |
@@ -133,6 +139,7 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         FieldDataType |
         FieldImageDataType |
         FieldJSONDataType |
+        FieldJSONRawDataType |
         ChipDataType |
         ContenteditableDataType |
         MDDataType |

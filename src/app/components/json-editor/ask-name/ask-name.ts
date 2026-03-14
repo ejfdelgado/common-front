@@ -33,6 +33,9 @@ export class AskNamePopUp {
   }
 
   accept() {
+    if (this.name.trim().length == 0) {
+      return;
+    }
     this.dialogRef.close(this.name);
   }
 }

@@ -50,6 +50,8 @@
         <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label"
             [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight" [label]="field.label"
             [saveName]="getMD(field).saveName"></app-md-input>
+        } @else if (field.type=='json_raw') {
+        <json-editor [formControl]="formControlMap[field.key]" [placeholder]="field.label"></json-editor>
         }
         }
     </div>

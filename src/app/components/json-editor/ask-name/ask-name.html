@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Element name</h2>
 <mat-dialog-content>
-    <input type="text" [(ngModel)]="name">
+    <input type="text" [(ngModel)]="name" (keydown.enter)="accept()">
 </mat-dialog-content>
 <mat-dialog-actions>
     @if (name.trim().length > 0) {

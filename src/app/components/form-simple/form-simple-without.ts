@@ -20,6 +20,7 @@ import { MDInput } from '@components/fields/md-input/md-input';
 import { Subscription } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
 
 @Component({
   selector: 'app-form-simple-without',
@@ -40,6 +41,7 @@ import { CommonModule } from '@angular/common';
     ImageGalleryComponent,
     MDInput,
     MatSelectModule,
+    JsonEditorComponent,
   ],
   templateUrl: './form-simple-without.html',
   styleUrl: './form-simple-without.scss',
