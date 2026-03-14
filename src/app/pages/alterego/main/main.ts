@@ -104,6 +104,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   @ViewChild('sidenavHistory') sidenavHistory!: MatSidenav;
 
   @ViewChild('article_form') articleForm!: FormSimpleWithout;
+  @ViewChild('article_form_metadata') articleFormMetadata!: FormSimpleWithout;
   @ViewChild('chat_session') chatSession!: Chatsession;
 
 
@@ -144,11 +145,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   fields: AllFieldsDataType[] = [];
   toolFields: AllFieldsDataType[] = [];
   articleFields: AllFieldsDataType[] = [];
+  articleFieldsMetadata: AllFieldsDataType[] = [];
   historyFields: AllFieldsDataType[] = [];
 
   model: FlatJsonDataType = {};
   toolModel: FlatJsonDataType = {};
   articleModel: FlatJsonDataType = {};
+  articleModelMetadata: FlatJsonDataType = {};
   historyModel: FlatJsonDataType = {};
 
   chatConfig: GenerateContentConfig = {
@@ -459,6 +462,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async selectArticleItem(index: number): Promise<void> {
     this.currentArticleSelected = null;
     this.articleFields = [];
+    this.articleFieldsMetadata = [];
     this.cdr.detectChanges();
     if (this.articles.length <= index || index < 0) {
       return;
@@ -468,16 +472,31 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       requestAnimationFrame(() => {
         this.currentArticleSelected = this.articles[index];
         this.articleFields = [
-          { label: "Keywords", type: "text", key: "keywords", required: true, },
-          { label: "Description", type: "md", key: "desc", required: false, },
           {
+            label: "Type", type: "select", key: "type", required: true,
+            select: {
+              options: [
+                { txt: "Basic", val: "basic" },
+                { txt: "Gallery", val: "gallery" },
+              ]
+            }
+          },
+          { label: "Keywords", type: "text", key: "keywords", required: true, },
+        ];
+        this.articleFieldsMetadata = [];
+        if (this.currentArticleSelected.type == "gallery") {
+          this.articleFieldsMetadata.push({ label: "Description", type: "md", key: "desc", required: false, });
+          this.articleFieldsMetadata.push({
             label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
               thumbnailMaxSizePixels: 100,
               template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
             }
-          },
-        ];
+          });
+        } else if (this.currentArticleSelected.type == "basic") {
+          this.articleFields.push({ label: "Metadata", type: "json_raw", key: "metadata", required: true, });
+        }
         this.articleModel = Object.assign({}, this.currentArticleSelected);
+        this.articleModelMetadata = Object.assign({}, this.currentArticleSelected.metadata);
         this.cdr.detectChanges();
         resolve();
       });
@@ -788,16 +807,19 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.tools.unshift(created);
     requestAnimationFrame(() => {
       this.selectToolItem(0);
-    })
+    });
   }
 
   async addArticle() {
     const created: ArticleDataType = {
       created: 0,
       updated: 0,
-      desc: "",
       id: "",
       keywords: "",
+      type: "basic",
+      metadata: {
+        desc: "",
+      }
     };
     // Call to create
     const parent = this.getParentId();
@@ -832,6 +854,18 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   async articleEditionMade(event: ChangeFieldType) {
     if (this.currentArticleSelected) {
       (this.currentArticleSelected as any)[event.name] = event.val;
+      if (this.articlesPendingToSave.indexOf(this.currentArticleSelected) < 0) {
+        this.articlesPendingToSave.push(this.currentArticleSelected);
+      }
+      if (['type'].indexOf(event.name) >= 0) {
+        this.selectArticleItem(this.articles.indexOf(this.currentArticleSelected));
+      }
+    }
+  }
+
+  async articleMetadataEditionMade(event: ChangeFieldType) {
+    if (this.currentArticleSelected) {
+      (this.currentArticleSelected as any)["metadata"][event.name] = event.val;
       if (this.articlesPendingToSave.indexOf(this.currentArticleSelected) < 0) {
         this.articlesPendingToSave.push(this.currentArticleSelected);
       }

@@ -86,9 +86,7 @@ export class Index implements AfterViewInit {
   ];
   model: FlatJsonDataType = {
     "gallery": [],
-    "raw": {
-      "name": "Edgar",
-    },
+    "raw": null
   };
 
   constructor(

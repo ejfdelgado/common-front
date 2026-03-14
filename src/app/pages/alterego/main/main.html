@@ -164,8 +164,7 @@
                                                     <div class="detail">
                                                         @if (currentToolSelected.gmailUser) {
                                                         <app-user-card [user]="currentToolSelected.gmailUser"
-                                                            [icon]="'delete'"
-                                                            (action)="deleteGmailUser()"
+                                                            [icon]="'delete'" (action)="deleteGmailUser()"
                                                             (pickThis)="assignGmailUser()"></app-user-card>
                                                         <button matButton="elevated" (click)="testGmail()">
                                                             <mat-icon>play_arrow</mat-icon>
@@ -269,7 +268,7 @@
                                                     <span [ngClass]="{'selected': currentArticleSelected == item}"
                                                         class="item_parent text-xs" (click)="selectThisArticle(item)">
                                                         <span class="txt">
-                                                            <span>{{ item.desc }}</span>
+                                                            <span>{{ item.metadata?.desc }}</span>
                                                         </span>
                                                         <span class="button_elements">
                                                             <span class="date">{{ item.created | epochDate:'DD MMMM
@@ -310,6 +309,10 @@
                                                     (innerFieldChanged)="articleEditionMade($event)"
                                                     [model]="articleModel"
                                                     [fields]="articleFields"></app-form-simple-without>
+                                                <app-form-simple-without #article_form_metadata
+                                                    (innerFieldChanged)="articleMetadataEditionMade($event)"
+                                                    [model]="articleModelMetadata"
+                                                    [fields]="articleFieldsMetadata"></app-form-simple-without>
                                             </div>
                                             }
                                         </mat-sidenav-content>

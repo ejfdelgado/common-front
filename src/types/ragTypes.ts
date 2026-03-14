@@ -84,9 +84,9 @@ export interface ToolDataType extends SimpleDataType {
 };
 // Article
 export interface ArticleDataType extends SimpleDataType {
+    type: string;
     keywords: string;
-    desc: string;
-    gallery?: any;
+    metadata?: any;
 };
 
 //History

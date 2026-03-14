@@ -116,10 +116,16 @@ export class AlterEgo2Service {
             payload,
         ));
         const rows: ArticleDataType[] = (response.data.rows as any[]).map((row) => {
-            const metadata = row.metadata as ArticleDataType;
-            metadata.id = row.id;
-            metadata.created = parseInt(row.created_at);
-            return metadata;
+            // Complete metadata if needed
+            const temp: ArticleDataType = {
+                id: row.id,
+                type: row.type,
+                metadata: row.metadata,
+                created: parseInt(row.created),
+                keywords: row.keywords,
+                updated: 0,
+            };
+            return temp;
         });
         const next = response.data.nextCursor;
         return {
@@ -133,8 +139,14 @@ export class AlterEgo2Service {
             id: fact.id,
             parent,
             q: fact.keywords,
-            metadata: fact,
+            type: fact.type,
+            metadata: JSON.parse(JSON.stringify(fact)),
         };
+        delete payload.metadata.id;
+        delete payload.metadata.keywords;
+        delete payload.metadata.type;
+        delete payload.metadata.created;
+        delete payload.metadata.updated;
         const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "articles/crud",
             payload,
         ));

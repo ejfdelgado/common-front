@@ -408,12 +408,12 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       if (tool.articles) {
         tool.articles.forEach((article) => {
           articleUnion.push(article);
-          if (article.gallery && article.gallery.length > 0) {
+          if (article.metadata && article.metadata.gallery && article.metadata.gallery.length > 0) {
             this.visualHistory.push({
               date: Date.now() - 1,
               role: "tool",
               txt: "",
-              gallery: article.gallery
+              gallery: article.metadata.gallery
             });
           }
         });
