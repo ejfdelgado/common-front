@@ -43,7 +43,10 @@ export class Index implements AfterViewInit {
     enabled: true,
     settings: {
       retries: 3
-    }
+    },
+    list: [
+      {name: "Edgar"}
+    ]
   };
 
   firestoreTemporal: any = { count: 0 };

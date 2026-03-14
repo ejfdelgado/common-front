@@ -25,13 +25,17 @@
                 <div class="one_row">
                     <!-- SAFE KEY RENAME -->
 
-                    <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
+
 
                     <!-- PRIMITIVE VALUE -->
                     @if (isPrimitive(node[k])) {
+                    <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
                     <ng-container>
                         <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
                     </ng-container>
+                    } @else {
+                    <input [ngModel]="k" (ngModelChange)="renameKeyTemporal(k, $event)"
+                        (blur)="renameKeyBlur(k, $event)" />
                     }
 
                     <!-- TYPE SELECT -->

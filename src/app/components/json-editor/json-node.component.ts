@@ -69,6 +69,18 @@ export class JsonNodeComponent {
         this.node[newKey] = value;
         this.nodeChange.emit();
     }
+    
+    temporalMap: { [key: string]: string } = {};
+    renameKeyTemporal(oldKey: string, newKey: string) {
+        if (!newKey || newKey === oldKey)
+            return;
+        this.temporalMap[oldKey] = newKey;
+    }
+    renameKeyBlur(oldKey: string, newKey: any) {
+        if (oldKey in this.temporalMap) {
+            this.renameKey(oldKey, this.temporalMap[oldKey]);
+        }
+    }
 
     addProperty() {
         const name = prompt("Property name");
