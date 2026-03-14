@@ -138,6 +138,7 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
     if (this.temporalUrl) {
       URL.revokeObjectURL(this.temporalUrl);
     }
+    this.lastBlob = null;
   }
 
   ngOnDestroy() {
