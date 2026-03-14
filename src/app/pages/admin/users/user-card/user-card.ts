@@ -17,4 +17,9 @@ export class UserCard {
 
   @Output() action: EventEmitter<User> = new EventEmitter();
   @Output() pickThis: EventEmitter<User> = new EventEmitter();
+
+  async iconAction(event: any) {
+    event.stopPropagation();
+    this.action.emit(this.user);
+  }
 }

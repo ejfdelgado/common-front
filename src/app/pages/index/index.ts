@@ -24,7 +24,6 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     CameraCaptureComponent,
     FormSimpleWithout,
-    JsonEditorComponent,
     FormsModule,
   ],
   templateUrl: './index.html',

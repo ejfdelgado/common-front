@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AskNamePopUp } from './ask-name/ask-name';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
+import { normalizeName } from '@tools/fieldTools';
 
 @Component({
     selector: 'json-node',
@@ -109,7 +110,7 @@ export class JsonNodeComponent {
         if (this.renameTemporal === undefined) {
             return;
         }
-        this.renameKey(oldKey, this.renameTemporal);
+        this.renameKey(oldKey, normalizeName(this.renameTemporal));
         this.renameTemporal = undefined;
     }
 
@@ -121,7 +122,8 @@ export class JsonNodeComponent {
         });
         dialogRef.afterClosed().subscribe((name: any) => {
             if (!name || name in this.node) return;
-            this.node[name] = null;
+            const normalized = normalizeName(name);
+            this.node[normalized] = null;
             this.nodeChange.emit();
         });
     }

@@ -41,7 +41,7 @@ import { marked } from 'marked';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
-import { normalizeName } from '@tools/Texts';
+import { normalizeName } from '@tools/fieldTools';
 import { AlterEgo2Service } from '@services/alteregov2.service';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
 import { MatDialog } from '@angular/material/dialog';

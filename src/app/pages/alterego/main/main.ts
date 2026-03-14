@@ -1660,6 +1660,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async deleteGmailUser() {
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: "If erased, the sender will be the default.",
+    });
+    if (!confirm) {
+      return;
+    }
     this.toolEditionMade({
       name: "gmailUser",
       val: null,

@@ -1,6 +1,7 @@
 # CommonFront
 
-En el mail, permitir que antes de quitar al usuario sender, confirme.
+Use gallery also but with vector database.
+Login with email...
 
 Poder filtrar por nombre de calendario, uno tiene varios.
 
@@ -11,7 +12,7 @@ Add a checkbox for hidden.
 Include:
 - Name:
 - Business:
-- Email: 
+- Email:
 
 Hacer una pagina con dos diagramas:
 1. Perfil del cliente.
