@@ -151,10 +151,10 @@ export class JsonNodeComponent {
     changeType(container: any, key: any, type: string) {
         switch (type) {
             case "string":
-                container[key] = "";
+                container[key] = [null, undefined].indexOf(container[key]) >= 0 ? "" : `${container[key]}`;
                 break;
             case "number":
-                container[key] = 0;
+                container[key] = isNaN(parseFloat(container[key])) ? 0 : parseFloat(container[key]);
                 break;
             case "boolean":
                 container[key] = false;

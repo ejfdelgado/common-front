@@ -1,8 +1,5 @@
 # CommonFront
 
-Ask confirm when delete an element
-Cuando cambia el tipo intentar hacer un autocasteo
-
 En el mail, permitir que antes de quitar al usuario sender, confirme.
 
 Poder filtrar por nombre de calendario, uno tiene varios.
