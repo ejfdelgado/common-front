@@ -1,11 +1,10 @@
 # CommonFront
 
-Editor de texto enriquecido no esta funcionando bien al leer.
 
 Login with email...
 
+Calendar:
 Poder filtrar por nombre de calendario, uno tiene varios.
-
 Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
 
 Allow search articles to confirm the person talking with, no gallery, but content, but hidden.

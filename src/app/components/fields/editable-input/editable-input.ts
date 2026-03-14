@@ -76,7 +76,8 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   /* ---------------- CVA ---------------- */
 
   writeValue(value: string): void {
-    this.value = escapeHtml(value ?? '');
+    //this.value = escapeHtml(value ?? '');
+    this.value = value;
     this.setText(this.value);
   }
 
