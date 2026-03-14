@@ -246,7 +246,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
     this.menuOptions.push({
       label: "Publish",
-      icon: "upload",
+      icon: "public",
       children: [],
       callback: () => {
         this.openExportDialog();
