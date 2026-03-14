@@ -140,13 +140,8 @@ export class AlterEgo2Service {
             parent,
             q: fact.keywords,
             type: fact.type,
-            metadata: JSON.parse(JSON.stringify(fact)),
+            metadata: JSON.parse(JSON.stringify(fact.metadata)),
         };
-        delete payload.metadata.id;
-        delete payload.metadata.keywords;
-        delete payload.metadata.type;
-        delete payload.metadata.created;
-        delete payload.metadata.updated;
         const response = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "articles/crud",
             payload,
         ));
