@@ -409,12 +409,12 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       if (articles) {
         articles.forEach((article: any) => {
           articleUnion.push(article);
-          if (article.gallery && article.gallery.length > 0) {
+          if (article.metadata && article.metadata.gallery && article.metadata.gallery.length > 0) {
             this.visualHistory.push({
               date: Date.now() - 1,
               role: "tool",
               txt: article.desc,
-              gallery: article.gallery
+              gallery: article.metadata.gallery
             });
           }
         });
