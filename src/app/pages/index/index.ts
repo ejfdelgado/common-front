@@ -14,6 +14,8 @@ import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { AllFieldsDataType } from 'types/fieldsTypes';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MyTemplate } from "ejfdelgado-common-ts";
+import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-index',
@@ -22,6 +24,8 @@ import { MyTemplate } from "ejfdelgado-common-ts";
     CommonModule,
     CameraCaptureComponent,
     FormSimpleWithout,
+    JsonEditorComponent,
+    FormsModule,
   ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
@@ -33,6 +37,14 @@ export class Index implements AfterViewInit {
 
   openCamera$ = new Subject<void>();
   html: SafeHtml = "";
+
+  config = {
+    name: "demo",
+    enabled: true,
+    settings: {
+      retries: 3
+    }
+  };
 
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];

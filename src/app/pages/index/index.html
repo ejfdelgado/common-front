@@ -28,3 +28,6 @@
 <pre>{{ model | json }}</pre>
 <button (click)="loadTemplate()">Load template</button>
 <div [innerHTML]="html"></div>
+<hr />
+<pre>{{ config | json }}</pre>
+<json-editor [(ngModel)]="config"></json-editor>

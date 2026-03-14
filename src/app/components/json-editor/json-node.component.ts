@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
         FormsModule,
     ],
     templateUrl: './json-node.component.html',
-    styleUrls: ["./json-node.component.css"],
+    styleUrls: ["./json-node.component.scss"],
 })
 export class JsonNodeComponent {
 

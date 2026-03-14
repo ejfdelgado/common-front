@@ -5,15 +5,19 @@ import {
 } from '@angular/core';
 import {
     ControlValueAccessor,
+    FormsModule,
     NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import { JsonNodeComponent } from './json-node.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'json-editor',
     standalone: true,
     imports: [
-        JsonNodeComponent
+        CommonModule,
+        FormsModule,
+        JsonNodeComponent,
     ],
     templateUrl: './json-editor.component.html',
     providers: [
@@ -22,7 +26,8 @@ import { JsonNodeComponent } from './json-node.component';
             useExisting: forwardRef(() => JsonEditorComponent),
             multi: true
         }
-    ]
+    ],
+    styleUrls: ["./json-editor.component.scss"],
 })
 export class JsonEditorComponent implements ControlValueAccessor {
 
