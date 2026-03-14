@@ -1,0 +1,10 @@
+@if (gallery.length > 0) {
+<div class="vertical_panel">
+    @for(photo of gallery; track photo; let i = $index) {
+    <div class="gallery_card">
+        <img [src]="getThumbnailPhoto(photo)" [ngStyle]="{'height': height}">
+        <div class="description" [innerHTML]="sanitizeText(photo.description)"></div>
+    </div>
+    }
+</div>
+}

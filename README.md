@@ -1,5 +1,7 @@
 # CommonFront
 
+Editor de texto enriquecido no esta funcionando bien al leer.
+
 Improve storing vector database.
 Use gallery also but with vector database.
 Login with email...

@@ -490,8 +490,18 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         if (this.currentArticleSelected.type == "gallery") {
           this.articleFieldsMetadata.push({ label: "Description", type: "md", key: "desc", required: false, });
           this.articleFieldsMetadata.push({
+            label: "Type", type: "select", key: "gallery_view", required: true,
+            select: {
+              options: [
+                { txt: "Complete", val: "complete" },
+                { txt: "Simple", val: "simple" },
+              ]
+            }
+          });
+          this.articleFieldsMetadata.push({
             label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
-              thumbnailMaxSizePixels: 100,
+              thumbnailMaxSizePixels: 100,//generate thumbnail
+              squareMaxSizePixels: 100,//generate square
               template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
             }
           });

@@ -140,6 +140,7 @@ export interface MessageLocalDataType {
     role: string;
     txt: SafeHtml;
     gallery?: ImageGalleryType[];
+    gallery_view?: string;
     events?: CalendarEventType[];
 };
 

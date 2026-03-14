@@ -1,0 +1,22 @@
+.vertical_panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.gallery_card {
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.gallery_card .description {
+    flex: 1;
+}
+
+.gallery_card img {
+    border-radius: 10px;
+}

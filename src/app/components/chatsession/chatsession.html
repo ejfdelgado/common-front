@@ -41,7 +41,11 @@
                 @for (message of visualHistory; track message.date) {
                 @if (message.gallery) {
                 <div class="single_msg">
+                    @if (message.gallery_view == "complete") {
                     <app-photo-gallery [gallery]="message.gallery"></app-photo-gallery>
+                    } @else {
+                    <app-photo-gallery-simple [gallery]="message.gallery"></app-photo-gallery-simple>
+                    }
                 </div>
                 } @else if (message.events) {
                 <div class="events_panel">

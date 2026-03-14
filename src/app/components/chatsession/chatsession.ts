@@ -51,6 +51,7 @@ import { environment } from 'environments/environment';
 import { ShareSrv } from '@services/share.service';
 import { CalendarEvent } from '@components/calendar-event/calendar-event';
 import { epochTo } from '@tools/DateUtils';
+import { PhotoGallerySimple } from '@components/photo-gallery-simple/photo-gallery-simple';
 
 const MODEL_NAME_CLONE = "pubknowledge";
 
@@ -78,6 +79,7 @@ marked.use({ renderer });
     MatInputModule,
     AlterEgoSplash,
     PhotoGallery,
+    PhotoGallerySimple,
     CalendarEvent,
   ],
   templateUrl: './chatsession.html',
@@ -418,7 +420,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               date: Date.now() - 1,
               role: "tool",
               txt: article.desc,
-              gallery: article.metadata.gallery
+              gallery: article.metadata.gallery,
+              gallery_view: article.metadata.gallery_view,
             });
           }
         });
