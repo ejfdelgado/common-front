@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Element name</h2>
+<mat-dialog-content>
+    <input type="text" [(ngModel)]="name">
+</mat-dialog-content>
+<mat-dialog-actions>
+    @if (name.trim().length > 0) {
+        <button mat-flat-button (click)="accept()"><mat-icon>check</mat-icon>Accept</button>
+    }
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancel</button>
+</mat-dialog-actions>

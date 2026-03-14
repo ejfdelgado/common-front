@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { AskNamePopUp } from './ask-name/ask-name';
+import { ConfirmDialogService } from '@services/confirm-dialog.service';
 
 @Component({
     selector: 'json-node',
@@ -22,6 +25,13 @@ export class JsonNodeComponent {
     @Output() nodeChange = new EventEmitter<void>();
 
     collapsed = false;
+
+    constructor(
+        private dialog: MatDialog,
+        public confirmSrv: ConfirmDialogService,
+    ) {
+
+    }
 
     toggle() {
         this.collapsed = !this.collapsed;
@@ -104,13 +114,26 @@ export class JsonNodeComponent {
     }
 
     addProperty() {
-        const name = prompt("Property name");
-        if (!name) return;
-        this.node[name] = null;
-        this.nodeChange.emit();
+        const dialogRef = this.dialog.open(AskNamePopUp, {
+            width: '350px',
+            autoFocus: true,
+            panelClass: 'custom-emoji-picker'
+        });
+        dialogRef.afterClosed().subscribe((name: any) => {
+            if (!name || name in this.node) return;
+            this.node[name] = null;
+            this.nodeChange.emit();
+        });
     }
 
-    removeProperty(key: string) {
+    async removeProperty(key: string) {
+        const confirm = await this.confirmSrv.confirm({
+            title: "Sure?",
+            message: "This operation can't be undone",
+        });
+        if (!confirm) {
+            return;
+        }
         delete this.node[key];
         this.nodeChange.emit();
     }

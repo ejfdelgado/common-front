@@ -1,7 +1,7 @@
 # CommonFront
 
 Ask confirm when delete an element
-Add an element with default type string.
+Cuando cambia el tipo intentar hacer un autocasteo
 
 En el mail, permitir que antes de quitar al usuario sender, confirme.
 
