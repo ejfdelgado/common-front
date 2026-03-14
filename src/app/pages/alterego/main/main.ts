@@ -601,6 +601,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     // First, need to save
     if (this.articleForm) {
       await this.articleForm.saveAllChangedData();
+      await this.articleFormMetadata.saveAllChangedData();
     }
     const index = this.articles.indexOf(item);
     await this.selectArticleItem(index);
@@ -1168,6 +1169,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       do {
         await this.articleForm.saveAllChangedData();
+        await this.articleFormMetadata.saveAllChangedData();
         const first = this.articlesPendingToSave[0];
         const parent = this.getParentId();
         await this.alterEgo2Srv.createUpdateArticles(first, parent);

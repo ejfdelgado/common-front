@@ -150,7 +150,6 @@ export interface ToolResponseType {
     message: string | InnerToolResponseType;
     hidden?: boolean;
     success?: boolean;
-    articles?: ArticleDataType[];
     events?: CalendarEventType[] | null;
 }
 

@@ -404,16 +404,17 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           }
         }]
       };
-      // Display gallery if needed
-      if (tool.articles) {
-        tool.articles.forEach((article) => {
+      // Display articles
+      const articles = (tool.message as InnerToolResponseType)?.data;
+      if (articles) {
+        articles.forEach((article: any) => {
           articleUnion.push(article);
-          if (article.metadata && article.metadata.gallery && article.metadata.gallery.length > 0) {
+          if (article.gallery && article.gallery.length > 0) {
             this.visualHistory.push({
               date: Date.now() - 1,
               role: "tool",
-              txt: "",
-              gallery: article.metadata.gallery
+              txt: article.desc,
+              gallery: article.gallery
             });
           }
         });
