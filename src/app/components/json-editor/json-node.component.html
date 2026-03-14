@@ -26,7 +26,11 @@
                     <!-- PRIMITIVE VALUE -->
                     @if (isPrimitive(node[k])) {
                     <ng-container>
+                        @if (detectType(node[k]) == "boolean") {
+                        <input type="checkbox" [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
+                        } @else {
                         <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
+                        }
                     </ng-container>
                     }
 
@@ -76,8 +80,12 @@
                     <!-- PRIMITIVE VALUE -->
                     @if (isPrimitive(item)) {
                     <ng-container>
+                        @if (detectType(item) == "boolean") {
+                        <input type="checkbox" [ngModel]="item" (ngModelChange)="updatePrimitive(node, i, $event)" />
+                        } @else {
                         <input [ngModel]="item" (ngModelChange)="updatePrimitiveInArray(node, i, $event)"
                             (blur)="updatePrimitiveInArrayBlur(node, i)" />
+                        }
                     </ng-container>
                     }
                     <!-- TYPE -->
