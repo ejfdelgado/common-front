@@ -298,6 +298,18 @@ mat-tab-group {
     gap: 15px;
 }
 
+pre.tool_response {
+    min-width: 0;
+    max-width: 100%;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    padding: 10px;
+    background-color: aliceblue;
+    border-radius: 15px;
+    color: #000074;
+}
+
 @media (max-width: 800px) {
     .content_wraper {
         padding: 30px 0;
