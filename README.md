@@ -1,5 +1,8 @@
 # CommonFront
 
+Ask confirm when delete an element
+Add an element with default type string.
+
 En el mail, permitir que antes de quitar al usuario sender, confirme.
 
 Poder filtrar por nombre de calendario, uno tiene varios.

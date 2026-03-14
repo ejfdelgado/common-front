@@ -10,7 +10,7 @@
                 <mat-icon class="action_open">add</mat-icon>
                 <mat-icon class="action_close">remove</mat-icon>
             </button>
-            <span class="add_action" (click)="addProperty()">Add property</span>
+            <span class="add_action" (click)="addProperty()">Add element</span>
         </div>
 
         @if (!collapsed) {
@@ -20,17 +20,14 @@
                 <div class="one_row">
                     <!-- SAFE KEY RENAME -->
 
-
+                    <input [ngModel]="k" (ngModelChange)="renameKeyTemporal(k, $event)"
+                        (blur)="renameKeyBlur(k, $event)" />
 
                     <!-- PRIMITIVE VALUE -->
                     @if (isPrimitive(node[k])) {
-                    <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
                     <ng-container>
                         <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
                     </ng-container>
-                    } @else {
-                    <input [ngModel]="k" (ngModelChange)="renameKeyTemporal(k, $event)"
-                        (blur)="renameKeyBlur(k, $event)" />
                     }
 
                     <!-- TYPE SELECT -->
@@ -62,13 +59,12 @@
     } @else if (isArray(node)) {
     <!-- ARRAY -->
     <ng-container>
-
         <div class="header">
-
             <button class="action_collapse rounded" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
                 <mat-icon class="action_open">add</mat-icon>
                 <mat-icon class="action_close">remove</mat-icon>
             </button>
+            <span class="add_action" (click)="addArrayItem()">Add element</span>
         </div>
 
         @if (!collapsed) {
@@ -76,15 +72,17 @@
             @for (item of node; let i = $index; track item) {
             <div class="row">
                 <div class="one_row">
-                    <span>{{i}}</span>
+                    <span class="array_index">[ {{i}} ]</span>
                     <!-- PRIMITIVE VALUE -->
                     @if (isPrimitive(item)) {
                     <ng-container>
-                        <input [ngModel]="item" (ngModelChange)="updatePrimitive(node, i, $event)" />
+                        <input [ngModel]="item" (ngModelChange)="updatePrimitiveInArray(node, i, $event)"
+                            (blur)="updatePrimitiveInArrayBlur(node, i)" />
                     </ng-container>
                     }
                     <!-- TYPE -->
-                    <select [ngModel]="detectType(item)" (ngModelChange)="changeType(node, i, $event)">
+                    <select class="see_on_hover" [ngModel]="detectType(item)"
+                        (ngModelChange)="changeType(node, i, $event)">
                         <option value="string">string</option>
                         <option value="number">number</option>
                         <option value="boolean">boolean</option>
@@ -92,9 +90,7 @@
                         <option value="array">array</option>
                         <option value="null">null</option>
                     </select>
-                    <button (click)="removeArrayItem(i)">
-                        delete
-                    </button>
+                    <mat-icon class="delete_button see_on_hover" (click)="removeArrayItem(i)">delete_forever</mat-icon>
                 </div>
                 @if (isObject(item) || isArray(item)) {
                 <json-node [node]="item" [key]="i" (nodeChange)="nodeChange.emit()">
@@ -102,9 +98,6 @@
                 }
             </div>
             }
-            <button (click)="addArrayItem()">
-                + item
-            </button>
         </div>
         }
     </ng-container>

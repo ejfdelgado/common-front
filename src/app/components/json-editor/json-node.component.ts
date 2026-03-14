@@ -40,7 +40,7 @@ export class JsonNodeComponent {
     }
 
     objectKeys() {
-        return Object.keys(this.node);
+        return Object.keys(this.node).sort();
     }
 
     detectType(v: any) {
@@ -61,6 +61,25 @@ export class JsonNodeComponent {
         this.nodeChange.emit();
     }
 
+    tempPrimitiveInArray: any = undefined;
+    updatePrimitiveInArray(container: any, key: any, value: any) {
+        const type = this.detectType(container[key]);
+        if (type === "number")
+            this.tempPrimitiveInArray = Number(value);
+        else if (type === "boolean")
+            this.tempPrimitiveInArray = value === 'true' || value === true;
+        else
+            this.tempPrimitiveInArray = value;
+    }
+    updatePrimitiveInArrayBlur(container: any, key: any) {
+        if (this.tempPrimitiveInArray === undefined) {
+            return;
+        }
+        container[key] = this.tempPrimitiveInArray;
+        this.nodeChange.emit();
+        this.tempPrimitiveInArray = undefined;
+    }
+
     renameKey(oldKey: string, newKey: string) {
         if (!newKey || newKey === oldKey)
             return;
@@ -69,17 +88,19 @@ export class JsonNodeComponent {
         this.node[newKey] = value;
         this.nodeChange.emit();
     }
-    
-    temporalMap: { [key: string]: string } = {};
+
+    renameTemporal: any = undefined;
     renameKeyTemporal(oldKey: string, newKey: string) {
         if (!newKey || newKey === oldKey)
             return;
-        this.temporalMap[oldKey] = newKey;
+        this.renameTemporal = newKey;
     }
     renameKeyBlur(oldKey: string, newKey: any) {
-        if (oldKey in this.temporalMap) {
-            this.renameKey(oldKey, this.temporalMap[oldKey]);
+        if (this.renameTemporal === undefined) {
+            return;
         }
+        this.renameKey(oldKey, this.renameTemporal);
+        this.renameTemporal = undefined;
     }
 
     addProperty() {
