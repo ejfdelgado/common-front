@@ -1,6 +1,38 @@
+
 .node {
     display: flex;
     flex-direction: column;
+    --action_color: rgb(94, 180, 255);
+    --action_color_hover: rgb(0, 21, 255);
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.add_action {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--action_color);
+}
+
+.add_action:hover {
+    color: var(--action_color_hover);
+}
+
+.node input,
+.node select {
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.node select {
+    padding: 5px;
 }
 
 .node .children {
@@ -29,19 +61,33 @@ button.rounded mat-icon {
     font-size: 10px;
 }
 
+.delete_button {
+    color: var(--action_color);
+    cursor: pointer;
+}
+
+.delete_button:hover {
+    color: var(--action_color_hover);
+}
+
 .row {
     display: flex;
     flex-direction: column;
+}
+
+.see_on_hover {
+    display: none;
 }
 
 .row .one_row {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    align-items: center;
 }
 
-.action_collapse {
-    margin-bottom: 10px;
+.row .one_row:hover .see_on_hover {
+    display: block;
 }
 
 .action_collapse .action_close {

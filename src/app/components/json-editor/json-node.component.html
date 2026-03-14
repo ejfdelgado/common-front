@@ -6,20 +6,15 @@
     <ng-container>
 
         <div class="header">
-
             <button class="action_collapse rounded" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
                 <mat-icon class="action_open">add</mat-icon>
                 <mat-icon class="action_close">remove</mat-icon>
             </button>
-
-            @if (key !== null) {
-            <span>{{key}} {{ "{}" }}</span>
-            }
+            <span class="add_action" (click)="addProperty()">Add property</span>
         </div>
 
         @if (!collapsed) {
         <div class="children">
-
             @for (k of objectKeys(); track k) {
             <div class="row">
                 <div class="one_row">
@@ -40,7 +35,8 @@
 
                     <!-- TYPE SELECT -->
 
-                    <select [ngModel]="detectType(node[k])" (ngModelChange)="changeType(node, k, $event)">
+                    <select class="see_on_hover" [ngModel]="detectType(node[k])"
+                        (ngModelChange)="changeType(node, k, $event)">
                         <option value="string">string</option>
                         <option value="number">number</option>
                         <option value="boolean">boolean</option>
@@ -49,9 +45,7 @@
                         <option value="null">null</option>
                     </select>
 
-                    <button (click)="removeProperty(k)">
-                        delete
-                    </button>
+                    <mat-icon class="delete_button see_on_hover" (click)="removeProperty(k)">delete_forever</mat-icon>
                 </div>
                 <!-- CHILD NODE -->
                 @if (isObject(node[k]) || isArray(node[k])) {
@@ -61,11 +55,6 @@
 
             </div>
             }
-
-            <button (click)="addProperty()">
-                + property
-            </button>
-
         </div>
         }
 
@@ -76,15 +65,10 @@
 
         <div class="header">
 
-            <button class="action_collapse" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
+            <button class="action_collapse rounded" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
                 <mat-icon class="action_open">add</mat-icon>
                 <mat-icon class="action_close">remove</mat-icon>
             </button>
-
-            @if (key !== null) {
-            <span>{{key}}</span> %5B%20%5D
-            }
-
         </div>
 
         @if (!collapsed) {
