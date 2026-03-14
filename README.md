@@ -1,32 +1,8 @@
 # CommonFront
 
-
-Login with email...
-
-Calendar:
-Poder filtrar por nombre de calendario, uno tiene varios.
-Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
-
-Allow search articles to confirm the person talking with, no gallery, but content, but hidden.
-Add a checkbox for hidden.
-Include:
-- Name:
-- Business:
-- Email:
-
 Hacer una pagina con dos diagramas:
 1. Perfil del cliente.
 2. Circulo dorado.
-
-Allow extend article to use a json object to organize data, intented for hidden tool responses.
-
-Permitir renderizar algunas variables del modelo en los textos.
-
-Hacer un backend para ingesta de un archivo.***
-
-Enable test calendar.
-
-Agregar al historial el evento reservado, quien, cuando.
 
 Enviar un correo de onboarding que lo redirija a la página principal.
 Cuando llegue, lo primero es que le pida logearse con un popup fancy:
@@ -36,6 +12,21 @@ Por eso necesitamos que te autentiques para ingresar.
 Después de logearse, un asistente le pedirá que 
 reserve un horario para una reunión
 de bienvenida y explicación.
+
+--------------------------------------------------------------------
+
+Calendar:
+Poder filtrar por nombre de calendario, uno tiene varios.
+Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
+Enable test calendar.
+
+Login with email...
+
+Permitir renderizar algunas variables del modelo en los textos.
+
+Hacer un backend para ingesta de un archivo.***
+
+Agregar al historial el evento reservado, quien, cuando.
 
 Permitir embeber el chat en una página externa.
 
