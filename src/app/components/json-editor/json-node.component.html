@@ -7,13 +7,13 @@
 
         <div class="header">
 
-            <button class="action_collapse" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
+            <button class="action_collapse rounded" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
                 <mat-icon class="action_open">add</mat-icon>
                 <mat-icon class="action_close">remove</mat-icon>
             </button>
 
             @if (key !== null) {
-            <span>{{key}}</span> %7B%20%7D
+            <span>{{key}} {{ "{}" }}</span>
             }
         </div>
 
@@ -22,33 +22,33 @@
 
             @for (k of objectKeys(); track k) {
             <div class="row">
+                <div class="one_row">
+                    <!-- SAFE KEY RENAME -->
 
-                <!-- SAFE KEY RENAME -->
+                    <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
 
-                <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
+                    <!-- PRIMITIVE VALUE -->
+                    @if (isPrimitive(node[k])) {
+                    <ng-container>
+                        <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
+                    </ng-container>
+                    }
 
-                <!-- PRIMITIVE VALUE -->
-                @if (isPrimitive(node[k])) {
-                <ng-container>
-                    <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
-                </ng-container>
-                }
+                    <!-- TYPE SELECT -->
 
-                <!-- TYPE SELECT -->
+                    <select [ngModel]="detectType(node[k])" (ngModelChange)="changeType(node, k, $event)">
+                        <option value="string">string</option>
+                        <option value="number">number</option>
+                        <option value="boolean">boolean</option>
+                        <option value="object">object</option>
+                        <option value="array">array</option>
+                        <option value="null">null</option>
+                    </select>
 
-                <select [ngModel]="detectType(node[k])" (ngModelChange)="changeType(node, k, $event)">
-                    <option value="string">string</option>
-                    <option value="number">number</option>
-                    <option value="boolean">boolean</option>
-                    <option value="object">object</option>
-                    <option value="array">array</option>
-                    <option value="null">null</option>
-                </select>
-
-                <button (click)="removeProperty(k)">
-                    delete
-                </button>
-
+                    <button (click)="removeProperty(k)">
+                        delete
+                    </button>
+                </div>
                 <!-- CHILD NODE -->
                 @if (isObject(node[k]) || isArray(node[k])) {
                 <json-node [node]="node[k]" [key]="k" (nodeChange)="nodeChange.emit()">
@@ -85,31 +85,35 @@
 
         @if (!collapsed) {
         <div class="children">
-            <div *ngFor="let item of node; let i = index" class="row">
-                <span>{{i}}</span>
-                <!-- PRIMITIVE VALUE -->
-                @if (isPrimitive(item)) {
-                <ng-container>
-                    <input [ngModel]="item" (ngModelChange)="updatePrimitive(node, i, $event)" />
-                </ng-container>
-                }
-                <!-- TYPE -->
-                <select [ngModel]="detectType(item)" (ngModelChange)="changeType(node, i, $event)">
-                    <option value="string">string</option>
-                    <option value="number">number</option>
-                    <option value="boolean">boolean</option>
-                    <option value="object">object</option>
-                    <option value="array">array</option>
-                    <option value="null">null</option>
-                </select>
-                <button (click)="removeArrayItem(i)">
-                    delete
-                </button>
+            @for (item of node; let i = $index; track item) {
+            <div class="row">
+                <div class="one_row">
+                    <span>{{i}}</span>
+                    <!-- PRIMITIVE VALUE -->
+                    @if (isPrimitive(item)) {
+                    <ng-container>
+                        <input [ngModel]="item" (ngModelChange)="updatePrimitive(node, i, $event)" />
+                    </ng-container>
+                    }
+                    <!-- TYPE -->
+                    <select [ngModel]="detectType(item)" (ngModelChange)="changeType(node, i, $event)">
+                        <option value="string">string</option>
+                        <option value="number">number</option>
+                        <option value="boolean">boolean</option>
+                        <option value="object">object</option>
+                        <option value="array">array</option>
+                        <option value="null">null</option>
+                    </select>
+                    <button (click)="removeArrayItem(i)">
+                        delete
+                    </button>
+                </div>
                 @if (isObject(item) || isArray(item)) {
                 <json-node [node]="item" [key]="i" (nodeChange)="nodeChange.emit()">
                 </json-node>
                 }
             </div>
+            }
             <button (click)="addArrayItem()">
                 + item
             </button>
