@@ -349,8 +349,8 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     toolsStatus: ToolResponseType[],
     searchedResult: FoundKnowledge[],
   ) {
-    this.foundFacts.emit(searchedResult);
 
+    const factsUnion: FoundKnowledge[] = [...searchedResult];
     const articleUnion: ArticleDataType[] = [];
     const toolsUnion: ToolDataType[] = [];
     let modelChanges: number = 0;
@@ -408,7 +408,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       const articles = (tool.message as InnerToolResponseType)?.data;
       if (articles) {
         articles.forEach((article: any) => {
-          articleUnion.push(article);
+          if (tool.type == "article") {
+            articleUnion.push(article);
+          } else if (tool.type == "fact") {
+            factsUnion.push(article);
+          }
           if (article.metadata && article.metadata.gallery && article.metadata.gallery.length > 0) {
             this.visualHistory.push({
               date: Date.now() - 1,
@@ -467,6 +471,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     // emit
     if (articleUnion.length > 0) {
       this.foundArticles.emit(articleUnion);
+    }
+    if (factsUnion.length > 0) {
+      this.foundFacts.emit(factsUnion);
     }
     if (toolsUnion.length > 0) {
       this.foundTools.emit(toolsUnion);
