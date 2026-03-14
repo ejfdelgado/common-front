@@ -306,6 +306,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
       // Clean
       this.foundArticles.emit([]);
+      this.foundFacts.emit([]);
       this.foundTools.emit([]);
 
       const {

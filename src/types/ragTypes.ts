@@ -36,7 +36,7 @@ export interface AssistantDataType extends BasicDataType {
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
-    type: "fact" | "question";
+    type: "fact" | "question" | "fact_gallery" | "question_gallery";
     txtFormat: string;
     answerFormat?: string;
     created: number;

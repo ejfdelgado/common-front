@@ -72,8 +72,9 @@
                                             </mat-toolbar>
                                             @if (currentSelected != null) {
                                             <div class="editor_parent">
-                                                <app-form-simple-without (innerFieldChanged)="editionMade($event)"
-                                                    [model]="model" [fields]="fields"></app-form-simple-without>
+                                                <app-form-simple-without #fact_form
+                                                    (innerFieldChanged)="editionMade($event)" [model]="model"
+                                                    [fields]="fields"></app-form-simple-without>
                                             </div>
                                             }
                                         </mat-sidenav-content>
@@ -238,7 +239,8 @@
                                                     <mat-icon>add</mat-icon>
                                                     Add argument</button>
                                                 @if (currentToolSelected.message) {
-                                                <pre class="tool_response">{{ currentToolSelected.message | json }}</pre>
+                                                <pre
+                                                    class="tool_response">{{ currentToolSelected.message | json }}</pre>
                                                 }
                                             </div>
                                             }

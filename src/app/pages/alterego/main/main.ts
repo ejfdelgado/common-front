@@ -103,6 +103,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   @ViewChild('sidenavArticles') sidenavArticles!: MatSidenav;
   @ViewChild('sidenavHistory') sidenavHistory!: MatSidenav;
 
+  @ViewChild('fact_form') factForm!: FormSimpleWithout;
   @ViewChild('article_form') articleForm!: FormSimpleWithout;
   @ViewChild('article_form_metadata') articleFormMetadata!: FormSimpleWithout;
   @ViewChild('chat_session') chatSession!: Chatsession;
@@ -373,7 +374,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
             select: {
               options: [
                 { txt: "Question", val: "question" },
+                { txt: "Question + Gallery", val: "question_gallery" },
                 { txt: "Fact", val: "fact" },
+                { txt: "Fact + Gallery", val: "fact_gallery" },
               ]
             }
           },
@@ -381,6 +384,27 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         ];
         if (isQuestion) {
           this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
+        }
+        if ([
+          'question_gallery',
+          'fact_gallery',
+        ].indexOf(this.currentSelected.type) >= 0) {
+          this.fields.push({
+            label: "Type", type: "select", key: "gallery_view", required: true,
+            select: {
+              options: [
+                { txt: "Complete", val: "complete" },
+                { txt: "Simple", val: "simple" },
+              ]
+            }
+          });
+          this.fields.push({
+            label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
+              thumbnailMaxSizePixels: 100,//generate thumbnail
+              squareMaxSizePixels: 100,//generate square
+              template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
+            }
+          });
         }
         this.model = Object.assign({}, this.currentSelected);
         this.cdr.detectChanges();
@@ -595,6 +619,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   async selectThisKnowledge(item: KnowledgeDataType) {
+    if (this.factForm) {
+      await this.factForm.saveAllChangedData();
+    }
     const index = this.knowledge.indexOf(item);
     await this.selectItem(index);
   }
@@ -1126,6 +1153,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       if (this.pendingToSave.length == 0) {
         return;
       }
+      await this.factForm.saveAllChangedData();
       do {
         const first = this.pendingToSave[0];
         const parent = this.getParentId();
@@ -1180,9 +1208,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       if (this.articlesPendingToSave.length == 0) {
         return;
       }
+      // Only once
+      await this.articleForm.saveAllChangedData();
+      await this.articleFormMetadata.saveAllChangedData();
       do {
-        await this.articleForm.saveAllChangedData();
-        await this.articleFormMetadata.saveAllChangedData();
         const first = this.articlesPendingToSave[0];
         const parent = this.getParentId();
         await this.alterEgo2Srv.createUpdateArticles(first, parent);

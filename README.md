@@ -2,8 +2,6 @@
 
 Editor de texto enriquecido no esta funcionando bien al leer.
 
-Improve storing vector database.
-Use gallery also but with vector database.
 Login with email...
 
 Poder filtrar por nombre de calendario, uno tiene varios.
