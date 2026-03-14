@@ -1,6 +1,6 @@
 # CommonFront
 
-improve storing vector database.
+Improve storing vector database.
 Use gallery also but with vector database.
 Login with email...
 

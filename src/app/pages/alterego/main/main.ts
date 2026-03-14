@@ -412,6 +412,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
                 { txt: "Basic", val: "basic" },
                 { txt: "Email", val: "mail" },
                 { txt: "Article", val: "article" },
+                { txt: "Fact", val: "fact" },
                 { txt: "Calendar - Search", val: "calendar_search" },
                 { txt: "Calendar - Modify guest", val: "calendar_write_guest" },
               ]
@@ -432,7 +433,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.toolFields.push({ label: "To", type: "text", key: "to", required: true, });
         } else if (this.currentToolSelected.type == 'article') {
           this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
-          this.toolFields.push({ label: "Response (Not found)", type: "text", key: "error", required: true, });
+        } else if (this.currentToolSelected.type == 'fact') {
+          this.toolFields.push({ label: "Max. matches", type: "number", key: "factsMaxMatches", required: true, });
+          this.toolFields.push({ label: "Min. % similarity", type: "number", key: "factsMinDistance", required: true, });
         } else if (this.currentToolSelected.type == 'calendar_search') {
           this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
           this.toolFields.push({ label: "Max. Guests", type: "number", key: "calendarMaxGuests", required: true, });
