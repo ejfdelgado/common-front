@@ -1,0 +1,16 @@
+.action_collapse .action_close {
+    display: block;
+}
+
+.action_collapse .action_open {
+    display: none;
+}
+
+.action_collapse.collapsed .action_close {
+    display: none;
+}
+
+.action_collapse.collapsed .action_open {
+    display: block;
+
+}

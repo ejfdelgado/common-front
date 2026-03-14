@@ -2,31 +2,37 @@
 
     <!-- OBJECT -->
 
-    <ng-container *ngIf="isObject(node)">
+    @if (isObject(node)) {
+    <ng-container>
 
         <div class="header">
-            <button (click)="toggle()">
-                {{ collapsed ? '+' : '-' }}
+
+            <button class="action_collapse" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
+                <mat-icon class="action_open">add</mat-icon>
+                <mat-icon class="action_close">remove</mat-icon>
             </button>
 
-            <span *ngIf="key !== null">{{key}}</span> { }
+            @if (key !== null) {
+            <span>{{key}}</span> %7B%20%7D
+            }
         </div>
 
-        <div *ngIf="!collapsed" class="children">
+        @if (!collapsed) {
+        <div class="children">
 
-            <div *ngFor="let k of objectKeys()" class="row">
+            @for (k of objectKeys(); track k) {
+            <div class="row">
 
                 <!-- SAFE KEY RENAME -->
 
                 <input [ngModel]="k" (ngModelChange)="renameKey(k, $event)" />
 
                 <!-- PRIMITIVE VALUE -->
-
-                <ng-container *ngIf="isPrimitive(node[k])">
-
+                @if (isPrimitive(node[k])) {
+                <ng-container>
                     <input [ngModel]="node[k]" (ngModelChange)="updatePrimitive(node, k, $event)" />
-
                 </ng-container>
+                }
 
                 <!-- TYPE SELECT -->
 
@@ -44,52 +50,50 @@
                 </button>
 
                 <!-- CHILD NODE -->
-
-                <json-node *ngIf="isObject(node[k]) || isArray(node[k])" [node]="node[k]" [key]="k"
-                    (nodeChange)="nodeChange.emit()">
+                @if (isObject(node[k]) || isArray(node[k])) {
+                <json-node [node]="node[k]" [key]="k" (nodeChange)="nodeChange.emit()">
                 </json-node>
+                }
 
             </div>
+            }
 
             <button (click)="addProperty()">
                 + property
             </button>
 
         </div>
+        }
 
     </ng-container>
-
-
+    } @else if (isArray(node)) {
     <!-- ARRAY -->
-
-    <ng-container *ngIf="isArray(node)">
+    <ng-container>
 
         <div class="header">
 
-            <button (click)="toggle()">
-                {{ collapsed ? '+' : '-' }}
+            <button class="action_collapse" (click)="toggle()" [ngClass]="{'collapsed': collapsed}">
+                <mat-icon class="action_open">add</mat-icon>
+                <mat-icon class="action_close">remove</mat-icon>
             </button>
 
-            <span *ngIf="key !== null">{{key}}</span> [ ]
+            @if (key !== null) {
+            <span>{{key}}</span> %5B%20%5D
+            }
 
         </div>
 
-        <div *ngIf="!collapsed" class="children">
-
+        @if (!collapsed) {
+        <div class="children">
             <div *ngFor="let item of node; let i = index" class="row">
-
                 <span>{{i}}</span>
-
                 <!-- PRIMITIVE VALUE -->
-
-                <ng-container *ngIf="isPrimitive(item)">
-
+                @if (isPrimitive(item)) {
+                <ng-container>
                     <input [ngModel]="item" (ngModelChange)="updatePrimitive(node, i, $event)" />
-
                 </ng-container>
-
+                }
                 <!-- TYPE -->
-
                 <select [ngModel]="detectType(item)" (ngModelChange)="changeType(node, i, $event)">
                     <option value="string">string</option>
                     <option value="number">number</option>
@@ -98,23 +102,19 @@
                     <option value="array">array</option>
                     <option value="null">null</option>
                 </select>
-
                 <button (click)="removeArrayItem(i)">
                     delete
                 </button>
-
-                <json-node *ngIf="isObject(item) || isArray(item)" [node]="item" [key]="i"
-                    (nodeChange)="nodeChange.emit()">
+                @if (isObject(item) || isArray(item)) {
+                <json-node [node]="item" [key]="i" (nodeChange)="nodeChange.emit()">
                 </json-node>
-
+                }
             </div>
-
             <button (click)="addArrayItem()">
                 + item
             </button>
-
         </div>
-
+        }
     </ng-container>
-
+    }
 </div>

@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'json-node',
     standalone: true,
     imports: [
         CommonModule,
+        MatIconModule,
+        FormsModule,
     ],
-    templateUrl: './json-node.component.html'
+    templateUrl: './json-node.component.html',
+    styleUrls: ["./json-node.component.css"],
 })
 export class JsonNodeComponent {
 
