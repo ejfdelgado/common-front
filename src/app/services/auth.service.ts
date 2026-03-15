@@ -20,6 +20,7 @@ import { ApiResponse } from 'types/file';
 export class AuthService {
     private readonly _user = signal<User | null>(null);
     private readonly _token = signal<string | null>(null);
+    private readonly _roles = signal<string[]>([]);
     readonly isLoggedIn = computed(() => !!this._user());
 
     private authSub?: Subscription;
@@ -47,8 +48,19 @@ export class AuthService {
                 const forceRefresh = true;
                 const token = await user.getIdToken(forceRefresh);
                 this._token.set(token);
+                // Get roles
+                const rolesResPromise = firstValueFrom(this.http.get<ApiResponse>(environment.apiUrl + "admin/user/myroles"));
+                rolesResPromise.then((data: ApiResponse) => {
+                    if (data.success) {
+                        const roles = data.data;
+                        this._roles.set(Object.keys(roles));
+                    }
+                }).catch(err => {
+
+                });
             } else {
                 this._token.set(null);
+                this._roles.set([]);
             }
         });
     }
@@ -56,7 +68,13 @@ export class AuthService {
     /** 🔐 Public signals */
     readonly user = computed(() => this._user());
     readonly token = computed(() => this._token());
+    readonly roles = computed(() => this._roles());
     readonly isAuthenticated = computed(() => !!this._user());
+
+    hasARole(r: string[]) {
+        const roles = this._roles();
+        return roles.find(el => r.indexOf(el) >= 0) != undefined;
+    }
 
     async waitForToken() {
         return new Promise<boolean>((resolve) => {

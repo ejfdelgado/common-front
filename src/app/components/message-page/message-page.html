@@ -20,6 +20,7 @@
                     } @else {
                     <p [innerHTML]="contentHTML"></p>
                     }
+                    @if (typeof content.actionLabel == "string") {
                     <br />
                     <p style="text-align: center;">
                         @if (edit) {
@@ -28,11 +29,10 @@
                                 [(ngModel)]="content.actionLabel"></app-editable-input>
                         </span>
                         } @else {
-                        <a class="action_button" [href]="content.actionUrl" [innerHTML]="labelHTML">{{
-                            content.actionLabel }}</a>
+                        <span class="action_button" [innerHTML]="labelHTML" (click)="actionFired()"></span>
                         }
                     </p>
-
+                    }
                 </td>
             </tr>
             <tr>

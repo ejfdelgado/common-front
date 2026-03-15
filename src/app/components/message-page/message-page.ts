@@ -14,7 +14,7 @@ export interface MessageContentType {
   title: string;
   content: string;
   footer: string;
-  actionLabel: string;
+  actionLabel?: string;
   actionUrl: string;
 }
 
@@ -35,6 +35,7 @@ export class MessagePage extends CommonComponent {
   @Input() content!: MessageContentType;
   @Input() canEdit: boolean = false;
   @Output() saveEvent: EventEmitter<MessageContentType> = new EventEmitter();
+  @Output() actionEvent: EventEmitter<void> = new EventEmitter();
   edit: boolean = false;
 
   constructor(
@@ -62,5 +63,9 @@ export class MessagePage extends CommonComponent {
 
   async save() {
     this.saveEvent.emit(this.content);
+  }
+
+  async actionFired() {
+    this.actionEvent.emit();
   }
 }

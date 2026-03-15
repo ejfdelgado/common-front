@@ -1,1 +1,2 @@
-<app-message-page [content]="content" (saveEvent)="save($event)" [canEdit]="canEdit"></app-message-page>
+<app-message-page [content]="content" (saveEvent)="save($event)"
+    [canEdit]="authSrv.hasARole(['superadmin'])"></app-message-page>
