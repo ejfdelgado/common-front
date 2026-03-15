@@ -45,4 +45,8 @@ export class MessagePage extends CommonComponent {
   get footerHTML() {
     return this.sanitizeMD(this.content.footer);
   }
+
+  get titleHTML() {
+    return this.sanitizeText(this.content.title);
+  }
 }
