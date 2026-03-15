@@ -10,7 +10,7 @@ import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialo
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
-import { BasicDataType, FirestoreService, PageDataType } from '@services/firestore.service';
+import { FirestoreService, PageDataType } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
@@ -19,10 +19,6 @@ import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 import { AssistantDataType } from 'types/ragTypes';
 import { MenuOptionType } from 'types/StatusBar';
-
-export interface NoteDataType extends BasicDataType {
-
-};
 
 const MODEL_NAME = "knowledge";
 const MODEL_NAME_CLONE = "pubknowledge";

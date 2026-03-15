@@ -78,5 +78,9 @@ service cloud.firestore {
     match /pro-publicpage/{document=**} {
       allow read: if true;
     }
+    match /pro-client/{clientId} {
+      allow read: if request.auth != null
+                  && request.auth.uid in resource.data.owners;
+    }
   }
 }

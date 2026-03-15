@@ -4,6 +4,10 @@ Hacer una pagina con dos diagramas:
 1. Perfil del cliente.
 2. Circulo dorado.
 
+Borrar indices:
+// pro-knowledge [] owners, ASC search, DESC updated, DESC __name__
+// pro-knowledge [] search, DESC updated, DESC __name__
+
 - Ajustar el max width del chat en el responsive de main.
 
 - add a subtype or boolean discriminator to add gallery.

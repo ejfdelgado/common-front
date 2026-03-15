@@ -1,1 +1,23 @@
-<p>index works!</p>
+<div class="main_container">
+    <app-side-menu [options]="menuOptions"></app-side-menu>
+    <div class="inner_photo_container">
+        <app-statusbar [title]="'Knowledge Database'"></app-statusbar>
+        <div class="dynamic_content">
+            <div class="container_grid_docs_found">
+                <div class="container_grid_docs_found_scroll">
+                    <div class="grid_docs_found">
+                        @for(note of notes; track note.id) {
+                        <app-card-doc [config]="cardConfig" [model]="note" [user]="user"
+                            (openDocument)="openDocument($event)" (createUpdate)="openDialog($event)"
+                            (delete)="deleteNote($event)" [imageType]="'thumbnail'"
+                            (share)="localShare($event)"></app-card-doc>
+                        }
+                        <div class="see_more_parent" (click)="pageNotes(false)">
+                            <p>Ver más</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
