@@ -35,8 +35,8 @@ export type OnOffDataType = boolean;
 })
 export class OnOffToggleComponent extends CommonComponent implements ControlValueAccessor {
 
-  @Input() iconName: string = "heart";
-  @Input() label: string = "Añadir a favorito";
+  @Input() iconName: string = "checkbox";
+  @Input() label: string = "Check";
   value: OnOffDataType = false;
   disabled = false;
 

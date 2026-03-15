@@ -5,6 +5,16 @@ import { epochTo } from "@tools/DateUtils";
 import { isMobile } from "@tools/mobile";
 import { DateOptionType } from "types/DateTypes";
 import { ImageTypeData } from "types/ImageTypes";
+import { marked } from 'marked';
+
+const renderer: any = {
+    link({ href, raw, text, tokens, type }: any) {
+        return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
+        return "";
+    }
+};
+
+marked.use({ renderer });
 
 export abstract class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};
@@ -53,6 +63,11 @@ export abstract class CommonComponent {
         }
     }
 
+    public sanitizeMD(text: string) {
+        const temp = marked.parse(text) as string;
+        return this.sanitizeText(temp);
+    }
+
     public sanitizeText(text?: string | null, max?: number) {
         if (!text) {
             return "";
@@ -73,7 +88,7 @@ export abstract class CommonComponent {
     public isMobile() {
         return isMobile();
     }
-    
+
     epochTo(millis: number, type: DateOptionType = "v1") {
         return epochTo(millis, type);
     }
