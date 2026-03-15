@@ -87,7 +87,7 @@ npx ng generate component --standalone --skip-tests components/message-page
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/tos
+npx ng generate component --standalone --skip-tests pages/clients/main
 ```
 
 ```bash

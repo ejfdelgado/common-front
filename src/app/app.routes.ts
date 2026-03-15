@@ -82,6 +82,14 @@ const routes: Routes = [
         loadComponent: () => import('./pages/tos/tos').then(m => m.Tos),
     },
     {
+        path: 'clients/main',
+        loadComponent: () => import('./pages/clients/main/main').then(m => m.ClientMainComponent),
+    },
+    {
+        path: 'clients/index',
+        loadComponent: () => import('./pages/clients/index/index').then(m => m.ClientIndexComponent),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
