@@ -82,6 +82,15 @@ export class FileService {
         });
     }
 
+    async uploadJsonFile(url: string, data: any) {
+        const rawFileName = url.split("?")[0];
+        const promesas: Promise<UploadResponse>[] = [];
+        const jsonString = JSON.stringify(data, null, 2);
+        const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+        promesas.push(this.upload(rawFileName, jsonBlob, "bucket"));
+        await Promise.all(promesas);
+    }
+
     upload(
         path: string | null,
         blob: Blob,
