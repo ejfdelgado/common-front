@@ -60,25 +60,35 @@ app-card-doc {
     text-decoration: underline;
 }
 
-@media screen AND (max-width: 1400px) {
+app-search-input {
+    margin-bottom: 15px;
+}
+
+app-card-doc {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+@media screen AND (max-width: 1640px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
 
-@media screen AND (max-width: 1200px) {
+@media screen AND (max-width: 1350px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
 
-@media screen AND (max-width: 976px) {
+@media screen AND (max-width: 1030px) {
     .grid_docs_found {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media screen AND (max-width: 630px) {
+@media screen AND (max-width: 640px) {
     .grid_docs_found {
         grid-template-columns: 1fr;
     }
