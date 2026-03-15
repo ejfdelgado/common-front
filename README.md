@@ -4,6 +4,17 @@ Hacer una pagina con dos diagramas:
 1. Perfil del cliente.
 2. Circulo dorado.
 
+- Ajustar el max width del chat en el responsive de main.
+
+- add a subtype or boolean discriminator to add gallery.
+- En la busqueda de fact agregar también como un keyword para agregar.
+
+Recover history:
+- guardar solo la history del agente.
+- una vez logeado guardar la history desde el backend.
+- en front end cargar de lo mas reciente a lo mas viejo, interpretando como si fuera un chat nuevo, en vez de usar push, usar unshift en posicion 0.
+- usar auto autor y created DESC.
+
 Enviar un correo de onboarding que lo redirija a la página principal.
 Cuando llegue, lo primero es que le pida logearse con un popup fancy:
 La seguridad y privacidad es importante para todos.
@@ -15,12 +26,16 @@ de bienvenida y explicación.
 
 --------------------------------------------------------------------
 
+Login with email.
+Hacer una tool que pida al usuario logearse.
+Permitir que el agente siempre sepa cual es el usuario logeado.
+Si es usuario logeado, guardar el historial.
+Cargar el historial.
+
 Calendar:
 Poder filtrar por nombre de calendario, uno tiene varios.
 Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
 Enable test calendar.
-
-Login with email...
 
 Permitir renderizar algunas variables del modelo en los textos.
 
@@ -68,11 +83,11 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/calendar-event
+npx ng generate component --standalone --skip-tests components/message-page
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/admin/users/user_card
+npx ng generate component --standalone --skip-tests pages/tos
 ```
 
 ```bash
