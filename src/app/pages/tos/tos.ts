@@ -6,10 +6,8 @@ import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
-import { UploadResponse } from 'types/file';
-import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
-import { getBucketPath } from '@tools/BucketPaths';
+import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 
 @Component({
   selector: 'app-tos',
@@ -58,27 +56,23 @@ export class Tos extends AuthenticatedComponent implements OnDestroy {
     this.readJSONFile();
   }
 
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
+
   async readJSONFile() {
     try {
       const collection = await this.firestoreSrv.readById(this.MODEL_COLLECTION, this.MODEL_ID);
       if (collection) {
         this.currentUrl = (collection as any).url;
-        const temp = await this.fileSrv.getJSON(this.getJSONUrl(this.currentUrl));
+        const temp = await this.fileSrv.getJSON(getJSONUrl(this.currentUrl));
         this.content = temp;
         this.cdr.detectChanges();
       }
     } catch (err) {
       console.log(err);
-    }
-  }
-
-  getJSONUrl(url: string) {
-    return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${url}`;
-  }
-
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
     }
   }
 
@@ -89,9 +83,8 @@ export class Tos extends AuthenticatedComponent implements OnDestroy {
     };
     // Generate next url
     this.currentUrl = getBucketPath(this.BUCKET_PATH, this.currentUrl, {}, true);
-    console.log(this.currentUrl);
     await this.fileSrv.uploadJsonFile(this.currentUrl, this.content);
     model.url = this.currentUrl;
-    await this.firestoreSrv.createUpdate("publicpage", model);
+    await this.firestoreSrv.createUpdate(this.MODEL_COLLECTION, model);
   }
 }

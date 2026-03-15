@@ -24,7 +24,7 @@ import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { FullscreenService } from '@services/fullscreen.service';
-import { getBucketPath } from '@tools/BucketPaths';
+import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 import { sortify } from 'ejfdelgado-common-ts';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
@@ -103,7 +103,7 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
 
   async reloadModel() {
     if (this.value) {
-      this.model = await this.fileSrv.getJSON(this.getJSONUrl(this.value));
+      this.model = await this.fileSrv.getJSON(getJSONUrl(this.value));
       const model = JSON.parse(JSON.stringify(this.model));
       const keys: string[] = Object.keys(model);
       for (let i = 0; i < keys.length; i++) {
@@ -189,18 +189,6 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
 
   isInvalid() {
     return this.innerForm?.getForm().invalid;
-  }
-
-  getJSONUrl(url: string) {
-    if (!url) {
-      return "./assets/json/sample.json";
-    } else {
-      if (url.startsWith("./assets/")) {
-        return url;
-      } else {
-        return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${url}`;
-      }
-    }
   }
 
   validate(control: AbstractControl): ValidationErrors | null {

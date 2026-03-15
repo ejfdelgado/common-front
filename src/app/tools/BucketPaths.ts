@@ -25,6 +25,18 @@ export function getSquarePath(value: string) {
     });
 }
 
+export function getJSONUrl(url: string) {
+    if (!url) {
+        return "./assets/json/sample.json";
+    } else {
+        if (url.startsWith("./assets/")) {
+            return url;
+        } else {
+            return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${url}`;
+        }
+    }
+}
+
 export function getBucketPath(template: string, url: string, data: any, addVersion: boolean = true) {
     const params = new URL(`http://temp.com/${url}`).searchParams;
     let versionString = params.get("v");
