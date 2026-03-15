@@ -12,11 +12,15 @@ import { MessageContentType, MessagePage } from '@components/message-page/messag
 })
 export class Tos {
   content: MessageContentType = {
-    title: "title",
+    title: "Términos y condiciones del Servicio",
     content: "content",
     footer: "footer",
     actionLabel: "action",
     actionUrl: "",
-    urlImage: "https://storage.googleapis.com/pro-ejflab-assets/images/landscape.jpg",
+    urlImage: "https://storage.googleapis.com/pro-ejflab-assets/images/letter.jpg",
   };
+
+  constructor() {
+    document.title = "Términos y condiciones del Servicio";
+  }
 }
