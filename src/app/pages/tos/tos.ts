@@ -19,8 +19,13 @@ export class Tos {
     actionUrl: "",
     urlImage: "https://storage.googleapis.com/pro-ejflab-assets/images/letter.jpg",
   };
+  canEdit: boolean = true;
 
   constructor() {
     document.title = "Términos y condiciones del Servicio";
+  }
+
+  async save(data: MessageContentType) {
+    console.log(data);
   }
 }

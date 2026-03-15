@@ -47,5 +47,11 @@
             </tr>
         </tbody>
     </table>
-    <app-on-off-toggle [(ngModel)]="edit" [label]="'Edit?'" [iconName]="'toggle'"></app-on-off-toggle>
+    @if (canEdit) {
+    <div class="horizontal_panel">
+        <app-on-off-toggle [(ngModel)]="edit" [label]="'Edit?'" [iconName]="'toggle'"></app-on-off-toggle>
+        <button mat-flat-button color="primary" (click)="save()">
+            <mat-icon>check</mat-icon>Save</button>
+    </div>
+    }
 </div>

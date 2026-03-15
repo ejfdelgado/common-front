@@ -35,3 +35,9 @@
      cursor: pointer;
      font-size: 1.1rem;
  }
+
+ .horizontal_panel {
+     display: flex;
+     gap: 20px;
+     align-items: center;
+ }
