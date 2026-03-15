@@ -65,7 +65,7 @@ export class ClientIndexComponent extends AuthenticatedComponent implements OnIn
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Add knowledge database",
+      label: "Add client",
       icon: "add",
       children: [],
       callback: this.openDialog.bind(this),
@@ -104,17 +104,7 @@ export class ClientIndexComponent extends AuthenticatedComponent implements OnIn
       modelName: MODEL_NAME,
       searchFields: ["title", "description"],
       fields: [
-        { label: "Title", type: "text", key: "title", required: true },
-        {
-          label: "Language", type: "select", key: "language", required: true,
-          select: {
-            options: [
-              { txt: "English", val: "en" },
-              { txt: "Español", val: "es" },
-              { txt: "Agnostic", val: "multi" },
-            ]
-          }
-        },
+        { label: "Name", type: "text", key: "title", required: true },
         {
           label: "Imagen", type: "image", key: "image", image: {
             thumbnailMaxSizePixels: 200,
@@ -122,13 +112,10 @@ export class ClientIndexComponent extends AuthenticatedComponent implements OnIn
             template: "alterego/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
           }
         },
+        { label: "Email", type: "text", key: "email", required: true },
         {
           label: "Description", type: "contenteditable", key: "description",
           contenteditable: { minHeight: "10em", maxHeight: "20em" }
-        },
-        {
-          label: "QR Emoji", type: "contenteditable", key: "emoji",
-          contenteditable: { minHeight: "20px", maxHeight: "20px" }
         },
       ],
       model: {
