@@ -1,4 +1,11 @@
 <div class="container_1">
+    @if (canEdit) {
+    <div class="horizontal_panel">
+        <app-on-off-toggle [(ngModel)]="edit" [label]="'Edit?'" [iconName]="'toggle'"></app-on-off-toggle>
+        <button mat-flat-button color="primary" (click)="save()">
+            <mat-icon>check</mat-icon>Save</button>
+    </div>
+    }
     <table
         style="margin: 0 auto; width: 100%; border: 1px solid; border-radius: 15px; border-color: rgb(181, 181, 181); background-color: aliceblue;">
         <tbody>
@@ -47,11 +54,4 @@
             </tr>
         </tbody>
     </table>
-    @if (canEdit) {
-    <div class="horizontal_panel">
-        <app-on-off-toggle [(ngModel)]="edit" [label]="'Edit?'" [iconName]="'toggle'"></app-on-off-toggle>
-        <button mat-flat-button color="primary" (click)="save()">
-            <mat-icon>check</mat-icon>Save</button>
-    </div>
-    }
 </div>
