@@ -49,4 +49,8 @@ export class MessagePage extends CommonComponent {
   get titleHTML() {
     return this.sanitizeText(this.content.title);
   }
+
+  get labelHTML() {
+    return this.sanitizeText(this.content.actionLabel);
+  }
 }
