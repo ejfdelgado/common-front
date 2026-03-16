@@ -6,14 +6,14 @@
         </div>
         <div class="view" [style.background-image]="'url(' + getPhoto(img1) + ')'">
         </div>
+        <div class="description_container">
+            <p class="white_subtitle" [innerHTML]="sanitizeText(img1?.description)"></p>
+        </div>
         @if (gallery.length > 1 && index > 0) {
         <div class="control_panel left_control" (click)="backward()">
             <mat-icon class="move_button white_subtitle">chevron_left</mat-icon>
         </div>
         }
-        <div class="description_container">
-            <p class="white_subtitle" [innerHTML]="sanitizeText(img1?.description)"></p>
-        </div>
         @if (gallery.length > 1 && index < gallery.length - 1) { <div class="control_panel right_control"
             (click)="forward()">
             <mat-icon class="move_button white_subtitle">chevron_right</mat-icon>
