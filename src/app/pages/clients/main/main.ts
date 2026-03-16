@@ -45,29 +45,12 @@ export interface DocumentDataType extends BasicDataType {
   ],
 })
 export class ClientMainComponent extends AuthenticatedComponent implements OnInit {
-  @ViewChild('inner_form') innerForm!: FormSimpleWith;
   menuOptions: MenuOptionType[] = [];
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
   searchable: string = "";
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
-  fields: AllFieldsDataType[] = [
-    {
-      label: "Json",
-      type: "json",
-      key: "json",
-      json: {
-        template: "document/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
-        fields: [
-          {
-            label: "Descripción", type: "md", key: "document",
-            md: { minHeight: "3em", maxHeight: "80vh" }
-          },
-        ]
-      },
-    },
-  ];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -132,11 +115,8 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
         this.collection = temp as BasicDataType;
-        const field1 = (this.fields[0] as FieldJSONDataType);
-        const field2 = (field1.json.fields[0] as MDDataType);
         const title = this.collection.title + " - " + epochTo(this.collection.updated);
         document.title = title;
-        field2.md.saveName = title;
       } else {
         this.collection = null;
       }
@@ -149,14 +129,6 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
   }
 
   async save() {
-    const { valid, data } = await this.innerForm.save();
-    if (valid) {
-      const conf: FirestoreConfigDataType = {
-        autoAuthor: true,
-        searchFields: ["title"],
-      };
-      const complete = Object.assign({}, this.collection, data);
-      await this.firestoreSrv.createUpdate(MODEL_NAME, complete, conf);
-    }
+
   }
 }
