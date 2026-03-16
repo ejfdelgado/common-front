@@ -1,15 +1,8 @@
 # CommonFront
 
-Hacer una pagina con dos diagramas:
-1. Perfil del cliente.
-2. Circulo dorado.
-
 Borrar indices:
 // pro-knowledge [] owners, ASC search, DESC updated, DESC __name__
 // pro-knowledge [] search, DESC updated, DESC __name__
-
-- Add a subtype or boolean discriminator to add gallery.
-- En la busqueda de fact agregar también como un keyword para agregar.
 
 Recover history:
 - guardar solo la history del agente.

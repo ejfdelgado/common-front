@@ -17,9 +17,9 @@ export class AlterEgo2Service {
 
     getIndexedText(fact: KnowledgeDataType) {
         let q = "";
-        if (["fact", "fact_gallery"].indexOf(fact.type) >= 0) {
+        if (["fact"].indexOf(fact.type) >= 0) {
             q = fact.txtFormat;
-        } else if (["question", "question_gallery"].indexOf(fact.type) >= 0) {
+        } else if (["question"].indexOf(fact.type) >= 0) {
             if (fact.answerFormat != undefined) {
                 q = fact.answerFormat;
             }

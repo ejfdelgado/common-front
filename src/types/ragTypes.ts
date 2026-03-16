@@ -36,10 +36,11 @@ export interface AssistantDataType extends BasicDataType {
 }
 
 export interface KnowledgeDataType extends SimpleDataType {
-    type: "fact" | "question" | "fact_gallery" | "question_gallery";
+    type: "fact" | "question";
     txtFormat: string;
     answerFormat?: string;
     created: number;
+    has_gallery?: boolean;
     tags?: KnowledgeTagType[];
 };
 

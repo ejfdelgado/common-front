@@ -374,9 +374,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
             select: {
               options: [
                 { txt: "Question", val: "question" },
-                { txt: "Question + Gallery", val: "question_gallery" },
                 { txt: "Fact", val: "fact" },
-                { txt: "Fact + Gallery", val: "fact_gallery" },
               ]
             }
           },
@@ -385,10 +383,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         if (isQuestion) {
           this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
         }
-        if ([
-          'question_gallery',
-          'fact_gallery',
-        ].indexOf(this.currentSelected.type) >= 0) {
+        this.fields.push({ label: "Use gallery?", type: "toggle", key: "has_gallery", required: false, });
+        if (this.currentSelected.has_gallery === true) {
           this.fields.push({
             label: "Type", type: "select", key: "gallery_view", required: true,
             select: {
@@ -458,6 +454,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         } else if (this.currentToolSelected.type == 'article') {
           this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
         } else if (this.currentToolSelected.type == 'fact') {
+          this.toolFields.push({ label: "Idea added", type: "text", key: "keywords", required: false, });
           this.toolFields.push({ label: "Max. matches", type: "number", key: "factsMaxMatches", required: true, });
           this.toolFields.push({ label: "Min. % similarity", type: "number", key: "factsMinDistance", required: true, });
         } else if (this.currentToolSelected.type == 'calendar_search') {
@@ -652,8 +649,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.selectHistoryItem(index);
   }
 
-  async deleteKnowledge(item: KnowledgeDataType, event: any) {
+  async deleteKnowledge(item: KnowledgeDataType, event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
       title: "Sure?",
       message: "This action can't be undone",
@@ -682,8 +680,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  async deleteTool(item: ToolDataType, event: any) {
+  async deleteTool(item: ToolDataType, event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
       title: "Sure?",
       message: "This action can't be undone",
@@ -711,8 +710,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  async deleteArticle(item: ArticleDataType, event: any) {
+  async deleteArticle(item: ArticleDataType, event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
       title: "Sure?",
       message: "This action can't be undone",
@@ -741,8 +741,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
   }
 
-  async deleteHistory(item: HistoryDataType, event: any) {
+  async deleteHistory(item: HistoryDataType, event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
       title: "Sure?",
       message: "This action can't be undone",
@@ -928,7 +929,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       if (this.pendingToSave.indexOf(this.currentSelected) < 0) {
         this.pendingToSave.push(this.currentSelected);
       }
-      if (event.name == 'type') {
+      if (['type', 'has_gallery'].indexOf(event.name) >= 0) {
         this.selectItem(this.knowledge.indexOf(this.currentSelected));
       }
     }
