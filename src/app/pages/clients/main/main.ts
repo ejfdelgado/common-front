@@ -18,6 +18,7 @@ import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
+import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { Unsubscribe } from 'firebase/firestore';
 import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType, MDDataType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
@@ -82,16 +83,27 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
             this.save();
           },
         },
-        {
-          label: "Regresar",
-          icon: "arrow_back",
-          callback: () => {
-            this.router.navigate([`clients/index`], {
-              queryParams: {}
-            });
-          },
-        },
       ],
+    });
+
+    this.menuOptions.push({
+      label: "Permissions",
+      icon: "lock",
+      children: [],
+      callback: () => {
+        this.openPermissions();
+      },
+    });
+
+    this.menuOptions.push({
+      label: "Back to databases",
+      icon: "arrow_back",
+      children: [],
+      callback: () => {
+        this.router.navigate([`clients/index`], {
+          queryParams: {}
+        });
+      },
     });
   }
 
@@ -126,6 +138,25 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
 
   getCollectionName() {
     return MODEL_NAME;
+  }
+
+  async openPermissions() {
+    if (!this.collection) {
+      return;
+    }
+    const dialogRef = this.dialog.open(SharedWith, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: {
+        id: this.collection.id,
+        collection: MODEL_NAME,
+        mode: "normal",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      //console.log(result);
+    });
   }
 
   async save() {
