@@ -458,6 +458,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.toolFields.push({ label: "Max. matches", type: "number", key: "factsMaxMatches", required: true, });
           this.toolFields.push({ label: "Min. % similarity", type: "number", key: "factsMinDistance", required: true, });
         } else if (this.currentToolSelected.type == 'calendar_search') {
+          this.toolFields.push({ label: "Calendar Id", type: "text", key: "calendarCalendarId", required: false, });
           this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
           this.toolFields.push({ label: "Max. Guests", type: "number", key: "calendarMaxGuests", required: true, });
           this.toolFields.push({ label: "Max. events", type: "number", key: "calendarMaxEvents", required: false, });

@@ -1,5 +1,9 @@
 # CommonFront
 
+1. Test calendarId.
+2. Test make a reservation and check it appears correctly. Focus on meet link.
+3. Check page clients.pais.tv
+
 Borrar indices:
 // pro-knowledge [] owners, ASC search, DESC updated, DESC __name__
 // pro-knowledge [] search, DESC updated, DESC __name__
@@ -36,12 +40,10 @@ Permitir renderizar algunas variables del modelo en los textos.
 
 Hacer un backend para ingesta de un archivo.***
 
-Agregar al historial el evento reservado, quien, cuando.
-
 Permitir embeber el chat en una página externa.
 
 Pagar Supabase
-Parar Sendgrid IP privada.
+Pagar Sendgrid IP privada.
 Mostrar página cuando no está publicado.
 
 Create an alternative email template, but for canvas user profile.
