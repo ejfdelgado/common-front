@@ -8,9 +8,7 @@ Borrar indices:
 // pro-knowledge [] owners, ASC search, DESC updated, DESC __name__
 // pro-knowledge [] search, DESC updated, DESC __name__
 
-- Ajustar el max width del chat en el responsive de main.
-
-- add a subtype or boolean discriminator to add gallery.
+- Add a subtype or boolean discriminator to add gallery.
 - En la busqueda de fact agregar también como un keyword para agregar.
 
 Recover history:

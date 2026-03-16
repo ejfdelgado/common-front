@@ -76,6 +76,11 @@ mat-card-actions {
     gap: 5px;
 }
 
+mat-card-header,
+mat-card-content {
+    cursor: pointer;
+}
+
 @media screen AND (max-width: 400px) {
 
     mat-card-title,

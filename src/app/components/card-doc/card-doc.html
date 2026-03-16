@@ -1,5 +1,5 @@
 <mat-card appearance="outlined">
-  <mat-card-header>
+  <mat-card-header (click)="openDocument.emit(model)">
     @if (config.showAuthorImg === true) {
     <div mat-card-avatar class="header-image" [style.background-image]="'url(' + model.author_picture + ')'">
     </div>
@@ -15,7 +15,8 @@
       [style.background-image]="'url(' + getBucketFilePathWithType(model.image, imageType) + ')'"></div>
   </div>
   }
-  <mat-card-content [ngClass]="{'with_image': config.hasImage, 'without_image': !config.hasImage}">
+  <mat-card-content (click)="openDocument.emit(model)"
+    [ngClass]="{'with_image': config.hasImage, 'without_image': !config.hasImage}">
     <span class="text_date">{{ epochTo(model.created, dateType) }}</span>
     <p class="content_parent" [innerHTML]="sanitizeText(model.description, 256)"></p>
   </mat-card-content>
