@@ -416,7 +416,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           } else if (tool.type == "fact") {
             factsUnion.push(article);
           }
-          if (article.metadata && article.metadata.gallery && article.metadata.gallery.length > 0) {
+          if (article.metadata
+            && article.metadata.has_gallery === true
+            && article.metadata.gallery
+            && article.metadata.gallery.length > 0
+          ) {
             this.visualHistory.push({
               date: Date.now() - 1,
               role: "tool",
