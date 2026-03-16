@@ -25,9 +25,18 @@ import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "client";
 
-export interface DocumentDataType extends BasicDataType {
-  description: string;
-  gallery: ImageGalleryType[];
+// The json bucket
+export interface ClientDataType {
+  profile?: {
+    user?: {
+      name?: string;
+      business?: string;
+    },
+    frustraciones?: string[],
+    alegrias?: string[],
+    medio?: string[],
+    habito?: string[],
+  }
 };
 
 @Component({
@@ -52,7 +61,7 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
   currentUrl: string = "";
-  content: any = {};
+  content: ClientDataType = {};
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -172,7 +181,18 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
         this.currentUrl = (collection as any).url;
         if (this.currentUrl) {
           const temp = await this.fileSrv.getJSON(getJSONUrl(this.currentUrl));
-          this.content = temp;
+          this.content = Object.assign({
+            profile: {
+              alegrias: [],
+              frustraciones: [],
+              habito: [],
+              medio: [],
+              user: {
+                name: "",
+                business: "",
+              }
+            }
+          } as ClientDataType, temp);
           this.cdr.detectChanges();
         }
       }

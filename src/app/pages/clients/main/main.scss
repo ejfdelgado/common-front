@@ -80,6 +80,50 @@ app-photo-gallery {
     margin-bottom: 50px;
 }
 
+.detail_parent {
+    display: flex;
+    flex-direction: column;
+    margin: 0 15%;
+    padding-top: 40px;
+}
+
+.client_profile_parent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    --padding-children: 10px;
+    --children-radius: 20px;
+    --children-border: 4px solid black;
+}
+
+.common_child {
+    padding: 20px;
+}
+
+.tareas_container {
+    grid-row: span 2;
+    background-color: rgb(255, 255, 130);
+    border-top-right-radius: var(--children-radius);
+    border-bottom-right-radius: var(--children-radius);
+    border: var(--children-border);
+}
+
+.alegrias_container {
+    background-color: rgb(189, 255, 90);
+    border-top-left-radius: var(--children-radius);
+    border-left: var(--children-border);
+    border-top: var(--children-border);
+    border-bottom: var(--children-border);
+}
+
+.tristezas_container {
+    background-color: rgb(255, 110, 110);
+    border-bottom-left-radius: var(--children-radius);
+    border-left: var(--children-border);
+    border-bottom: var(--children-border);
+}
+
+
 @media print {
     .container_grid_docs_found_scroll {
         overflow-y: unset;
