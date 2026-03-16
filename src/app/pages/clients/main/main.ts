@@ -1,26 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { BasicDataType, FirestoreConfigDataType, FirestoreService } from '@services/firestore.service';
+import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
+import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { Unsubscribe } from 'firebase/firestore';
-import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType, MDDataType } from 'types/fieldsTypes';
+import { ImageGalleryType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "client";
@@ -37,7 +37,6 @@ export interface DocumentDataType extends BasicDataType {
     CommonModule,
     MatButtonModule,
     Statusbar,
-    FormSimpleWith,
     SideMenu,
   ],
   templateUrl: './main.html',
@@ -52,6 +51,8 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
   searchable: string = "";
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
+  currentUrl: string = "";
+  content: any = {};
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -129,6 +130,7 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
         this.collection = temp as BasicDataType;
         const title = this.collection.title + " - " + epochTo(this.collection.updated);
         document.title = title;
+        await this.readJSONFile();
       } else {
         this.collection = null;
       }
@@ -159,7 +161,42 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
     });
   }
 
-  async save() {
+  async readJSONFile() {
+    try {
+      if (!this.collection) {
+        return;
+      }
+      const id = this.collection.id;
+      const collection = await this.firestoreSrv.readById(MODEL_NAME, id);
+      if (collection) {
+        this.currentUrl = (collection as any).url;
+        if (this.currentUrl) {
+          const temp = await this.fileSrv.getJSON(getJSONUrl(this.currentUrl));
+          this.content = temp;
+          this.cdr.detectChanges();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
+  async save() {
+    if (!this.collection) {
+      return;
+    }
+    const model = {
+      id: this.collection.id,
+      url: this.currentUrl,
+    };
+    // Generate next url
+    const template = "clients/${user.uid}/${collection.id}/${date.year}-${date.month}-${date.day}/${random}.jpg";
+    this.currentUrl = getBucketPath(template, this.currentUrl, {
+      collection: this.collection,
+      user: AuthService.userStatic,
+    }, true);
+    await this.fileSrv.uploadJsonFile(this.currentUrl, this.content);
+    model.url = this.currentUrl;
+    await this.firestoreSrv.createUpdate(MODEL_NAME, model);
   }
 }

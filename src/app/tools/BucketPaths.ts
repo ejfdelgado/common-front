@@ -45,6 +45,9 @@ export function getBucketPath(template: string, url: string, data: any, addVersi
         version = parseInt(versionString);
     }
     // remove all other query params
+    if (!(typeof url == "string")) {
+        url = "";
+    }
     url = url.replace(/\?.*$/, "");
     const original: string[] = [];
     const pattern = template.replaceAll(/(\$\{[^}]+\})/ig, (substring: string, ...args: any[]) => {
