@@ -90,7 +90,7 @@ app-photo-gallery {
 .client_profile_parent {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto auto;
     --padding-children: 10px;
     --children-radius: 20px;
     --children-border: 4px solid black;
@@ -103,7 +103,8 @@ app-photo-gallery {
     gap: 20px;
 }
 
-.common_child h3 {
+.common_child h3,
+.common_child h2 {
     margin: 0;
 }
 

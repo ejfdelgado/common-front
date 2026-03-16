@@ -5,12 +5,16 @@
     <!-- Toolbar -->
     @if (focused || !discrete) {
     <div class="toolbar">
-        <button type="button" (mousedown)="format('bold', $event)" aria-label="Bold">
+        <button type="button" (mousedown)="format('bold')" aria-label="Bold">
             <b>b</b>
         </button>
 
-        <button type="button" (mousedown)="format('italic', $event)" aria-label="Italic">
+        <button type="button" (mousedown)="format('italic')" aria-label="Italic">
             <i>It</i>
+        </button>
+
+        <button type="button" (mousedown)="format('underline')" aria-label="Underline">
+            <u>U</u>
         </button>
 
         <button type="button" (mousedown)="openEmoticons()" aria-label="Italic">

@@ -153,11 +153,44 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
 
   /* ---------------- Formatting ---------------- */
 
-  format(command: 'bold' | 'italic', event: MouseEvent): void {
-    event.preventDefault(); // keeps focus
-    this.editable.nativeElement.focus();
-    document.execCommand(command);
-  }
+  format(style: 'bold' | 'italic' | 'underline'): void {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return;
+
+    const range = selection.getRangeAt(0);
+    const parent = selection.anchorNode?.parentElement;
+
+    if (!parent) return;
+
+    // 1. Check if the style is already applied to the parent
+    const computedStyle = window.getComputedStyle(parent);
+    let isAlreadyApplied = false;
+
+    if (style === 'bold' && (computedStyle.fontWeight === '700' || computedStyle.fontWeight === 'bold')) isAlreadyApplied = true;
+    if (style === 'italic' && computedStyle.fontStyle === 'italic') isAlreadyApplied = true;
+    if (style === 'underline' && computedStyle.textDecoration.includes('underline')) isAlreadyApplied = true;
+
+    if (isAlreadyApplied) {
+      // 2. TOGGLE OFF: Unwrap the text
+      // Move all children of the parent to the parent's parent, then remove the span
+      const text = document.createTextNode(parent.textContent || "");
+      parent.replaceWith(text);
+    } else {
+      // 3. TOGGLE ON: Wrap the text
+      const span = document.createElement('span');
+      if (style === 'bold') span.style.fontWeight = 'bold';
+      if (style === 'italic') span.style.fontStyle = 'italic';
+      if (style === 'underline') span.style.textDecoration = 'underline';
+
+      try {
+        range.surroundContents(span);
+      } catch (e) {
+        console.error("Complex selection detected. Manual node splitting required.", e);
+      }
+    }
+
+    selection.removeAllRanges();
+  };
 
   openEmoticons() {
     this.saveScrollPos();
