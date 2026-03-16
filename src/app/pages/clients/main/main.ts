@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
+import { EditableInput } from '@components/fields/editable-input/editable-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
@@ -20,22 +22,21 @@ import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { Unsubscribe } from 'firebase/firestore';
-import { ImageGalleryType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "client";
 
 // The json bucket
 export interface ClientDataType {
-  profile?: {
+  profile: {
     user?: {
       name?: string;
       business?: string;
     },
-    frustraciones?: string[],
-    alegrias?: string[],
-    medio?: string[],
-    habito?: string[],
+    frustraciones?: string,
+    alegrias?: string,
+    medio?: string,
+    habito?: string,
   }
 };
 
@@ -47,6 +48,8 @@ export interface ClientDataType {
     MatButtonModule,
     Statusbar,
     SideMenu,
+    EditableInput,
+    FormsModule,
   ],
   templateUrl: './main.html',
   styleUrls: [
@@ -61,7 +64,14 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
   currentUrl: string = "";
-  content: ClientDataType = {};
+  content: ClientDataType = {
+    profile: {
+      alegrias: "",
+      frustraciones: "",
+      habito: "",
+      medio: "",
+    }
+  };
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -183,10 +193,10 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
           const temp = await this.fileSrv.getJSON(getJSONUrl(this.currentUrl));
           this.content = Object.assign({
             profile: {
-              alegrias: [],
-              frustraciones: [],
-              habito: [],
-              medio: [],
+              alegrias: "",
+              frustraciones: "",
+              habito: "",
+              medio: "",
               user: {
                 name: "",
                 business: "",

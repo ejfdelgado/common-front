@@ -98,18 +98,25 @@ app-photo-gallery {
 
 .common_child {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.common_child h3 {
+    margin: 0;
 }
 
 .tareas_container {
     grid-row: span 2;
-    background-color: rgb(255, 255, 130);
+    background-color: rgb(255 255 184);
     border-top-right-radius: var(--children-radius);
     border-bottom-right-radius: var(--children-radius);
     border: var(--children-border);
 }
 
 .alegrias_container {
-    background-color: rgb(189, 255, 90);
+    background-color: rgb(220 255 168);
     border-top-left-radius: var(--children-radius);
     border-left: var(--children-border);
     border-top: var(--children-border);
@@ -117,7 +124,7 @@ app-photo-gallery {
 }
 
 .tristezas_container {
-    background-color: rgb(255, 110, 110);
+    background-color: rgb(255 225 225);
     border-bottom-left-radius: var(--children-radius);
     border-left: var(--children-border);
     border-bottom: var(--children-border);
