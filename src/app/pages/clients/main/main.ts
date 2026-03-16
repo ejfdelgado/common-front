@@ -37,6 +37,11 @@ export interface ClientDataType {
     alegrias?: string,
     medio?: string,
     habito?: string,
+  },
+  golden: {
+    why?: string;
+    how?: string;
+    what?: string;
   }
 };
 
@@ -70,6 +75,11 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
       frustraciones: "",
       habito: "",
       medio: "",
+    },
+    golden: {
+      why: "",
+      how: "",
+      what: "",
     }
   };
 
@@ -201,6 +211,11 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
                 name: "",
                 business: "",
               }
+            },
+            golden: {
+              how: "",
+              what: "",
+              why: "",
             }
           } as ClientDataType, temp);
           this.cdr.detectChanges();

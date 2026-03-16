@@ -84,16 +84,16 @@ app-photo-gallery {
     display: flex;
     flex-direction: column;
     margin: 0 15%;
-    padding-top: 40px;
+    padding: 40px 0;
+    --padding-children: 10px;
+    --children-radius: 20px;
+    --children-border: 4px solid black;
 }
 
 .client_profile_parent {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
-    --padding-children: 10px;
-    --children-radius: 20px;
-    --children-border: 4px solid black;
 }
 
 .common_child {
@@ -104,7 +104,9 @@ app-photo-gallery {
 }
 
 .common_child h3,
-.common_child h2 {
+.common_child h2,
+.golden_circle_generic h3,
+.golden_circle_generic h2 {
     margin: 0;
 }
 
@@ -129,6 +131,27 @@ app-photo-gallery {
     border-bottom-left-radius: var(--children-radius);
     border-left: var(--children-border);
     border-bottom: var(--children-border);
+}
+
+.golden_circle_generic {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: var(--children-radius);
+    border: var(--children-border);
+}
+
+.circle_1 {
+    background-color: rgb(255 255 181);
+}
+
+.circle_2 {
+    background-color: rgb(226 226 135);
+}
+
+.circle_3 {
+    background-color: rgb(189 189 141);
 }
 
 
