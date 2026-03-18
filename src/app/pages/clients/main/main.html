@@ -7,6 +7,9 @@
                 <div class="container_grid_docs_found">
                     <div class="container_grid_docs_found_scroll">
                         <div class="detail_parent">
+                            @if (authSrv.hasARole(['superadmin'])) {
+                                <button mat-button (click)="sendOnBoardingEmail()"><mat-icon></mat-icon>Send email on boarding</button>
+                            }
                             <h1>Perfil del negocio</h1>
                             <div class="client_profile_parent">
                                 <div class="alegrias_container common_child">

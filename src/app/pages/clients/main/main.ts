@@ -4,24 +4,30 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { EditableInput } from '@components/fields/editable-input/editable-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
+import { ApiResponse } from '@mytypes/file';
 import { AuthService } from '@services/auth.service';
+import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
+import { UINotificationSrv } from '@services/uinotifications.service';
 import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
+import { environment } from 'environments/environment';
 import { Unsubscribe } from 'firebase/firestore';
+import { firstValueFrom } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "client";
@@ -51,6 +57,7 @@ export interface ClientDataType {
   imports: [
     CommonModule,
     MatButtonModule,
+    MatIconModule,
     Statusbar,
     SideMenu,
     EditableInput,
@@ -96,6 +103,8 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
     public shareSrv: ShareSrv,
     private router: Router,
     public override fullScreenSrv: FullscreenService,
+    public confirmSrv: ConfirmDialogService,
+    private notifSrv: UINotificationSrv,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -243,5 +252,23 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
     await this.fileSrv.uploadJsonFile(this.currentUrl, this.content);
     model.url = this.currentUrl;
     await this.firestoreSrv.createUpdate(MODEL_NAME, model);
+  }
+
+  async sendOnBoardingEmail() {
+    const { email, person, company } = this.collection as any;
+    const confirm = await this.confirmSrv.confirm({
+      title: "Sure?",
+      message: `Email will be sent to ${person} ${email} of ${company}`,
+    });
+    if (!confirm) {
+      return;
+    }
+    const queryParams = new URLSearchParams({ email }).toString();
+    const response = await firstValueFrom(this.http.get<ApiResponse>(`${environment.apiUrl}srv/email/invite?${queryParams}`));
+    if (response.success) {
+      this.notifSrv.show("Email sent");
+    } else {
+      this.notifSrv.show(response.message);
+    }
   }
 }

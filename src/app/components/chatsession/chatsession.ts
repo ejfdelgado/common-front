@@ -414,7 +414,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       };
       // Display articles
       const articles = (tool.message as InnerToolResponseType)?.data;
-      if (articles) {
+      if (articles && articles instanceof Array) {
         articles.forEach((article: any) => {
           if (tool.type == "article") {
             articleUnion.push(article);

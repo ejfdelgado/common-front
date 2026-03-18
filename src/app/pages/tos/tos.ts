@@ -26,7 +26,7 @@ export class Tos extends AuthenticatedComponent implements OnDestroy {
     actionUrl: "",
     urlImage: "https://storage.googleapis.com/pro-ejflab-assets/images/letter.jpg",
   };
-  canEdit: boolean = true;
+
   authSubscription: Subscription | null = null;
   MODEL_COLLECTION: string = "publicpage";
   MODEL_ID: string = "superadmin_tos_json";
@@ -43,11 +43,6 @@ export class Tos extends AuthenticatedComponent implements OnDestroy {
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
     document.title = "Términos y condiciones del Servicio";
-    this.authSubscription = this.authSrv.authState$.subscribe(async (user) => {
-      if (user) {
-        this.canEdit = true;
-      }
-    });
     effect(() => {
       this.authSrv.roles();
       this.cdr.detectChanges();

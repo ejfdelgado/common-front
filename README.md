@@ -1,7 +1,7 @@
 # CommonFront
 
-Enviar el correo!!!
-Quitar la parte de states del asistente.
+
+https://share.pais.tv/srv/email/invite?email=edgar.jose.fernando.delgado@gmail.com
 
 1. Test calendarId.
 2. Test make a reservation and check it appears correctly. Focus on meet link.

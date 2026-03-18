@@ -440,7 +440,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           },
           { label: "Name", type: "text", key: "name", required: true, },
           { label: "Description", type: "text", key: "desc", required: false, },
-          { label: "Use states?", type: "toggle", key: "useStates", required: false, },
+          //{ label: "Use states?", type: "toggle", key: "useStates", required: false, },
         ];
 
         if (this.currentToolSelected.useStates === true) {
