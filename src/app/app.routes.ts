@@ -102,6 +102,7 @@ const routes: Routes = [
 // Rememeber add subdomains on:
 // 1. https://login.domaindiscount24.com/
 // 2. https://console.cloud.google.com/appengine/settings/domains?serviceId=default&project=proyeccion-colombia1
+// 3. En la infra ENV vars: CORS_MAIN_ALLOWED_ORIGIN
 if (["localhost"].indexOf(location.hostname) >= 0) {
     routes.unshift({
         path: '',

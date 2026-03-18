@@ -1,10 +1,7 @@
 # CommonFront
 
+Automatizar que al final de la entrevista inicial, se envíe el correo de OnBoarding, solo requiere del email.
 
-https://share.pais.tv/srv/email/invite?email=edgar.jose.fernando.delgado@gmail.com
-
-1. Test calendarId.
-2. Test make a reservation and check it appears correctly. Focus on meet link.
 3. Check page clients.pais.tv
 
 Borrar indices:
