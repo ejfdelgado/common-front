@@ -63,25 +63,7 @@ export interface ClientDataType {
 })
 export class AlteregoLandComponent extends AuthenticatedComponent implements OnInit {
   menuOptions: MenuOptionType[] = [];
-  liveSubscription: Unsubscribe | null = null;
-  liveMode: boolean = true;
-  searchable: string = "";
   collection: BasicDataType | null = null;
-  cardActions: string[] = [];
-  currentUrl: string = "";
-  content: ClientDataType = {
-    profile: {
-      alegrias: "",
-      frustraciones: "",
-      habito: "",
-      medio: "",
-    },
-    golden: {
-      why: "",
-      how: "",
-      what: "",
-    }
-  };
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -99,35 +81,24 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
-    if (!this.isMobile()) {
-      this.cardActions = ['location_on'];
-    }
-
     this.menuOptions.push({
       label: "OPCIONES",
       children: [
         {
-          label: "Guardar",
-          icon: "save",
+          label: "Administrar asistentes",
+          icon: "design_services",
           callback: () => {
-            this.save();
+            this.router.navigate([`alterego/index`], {
+              queryParams: {}
+            });
           },
         },
       ],
     });
 
     this.menuOptions.push({
-      label: "Permissions",
-      icon: "lock",
-      children: [],
-      callback: () => {
-        this.openPermissions();
-      },
-    });
-
-    this.menuOptions.push({
-      label: "Back to databases",
-      icon: "arrow_back",
+      label: "Perfil de clientes",
+      icon: "face_up",
       children: [],
       callback: () => {
         this.router.navigate([`clients/index`], {
@@ -135,11 +106,12 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
         });
       },
     });
+
   }
 
   getTitle(): string {
     if (!this.collection) {
-      return "Document";
+      return "Crea asistentes virtuales";
     } else {
       return this.collection.title;
     }
@@ -157,9 +129,6 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
         this.collection = temp as BasicDataType;
-        const title = this.collection.title + " - " + epochTo(this.collection.updated);
-        document.title = title;
-        await this.readJSONFile();
       } else {
         this.collection = null;
       }
@@ -169,79 +138,5 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
 
   getCollectionName() {
     return MODEL_NAME;
-  }
-
-  async openPermissions() {
-    if (!this.collection) {
-      return;
-    }
-    const dialogRef = this.dialog.open(SharedWith, {
-      width: '800px',
-      panelClass: 'custom-emoji-picker',
-      autoFocus: !this.isMobile(),
-      data: {
-        id: this.collection.id,
-        collection: MODEL_NAME,
-        mode: "normal",
-      },
-    });
-    dialogRef.afterClosed().subscribe(async (result) => {
-      //console.log(result);
-    });
-  }
-
-  async readJSONFile() {
-    try {
-      if (!this.collection) {
-        return;
-      }
-      const id = this.collection.id;
-      const collection = await this.firestoreSrv.readById(MODEL_NAME, id);
-      if (collection) {
-        this.currentUrl = (collection as any).url;
-        if (this.currentUrl) {
-          const temp = await this.fileSrv.getJSON(getJSONUrl(this.currentUrl));
-          this.content = Object.assign({
-            profile: {
-              alegrias: "",
-              frustraciones: "",
-              habito: "",
-              medio: "",
-              user: {
-                name: "",
-                business: "",
-              }
-            },
-            golden: {
-              how: "",
-              what: "",
-              why: "",
-            }
-          } as ClientDataType, temp);
-          this.cdr.detectChanges();
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async save() {
-    if (!this.collection) {
-      return;
-    }
-    const model = {
-      id: this.collection.id,
-      url: this.currentUrl,
-    };
-    // Generate next url
-    const template = "clients/${user.uid}/${collection.id}/${date.year}-${date.month}-${date.day}/${random}.jpg";
-    this.currentUrl = getBucketPath(template, this.currentUrl, {
-      collection: this.collection,
-      user: AuthService.userStatic,
-    }, true);
-    await this.fileSrv.uploadJsonFile(this.currentUrl, this.content);
-    model.url = this.currentUrl;
-    await this.firestoreSrv.createUpdate(MODEL_NAME, model);
   }
 }

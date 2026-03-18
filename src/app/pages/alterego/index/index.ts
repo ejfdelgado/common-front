@@ -70,6 +70,17 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
       callback: this.openDialog.bind(this),
     });
 
+    this.menuOptions.push({
+      label: "Go back",
+      icon: "arrow_back",
+      children: [],
+      callback: () => {
+        this.router.navigate([`alterego/land`], {
+          queryParams: {}
+        });
+      },
+    });
+
     this.authSubscription = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.notes = [];
