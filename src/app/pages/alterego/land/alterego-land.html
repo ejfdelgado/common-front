@@ -8,9 +8,9 @@
                     <div class="container_grid_docs_found_scroll">
                         <div class="detail_parent wellcome_message">
                             <h1 class="centered" [innerHTML]="getGreating()"></h1>
-                            <p class="centered">Queremos generar valor a tu negocio <strong
-                                    [innerHTML]="getCompany()"></strong><br />La inteligencia artificial puede ser tu
-                                aliada para:</p>
+                            <p class="centered">Queremos agregar valor a tu negocio <strong
+                                    [innerHTML]="getCompany()"></strong><br />La inteligencia artificial te puede
+                                colaborar para:</p>
                             <div class="parent_items">
                                 <p class="items">
                                     🤓 Crear un representante virtual de tu negocio para atención al cliente.<br />
@@ -19,9 +19,9 @@
                                     📬 Enviar correos a nombre tuyo.
                                 </p>
                             </div>
-                            <p class="centered">Para comenzar podemos agendar una reunión.</p>
+                            <p class="centered">Cuando desees podemos agendar una reunión.</p>
                             <p class="centered">
-                                <button mat-flat-button color="primary"><mat-icon>check</mat-icon>Agendar</button>
+                                <button mat-flat-button color="primary" (click)="openAssistant()"><mat-icon>check</mat-icon>Agendar</button>
                             </p>
                         </div>
                     </div>
@@ -30,3 +30,6 @@
         </div>
     </div>
 </div>
+@if(isAssistantOpened) {
+<iframe class="iframe_chat" [src]="getIframeSrc()"></iframe>
+}

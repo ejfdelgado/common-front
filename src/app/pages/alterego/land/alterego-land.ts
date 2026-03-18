@@ -66,6 +66,7 @@ export interface ClientDataType {
 export class AlteregoLandComponent extends AuthenticatedComponent implements OnInit {
   menuOptions: MenuOptionType[] = [];
   collection: BasicDataType | null = null;
+  isAssistantOpened: boolean = false;
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -158,5 +159,24 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
 
   getCollectionName() {
     return MODEL_NAME;
+  }
+
+  openAssistant() {
+    this.isAssistantOpened = true;
+  }
+
+  getIframeSrc() {
+
+    const params = getUrlQueryParams();
+    const ref = params.get("ref");
+    let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
+    host = "http://localhost:8080/social?col=1";
+    let base = `${host}&id=7es1sDvA8he2HeUFPwOJ`;
+    if (ref) {
+      base = `${base}&mode=embedded&ref=${ref}`;
+    } else {
+      base = `${base}&mode=embedded`;
+    }
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base);
   }
 }
