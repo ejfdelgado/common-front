@@ -93,19 +93,19 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
             });
           },
         },
+        {
+          label: "Perfil de clientes",
+          icon: "face_up",
+          children: [],
+          callback: () => {
+            this.router.navigate([`clients/index`], {
+              queryParams: {}
+            });
+          },
+        }
       ],
     });
 
-    this.menuOptions.push({
-      label: "Perfil de clientes",
-      icon: "face_up",
-      children: [],
-      callback: () => {
-        this.router.navigate([`clients/index`], {
-          queryParams: {}
-        });
-      },
-    });
 
   }
 
