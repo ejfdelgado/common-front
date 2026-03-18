@@ -4,6 +4,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
@@ -50,6 +51,7 @@ export interface ClientDataType {
   standalone: true,
   imports: [
     CommonModule,
+    MatIconModule,
     MatButtonModule,
     Statusbar,
     SideMenu,
