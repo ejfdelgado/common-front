@@ -1,17 +1,6 @@
 # CommonFront
 
-Hacer landing page.
-- Mensaje de bienvenida:
-  Hola Laura, 
-  Crea tus asistentes de inteligencia artificial personalizados para:
-* Compartir amigablemente tu catálogo de productos y/o servicios.
-* Capturar información de tus clientes.
-* Agendar citas con las personas interesadas.
-* Enviar correos a nombre tuyo.
-
-
-- Menu izquierda -> Administrar asistentes.
-- Menu izquierda -> Perfil de clientes.
+Permitir que el asistente este consiente del ref.email
 
 Reservar una meet
 - Deducir persona por medio de correo en url (base64? + timestamp)

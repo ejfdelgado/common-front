@@ -135,15 +135,28 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
     });
   }
 
-  async loadCollection() {
+  getRef() {
     const params = getUrlQueryParams();
     const ref = params.get("ref");
     if (ref) {
       const decoded = JSON.parse(Base64.decode(ref));
+      localStorage["ref"] = ref;
+      return decoded;
+    } else if (localStorage["ref"]) {
+      const decoded = JSON.parse(Base64.decode(localStorage["ref"]));
+      return decoded;
+    }
+    return null;
+  }
+
+  async loadCollection() {
+    const decoded = this.getRef();
+    if (decoded) {
       if (decoded.email) {
         const loaded = await firstValueFrom(this.http.post<ApiResponse>(`${environment.apiUrl}public/clients`, { email: decoded.email }));
         if (loaded.success) {
           this.collection = loaded.data[0];
+          this.cdr.detectChanges();
           // company, email, person
         }
       }
@@ -177,8 +190,7 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
   }
 
   getIframeSrc() {
-    const params = getUrlQueryParams();
-    const ref = params.get("ref");
+    const ref = this.getRef();
     let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
     let base = `${host}&id=7es1sDvA8he2HeUFPwOJ&origin=${encodeURIComponent(location.origin)}`;
     if (ref) {
