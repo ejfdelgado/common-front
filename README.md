@@ -1,5 +1,23 @@
 # CommonFront
 
+Hacer landing page.
+- Mensaje de bienvenida:
+  Hola Laura, 
+  Crea tus asistentes de inteligencia artificial personalizados para:
+* Compartir amigablemente tu catálogo de productos y/o servicios.
+* Capturar información de tus clientes.
+* Agendar citas con las personas interesadas.
+* Enviar correos a nombre tuyo.
+
+
+- Menu izquierda -> Administrar asistentes.
+- Menu izquierda -> Perfil de clientes.
+
+Reservar una meet
+- Deducir persona por medio de correo en url (base64? + timestamp)
+- Buscar persona.
+
+
 1. Test calendarId.
 2. Test make a reservation and check it appears correctly. Focus on meet link.
 3. Check page clients.pais.tv
@@ -84,7 +102,7 @@ npx ng generate component --standalone --skip-tests components/message-page
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/clients/main
+npx ng generate component --standalone --skip-tests pages/alterego/land
 ```
 
 ```bash

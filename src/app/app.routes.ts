@@ -66,6 +66,10 @@ const routes: Routes = [
         loadComponent: () => import('./pages/admin/users/users').then(m => m.UsersView),
     },
     {
+        path: 'alterego/land',
+        loadComponent: () => import('./pages/alterego/land/alterego-land').then(m => m.AlteregoLandComponent),
+    },
+    {
         path: 'alterego/main',
         loadComponent: () => import('./pages/alterego/main/main').then(m => m.AlterEgoMain),
     },
@@ -102,12 +106,14 @@ if (["localhost"].indexOf(location.hostname) >= 0) {
     routes.unshift({
         path: '',
         //loadComponent: () => import('./pages/index/index').then(m => m.Index),
-        loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
+        //loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
+        loadComponent: () => import('./pages/alterego/land/alterego-land').then(m => m.AlteregoLandComponent),
     });
 } else if (["pais.tv", "chat.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
         path: '',
-        loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
+        //loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
+        loadComponent: () => import('./pages/alterego/land/alterego-land').then(m => m.AlteregoLandComponent),
     });
 } else if (["admin.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
