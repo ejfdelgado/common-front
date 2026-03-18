@@ -7,13 +7,21 @@
                 <div class="container_grid_docs_found">
                     <div class="container_grid_docs_found_scroll">
                         <div class="detail_parent wellcome_message">
-                            <h1 [innerHTML]="getGreating()"></h1>
-                            <p>La inteligencia artificial puede ser tu aliada para:</p>
-                            <p class="margin_left">
-                            🌎 Compartir tu catálogo de productos y/o servicios.<br />
-                            🗒️ Obtener información valiosa de tus clientes.<br />
-                            📅 Agendar citas con las personas interesadas.<br />
-                            📬 Enviar correos a nombre tuyo.<br />
+                            <h1 class="centered" [innerHTML]="getGreating()"></h1>
+                            <p class="centered">Queremos generar valor a tu negocio <strong
+                                    [innerHTML]="getCompany()"></strong><br />La inteligencia artificial puede ser tu
+                                aliada para:</p>
+                            <div class="parent_items">
+                                <p class="items">
+                                    🤓 Crear un representante virtual de tu negocio para atención al cliente.<br />
+                                    🌎 Compartir tu catálogo de productos y/o servicios.<br />
+                                    📅 Agendar citas con las personas interesadas.<br />
+                                    📬 Enviar correos a nombre tuyo.
+                                </p>
+                            </div>
+                            <p class="centered">Para comenzar podemos agendar una reunión.</p>
+                            <p class="centered">
+                                <button>Agendar</button>
                             </p>
                         </div>
                     </div>

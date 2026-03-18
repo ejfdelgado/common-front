@@ -98,3 +98,20 @@ app-photo-gallery {
 .margin_left {
     margin-left: 20px;
 }
+
+.centered {
+    text-align: center;
+}
+
+.items {
+    display: inline-block;
+}
+
+.parent_items {
+    display: flex;
+    justify-content: center;
+}
+
+.company_name {
+    font-size: 0.9rem;
+}

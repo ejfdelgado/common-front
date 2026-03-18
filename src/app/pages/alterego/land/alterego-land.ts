@@ -145,6 +145,15 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
     }
   }
 
+  getCompany() {
+    if (this.collection) {
+      const { company } = this.collection as any;
+      return `${company}!`;
+    } else {
+      return "";
+    }
+  }
+
   getCollectionName() {
     return MODEL_NAME;
   }
