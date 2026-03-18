@@ -90,7 +90,7 @@ export class AlterEgoUse implements OnInit {
     this.chatConfig.temperature = withDefaults.temperature;
 
     // Add extra data:
-    const ref = getClientRef();
+    const ref = getClientRef(false);
     if (ref) {
       this.chatConfig.systemInstruction += "\n\nHint: Information about the current user: ";
       this.chatConfig.systemInstruction += JSON.stringify(ref.decoded);

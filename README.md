@@ -1,11 +1,7 @@
 # CommonFront
 
-Permitir que el asistente este consiente del ref.email
-
-Reservar una meet
-- Deducir persona por medio de correo en url (base64? + timestamp)
-- Buscar persona.
-
+Enviar el correo!!!
+Quitar la parte de states del asistente.
 
 1. Test calendarId.
 2. Test make a reservation and check it appears correctly. Focus on meet link.
