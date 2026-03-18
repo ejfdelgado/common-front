@@ -10,6 +10,7 @@ import { AuthenticatedComponent } from '@components/authenticated.component';
 import { EditableInput } from '@components/fields/editable-input/editable-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
+import { ApiResponse } from '@mytypes/file';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { BasicDataType, FirestoreService } from '@services/firestore.service';
@@ -17,11 +18,10 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
-import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
-import { epochTo } from '@tools/DateUtils';
+import { Base64 } from '@tools/Base64';
 import { getUrlQueryParams } from '@tools/UrlUtil';
-import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
-import { Unsubscribe } from 'firebase/firestore';
+import { environment } from 'environments/environment';
+import { firstValueFrom } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 
 const MODEL_NAME = "client";
@@ -123,16 +123,25 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
 
   async loadCollection() {
     const params = getUrlQueryParams();
-    const col = params.get("col");
-    const id = params.get("id");
-    if (col && id) {
-      const temp = await this.firestoreSrv.readById(col, id);
-      if (temp) {
-        this.collection = temp as BasicDataType;
-      } else {
-        this.collection = null;
+    const ref = params.get("ref");
+    if (ref) {
+      const decoded = JSON.parse(Base64.decode(ref));
+      if (decoded.email) {
+        const loaded = await firstValueFrom(this.http.post<ApiResponse>(`${environment.apiUrl}public/clients`, { email: decoded.email }));
+        if (loaded.success) {
+          this.collection = loaded.data[0];
+          // company, email, person
+        }
       }
-      this.cdr.detectChanges();
+    }
+  }
+
+  getGreating() {
+    if (this.collection) {
+      const { person } = this.collection as any;
+      return `Hola ${person}!`;
+    } else {
+      return "Hola!";
     }
   }
 

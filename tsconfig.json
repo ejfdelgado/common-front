@@ -39,7 +39,7 @@
       "@pipes/*": [
         "app/pipes/*"
       ],
-      "@types/*": [
+      "@mytypes/*": [
         "types/*"
       ],
     },

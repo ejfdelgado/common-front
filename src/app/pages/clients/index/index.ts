@@ -124,6 +124,8 @@ export class ClientIndexComponent extends AuthenticatedComponent implements OnIn
           }
         },
         { label: "Email", type: "text", key: "email", required: true },
+        { label: "Person Name", type: "text", key: "person", required: true },
+        { label: "Company Name", type: "text", key: "company", required: true },
         {
           label: "Description", type: "contenteditable", key: "description",
           contenteditable: { minHeight: "10em", maxHeight: "20em" }
