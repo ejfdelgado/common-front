@@ -122,6 +122,17 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
 
   ngOnInit(): void {
     this.loadCollection();
+    window.addEventListener('message', (event) => {
+      // Always validate origin for security
+      if (event.origin !== location.origin) return;
+
+      if (event.data.type === 'action') {
+        if (event.data.payload == "close") {
+          this.isAssistantOpened = false;
+          this.cdr.detectChanges();
+        }
+      }
+    });
   }
 
   async loadCollection() {
@@ -166,12 +177,10 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
   }
 
   getIframeSrc() {
-
     const params = getUrlQueryParams();
     const ref = params.get("ref");
     let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
-    host = "http://localhost:8080/social?col=1";
-    let base = `${host}&id=7es1sDvA8he2HeUFPwOJ`;
+    let base = `${host}&id=7es1sDvA8he2HeUFPwOJ&origin=${encodeURIComponent(location.origin)}`;
     if (ref) {
       base = `${base}&mode=embedded&ref=${ref}`;
     } else {

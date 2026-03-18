@@ -30,6 +30,11 @@
                         <span>¿Cómo funciona este asistente?</span>
                     </button>
                 </mat-menu>
+                @if (isEmbeddedMode()) {
+                <button mat-icon-button color="primary" (click)="closeChat()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                }
             </div>
         </mat-toolbar>
         <div class="scrolled_messages_parent">

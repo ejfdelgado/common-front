@@ -21,7 +21,8 @@
                             </div>
                             <p class="centered">Cuando desees podemos agendar una reunión.</p>
                             <p class="centered">
-                                <button mat-flat-button color="primary" (click)="openAssistant()"><mat-icon>check</mat-icon>Agendar</button>
+                                <button mat-flat-button color="primary"
+                                    (click)="openAssistant()"><mat-icon>check</mat-icon>Agendar</button>
                             </p>
                         </div>
                     </div>
@@ -30,6 +31,4 @@
         </div>
     </div>
 </div>
-@if(isAssistantOpened) {
-<iframe class="iframe_chat" [src]="getIframeSrc()"></iframe>
-}
+<iframe class="iframe_chat" [ngClass]="{'invisible': !isAssistantOpened}" [src]="getIframeSrc()"></iframe>

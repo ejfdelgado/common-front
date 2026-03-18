@@ -52,6 +52,7 @@ import { ShareSrv } from '@services/share.service';
 import { CalendarEvent } from '@components/calendar-event/calendar-event';
 import { epochTo } from '@tools/DateUtils';
 import { PhotoGallerySimple } from '@components/photo-gallery-simple/photo-gallery-simple';
+import { getUrlQueryParams } from '@tools/UrlUtil';
 
 const MODEL_NAME_CLONE = "pubknowledge";
 
@@ -570,5 +571,21 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     const millis = new Date(event.start.dateTime).getTime();
     const texto = epochTo(millis, "v5");
     this.sendMessageInternal(`**${texto}**`);
+  }
+
+  isEmbeddedMode() {
+    const params = getUrlQueryParams();
+    return params.get("mode") == "embedded";
+  }
+
+  closeChat() {
+    const params = getUrlQueryParams();
+    const origin = params.get("origin");
+    if (origin) {
+      window.parent.postMessage(
+        { type: 'action', payload: 'close' },
+        origin,//
+      );
+    }
   }
 }
