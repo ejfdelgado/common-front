@@ -126,11 +126,11 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
       // Always validate origin for security
       if (event.origin !== location.origin) return;
 
-      if (event.data.type === 'action') {
-        if (event.data.payload == "close") {
-          this.isAssistantOpened = false;
-          this.cdr.detectChanges();
-        }
+      if (event.data.type === 'close') {
+        this.isAssistantOpened = false;
+        this.cdr.detectChanges();
+      } else if (event.data.type === 'echo_response') {
+        console.log(JSON.stringify(event.data));
       }
     });
   }
@@ -187,5 +187,13 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
       base = `${base}&mode=embedded`;
     }
     return this.sanitizer.bypassSecurityTrustResourceUrl(base);
+  }
+
+  sendEchoToIframe() {
+    const iframe = document.querySelector('iframe');
+    iframe?.contentWindow?.postMessage(
+      { type: 'echo', payload: JSON.stringify('hello') },
+      location.origin,//https://chat.pais.tv
+    );
   }
 }

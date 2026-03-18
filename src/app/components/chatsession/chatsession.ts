@@ -138,7 +138,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     public shareSrv: ShareSrv,
   ) {
     super(sanitizer, fullScreenSrv);
+    if (this.isEmbeddedMode()) {
+      this.configureMessaging();
+    }
   }
+
   async ngAfterViewInit(): Promise<void> {
     if (this.autowarm) {
       await this.setup();
@@ -578,12 +582,31 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return params.get("mode") == "embedded";
   }
 
+  configureMessaging() {
+    const params = getUrlQueryParams();
+    const origin = params.get("origin");
+    window.addEventListener('message', (event) => {
+      if (event.origin !== origin) return;
+      try {
+        const payload = JSON.parse(event.data.payload);
+        if (event.data.type == "echo") {
+          window.parent.postMessage(
+            { type: `${event.data.type}_response`, payload: JSON.stringify(payload) },
+            origin,
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  }
+
   closeChat() {
     const params = getUrlQueryParams();
     const origin = params.get("origin");
     if (origin) {
       window.parent.postMessage(
-        { type: 'action', payload: 'close' },
+        { type: 'close', payload: JSON.stringify('close') },
         origin,//
       );
     }
