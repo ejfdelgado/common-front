@@ -24,6 +24,7 @@ import { getUrlQueryParams } from '@tools/UrlUtil';
 import { environment } from 'environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
+import { getClientRef } from '../common';
 
 const MODEL_NAME = "client";
 
@@ -135,25 +136,12 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
     });
   }
 
-  getRef() {
-    const params = getUrlQueryParams();
-    const ref = params.get("ref");
-    if (ref) {
-      const decoded = JSON.parse(Base64.decode(ref));
-      localStorage["ref"] = ref;
-      return decoded;
-    } else if (localStorage["ref"]) {
-      const decoded = JSON.parse(Base64.decode(localStorage["ref"]));
-      return decoded;
-    }
-    return null;
-  }
-
   async loadCollection() {
-    const decoded = this.getRef();
-    if (decoded) {
-      if (decoded.email) {
-        const loaded = await firstValueFrom(this.http.post<ApiResponse>(`${environment.apiUrl}public/clients`, { email: decoded.email }));
+    const ref = getClientRef();
+    if (ref) {
+      if (ref.decoded.email) {
+        const payload = { email: ref.decoded.email };
+        const loaded = await firstValueFrom(this.http.post<ApiResponse>(`${environment.apiUrl}public/clients`, payload));
         if (loaded.success) {
           this.collection = loaded.data[0];
           this.cdr.detectChanges();
@@ -190,11 +178,11 @@ export class AlteregoLandComponent extends AuthenticatedComponent implements OnI
   }
 
   getIframeSrc() {
-    const ref = this.getRef();
+    const ref = getClientRef();
     let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
     let base = `${host}&id=7es1sDvA8he2HeUFPwOJ&origin=${encodeURIComponent(location.origin)}`;
     if (ref) {
-      base = `${base}&mode=embedded&ref=${ref}`;
+      base = `${base}&mode=embedded&ref=${ref.ref}`;
     } else {
       base = `${base}&mode=embedded`;
     }

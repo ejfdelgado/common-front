@@ -16,6 +16,8 @@ import {
 import { decode } from '@msgpack/msgpack';
 import { AlterEgoSplash } from '@components/chatsession/splash/splash';
 import { CommonModule } from '@angular/common';
+import { Base64 } from '@tools/Base64';
+import { getClientRef } from '../common';
 
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -76,6 +78,8 @@ export class AlterEgoUse implements OnInit {
     }
   }
 
+
+
   updateProperties() {
     const withDefaults = Object.assign({}, DEF_ASSISTANT_MODEL, this.collection);
     this.top = withDefaults.top;
@@ -84,6 +88,14 @@ export class AlterEgoUse implements OnInit {
     this.chatConfig.systemInstruction = withDefaults.instruct;
     this.chatConfig.maxOutputTokens = withDefaults.maxOutputTokens;
     this.chatConfig.temperature = withDefaults.temperature;
+
+    // Add extra data:
+    const ref = getClientRef();
+    if (ref) {
+      this.chatConfig.systemInstruction += "\n\nHint: Information about the current user: ";
+      this.chatConfig.systemInstruction += JSON.stringify(ref.decoded);
+    }
+
   }
 
   receiveSearch(search: FoundKnowledge[]) {
