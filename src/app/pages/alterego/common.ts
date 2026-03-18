@@ -8,6 +8,10 @@ export function getClientRef(useLocalStorage: boolean = true) {
     if (typeof ref == "string" && ref.length > 0) {
         const decoded = JSON.parse(Base64.decode(ref));
         localStorage.setItem("ref", ref);
+        if (useLocalStorage) {
+            // Remove from url
+            window.history.replaceState({}, '', '/#/');
+        }
         return { decoded, ref };
     } else if (oldLocal) {
         if (!useLocalStorage) {

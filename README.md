@@ -1,38 +1,30 @@
 # CommonFront
 
-Automatizar que al final de la entrevista inicial, se envíe el correo de OnBoarding, solo requiere del email.
+- Automatizar que al final de la entrevista inicial, se envíe el correo de OnBoarding, solo requiere del email.
+- Automatizar crear un cliente, con los datos básicos a nombre del autor.
 
-3. Check page clients.pais.tv
+- Login with email on chat.
+
+TEST: Calendar, poder filtrar por nombre de calendario, uno tiene varios.
 
 Borrar indices:
 // pro-knowledge [] owners, ASC search, DESC updated, DESC __name__
 // pro-knowledge [] search, DESC updated, DESC __name__
 
 Recover history:
-- guardar solo la history del agente.
-- una vez logeado guardar la history desde el backend.
-- en front end cargar de lo mas reciente a lo mas viejo, interpretando como si fuera un chat nuevo, en vez de usar push, usar unshift en posicion 0.
-- usar auto autor y created DESC.
-
-Enviar un correo de onboarding que lo redirija a la página principal.
-Cuando llegue, lo primero es que le pida logearse con un popup fancy:
-La seguridad y privacidad es importante para todos.
-Por eso necesitamos que te autentiques para ingresar.
-
-Después de logearse, un asistente le pedirá que 
-reserve un horario para una reunión
-de bienvenida y explicación.
+- Guardar solo la history del agente.
+- Una vez logeado guardar la history desde el backend.
+- En front end cargar de lo mas reciente a lo mas viejo, interpretando como si fuera un chat nuevo, en vez de usar push, usar unshift en posicion 0.
+- Usar auto autor y created DESC.
 
 --------------------------------------------------------------------
 
-Login with email.
 Hacer una tool que pida al usuario logearse.
 Permitir que el agente siempre sepa cual es el usuario logeado.
 Si es usuario logeado, guardar el historial.
 Cargar el historial.
 
 Calendar:
-Poder filtrar por nombre de calendario, uno tiene varios.
 Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
 Enable test calendar.
 

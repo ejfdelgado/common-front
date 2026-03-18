@@ -91,3 +91,8 @@
 .visible .scrolled_content .editable-input.with_focus {
     background-color: unset;
 }
+
+.editable-input.empty {
+    border: 2px dashed rgba(128, 128, 128, 0.336);
+    border-radius: 10px;
+}

@@ -249,4 +249,11 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   charCount(): number {
     return this.value?.length || 0;
   }
+
+  isEmpty() {
+    if (!(typeof this.value == "string")) {
+      return true;
+    }
+    return this.value.trim().length == 0;
+  }
 }
