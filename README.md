@@ -1,15 +1,13 @@
 # CommonFront
 
+- Login with email on chat.
+- Quitar el arreglo de los eventos del payload de afuera y usar solo adentro.
+- Cambiar a post la invitación, al menos con autenticación o superadmin.
+
 - Automatizar que al final de la entrevista inicial, se envíe el correo de OnBoarding, solo requiere del email.
 - Automatizar crear un cliente, con los datos básicos a nombre del autor.
 
-- Login with email on chat.
-
 TEST: Calendar, poder filtrar por nombre de calendario, uno tiene varios.
-
-Borrar indices:
-// pro-knowledge [] owners, ASC search, DESC updated, DESC __name__
-// pro-knowledge [] search, DESC updated, DESC __name__
 
 Recover history:
 - Guardar solo la history del agente.
@@ -25,20 +23,16 @@ Si es usuario logeado, guardar el historial.
 Cargar el historial.
 
 Calendar:
-Buscar los eventos existentes dado un inicio y final de tiempo. (agregarlo a la consulta existente!)
+Buscar los eventos existentes dado un inicio y final de tiempo (o por día!). (agregarlo a la consulta existente!)
 Enable test calendar.
 
 Permitir renderizar algunas variables del modelo en los textos.
 
 Hacer un backend para ingesta de un archivo.***
 
-Permitir embeber el chat en una página externa.
-
 Pagar Supabase
 Pagar Sendgrid IP privada.
 Mostrar página cuando no está publicado.
-
-Create an alternative email template, but for canvas user profile.
 
 Allow filter history given the type.
 
@@ -49,7 +43,6 @@ Paginar usuarios.
 
 Capturar mejor la foto o permitir rotar.
 
-Cual es el max length del embeeding text?
 Allow to configure with the url query param, set the size of the shared url.
 
 Credits to:
