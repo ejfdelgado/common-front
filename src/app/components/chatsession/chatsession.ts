@@ -412,38 +412,38 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           }
         }]
       };
+      const dataPayload = (tool.message as InnerToolResponseType)?.data;
       // Display articles
-      const articles = (tool.message as InnerToolResponseType)?.data;
-      if (articles && articles instanceof Array) {
-        articles.forEach((article: any) => {
-          if (tool.type == "article") {
-            articleUnion.push(article);
-          } else if (tool.type == "fact") {
-            factsUnion.push(article);
-          }
-          if (article.metadata
-            && article.metadata.has_gallery === true
-            && article.metadata.gallery
-            && article.metadata.gallery.length > 0
-          ) {
-            this.visualHistory.push({
-              date: Date.now() - 1,
-              role: "tool",
-              txt: article.desc,
-              gallery: article.metadata.gallery,
-              gallery_view: article.metadata.gallery_view,
-            });
-          }
-        });
-      }
-      // Display events if needed
-      if (tool.events) {
-        this.visualHistory.push({
-          date: Date.now() - 1,
-          role: "tool",
-          txt: "",
-          events: tool.events,
-        });
+      if (dataPayload && dataPayload instanceof Array) {
+        if (["article", "fact"].indexOf(tool.type) >= 0) {
+          dataPayload.forEach((article: any) => {
+            if (tool.type == "article") {
+              articleUnion.push(article);
+            } else if (tool.type == "fact") {
+              factsUnion.push(article);
+            }
+            if (article.metadata
+              && article.metadata.has_gallery === true
+              && article.metadata.gallery
+              && article.metadata.gallery.length > 0
+            ) {
+              this.visualHistory.push({
+                date: Date.now() - 1,
+                role: "tool",
+                txt: article.desc,
+                gallery: article.metadata.gallery,
+                gallery_view: article.metadata.gallery_view,
+              });
+            }
+          });
+        } else if (tool.type == "calendar_search") {
+          this.visualHistory.push({
+            date: Date.now() - 1,
+            role: "tool",
+            txt: "",
+            events: dataPayload,
+          });
+        }
       }
 
       if (
