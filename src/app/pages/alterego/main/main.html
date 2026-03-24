@@ -389,6 +389,8 @@
                                                     <span>Searched text: <strong>"{{ currentHistorySelected.searchText
                                                             }}"</strong></span>
                                                 </div>
+                                                } @else {
+                                                    <pre>{{ currentHistorySelected | json }}</pre>
                                                 }
                                             </div>
                                             }
