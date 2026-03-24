@@ -386,7 +386,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.fields.push({ label: "Use gallery?", type: "toggle", key: "has_gallery", required: false, });
         if (this.currentSelected.has_gallery === true) {
           this.fields.push({
-            label: "Type", type: "select", key: "gallery_view", required: true,
+            label: "Gallery view", type: "select", key: "gallery_view", required: true,
             select: {
               options: [
                 { txt: "Complete", val: "complete" },
@@ -512,7 +512,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         if (this.currentArticleSelected.type == "gallery") {
           this.articleFieldsMetadata.push({ label: "Description", type: "md", key: "desc", required: false, });
           this.articleFieldsMetadata.push({
-            label: "Type", type: "select", key: "gallery_view", required: true,
+            label: "Gallery view", type: "select", key: "gallery_view", required: true,
             select: {
               options: [
                 { txt: "Complete", val: "complete" },
@@ -1216,6 +1216,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       do {
         const first = this.articlesPendingToSave[0];
         const parent = this.getParentId();
+        first.metadata.has_gallery = (first.type == "gallery")
         await this.alterEgo2Srv.createUpdateArticles(first, parent);
         // Merge original refs
         this.articles.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));

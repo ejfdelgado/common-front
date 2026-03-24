@@ -93,6 +93,7 @@ export interface ArticleDataType extends SimpleDataType {
     type: string;
     keywords: string;
     metadata?: any;
+    has_gallery?: boolean;
 };
 
 //History

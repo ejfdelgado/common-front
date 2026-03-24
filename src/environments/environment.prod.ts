@@ -10,4 +10,5 @@ export const environment = {
   env: "pro",
   contactUsAssistant: "Oa408ZZ7aLFmw3NMohci",
   roles: "superadmin,alterego_publisher,alterego_editor,alterego_viewer,developer,knowledge_create",
+  mapKeyMobile: "AIzaSyDm7QUi-SJhm7A4wWKG9gOgIPUNXIy3DIQ"
 };

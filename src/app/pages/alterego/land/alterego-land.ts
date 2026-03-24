@@ -19,8 +19,6 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
-import { Base64 } from '@tools/Base64';
-import { getUrlQueryParams } from '@tools/UrlUtil';
 import { environment } from 'environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
@@ -56,7 +54,6 @@ export interface ClientDataType {
     MatButtonModule,
     Statusbar,
     SideMenu,
-    EditableInput,
     FormsModule,
   ],
   templateUrl: './alterego-land.html',
