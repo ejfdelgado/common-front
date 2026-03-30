@@ -263,8 +263,8 @@ export class ClientMainComponent extends AuthenticatedComponent implements OnIni
     if (!confirm) {
       return;
     }
-    const queryParams = new URLSearchParams({ email }).toString();
-    const response = await firstValueFrom(this.http.get<ApiResponse>(`${environment.apiUrl}srv/email/invite?${queryParams}`));
+    const payload = { email };
+    const response = await firstValueFrom(this.http.post<ApiResponse>(`${environment.apiUrl}srv/email/invite`, payload));
     if (response.success) {
       this.notifSrv.show("Email sent");
     } else {

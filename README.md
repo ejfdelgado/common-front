@@ -1,9 +1,6 @@
 # CommonFront
 
 - Login with email on chat.
-- Quitar el arreglo de los eventos del payload de afuera y usar solo adentro.
-- Cambiar a post la invitación, al menos con autenticación o superadmin.
-
 - Automatizar que al final de la entrevista inicial, se envíe el correo de OnBoarding, solo requiere del email.
 - Automatizar crear un cliente, con los datos básicos a nombre del autor.
 
