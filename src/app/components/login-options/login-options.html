@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Login</h2>
+<h2 mat-dialog-title>{{ showEmailForm && isRegistering ? 'Register' : 'Login' }}</h2>
 
 <mat-dialog-content>
     <div *ngIf="showEmailForm" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
@@ -9,6 +9,10 @@
         <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Password</mat-label>
             <input matInput type="password" [(ngModel)]="password" (keyup.enter)="loginWithEmail()">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 100%;" *ngIf="isRegistering">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" [(ngModel)]="confirmPassword" (keyup.enter)="loginWithEmail()">
         </mat-form-field>
         <p *ngIf="errorMessage" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}</p>
     </div>
@@ -26,11 +30,26 @@
     </button>
 </mat-dialog-actions>
 
-<mat-dialog-actions *ngIf="showEmailForm">
+<mat-dialog-actions *ngIf="showEmailForm && !isRegistering">
     <button mat-button mat-flat-button color="primary" (click)="loginWithEmail()">
         Login
     </button>
+    <button mat-button (click)="toggleRegister()">
+        Register here
+    </button>
     <button mat-button (click)="showEmailForm = false; errorMessage = ''">
+        Back
+    </button>
+</mat-dialog-actions>
+
+<mat-dialog-actions *ngIf="showEmailForm && isRegistering">
+    <button mat-button mat-flat-button color="primary" (click)="loginWithEmail()">
+        Register
+    </button>
+    <button mat-button (click)="toggleRegister()">
+        Go to Login
+    </button>
+    <button mat-button (click)="showEmailForm = false; isRegistering = false; errorMessage = ''">
         Back
     </button>
 </mat-dialog-actions>

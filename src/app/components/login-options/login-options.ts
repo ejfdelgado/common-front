@@ -32,6 +32,8 @@ export class LoginOptions {
   password = '';
   showEmailForm = false;
   errorMessage = '';
+  isRegistering = false;
+  confirmPassword = '';
 
   constructor(
     public authSrv: AuthService,
@@ -46,16 +48,41 @@ export class LoginOptions {
 
   async loginWithEmail() {
     this.errorMessage = '';
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Please enter both email and password';
-      return;
+    
+    if (this.isRegistering) {
+      if (!this.email || !this.password || !this.confirmPassword) {
+        this.errorMessage = 'Please enter email, password, and confirm password';
+        return;
+      }
+      if (this.password !== this.confirmPassword) {
+        this.errorMessage = 'Passwords do not match';
+        return;
+      }
+      try {
+        await this.authSrv.registerWithEmail(this.email, this.password);
+        this.dialogRef.close(true);
+      } catch (e: any) {
+        this.errorMessage = e.message || 'Error registering';
+      }
+    } else {
+      if (!this.email || !this.password) {
+        this.errorMessage = 'Please enter both email and password';
+        return;
+      }
+      try {
+        await this.authSrv.loginWithEmail(this.email, this.password);
+        this.dialogRef.close(true);
+      } catch (e: any) {
+        this.errorMessage = e.message || 'Invalid email or password';
+      }
     }
-    try {
-      await this.authSrv.loginWithEmail(this.email, this.password);
-      this.dialogRef.close(true);
-    } catch (e: any) {
-      this.errorMessage = e.message || 'Invalid email or password';
-    }
+  }
+
+  toggleRegister() {
+    this.isRegistering = !this.isRegistering;
+    this.errorMessage = '';
+    this.password = '';
+    this.confirmPassword = '';
   }
 
   cancel() {
