@@ -171,7 +171,7 @@ export class AuthService {
             promise2.done();
             setTimeout(() => {
                 reject(new Error('reCAPTCHA timeout'));
-            }, 60000);
+            }, 2*60000);
         });
 
         return promise;

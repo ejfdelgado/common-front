@@ -7,7 +7,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '@services/auth.service';
-import { Auth, RecaptchaVerifier } from '@angular/fire/auth';
+import { RecaptchaVerifier } from '@angular/fire/auth';
+import { PhoneInputComponent, PhoneValue } from '@components/fields/phone-input/phone-input';
 
 export interface LoginOptionsData {
 
@@ -24,6 +25,7 @@ export interface LoginOptionsData {
     MatIcon,
     MatFormFieldModule,
     MatInputModule,
+    PhoneInputComponent,
   ],
   templateUrl: './login-options.html',
   styleUrl: './login-options.scss',
@@ -37,7 +39,10 @@ export class LoginOptions {
   confirmPassword = '';
   isResettingPassword = false;
   _isPhoneAuth = false;
-  phoneNumber = '';
+  phoneNumber: PhoneValue = {
+    prefix: "+57",
+    number: "",
+  };
   verificationCode = '';
   codeSent = false;
   recaptchaVerifier?: RecaptchaVerifier;
@@ -54,11 +59,13 @@ export class LoginOptions {
   }
 
   set isPhoneAuth(value: boolean) {
-    this._isPhoneAuth = value;
-    if (value) {
-      this.onMobileContainerReady();
-    } else {
-      this.destroyRecaptcha();
+    if (this._isPhoneAuth != value) {
+      this._isPhoneAuth = value;
+      if (value) {
+        this.onMobileContainerReady();
+      } else {
+        this.destroyRecaptcha();
+      }
     }
   }
 
@@ -155,7 +162,10 @@ export class LoginOptions {
     this.isRegistering = false;
     this.isResettingPassword = false;
     this.errorMessage = '';
-    this.phoneNumber = '';
+    this.phoneNumber = {
+      prefix: "+57",
+      number: "",
+    };
     this.verificationCode = '';
     this.codeSent = false;
   }
@@ -167,15 +177,15 @@ export class LoginOptions {
       return;
     }
     if (!this.recaptchaVerifier) {
-      this.errorMessage = 'Please confirm Recaptcha';
+      this.errorMessage = 'Please confirm reCAPTCHA';
       return;
     }
     try {
-      await this.authSrv.signInWithPhoneNumber(this.phoneNumber, this.recaptchaVerifier);
+      await this.authSrv.signInWithPhoneNumber(this.phoneNumber.prefix + this.phoneNumber.number, this.recaptchaVerifier);
       this.codeSent = true;
       this.cdr.detectChanges();
     } catch (e: any) {
-      this.errorMessage = e.message || 'Error sending code';
+      this.errorMessage = e.customData?.message || 'Error sending code';
       this.cdr.detectChanges();
     }
   }
