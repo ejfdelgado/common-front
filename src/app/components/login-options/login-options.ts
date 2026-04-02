@@ -7,6 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '@services/auth.service';
+import { Auth, RecaptchaVerifier } from '@angular/fire/auth';
 
 export interface LoginOptionsData {
 
@@ -35,8 +36,14 @@ export class LoginOptions {
   isRegistering = false;
   confirmPassword = '';
   isResettingPassword = false;
+  isPhoneAuth = false;
+  phoneNumber = '';
+  verificationCode = '';
+  codeSent = false;
+  recaptchaVerifier?: RecaptchaVerifier;
 
   constructor(
+    public auth: Auth,
     public authSrv: AuthService,
     public cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<LoginOptions>,
@@ -111,6 +118,55 @@ export class LoginOptions {
     this.errorMessage = '';
     this.password = '';
     this.confirmPassword = '';
+  }
+
+  togglePhoneAuth() {
+    this.isPhoneAuth = true;
+    this.showEmailForm = false;
+    this.isRegistering = false;
+    this.isResettingPassword = false;
+    this.errorMessage = '';
+    this.phoneNumber = '';
+    this.verificationCode = '';
+    this.codeSent = false;
+  }
+
+  async sendCode() {
+    this.errorMessage = '';
+    if (!this.phoneNumber) {
+      this.errorMessage = 'Please enter phone number (e.g. +1234567890)';
+      return;
+    }
+    try {
+      if (!this.recaptchaVerifier) {
+        this.recaptchaVerifier = new RecaptchaVerifier(this.auth, 'recaptcha-container', { size: 'invisible' });
+      }
+      await this.authSrv.signInWithPhoneNumber(this.phoneNumber, this.recaptchaVerifier);
+      this.codeSent = true;
+      this.cdr.detectChanges();
+    } catch (e: any) {
+      this.errorMessage = e.message || 'Error sending code';
+      if (this.recaptchaVerifier) {
+        this.recaptchaVerifier.clear();
+        this.recaptchaVerifier = undefined;
+      }
+      this.cdr.detectChanges();
+    }
+  }
+
+  async verifyCode() {
+    this.errorMessage = '';
+    if (!this.verificationCode) {
+      this.errorMessage = 'Please enter the verification code';
+      return;
+    }
+    try {
+      await this.authSrv.verifyCode(this.verificationCode);
+      this.dialogRef.close(true);
+    } catch (e: any) {
+      this.errorMessage = e.message || 'Invalid code';
+      this.cdr.detectChanges();
+    }
   }
 
   cancel() {

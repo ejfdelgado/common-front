@@ -155,9 +155,10 @@ export class AuthService {
     }
 
     async verifyCode(code: string) {
-        if (this.confirmationResult) {
-            this.confirmationResult.confirm(code);
+        if (!this.confirmationResult) {
+            throw new Error('No pending SMS verification. Please request a code first.');
         }
+        return this.confirmationResult.confirm(code);
     }
 
     /** 🚪 Logout */

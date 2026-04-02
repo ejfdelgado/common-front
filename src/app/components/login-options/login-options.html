@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>{{ showEmailForm && isResettingPassword ? 'Reset Password' : (showEmailForm && isRegistering ? 'Register' : 'Login') }}</h2>
+<h2 mat-dialog-title>
+    {{ isPhoneAuth ? 'Mobile Login' : (showEmailForm && isResettingPassword ? 'Reset Password' : (showEmailForm && isRegistering ? 'Register' : 'Login')) }}
+</h2>
 
 <mat-dialog-content>
     <div *ngIf="showEmailForm" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
@@ -14,16 +16,36 @@
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" [(ngModel)]="confirmPassword" (keyup.enter)="loginWithEmail()">
         </mat-form-field>
-        <p *ngIf="errorMessage" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}</p>
+        <p *ngIf="errorMessage && !isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}</p>
+    </div>
+
+    <div *ngIf="isPhoneAuth" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
+        <div id="recaptcha-container"></div>
+        <ng-container *ngIf="!codeSent">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Phone Number (e.g. +1...)</mat-label>
+                <input matInput type="tel" [(ngModel)]="phoneNumber" (keyup.enter)="sendCode()">
+            </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="codeSent">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Verification Code</mat-label>
+                <input matInput type="text" [(ngModel)]="verificationCode" (keyup.enter)="verifyCode()">
+            </mat-form-field>
+        </ng-container>
+        <p *ngIf="errorMessage && isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}</p>
     </div>
 </mat-dialog-content>
 
-<mat-dialog-actions *ngIf="!showEmailForm">
+<mat-dialog-actions *ngIf="!showEmailForm && !isPhoneAuth">
     <button mat-button mat-flat-button color="primary" (click)="loginWithGoogle()">
         Google
     </button>
     <button mat-button mat-flat-button color="primary" (click)="showEmailForm = true">
         Email
+    </button>
+    <button mat-button mat-flat-button color="primary" (click)="togglePhoneAuth()">
+        Mobile
     </button>
     <button mat-button (click)="cancel()">
         Cancel
@@ -65,6 +87,18 @@
         Go to Login
     </button>
     <button mat-button (click)="showEmailForm = false; isResettingPassword = false; errorMessage = ''">
+        Back
+    </button>
+</mat-dialog-actions>
+
+<mat-dialog-actions *ngIf="isPhoneAuth">
+    <button *ngIf="!codeSent" mat-button mat-flat-button color="primary" (click)="sendCode()">
+        Send Code
+    </button>
+    <button *ngIf="codeSent" mat-button mat-flat-button color="primary" (click)="verifyCode()">
+        Verify Code
+    </button>
+    <button mat-button (click)="isPhoneAuth = false; errorMessage = ''">
         Back
     </button>
 </mat-dialog-actions>
