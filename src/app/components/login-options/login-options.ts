@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,6 +37,7 @@ export class LoginOptions {
 
   constructor(
     public authSrv: AuthService,
+    public cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<LoginOptions>,
     @Inject(MAT_DIALOG_DATA) public data: LoginOptionsData
   ) { }
@@ -48,7 +49,7 @@ export class LoginOptions {
 
   async loginWithEmail() {
     this.errorMessage = '';
-    
+
     if (this.isRegistering) {
       if (!this.email || !this.password || !this.confirmPassword) {
         this.errorMessage = 'Please enter email, password, and confirm password';
@@ -62,7 +63,8 @@ export class LoginOptions {
         await this.authSrv.registerWithEmail(this.email, this.password);
         this.dialogRef.close(true);
       } catch (e: any) {
-        this.errorMessage = e.message || 'Error registering';
+        this.errorMessage = e.customData?.message || 'Error registering';
+        this.cdr.detectChanges();
       }
     } else {
       if (!this.email || !this.password) {
@@ -73,7 +75,8 @@ export class LoginOptions {
         await this.authSrv.loginWithEmail(this.email, this.password);
         this.dialogRef.close(true);
       } catch (e: any) {
-        this.errorMessage = e.message || 'Invalid email or password';
+        this.errorMessage = e.customData?.message || 'Invalid email or password';
+        this.cdr.detectChanges();
       }
     }
   }

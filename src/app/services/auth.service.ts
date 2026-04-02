@@ -9,7 +9,7 @@ import {
     createUserWithEmailAndPassword,
     signOut,
 } from '@angular/fire/auth';
-import { getAuth } from 'firebase/auth';
+import { getAuth, UserCredential } from 'firebase/auth';
 import { BehaviorSubject, firstValueFrom, from, Observable, Subscription } from 'rxjs';
 import { UINotificationSrv } from './uinotifications.service';
 import { HttpClient } from '@angular/common/http';
@@ -118,15 +118,13 @@ export class AuthService {
     }
 
     /** 📧 Email login */
-    loginWithEmail(email: string, password: string): Promise<void> {
-        return signInWithEmailAndPassword(this.auth, email, password).then(() => { });
+    loginWithEmail(email: string, password: string): Promise<UserCredential> {
+        return signInWithEmailAndPassword(this.auth, email, password);
     }
 
     /** ✍️ Email signup */
-    registerWithEmail(email: string, password: string): Promise<void> {
-        return createUserWithEmailAndPassword(this.auth, email, password).then(
-            () => { }
-        );
+    registerWithEmail(email: string, password: string): Promise<UserCredential> {
+        return createUserWithEmailAndPassword(this.auth, email, password);
     }
 
     /** 🚪 Logout */
