@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,19 +36,48 @@ export class LoginOptions {
   isRegistering = false;
   confirmPassword = '';
   isResettingPassword = false;
-  isPhoneAuth = false;
+  _isPhoneAuth = false;
   phoneNumber = '';
   verificationCode = '';
   codeSent = false;
   recaptchaVerifier?: RecaptchaVerifier;
 
   constructor(
-    public auth: Auth,
     public authSrv: AuthService,
     public cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<LoginOptions>,
     @Inject(MAT_DIALOG_DATA) public data: LoginOptionsData
   ) { }
+
+  get isPhoneAuth() {
+    return this._isPhoneAuth;
+  }
+
+  set isPhoneAuth(value: boolean) {
+    this._isPhoneAuth = value;
+    if (value) {
+      this.onMobileContainerReady();
+    } else {
+      this.destroyRecaptcha();
+    }
+  }
+
+  onMobileContainerReady() {
+    requestAnimationFrame(async () => {
+      if (!this.recaptchaVerifier) {
+        try {
+          const temp = await this.authSrv.createRecaptcha();
+          if (temp) {
+            this.recaptchaVerifier = temp;
+          } else {
+            console.log(temp);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
 
   async loginWithGoogle() {
     this.authSrv.loginWithGoogle();
@@ -137,20 +166,26 @@ export class LoginOptions {
       this.errorMessage = 'Please enter phone number (e.g. +1234567890)';
       return;
     }
+    if (!this.recaptchaVerifier) {
+      this.errorMessage = 'Please confirm Recaptcha';
+      return;
+    }
     try {
-      if (!this.recaptchaVerifier) {
-        this.recaptchaVerifier = new RecaptchaVerifier(this.auth, 'recaptcha-container', { size: 'invisible' });
-      }
       await this.authSrv.signInWithPhoneNumber(this.phoneNumber, this.recaptchaVerifier);
       this.codeSent = true;
       this.cdr.detectChanges();
     } catch (e: any) {
       this.errorMessage = e.message || 'Error sending code';
-      if (this.recaptchaVerifier) {
-        this.recaptchaVerifier.clear();
-        this.recaptchaVerifier = undefined;
-      }
       this.cdr.detectChanges();
+    }
+  }
+
+  destroyRecaptcha() {
+    if (this.recaptchaVerifier) {
+      try {
+        this.recaptchaVerifier.clear();
+      } catch (err) { }
+      this.recaptchaVerifier = undefined;
     }
   }
 

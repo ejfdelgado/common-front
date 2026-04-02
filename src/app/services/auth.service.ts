@@ -40,6 +40,7 @@ export class AuthService {
         this.authStateSubject.asObservable();
 
     confirmationResult: ConfirmationResult | null = null;
+    recaptchaWidget: RecaptchaVerifier | null = null;
 
     constructor(
         private auth: Auth,
@@ -148,6 +149,32 @@ export class AuthService {
 
     async resetPassword(email: string) {
         return sendPasswordResetEmail(this.auth, email);
+    }
+
+    async createRecaptcha(): Promise<RecaptchaVerifier> {
+        if (this.recaptchaWidget) {
+            try {
+                this.recaptchaWidget.clear();
+            } catch (err) { }
+        }
+        const promise2 = this.indicatorSrv.start();
+        const promise = new Promise<RecaptchaVerifier>(async (resolve, reject) => {
+            this.recaptchaWidget = new RecaptchaVerifier(this.auth, 'recaptcha-container', {
+                size: 'normal',
+                callback: (response: any) => {
+                    if (this.recaptchaWidget) {
+                        resolve(this.recaptchaWidget);
+                    }
+                },
+            });
+            await this.recaptchaWidget.render();
+            promise2.done();
+            setTimeout(() => {
+                reject(new Error('reCAPTCHA timeout'));
+            }, 60000);
+        });
+
+        return promise;
     }
 
     async signInWithPhoneNumber(phoneNumber: string, appVerifier: RecaptchaVerifier) {

@@ -1,9 +1,11 @@
 <h2 mat-dialog-title>
-    {{ isPhoneAuth ? 'Mobile Login' : (showEmailForm && isResettingPassword ? 'Reset Password' : (showEmailForm && isRegistering ? 'Register' : 'Login')) }}
+    {{ isPhoneAuth ? 'Mobile Login' : (showEmailForm && isResettingPassword ? 'Reset Password' : (showEmailForm &&
+    isRegistering ? 'Register' : 'Login')) }}
 </h2>
 
 <mat-dialog-content>
-    <div *ngIf="showEmailForm" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
+    <div *ngIf="showEmailForm"
+        style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
         <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Email</mat-label>
             <input matInput type="email" [(ngModel)]="email">
@@ -16,10 +18,12 @@
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" [(ngModel)]="confirmPassword" (keyup.enter)="loginWithEmail()">
         </mat-form-field>
-        <p *ngIf="errorMessage && !isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}</p>
+        <p *ngIf="errorMessage && !isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}
+        </p>
     </div>
 
-    <div *ngIf="isPhoneAuth" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
+    <div *ngIf="isPhoneAuth"
+        style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;" #myElement>
         <div id="recaptcha-container"></div>
         <ng-container *ngIf="!codeSent">
             <mat-form-field appearance="outline" style="width: 100%;">
@@ -33,7 +37,8 @@
                 <input matInput type="text" [(ngModel)]="verificationCode" (keyup.enter)="verifyCode()">
             </mat-form-field>
         </ng-container>
-        <p *ngIf="errorMessage && isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}</p>
+        <p *ngIf="errorMessage && isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{ errorMessage }}
+        </p>
     </div>
 </mat-dialog-content>
 
