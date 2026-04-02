@@ -177,7 +177,7 @@ export class Index implements AfterViewInit {
   }
 
   async login() {
-    this.authSrv.loginWithGoogle();
+    this.authSrv.login();
   }
 
   async logout() {

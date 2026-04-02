@@ -64,7 +64,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/message-page
+npx ng generate component --standalone --skip-tests components/login-options
 ```
 
 ```bash

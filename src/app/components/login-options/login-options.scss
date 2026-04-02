@@ -1,0 +1,10 @@
+mat-dialog-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+}
+
+mat-dialog-actions button {
+    margin: 0 !important;
+}

@@ -41,7 +41,7 @@
         }
         <mat-menu #menu2="matMenu">
             @if(user == null) {
-            <button mat-menu-item (click)="authSrv.loginWithGoogle()">
+            <button mat-menu-item (click)="authSrv.login()">
                 <mat-icon>login</mat-icon>
                 <span>Ingresar</span>
             </button>

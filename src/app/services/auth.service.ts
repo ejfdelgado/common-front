@@ -15,6 +15,8 @@ import { UINotificationSrv } from './uinotifications.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { ApiResponse } from 'types/file';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginOptions, LoginOptionsData } from '@components/login-options/login-options';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -35,6 +37,7 @@ export class AuthService {
         private auth: Auth,
         private notifSrv: UINotificationSrv,
         private http: HttpClient,
+        private dialog: MatDialog,
     ) {
         this.authSub = authState(this.auth).subscribe(async user => {
             getAuth();//Without this line, firestore frontend operations did not include token
@@ -98,7 +101,14 @@ export class AuthService {
     }
 
     async login() {
-        await this.loginWithGoogle();
+        const data: LoginOptionsData = {};
+        this.dialog
+            .open(LoginOptions, {
+                width: '400px',
+                disableClose: true,
+                data,
+                panelClass: 'custom-emoji-picker',
+            });
     }
 
     /** 🔑 Google login */
