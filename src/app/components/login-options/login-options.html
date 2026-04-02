@@ -24,9 +24,9 @@
 
     <div *ngIf="isPhoneAuth"
         style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;" #myElement>
-        <div id="recaptcha-container"></div>
         <ng-container *ngIf="!codeSent">
             <app-phone-input [(ngModel)]="phoneNumber"></app-phone-input>
+            <div id="recaptcha-container"></div>
         </ng-container>
         <ng-container *ngIf="codeSent">
             <mat-form-field appearance="outline" style="width: 100%;">
