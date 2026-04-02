@@ -8,8 +8,10 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
+    UserCredential,
+    sendPasswordResetEmail
 } from '@angular/fire/auth';
-import { getAuth, UserCredential } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { BehaviorSubject, firstValueFrom, from, Observable, Subscription } from 'rxjs';
 import { UINotificationSrv } from './uinotifications.service';
 import { HttpClient } from '@angular/common/http';
@@ -137,6 +139,10 @@ export class AuthService {
         } finally {
             promise.done();
         }
+    }
+
+    async resetPassword(email: string) {
+        return sendPasswordResetEmail(this.auth, email);
     }
 
     /** 🚪 Logout */
