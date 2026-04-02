@@ -34,4 +34,8 @@ export class LoginOptions {
   async loginWithEmail() {
     this.dialogRef.close(true);
   }
+
+  cancel() {
+    this.dialogRef.close(false);
+  }
 }
