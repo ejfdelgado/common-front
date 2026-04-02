@@ -9,7 +9,10 @@ import {
     createUserWithEmailAndPassword,
     signOut,
     UserCredential,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    signInWithPhoneNumber,
+    RecaptchaVerifier,
+    ConfirmationResult
 } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 import { BehaviorSubject, firstValueFrom, from, Observable, Subscription } from 'rxjs';
@@ -35,6 +38,8 @@ export class AuthService {
 
     readonly authState$: Observable<User | null> =
         this.authStateSubject.asObservable();
+
+    confirmationResult: ConfirmationResult | null = null;
 
     constructor(
         private auth: Auth,
@@ -143,6 +148,16 @@ export class AuthService {
 
     async resetPassword(email: string) {
         return sendPasswordResetEmail(this.auth, email);
+    }
+
+    async signInWithPhoneNumber(phoneNumber: string, appVerifier: RecaptchaVerifier) {
+        this.confirmationResult = await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier);
+    }
+
+    async verifyCode(code: string) {
+        if (this.confirmationResult) {
+            this.confirmationResult.confirm(code);
+        }
     }
 
     /** 🚪 Logout */
