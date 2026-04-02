@@ -34,6 +34,7 @@ export class LoginOptions {
   errorMessage = '';
   isRegistering = false;
   confirmPassword = '';
+  isResettingPassword = false;
 
   constructor(
     public authSrv: AuthService,
@@ -81,8 +82,32 @@ export class LoginOptions {
     }
   }
 
+  async resetPassword() {
+    this.errorMessage = '';
+    if (!this.email) {
+      this.errorMessage = 'Please enter your email';
+      return;
+    }
+    try {
+      await this.authSrv.resetPassword(this.email);
+      this.errorMessage = 'Password reset email sent!';
+      this.cdr.detectChanges();
+    } catch (e: any) {
+      this.errorMessage = e.customData?.message || 'Error resetting password';
+      this.cdr.detectChanges();
+    }
+  }
+
+  toggleResetPassword() {
+    this.isResettingPassword = !this.isResettingPassword;
+    this.errorMessage = '';
+    this.password = '';
+    this.confirmPassword = '';
+  }
+
   toggleRegister() {
     this.isRegistering = !this.isRegistering;
+    this.isResettingPassword = false;
     this.errorMessage = '';
     this.password = '';
     this.confirmPassword = '';

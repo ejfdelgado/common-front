@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{ showEmailForm && isRegistering ? 'Register' : 'Login' }}</h2>
+<h2 mat-dialog-title>{{ showEmailForm && isResettingPassword ? 'Reset Password' : (showEmailForm && isRegistering ? 'Register' : 'Login') }}</h2>
 
 <mat-dialog-content>
     <div *ngIf="showEmailForm" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
@@ -6,11 +6,11 @@
             <mat-label>Email</mat-label>
             <input matInput type="email" [(ngModel)]="email">
         </mat-form-field>
-        <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-form-field appearance="outline" style="width: 100%;" *ngIf="!isResettingPassword">
             <mat-label>Password</mat-label>
             <input matInput type="password" [(ngModel)]="password" (keyup.enter)="loginWithEmail()">
         </mat-form-field>
-        <mat-form-field appearance="outline" style="width: 100%;" *ngIf="isRegistering">
+        <mat-form-field appearance="outline" style="width: 100%;" *ngIf="isRegistering && !isResettingPassword">
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" [(ngModel)]="confirmPassword" (keyup.enter)="loginWithEmail()">
         </mat-form-field>
@@ -30,19 +30,22 @@
     </button>
 </mat-dialog-actions>
 
-<mat-dialog-actions *ngIf="showEmailForm && !isRegistering">
+<mat-dialog-actions *ngIf="showEmailForm && !isRegistering && !isResettingPassword">
     <button mat-button mat-flat-button color="primary" (click)="loginWithEmail()">
         Login
     </button>
     <button mat-button (click)="toggleRegister()">
         Register here
     </button>
+    <button mat-button (click)="toggleResetPassword()">
+        I forgot my password
+    </button>
     <button mat-button (click)="showEmailForm = false; errorMessage = ''">
         Back
     </button>
 </mat-dialog-actions>
 
-<mat-dialog-actions *ngIf="showEmailForm && isRegistering">
+<mat-dialog-actions *ngIf="showEmailForm && isRegistering && !isResettingPassword">
     <button mat-button mat-flat-button color="primary" (click)="loginWithEmail()">
         Register
     </button>
@@ -50,6 +53,18 @@
         Go to Login
     </button>
     <button mat-button (click)="showEmailForm = false; isRegistering = false; errorMessage = ''">
+        Back
+    </button>
+</mat-dialog-actions>
+
+<mat-dialog-actions *ngIf="showEmailForm && isResettingPassword">
+    <button mat-button mat-flat-button color="primary" (click)="resetPassword()">
+        Reset Password
+    </button>
+    <button mat-button (click)="toggleResetPassword()">
+        Go to Login
+    </button>
+    <button mat-button (click)="showEmailForm = false; isResettingPassword = false; errorMessage = ''">
         Back
     </button>
 </mat-dialog-actions>
