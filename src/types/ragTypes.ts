@@ -115,8 +115,8 @@ export const DEF_ASSISTANT_MODEL = {
     title: '',
     description: '',
     language: 'en',
-    top: 3,
-    distance: 0.3,
+    top: 3,//factsMaxMatches
+    distance: 30,//factsMinDistance
     instruct: "You are an assistant giving some information",
     startConversation: "",
     maxOutputTokens: 10000,

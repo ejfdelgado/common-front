@@ -1,5 +1,7 @@
 # CommonFront
 
+- Comentarios del inicio de la vista de Clientes.
+
 - Login with email on chat.
 - Automatizar que al final de la entrevista inicial, se envíe el correo de OnBoarding, solo requiere del email.
 - Automatizar crear un cliente, con los datos básicos a nombre del autor.
