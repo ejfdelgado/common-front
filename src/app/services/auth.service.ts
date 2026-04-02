@@ -17,6 +17,7 @@ import { environment } from 'environments/environment';
 import { ApiResponse } from 'types/file';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginOptions, LoginOptionsData } from '@components/login-options/login-options';
+import { IndicatorService } from './indicator.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -38,6 +39,7 @@ export class AuthService {
         private notifSrv: UINotificationSrv,
         private http: HttpClient,
         private dialog: MatDialog,
+        private indicatorSrv: IndicatorService,
     ) {
         this.authSub = authState(this.auth).subscribe(async user => {
             getAuth();//Without this line, firestore frontend operations did not include token
@@ -119,12 +121,22 @@ export class AuthService {
 
     /** 📧 Email login */
     loginWithEmail(email: string, password: string): Promise<UserCredential> {
-        return signInWithEmailAndPassword(this.auth, email, password);
+        const promise = this.indicatorSrv.start();
+        try {
+            return signInWithEmailAndPassword(this.auth, email, password);
+        } finally {
+            promise.done();
+        }
     }
 
     /** ✍️ Email signup */
     registerWithEmail(email: string, password: string): Promise<UserCredential> {
-        return createUserWithEmailAndPassword(this.auth, email, password);
+        const promise = this.indicatorSrv.start();
+        try {
+            return createUserWithEmailAndPassword(this.auth, email, password);
+        } finally {
+            promise.done();
+        }
     }
 
     /** 🚪 Logout */
