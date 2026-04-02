@@ -160,7 +160,7 @@ export class AuthService {
         const promise2 = this.indicatorSrv.start();
         const promise = new Promise<RecaptchaVerifier>(async (resolve, reject) => {
             this.recaptchaWidget = new RecaptchaVerifier(this.auth, 'recaptcha-container', {
-                size: 'normal',
+                size: 'normal',//invisible normal
                 callback: (response: any) => {
                     if (this.recaptchaWidget) {
                         resolve(this.recaptchaWidget);

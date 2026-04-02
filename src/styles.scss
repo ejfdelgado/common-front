@@ -355,6 +355,17 @@ mat-icon.xs {
     height: 17px;
 }
 
+button .mdc-button__label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+button .mdc-button__label img {
+    height: 1em;
+}
+
 @media (max-width: 800px) {
     .nogalespopup {
         max-width: 90vw;

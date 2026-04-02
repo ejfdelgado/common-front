@@ -41,12 +41,15 @@
 
 <mat-dialog-actions *ngIf="!showEmailForm && !isPhoneAuth">
     <button mat-button mat-flat-button color="primary" (click)="loginWithGoogle()">
+        <img src="/assets/img/google-small.png">
         Google
     </button>
     <button mat-button mat-flat-button color="primary" (click)="showEmailForm = true">
+        <mat-icon>mail</mat-icon>
         Email
     </button>
     <button mat-button mat-flat-button color="primary" (click)="togglePhoneAuth()">
+        <mat-icon>phone_enabled</mat-icon>
         Mobile
     </button>
     <button mat-button (click)="cancel()">
@@ -56,6 +59,7 @@
 
 <mat-dialog-actions *ngIf="showEmailForm && !isRegistering && !isResettingPassword">
     <button mat-button mat-flat-button color="primary" (click)="loginWithEmail()">
+        <mat-icon>mail</mat-icon>
         Login
     </button>
     <button mat-button (click)="toggleRegister()">
