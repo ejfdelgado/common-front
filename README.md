@@ -1,5 +1,30 @@
 # CommonFront
 
+-------------------------------------------------------------------
+
+Permitir construir un mundo 3d:
+Permitiendo cargar N partes el mundo:
+Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
+min, x, y, z, max, x, y, z.
+Cada parte permite cargar también un mesh que permite deducir la altura por donde camina.
+
+Colocar la cámara un poco mas lejos.
+Hacer que cada paso que da el usuario se más pequeño.
+Hacer que la pose T permita caminar hacia atrás.
+Crear un avatar que se mueva con los puntos.
+Que sea fácil personalizar la textura.
+Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
+
+Quitar el gesto de pararse en un solo pie por mas de cierto tiempo.
+Permitir cargar el mundo haciendo referencia al modelo guardado previamente.
+Permitir cargar unicamente la región donde está ubicado el usuario.
+
+Evitar los saltos bruscos de la cámara, tal vez colocar un filtro pasabajos.
+Revisar cómo saber cuando no está detectando corrrectamente la pose del cuerpo.
+Para entonces evitar mandar una nueva pose.
+
+-------------------------------------------------------------------
+
 - Comentarios del inicio de la vista de Clientes.
 
 - Login with email on chat.
