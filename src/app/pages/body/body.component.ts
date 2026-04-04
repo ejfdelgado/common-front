@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { tracker } from './tracker.js';
 import { BodyData, BodyState } from './threejs-body/types';
 import { ThreejsBodyComponent } from './threejs-body/threejs-body.component';
@@ -31,6 +31,7 @@ export class BodyComponent extends CommonComponent implements OnInit, OnDestroy 
 
   constructor(
     public indicatorSrv: IndicatorService,
+    public cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
   ) {
@@ -66,6 +67,7 @@ export class BodyComponent extends CommonComponent implements OnInit, OnDestroy 
     // tracker.run('stream') // takes video from an m3u8 online stream
     tracker.on('beforeupdate', (poses: any) => {
       this.poses = poses;
+      this.cdr.detectChanges();
     });
   }
 
