@@ -1,4 +1,3 @@
-//import { GUI } from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';

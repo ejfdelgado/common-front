@@ -94,6 +94,10 @@ const routes: Routes = [
         loadComponent: () => import('./pages/clients/index/index').then(m => m.ClientIndexComponent),
     },
     {
+        path: 'game/walk',
+        loadComponent: () => import('./pages/body/body.component').then(m => m.BodyComponent),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
