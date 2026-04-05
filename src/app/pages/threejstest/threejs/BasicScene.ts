@@ -10,7 +10,7 @@ import {
   CCDIKHelper,
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { BodyData, BodyKeyPointData } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData, FrontComputationType } from '@mytypes/bodyTypes';
 
 const textureLoader = new TextureLoader();
 
@@ -52,6 +52,8 @@ export class BasicScene extends THREE.Scene {
   previousTime = performance.now();
   canvasRef: HTMLCanvasElement;
   ikSolver: CCDIKSolver | null = null;
+  computingIK: boolean = false;
+  originalPelvisRotation: THREE.Euler | null = null;
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
@@ -159,7 +161,7 @@ export class BasicScene extends THREE.Scene {
         bonesIdMap[oneBone.name] = i;
       }
     }
-    console.log(JSON.stringify(bonesIdMap, null, 4));
+    //console.log(JSON.stringify(bonesIdMap, null, 4));
 
     const createControlFor = (boneName: string) => {
       const targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -471,7 +473,7 @@ export class BasicScene extends THREE.Scene {
             async (response: any) => {
               let object = null;
               if (loader == this.gltfLoader) {
-                console.log(response.scene.children[0]);
+                //console.log(response.scene.children[0]);
                 /*
                 const group = new THREE.Object3D(); // or new THREE.Group();
                 response.scene.children.forEach((obj: any) => group.add(obj));
@@ -484,7 +486,7 @@ export class BasicScene extends THREE.Scene {
               object.name = item.name;
               if (object != null) {
                 if (autoAdd) {
-                  this.inspectObject(object);
+                  //this.inspectObject(object);
                   this.add(object);
                 }
               }
@@ -521,13 +523,13 @@ export class BasicScene extends THREE.Scene {
     const children = temp.children;
     let skinnedMesh: THREE.SkinnedMesh | null = null;
     // Find the SkinnedMesh
-    console.log(model.type);
+    //console.log(model.type);
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       if (child.type == 'SkinnedMesh') {
         skinnedMesh = child as THREE.SkinnedMesh;
       }
-      console.log(child.type);
+      //console.log(child.type);
     }
     return skinnedMesh;
   }
@@ -586,15 +588,53 @@ export class BasicScene extends THREE.Scene {
     });
   }
 
-  computingIK: boolean = false;
+  computeScore(pose: BodyData) {
+    const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
+    pose.keypoints3D.forEach((el) => {
+      keypoints3DMap[el.name] = el;
+    });
+    let scoreComputation: number = 0;
+    let countScores: number = 0;
+
+    scoreComputation += keypoints3DMap["right_shoulder"].score;
+    countScores++;
+    scoreComputation += keypoints3DMap["left_shoulder"].score;
+    countScores++;
+    scoreComputation += Math.max(keypoints3DMap["right_ear"].score, keypoints3DMap["left_ear"].score)
+    countScores++;
+    scoreComputation += keypoints3DMap["right_heel"].score;
+    countScores++;
+    scoreComputation += keypoints3DMap["left_heel"].score;
+    countScores++;
+    const score = 100 * scoreComputation / countScores;
+    return score;
+  }
+
+  getHigherScoredPose(poses: BodyData[]) {
+    return poses.map((pose) => {
+      const score = this.computeScore(pose);
+      return {
+        score,
+        pose,
+      };
+    }).sort((a, b) => {
+      return b.score - a.score;
+    })[0];
+  }
+
   async computeIK(poses: BodyData[]) {
-    if (this.computingIK) {
+    if (this.computingIK || poses.length == 0) {
       return;
     }
     this.computingIK = true;
     try {
+
       const model = this.getObjectByName("avatar");
-      const pose = poses[0];
+      const { pose, score } = this.getHigherScoredPose(poses);
+      if (score < 90) {
+        // Not all body in view
+        return;
+      }
       if (!model || !pose) {
         this.computingIK = false;
         return;
@@ -635,18 +675,13 @@ export class BasicScene extends THREE.Scene {
       // Generate front vector
       const pelvisBone = model.getObjectByName("pelvis");
       if (pelvisBone) {
-        /*
-        pelvisBone.rotation.x = 0;
-        pelvisBone.rotation.y = 0;
-        pelvisBone.rotation.z = 0;
-        */
+        const frontData = this.computeFront(keypoints3DMap);
+        if (this.originalPelvisRotation == null) {
+          this.originalPelvisRotation = pelvisBone.rotation.clone();
+        }
+        const delta = -1 * (frontData.angle + Math.PI / 2);
+        pelvisBone.rotation.y = this.originalPelvisRotation.y + delta;
       }
-      /*
-      keypoints3DMap["right_hip"];
-      keypoints3DMap["left_hip"];
-      keypoints3DMap["right_shoulder"];
-      keypoints3DMap["left_shoulder"];
-      */
 
       // avg(left_shoulder, right_shoulder) => target_chest
       pose.keypoints3D.push(computeAverage("target_chest", [
@@ -701,5 +736,38 @@ export class BasicScene extends THREE.Scene {
     } finally {
       this.computingIK = false;
     }
+  }
+
+  computeFront(keypoints3DMap: { [key: string]: BodyKeyPointData }): FrontComputationType {
+    const left_shoulder = keypoints3DMap['left_shoulder'];
+    const right_shoulder = keypoints3DMap['right_shoulder'];
+    const left_hip = keypoints3DMap['left_hip'];
+    const right_hip = keypoints3DMap['right_hip'];
+
+    const v1 = new THREE.Vector3(left_hip.x - right_hip.x, left_hip.y - right_hip.y, left_hip.z - right_hip.z);
+    const v2 = new THREE.Vector3(right_shoulder.x - right_hip.x, right_shoulder.y - right_hip.y, right_shoulder.z - right_hip.z);
+    const front1 = new THREE.Vector3().crossVectors(v1, v2).normalize();
+
+    const v1p = new THREE.Vector3(right_shoulder.x - left_shoulder.x, right_shoulder.y - left_shoulder.y, right_shoulder.z - left_shoulder.z);
+    const v2p = new THREE.Vector3(left_hip.x - left_shoulder.x, left_hip.y - left_shoulder.y, left_hip.z - left_shoulder.z);
+    const front2 = new THREE.Vector3().crossVectors(v1p, v2p).normalize();
+
+    const FRONT_REFERENCE = new THREE.Vector3(-1, 0, 0);
+    const front = new THREE.Vector3(0, 0, 0);
+    front.setX((front1.x + front2.x) / 2);
+    front.setY(0);
+    front.setZ((front1.z + front2.z) / 2);
+    front.normalize();
+
+    const angle = FRONT_REFERENCE.angleTo(front);
+
+    const response: FrontComputationType = {
+      x: front.x,
+      y: front.y,
+      angle: (front.z < 0 ? -1 : 1) * angle,
+      angle_deg: 0,
+    };
+    response.angle_deg = response.angle * 180 / Math.PI;
+    return response;
   }
 }

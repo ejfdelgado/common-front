@@ -15,3 +15,10 @@ export interface BodyData {
 export interface BodyState {
     data: any;
 }
+
+export interface FrontComputationType {
+    x: number;
+    y: number;
+    angle: number;
+    angle_deg: number;
+};

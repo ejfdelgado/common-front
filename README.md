@@ -1,5 +1,8 @@
 # CommonFront
 
+Revisar el score de todo para tomar mejor decision si aplicar o no.
+Limitar la rotacion de los brazos para que no quede mal.
+
 -------------------------------------------------------------------
 
 Permitir construir un mundo 3d:

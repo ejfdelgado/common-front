@@ -13,7 +13,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { ModuloSonido } from '@services/sonido.service';
 import { tracker } from '@tools/tracker.js';
-import { BodyData } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData } from '@mytypes/bodyTypes';
 import * as tf from '@tensorflow/tfjs';
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
@@ -139,7 +139,9 @@ export class ThreejsTestComponent extends CommonSpeech {
         this.activity.done();
         this.activity = null;
       }
-      this.threeComponent.computeIK(this.poses);
+      if (this.poses.length > 0) {
+        this.threeComponent.computeIK(this.poses);
+      }
     });
   }
 
