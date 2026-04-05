@@ -10,6 +10,7 @@ import {
   CCDIKHelper,
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import { BodyData } from '@mytypes/bodyTypes';
 
 const textureLoader = new TextureLoader();
 
@@ -593,5 +594,9 @@ export class BasicScene extends THREE.Scene {
         child.material.needsUpdate = true;
       }
     });
+  }
+
+  computeIK(poses: BodyData[]) {
+
   }
 }

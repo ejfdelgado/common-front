@@ -17,6 +17,7 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
+import { BodyData } from '@mytypes/bodyTypes';
 
 @Component({
   standalone: true,
@@ -97,5 +98,12 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
 
   executeCommand(command: RecognizedCommand) {
     console.log(command);
+  }
+
+  computeIK(poses: BodyData[]) {
+    if (!this.scene) {
+      return;
+    }
+    this.scene.computeIK(poses);
   }
 }

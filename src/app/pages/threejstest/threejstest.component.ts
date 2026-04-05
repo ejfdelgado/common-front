@@ -139,7 +139,7 @@ export class ThreejsTestComponent extends CommonSpeech {
         this.activity.done();
         this.activity = null;
       }
-      this.cdr.detectChanges();
+      this.threeComponent.computeIK(this.poses);
     });
   }
 
