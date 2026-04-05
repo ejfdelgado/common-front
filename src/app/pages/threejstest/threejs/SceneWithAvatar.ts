@@ -13,6 +13,9 @@ import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 
 export abstract class BasicAvatarScene extends THREE.Scene {
 
+    camera: THREE.PerspectiveCamera | null = null;
+    renderer: THREE.WebGLRenderer | null = null;
+    orbitals: OrbitControls | null = null;
     bonesBackup: BoneBackupType[] = [];
     fbxLoader = new FBXLoader();
     gltfLoader = new GLTFLoader();
@@ -506,9 +509,13 @@ export abstract class BasicAvatarScene extends THREE.Scene {
         return new Promise<void>((resolve, reject) => {
             new HDRLoader().load(url, (texture) => {
                 texture.mapping = THREE.EquirectangularReflectionMapping;
-                this.environment = texture;
-                this.background = texture;
-                this.environmentIntensity = 0.3;
+                if (this.renderer) {
+                    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+                    const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+                    this.environment = envMap;
+                    this.background = envMap;
+                    this.environmentIntensity = 0.3;
+                }
                 resolve();
             }, (err) => {
                 //reject(err);

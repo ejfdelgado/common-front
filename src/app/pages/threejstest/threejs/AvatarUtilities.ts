@@ -70,7 +70,7 @@ export function getHigherAvatarScoredPose(poses: BodyData[]) {
 
 export function replaceAvatarSkin(model: THREE.Object3D<THREE.Object3DEventMap>, url: string) {
     const newTexture = textureLoader.load(url);
-    //newTexture.colorSpace = THREE.SRGBColorSpace;
+    newTexture.colorSpace = THREE.SRGBColorSpace;
     newTexture.flipY = false;
     model.traverse((child: any) => {
         if (child.isMesh && child.material) {

@@ -11,9 +11,6 @@ Hacer que la pose T permita caminar hacia atrás.
 Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
 Colocar la cámara un poco mas lejos.
 
-Revisar por qué la textura no se ve bien en mobile.
-Hacer que la textura se vea smooth, no como metalica.
-Usar border redondos en el video.
 Permitir interactuar con voz con los asistentes virtuales.
 
 Permitir usar un modelo en tiempo real con firestore.

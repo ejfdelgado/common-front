@@ -9,9 +9,6 @@ import { BasicAvatarScene } from './SceneWithAvatar';
 const ROOT_PATH = "/assets/models/";
 
 export class BasicScene extends BasicAvatarScene {
-  camera: THREE.PerspectiveCamera | null = null;
-  renderer: THREE.WebGLRenderer | null = null;
-  orbitals: OrbitControls | null = null;
   lights: Array<THREE.Light> = [];
   bounds: DOMRect;
   previousTime = performance.now();
@@ -43,6 +40,7 @@ export class BasicScene extends BasicAvatarScene {
       alpha: true,
       antialias: true
     });
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setSize(this.bounds.width, this.bounds.height);
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitals.enableZoom = true;
@@ -50,7 +48,15 @@ export class BasicScene extends BasicAvatarScene {
     this.orbitals.zoomSpeed = 1.0;
     this.background = new THREE.Color(0x333333);
     this.initializeAvatar();
-    this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
+
+    const light = new THREE.AmbientLight(0xFFFFFF);
+    this.add(light);
+
+    const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    pointLight.position.set(0, 5, 0);
+    this.add(pointLight);
+
+    //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
   }
 
   async initializeAvatar() {
