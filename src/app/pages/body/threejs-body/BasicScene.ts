@@ -1,6 +1,6 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
-import { BodyData, BodyKeyPointData, BodyState } from './types';
+import { BodyData, BodyKeyPointData, BodyState } from '@mytypes/bodyTypes';
 import { WalkBody } from './WalkBody';
 import { MyHelper } from './MyHelper';
 import { MyAsset, MyAssetInData } from './MyAsset';
@@ -233,7 +233,7 @@ export class BasicScene extends THREE.Scene {
     let response: THREE.Vector3[] = [];
     let scores: number[] = [];
     const originalData = this.poses[index];
-    const original = originalData.keypoints3D;
+    const original: BodyKeyPointData[] = originalData.keypoints3D;
     response = this.vector3DAll[index];
 
     // search the minimum y
@@ -287,7 +287,7 @@ export class BasicScene extends THREE.Scene {
       return this.bodyPointMapIndex;
     }
     const pose = this.poses[0];
-    pose.keypoints3D.forEach((element, index) => {
+    pose.keypoints3D.forEach((element: BodyKeyPointData, index: number) => {
       this.bodyPointMapIndex[element.name] = index;
     });
     const map = this.bodyPointMapIndex;

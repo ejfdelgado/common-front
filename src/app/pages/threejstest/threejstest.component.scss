@@ -18,3 +18,50 @@
     background: white;
     color: black;
 }
+
+.no_mouse {
+    pointer-events: none;
+}
+
+#canvas {
+    display: none;
+}
+
+#video {
+    position: absolute;
+    z-index: 2;
+    right: 20px;
+    bottom: 20px;
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+}
+
+.start_container {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.start_button {
+    pointer-events: all !important;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: red;
+    color: white;
+    z-index: 2;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+}

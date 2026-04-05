@@ -1,5 +1,12 @@
 <div class="full_screen container_vertical">
+    <canvas id="canvas" width="500" height="500"></canvas>
     <app-threejs #three_component></app-threejs>
+    <div *ngIf="!started" class="start_container no_mouse">
+        <button class="start_button" (click)="startTracking()">
+            <mat-icon>play_arrow</mat-icon>
+            <span>Start</span>
+        </button>
+    </div>
     <div class="top_absolute container_horizontal gap_10 padding_20">
         @if (!isRunning) {
         @for (lang of langs; track lang.id) {
