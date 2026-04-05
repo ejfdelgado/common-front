@@ -73,7 +73,7 @@ export class BasicScene extends THREE.Scene {
     );
     this.camera.position.x = 10;
     this.camera.position.y = 5;
-    this.camera.position.z = 0;
+    this.camera.position.z = 10;
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvasRef,
@@ -193,8 +193,8 @@ export class BasicScene extends THREE.Scene {
       }
     };
 
-    createControlFor("target_kneeR");
-    createControlFor("target_footR");
+    //createControlFor("target_kneeR");
+    //createControlFor("target_footR");
     //createControlFor("target_kneeL");
     //createControlFor("target_footL");
     //createControlFor("target_chest");
@@ -491,7 +491,7 @@ export class BasicScene extends THREE.Scene {
               } else {
                 object = response;
               }
-              //object.name = item.name;
+              object.name = item.name;
               if (object != null) {
                 if (autoAdd) {
                   this.inspectObject(object);
@@ -596,7 +596,48 @@ export class BasicScene extends THREE.Scene {
     });
   }
 
-  computeIK(poses: BodyData[]) {
+  computingIK: boolean = false;
+  async computeIK(poses: BodyData[]) {
+    if (this.computingIK) {
+      return;
+    }
+    this.computingIK = true;
+    try {
+      const model = this.getObjectByName("avatar");
+      const pose = poses[0];
+      if (!model || !pose) {
+        this.computingIK = false;
+        return;
+      }
+      const MAPPING_TARGETS = [
+        { "source": "left_knee", "target": "target_kneeL" },
+        { "source": "left_foot_index", "target": "target_footL" },
+      ];
+      for (let i = 0; i < MAPPING_TARGETS.length; i++) {
+        const { source, target } = MAPPING_TARGETS[i];
+        const targetBone = model.getObjectByName(target);
+        const sourceData = pose.keypoints3D.find(e => e.name == source);
+        if (!sourceData || !targetBone) {
+          continue;
+        }
 
+        const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
+        sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+
+        targetBone.position.x = sourceCoord.x;
+        targetBone.position.y = sourceCoord.y;
+        targetBone.position.z = sourceCoord.z;
+      }
+      if (this.ikSolver) {
+        console.log("ikSolver update!");
+        this.ikSolver.update();
+      } else {
+        console.log("No ikSolver");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.computingIK = false;
+    }
   }
 }
