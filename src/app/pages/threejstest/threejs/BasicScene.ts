@@ -1,4 +1,5 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -40,7 +41,6 @@ export class BasicScene extends THREE.Scene {
   fbxLoader = new FBXLoader();
   gltfLoader = new GLTFLoader();
   previousTime = performance.now();
-  pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
 
   canvasRef: HTMLCanvasElement;
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
@@ -61,9 +61,9 @@ export class BasicScene extends THREE.Scene {
       0.1,
       1000
     );
-    this.camera.position.z = 20;
+    this.camera.position.x = 20;
     this.camera.position.y = 15;
-    this.camera.position.x = 0;
+    this.camera.position.z = 0;
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvasRef,
@@ -81,20 +81,22 @@ export class BasicScene extends THREE.Scene {
 
     this.background = new THREE.Color(0x333333);
 
-    const ambient = new THREE.AmbientLight(0xefefef, 0.3);
-    this.add(ambient);
-
-    //pointLight.castShadow = true;
-    //pointLight.position.set(3, 5, -3);
-    this.pointLight.position.set(0, 5, 0);
-    this.add(this.pointLight);
-
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "avatar", url: ROOT_PATH + "avatar002.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
         this.fitCameraToObject(this.camera, object, this.orbitals);
       }
       loading.done();
+    });
+
+
+
+    new HDRLoader().load(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr", (texture) => {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+
+      this.environment = texture;
+      this.background = texture;
+      this.environmentIntensity = 0.5;
     });
   }
 
