@@ -612,6 +612,8 @@ export class BasicScene extends THREE.Scene {
       const MAPPING_TARGETS = [
         { "source": "left_knee", "target": "target_kneeL" },
         { "source": "left_foot_index", "target": "target_footL" },
+        { "source": "right_knee", "target": "target_kneeR" },
+        { "source": "right_foot_index", "target": "target_footR" },
       ];
       for (let i = 0; i < MAPPING_TARGETS.length; i++) {
         const { source, target } = MAPPING_TARGETS[i];
@@ -629,10 +631,9 @@ export class BasicScene extends THREE.Scene {
         targetBone.position.z = sourceCoord.z;
       }
       if (this.ikSolver) {
-        console.log("ikSolver update!");
         this.ikSolver.update();
       } else {
-        console.log("No ikSolver");
+        console.log("No ikSolver!");
       }
     } catch (err) {
       console.log(err);
