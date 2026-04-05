@@ -4,6 +4,8 @@ import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { TextureLoader } from 'three';
+const textureLoader = new TextureLoader();
 
 const ROOT_PATH = "/assets/models/";
 
@@ -56,12 +58,12 @@ export class BasicScene extends THREE.Scene {
   initialize(debug: boolean = true, addGridHelper: boolean = true) {
     // setup camera
     this.camera = new THREE.PerspectiveCamera(
-      50,
+      20,
       this.bounds.width / this.bounds.height,
       0.1,
       1000
     );
-    this.camera.position.x = 20;
+    this.camera.position.x = -30;
     this.camera.position.y = 15;
     this.camera.position.z = 0;
     // setup renderer
@@ -82,21 +84,20 @@ export class BasicScene extends THREE.Scene {
     this.background = new THREE.Color(0x333333);
 
     const loading = this.indicatorSrv.start();
-    this.addModel({ name: "avatar", url: ROOT_PATH + "avatar002.glb", }, true).then(async (object) => {
+    this.addModel({ name: "avatar", url: ROOT_PATH + "avatar003.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
         this.fitCameraToObject(this.camera, object, this.orbitals);
       }
+      this.replaceSkin(object, "avatar.jpg");
       loading.done();
     });
-
-
 
     new HDRLoader().load(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr", (texture) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
 
       this.environment = texture;
       this.background = texture;
-      this.environmentIntensity = 0.5;
+      this.environmentIntensity = 0.3;
     });
   }
 
@@ -204,6 +205,7 @@ export class BasicScene extends THREE.Scene {
               //object.name = item.name;
               if (object != null) {
                 if (autoAdd) {
+                  //this.inspectObject(object);
                   this.add(object);
                 }
               }
@@ -219,6 +221,26 @@ export class BasicScene extends THREE.Scene {
         } else {
           alert(`No loader for ${item.url}`);
         }
+      }
+    });
+  }
+
+  inspectObject(model: THREE.Object3D<THREE.Object3DEventMap>) {
+    model.traverse((child: any) => {
+      if (child.isMesh) {
+        console.log(child.material);
+      }
+    });
+  }
+
+  replaceSkin(model: THREE.Object3D<THREE.Object3DEventMap>, textureUrl: string) {
+    const newTexture = textureLoader.load(ROOT_PATH + textureUrl);
+    newTexture.colorSpace = THREE.SRGBColorSpace;
+    newTexture.flipY = false;
+    model.traverse((child: any) => {
+      if (child.isMesh && child.material) {
+        child.material.map = newTexture;
+        child.material.needsUpdate = true;
       }
     });
   }
