@@ -98,8 +98,8 @@ export class BasicScene extends THREE.Scene {
       this.replaceSkin(object, "avatar.jpg");
       loading.done();
 
-      //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, -90);
-      //this.setRotationBoneAnglesDegrees(object, "legR", 0, 0, 90);
+      //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, 0);
+      //this.setRotationBoneAnglesDegrees(object, "legR", 0, 0, -90);
 
       const skinnedMesh = this.getSkinnedMesh(object);
       if (skinnedMesh) {
@@ -192,7 +192,7 @@ export class BasicScene extends THREE.Scene {
     };
 
     //createControlFor("target_kneeR");
-    createControlFor("target_footR");
+    //createControlFor("target_footR");
 
     const ikModel: any[] = [
       {
@@ -201,16 +201,18 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['footR'],
-            rotationMin: new THREE.Vector3(0, 0, THREE.MathUtils.degToRad(-90 - 45)),
-            rotationMax: new THREE.Vector3(0, 0, 0)
+            rotationMin: new THREE.Vector3(
+              0, 0, THREE.MathUtils.degToRad(-90 - 45)),
+            rotationMax: new THREE.Vector3(
+              0, 0, 0)
           },
-          /*{
+          {
             index: bonesIdMap['legR'],
-          },*/
+          },
         ],
         iteration: 10,
       },
-      /*{
+      {
         target: bonesIdMap['target_kneeR'],
         effector: bonesIdMap['footR'],
         links: [
@@ -219,9 +221,8 @@ export class BasicScene extends THREE.Scene {
           },
         ],
         iteration: 10,
-      },*/
+      },
     ];
-
 
     const iks: any[] = ikModel;
     this.ikSolver = new CCDIKSolver(skinnedMesh, iks);
@@ -403,6 +404,8 @@ export class BasicScene extends THREE.Scene {
       }
       const originalRotation = this.BONE_MAP_ORIGINAL_ROTATION.get(boneName);
       if (originalRotation) {
+        console.log(`Original rotation for ${boneName}:`);
+        console.log(THREE.MathUtils.radToDeg(originalRotation.x), THREE.MathUtils.radToDeg(originalRotation.y), THREE.MathUtils.radToDeg(originalRotation.z));
         bone.rotation.set(
           originalRotation.x + THREE.MathUtils.degToRad(x),
           originalRotation.y + THREE.MathUtils.degToRad(y),
