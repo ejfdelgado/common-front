@@ -91,7 +91,7 @@ export class BasicScene extends THREE.Scene {
     this.background = new THREE.Color(0x333333);
 
     const loading = this.indicatorSrv.start();
-    this.addModel({ name: "avatar", url: ROOT_PATH + "avatar003.glb", }, true).then(async (object) => {
+    this.addModel({ name: "avatar", url: ROOT_PATH + "avatar004.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
         //this.fitCameraToObject(this.camera, object, this.orbitals);
       }
@@ -192,17 +192,17 @@ export class BasicScene extends THREE.Scene {
       }
     };
 
-    //createControlFor("target_kneeR");
-    //createControlFor("target_footR");
+    createControlFor("target_kneeR");
+    createControlFor("target_footR");
     //createControlFor("target_kneeL");
     //createControlFor("target_footL");
-    //createControlFor("target_chest");
-    //createControlFor("target_head");
-    //createControlFor("target_elbowR");
+    createControlFor("target_chest");
+    createControlFor("target_head");
+    createControlFor("target_elbowR");
     //createControlFor("target_elbowL");
-    //createControlFor("target_armR");
+    createControlFor("target_armR");
     //createControlFor("target_armL");
-    //createControlFor("target_handR");
+    createControlFor("target_handR");
     //createControlFor("target_handL");
 
 
@@ -480,7 +480,7 @@ export class BasicScene extends THREE.Scene {
             async (response: any) => {
               let object = null;
               if (loader == this.gltfLoader) {
-                //console.log(response.scene.children);
+                console.log(response.scene.children[0]);
                 /*
                 const group = new THREE.Object3D(); // or new THREE.Group();
                 response.scene.children.forEach((obj: any) => group.add(obj));
@@ -530,11 +530,13 @@ export class BasicScene extends THREE.Scene {
     const children = temp.children;
     let skinnedMesh: THREE.SkinnedMesh | null = null;
     // Find the SkinnedMesh
+    console.log(model.type);
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       if (child.type == 'SkinnedMesh') {
         skinnedMesh = child as THREE.SkinnedMesh;
       }
+      console.log(child.type);
     }
     return skinnedMesh;
   }
