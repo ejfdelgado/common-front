@@ -62,9 +62,11 @@ export class ThreejsTestComponent extends CommonSpeech {
       commands: {
         "es-ES": {
           "guardar": "save",
+          "restaurar": "restore",
         },
         "en-US": {
           "save": "save",
+          "restore": "restore",
         },
         "fr-FR": {}
       },

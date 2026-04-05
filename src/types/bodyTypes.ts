@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export interface BodyKeyPointData {
     x: number;
     y: number;
@@ -22,3 +24,9 @@ export interface FrontComputationType {
     angle: number;
     angle_deg: number;
 };
+
+export interface BoneBackupType {
+    boneName: string;
+    position: THREE.Vector3;
+    rotation: THREE.Euler;
+}

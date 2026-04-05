@@ -97,7 +97,10 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   }
 
   executeCommand(command: RecognizedCommand) {
-    console.log(command);
+    if (!this.scene) {
+      return;
+    }
+    this.scene.executeCommand(command);
   }
 
   computeIK(poses: BodyData[]) {

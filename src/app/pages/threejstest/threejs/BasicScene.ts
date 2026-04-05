@@ -10,7 +10,8 @@ import {
   CCDIKHelper,
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { BodyData, BodyKeyPointData, FrontComputationType } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData, BoneBackupType, FrontComputationType } from '@mytypes/bodyTypes';
+import { RecognizedCommand } from '@services/voicerecognition.service';
 
 const textureLoader = new TextureLoader();
 
@@ -54,6 +55,8 @@ export class BasicScene extends THREE.Scene {
   ikSolver: CCDIKSolver | null = null;
   computingIK: boolean = false;
   originalPelvisRotation: THREE.Euler | null = null;
+  bonesBackup: BoneBackupType[] = [];
+  restoreBackupOnNextComputation: boolean = false;
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
@@ -146,6 +149,42 @@ export class BasicScene extends THREE.Scene {
     });
   }
 
+  makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
+    this.bonesBackup = [];
+    const makeBackupBone = (boneName: string) => {
+      const bone = model.getObjectByName(boneName);
+      if (bone) {
+        this.bonesBackup.push({
+          boneName,
+          position: bone.position.clone(),
+          rotation: bone.rotation.clone(),
+        });
+      }
+    }
+    model.traverse((child: any) => {
+      if (child.isBone || child.type === 'Bone') {
+        makeBackupBone(child.name);
+      }
+    });
+  }
+
+  restoreBoneBackup() {
+    const model = this.getObjectByName("avatar");
+    if (model) {
+      this.bonesBackup.forEach((bk) => {
+        const bone = model.getObjectByName(bk.boneName);
+        if (bone) {
+          bone.position.x = bk.position.x;
+          bone.position.y = bk.position.y;
+          bone.position.z = bk.position.z;
+          bone.rotation.x = bk.rotation.x;
+          bone.rotation.y = bk.rotation.y;
+          bone.rotation.z = bk.rotation.z;
+        }
+      });
+    }
+  }
+
   configureIK(
     model: THREE.Object3D<THREE.Object3DEventMap>,
     skinnedMesh: THREE.SkinnedMesh,
@@ -208,6 +247,7 @@ export class BasicScene extends THREE.Scene {
     //createControlFor("target_handR");
     //createControlFor("target_handL");
 
+    this.makeBoneBackup(model);
 
     const iteration = 20;
 
@@ -292,6 +332,10 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['elbowR'],
+            rotationMin: new THREE.Vector3(
+              -Math.PI, -Math.PI, -Math.PI),
+            rotationMax: new THREE.Vector3(
+              Math.PI, Math.PI, Math.PI),
           },
         ],
         iteration: iteration,
@@ -628,7 +672,10 @@ export class BasicScene extends THREE.Scene {
     }
     this.computingIK = true;
     try {
-
+      if (this.restoreBackupOnNextComputation) {
+        this.restoreBoneBackup();
+        this.restoreBackupOnNextComputation = false;
+      }
       const model = this.getObjectByName("avatar");
       const { pose, score } = this.getHigherScoredPose(poses);
       if (score < 90) {
@@ -769,5 +816,11 @@ export class BasicScene extends THREE.Scene {
     };
     response.angle_deg = response.angle * 180 / Math.PI;
     return response;
+  }
+
+  executeCommand(command: RecognizedCommand) {
+    if (command.command == "restore") {
+      this.restoreBackupOnNextComputation = true;
+    }
   }
 }
