@@ -20,7 +20,7 @@ export interface BodyState {
 
 export interface FrontComputationType {
     x: number;
-    y: number;
+    z: number;
     angle: number;
     angle_deg: number;
 };

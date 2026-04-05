@@ -30,7 +30,7 @@ export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPoint
 
     const response: FrontComputationType = {
         x: front.x,
-        y: front.y,
+        z: front.z,
         angle: (front.z < 0 ? -1 : 1) * angle,
         angle_deg: 0,
     };

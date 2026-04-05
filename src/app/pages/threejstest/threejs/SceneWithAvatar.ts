@@ -392,8 +392,9 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             const {
                 pose,
                 keypoints3DMap,
+                frontData,
             } = response;
-            this.walkBody.capture(keypoints3DMap);
+            this.walkBody.capture(keypoints3DMap, frontData);
         }
     }
 
@@ -454,8 +455,8 @@ export abstract class BasicAvatarScene extends THREE.Scene {
 
             // Generate front vector
             const pelvisBone = model.getObjectByName("pelvis");
+            const frontData = computeAvatarFront(keypoints3DMap);
             if (pelvisBone) {
-                const frontData = computeAvatarFront(keypoints3DMap);
                 if (this.originalPelvisRotation == null) {
                     this.originalPelvisRotation = pelvisBone.rotation.clone();
                 }
@@ -514,6 +515,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             return {
                 pose,
                 keypoints3DMap,
+                frontData,
             };
         } catch (err) {
             console.log(err);
