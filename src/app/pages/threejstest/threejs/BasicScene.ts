@@ -64,6 +64,7 @@ export class BasicScene extends THREE.Scene {
     this.bounds = bounds;
     this.indicatorSrv = indicatorSrv;
     const params = this.getUrlQueryParams();
+
   }
   /**
    * Initializes the scene by adding lights, and the geometry
@@ -106,7 +107,8 @@ export class BasicScene extends THREE.Scene {
 
       //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, 0);
       //this.setRotationBoneAnglesDegrees(object, "legR", 0, 0, -90);
-      //this.setRotationBoneAnglesDegrees(object, "footL", 0, 0, 90);
+      //this.setRotationBoneAnglesDegrees(object, "handR", 0, 0, 0);//Z: -150 -> 0
+      //this.setRotationBoneAnglesDegrees(object, "handL", 0, 0, -150);//Z: -150 -> 0
 
       const skinnedMesh = this.getSkinnedMesh(object);
       if (skinnedMesh) {
@@ -249,7 +251,7 @@ export class BasicScene extends THREE.Scene {
 
     this.makeBoneBackup(model);
 
-    const iteration = 20;
+    const iteration = 10;
 
     const ikModel: any[] = [
       {
@@ -346,6 +348,10 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['elbowL'],
+            rotationMin: new THREE.Vector3(
+              -Math.PI, -Math.PI, -Math.PI),
+            rotationMax: new THREE.Vector3(
+              Math.PI, Math.PI, Math.PI),
           },
         ],
         iteration: iteration,
@@ -358,9 +364,6 @@ export class BasicScene extends THREE.Scene {
           {
             index: bonesIdMap['armR'],
           },
-          {
-            index: bonesIdMap['elbowR'],
-          },
         ],
         iteration: iteration,
       },
@@ -370,9 +373,6 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['armL'],
-          },
-          {
-            index: bonesIdMap['elbowL'],
           },
         ],
         iteration: iteration,
@@ -384,12 +384,13 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['handR'],
+            rotationMin: new THREE.Vector3(
+              0, 0, THREE.MathUtils.degToRad(-150)),
+            rotationMax: new THREE.Vector3(
+              0, 0, 0),
           },
           {
             index: bonesIdMap['armR'],
-          },
-          {
-            index: bonesIdMap['elbowR'],
           },
         ],
         iteration: iteration,
@@ -400,12 +401,13 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['handL'],
+            rotationMin: new THREE.Vector3(
+              0, 0, THREE.MathUtils.degToRad(-150)),
+            rotationMax: new THREE.Vector3(
+              0, 0, 0),
           },
           {
             index: bonesIdMap['armL'],
-          },
-          {
-            index: bonesIdMap['elbowL'],
           },
         ],
         iteration: iteration,
@@ -680,6 +682,8 @@ export class BasicScene extends THREE.Scene {
       const { pose, score } = this.getHigherScoredPose(poses);
       if (score < 90) {
         // Not all body in view
+        this.computingIK = false;
+        this.restoreBackupOnNextComputation = true;
         return;
       }
       if (!model || !pose) {

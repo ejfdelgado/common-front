@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -30,15 +31,14 @@ import { BodyData } from '@mytypes/bodyTypes';
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
-export class ThreejsComponent extends CommonComponent implements OnInit, AfterViewInit {
+export class ThreejsComponent extends CommonComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
-
   sceneCreated: PromiseEmitter = new PromiseEmitter();
-
   hasMobile: boolean;
+  restoreInterval: NodeJS.Timeout | null = null;
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -48,6 +48,11 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   ) {
     super(sanitizer, fullScreenSrv);
     this.hasMobile = this.isMobile();
+  }
+  ngOnDestroy(): void {
+    if (this.restoreInterval) {
+      clearInterval(this.restoreInterval);
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -94,6 +99,12 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
     setTimeout(() => {
       this.onResize({});
     }, 0);
+    this.restoreInterval = setInterval(() => {
+      if (!this.scene) {
+        return;
+      }
+      this.scene.restoreBackupOnNextComputation = true;
+    }, 5 * 1000);
   }
 
   executeCommand(command: RecognizedCommand) {
