@@ -70,12 +70,17 @@ export function getHigherAvatarScoredPose(poses: BodyData[]) {
 
 export function replaceAvatarSkin(model: THREE.Object3D<THREE.Object3DEventMap>, url: string) {
     const newTexture = textureLoader.load(url);
-    newTexture.colorSpace = THREE.SRGBColorSpace;
+    //newTexture.colorSpace = THREE.SRGBColorSpace;
     newTexture.flipY = false;
     model.traverse((child: any) => {
         if (child.isMesh && child.material) {
             child.material.map = newTexture;
+            child.material.metalness = 0.0;
+            child.material.roughness = 0.8;
             child.material.needsUpdate = true;
+            //child.material.roughnessMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_Roughness.jpg');
+            child.material.normalMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_NormalGL.jpg');
+            child.material.normalScale.set(1, 1);
         }
     });
 }

@@ -28,7 +28,7 @@ export class BasicScene extends BasicAvatarScene {
     const params = getUrlQueryParams();
   }
 
-  initialize(debug: boolean = true, addGridHelper: boolean = true) {
+  initialize() {
     this.camera = new THREE.PerspectiveCamera(
       10,
       this.bounds.width / this.bounds.height,
@@ -59,15 +59,23 @@ export class BasicScene extends BasicAvatarScene {
       if (!this.camera || !this.renderer || !this.orbitals) {
         return;
       }
-      const object = await this.addAvatar(
+      await this.addAvatar(
         ROOT_PATH + "avatar005.glb",
         this.camera, this.renderer, this.orbitals);
-      replaceAvatarSkin(object, ROOT_PATH + "avatar.jpg");
+      this.replaceAvatarSkin(ROOT_PATH + "squeleton.jpg");
     } catch (err) {
 
     } finally {
       loading.done();
     }
+  }
+
+  replaceAvatarSkin(url: string) {
+    const avatar = this.getObjectByName("avatar");
+    if (!avatar) {
+      return;
+    }
+    replaceAvatarSkin(avatar, url);
   }
 
   animate() {
