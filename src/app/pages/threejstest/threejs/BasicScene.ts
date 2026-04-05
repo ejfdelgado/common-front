@@ -196,8 +196,19 @@ export class BasicScene extends THREE.Scene {
     //createControlFor("target_footR");
     //createControlFor("target_kneeL");
     //createControlFor("target_footL");
+    //createControlFor("target_chest");
 
     const ikModel: any[] = [
+      {
+        target: bonesIdMap['target_chest'],
+        effector: bonesIdMap['trunk'],
+        links: [
+          {
+            index: bonesIdMap['pelvis'],
+          },
+        ],
+        iteration: 10,
+      },
       {
         target: bonesIdMap['target_kneeR'],
         effector: bonesIdMap['footR'],
