@@ -10,7 +10,7 @@ import {
   CCDIKHelper,
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { BodyData } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData } from '@mytypes/bodyTypes';
 
 const textureLoader = new TextureLoader();
 
@@ -609,22 +609,81 @@ export class BasicScene extends THREE.Scene {
         this.computingIK = false;
         return;
       }
+
+      const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
+      // Generate map
+      pose.keypoints3D.forEach((el) => {
+        keypoints3DMap[el.name] = el;
+      });
+
+      const computeAverage = (name: string, list: BodyKeyPointData[]) => {
+        const avg: BodyKeyPointData = {
+          name, score: 0, x: 0, y: 0, z: 0
+        };
+        const size = list.length;
+        list.forEach((el) => {
+          avg.x += el.x;
+          avg.y += el.y;
+          avg.z += el.z;
+          avg.score += el.score;
+        });
+        avg.x = avg.x / size;
+        avg.y = avg.y / size;
+        avg.z = avg.z / size;
+        avg.score = avg.score / size;
+        return avg;
+      }
+
+      // Generate front vector
+      /*
+      keypoints3DMap["right_hip"];
+      keypoints3DMap["left_hip"];
+      keypoints3DMap["right_shoulder"];
+      keypoints3DMap["left_shoulder"];
+      */
+
+      // avg(left_shoulder, right_shoulder) => target_chest
+      pose.keypoints3D.push(computeAverage("target_chest", [
+        keypoints3DMap["right_shoulder"],
+        keypoints3DMap["left_shoulder"],
+      ]));
+      // avg(left_ear, right_ear) => target_head
+      pose.keypoints3D.push(computeAverage("target_head", [
+        keypoints3DMap["right_ear"],
+        keypoints3DMap["left_ear"],
+      ]));
+
+      pose.keypoints3D.forEach((el) => {
+        keypoints3DMap[el.name] = el;
+      });
+
       const MAPPING_TARGETS = [
         { "source": "left_knee", "target": "target_kneeL" },
-        { "source": "left_foot_index", "target": "target_footL" },
+        { "source": "left_heel", "target": "target_footL" },
         { "source": "right_knee", "target": "target_kneeR" },
-        { "source": "right_foot_index", "target": "target_footR" },
+        { "source": "right_heel", "target": "target_footR" },
+        //
+        { "source": "right_shoulder", "target": "target_elbowR" },
+        { "source": "right_elbow", "target": "target_armR" },
+        { "source": "right_wrist", "target": "target_handR" },
+        { "source": "left_shoulder", "target": "target_elbowL" },
+        { "source": "left_elbow", "target": "target_armL" },
+        { "source": "left_wrist", "target": "target_handL" },
+        //
+        { "source": "target_chest", "target": "target_chest" },
+        { "source": "target_head", "target": "target_head" },
       ];
       for (let i = 0; i < MAPPING_TARGETS.length; i++) {
         const { source, target } = MAPPING_TARGETS[i];
         const targetBone = model.getObjectByName(target);
-        const sourceData = pose.keypoints3D.find(e => e.name == source);
+        const sourceData = keypoints3DMap[source];
         if (!sourceData || !targetBone) {
           continue;
         }
 
         const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
         sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+        sourceCoord.applyAxisAngle(new THREE.Vector3(1, 0, 0), THREE.MathUtils.degToRad(14));
 
         targetBone.position.x = sourceCoord.x;
         targetBone.position.y = sourceCoord.y;
