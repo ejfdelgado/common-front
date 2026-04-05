@@ -14,7 +14,7 @@ export class WalkBody {
     frontData!: FrontComputationType;
     HANDS_CLOSE = 0.3;
     HANDS_NOT_CLOSE = 0.35;
-    MOVEMENT_THRESHOLD = 0.11;
+    MOVEMENT_THRESHOLD = 0.15;
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     public makeClap: EventEmitter<WalkBody> = new EventEmitter();
     FRONT_REFERENCE = new THREE.Vector3(-1, 0, 0);
@@ -164,8 +164,6 @@ export class WalkBody {
         let makeStep = false;
 
         if (differenceAbs > this.MOVEMENT_THRESHOLD) {
-            //console.log(`differenceAbs ${differenceAbs} > this.MOVEMENT_THRESHOLD ${this.MOVEMENT_THRESHOLD}`);
-            // Somo foot is elevated more than the other
             if (difference > 0) {
                 // Caused by the left foot
                 if (this.sideState !== 1) {
@@ -186,13 +184,7 @@ export class WalkBody {
                 }
             }
             this.maxDifference = Math.max(this.maxDifference, differenceAbs);
-        } else {
-            // Both foots on the floor
-            this.sideState = 0;
         }
-        //state.data.difference = difference * 10;
-        //state.data.sideState = this.sideState;
-        //state.data.lastStep = this.lastStep * 10;
 
         if (makeStep) {
             ModuloSonido.play('/assets/sounds/tictoc.mp3', false);
