@@ -98,6 +98,10 @@ const routes: Routes = [
         loadComponent: () => import('./pages/body/body.component').then(m => m.BodyComponent),
     },
     {
+        path: 'threejs',
+        loadComponent: () => import('./pages/threejstest/threejstest.component').then(m => m.ThreejsTestComponent),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
