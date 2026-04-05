@@ -100,7 +100,7 @@ export class BasicScene extends THREE.Scene {
 
       const skinnedMesh = this.getSkinnedMesh(object);
       if (skinnedMesh) {
-        this.configureIK(object, skinnedMesh, true);
+        this.configureIK(object, skinnedMesh, false);
         if (this.ikSolver) {
           this.ikSolver.update();
         }
@@ -155,44 +155,63 @@ export class BasicScene extends THREE.Scene {
     }
     console.log(JSON.stringify(bonesIdMap, null, 4));
 
-    const targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    const target = new THREE.Mesh(new THREE.SphereGeometry(0.05), targetMaterial);
-    const boneTarget = model.getObjectByName("target_footR");
-    if (boneTarget) {
-      target.position.copy(boneTarget.position);
-      if (this.camera && this.renderer) {
-        const transformControls = new TransformControls(this.camera, this.renderer.domElement);
-        transformControls.attach(target);
-        transformControls.setMode('translate');
-        transformControls.showX = true;
-        transformControls.showY = true;
-        transformControls.showZ = true;
-        this.add(transformControls.getHelper());
-        transformControls.addEventListener('dragging-changed', (event) => {
-          if (this.orbitals) {
-            this.orbitals.enabled = !event.value;
-            if (this.orbitals.enabled) {
-              boneTarget.position.copy(target.position);
-              if (this.ikSolver) {
-                this.ikSolver.update();
+    const createControlFor = (boneName: string) => {
+      const targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const target = new THREE.Mesh(new THREE.SphereGeometry(0.05), targetMaterial);
+      const boneTarget = model.getObjectByName(boneName);
+      if (boneTarget) {
+        target.position.copy(boneTarget.position);
+        if (this.camera && this.renderer) {
+          const transformControls = new TransformControls(this.camera, this.renderer.domElement);
+          transformControls.attach(target);
+          transformControls.setMode('translate');
+          transformControls.showX = true;
+          transformControls.showY = true;
+          transformControls.showZ = true;
+          this.add(transformControls.getHelper());
+          transformControls.addEventListener('dragging-changed', (event) => {
+            if (this.orbitals) {
+              this.orbitals.enabled = !event.value;
+              if (this.orbitals.enabled) {
+                boneTarget.position.copy(target.position);
+                if (this.ikSolver) {
+                  this.ikSolver.update();
+                }
               }
             }
-          }
-        });
+          });
+        }
+        this.add(target);
+      } else {
+        console.log(`No bone target for "${boneName}"`);
       }
-      this.add(target);
-    } else {
-      console.log(`No bone target for "target_footR"`);
-    }
+    };
+
+    createControlFor("target_kneeR");
+    createControlFor("target_footR");
 
     const ikModel: any[] = [
       {
-        target: 16,//index of the bone to reach
-        effector: 11,//the bone that moves (end of chain)
+        target: bonesIdMap['target_footR'],
+        effector: bonesIdMap['foot2R'],
         links: [
           {
-            index: 10,
-
+            index: bonesIdMap['footR'],
+          },
+          {
+            index: bonesIdMap['legR'],
+          },
+        ],
+        iteration: 10,
+        minAngle: 0,
+        maxAngle: Math.PI
+      },
+      {
+        target: bonesIdMap['target_kneeR'],
+        effector: bonesIdMap['footR'],
+        links: [
+          {
+            index: bonesIdMap['legR'],
           },
         ],
         iteration: 10,
