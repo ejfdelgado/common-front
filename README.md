@@ -1,7 +1,17 @@
 # CommonFront
 
-Revisar el score de todo para tomar mejor decision si aplicar o no.
-Limitar la rotacion de los brazos para que no quede mal.
+Para la detección de pies, usar el maximo de los pies.
+Generalizar todo en una clase abstracta.
+Usar eventos para posiciones.
+
+Revisar por qué la textura no se ve bien en mobile.
+Hacer que la textura se vea smooth, no como metalica.
+Usar border redondos en el video.
+Permitir interactuar con voz con los asistentes virtuales.
+
+Permitir usar un modelo en tiempo real con firestore.
+
+El sistema de navegación debe manejar colisiones para evitar overlaping.
 
 -------------------------------------------------------------------
 

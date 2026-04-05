@@ -4,42 +4,19 @@ import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
-import { TextureLoader } from 'three';
 import {
   CCDIKSolver,
   CCDIKHelper,
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { BodyData, BodyKeyPointData, BoneBackupType, FrontComputationType } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData, BoneBackupType, FrontComputationType, ItemModelRef } from '@mytypes/bodyTypes';
 import { RecognizedCommand } from '@services/voicerecognition.service';
+import { computeAvatarFront, computeAvatarScore, fitCameraToObject, getAvatarSkinnedMesh, getHigherAvatarScoredPose, inspectAvatarObject, replaceAvatarSkin, setRotationBoneLocation } from './AvatarUtilities';
+import { getUrlQueryParams } from '@tools/UrlUtil';
 
-const textureLoader = new TextureLoader();
+
 
 const ROOT_PATH = "/assets/models/";
-
-export interface ActorType {
-  object: any;
-  alias: string;
-  x: number;
-  y: number;
-};
-
-export interface ItemModelRef {
-  url: string;
-  name: string;
-};
-
-export interface RotationType {
-  direction: boolean;
-  obj: any;
-  speed: number;
-  rotation: number;
-}
-
-export interface PawLocation {
-  x: number;
-  y: number;
-};
 
 export class BasicScene extends THREE.Scene {
   camera: THREE.PerspectiveCamera | null = null;
@@ -57,13 +34,14 @@ export class BasicScene extends THREE.Scene {
   originalPelvisRotation: THREE.Euler | null = null;
   bonesBackup: BoneBackupType[] = [];
   restoreBackupOnNextComputation: boolean = false;
+  BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
 
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
     this.canvasRef = canvasRef;
     this.bounds = bounds;
     this.indicatorSrv = indicatorSrv;
-    const params = this.getUrlQueryParams();
+    const params = getUrlQueryParams();
 
   }
   /**
@@ -100,9 +78,9 @@ export class BasicScene extends THREE.Scene {
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "avatar", url: ROOT_PATH + "avatar005.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
-        //this.fitCameraToObject(this.camera, object, this.orbitals);
+        //fitCameraToObject(this.camera, object, this.orbitals);
       }
-      this.replaceSkin(object, "avatar.jpg");
+      replaceAvatarSkin(object, ROOT_PATH + "avatar.jpg");
       loading.done();
 
       //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, 0);
@@ -110,7 +88,7 @@ export class BasicScene extends THREE.Scene {
       //this.setRotationBoneAnglesDegrees(object, "handR", 0, 0, 0);//Z: -150 -> 0
       //this.setRotationBoneAnglesDegrees(object, "handL", 0, 0, -150);//Z: -150 -> 0
 
-      const skinnedMesh = this.getSkinnedMesh(object);
+      const skinnedMesh = getAvatarSkinnedMesh(object);
       if (skinnedMesh) {
         this.configureIK(object, skinnedMesh, false);
         if (this.ikSolver) {
@@ -136,9 +114,9 @@ export class BasicScene extends THREE.Scene {
       this.setRotationBoneAnglesDegrees(object, "head", 0, 0, 45);
       // Pelvis
       // Esto posiciona el cuerpo y lo rota?
-      this.setRotationBoneLocation(object, "pelvis", 0, 0, 0);
       this.setRotationBoneAnglesDegrees(object, "pelvis", 0, -45, 0);
       */
+      //setRotationBoneLocation(object, "pelvis", 0, 0, 0);
 
     });
 
@@ -428,67 +406,11 @@ export class BasicScene extends THREE.Scene {
 
   }
 
-
-  getUrlQueryParams() {
-    return new URLSearchParams(window.location.hash.split("?")[1]);
-  }
-
   animate() {
     const currentTime = performance.now();
     const delta = (currentTime - this.previousTime) / 1000;
   }
 
-  fitCameraToObject(
-    camera: THREE.PerspectiveCamera,
-    object: THREE.Object3D<THREE.Object3DEventMap>,
-    controls: OrbitControls,
-    offset = 1.25) {
-    // Ensure world transforms are up to date
-    object.updateWorldMatrix(true, true);
-
-    // Compute bounding box
-    const box = new THREE.Box3().setFromObject(object);
-    const size = new THREE.Vector3();
-    const center = new THREE.Vector3();
-    box.getSize(size);
-    box.getCenter(center);
-
-    // Get the largest dimension
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const fov = camera.fov * (Math.PI / 180); // convert to radians
-    let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-
-    cameraZ *= offset; // add some padding
-
-    // Compute direction from camera to center
-    const direction = new THREE.Vector3()
-      .subVectors(camera.position, center)
-      .normalize();
-
-    // Reposition camera
-    camera.position.copy(center.clone().addScaledVector(direction, cameraZ));
-    camera.lookAt(center);
-
-    // Update near/far planes
-    const minZ = box.min.z;
-    const maxZ = box.max.z;
-    camera.near = Math.max(0.1, cameraZ - maxDim * 2);
-    camera.far = cameraZ + maxDim * 2;
-    camera.updateProjectionMatrix();
-
-    // Optional: update OrbitControls target
-    if (controls) {
-      controls.target.copy(center);
-      controls.update();
-    }
-  }
-
-  /**
-   * Given a ThreeJS camera and renderer, resizes the scene if the
-   * browser window is resized.
-   * @param camera - a ThreeJS PerspectiveCamera object.
-   * @param renderer - a subclass of a ThreeJS Renderer object.
-   */
   setBounds(bounds: DOMRect) {
     this.bounds = bounds;
     if (this.camera == null || this.renderer == null) {
@@ -532,7 +454,7 @@ export class BasicScene extends THREE.Scene {
               object.name = item.name;
               if (object != null) {
                 if (autoAdd) {
-                  //this.inspectObject(object);
+                  //inspectAvatarObject(object);
                   this.add(object);
                 }
               }
@@ -551,36 +473,6 @@ export class BasicScene extends THREE.Scene {
       }
     });
   }
-
-  inspectObject(model: THREE.Object3D<THREE.Object3DEventMap>) {
-    model.traverse((child: any) => {
-      if (child.isMesh) {
-        console.log("Mesh material:", child.material);
-      }
-      if (child.isBone || child.type === 'Bone') {
-        console.log("Bone found:", child.name, child);
-      }
-    });
-
-  }
-
-  getSkinnedMesh(model: THREE.Object3D<THREE.Object3DEventMap>) {
-    const temp: THREE.Object3D = model;
-    const children = temp.children;
-    let skinnedMesh: THREE.SkinnedMesh | null = null;
-    // Find the SkinnedMesh
-    //console.log(model.type);
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      if (child.type == 'SkinnedMesh') {
-        skinnedMesh = child as THREE.SkinnedMesh;
-      }
-      //console.log(child.type);
-    }
-    return skinnedMesh;
-  }
-
-  BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
 
   setRotationBoneAnglesDegrees(
     model: THREE.Object3D<THREE.Object3DEventMap>,
@@ -609,65 +501,6 @@ export class BasicScene extends THREE.Scene {
     }
   }
 
-  setRotationBoneLocation(
-    model: THREE.Object3D<THREE.Object3DEventMap>,
-    boneName: string,
-    x: number,
-    y: number,
-    z: number,
-  ) {
-    const bone = model.getObjectByName(boneName);
-    if (bone && ((bone as any).isBone || bone.type === 'Bone')) {
-      bone.position.set(x, y, z);
-    }
-  }
-
-  replaceSkin(model: THREE.Object3D<THREE.Object3DEventMap>, textureUrl: string) {
-    const newTexture = textureLoader.load(ROOT_PATH + textureUrl);
-    newTexture.colorSpace = THREE.SRGBColorSpace;
-    newTexture.flipY = false;
-    model.traverse((child: any) => {
-      if (child.isMesh && child.material) {
-        child.material.map = newTexture;
-        child.material.needsUpdate = true;
-      }
-    });
-  }
-
-  computeScore(pose: BodyData) {
-    const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
-    pose.keypoints3D.forEach((el) => {
-      keypoints3DMap[el.name] = el;
-    });
-    let scoreComputation: number = 0;
-    let countScores: number = 0;
-
-    scoreComputation += keypoints3DMap["right_shoulder"].score;
-    countScores++;
-    scoreComputation += keypoints3DMap["left_shoulder"].score;
-    countScores++;
-    scoreComputation += Math.max(keypoints3DMap["right_ear"].score, keypoints3DMap["left_ear"].score)
-    countScores++;
-    scoreComputation += keypoints3DMap["right_heel"].score;
-    countScores++;
-    scoreComputation += keypoints3DMap["left_heel"].score;
-    countScores++;
-    const score = 100 * scoreComputation / countScores;
-    return score;
-  }
-
-  getHigherScoredPose(poses: BodyData[]) {
-    return poses.map((pose) => {
-      const score = this.computeScore(pose);
-      return {
-        score,
-        pose,
-      };
-    }).sort((a, b) => {
-      return b.score - a.score;
-    })[0];
-  }
-
   async computeIK(poses: BodyData[]) {
     if (this.computingIK || poses.length == 0) {
       return;
@@ -679,7 +512,7 @@ export class BasicScene extends THREE.Scene {
         this.restoreBackupOnNextComputation = false;
       }
       const model = this.getObjectByName("avatar");
-      const { pose, score } = this.getHigherScoredPose(poses);
+      const { pose, score } = getHigherAvatarScoredPose(poses);
       if (score < 90) {
         // Not all body in view
         this.computingIK = false;
@@ -726,7 +559,7 @@ export class BasicScene extends THREE.Scene {
       // Generate front vector
       const pelvisBone = model.getObjectByName("pelvis");
       if (pelvisBone) {
-        const frontData = this.computeFront(keypoints3DMap);
+        const frontData = computeAvatarFront(keypoints3DMap);
         if (this.originalPelvisRotation == null) {
           this.originalPelvisRotation = pelvisBone.rotation.clone();
         }
@@ -787,39 +620,6 @@ export class BasicScene extends THREE.Scene {
     } finally {
       this.computingIK = false;
     }
-  }
-
-  computeFront(keypoints3DMap: { [key: string]: BodyKeyPointData }): FrontComputationType {
-    const left_shoulder = keypoints3DMap['left_shoulder'];
-    const right_shoulder = keypoints3DMap['right_shoulder'];
-    const left_hip = keypoints3DMap['left_hip'];
-    const right_hip = keypoints3DMap['right_hip'];
-
-    const v1 = new THREE.Vector3(left_hip.x - right_hip.x, left_hip.y - right_hip.y, left_hip.z - right_hip.z);
-    const v2 = new THREE.Vector3(right_shoulder.x - right_hip.x, right_shoulder.y - right_hip.y, right_shoulder.z - right_hip.z);
-    const front1 = new THREE.Vector3().crossVectors(v1, v2).normalize();
-
-    const v1p = new THREE.Vector3(right_shoulder.x - left_shoulder.x, right_shoulder.y - left_shoulder.y, right_shoulder.z - left_shoulder.z);
-    const v2p = new THREE.Vector3(left_hip.x - left_shoulder.x, left_hip.y - left_shoulder.y, left_hip.z - left_shoulder.z);
-    const front2 = new THREE.Vector3().crossVectors(v1p, v2p).normalize();
-
-    const FRONT_REFERENCE = new THREE.Vector3(-1, 0, 0);
-    const front = new THREE.Vector3(0, 0, 0);
-    front.setX((front1.x + front2.x) / 2);
-    front.setY(0);
-    front.setZ((front1.z + front2.z) / 2);
-    front.normalize();
-
-    const angle = FRONT_REFERENCE.angleTo(front);
-
-    const response: FrontComputationType = {
-      x: front.x,
-      y: front.y,
-      angle: (front.z < 0 ? -1 : 1) * angle,
-      angle_deg: 0,
-    };
-    response.angle_deg = response.angle * 180 / Math.PI;
-    return response;
   }
 
   executeCommand(command: RecognizedCommand) {
