@@ -1,6 +1,15 @@
 # CommonFront
 
 Usar eventos para posiciones.
+- Evento de dar un paso.
+- Evento de cada una de las manos arriba IN y OUT.
+- Evento de aplauso IN y OUT para atrapar cosas.
+- Evento de brazos a los lados. IN y OUT
+
+Hacer que cada paso que da el usuario sea más pequeño.
+Hacer que la pose T permita caminar hacia atrás.
+Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
+Colocar la cámara un poco mas lejos.
 
 Revisar por qué la textura no se ve bien en mobile.
 Hacer que la textura se vea smooth, no como metalica.
@@ -18,13 +27,6 @@ Permitiendo cargar N partes el mundo:
 Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
 min, x, y, z, max, x, y, z.
 Cada parte permite cargar también un mesh que permite deducir la altura por donde camina.
-
-Colocar la cámara un poco mas lejos.
-Hacer que cada paso que da el usuario se más pequeño.
-Hacer que la pose T permita caminar hacia atrás.
-Crear un avatar que se mueva con los puntos.
-Que sea fácil personalizar la textura.
-Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
 
 Quitar el gesto de pararse en un solo pie por mas de cierto tiempo.
 Permitir cargar el mundo haciendo referencia al modelo guardado previamente.
