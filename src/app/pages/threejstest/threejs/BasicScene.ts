@@ -58,13 +58,13 @@ export class BasicScene extends THREE.Scene {
   initialize(debug: boolean = true, addGridHelper: boolean = true) {
     // setup camera
     this.camera = new THREE.PerspectiveCamera(
-      20,
+      10,
       this.bounds.width / this.bounds.height,
       0.1,
       1000
     );
-    this.camera.position.x = -30;
-    this.camera.position.y = 15;
+    this.camera.position.x = 10;
+    this.camera.position.y = 5;
     this.camera.position.z = 0;
     // setup renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -86,10 +86,30 @@ export class BasicScene extends THREE.Scene {
     const loading = this.indicatorSrv.start();
     this.addModel({ name: "avatar", url: ROOT_PATH + "avatar003.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
-        this.fitCameraToObject(this.camera, object, this.orbitals);
+        //this.fitCameraToObject(this.camera, object, this.orbitals);
       }
       this.replaceSkin(object, "avatar.jpg");
       loading.done();
+
+      //Piernas al frente y abiertas
+      this.setRotationBoneAnglesDegrees(object, "legL", 0, -45, -90);
+      this.setRotationBoneAnglesDegrees(object, "legR", 0, -45, 90);
+      // Rodillas flexionadas
+      this.setRotationBoneAnglesDegrees(object, "footL", 0, 0, 90);
+      this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, -90);
+      // Antebrazo al frente
+      this.setRotationBoneAnglesDegrees(object, "armL", 0, 0, -90);
+      this.setRotationBoneAnglesDegrees(object, "armR", 0, 0, -90);
+      // Brasos flexionados
+      this.setRotationBoneAnglesDegrees(object, "handL", 0, 0, -90);
+      // Tronco
+      this.setRotationBoneAnglesDegrees(object, "trunk", 45, 0, 0);
+      //Cabeza
+      this.setRotationBoneAnglesDegrees(object, "head", 0, 0, 45);
+      // Pelvis
+      // Esto posiciona el cuerpo y lo rota?
+      this.setRotationBoneLocation(object, "pelvis", 0, 0, 0);
+      this.setRotationBoneAnglesDegrees(object, "pelvis", 0, -45, 0);
     });
 
     new HDRLoader().load(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr", (texture) => {
@@ -244,6 +264,46 @@ export class BasicScene extends THREE.Scene {
       if (child.type == 'SkinnedMesh') {
         skinnedMesh = child as THREE.SkinnedMesh;
       }
+    }
+  }
+
+  BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
+
+  setRotationBoneAnglesDegrees(
+    model: THREE.Object3D<THREE.Object3DEventMap>,
+    boneName: string,
+    x: number,
+    y: number,
+    z: number,
+  ) {
+    const bone = model.getObjectByName(boneName);
+    if (bone && ((bone as any).isBone || bone.type === 'Bone')) {
+      if (!this.BONE_MAP_ORIGINAL_ROTATION.has(boneName)) {
+        this.BONE_MAP_ORIGINAL_ROTATION.set(boneName, bone.rotation.clone());
+      }
+      const originalRotation = this.BONE_MAP_ORIGINAL_ROTATION.get(boneName);
+      if (originalRotation) {
+        bone.rotation.set(
+          originalRotation.x + THREE.MathUtils.degToRad(x),
+          originalRotation.y + THREE.MathUtils.degToRad(y),
+          originalRotation.z + THREE.MathUtils.degToRad(z)
+        );
+      }
+    } else {
+      console.warn(`Bone ${boneName} not found.`);
+    }
+  }
+
+  setRotationBoneLocation(
+    model: THREE.Object3D<THREE.Object3DEventMap>,
+    boneName: string,
+    x: number,
+    y: number,
+    z: number,
+  ) {
+    const bone = model.getObjectByName(boneName);
+    if (bone && ((bone as any).isBone || bone.type === 'Bone')) {
+      bone.position.set(x, y, z);
     }
   }
 
