@@ -76,10 +76,10 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   }
 
   loop() {
-    if (this.scene != null && this.scene.camera) {
-      this.scene.camera?.updateProjectionMatrix();
-      this.scene.renderer?.render(this.scene, this.scene.camera);
-      this.scene.orbitals?.update();
+    if (this.scene && this.scene.camera && this.scene.renderer && this.scene.orbitals) {
+      this.scene.camera.updateProjectionMatrix();
+      this.scene.renderer.render(this.scene, this.scene.camera);
+      this.scene.orbitals.update();
       this.scene.animate();
       requestAnimationFrame(() => {
         this.loop();
@@ -99,6 +99,10 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
     setTimeout(() => {
       this.onResize({});
     }, 0);
+    this.startSkeletonGuardinan();
+  }
+
+  startSkeletonGuardinan() {
     this.restoreInterval = setInterval(() => {
       if (!this.scene) {
         return;

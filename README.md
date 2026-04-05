@@ -1,7 +1,5 @@
 # CommonFront
 
-Para la detección de pies, usar el maximo de los pies.
-Generalizar todo en una clase abstracta.
 Usar eventos para posiciones.
 
 Revisar por qué la textura no se ve bien en mobile.
