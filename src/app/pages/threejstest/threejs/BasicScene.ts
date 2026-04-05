@@ -100,6 +100,7 @@ export class BasicScene extends THREE.Scene {
 
       //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, 0);
       //this.setRotationBoneAnglesDegrees(object, "legR", 0, 0, -90);
+      //this.setRotationBoneAnglesDegrees(object, "footL", 0, 0, 90);
 
       const skinnedMesh = this.getSkinnedMesh(object);
       if (skinnedMesh) {
@@ -193,6 +194,8 @@ export class BasicScene extends THREE.Scene {
 
     //createControlFor("target_kneeR");
     //createControlFor("target_footR");
+    //createControlFor("target_kneeL");
+    //createControlFor("target_footL");
 
     const ikModel: any[] = [
       {
@@ -218,6 +221,33 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['legR'],
+          },
+        ],
+        iteration: 10,
+      },
+      {
+        target: bonesIdMap['target_footL'],
+        effector: bonesIdMap['foot2L'],
+        links: [
+          {
+            index: bonesIdMap['footL'],
+            rotationMin: new THREE.Vector3(
+              0, 0, 0),
+            rotationMax: new THREE.Vector3(
+              0, 0, THREE.MathUtils.degToRad(90 + 45))
+          },
+          {
+            index: bonesIdMap['legL'],
+          },
+        ],
+        iteration: 10,
+      },
+      {
+        target: bonesIdMap['target_kneeL'],
+        effector: bonesIdMap['footL'],
+        links: [
+          {
+            index: bonesIdMap['legL'],
           },
         ],
         iteration: 10,
