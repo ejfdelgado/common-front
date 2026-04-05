@@ -197,17 +197,46 @@ export class BasicScene extends THREE.Scene {
     //createControlFor("target_kneeL");
     //createControlFor("target_footL");
     //createControlFor("target_chest");
+    //createControlFor("target_head");
+    //createControlFor("target_elbowR");
+    //createControlFor("target_elbowL");
+    //createControlFor("target_armR");
+    //createControlFor("target_armL");
+    //createControlFor("target_handR");
+    //createControlFor("target_handL");
+
+
+    const iteration = 20;
 
     const ikModel: any[] = [
       {
         target: bonesIdMap['target_chest'],
-        effector: bonesIdMap['trunk'],
+        effector: bonesIdMap['head'],
         links: [
+          {
+            index: bonesIdMap['trunk'],
+          },
           {
             index: bonesIdMap['pelvis'],
           },
         ],
-        iteration: 10,
+        iteration: iteration,
+      },
+      {
+        target: bonesIdMap['target_head'],
+        effector: bonesIdMap['head2'],
+        links: [
+          {
+            index: bonesIdMap['head'],
+          },
+          {
+            index: bonesIdMap['trunk'],
+          },
+          {
+            index: bonesIdMap['pelvis'],
+          },
+        ],
+        iteration: iteration,
       },
       {
         target: bonesIdMap['target_kneeR'],
@@ -217,7 +246,7 @@ export class BasicScene extends THREE.Scene {
             index: bonesIdMap['legR'],
           },
         ],
-        iteration: 10,
+        iteration: iteration,
       },
       {
         target: bonesIdMap['target_footR'],
@@ -234,7 +263,7 @@ export class BasicScene extends THREE.Scene {
             index: bonesIdMap['legR'],
           },
         ],
-        iteration: 10,
+        iteration: iteration,
       },
       {
         target: bonesIdMap['target_kneeL'],
@@ -244,7 +273,7 @@ export class BasicScene extends THREE.Scene {
             index: bonesIdMap['legL'],
           },
         ],
-        iteration: 10,
+        iteration: iteration,
       },
       {
         target: bonesIdMap['target_footL'],
@@ -261,7 +290,88 @@ export class BasicScene extends THREE.Scene {
             index: bonesIdMap['legL'],
           },
         ],
-        iteration: 10,
+        iteration: iteration,
+      },
+      //
+      {
+        target: bonesIdMap['target_elbowR'],
+        effector: bonesIdMap['armR'],
+        links: [
+          {
+            index: bonesIdMap['elbowR'],
+          },
+        ],
+        iteration: iteration,
+      },
+      {
+        target: bonesIdMap['target_elbowL'],
+        effector: bonesIdMap['armL'],
+        links: [
+          {
+            index: bonesIdMap['elbowL'],
+          },
+        ],
+        iteration: iteration,
+      },
+      //
+      {
+        target: bonesIdMap['target_armR'],
+        effector: bonesIdMap['handR'],
+        links: [
+          {
+            index: bonesIdMap['armR'],
+          },
+          {
+            index: bonesIdMap['elbowR'],
+          },
+        ],
+        iteration: iteration,
+      },
+      {
+        target: bonesIdMap['target_armL'],
+        effector: bonesIdMap['handL'],
+        links: [
+          {
+            index: bonesIdMap['armL'],
+          },
+          {
+            index: bonesIdMap['elbowL'],
+          },
+        ],
+        iteration: iteration,
+      },
+      //
+      {
+        target: bonesIdMap['target_handR'],
+        effector: bonesIdMap['hand2R'],
+        links: [
+          {
+            index: bonesIdMap['handR'],
+          },
+          {
+            index: bonesIdMap['armR'],
+          },
+          {
+            index: bonesIdMap['elbowR'],
+          },
+        ],
+        iteration: iteration,
+      },
+      {
+        target: bonesIdMap['target_handL'],
+        effector: bonesIdMap['hand2L'],
+        links: [
+          {
+            index: bonesIdMap['handL'],
+          },
+          {
+            index: bonesIdMap['armL'],
+          },
+          {
+            index: bonesIdMap['elbowL'],
+          },
+        ],
+        iteration: iteration,
       },
     ];
 
