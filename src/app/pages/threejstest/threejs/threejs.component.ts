@@ -96,6 +96,6 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   }
 
   executeCommand(command: RecognizedCommand) {
-    //Ignore
+    console.log(command);
   }
 }

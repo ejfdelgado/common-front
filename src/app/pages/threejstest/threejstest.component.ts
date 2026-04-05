@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
+import { CommandConfigType, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ThreejsComponent } from "./threejs/threejs.component";
@@ -15,6 +15,8 @@ import { ModuloSonido } from '@services/sonido.service';
 import { tracker } from '@tools/tracker.js';
 import { BodyData } from '@mytypes/bodyTypes';
 import * as tf from '@tensorflow/tfjs';
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 
 @Component({
   selector: 'app-threejstest',
@@ -58,8 +60,12 @@ export class ThreejsTestComponent extends CommonSpeech {
       maxDiffMillis: 600,
 
       commands: {
-        "es-ES": {},
-        "en-US": {},
+        "es-ES": {
+          "guardar": "save",
+        },
+        "en-US": {
+          "save": "save",
+        },
         "fr-FR": {}
       },
     };
@@ -85,6 +91,9 @@ export class ThreejsTestComponent extends CommonSpeech {
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
       this.threeComponent.executeCommand(command);
+      if (command.command == "save") {
+        this.savePosititon();
+      }
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
   }
@@ -145,5 +154,81 @@ export class ThreejsTestComponent extends CommonSpeech {
 
   async stopTracking() {
     tracker.pause();
+  }
+
+  downloadOBJ(data: string, filename = 'model.obj') {
+    const blob = new Blob([data], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  async savePosititon() {
+    if (!this.poses || this.poses.length == 0) {
+      return;
+    }
+    const keypoints3D = this.poses[0].keypoints3D;
+    const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const group = new THREE.Group();
+    const SPHERE_RADIUS = 0.01;
+    const SCALING = 1;
+    for (let i = 0; i < keypoints3D.length; i++) {
+      const keyPoint = keypoints3D[i];
+      const geometry = new THREE.SphereGeometry(SPHERE_RADIUS, 8, 8);
+      const sphere = new THREE.Mesh(geometry, material);
+
+      sphere.position.set(
+        SCALING * keyPoint.x,
+        SCALING * keyPoint.y,
+        SCALING * keyPoint.z,
+      );
+      sphere.name = keyPoint.name;
+      group.add(sphere);
+    }
+    group.updateMatrixWorld(true);
+    const exporter = new GLTFExporter();
+    exporter.parse(group, function (result) {
+      let output;
+      let filename;
+
+      if (result instanceof ArrayBuffer) {
+        // Binary (.glb)
+        output = result;
+        filename = 'model.glb';
+      } else {
+        // JSON (.gltf)
+        output = JSON.stringify(result, null, 2);
+        filename = 'model.gltf';
+      }
+
+      const blob = new Blob([output], {
+        type: result instanceof ArrayBuffer
+          ? 'application/octet-stream'
+          : 'application/json'
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+
+      URL.revokeObjectURL(url);
+    },
+      function (error) {
+        console.error('Export error:', error);
+      },
+      {
+        binary: true,
+        trs: false,
+        onlyVisible: true,
+        truncateDrawRange: true
+      });
   }
 }

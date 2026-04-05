@@ -91,7 +91,7 @@ export class BasicScene extends THREE.Scene {
     this.background = new THREE.Color(0x333333);
 
     const loading = this.indicatorSrv.start();
-    this.addModel({ name: "avatar", url: ROOT_PATH + "avatar004.glb", }, true).then(async (object) => {
+    this.addModel({ name: "avatar", url: ROOT_PATH + "avatar005.glb", }, true).then(async (object) => {
       if (this.camera && this.orbitals) {
         //this.fitCameraToObject(this.camera, object, this.orbitals);
       }
@@ -192,8 +192,8 @@ export class BasicScene extends THREE.Scene {
       }
     };
 
-    //createControlFor("target_kneeR");
-    //createControlFor("target_footR");
+    createControlFor("target_kneeR");
+    createControlFor("target_footR");
     //createControlFor("target_kneeL");
     //createControlFor("target_footL");
     //createControlFor("target_chest");
