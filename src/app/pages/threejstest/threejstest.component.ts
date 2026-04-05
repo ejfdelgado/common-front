@@ -13,7 +13,8 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { ModuloSonido } from '@services/sonido.service';
 import { tracker } from '@tools/tracker.js';
-import { BodyData, BodyState } from '@mytypes/bodyTypes';
+import { BodyData } from '@mytypes/bodyTypes';
+import * as tf from '@tensorflow/tfjs';
 
 @Component({
   selector: 'app-threejstest',
@@ -90,6 +91,8 @@ export class ThreejsTestComponent extends CommonSpeech {
 
   async ngOnInit() {
     const promise = this.indicatorSrv.start();
+    await tf.ready();
+    this.initializeBodyTracker();
     await this.speechSrv.init();
     promise.done();
   }
@@ -123,6 +126,10 @@ export class ThreejsTestComponent extends CommonSpeech {
     // tracker.run('stream') // takes video from an m3u8 online stream
     tracker.on('beforeupdate', (poses: any) => {
       this.poses = poses;
+      if (this.activity) {
+        this.activity.done();
+        this.activity = null;
+      }
       this.cdr.detectChanges();
     });
   }
@@ -130,7 +137,7 @@ export class ThreejsTestComponent extends CommonSpeech {
   async startTracking() {
     this.started = true;
     //this.enterFullScreen();
-    ModuloSonido.play('/assets/sounds/nature.mp3', true);
+    //ModuloSonido.play('/assets/sounds/nature.mp3', true);
     ModuloSonido.play('/assets/sounds/button.mp3');
     this.activity = this.indicatorSrv.start();
     tracker.run('camera');

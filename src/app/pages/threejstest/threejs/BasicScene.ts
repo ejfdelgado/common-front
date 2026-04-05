@@ -192,17 +192,17 @@ export class BasicScene extends THREE.Scene {
       }
     };
 
-    createControlFor("target_kneeR");
-    createControlFor("target_footR");
+    //createControlFor("target_kneeR");
+    //createControlFor("target_footR");
     //createControlFor("target_kneeL");
     //createControlFor("target_footL");
-    createControlFor("target_chest");
-    createControlFor("target_head");
-    createControlFor("target_elbowR");
+    //createControlFor("target_chest");
+    //createControlFor("target_head");
+    //createControlFor("target_elbowR");
     //createControlFor("target_elbowL");
-    createControlFor("target_armR");
+    //createControlFor("target_armR");
     //createControlFor("target_armL");
-    createControlFor("target_handR");
+    //createControlFor("target_handR");
     //createControlFor("target_handL");
 
 
