@@ -98,6 +98,9 @@ export class BasicScene extends THREE.Scene {
       this.replaceSkin(object, "avatar.jpg");
       loading.done();
 
+      //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, -90);
+      //this.setRotationBoneAnglesDegrees(object, "legR", 0, 0, 90);
+
       const skinnedMesh = this.getSkinnedMesh(object);
       if (skinnedMesh) {
         this.configureIK(object, skinnedMesh, false);
@@ -127,6 +130,7 @@ export class BasicScene extends THREE.Scene {
       this.setRotationBoneLocation(object, "pelvis", 0, 0, 0);
       this.setRotationBoneAnglesDegrees(object, "pelvis", 0, -45, 0);
       */
+
     });
 
     new HDRLoader().load(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr", (texture) => {
@@ -187,7 +191,7 @@ export class BasicScene extends THREE.Scene {
       }
     };
 
-    createControlFor("target_kneeR");
+    //createControlFor("target_kneeR");
     createControlFor("target_footR");
 
     const ikModel: any[] = [
@@ -197,16 +201,16 @@ export class BasicScene extends THREE.Scene {
         links: [
           {
             index: bonesIdMap['footR'],
+            rotationMin: new THREE.Vector3(0, 0, THREE.MathUtils.degToRad(-90 - 45)),
+            rotationMax: new THREE.Vector3(0, 0, 0)
           },
-          {
+          /*{
             index: bonesIdMap['legR'],
-          },
+          },*/
         ],
         iteration: 10,
-        minAngle: 0,
-        maxAngle: Math.PI
       },
-      {
+      /*{
         target: bonesIdMap['target_kneeR'],
         effector: bonesIdMap['footR'],
         links: [
@@ -215,9 +219,7 @@ export class BasicScene extends THREE.Scene {
           },
         ],
         iteration: 10,
-        minAngle: 0,
-        maxAngle: Math.PI
-      }
+      },*/
     ];
 
 
