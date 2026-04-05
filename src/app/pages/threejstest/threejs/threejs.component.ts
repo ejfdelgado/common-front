@@ -82,6 +82,9 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   }
 
   public computeDimensions() {
+    if (!this.parentRef) {
+      return;
+    }
     const parentNativeElement = this.parentRef.nativeElement;
     this.bounds = parentNativeElement.getBoundingClientRect();
   }

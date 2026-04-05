@@ -5,6 +5,12 @@ import { IndicatorService, Wait } from '@services/indicator.service';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { TextureLoader } from 'three';
+import {
+  CCDIKSolver,
+  CCDIKHelper,
+} from 'three/examples/jsm/animation/CCDIKSolver.js';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+
 const textureLoader = new TextureLoader();
 
 const ROOT_PATH = "/assets/models/";
@@ -43,8 +49,9 @@ export class BasicScene extends THREE.Scene {
   fbxLoader = new FBXLoader();
   gltfLoader = new GLTFLoader();
   previousTime = performance.now();
-
   canvasRef: HTMLCanvasElement;
+  ikSolver: CCDIKSolver | null = null;
+
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
     this.canvasRef = canvasRef;
@@ -91,6 +98,15 @@ export class BasicScene extends THREE.Scene {
       this.replaceSkin(object, "avatar.jpg");
       loading.done();
 
+      const skinnedMesh = this.getSkinnedMesh(object);
+      if (skinnedMesh) {
+        this.configureIK(object, skinnedMesh, true);
+        if (this.ikSolver) {
+          this.ikSolver.update();
+        }
+      }
+
+      /*
       //Piernas al frente y abiertas
       this.setRotationBoneAnglesDegrees(object, "legL", 0, -45, -90);
       this.setRotationBoneAnglesDegrees(object, "legR", 0, -45, 90);
@@ -110,6 +126,7 @@ export class BasicScene extends THREE.Scene {
       // Esto posiciona el cuerpo y lo rota?
       this.setRotationBoneLocation(object, "pelvis", 0, 0, 0);
       this.setRotationBoneAnglesDegrees(object, "pelvis", 0, -45, 0);
+      */
     });
 
     new HDRLoader().load(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr", (texture) => {
@@ -119,6 +136,84 @@ export class BasicScene extends THREE.Scene {
       this.background = texture;
       this.environmentIntensity = 0.3;
     });
+  }
+
+  configureIK(
+    model: THREE.Object3D<THREE.Object3DEventMap>,
+    skinnedMesh: THREE.SkinnedMesh,
+    showHelper: boolean
+  ): void {
+    // https://threejs.org/docs/#examples/en/animations/CCDIKSolver
+    const bonesIdMap: { [key: string]: number } = {};
+    // Map the bones
+    const originalBones = skinnedMesh.skeleton.bones;
+    if (originalBones) {
+      for (let i = 0; i < originalBones.length; i++) {
+        const oneBone = originalBones[i];
+        bonesIdMap[oneBone.name] = i;
+      }
+    }
+    console.log(JSON.stringify(bonesIdMap, null, 4));
+
+    const targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const target = new THREE.Mesh(new THREE.SphereGeometry(0.05), targetMaterial);
+    const boneTarget = model.getObjectByName("target_footR");
+    if (boneTarget) {
+      target.position.copy(boneTarget.position);
+      if (this.camera && this.renderer) {
+        const transformControls = new TransformControls(this.camera, this.renderer.domElement);
+        transformControls.attach(target);
+        transformControls.setMode('translate');
+        transformControls.showX = true;
+        transformControls.showY = true;
+        transformControls.showZ = true;
+        this.add(transformControls.getHelper());
+        transformControls.addEventListener('dragging-changed', (event) => {
+          if (this.orbitals) {
+            this.orbitals.enabled = !event.value;
+            if (this.orbitals.enabled) {
+              boneTarget.position.copy(target.position);
+              if (this.ikSolver) {
+                this.ikSolver.update();
+              }
+            }
+          }
+        });
+      }
+      this.add(target);
+    } else {
+      console.log(`No bone target for "target_footR"`);
+    }
+
+    const ikModel: any[] = [
+      {
+        target: 16,//index of the bone to reach
+        effector: 11,//the bone that moves (end of chain)
+        links: [
+          {
+            index: 10,
+
+          },
+        ],
+        iteration: 10,
+        minAngle: 0,
+        maxAngle: Math.PI
+      }
+    ];
+
+
+    const iks: any[] = ikModel;
+    this.ikSolver = new CCDIKSolver(skinnedMesh, iks);
+    if (showHelper) {
+      const helper2: CCDIKHelper = this.ikSolver.createHelper();
+      helper2.name = 'CCDIKHelper';
+      const oldHelper2 = this.getObjectByName('CCDIKHelper');
+      if (oldHelper2) {
+        this.remove(oldHelper2);
+      }
+      this.add(helper2);
+    }
+
   }
 
 
@@ -246,8 +341,6 @@ export class BasicScene extends THREE.Scene {
   }
 
   inspectObject(model: THREE.Object3D<THREE.Object3DEventMap>) {
-    const temp: THREE.Object3D = model;
-    const children = temp.children;
     model.traverse((child: any) => {
       if (child.isMesh) {
         console.log("Mesh material:", child.material);
@@ -256,8 +349,13 @@ export class BasicScene extends THREE.Scene {
         console.log("Bone found:", child.name, child);
       }
     });
-    let skinnedMesh: THREE.SkinnedMesh | null = null;
 
+  }
+
+  getSkinnedMesh(model: THREE.Object3D<THREE.Object3DEventMap>) {
+    const temp: THREE.Object3D = model;
+    const children = temp.children;
+    let skinnedMesh: THREE.SkinnedMesh | null = null;
     // Find the SkinnedMesh
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
@@ -265,6 +363,7 @@ export class BasicScene extends THREE.Scene {
         skinnedMesh = child as THREE.SkinnedMesh;
       }
     }
+    return skinnedMesh;
   }
 
   BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
