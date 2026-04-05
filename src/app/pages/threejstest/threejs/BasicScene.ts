@@ -205,7 +205,7 @@ export class BasicScene extends THREE.Scene {
               //object.name = item.name;
               if (object != null) {
                 if (autoAdd) {
-                  //this.inspectObject(object);
+                  this.inspectObject(object);
                   this.add(object);
                 }
               }
@@ -226,11 +226,25 @@ export class BasicScene extends THREE.Scene {
   }
 
   inspectObject(model: THREE.Object3D<THREE.Object3DEventMap>) {
+    const temp: THREE.Object3D = model;
+    const children = temp.children;
     model.traverse((child: any) => {
       if (child.isMesh) {
-        console.log(child.material);
+        console.log("Mesh material:", child.material);
+      }
+      if (child.isBone || child.type === 'Bone') {
+        console.log("Bone found:", child.name, child);
       }
     });
+    let skinnedMesh: THREE.SkinnedMesh | null = null;
+
+    // Find the SkinnedMesh
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      if (child.type == 'SkinnedMesh') {
+        skinnedMesh = child as THREE.SkinnedMesh;
+      }
+    }
   }
 
   replaceSkin(model: THREE.Object3D<THREE.Object3DEventMap>, textureUrl: string) {
