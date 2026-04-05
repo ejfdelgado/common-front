@@ -214,12 +214,8 @@ export class BasicScene extends THREE.Scene {
         target: bonesIdMap['target_chest'],
         effector: bonesIdMap['head'],
         links: [
-          {
-            index: bonesIdMap['trunk'],
-          },
-          {
-            index: bonesIdMap['pelvis'],
-          },
+          { index: bonesIdMap['trunk'], },
+          //{ index: bonesIdMap['pelvis'], },
         ],
         iteration: iteration,
       },
@@ -227,15 +223,9 @@ export class BasicScene extends THREE.Scene {
         target: bonesIdMap['target_head'],
         effector: bonesIdMap['head2'],
         links: [
-          {
-            index: bonesIdMap['head'],
-          },
-          {
-            index: bonesIdMap['trunk'],
-          },
-          {
-            index: bonesIdMap['pelvis'],
-          },
+          { index: bonesIdMap['head'], },
+          { index: bonesIdMap['trunk'], },
+          //{index: bonesIdMap['pelvis'],},
         ],
         iteration: iteration,
       },
@@ -611,6 +601,14 @@ export class BasicScene extends THREE.Scene {
       }
 
       const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
+      pose.keypoints3D.forEach((sourceData) => {
+        const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
+        sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+        sourceCoord.applyAxisAngle(new THREE.Vector3(1, 0, 0), THREE.MathUtils.degToRad(14));
+        sourceData.x = sourceCoord.x;
+        sourceData.y = sourceCoord.y;
+        sourceData.z = sourceCoord.z;
+      });
       // Generate map
       pose.keypoints3D.forEach((el) => {
         keypoints3DMap[el.name] = el;
@@ -635,6 +633,14 @@ export class BasicScene extends THREE.Scene {
       }
 
       // Generate front vector
+      const pelvisBone = model.getObjectByName("pelvis");
+      if (pelvisBone) {
+        /*
+        pelvisBone.rotation.x = 0;
+        pelvisBone.rotation.y = 0;
+        pelvisBone.rotation.z = 0;
+        */
+      }
       /*
       keypoints3DMap["right_hip"];
       keypoints3DMap["left_hip"];
@@ -681,13 +687,9 @@ export class BasicScene extends THREE.Scene {
           continue;
         }
 
-        const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
-        sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
-        sourceCoord.applyAxisAngle(new THREE.Vector3(1, 0, 0), THREE.MathUtils.degToRad(14));
-
-        targetBone.position.x = sourceCoord.x;
-        targetBone.position.y = sourceCoord.y;
-        targetBone.position.z = sourceCoord.z;
+        targetBone.position.x = sourceData.x;
+        targetBone.position.y = sourceData.y;
+        targetBone.position.z = sourceData.z;
       }
       if (this.ikSolver) {
         this.ikSolver.update();
