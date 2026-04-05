@@ -199,6 +199,16 @@ export class BasicScene extends THREE.Scene {
 
     const ikModel: any[] = [
       {
+        target: bonesIdMap['target_kneeR'],
+        effector: bonesIdMap['footR'],
+        links: [
+          {
+            index: bonesIdMap['legR'],
+          },
+        ],
+        iteration: 10,
+      },
+      {
         target: bonesIdMap['target_footR'],
         effector: bonesIdMap['foot2R'],
         links: [
@@ -216,11 +226,11 @@ export class BasicScene extends THREE.Scene {
         iteration: 10,
       },
       {
-        target: bonesIdMap['target_kneeR'],
-        effector: bonesIdMap['footR'],
+        target: bonesIdMap['target_kneeL'],
+        effector: bonesIdMap['footL'],
         links: [
           {
-            index: bonesIdMap['legR'],
+            index: bonesIdMap['legL'],
           },
         ],
         iteration: 10,
@@ -236,16 +246,6 @@ export class BasicScene extends THREE.Scene {
             rotationMax: new THREE.Vector3(
               0, 0, THREE.MathUtils.degToRad(90 + 45))
           },
-          {
-            index: bonesIdMap['legL'],
-          },
-        ],
-        iteration: 10,
-      },
-      {
-        target: bonesIdMap['target_kneeL'],
-        effector: bonesIdMap['footL'],
-        links: [
           {
             index: bonesIdMap['legL'],
           },
