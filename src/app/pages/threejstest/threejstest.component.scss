@@ -32,8 +32,8 @@
     z-index: 2;
     right: 30px;
     bottom: 30px;
-    max-width: 300px;
-    max-height: 300px;
+    width: 300px;
+    height: 300px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -76,7 +76,7 @@
 
 @media (max-width: 500px) {
     .video_parent {
-        max-width: 100px;
-        max-height: 100px;
+        width: 100px;
+        height: 100px;
     }
 }

@@ -45,6 +45,8 @@ export class WalkBody {
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     public makeClap: EventEmitter<WalkBody> = new EventEmitter();
     lastStepTime: number = 0;
+    isTPose: boolean = false;
+    MIN_T_POSE_THRESHOLD: number = 0.25;
 
     capture(
         points: { [key: string]: BodyKeyPointData },
@@ -57,6 +59,7 @@ export class WalkBody {
         this.computeLeftHand();
         this.computeRightHand();
         this.computeHandGet();
+        this.checkTPose();
         this.walkLogic();
     }
 
@@ -208,7 +211,7 @@ export class WalkBody {
             this.rotationY += (this.frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
             const advanceFront = this.FRONT_REFERENCE.clone().applyAxisAngle(this.UP_REFERENCE, this.rotationY).normalize();
             let forward = 1;
-            if (this.handsClose) {
+            if (this.isTPose) {
                 forward = -1;
             }
             this.translationX += (advanceFront.x * this.lastStep * this.STEP_AMOUNT) * forward;
@@ -266,6 +269,34 @@ export class WalkBody {
             actual.z = destination.z;
         }
         return actualT;
+    }
+
+    checkTPose() {
+        // right_shoulder y left_shoulder Y
+        const average = this.computeAverageByNames(['right_shoulder', 'left_shoulder']);
+        const referenceY = average.y;
+
+        // right_elbow left_elbow Y
+        const m1 = Math.abs(this.points['right_elbow'].y - referenceY);
+        const m2 = Math.abs(this.points['left_elbow'].y - referenceY);
+
+        // right_wrist left_wrist Y
+        const m3 = Math.abs(this.points['right_wrist'].y - referenceY);
+        const m4 = Math.abs(this.points['left_wrist'].y - referenceY);
+
+        if (
+            m1 < this.MIN_T_POSE_THRESHOLD &&
+            m2 < this.MIN_T_POSE_THRESHOLD &&
+            m3 < this.MIN_T_POSE_THRESHOLD &&
+            m4 < this.MIN_T_POSE_THRESHOLD
+        ) {
+            if (!this.isTPose) {
+                ModuloSonido.play('/assets/sounds/bang.mp3', false);
+            }
+            this.isTPose = true;
+        } else {
+            this.isTPose = false;
+        }
     }
 
     off() {
