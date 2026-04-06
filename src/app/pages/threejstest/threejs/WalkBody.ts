@@ -2,6 +2,7 @@ import { EventEmitter } from "@angular/core";
 import { BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class WalkBody {
     now: number = 0;
@@ -14,13 +15,16 @@ export class WalkBody {
     frontData!: FrontComputationType;
     HANDS_CLOSE = 0.3;
     HANDS_NOT_CLOSE = 0.35;
-    MOVEMENT_THRESHOLD = 0.15;
-    public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
-    public makeClap: EventEmitter<WalkBody> = new EventEmitter();
+    MOVEMENT_THRESHOLD = 0.1; // Step detection
+    STEP_AMOUNT: number = 3;// Walked distance on every step
     FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
     UP_REFERENCE = new THREE.Vector3(0, 1, 0);
     ROTATION_AMOUNT: number = 0.25;
-    STEP_AMOUNT: number = 2;
+    CAMERA_DISTANCE_TO_AVATAR: number = 14;
+    CAMERA_HEIGTH_RATIO: number = 4;
+    SMOOT_RATIO: number = 0.006 * 0.3;
+    MIN_MILLIS_BETWEEN_STEPS: number = 1000;
+
     // KPIs
     stepCount: number = 0;
     kilometers: number = 0;
@@ -33,6 +37,14 @@ export class WalkBody {
     translationX: number = 0;
     translationZ: number = 0;
     public transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
+    destinationCameraLocation = new THREE.Vector3(0, 0, 0);
+    lastCameraSmoot: number = new Date().getTime();
+    destinationLookAt = new THREE.Vector3(0, 0, 0);
+    lookAtLastT: number = new Date().getTime();
+    lookAtActual = new THREE.Vector3(0, 0, 0);
+    public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
+    public makeClap: EventEmitter<WalkBody> = new EventEmitter();
+    lastStepTime: number = 0;
 
     capture(
         points: { [key: string]: BodyKeyPointData },
@@ -171,15 +183,20 @@ export class WalkBody {
                     // Foot change, make the step of the previous amount
                     this.lastStep = this.maxDifference;
                     this.maxDifference = 0;
-                    makeStep = true;
+                    if (this.now - this.lastStepTime < this.MIN_MILLIS_BETWEEN_STEPS) {
+                        makeStep = true;
+                    }
+                    this.lastStepTime = this.now;
                     this.sideState = 1;
                 }
             } else {
                 // Caused by the right foot
                 if (this.sideState !== 2) {
                     this.lastStep = this.maxDifference;
-                    this.maxDifference = 0;
-                    makeStep = true;
+                    if (this.now - this.lastStepTime < this.MIN_MILLIS_BETWEEN_STEPS) {
+                        makeStep = true;
+                    }
+                    this.lastStepTime = this.now;
                     this.sideState = 2;
                 }
             }
@@ -204,32 +221,19 @@ export class WalkBody {
         }
     }
 
-    getVector(point: BodyKeyPointData) {
-        return new THREE.Vector3(point.x, point.y, point.z);
-    }
-
-    cameraSmoot = new THREE.Vector3(0, 0, 0);
-    lastCameraSmoot: number = new Date().getTime();
-    lookAtDestination = new THREE.Vector3(0, 0, 0);
-    lookAtLastT: number = new Date().getTime();
-    lookAtActual = new THREE.Vector3(0, 0, 0);
-
-    placeCamera(camera: THREE.PerspectiveCamera) {
-        // Compute the location behind the avatar
-        // Compute the avatar height
-        this.cameraSmoot.y = this.height * 2;
+    placeCamera(camera: THREE.PerspectiveCamera, orbitals: OrbitControls) {
+        this.destinationCameraLocation.y = this.height * this.CAMERA_HEIGTH_RATIO;
         const advanceFront = this.FRONT_REFERENCE.clone().applyAxisAngle(this.UP_REFERENCE, this.rotationY).normalize();
-        this.cameraSmoot.x = this.translationX - advanceFront.x * 15;
-        this.cameraSmoot.z = this.translationZ - advanceFront.z * 15;
+        this.destinationCameraLocation.x = this.translationX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.destinationCameraLocation.z = this.translationZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.lastCameraSmoot = this.makeSmoot(camera.position, this.destinationCameraLocation, this.lastCameraSmoot);
 
-        this.lastCameraSmoot = this.makeSmoot(camera.position, this.cameraSmoot, this.lastCameraSmoot);
-        this.lookAtDestination.setX(this.translationX);
-        this.lookAtDestination.setY(this.height);
-        this.lookAtDestination.setZ(this.translationZ);
-        this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.lookAtDestination, this.lookAtLastT);
-
-        camera.lookAt(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
-
+        this.destinationLookAt.setX(this.translationX);
+        this.destinationLookAt.setY(0);
+        this.destinationLookAt.setZ(this.translationZ);
+        this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.destinationLookAt, this.lookAtLastT);
+        camera.lookAt(this.lookAtActual);
+        orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
     }
 
     placeLight(light: THREE.PointLight) {
@@ -249,7 +253,7 @@ export class WalkBody {
         );
         const length = trayectoria.length();
         trayectoria.normalize();
-        const thisStep = diffTime * 0.006;
+        const thisStep = diffTime * this.SMOOT_RATIO;
         const currentStep = Math.min(thisStep, length);
         if (currentStep >= 0.0001) {
             trayectoria.multiplyScalar(currentStep);
