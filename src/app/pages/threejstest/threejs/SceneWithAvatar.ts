@@ -395,6 +395,14 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 frontData,
             } = response;
             this.walkBody.capture(keypoints3DMap, frontData);
+            if (this.camera) {
+                //this.walkBody.placeCamera(this.camera);
+                const model = this.getObjectByName("avatar");
+                if (model) {
+                    model.matrixAutoUpdate = false;
+                    model.matrix.copy(this.walkBody.transformationMatrix);
+                }
+            }
         }
     }
 

@@ -17,10 +17,10 @@ export class WalkBody {
     MOVEMENT_THRESHOLD = 0.15;
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     public makeClap: EventEmitter<WalkBody> = new EventEmitter();
-    FRONT_REFERENCE = new THREE.Vector3(-1, 0, 0);
+    FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
     UP_REFERENCE = new THREE.Vector3(0, 1, 0);
     ROTATION_AMOUNT: number = 0.25;
-    STEP_AMOUNT: number = 3;
+    STEP_AMOUNT: number = 2;
     // KPIs
     stepCount: number = 0;
     kilometers: number = 0;
@@ -188,7 +188,7 @@ export class WalkBody {
 
         if (makeStep) {
             ModuloSonido.play('/assets/sounds/tictoc.mp3', false);
-            this.rotationY += this.frontData.angle * this.ROTATION_AMOUNT;
+            this.rotationY += (this.frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
             const advanceFront = this.FRONT_REFERENCE.clone().applyAxisAngle(this.UP_REFERENCE, this.rotationY).normalize();
             let forward = 1;
             if (this.handsClose) {
@@ -206,6 +206,62 @@ export class WalkBody {
 
     getVector(point: BodyKeyPointData) {
         return new THREE.Vector3(point.x, point.y, point.z);
+    }
+
+    cameraSmoot = new THREE.Vector3(0, 0, 0);
+    lastCameraSmoot: number = new Date().getTime();
+    lookAtDestination = new THREE.Vector3(0, 0, 0);
+    lookAtLastT: number = new Date().getTime();
+    lookAtActual = new THREE.Vector3(0, 0, 0);
+
+    placeCamera(camera: THREE.PerspectiveCamera) {
+        // Compute the location behind the avatar
+        // Compute the avatar height
+        this.cameraSmoot.y = this.height * 2;
+        const advanceFront = this.FRONT_REFERENCE.clone().applyAxisAngle(this.UP_REFERENCE, this.rotationY).normalize();
+        this.cameraSmoot.x = this.translationX - advanceFront.x * 15;
+        this.cameraSmoot.z = this.translationZ - advanceFront.z * 15;
+
+        this.lastCameraSmoot = this.makeSmoot(camera.position, this.cameraSmoot, this.lastCameraSmoot);
+        this.lookAtDestination.setX(this.translationX);
+        this.lookAtDestination.setY(this.height);
+        this.lookAtDestination.setZ(this.translationZ);
+        this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.lookAtDestination, this.lookAtLastT);
+
+        camera.lookAt(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
+
+    }
+
+    placeLight(light: THREE.PointLight) {
+        light.position.x = this.translationX;
+        light.position.y = this.height * 2;
+        light.position.z = this.translationZ;
+    }
+
+    makeSmoot(actual: THREE.Vector3, destination: THREE.Vector3, lastTime: number) {
+        const actualT = this.now;
+        const diffTime = actualT - lastTime;
+
+        const trayectoria = new THREE.Vector3(
+            destination.x - actual.x,
+            destination.y - actual.y,
+            destination.z - actual.z,
+        );
+        const length = trayectoria.length();
+        trayectoria.normalize();
+        const thisStep = diffTime * 0.006;
+        const currentStep = Math.min(thisStep, length);
+        if (currentStep >= 0.0001) {
+            trayectoria.multiplyScalar(currentStep);
+            actual.x += trayectoria.x;
+            actual.y += trayectoria.y;
+            actual.z += trayectoria.z;
+        } else {
+            actual.x = destination.x;
+            actual.y = destination.y;
+            actual.z = destination.z;
+        }
+        return actualT;
     }
 
     off() {
