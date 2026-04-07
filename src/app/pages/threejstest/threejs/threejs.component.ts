@@ -20,7 +20,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { SceneWithAvatarComponent } from './SceneWithAvatarComponent';
 import { WalkController } from './controllers/WalkController';
 import { SoundFeedbackController } from './controllers/SoundFeedbackController';
-import { Stand2dController } from './controllers/stand2dController';
+import { Stand2dController } from './controllers/Stand2dController';
 
 @Component({
   standalone: true,

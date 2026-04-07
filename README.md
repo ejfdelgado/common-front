@@ -1,16 +1,8 @@
 # CommonFront
 
-Quitar login con cellphone.
+Agregar a manos y pies capacidad de colision para detectar cuando el usuario toca algo.
 
-Ubicar al avatar a una altura correcta.
-
-1. Medir de continuo el valor mínimo de Y en 2D.
-2. Hacer un filtro pasabajos, para que en un salto eso se note como un pasa altas.
-3. Pasar esa medida al mundo 3D, y sumarlo al offset anterior.
-
-Usar la posición en 2D:
-- para ubicar el avatar a izquierda o a derecha, sacar primero la proporcion del ancho de la pantalla con respecto al ancho del avatar, tal vez con la altura.
-- Para saltar.
+Mover lentamente la posición del avatar cuando va caminando, no que salte.
 
 Comparar poses y asignar un score.
 Agnostico de la orientación del avatar:

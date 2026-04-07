@@ -5,6 +5,7 @@ import * as THREE from 'three';
 
 export class WalkController extends SceneControllerAbstract {
     // constants 
+    MAX_INACTIVITY_MILLIS: number = 3000;
     SMOOT_RATIO: number = 0.006 * 0.3;
     CAMERA_HEIGTH_RATIO: number = 4;
     CAMERA_DISTANCE_TO_AVATAR: number = 14;
@@ -12,9 +13,9 @@ export class WalkController extends SceneControllerAbstract {
     STEP_AMOUNT: number = 3;// Walked distance on every step
     // variables
     destinationCameraLocation = new THREE.Vector3(0, 0, 0);
-    lastCameraSmoot: number = new Date().getTime();
+    lastCameraSmoot: number = 0;
+    lookAtLastT: number = 0;
     destinationLookAt = new THREE.Vector3(0, 0, 0);
-    lookAtLastT: number = new Date().getTime();
     lookAtActual = new THREE.Vector3(0, 0, 0);
     translationX: number = 0;
     translationY: number = 0;
@@ -61,9 +62,15 @@ export class WalkController extends SceneControllerAbstract {
 
     }
 
-    makeSmoot(actual: THREE.Vector3, destination: THREE.Vector3, lastTime: number) {
+    makeSmoot(actual: THREE.Vector3, destination: THREE.Vector3, lastTime: number, smootRatio: number) {
         const actualT = this.now;
+        if (lastTime == 0) {
+            return actualT;
+        }
         const diffTime = actualT - lastTime;
+        if (diffTime > this.MAX_INACTIVITY_MILLIS) {
+            return actualT;
+        }
 
         const trayectoria = new THREE.Vector3(
             destination.x - actual.x,
@@ -72,7 +79,7 @@ export class WalkController extends SceneControllerAbstract {
         );
         const length = trayectoria.length();
         trayectoria.normalize();
-        const thisStep = diffTime * this.SMOOT_RATIO;
+        const thisStep = diffTime * smootRatio;
         const currentStep = Math.min(thisStep, length);
         if (currentStep >= 0.0001) {
             trayectoria.multiplyScalar(currentStep);
@@ -95,12 +102,22 @@ export class WalkController extends SceneControllerAbstract {
         ).normalize();
         this.destinationCameraLocation.x = this.translationX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
         this.destinationCameraLocation.z = this.translationZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
-        this.lastCameraSmoot = this.makeSmoot(camera.position, this.destinationCameraLocation, this.lastCameraSmoot);
+        this.lastCameraSmoot = this.makeSmoot(
+            camera.position,
+            this.destinationCameraLocation,
+            this.lastCameraSmoot,
+            this.SMOOT_RATIO,
+        );
 
         this.destinationLookAt.setX(this.translationX);
         this.destinationLookAt.setY(0);
         this.destinationLookAt.setZ(this.translationZ);
-        this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.destinationLookAt, this.lookAtLastT);
+        this.lookAtLastT = this.makeSmoot(
+            this.lookAtActual,
+            this.destinationLookAt,
+            this.lookAtLastT,
+            this.SMOOT_RATIO,
+        );
         camera.lookAt(this.lookAtActual);
         orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
     }
@@ -119,7 +136,6 @@ export class WalkController extends SceneControllerAbstract {
 
         this.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
         const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(UP_REFERENCE, this.rotationY).normalize();
-
         this.translationX += (advanceFront.x * stepSize * this.STEP_AMOUNT) * forward;
         this.translationZ += (advanceFront.z * stepSize * this.STEP_AMOUNT) * forward;
         this.computeTransformationMatrix();
