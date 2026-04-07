@@ -28,12 +28,22 @@ export class WalkController extends SceneControllerAbstract {
         const { camera, orbitals } = this.scene;
         if (camera && orbitals) {
             orbitals.enabled = false;
+            // Affect the scene camera
             this.placeCamera(camera, orbitals);
+            // Affect the avatar
             const model = this.scene.getObjectByName("avatar");
             if (model) {
                 model.matrixAutoUpdate = false;
                 model.matrix.copy(this.transformationMatrix);
             }
+        }
+    }
+
+    override onEvent(event: AvatarBodyEvent): void {
+        if ("MAKE_STEP_FORWARD" == event.name) {
+            this.makeStep(1);
+        } else if ("MAKE_STEP_BACKWARD" == event.name) {
+            this.makeStep(-1);
         }
     }
 
@@ -91,14 +101,6 @@ export class WalkController extends SceneControllerAbstract {
         this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.destinationLookAt, this.lookAtLastT);
         camera.lookAt(this.lookAtActual);
         orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
-    }
-
-    override onEvent(event: AvatarBodyEvent): void {
-        if ("MAKE_STEP_FORWARD" == event.name) {
-            this.makeStep(1);
-        } else if ("MAKE_STEP_BACKWARD" == event.name) {
-            this.makeStep(-1);
-        }
     }
 
     makeStep(forward: number) {
