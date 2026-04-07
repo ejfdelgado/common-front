@@ -1,4 +1,10 @@
-import { BodyData, BodyKeyPointData, BoneBackupType, ItemModelRef, ScenePoseAndWalkEventType, ScenePoseEventType } from '@mytypes/bodyTypes';
+import {
+    BodyData,
+    BodyKeyPointData,
+    BoneBackupType,
+    ItemModelRef,
+    ScenePoseEventType,
+} from '@mytypes/bodyTypes';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -8,7 +14,11 @@ import {
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import * as THREE from 'three';
-import { computeAvatarFront, getAvatarSkinnedMesh, getHigherAvatarScoredPose } from './AvatarUtilities';
+import {
+    computeAvatarFront,
+    getAvatarSkinnedMesh,
+    getHigherAvatarScoredPose,
+} from './AvatarUtilities';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 
 export abstract class BasicAvatarScene extends THREE.Scene {
