@@ -5,7 +5,7 @@ import { SignalLowPass } from "../SignalLowPass";
 import * as THREE from 'three';
 
 export class Stand2dController extends SceneControllerAbstract {
-
+    HORIZONTAL_DISPLACEMENT_PONDERATION = 1.2;
     MIN_SCORE: number = 0.8;
     floorSignalLowPass: SignalLowPass = new SignalLowPass(1000);
     heightSignalLowPass: SignalLowPass = new SignalLowPass(2000);
@@ -62,7 +62,9 @@ export class Stand2dController extends SceneControllerAbstract {
         // Ponderate with the hight
         const xShiftReal = xShift / heightSignaLowPassed;
 
-        console.log(xShiftReal);
+        this.transformationMatrix = new THREE.Matrix4().makeTranslation(
+            this.HORIZONTAL_DISPLACEMENT_PONDERATION * xShiftReal, 0, 0
+        );
         return {
             avatarTransform: this.transformationMatrix,
         };

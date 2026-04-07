@@ -78,6 +78,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     this.scene.initialize();
     this.sceneCreated.resolve();
     // Add controllers
+    // The order matters...
     this.addController(this.walkController);
     this.addController(this.soundFeedbackController);
     this.addController(this.stand2dController);
