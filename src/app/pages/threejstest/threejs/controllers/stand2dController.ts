@@ -6,8 +6,9 @@ import * as THREE from 'three';
 
 export class Stand2dController extends SceneControllerAbstract {
     HORIZONTAL_DISPLACEMENT_PONDERATION = 1.2;
+    VERTICAL_JUMP_PONDERATION = 1.2;
     MIN_SCORE: number = 0.8;
-    floorSignalLowPass: SignalLowPass = new SignalLowPass(1000);
+    floorSignalLowPass: SignalLowPass = new SignalLowPass(900);
     heightSignalLowPass: SignalLowPass = new SignalLowPass(2000);
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
 
@@ -31,7 +32,7 @@ export class Stand2dController extends SceneControllerAbstract {
         }
         let currenMinY = yPos[0];
         if (yPos.length > 1) {
-            if (yPos[1] < currenMinY) {
+            if (yPos[1] > currenMinY) {
                 currenMinY = yPos[1];
             }
         }
@@ -50,6 +51,9 @@ export class Stand2dController extends SceneControllerAbstract {
         const floorSignalLowPassed = this.floorSignalLowPass.compute();
         const heightSignaLowPassed = this.heightSignalLowPass.compute();
 
+        // Jump detection
+        const jumpY = (floorSignal - floorSignalLowPassed) / heightSignaLowPassed;
+
         // X position
         const center = computeBodyPointAverage("", [
             keypoints2DMap["left_hip"],
@@ -63,7 +67,9 @@ export class Stand2dController extends SceneControllerAbstract {
         const xShiftReal = xShift / heightSignaLowPassed;
 
         this.transformationMatrix = new THREE.Matrix4().makeTranslation(
-            this.HORIZONTAL_DISPLACEMENT_PONDERATION * xShiftReal, 0, 0
+            xShiftReal * this.HORIZONTAL_DISPLACEMENT_PONDERATION,
+            jumpY * this.VERTICAL_JUMP_PONDERATION,
+            0,
         );
         return {
             avatarTransform: this.transformationMatrix,
