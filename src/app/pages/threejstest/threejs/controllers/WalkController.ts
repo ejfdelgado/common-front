@@ -1,4 +1,4 @@
-import { AvatarBodyEvent, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, BodyKeyPointData, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
@@ -17,6 +17,7 @@ export class WalkController extends SceneControllerAbstract {
     lookAtLastT: number = new Date().getTime();
     lookAtActual = new THREE.Vector3(0, 0, 0);
     translationX: number = 0;
+    translationY: number = 0;
     translationZ: number = 0;
     rotationY: number = 0;//radians
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
@@ -24,11 +25,14 @@ export class WalkController extends SceneControllerAbstract {
     stepCount: number = 0;
     kilometers: number = 0;
     calories: number = 0;
+    min3DYValue: number = 0;
 
     override async update(): Promise<void> {
         const { camera, orbitals } = this.scene;
         if (camera && orbitals) {
             orbitals.enabled = false;
+            this.computeMin3DY();
+            this.computeTransformationMatrix();
             // Affect the scene camera
             this.placeCamera(camera, orbitals);
             // Affect the avatar
@@ -121,8 +125,34 @@ export class WalkController extends SceneControllerAbstract {
 
         this.translationX += (advanceFront.x * stepSize * this.STEP_AMOUNT) * forward;
         this.translationZ += (advanceFront.z * stepSize * this.STEP_AMOUNT) * forward;
-        const translationMatrix = new THREE.Matrix4().makeTranslation(this.translationX, 0, this.translationZ);
+        this.computeTransformationMatrix();
+    }
+
+    computeYPosition() {
+        this.translationY = -1 * this.min3DYValue;
+    }
+
+    computeTransformationMatrix() {
+        this.computeYPosition();
+        const translationMatrix = new THREE.Matrix4().makeTranslation(this.translationX, this.translationY, this.translationZ);
         const rotationMatrix = new THREE.Matrix4().makeRotationY(this.rotationY);
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(translationMatrix, rotationMatrix);
+    }
+
+    computeMin3DY() {
+        const { walkBody } = this.lastData;
+        const { points } = walkBody;
+
+        const focusPoints: BodyKeyPointData[] = [];
+
+        focusPoints.push(points['left_heel']);
+        focusPoints.push(points['right_heel']);
+
+        this.min3DYValue = focusPoints.map(a => a.y).reduce((yVal, minVal, currentIndex, array) => {
+            if (yVal < minVal) {
+                return yVal;
+            }
+            return minVal;
+        }, 0);
     }
 }

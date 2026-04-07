@@ -2,13 +2,15 @@
 
 Quitar login con cellphone.
 
+Ubicar al avatar a una altura correcta.
+
+1. Medir de continuo el valor mínimo de Y en 2D.
+2. Hacer un filtro pasabajos, para que en un salto eso se note como un pasa altas.
+3. Pasar esa medida al mundo 3D, y sumarlo al offset anterior.
+
 Usar la posición en 2D:
 - para ubicar el avatar a izquierda o a derecha, sacar primero la proporcion del ancho de la pantalla con respecto al ancho del avatar, tal vez con la altura.
 - Para saltar.
-
-Ubicar al avatar a una altura correcta.
-
-En los eventos tal vez enviar el walkBody?
 
 Comparar poses y asignar un score.
 Agnostico de la orientación del avatar:
@@ -48,6 +50,7 @@ Permitir usar un modelo en tiempo real con firestore.
 El sistema de navegación debe manejar colisiones para evitar overlaping.
 
 Agregar login con microsoft.
+En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser varios?
 
 -------------------------------------------------------------------
 
