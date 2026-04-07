@@ -19,6 +19,8 @@ import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyData } from '@mytypes/bodyTypes';
+import { SceneWithAvatarComponent } from './SceneWithAvatarComponent';
+import { WalkController } from './controllers/WalkController';
 
 @Component({
   standalone: true,
@@ -31,14 +33,15 @@ import { BodyData } from '@mytypes/bodyTypes';
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
-export class ThreejsComponent extends CommonComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
-  scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
   restoreInterval: NodeJS.Timeout | null = null;
+  // controllers
+  walkController: WalkController = new WalkController();
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -72,6 +75,8 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
     this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv);
     this.scene.initialize();
     this.sceneCreated.resolve();
+    // Add controllers
+    this.addController(this.walkController);
     this.loop();
   }
 
@@ -116,12 +121,5 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
       return;
     }
     this.scene.executeCommand(command);
-  }
-
-  computeIK(poses: BodyData[]) {
-    if (!this.scene) {
-      return;
-    }
-    this.scene.computeIK(poses);
   }
 }

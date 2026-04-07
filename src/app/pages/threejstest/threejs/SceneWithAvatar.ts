@@ -1,4 +1,4 @@
-import { BodyData, BodyKeyPointData, BoneBackupType, ItemModelRef } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData, BoneBackupType, ItemModelRef, ScenePoseAndWalkEventType, ScenePoseEventType } from '@mytypes/bodyTypes';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -386,34 +386,35 @@ export abstract class BasicAvatarScene extends THREE.Scene {
         }
     }
 
-    async computeIK(poses: BodyData[]) {
+    async computeIK(poses: BodyData[]): Promise<null | false | ScenePoseAndWalkEventType> {
         const response = await this.computeIKInternal(poses);
-        if (response != false) {
+        if (response != false && response != null) {
             const {
                 pose,
                 keypoints3DMap,
                 frontData,
             } = response;
             this.walkBody.capture(keypoints3DMap, frontData);
-            if (this.camera && this.orbitals) {
-                this.orbitals.enabled = false;
-                this.walkBody.placeCamera(this.camera, this.orbitals);
-                const model = this.getObjectByName("avatar");
-                if (model) {
-                    model.matrixAutoUpdate = false;
-                    model.matrix.copy(this.walkBody.transformationMatrix);
-                }
+            return {
+                pose,
+                keypoints3DMap,
+                frontData,
+                walkBody: this.walkBody,
             }
         } else {
-            if (this.orbitals) {
-                this.orbitals.enabled = true;
-                this.orbitals.update();
-            }
+            return response;
         }
     }
 
-    async computeIKInternal(poses: BodyData[]) {
-        if (this.computingIK || poses.length == 0) {
+    /**
+     * @param poses 
+     * @returns null - System is bussy, false - imposible to track, ok
+     */
+    async computeIKInternal(poses: BodyData[]): Promise<null | false | ScenePoseEventType> {
+        if (this.computingIK) {
+            return null;
+        }
+        if (poses.length == 0) {
             return false;
         }
         this.computingIK = true;

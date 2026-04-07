@@ -1,5 +1,24 @@
 # CommonFront
 
+Quitar login con cellphone.
+Agregar login con microsoft.
+
+Hacer un vestier.
+- Interact with body.
+- Interact with voice commands.
+
+Permitir guardar la secuencia de poses; filtrar solo los puntos relevantes.
+Permitir reproducirlos.
+
+Crear un nivel más alto de configuración.
+Modificable en tiempo de ejecución.
+Connect, Disconnect.
+
+Usar menú de arriba para alojar:
+- Play/Pause. (voice on/of) (camera pose on/off)
+- Idioma.
+- Login/Logout
+
 Permitir construir un mundo 3d:
 Permitiendo cargar N partes el mundo:
 Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
@@ -220,66 +239,26 @@ css masonry
 
 -----
 
+private async confirmLoadState(userName: string) {
+  const popUpParameter: GenericData = {
+    translateFolder: 'nogales_assessment_single',
+    title: 'popups.load_previous.title',
+    txt: 'popups.load_previous.text',
+    model: {
+      userName,
+    },
+    ishtml: true,
+    choices: [
+      { txt: 'popups.choices.yes_word', val: 'yes', icon: "check" },
+      { txt: 'popups.choices.no_word', val: 'no', icon: "close", class: "secondary_button" },
+    ],
+  };
+  const modalResponse = (await this.modalSrv.generic(popUpParameter)) as {
+    choice: string;
+  };
 
-  async openDialog(payload: any) {
-    let model: any = null;
-    if (payload) {
-      model = payload.model;
-    }
-    const formConfig: FormDataType = {
-      title: "Crear / actualizar",
-      autoAuthor: true,
-      modelName: "note",
-      searchFields: ["title", "description", "cathegory"],
-      fields: [
-        {
-          label: "Json", type: "json", key: "json", json: {
-            template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.json",
-            fields: [
-              { label: "Título", type: "text", key: "tit", required: true },
-              {
-                label: "Imagen", type: "image", key: "image", image: {
-                  template: "voyage_note/${user.email}/${date.year}-${date.month}-${date.day}/${random}.jpg",
-                }
-              },
-              { label: "Descripción", type: "contenteditable", key: "desc" },
-              { label: "Habilitado", type: "toggle", key: "enabled" },
-              { label: "Calificación", type: "rating", key: "rate" },
-              { label: "Teléfono", type: "phone", key: "phone", required: false },
-              { label: "Categorías", type: "chip", key: "cathegory", required: false, chip: { stringOptions: ["Manzana", "Pera"] } },
-            ],
-          }
-        },
-      ],
-      model: {
-        title: '',
-        description: '',
-        json: "./assets/json/sample.json"
-      }
-    };
-    if (model) {
-      formConfig.model = model;
-    }
-    const dialogRef = this.dialog.open(DialogFormComponent, {
-      width: '800px',
-      panelClass: 'custom-emoji-picker',
-      autoFocus: !this.isMobile(),
-      data: formConfig,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (!model) {
-          // Creation
-          if (!this.liveMode) {
-            this.pageNotes(true);
-          }
-        } else {
-          // Update
-          // mix objects
-          Object.assign(model, result);
-          this.cdr.detectChanges();
-        }
-      }
-    });
+  if (!modalResponse || modalResponse.choice === 'no') {
+    return false;
   }
+  return true;
+}

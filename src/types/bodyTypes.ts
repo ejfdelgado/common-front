@@ -54,3 +54,19 @@ export interface PawLocation {
     x: number;
     y: number;
 };
+
+export interface ScenePoseEventType {
+    pose: BodyData,
+    keypoints3DMap: {
+        [key: string]: BodyKeyPointData;
+    },
+    frontData: FrontComputationType,
+}
+
+export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
+    walkBody: any,
+}
+
+export interface ControllerInitDataType {
+    scene: any,
+}
