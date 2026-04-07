@@ -37,7 +37,8 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                 // Update all controllers
                 for (let i = 0; i < this.controllers.length; i++) {
                     const controller = this.controllers[i];
-                    await controller.update(response);
+                    controller.preUpdate(response);
+                    await controller.update();
                 }
             }
         } catch (err) {

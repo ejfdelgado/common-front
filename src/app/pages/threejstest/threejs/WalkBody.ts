@@ -2,7 +2,6 @@ import { EventEmitter } from "@angular/core";
 import { BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class WalkBody {
     now: number = 0;
@@ -20,11 +19,7 @@ export class WalkBody {
     FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
     UP_REFERENCE = new THREE.Vector3(0, 1, 0);
     ROTATION_AMOUNT: number = 0.25;
-    CAMERA_DISTANCE_TO_AVATAR: number = 14;
-    CAMERA_HEIGTH_RATIO: number = 4;
-    SMOOT_RATIO: number = 0.006 * 0.3;
     MIN_MILLIS_BETWEEN_STEPS: number = 1000;
-
     // KPIs
     stepCount: number = 0;
     kilometers: number = 0;
@@ -37,11 +32,6 @@ export class WalkBody {
     translationX: number = 0;
     translationZ: number = 0;
     public transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
-    destinationCameraLocation = new THREE.Vector3(0, 0, 0);
-    lastCameraSmoot: number = new Date().getTime();
-    destinationLookAt = new THREE.Vector3(0, 0, 0);
-    lookAtLastT: number = new Date().getTime();
-    lookAtActual = new THREE.Vector3(0, 0, 0);
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     public makeClap: EventEmitter<WalkBody> = new EventEmitter();
     lastStepTime: number = 0;
@@ -224,51 +214,10 @@ export class WalkBody {
         }
     }
 
-    placeCamera(camera: THREE.PerspectiveCamera, orbitals: OrbitControls) {
-        this.destinationCameraLocation.y = this.height * this.CAMERA_HEIGTH_RATIO;
-        const advanceFront = this.FRONT_REFERENCE.clone().applyAxisAngle(this.UP_REFERENCE, this.rotationY).normalize();
-        this.destinationCameraLocation.x = this.translationX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
-        this.destinationCameraLocation.z = this.translationZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
-        this.lastCameraSmoot = this.makeSmoot(camera.position, this.destinationCameraLocation, this.lastCameraSmoot);
-
-        this.destinationLookAt.setX(this.translationX);
-        this.destinationLookAt.setY(0);
-        this.destinationLookAt.setZ(this.translationZ);
-        this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.destinationLookAt, this.lookAtLastT);
-        camera.lookAt(this.lookAtActual);
-        orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
-    }
-
     placeLight(light: THREE.PointLight) {
         light.position.x = this.translationX;
         light.position.y = this.height * 2;
         light.position.z = this.translationZ;
-    }
-
-    makeSmoot(actual: THREE.Vector3, destination: THREE.Vector3, lastTime: number) {
-        const actualT = this.now;
-        const diffTime = actualT - lastTime;
-
-        const trayectoria = new THREE.Vector3(
-            destination.x - actual.x,
-            destination.y - actual.y,
-            destination.z - actual.z,
-        );
-        const length = trayectoria.length();
-        trayectoria.normalize();
-        const thisStep = diffTime * this.SMOOT_RATIO;
-        const currentStep = Math.min(thisStep, length);
-        if (currentStep >= 0.0001) {
-            trayectoria.multiplyScalar(currentStep);
-            actual.x += trayectoria.x;
-            actual.y += trayectoria.y;
-            actual.z += trayectoria.z;
-        } else {
-            actual.x = destination.x;
-            actual.y = destination.y;
-            actual.z = destination.z;
-        }
-        return actualT;
     }
 
     checkTPose() {

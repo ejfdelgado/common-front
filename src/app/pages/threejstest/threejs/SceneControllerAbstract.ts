@@ -2,14 +2,20 @@ import { ControllerInitDataType, ScenePoseAndWalkEventType } from "@mytypes/body
 import { BasicScene } from "./BasicScene";
 
 export abstract class SceneControllerAbstract {
-
+    now: number = 0;
     scene!: BasicScene;
+    lastData!: ScenePoseAndWalkEventType;
 
     async initialize(data: ControllerInitDataType) {
         this.scene = data.scene;
     }
 
-    abstract update(data: ScenePoseAndWalkEventType): Promise<void>;
+    async preUpdate(data: ScenePoseAndWalkEventType): Promise<void> {
+        this.lastData = data;
+        this.now = new Date().getTime();
+    }
+
+    abstract update(): Promise<void>;
 
     abstract stop(): Promise<void>;
 
