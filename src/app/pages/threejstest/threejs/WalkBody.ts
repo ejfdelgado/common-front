@@ -33,7 +33,6 @@ export class WalkBody {
     translationZ: number = 0;
     public transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
-    public makeClap: EventEmitter<WalkBody> = new EventEmitter();
     lastStepTime: number = 0;
     isTPose: boolean = false;
     MIN_T_POSE_THRESHOLD: number = 0.25;
@@ -131,14 +130,18 @@ export class WalkBody {
         const onThreshold = 1.1 * height;
         const offTHreshold = 0.9 * height;
         if (wristHeight > onThreshold) {
-            if (this.handUpLeft == false) {
-                ModuloSonido.play('/assets/sounds/on1.mp3', false);
+            if (!this.handUpLeft) {
+                this.events.emit({
+                    name: "LEFT_HAND_UP_ON",
+                });
                 this.handUpLeft = true;
             }
         }
         if (wristHeight < offTHreshold) {
-            if (this.handUpLeft == true) {
-                //ModuloSonido.play('/assets/sounds/off.mp3', false);
+            if (this.handUpLeft) {
+                this.events.emit({
+                    name: "LEFT_HAND_UP_OFF",
+                });
                 this.handUpLeft = false;
             }
         }
@@ -149,15 +152,19 @@ export class WalkBody {
         const average = this.computeAverageByNames(['left_wrist', 'right_wrist']);
         if (distance <= this.HANDS_CLOSE) {
             if (this.handsClose == false) {
-                ModuloSonido.play('/assets/sounds/clap.mp3', false);
                 this.clapLocation.set(average.x, average.y, average.z);
-                this.makeClap.emit(this);
                 this.handsClose = true;
+                this.events.emit({
+                    name: "HANDS_JOINED_ON",
+                });
             }
         } else if (distance > this.HANDS_NOT_CLOSE) {
             if (this.handsClose == true) {
                 //ModuloSonido.play('/assets/sounds/off.mp3', false);
                 this.handsClose = false;
+                this.events.emit({
+                    name: "HANDS_JOINED_OFF",
+                });
             }
         }
     }
@@ -244,10 +251,17 @@ export class WalkBody {
             m4 < this.MIN_T_POSE_THRESHOLD
         ) {
             if (!this.isTPose) {
-                ModuloSonido.play('/assets/sounds/bang.mp3', false);
+                this.events.emit({
+                    name: "T_POSE_ON",
+                });
             }
             this.isTPose = true;
         } else {
+            if (this.isTPose) {
+                this.events.emit({
+                    name: "T_POSE_OFF",
+                });
+            }
             this.isTPose = false;
         }
     }

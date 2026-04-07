@@ -19,6 +19,11 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         public override fullScreenSrv: FullscreenService,
     ) {
         super(sanitizer, fullScreenSrv);
+        this.events.subscribe((event) => {
+            this.controllers.forEach((controller) => {
+                controller.onEvent(event);
+            });
+        });
     }
 
     async computeIK(poses: BodyData[]) {

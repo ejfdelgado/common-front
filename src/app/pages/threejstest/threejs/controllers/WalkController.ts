@@ -1,4 +1,4 @@
-import { ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
@@ -82,5 +82,9 @@ export class WalkController extends SceneControllerAbstract {
         this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.destinationLookAt, this.lookAtLastT);
         camera.lookAt(this.lookAtActual);
         orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
+    }
+
+    override onEvent(event: AvatarBodyEvent): void {
+
     }
 }

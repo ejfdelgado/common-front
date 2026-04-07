@@ -21,6 +21,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { BodyData } from '@mytypes/bodyTypes';
 import { SceneWithAvatarComponent } from './SceneWithAvatarComponent';
 import { WalkController } from './controllers/WalkController';
+import { SoundFeedbackController } from './controllers/SoundFeedbackController';
 
 @Component({
   standalone: true,
@@ -42,6 +43,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   restoreInterval: NodeJS.Timeout | null = null;
   // controllers
   walkController: WalkController = new WalkController();
+  soundFeedbackController: SoundFeedbackController = new SoundFeedbackController();
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -77,6 +79,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     this.sceneCreated.resolve();
     // Add controllers
     this.addController(this.walkController);
+    this.addController(this.soundFeedbackController);
     this.loop();
   }
 

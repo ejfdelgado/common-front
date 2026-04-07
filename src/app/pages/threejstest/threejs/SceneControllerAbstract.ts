@@ -1,4 +1,4 @@
-import { ControllerInitDataType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, ControllerInitDataType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
 import { BasicScene } from "./BasicScene";
 
 export abstract class SceneControllerAbstract {
@@ -20,4 +20,6 @@ export abstract class SceneControllerAbstract {
     abstract stop(): Promise<void>;
 
     abstract destroy(): Promise<void>;
+
+    abstract onEvent(event: AvatarBodyEvent): void;
 }
