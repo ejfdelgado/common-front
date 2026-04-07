@@ -1,10 +1,11 @@
-import { AvatarBodyEvent, ControllerInitDataType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, ControllerInitDataType, GenericSizeType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
 import { BasicScene } from "./BasicScene";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;
     scene!: BasicScene;
     lastData!: ScenePoseAndWalkEventType;
+    videoSize!: GenericSizeType;
 
     async initialize(data: ControllerInitDataType) {
         this.scene = data.scene;
@@ -12,6 +13,7 @@ export abstract class SceneControllerAbstract {
 
     async preUpdate(data: ScenePoseAndWalkEventType): Promise<void> {
         this.lastData = data;
+        this.videoSize = data.videoSize;
         this.now = new Date().getTime();
     }
 

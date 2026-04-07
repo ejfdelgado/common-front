@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { CommandConfigType, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
@@ -13,7 +13,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { ModuloSonido } from '@services/sonido.service';
 import { tracker } from '@tools/tracker.js';
-import { BodyData, BodyKeyPointData } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData, GenericSizeType } from '@mytypes/bodyTypes';
 import * as tf from '@tensorflow/tfjs';
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
@@ -38,9 +38,15 @@ import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 export class ThreejsTestComponent extends CommonSpeech {
 
   @ViewChild("three_component") threeComponent!: ThreejsComponent;
+  @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
   started: boolean = false;
   activity: Wait | null = null;
   poses: BodyData[] = [];
+
+  videoSize: GenericSizeType = {
+    width: 0,
+    height: 0,
+  };
 
   constructor(
     public cdr: ChangeDetectorRef,
@@ -62,11 +68,9 @@ export class ThreejsTestComponent extends CommonSpeech {
       commands: {
         "es-ES": {
           "guardar": "save",
-          "restaurar": "restore",
         },
         "en-US": {
           "save": "save",
-          "restore": "restore",
         },
         "fr-FR": {}
       },
@@ -94,10 +98,26 @@ export class ThreejsTestComponent extends CommonSpeech {
     command$.subscribe((command) => {
       this.threeComponent.executeCommand(command);
       if (command.command == "save") {
-        this.savePosititon();
+        this.downloadTextPlain();
       }
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
+  }
+
+  updateVideoSize() {
+    if (!this.videoRef) {
+      return;
+    }
+    if (this.videoSize.width != 0) {
+      return;
+    }
+    const video = this.videoRef.nativeElement;
+    const width = video.videoWidth;
+    const height = video.videoHeight;
+    this.videoSize = {
+      width,
+      height,
+    };
   }
 
   async ngOnInit() {
@@ -141,8 +161,9 @@ export class ThreejsTestComponent extends CommonSpeech {
         this.activity.done();
         this.activity = null;
       }
+      this.updateVideoSize();
       if (this.poses.length > 0) {
-        this.threeComponent.computeIK(this.poses);
+        this.threeComponent.computeIK(this.poses, this.videoSize);
       }
     });
   }
@@ -158,6 +179,22 @@ export class ThreejsTestComponent extends CommonSpeech {
 
   async stopTracking() {
     tracker.pause();
+  }
+
+  downloadTextPlain(filename = 'model.json') {
+    if (!this.poses || this.poses.length == 0) {
+      return;
+    }
+    const keypoints = this.poses[0].keypoints;
+    const blob = new Blob([JSON.stringify(keypoints, null, 4)], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+
+    URL.revokeObjectURL(url);
   }
 
   downloadOBJ(data: string, filename = 'model.obj') {

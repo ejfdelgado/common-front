@@ -169,3 +169,21 @@ export function fitCameraToObject(
         controls.update();
     }
 };
+
+export function computeBodyPointAverage(name: string, list: BodyKeyPointData[]) {
+    const avg: BodyKeyPointData = {
+        name, score: 0, x: 0, y: 0, z: 0
+    };
+    const size = list.length;
+    list.forEach((el) => {
+        avg.x += el.x;
+        avg.y += el.y;
+        avg.z += el.z;
+        avg.score += el.score;
+    });
+    avg.x = avg.x / size;
+    avg.y = avg.y / size;
+    avg.z = avg.z / size;
+    avg.score = avg.score / size;
+    return avg;
+};

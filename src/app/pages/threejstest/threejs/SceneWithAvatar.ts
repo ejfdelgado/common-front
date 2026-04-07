@@ -16,6 +16,7 @@ import { TransformControls } from 'three/examples/jsm/controls/TransformControls
 import * as THREE from 'three';
 import {
     computeAvatarFront,
+    computeBodyPointAverage,
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
 } from './AvatarUtilities';
@@ -444,23 +445,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 keypoints3DMap[el.name] = el;
             });
 
-            const computeAverage = (name: string, list: BodyKeyPointData[]) => {
-                const avg: BodyKeyPointData = {
-                    name, score: 0, x: 0, y: 0, z: 0
-                };
-                const size = list.length;
-                list.forEach((el) => {
-                    avg.x += el.x;
-                    avg.y += el.y;
-                    avg.z += el.z;
-                    avg.score += el.score;
-                });
-                avg.x = avg.x / size;
-                avg.y = avg.y / size;
-                avg.z = avg.z / size;
-                avg.score = avg.score / size;
-                return avg;
-            }
+
 
             // Generate front vector
             const pelvisBone = model.getObjectByName("pelvis");
@@ -474,12 +459,12 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             }
 
             // avg(left_shoulder, right_shoulder) => target_chest
-            pose.keypoints3D.push(computeAverage("target_chest", [
+            pose.keypoints3D.push(computeBodyPointAverage("target_chest", [
                 keypoints3DMap["right_shoulder"],
                 keypoints3DMap["left_shoulder"],
             ]));
             // avg(left_ear, right_ear) => target_head
-            pose.keypoints3D.push(computeAverage("target_head", [
+            pose.keypoints3D.push(computeBodyPointAverage("target_head", [
                 keypoints3DMap["right_ear"],
                 keypoints3DMap["left_ear"],
             ]));

@@ -67,6 +67,10 @@ export interface ScenePoseEventType {
 
 export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
     walkBody: WalkBody,
+    videoSize: GenericSizeType,
+    keypoints2DMap: {
+        [key: string]: BodyKeyPointData;
+    },
 }
 
 export interface ControllerInitDataType {
@@ -76,3 +80,8 @@ export interface ControllerInitDataType {
 export interface AvatarBodyEvent {
     name: string;
 }
+
+export interface GenericSizeType {
+    width: number;
+    height: number;
+};

@@ -20,6 +20,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { SceneWithAvatarComponent } from './SceneWithAvatarComponent';
 import { WalkController } from './controllers/WalkController';
 import { SoundFeedbackController } from './controllers/SoundFeedbackController';
+import { Stand2dController } from './controllers/stand2dController';
 
 @Component({
   standalone: true,
@@ -42,6 +43,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   // controllers
   walkController: WalkController = new WalkController();
   soundFeedbackController: SoundFeedbackController = new SoundFeedbackController();
+  stand2dController: Stand2dController = new Stand2dController();
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -78,6 +80,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     // Add controllers
     this.addController(this.walkController);
     this.addController(this.soundFeedbackController);
+    this.addController(this.stand2dController);
     this.loop();
   }
 

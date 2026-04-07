@@ -35,7 +35,7 @@ export class SoundFeedbackController extends SceneControllerAbstract {
             "LEFT_HAND_UP_OFF",
             "T_POSE_OFF",
         ].indexOf(event.name) >= 0) {
-            ModuloSonido.play('/assets/sounds/off.mp3', false);
+            //ModuloSonido.play('/assets/sounds/off.mp3', false);
         }
     }
 }

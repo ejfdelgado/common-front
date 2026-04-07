@@ -2,7 +2,7 @@ import { CommonComponent } from '@components/common.component';
 import { BasicScene } from './BasicScene';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { AvatarBodyEvent, BodyData } from '@mytypes/bodyTypes';
+import { AvatarBodyEvent, BodyData, BodyKeyPointData, GenericSizeType } from '@mytypes/bodyTypes';
 import { SceneControllerAbstract } from './SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import { WalkBody } from './WalkBody';
@@ -26,7 +26,10 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         });
     }
 
-    async computeIK(poses: BodyData[]) {
+    async computeIK(
+        poses: BodyData[],
+        videoSize: GenericSizeType,
+    ) {
         if (!this.scene) {
             return;
         }
@@ -50,13 +53,21 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                     frontData,
                 } = response;
                 this.walkBody.capture(keypoints3DMap, frontData);
+                const keypoints2DMap: {
+                    [key: string]: BodyKeyPointData;
+                } = {};
+                pose.keypoints.forEach(a => {
+                    keypoints2DMap[a.name] = a;
+                });
                 for (let i = 0; i < this.controllers.length; i++) {
                     const controller = this.controllers[i];
                     controller.preUpdate({
                         pose,
                         keypoints3DMap,
+                        keypoints2DMap,
                         frontData,
                         walkBody: this.walkBody,
+                        videoSize,
                     });
                     await controller.update();
                 }
