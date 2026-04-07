@@ -25,7 +25,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
     BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
     computingIK: boolean = false;
     originalPelvisRotation: THREE.Euler | null = null;
-    walkBody: WalkBody = new WalkBody();
+    
 
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
         this.bonesBackup = [];
@@ -386,24 +386,9 @@ export abstract class BasicAvatarScene extends THREE.Scene {
         }
     }
 
-    async computeIK(poses: BodyData[]): Promise<null | false | ScenePoseAndWalkEventType> {
+    async computeIK(poses: BodyData[]): Promise<null | false | ScenePoseEventType> {
         const response = await this.computeIKInternal(poses);
-        if (response != false && response != null) {
-            const {
-                pose,
-                keypoints3DMap,
-                frontData,
-            } = response;
-            this.walkBody.capture(keypoints3DMap, frontData);
-            return {
-                pose,
-                keypoints3DMap,
-                frontData,
-                walkBody: this.walkBody,
-            }
-        } else {
-            return response;
-        }
+        return response;
     }
 
     /**

@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core";
-import { BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
 
@@ -37,6 +37,10 @@ export class WalkBody {
     lastStepTime: number = 0;
     isTPose: boolean = false;
     MIN_T_POSE_THRESHOLD: number = 0.25;
+
+    constructor(private events: EventEmitter<AvatarBodyEvent>) {
+
+    }
 
     capture(
         points: { [key: string]: BodyKeyPointData },

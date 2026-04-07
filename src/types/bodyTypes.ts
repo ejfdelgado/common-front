@@ -70,3 +70,7 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
 export interface ControllerInitDataType {
     scene: any,
 }
+
+export interface AvatarBodyEvent {
+    name: string;
+}

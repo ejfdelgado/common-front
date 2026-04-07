@@ -2,13 +2,17 @@ import { CommonComponent } from '@components/common.component';
 import { BasicScene } from './BasicScene';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { BodyData } from '@mytypes/bodyTypes';
+import { AvatarBodyEvent, BodyData } from '@mytypes/bodyTypes';
 import { SceneControllerAbstract } from './SceneControllerAbstract';
+import { EventEmitter } from '@angular/core';
+import { WalkBody } from './WalkBody';
 
 export abstract class SceneWithAvatarComponent extends CommonComponent {
     scene: BasicScene | null = null;
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
+    events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
+    walkBody: WalkBody = new WalkBody(this.events);
 
     constructor(
         public override sanitizer: DomSanitizer,
@@ -35,9 +39,20 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                 }
             } else if (response != null) {
                 // Update all controllers
+                const {
+                    pose,
+                    keypoints3DMap,
+                    frontData,
+                } = response;
+                this.walkBody.capture(keypoints3DMap, frontData);
                 for (let i = 0; i < this.controllers.length; i++) {
                     const controller = this.controllers[i];
-                    controller.preUpdate(response);
+                    controller.preUpdate({
+                        pose,
+                        keypoints3DMap,
+                        frontData,
+                        walkBody: this.walkBody,
+                    });
                     await controller.update();
                 }
             }
