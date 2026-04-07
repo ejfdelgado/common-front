@@ -8,9 +8,8 @@ import {
 } from 'three/examples/jsm/animation/CCDIKSolver.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import * as THREE from 'three';
-import { computeAvatarFront, getAvatarSkinnedMesh, getHigherAvatarScoredPose, replaceAvatarSkin } from './AvatarUtilities';
+import { computeAvatarFront, getAvatarSkinnedMesh, getHigherAvatarScoredPose } from './AvatarUtilities';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
-import { WalkBody } from './WalkBody';
 
 export abstract class BasicAvatarScene extends THREE.Scene {
 
@@ -25,7 +24,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
     BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
     computingIK: boolean = false;
     originalPelvisRotation: THREE.Euler | null = null;
-    
+
 
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
         this.bonesBackup = [];

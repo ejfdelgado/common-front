@@ -204,7 +204,7 @@ export class WalkBody {
             if (this.isTPose) {
                 forward = -1;
             }
-            if (forward) {
+            if (forward > 0) {
                 this.events.emit({
                     name: "MAKE_STEP_FORWARD",
                 });
@@ -245,18 +245,18 @@ export class WalkBody {
             m4 < this.MIN_T_POSE_THRESHOLD
         ) {
             if (!this.isTPose) {
+                this.isTPose = true;
                 this.events.emit({
                     name: "T_POSE_ON",
                 });
             }
-            this.isTPose = true;
         } else {
             if (this.isTPose) {
+                this.isTPose = false;
                 this.events.emit({
                     name: "T_POSE_OFF",
                 });
             }
-            this.isTPose = false;
         }
     }
 

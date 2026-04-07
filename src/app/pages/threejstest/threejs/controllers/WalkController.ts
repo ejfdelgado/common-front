@@ -94,34 +94,35 @@ export class WalkController extends SceneControllerAbstract {
     }
 
     override onEvent(event: AvatarBodyEvent): void {
-        if (["MAKE_STEP_FORWARD"].indexOf(event.name)) {
+        if ("MAKE_STEP_FORWARD" == event.name) {
             this.makeStep(1);
+        } else if ("MAKE_STEP_BACKWARD" == event.name) {
+            this.makeStep(-1);
         }
     }
 
     makeStep(forward: number) {
-
         const {
             frontData,
+            walkBody,
         } = this.lastData;
 
         const {
-            rotationY,
             FRONT_REFERENCE,
             UP_REFERENCE,
             lastStep,
-        } = this.lastData.walkBody;
+        } = walkBody;
 
-        this.lastData.walkBody.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
-        const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(UP_REFERENCE, rotationY).normalize();
+        walkBody.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
+        const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(UP_REFERENCE, walkBody.rotationY).normalize();
 
         this.translationX += (advanceFront.x * lastStep * this.STEP_AMOUNT) * forward;
         this.translationZ += (advanceFront.z * lastStep * this.STEP_AMOUNT) * forward;
         const translationMatrix = new THREE.Matrix4().makeTranslation(this.translationX, 0, this.translationZ);
-        const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(walkBody.rotationY);
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(translationMatrix, rotationMatrix);
         this.stepCount += 1;
         // This is weird...
-        this.lastData.walkBody.lastStep = 0;
+        walkBody.lastStep = 0;
     }
 }
