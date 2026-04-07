@@ -1,12 +1,11 @@
-import { AvatarBodyEvent } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { ModuloSonido } from "@services/sonido.service";
 
 export class SoundFeedbackController extends SceneControllerAbstract {
 
-    override async update(): Promise<void> {
-
-
+    override async update(): Promise<ControllerUpdateResponse> {
+        return {};
     }
 
     override async stop(): Promise<void> {

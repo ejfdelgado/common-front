@@ -1,4 +1,4 @@
-import { AvatarBodyEvent, BodyKeyPointData, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, BodyKeyPointData, ControllerUpdateResponse, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
@@ -27,7 +27,7 @@ export class WalkController extends SceneControllerAbstract {
     calories: number = 0;
     min3DYValue: number = 0;
 
-    override async update(): Promise<void> {
+    override async update(): Promise<ControllerUpdateResponse> {
         const { camera, orbitals } = this.scene;
         if (camera && orbitals) {
             orbitals.enabled = false;
@@ -35,13 +35,10 @@ export class WalkController extends SceneControllerAbstract {
             this.computeTransformationMatrix();
             // Affect the scene camera
             this.placeCamera(camera, orbitals);
-            // Affect the avatar
-            const model = this.scene.getObjectByName("avatar");
-            if (model) {
-                model.matrixAutoUpdate = false;
-                model.matrix.copy(this.transformationMatrix);
-            }
         }
+        return {
+            avatarTransform: this.transformationMatrix,
+        };
     }
 
     override onEvent(event: AvatarBodyEvent): void {

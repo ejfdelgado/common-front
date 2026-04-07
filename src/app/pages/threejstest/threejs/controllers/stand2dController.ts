@@ -1,15 +1,17 @@
-import { AvatarBodyEvent } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { computeBodyPointAverage } from "../AvatarUtilities";
 import { SignalLowPass } from "../SignalLowPass";
+import * as THREE from 'three';
 
 export class Stand2dController extends SceneControllerAbstract {
 
     MIN_SCORE: number = 0.8;
     floorSignalLowPass: SignalLowPass = new SignalLowPass(1000);
     heightSignalLowPass: SignalLowPass = new SignalLowPass(2000);
+    transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
 
-    override async update(): Promise<void> {
+    override async update(): Promise<ControllerUpdateResponse> {
         // Compute the transformation needed to reflect the 2D situation
         this.videoSize;
         const { keypoints2DMap } = this.lastData;
@@ -23,7 +25,9 @@ export class Stand2dController extends SceneControllerAbstract {
             yPos.push(rightHeel.y);
         }
         if (yPos.length == 0) {
-            return;
+            return {
+                avatarTransform: this.transformationMatrix,
+            };
         }
         let currenMinY = yPos[0];
         if (yPos.length > 1) {
@@ -59,6 +63,9 @@ export class Stand2dController extends SceneControllerAbstract {
         const xShiftReal = xShift / heightSignaLowPassed;
 
         console.log(xShiftReal);
+        return {
+            avatarTransform: this.transformationMatrix,
+        };
     }
     override async stop(): Promise<void> {
 

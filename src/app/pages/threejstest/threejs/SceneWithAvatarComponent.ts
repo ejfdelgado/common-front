@@ -6,6 +6,7 @@ import { AvatarBodyEvent, BodyData, BodyKeyPointData, GenericSizeType } from '@m
 import { SceneControllerAbstract } from './SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import { WalkBody } from './WalkBody';
+import * as THREE from 'three';
 
 export abstract class SceneWithAvatarComponent extends CommonComponent {
     scene: BasicScene | null = null;
@@ -59,6 +60,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                 pose.keypoints.forEach(a => {
                     keypoints2DMap[a.name] = a;
                 });
+                const matrixTransforms: THREE.Matrix4[] = [];
                 for (let i = 0; i < this.controllers.length; i++) {
                     const controller = this.controllers[i];
                     controller.preUpdate({
@@ -69,7 +71,22 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                         walkBody: this.walkBody,
                         videoSize,
                     });
-                    await controller.update();
+                    const temp = await controller.update();
+                    if (temp.avatarTransform) {
+                        matrixTransforms.push(temp.avatarTransform);
+                    }
+                }
+                // Affect the avatar
+                if (matrixTransforms.length > 0) {
+                    const model = this.scene.getObjectByName("avatar");
+                    if (model) {
+                        model.matrixAutoUpdate = false;
+                        const result = new THREE.Matrix4().identity();
+                        for (const m of matrixTransforms) {
+                            result.multiply(m);
+                        }
+                        model.matrix.copy(result);
+                    }
                 }
             }
         } catch (err) {

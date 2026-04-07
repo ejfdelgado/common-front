@@ -85,3 +85,7 @@ export interface GenericSizeType {
     width: number;
     height: number;
 };
+
+export interface ControllerUpdateResponse {
+    avatarTransform?: THREE.Matrix4;
+}

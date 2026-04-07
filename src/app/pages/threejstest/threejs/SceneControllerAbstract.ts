@@ -1,4 +1,4 @@
-import { AvatarBodyEvent, ControllerInitDataType, GenericSizeType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, ControllerInitDataType, ControllerUpdateResponse, GenericSizeType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
 import { BasicScene } from "./BasicScene";
 
 export abstract class SceneControllerAbstract {
@@ -17,7 +17,7 @@ export abstract class SceneControllerAbstract {
         this.now = new Date().getTime();
     }
 
-    abstract update(): Promise<void>;
+    abstract update(): Promise<ControllerUpdateResponse>;
 
     abstract stop(): Promise<void>;
 
