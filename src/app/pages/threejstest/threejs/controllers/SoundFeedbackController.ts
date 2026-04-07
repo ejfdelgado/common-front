@@ -25,6 +25,8 @@ export class SoundFeedbackController extends SceneControllerAbstract {
             ModuloSonido.play('/assets/sounds/clap.mp3', false);
         } else if (event.name == "T_POSE_ON") {
             ModuloSonido.play('/assets/sounds/bang.mp3', false);
+        } else if (["MAKE_STEP_FORWARD"].indexOf(event.name)) {
+            ModuloSonido.play('/assets/sounds/tictoc.mp3', false);
         } else if ([
             "HANDS_JOINED_OFF",
             "LEFT_HAND_UP_OFF",

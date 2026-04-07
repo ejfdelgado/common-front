@@ -4,26 +4,35 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
 
 export class WalkController extends SceneControllerAbstract {
-
+    // constants 
     SMOOT_RATIO: number = 0.006 * 0.3;
     CAMERA_HEIGTH_RATIO: number = 4;
     CAMERA_DISTANCE_TO_AVATAR: number = 14;
+    ROTATION_AMOUNT: number = 0.25;
+    STEP_AMOUNT: number = 3;// Walked distance on every step
+    // variables
     destinationCameraLocation = new THREE.Vector3(0, 0, 0);
     lastCameraSmoot: number = new Date().getTime();
     destinationLookAt = new THREE.Vector3(0, 0, 0);
     lookAtLastT: number = new Date().getTime();
     lookAtActual = new THREE.Vector3(0, 0, 0);
+    translationX: number = 0;
+    translationZ: number = 0;
+    transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
+    // KPIs
+    stepCount: number = 0;
+    kilometers: number = 0;
+    calories: number = 0;
 
     override async update(): Promise<void> {
         const { camera, orbitals } = this.scene;
-        const { walkBody } = this.lastData;
         if (camera && orbitals) {
             orbitals.enabled = false;
             this.placeCamera(camera, orbitals);
             const model = this.scene.getObjectByName("avatar");
             if (model) {
                 model.matrixAutoUpdate = false;
-                model.matrix.copy(walkBody.transformationMatrix);
+                model.matrix.copy(this.transformationMatrix);
             }
         }
     }
@@ -72,19 +81,47 @@ export class WalkController extends SceneControllerAbstract {
             this.lastData.walkBody.UP_REFERENCE,
             this.lastData.walkBody.rotationY,
         ).normalize();
-        this.destinationCameraLocation.x = this.lastData.walkBody.translationX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
-        this.destinationCameraLocation.z = this.lastData.walkBody.translationZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.destinationCameraLocation.x = this.translationX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.destinationCameraLocation.z = this.translationZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
         this.lastCameraSmoot = this.makeSmoot(camera.position, this.destinationCameraLocation, this.lastCameraSmoot);
 
-        this.destinationLookAt.setX(this.lastData.walkBody.translationX);
+        this.destinationLookAt.setX(this.translationX);
         this.destinationLookAt.setY(0);
-        this.destinationLookAt.setZ(this.lastData.walkBody.translationZ);
+        this.destinationLookAt.setZ(this.translationZ);
         this.lookAtLastT = this.makeSmoot(this.lookAtActual, this.destinationLookAt, this.lookAtLastT);
         camera.lookAt(this.lookAtActual);
         orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
     }
 
     override onEvent(event: AvatarBodyEvent): void {
+        if (["MAKE_STEP_FORWARD"].indexOf(event.name)) {
+            this.makeStep(1);
+        }
+    }
 
+    makeStep(forward: number) {
+
+        const {
+            frontData,
+        } = this.lastData;
+
+        const {
+            rotationY,
+            FRONT_REFERENCE,
+            UP_REFERENCE,
+            lastStep,
+        } = this.lastData.walkBody;
+
+        this.lastData.walkBody.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
+        const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(UP_REFERENCE, rotationY).normalize();
+
+        this.translationX += (advanceFront.x * lastStep * this.STEP_AMOUNT) * forward;
+        this.translationZ += (advanceFront.z * lastStep * this.STEP_AMOUNT) * forward;
+        const translationMatrix = new THREE.Matrix4().makeTranslation(this.translationX, 0, this.translationZ);
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
+        this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(translationMatrix, rotationMatrix);
+        this.stepCount += 1;
+        // This is weird...
+        this.lastData.walkBody.lastStep = 0;
     }
 }

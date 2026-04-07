@@ -1,3 +1,5 @@
+import { BasicScene } from 'app/pages/threejstest/threejs/BasicScene';
+import { WalkBody } from 'app/pages/threejstest/threejs/WalkBody';
 import * as THREE from 'three';
 
 export interface BodyKeyPointData {
@@ -64,11 +66,11 @@ export interface ScenePoseEventType {
 }
 
 export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
-    walkBody: any,
+    walkBody: WalkBody,
 }
 
 export interface ControllerInitDataType {
-    scene: any,
+    scene: BasicScene,
 }
 
 export interface AvatarBodyEvent {

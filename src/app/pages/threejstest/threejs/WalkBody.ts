@@ -15,23 +15,15 @@ export class WalkBody {
     HANDS_CLOSE = 0.3;
     HANDS_NOT_CLOSE = 0.35;
     MOVEMENT_THRESHOLD = 0.1; // Step detection
-    STEP_AMOUNT: number = 3;// Walked distance on every step
     FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
     UP_REFERENCE = new THREE.Vector3(0, 1, 0);
-    ROTATION_AMOUNT: number = 0.25;
     MIN_MILLIS_BETWEEN_STEPS: number = 1000;
-    // KPIs
-    stepCount: number = 0;
-    kilometers: number = 0;
-    calories: number = 0;
+
     // Walking variables
     lastStep: number = 0;
     maxDifference: number = 0;
     overpassLastMax: boolean = false;
     rotationY: number = 0;//radians
-    translationX: number = 0;
-    translationZ: number = 0;
-    public transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     lastStepTime: number = 0;
     isTPose: boolean = false;
@@ -208,28 +200,30 @@ export class WalkBody {
         }
 
         if (makeStep) {
-            ModuloSonido.play('/assets/sounds/tictoc.mp3', false);
-            this.rotationY += (this.frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
-            const advanceFront = this.FRONT_REFERENCE.clone().applyAxisAngle(this.UP_REFERENCE, this.rotationY).normalize();
             let forward = 1;
             if (this.isTPose) {
                 forward = -1;
             }
-            this.translationX += (advanceFront.x * this.lastStep * this.STEP_AMOUNT) * forward;
-            this.translationZ += (advanceFront.z * this.lastStep * this.STEP_AMOUNT) * forward;
-            const translationMatrix = new THREE.Matrix4().makeTranslation(this.translationX, 0, this.translationZ);
-            const rotationMatrix = new THREE.Matrix4().makeRotationY(this.rotationY);
-            this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(translationMatrix, rotationMatrix);
-            this.stepCount += 1;
-            this.lastStep = 0;
+            if (forward) {
+                this.events.emit({
+                    name: "MAKE_STEP_FORWARD",
+                });
+            } else {
+                this.events.emit({
+                    name: "MAKE_STEP_BACKWARD",
+                });
+            }
         }
     }
 
+    // Remove or move this
+    /*
     placeLight(light: THREE.PointLight) {
         light.position.x = this.translationX;
         light.position.y = this.height * 2;
         light.position.z = this.translationZ;
     }
+    */
 
     checkTPose() {
         // right_shoulder y left_shoulder Y
@@ -270,5 +264,6 @@ export class WalkBody {
         this.handUpLeft = false;
         this.handUpRight = false;
         this.handsClose = false;
+        this.isTPose = false;
     }
 }
