@@ -11,6 +11,8 @@ export class Stand2dController extends SceneControllerAbstract {
     floorSignalLowPass: SignalLowPass = new SignalLowPass(900);
     heightSignalLowPass: SignalLowPass = new SignalLowPass(2000);
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
+    jumping: boolean = false;
+    JUMP_THRESHOLD = 0.15; // 0.6 is my maximum
 
     override async update(): Promise<ControllerUpdateResponse> {
         // Compute the transformation needed to reflect the 2D situation
@@ -65,6 +67,22 @@ export class Stand2dController extends SceneControllerAbstract {
 
         // Ponderate with the hight
         const xShiftReal = xShift / heightSignaLowPassed;
+
+        if (!this.jumping) {
+            if (jumpY >= this.JUMP_THRESHOLD) {
+                this.jumping = true;
+                this.events.emit({
+                    name: "JUMP_ON",
+                });
+            }
+        } else {
+            if (jumpY < this.JUMP_THRESHOLD) {
+                this.jumping = false;
+                this.events.emit({
+                    name: "JUMP_OFF",
+                });
+            }
+        }
 
         this.transformationMatrix = new THREE.Matrix4().makeTranslation(
             xShiftReal * this.HORIZONTAL_DISPLACEMENT_PONDERATION,

@@ -24,6 +24,8 @@ export class SoundFeedbackController extends SceneControllerAbstract {
             ModuloSonido.play('/assets/sounds/clap.mp3', false);
         } else if (event.name == "T_POSE_ON") {
             ModuloSonido.play('/assets/sounds/bang.mp3', false);
+        } else if (event.name == "JUMP_ON") {
+            ModuloSonido.play('/assets/sounds/mario-coin.mp3', false);
         } else if ([
             "MAKE_STEP_FORWARD",
             "MAKE_STEP_BACKWARD",

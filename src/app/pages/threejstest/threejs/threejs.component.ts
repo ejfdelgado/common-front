@@ -41,9 +41,9 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   hasMobile: boolean;
   restoreInterval: NodeJS.Timeout | null = null;
   // controllers
-  walkController: WalkController = new WalkController();
-  soundFeedbackController: SoundFeedbackController = new SoundFeedbackController();
-  stand2dController: Stand2dController = new Stand2dController();
+  walkController: WalkController = new WalkController(this.events);
+  soundFeedbackController: SoundFeedbackController = new SoundFeedbackController(this.events);
+  stand2dController: Stand2dController = new Stand2dController(this.events);
 
   constructor(
     private indicatorSrv: IndicatorService,
