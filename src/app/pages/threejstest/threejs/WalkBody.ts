@@ -20,10 +20,9 @@ export class WalkBody {
     MIN_MILLIS_BETWEEN_STEPS: number = 1000;
 
     // Walking variables
-    lastStep: number = 0;
+    stepSize: number = 0;
     maxDifference: number = 0;
     overpassLastMax: boolean = false;
-    rotationY: number = 0;//radians
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     lastStepTime: number = 0;
     isTPose: boolean = false;
@@ -177,7 +176,7 @@ export class WalkBody {
                 if (this.sideState !== 1) {
                     // Foot switch
                     // Foot change, make the step of the previous amount
-                    this.lastStep = this.maxDifference;
+                    this.stepSize = this.maxDifference;
                     this.maxDifference = 0;
                     if (this.now - this.lastStepTime < this.MIN_MILLIS_BETWEEN_STEPS) {
                         makeStep = true;
@@ -188,7 +187,7 @@ export class WalkBody {
             } else {
                 // Caused by the right foot
                 if (this.sideState !== 2) {
-                    this.lastStep = this.maxDifference;
+                    this.stepSize = this.maxDifference;
                     if (this.now - this.lastStepTime < this.MIN_MILLIS_BETWEEN_STEPS) {
                         makeStep = true;
                     }
@@ -213,6 +212,7 @@ export class WalkBody {
                     name: "MAKE_STEP_BACKWARD",
                 });
             }
+            this.stepSize = 0;
         }
     }
 

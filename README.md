@@ -1,18 +1,35 @@
 # CommonFront
 
 Quitar login con cellphone.
-Agregar login con microsoft.
+
+Usar la posición en 2D:
+- para ubicar el avatar a izquierda o a derecha, sacar primero la proporcion del ancho de la pantalla con respecto al ancho del avatar, tal vez con la altura.
+- Para saltar.
+
+Ubicar al avatar a una altura correcta.
+
+En los eventos tal vez enviar el walkBody?
+
+Comparar poses y asignar un score.
+Agnostico de la orientación del avatar:
+- Usando frente del avatar
+- Angulos de antebrazo y femur relativos al frente del avatar, usando 3 ejes de coordenadas canónico.
+- Angulo mímimo de brazo relativo a antebrazo y de pie relativo a femur.
+
+Agregar mundo para:
+- Evaluar equilibrio.
+- Evaluar hasta donde puede pegar patadas con el pie.
+- Máximo tiempo con los brazos a los lados.
+- Trotoar sin parar.
+- Ritmo (tambores).
 
 Hacer un vestier.
 - Interact with body.
 - Interact with voice commands.
 
 Permitir guardar la secuencia de poses; filtrar solo los puntos relevantes.
+Permitir asignar una pose específica.
 Permitir reproducirlos.
-
-Crear un nivel más alto de configuración.
-Modificable en tiempo de ejecución.
-Connect, Disconnect.
 
 Usar menú de arriba para alojar:
 - Play/Pause. (voice on/of) (camera pose on/off)
@@ -30,15 +47,12 @@ Permitir interactuar con voz con los asistentes virtuales.
 Permitir usar un modelo en tiempo real con firestore.
 El sistema de navegación debe manejar colisiones para evitar overlaping.
 
+Agregar login con microsoft.
+
 -------------------------------------------------------------------
 
-Quitar el gesto de pararse en un solo pie por mas de cierto tiempo.
 Permitir cargar el mundo haciendo referencia al modelo guardado previamente.
 Permitir cargar unicamente la región donde está ubicado el usuario.
-
-Evitar los saltos bruscos de la cámara, tal vez colocar un filtro pasabajos.
-Revisar cómo saber cuando no está detectando corrrectamente la pose del cuerpo.
-Para entonces evitar mandar una nueva pose.
 
 -------------------------------------------------------------------
 

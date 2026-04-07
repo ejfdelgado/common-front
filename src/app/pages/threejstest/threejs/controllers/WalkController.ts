@@ -18,6 +18,7 @@ export class WalkController extends SceneControllerAbstract {
     lookAtActual = new THREE.Vector3(0, 0, 0);
     translationX: number = 0;
     translationZ: number = 0;
+    rotationY: number = 0;//radians
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
     // KPIs
     stepCount: number = 0;
@@ -89,7 +90,7 @@ export class WalkController extends SceneControllerAbstract {
         this.destinationCameraLocation.y = this.lastData.walkBody.height * this.CAMERA_HEIGTH_RATIO;
         const advanceFront = this.lastData.walkBody.FRONT_REFERENCE.clone().applyAxisAngle(
             this.lastData.walkBody.UP_REFERENCE,
-            this.lastData.walkBody.rotationY,
+            this.rotationY,
         ).normalize();
         this.destinationCameraLocation.x = this.translationX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
         this.destinationCameraLocation.z = this.translationZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
@@ -112,19 +113,16 @@ export class WalkController extends SceneControllerAbstract {
         const {
             FRONT_REFERENCE,
             UP_REFERENCE,
-            lastStep,
+            stepSize,
         } = walkBody;
 
-        walkBody.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
-        const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(UP_REFERENCE, walkBody.rotationY).normalize();
+        this.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
+        const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(UP_REFERENCE, this.rotationY).normalize();
 
-        this.translationX += (advanceFront.x * lastStep * this.STEP_AMOUNT) * forward;
-        this.translationZ += (advanceFront.z * lastStep * this.STEP_AMOUNT) * forward;
+        this.translationX += (advanceFront.x * stepSize * this.STEP_AMOUNT) * forward;
+        this.translationZ += (advanceFront.z * stepSize * this.STEP_AMOUNT) * forward;
         const translationMatrix = new THREE.Matrix4().makeTranslation(this.translationX, 0, this.translationZ);
-        const rotationMatrix = new THREE.Matrix4().makeRotationY(walkBody.rotationY);
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.rotationY);
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(translationMatrix, rotationMatrix);
-        this.stepCount += 1;
-        // This is weird...
-        walkBody.lastStep = 0;
     }
 }
