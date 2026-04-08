@@ -22,6 +22,7 @@ import { WalkController } from './controllers/WalkController';
 import { SoundFeedbackController } from './controllers/SoundFeedbackController';
 import { Stand2dController } from './controllers/Stand2dController';
 import { RecordPoseController } from './controllers/RecordPoseController';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -52,6 +53,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     private cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    private http: HttpClient,
   ) {
     super(sanitizer, fullScreenSrv);
     this.hasMobile = this.isMobile();
@@ -76,7 +78,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
       return;
     }
     const theCanvas = this.canvasRef.nativeElement;
-    this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv);
+    this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv, this.http);
     this.scene.initialize();
     this.sceneCreated.resolve();
     // Add controllers

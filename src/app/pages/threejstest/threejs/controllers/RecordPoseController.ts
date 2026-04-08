@@ -19,8 +19,8 @@ export class RecordPoseController extends SceneControllerAbstract {
         if (avatar) {
             // Traverse all the skeleton and store position and rotation
             const state: StoredAvatarState = {
-                t: now,
-                d: difference,
+                t: now - this.recordingStartTime,
+                //d: difference,
                 bones: [],
             };
             avatar.traverse((child: any) => {
@@ -64,7 +64,7 @@ export class RecordPoseController extends SceneControllerAbstract {
 
     downloadTextPlain(filename = 'animation.bin') {
         const encoded = encode(this.history);
-        
+
         const blob = new Blob([encoded], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
 

@@ -5,7 +5,10 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { replaceAvatarSkin } from './AvatarUtilities';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { BasicAvatarScene } from './SceneWithAvatar';
-import { AVATAR_NAME, AvatarLocationState } from '@mytypes/bodyTypes';
+import { AVATAR_NAME, AvatarLocationState, StoredAvatarAnimation, StoredAvatarState } from '@mytypes/bodyTypes';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { decode } from "@msgpack/msgpack";
 
 const ROOT_PATH = "/assets/models/";
 
@@ -24,6 +27,7 @@ export class BasicScene extends BasicAvatarScene {
     canvasRef: any,
     bounds: DOMRect,
     private indicatorSrv: IndicatorService,
+    private http: HttpClient,
   ) {
     super();
     this.canvasRef = canvasRef;
@@ -61,6 +65,8 @@ export class BasicScene extends BasicAvatarScene {
     this.add(pointLight);
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
+
+    this.loadCharacters();
   }
 
   async initializeScenario() {
@@ -110,5 +116,37 @@ export class BasicScene extends BasicAvatarScene {
 
   executeCommand(command: RecognizedCommand) {
     console.log(command);
+  }
+
+  async loadAnimation(): Promise<StoredAvatarAnimation> {
+    const loaded = await firstValueFrom(this.http.get(ROOT_PATH + "animations/animation.bin", { responseType: 'arraybuffer' }));
+    const model = decode(loaded);
+    return model as StoredAvatarAnimation;
+  }
+
+  async loadCharacters() {
+    const autoAdd: boolean = true;
+    this.addModel({ name: AVATAR_NAME, url: ROOT_PATH + "avatar005.glb", }, autoAdd).then(async (object) => {
+      object.position.add(new THREE.Vector3(1, 1, -1));
+      object.rotateY(Math.PI);
+
+      // Load animation
+      const anim = await this.loadAnimation();
+      this.applyAvatarState(object, anim.a[0]);
+    });
+  }
+
+  applyAvatarState(
+    avatar: THREE.Object3D<THREE.Object3DEventMap>,
+    state: StoredAvatarState
+  ) {
+    for (let i = 0; i < state.bones.length; i++) {
+      const { n, v } = state.bones[i];
+      const boneTarget = avatar.getObjectByName(n);
+      if (boneTarget) {
+        boneTarget.position.set(v[0], v[1], v[2]);
+        boneTarget.rotation.set(v[3], v[4], v[5]);
+      }
+    }
   }
 }

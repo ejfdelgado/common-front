@@ -106,8 +106,8 @@ export interface StoredAvatarBoneState {
 
 export interface StoredAvatarState {
     t: number;
-    d: number;
     bones: StoredAvatarBoneState[],
+    d?: number;
 }
 
 export interface StoredAvatarAnimation {
