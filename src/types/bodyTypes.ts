@@ -98,3 +98,18 @@ export interface AvatarLocationState {
     rotationY: number;
     positionZ: number,
 }
+
+export interface StoredAvatarBoneState {
+    n: string;
+    v: number[]; //px,py,pz,rx,ry,rz
+}
+
+export interface StoredAvatarState {
+    t: number;
+    d: number;
+    bones: StoredAvatarBoneState[],
+}
+
+export interface StoredAvatarAnimation {
+    a: StoredAvatarState[];
+}
