@@ -2,7 +2,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 import { IndicatorService } from '@services/indicator.service';
 import { RecognizedCommand } from '@services/voicerecognition.service';
-import { replaceAvatarSkin } from './AvatarUtilities';
+import { arrayToMatrix, replaceAvatarSkin } from './AvatarUtilities';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { BasicAvatarScene } from './SceneWithAvatar';
 import { AnimatedElements, AVATAR_NAME, AvatarLocationState, StoredAvatarAnimation, StoredAvatarState } from '@mytypes/bodyTypes';
@@ -35,7 +35,7 @@ export class BasicScene extends BasicAvatarScene {
     const params = getUrlQueryParams();
     setInterval(() => {
       this.animationHeartBeat();
-    }, 200);
+    }, 100);
   }
 
   initialize() {
@@ -130,17 +130,19 @@ export class BasicScene extends BasicAvatarScene {
   async loadCharacters() {
     const autoAdd: boolean = true;
     this.addModel({ name: "friend", url: ROOT_PATH + "avatar005.glb", }, autoAdd).then(async (object) => {
-      object.position.add(new THREE.Vector3(1, 1, -1));
-      object.rotateY(Math.PI);
-
       // Load animation
       const anim = await this.loadAnimation();
+
+      anim.location = new THREE.Vector2(1, -1);
+      anim.rotationY = Math.PI;
+
       this.animatedElements.push({
         avatar: object,
         loop: true,
         startingTime: 0,
         state: anim,
       });
+
     });
   }
 
@@ -152,7 +154,7 @@ export class BasicScene extends BasicAvatarScene {
     const sceneTime = now - this.startingAnimationTime;
     for (let i = 0; i < this.animatedElements.length; i++) {
       const { avatar, state, loop, startingTime } = this.animatedElements[i];
-      let { a, frameId } = state;
+      let { a, frameId, location, rotationY } = state;
       // Busco el frame de acuerdo al tiempo
 
       let startingIndex = 0;
@@ -163,12 +165,11 @@ export class BasicScene extends BasicAvatarScene {
         const pos = a[j];
         if (startingTime + pos.t > sceneTime) {
           state.frameId = j;
-          // For performance optimization, Store the frameId!
           break;
         }
       }
       if (state.frameId != undefined && state.frameId >= 0) {
-        this.applyAvatarState(avatar, a[state.frameId]);
+        this.applyAvatarState(avatar, a[state.frameId], location, rotationY);
       }
       if (loop) {
         if (state.frameId !== undefined) {
@@ -183,7 +184,9 @@ export class BasicScene extends BasicAvatarScene {
 
   applyAvatarState(
     avatar: THREE.Object3D<THREE.Object3DEventMap>,
-    state: StoredAvatarState
+    state: StoredAvatarState,
+    location?: THREE.Vector2,
+    rotationY?: number,
   ) {
     for (let i = 0; i < state.bones.length; i++) {
       const { n, v } = state.bones[i];
@@ -193,5 +196,26 @@ export class BasicScene extends BasicAvatarScene {
         boneTarget.rotation.set(v[3], v[4], v[5]);
       }
     }
+    const matrix = arrayToMatrix(state.matrix);
+    avatar.matrixAutoUpdate = false;
+    const result = new THREE.Matrix4().identity();
+    const matrixTransforms: THREE.Matrix4[] = [];
+    matrixTransforms.push(matrix);
+    if (location) {
+      const translationMatrix = new THREE.Matrix4().makeTranslation(
+        location.x,
+        0,// Check height with terrain
+        location.y,
+      );
+      matrixTransforms.push(translationMatrix);
+    }
+    if (typeof rotationY == "number") {
+      const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
+      matrixTransforms.push(rotationMatrix);
+    }
+    for (const m of matrixTransforms) {
+      result.multiply(m);
+    }
+    avatar.matrix.copy(result);
   }
 }

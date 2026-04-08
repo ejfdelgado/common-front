@@ -107,6 +107,10 @@ export class Stand2dController extends SceneControllerAbstract {
             -1 * this.min3DYValue + jumpY * this.VERTICAL_JUMP_PONDERATION,
             0,
         );
+        this.events.emit({
+            name: "STAND2MATRIX",
+            data: this.transformationMatrix,
+        });
         return {
             avatarTransform: this.transformationMatrix,
         };

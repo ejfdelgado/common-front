@@ -80,6 +80,7 @@ export interface ControllerInitDataType {
 export interface AvatarBodyEvent {
     name: string;
     voiceCommand?: string;
+    data?: any;
 }
 
 export interface GenericSizeType {
@@ -107,12 +108,15 @@ export interface StoredAvatarBoneState {
 export interface StoredAvatarState {
     t: number;
     bones: StoredAvatarBoneState[],
+    matrix: number[],
     d?: number;
 }
 
 export interface StoredAvatarAnimation {
     a: StoredAvatarState[];
     frameId?: number;
+    location?: THREE.Vector2;
+    rotationY?: number;
 }
 
 export interface AnimatedElements {

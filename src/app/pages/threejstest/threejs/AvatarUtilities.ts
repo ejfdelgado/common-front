@@ -189,10 +189,10 @@ export function computeBodyPointAverage(name: string, list: BodyKeyPointData[]) 
 };
 
 export function makeSmootVector(
-    actual: THREE.Vector3, 
-    destination: THREE.Vector3, 
-    lastTime: number, 
-    smootRatio: number, 
+    actual: THREE.Vector3,
+    destination: THREE.Vector3,
+    lastTime: number,
+    smootRatio: number,
     maxInactivityMillis: number,
 ) {
     const actualT = Date.now();
@@ -267,4 +267,28 @@ export function makeSmootValue(
         t: actualT,
         v: actual,
     };
+}
+
+/**
+ * Converts a THREE.Matrix4 into a standard array of 16 numbers.
+ */
+export function matrixToArray(matrix: THREE.Matrix4): number[] {
+    // .elements is a Float32Array(16)
+    // We use the spread operator or Array.from to convert to a standard number[]
+    return Array.from(matrix.elements);
+}
+
+/**
+ * Creates a THREE.Matrix4 from an array of 16 numbers.
+ */
+export function arrayToMatrix(array: number[]): THREE.Matrix4 {
+    if (array.length !== 16) {
+        throw new Error("A Matrix4 requires exactly 16 elements.");
+    }
+
+    const matrix = new THREE.Matrix4();
+    // .fromArray handles the internal mapping automatically
+    matrix.fromArray(array);
+
+    return matrix;
 }

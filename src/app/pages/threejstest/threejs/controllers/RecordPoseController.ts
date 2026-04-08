@@ -1,13 +1,18 @@
 import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME, StoredAvatarAnimation, StoredAvatarState } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
+import * as THREE from 'three';
+import { matrixToArray } from "../AvatarUtilities";
 
 export class RecordPoseController extends SceneControllerAbstract {
+
     recording: boolean = false;
     recordingStartTime: number = 0;
     lastRecorded: number = 0;
-    MAX_STATES_PER_SECOND: number = 5;
+    MAX_STATES_PER_SECOND: number = 10;
     history: StoredAvatarAnimation = { a: [] };
+    transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
+
     override async update(): Promise<ControllerUpdateResponse> {
         const now = Date.now();
         const difference = now - this.lastRecorded;
@@ -20,6 +25,7 @@ export class RecordPoseController extends SceneControllerAbstract {
             // Traverse all the skeleton and store position and rotation
             const state: StoredAvatarState = {
                 t: now - this.recordingStartTime,
+                matrix: matrixToArray(this.transformationMatrix),
                 //d: difference,
                 bones: [],
             };
@@ -58,6 +64,10 @@ export class RecordPoseController extends SceneControllerAbstract {
                 if (this.history.a.length > 0) {
                     this.downloadTextPlain();
                 }
+            }
+        } else if (event.name == "STAND2MATRIX") {
+            if (event.data) {
+                this.transformationMatrix = event.data;
             }
         }
     }
