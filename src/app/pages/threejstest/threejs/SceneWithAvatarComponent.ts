@@ -2,7 +2,7 @@ import { CommonComponent } from '@components/common.component';
 import { BasicScene } from './BasicScene';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { AvatarBodyEvent, BodyData, BodyKeyPointData, GenericSizeType } from '@mytypes/bodyTypes';
+import { AVATAR_NAME, AvatarBodyEvent, BodyData, BodyKeyPointData, GenericSizeType } from '@mytypes/bodyTypes';
 import { SceneControllerAbstract } from './SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import { WalkBody } from './WalkBody';
@@ -78,7 +78,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                 }
                 // Affect the avatar
                 if (matrixTransforms.length > 0) {
-                    const model = this.scene.getObjectByName("avatar");
+                    const model = this.scene.getObjectByName(AVATAR_NAME);
                     if (model) {
                         model.matrixAutoUpdate = false;
                         const result = new THREE.Matrix4().identity();

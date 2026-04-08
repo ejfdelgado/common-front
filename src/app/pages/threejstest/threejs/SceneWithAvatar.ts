@@ -1,4 +1,5 @@
 import {
+    AVATAR_NAME,
     BodyData,
     BodyKeyPointData,
     BoneBackupType,
@@ -27,7 +28,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
     camera: THREE.PerspectiveCamera | null = null;
     renderer: THREE.WebGLRenderer | null = null;
     orbitals: OrbitControls | null = null;
-    bonesBackup: BoneBackupType[] = [];
+    bonesBackup: { [key: string]: BoneBackupType[] } = {};
     fbxLoader = new FBXLoader();
     gltfLoader = new GLTFLoader();
     restoreBackupOnNextComputation: boolean = false;
@@ -38,11 +39,12 @@ export abstract class BasicAvatarScene extends THREE.Scene {
 
 
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
-        this.bonesBackup = [];
+        const name = model.name;
+        this.bonesBackup[name] = [];
         const makeBackupBone = (boneName: string) => {
             const bone = model.getObjectByName(boneName);
             if (bone) {
-                this.bonesBackup.push({
+                this.bonesBackup[name].push({
                     boneName,
                     position: bone.position.clone(),
                     rotation: bone.rotation.clone(),
@@ -56,10 +58,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
         });
     }
 
-    restoreBoneBackup() {
-        const model = this.getObjectByName("avatar");
+    restoreBoneBackup(name: string) {
+        const model = this.getObjectByName(name);
         if (model) {
-            this.bonesBackup.forEach((bk) => {
+            this.bonesBackup[name].forEach((bk) => {
                 const bone = model.getObjectByName(bk.boneName);
                 if (bone) {
                     bone.position.x = bk.position.x;
@@ -415,10 +417,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
         this.computingIK = true;
         try {
             if (this.restoreBackupOnNextComputation) {
-                this.restoreBoneBackup();
+                this.restoreBoneBackup(AVATAR_NAME);
                 this.restoreBackupOnNextComputation = false;
             }
-            const model = this.getObjectByName("avatar");
+            const model = this.getObjectByName(AVATAR_NAME);
             const { pose, score } = getHigherAvatarScoredPose(poses);
             if (score < 90) {
                 // Not all body in view
@@ -444,8 +446,6 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             pose.keypoints3D.forEach((el) => {
                 keypoints3DMap[el.name] = el;
             });
-
-
 
             // Generate front vector
             const pelvisBone = model.getObjectByName("pelvis");
@@ -544,10 +544,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
         orbitals: OrbitControls
     ) {
         return new Promise<THREE.Object3D<THREE.Object3DEventMap>>((resolve, reject) => {
-            this.addModel({ name: "avatar", url: url, }, true).then(async (object) => {
-                if (camera && orbitals) {
-                    //fitCameraToObject(this.camera, object, this.orbitals);
-                }
+            this.addModel({ name: AVATAR_NAME, url: url, }, true).then(async (object) => {
 
                 //this.setRotationBoneAnglesDegrees(object, "footR", 0, 0, 0);
                 //this.setRotationBoneAnglesDegrees(object, "legR", 0, 0, -90);

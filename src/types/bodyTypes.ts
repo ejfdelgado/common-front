@@ -89,3 +89,5 @@ export interface GenericSizeType {
 export interface ControllerUpdateResponse {
     avatarTransform?: THREE.Matrix4;
 }
+
+export const AVATAR_NAME = "avatar";

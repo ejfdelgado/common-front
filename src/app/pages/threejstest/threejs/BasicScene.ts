@@ -5,6 +5,7 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { replaceAvatarSkin } from './AvatarUtilities';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { BasicAvatarScene } from './SceneWithAvatar';
+import { AVATAR_NAME } from '@mytypes/bodyTypes';
 
 const ROOT_PATH = "/assets/models/";
 
@@ -80,7 +81,7 @@ export class BasicScene extends BasicAvatarScene {
   }
 
   replaceAvatarSkin(url: string) {
-    const avatar = this.getObjectByName("avatar");
+    const avatar = this.getObjectByName(AVATAR_NAME);
     if (!avatar) {
       return;
     }

@@ -1,7 +1,5 @@
 # CommonFront
 
-Evitar que se vuelva loco cuando no detecta bien el body.
-
 Permitir guardar la secuencia de poses; filtrar solo los puntos relevantes.
 Permitir asignar una pose específica.
 Permitir reproducirlos.
@@ -14,7 +12,10 @@ Agnostico de la orientación del avatar:
 
 ------------------------------------------------------------------------
 
-Agregar a manos y pies capacidad de colision para detectar cuando el usuario toca algo.
+Evitar que se vuelva loco cuando no detecta bien el body.
+
+Agregar a manos y pies capacidad de colision (aplicar matriz a la pose y evaluar manos o pies)
+para detectar cuando el usuario toca algo.
 
 Agregar mundo para:
 - Evaluar equilibrio.
