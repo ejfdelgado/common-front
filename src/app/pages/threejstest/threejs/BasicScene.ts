@@ -138,7 +138,7 @@ export class BasicScene extends BasicAvatarScene {
       this.animatedElements.push({
         avatar: object,
         loop: true,
-        startingTime: Date.now(),
+        startingTime: 0,
         state: anim,
       });
     });
@@ -149,22 +149,34 @@ export class BasicScene extends BasicAvatarScene {
 
   animationHeartBeat() {
     const now = Date.now();
-    const difference = now - this.startingAnimationTime;
+    const sceneTime = now - this.startingAnimationTime;
     for (let i = 0; i < this.animatedElements.length; i++) {
-      const { avatar, state } = this.animatedElements[i];
-      const { a } = state;
+      const { avatar, state, loop, startingTime } = this.animatedElements[i];
+      let { a, frameId } = state;
       // Busco el frame de acuerdo al tiempo
-      let frameId = -1;
+
+      let startingIndex = 0;
+      if (frameId !== undefined) {
+        startingIndex = frameId;
+      }
       for (let j = 0; j < a.length; j++) {
         const pos = a[j];
-        if (pos.t > difference) {
-          frameId = j;
+        if (startingTime + pos.t > sceneTime) {
+          state.frameId = j;
           // For performance optimization, Store the frameId!
           break;
         }
       }
-      if (frameId >= 0) {
-        this.applyAvatarState(avatar, a[frameId]);
+      if (state.frameId != undefined && state.frameId >= 0) {
+        this.applyAvatarState(avatar, a[state.frameId]);
+      }
+      if (loop) {
+        if (state.frameId !== undefined) {
+          if (state.frameId >= a.length - 1) {
+            state.frameId = 0;
+            this.animatedElements[i].startingTime = sceneTime;
+          }
+        }
       }
     }
   }

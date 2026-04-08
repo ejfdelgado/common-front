@@ -112,6 +112,7 @@ export interface StoredAvatarState {
 
 export interface StoredAvatarAnimation {
     a: StoredAvatarState[];
+    frameId?: number;
 }
 
 export interface AnimatedElements {
