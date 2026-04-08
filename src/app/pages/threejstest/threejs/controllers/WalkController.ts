@@ -21,16 +21,13 @@ export class WalkController extends SceneControllerAbstract {
     destinationLookAt = new THREE.Vector3(0, 0, 0);
     lookAtActual = new THREE.Vector3(0, 0, 0);
     translationX2: number = 0;
-    translationY2: number = 0;
     translationZ2: number = 0;
     rotationY2: number = 0;//radians
 
     translationX1: number = 0;
-    translationY1: number = 0;
     translationZ1: number = 0;
 
     translationX1Last: number = 0;
-    translationY1Last: number = 0;
     translationZ1Last: number = 0;
 
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
@@ -38,13 +35,12 @@ export class WalkController extends SceneControllerAbstract {
     stepCount: number = 0;
     kilometers: number = 0;
     calories: number = 0;
-    min3DYValue: number = 0;
+
 
     override async update(): Promise<ControllerUpdateResponse> {
         const { camera, orbitals } = this.scene;
         if (camera && orbitals) {
             orbitals.enabled = false;
-            this.computeMin3DY();
             this.computeTransformationMatrix();
             // Affect the scene camera
             this.placeCamera(camera, orbitals);
@@ -87,17 +83,6 @@ export class WalkController extends SceneControllerAbstract {
         );
         this.translationX1 = translationX1Res.v;
         this.translationX1Last = translationX1Res.t;
-
-        const translationY1Res = makeSmootValue(
-            this.translationY1,
-            this.translationY2,
-            this.translationY1Last,
-            this.SMOOT_RATIO_TRANSLATION,
-            this.MAX_INACTIVITY_MILLIS,
-            this.PRESITION_TRANSLATION,
-        );
-        this.translationY1 = translationY1Res.v;
-        this.translationY1Last = translationY1Res.t;
 
         const translationZ1Res = makeSmootValue(
             this.translationZ1,
@@ -162,16 +147,11 @@ export class WalkController extends SceneControllerAbstract {
         this.computeTransformationMatrix();
     }
 
-    computeYPosition() {
-        this.translationY2 = -1 * this.min3DYValue;
-    }
-
     computeTransformationMatrix() {
-        this.computeYPosition();
         this.updateValues();
         const translationMatrix = new THREE.Matrix4().makeTranslation(
             this.translationX1,
-            this.translationY1,
+            0,
             this.translationZ1,
         );
         const rotationMatrix = new THREE.Matrix4().makeRotationY(this.rotationY2);
@@ -181,20 +161,5 @@ export class WalkController extends SceneControllerAbstract {
         );
     }
 
-    computeMin3DY() {
-        const { walkBody } = this.lastData;
-        const { points } = walkBody;
 
-        const focusPoints: BodyKeyPointData[] = [];
-
-        focusPoints.push(points['left_heel']);
-        focusPoints.push(points['right_heel']);
-
-        this.min3DYValue = focusPoints.map(a => a.y).reduce((yVal, minVal, currentIndex, array) => {
-            if (yVal < minVal) {
-                return yVal;
-            }
-            return minVal;
-        }, 0);
-    }
 }

@@ -1,14 +1,20 @@
 # CommonFront
 
-Agregar a manos y pies capacidad de colision para detectar cuando el usuario toca algo.
+Evitar que se vuelva loco cuando no detecta bien el body.
 
-Mover lentamente la posición del avatar cuando va caminando, no que salte.
+Permitir guardar la secuencia de poses; filtrar solo los puntos relevantes.
+Permitir asignar una pose específica.
+Permitir reproducirlos.
 
 Comparar poses y asignar un score.
 Agnostico de la orientación del avatar:
 - Usando frente del avatar
 - Angulos de antebrazo y femur relativos al frente del avatar, usando 3 ejes de coordenadas canónico.
 - Angulo mímimo de brazo relativo a antebrazo y de pie relativo a femur.
+
+------------------------------------------------------------------------
+
+Agregar a manos y pies capacidad de colision para detectar cuando el usuario toca algo.
 
 Agregar mundo para:
 - Evaluar equilibrio.
@@ -20,10 +26,6 @@ Agregar mundo para:
 Hacer un vestier.
 - Interact with body.
 - Interact with voice commands.
-
-Permitir guardar la secuencia de poses; filtrar solo los puntos relevantes.
-Permitir asignar una pose específica.
-Permitir reproducirlos.
 
 Usar menú de arriba para alojar:
 - Play/Pause. (voice on/of) (camera pose on/off)

@@ -1,4 +1,4 @@
-import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/bodyTypes";
+import { AvatarBodyEvent, BodyKeyPointData, ControllerUpdateResponse } from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { computeBodyPointAverage } from "../AvatarUtilities";
 import { SignalLowPass } from "../SignalLowPass";
@@ -13,6 +13,24 @@ export class Stand2dController extends SceneControllerAbstract {
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
     jumping: boolean = false;
     JUMP_THRESHOLD = 0.15; // 0.6 is my maximum
+    min3DYValue: number = 0;
+
+    computeMin3DY() {
+        const { walkBody } = this.lastData;
+        const { points } = walkBody;
+
+        const focusPoints: BodyKeyPointData[] = [];
+
+        focusPoints.push(points['left_heel']);
+        focusPoints.push(points['right_heel']);
+
+        this.min3DYValue = focusPoints.map(a => a.y).reduce((yVal, minVal, currentIndex, array) => {
+            if (yVal < minVal) {
+                return yVal;
+            }
+            return minVal;
+        }, 0);
+    }
 
     override async update(): Promise<ControllerUpdateResponse> {
         // Compute the transformation needed to reflect the 2D situation
@@ -83,16 +101,17 @@ export class Stand2dController extends SceneControllerAbstract {
                 });
             }
         }
-
+        this.computeMin3DY();
         this.transformationMatrix = new THREE.Matrix4().makeTranslation(
             xShiftReal * this.HORIZONTAL_DISPLACEMENT_PONDERATION,
-            jumpY * this.VERTICAL_JUMP_PONDERATION,
+            -1 * this.min3DYValue + jumpY * this.VERTICAL_JUMP_PONDERATION,
             0,
         );
         return {
             avatarTransform: this.transformationMatrix,
         };
     }
+
     override async stop(): Promise<void> {
 
     }
