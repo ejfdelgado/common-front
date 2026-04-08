@@ -20,9 +20,6 @@ export class WalkController extends SceneControllerAbstract {
     lookAtLastT: number = 0;
     destinationLookAt = new THREE.Vector3(0, 0, 0);
     lookAtActual = new THREE.Vector3(0, 0, 0);
-    translationX2: number = 0;
-    translationZ2: number = 0;
-    rotationY2: number = 0;//radians
 
     translationX1: number = 0;
     translationZ1: number = 0;
@@ -75,7 +72,7 @@ export class WalkController extends SceneControllerAbstract {
         // Translation
         const translationX1Res = makeSmootValue(
             this.translationX1,
-            this.translationX2,
+            this.scene.avatarState.positionX,
             this.translationX1Last,
             this.SMOOT_RATIO_TRANSLATION,
             this.MAX_INACTIVITY_MILLIS,
@@ -86,7 +83,7 @@ export class WalkController extends SceneControllerAbstract {
 
         const translationZ1Res = makeSmootValue(
             this.translationZ1,
-            this.translationZ2,
+            this.scene.avatarState.positionZ,
             this.translationZ1Last,
             this.SMOOT_RATIO_TRANSLATION,
             this.MAX_INACTIVITY_MILLIS,
@@ -100,7 +97,7 @@ export class WalkController extends SceneControllerAbstract {
         this.destinationCameraLocation.y = this.lastData.walkBody.height * this.CAMERA_HEIGTH_RATIO;
         const advanceFront = this.lastData.walkBody.FRONT_REFERENCE.clone().applyAxisAngle(
             this.lastData.walkBody.UP_REFERENCE,
-            this.rotationY2,
+            this.scene.avatarState.rotationY,
         ).normalize();
         this.destinationCameraLocation.x = this.translationX1 - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
         this.destinationCameraLocation.z = this.translationZ1 - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
@@ -138,12 +135,12 @@ export class WalkController extends SceneControllerAbstract {
             stepSize,
         } = walkBody;
 
-        this.rotationY2 += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
+        this.scene.avatarState.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
         const advanceFront = FRONT_REFERENCE.clone()
-            .applyAxisAngle(UP_REFERENCE, this.rotationY2)
+            .applyAxisAngle(UP_REFERENCE, this.scene.avatarState.rotationY)
             .normalize();
-        this.translationX2 += (advanceFront.x * stepSize * this.STEP_AMOUNT) * forward;
-        this.translationZ2 += (advanceFront.z * stepSize * this.STEP_AMOUNT) * forward;
+        this.scene.avatarState.positionX += (advanceFront.x * stepSize * this.STEP_AMOUNT) * forward;
+        this.scene.avatarState.positionZ += (advanceFront.z * stepSize * this.STEP_AMOUNT) * forward;
         this.computeTransformationMatrix();
     }
 
@@ -154,7 +151,7 @@ export class WalkController extends SceneControllerAbstract {
             0,
             this.translationZ1,
         );
-        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.rotationY2);
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarState.rotationY);
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(
             translationMatrix,
             rotationMatrix,

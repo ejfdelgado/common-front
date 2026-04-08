@@ -5,7 +5,7 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { replaceAvatarSkin } from './AvatarUtilities';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { BasicAvatarScene } from './SceneWithAvatar';
-import { AVATAR_NAME } from '@mytypes/bodyTypes';
+import { AVATAR_NAME, AvatarLocationState } from '@mytypes/bodyTypes';
 
 const ROOT_PATH = "/assets/models/";
 
@@ -14,6 +14,11 @@ export class BasicScene extends BasicAvatarScene {
   bounds: DOMRect;
   previousTime = performance.now();
   canvasRef: HTMLCanvasElement;
+  avatarState: AvatarLocationState = {
+    positionX: 0,
+    positionZ: 0,
+    rotationY: 0,
+  };
 
   constructor(
     canvasRef: any,

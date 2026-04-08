@@ -6,7 +6,9 @@ export class RecordPoseController extends SceneControllerAbstract {
     lastRecorded: number = 0;
     MAX_STATES_PER_SECOND: number = 5;
     override async update(): Promise<ControllerUpdateResponse> {
-        if (!this.recording) {
+        const now = Date.now();
+        const difference = now - this.lastRecorded;
+        if (!this.recording || difference < 1000 * this.MAX_STATES_PER_SECOND) {
             return {};
         }
         // Leer el modelo
@@ -15,6 +17,7 @@ export class RecordPoseController extends SceneControllerAbstract {
             //traverse all the skeleton and store position and rotation
             console.log("traverse");
         }
+        this.lastRecorded = now;
         return {};
     }
 

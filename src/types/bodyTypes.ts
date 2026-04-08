@@ -92,3 +92,9 @@ export interface ControllerUpdateResponse {
 }
 
 export const AVATAR_NAME = "avatar";
+
+export interface AvatarLocationState {
+    positionX: number,
+    rotationY: number;
+    positionZ: number,
+}
