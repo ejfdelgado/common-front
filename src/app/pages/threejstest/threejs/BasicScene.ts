@@ -5,7 +5,7 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { replaceAvatarSkin } from './AvatarUtilities';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { BasicAvatarScene } from './SceneWithAvatar';
-import { AVATAR_NAME, AvatarLocationState, StoredAvatarAnimation, StoredAvatarState } from '@mytypes/bodyTypes';
+import { AnimatedElements, AVATAR_NAME, AvatarLocationState, StoredAvatarAnimation, StoredAvatarState } from '@mytypes/bodyTypes';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { decode } from "@msgpack/msgpack";
@@ -33,6 +33,9 @@ export class BasicScene extends BasicAvatarScene {
     this.canvasRef = canvasRef;
     this.bounds = bounds;
     const params = getUrlQueryParams();
+    setInterval(() => {
+      this.animationHeartBeat();
+    }, 200);
   }
 
   initialize() {
@@ -126,14 +129,44 @@ export class BasicScene extends BasicAvatarScene {
 
   async loadCharacters() {
     const autoAdd: boolean = true;
-    this.addModel({ name: AVATAR_NAME, url: ROOT_PATH + "avatar005.glb", }, autoAdd).then(async (object) => {
+    this.addModel({ name: "friend", url: ROOT_PATH + "avatar005.glb", }, autoAdd).then(async (object) => {
       object.position.add(new THREE.Vector3(1, 1, -1));
       object.rotateY(Math.PI);
 
       // Load animation
       const anim = await this.loadAnimation();
-      this.applyAvatarState(object, anim.a[0]);
+      this.animatedElements.push({
+        avatar: object,
+        loop: true,
+        startingTime: Date.now(),
+        state: anim,
+      });
     });
+  }
+
+  animatedElements: AnimatedElements[] = [];
+  startingAnimationTime: number = Date.now();
+
+  animationHeartBeat() {
+    const now = Date.now();
+    const difference = now - this.startingAnimationTime;
+    for (let i = 0; i < this.animatedElements.length; i++) {
+      const { avatar, state } = this.animatedElements[i];
+      const { a } = state;
+      // Busco el frame de acuerdo al tiempo
+      let frameId = -1;
+      for (let j = 0; j < a.length; j++) {
+        const pos = a[j];
+        if (pos.t > difference) {
+          frameId = j;
+          // For performance optimization, Store the frameId!
+          break;
+        }
+      }
+      if (frameId >= 0) {
+        this.applyAvatarState(avatar, a[frameId]);
+      }
+    }
   }
 
   applyAvatarState(

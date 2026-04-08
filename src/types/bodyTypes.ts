@@ -113,3 +113,10 @@ export interface StoredAvatarState {
 export interface StoredAvatarAnimation {
     a: StoredAvatarState[];
 }
+
+export interface AnimatedElements {
+    avatar: THREE.Object3D<THREE.Object3DEventMap>;
+    state: StoredAvatarAnimation,
+    startingTime: number;
+    loop: boolean;
+}
