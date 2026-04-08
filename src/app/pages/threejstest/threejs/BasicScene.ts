@@ -22,6 +22,11 @@ export class BasicScene extends BasicAvatarScene {
     positionZ: 0,
     rotationY: 0,
   };
+  avatarStateSmoot: AvatarLocationState = {
+    positionX: 0,
+    positionZ: 0,
+    rotationY: 0,
+  };
 
   constructor(
     canvasRef: any,
@@ -133,8 +138,7 @@ export class BasicScene extends BasicAvatarScene {
       // Load animation
       const anim = await this.loadAnimation();
 
-      anim.location = new THREE.Vector2(1, -1);
-      anim.rotationY = Math.PI;
+      anim.lr = [1, -1, Math.PI];
 
       this.animatedElements.push({
         avatar: object,
@@ -142,6 +146,7 @@ export class BasicScene extends BasicAvatarScene {
         startingTime: 0,
         state: anim,
       });
+
 
     });
   }
@@ -154,7 +159,7 @@ export class BasicScene extends BasicAvatarScene {
     const sceneTime = now - this.startingAnimationTime;
     for (let i = 0; i < this.animatedElements.length; i++) {
       const { avatar, state, loop, startingTime } = this.animatedElements[i];
-      let { a, frameId, location, rotationY } = state;
+      let { a, frameId, lr } = state;
       // Busco el frame de acuerdo al tiempo
 
       let startingIndex = 0;
@@ -169,7 +174,7 @@ export class BasicScene extends BasicAvatarScene {
         }
       }
       if (state.frameId != undefined && state.frameId >= 0) {
-        this.applyAvatarState(avatar, a[state.frameId], location, rotationY);
+        this.applyAvatarState(avatar, a[state.frameId], lr);
       }
       if (loop) {
         if (state.frameId !== undefined) {
@@ -185,8 +190,7 @@ export class BasicScene extends BasicAvatarScene {
   applyAvatarState(
     avatar: THREE.Object3D<THREE.Object3DEventMap>,
     state: StoredAvatarState,
-    location?: THREE.Vector2,
-    rotationY?: number,
+    lr?: number[],
   ) {
     for (let i = 0; i < state.bones.length; i++) {
       const { n, v } = state.bones[i];
@@ -201,18 +205,27 @@ export class BasicScene extends BasicAvatarScene {
     const result = new THREE.Matrix4().identity();
     const matrixTransforms: THREE.Matrix4[] = [];
     matrixTransforms.push(matrix);
-    if (location) {
-      const translationMatrix = new THREE.Matrix4().makeTranslation(
-        location.x,
-        0,// Check height with terrain
-        location.y,
-      );
-      matrixTransforms.push(translationMatrix);
+
+    let positionX = state.lr[0];
+    let positionZ = state.lr[1];
+    let rotationY = state.lr[2];
+    if (lr && lr.length == 3) {
+      positionX = lr[0];
+      positionZ = lr[1];
+      rotationY = lr[2];
     }
-    if (typeof rotationY == "number") {
-      const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
-      matrixTransforms.push(rotationMatrix);
-    }
+    // Location
+    const translationMatrix = new THREE.Matrix4().makeTranslation(
+      positionX,
+      0,// Check height with terrain
+      positionZ,
+    );
+    matrixTransforms.push(translationMatrix);
+
+    // Rotation
+    const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
+    matrixTransforms.push(rotationMatrix);
+
     for (const m of matrixTransforms) {
       result.multiply(m);
     }

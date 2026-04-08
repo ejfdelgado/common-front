@@ -26,6 +26,11 @@ export class RecordPoseController extends SceneControllerAbstract {
             const state: StoredAvatarState = {
                 t: now - this.recordingStartTime,
                 matrix: matrixToArray(this.transformationMatrix),
+                lr: [
+                    this.scene.avatarStateSmoot.positionX,
+                    this.scene.avatarStateSmoot.positionZ,
+                    this.scene.avatarStateSmoot.rotationY,
+                ],
                 //d: difference,
                 bones: [],
             };

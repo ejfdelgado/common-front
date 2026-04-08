@@ -109,14 +109,14 @@ export interface StoredAvatarState {
     t: number;
     bones: StoredAvatarBoneState[],
     matrix: number[],
+    lr: number[],//positionX, positionZ, rotationY
     d?: number;
 }
 
 export interface StoredAvatarAnimation {
     a: StoredAvatarState[];
     frameId?: number;
-    location?: THREE.Vector2;
-    rotationY?: number;
+    lr?: number[],// If this is assigned, the state is overrided with this
 }
 
 export interface AnimatedElements {

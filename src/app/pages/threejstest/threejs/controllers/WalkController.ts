@@ -21,9 +21,6 @@ export class WalkController extends SceneControllerAbstract {
     destinationLookAt = new THREE.Vector3(0, 0, 0);
     lookAtActual = new THREE.Vector3(0, 0, 0);
 
-    translationX1: number = 0;
-    translationZ1: number = 0;
-
     translationX1Last: number = 0;
     translationZ1Last: number = 0;
 
@@ -71,25 +68,25 @@ export class WalkController extends SceneControllerAbstract {
 
         // Translation
         const translationX1Res = makeSmootValue(
-            this.translationX1,
+            this.scene.avatarStateSmoot.positionX,
             this.scene.avatarState.positionX,
             this.translationX1Last,
             this.SMOOT_RATIO_TRANSLATION,
             this.MAX_INACTIVITY_MILLIS,
             this.PRESITION_TRANSLATION,
         );
-        this.translationX1 = translationX1Res.v;
+        this.scene.avatarStateSmoot.positionX = translationX1Res.v;
         this.translationX1Last = translationX1Res.t;
 
         const translationZ1Res = makeSmootValue(
-            this.translationZ1,
+            this.scene.avatarStateSmoot.positionZ,
             this.scene.avatarState.positionZ,
             this.translationZ1Last,
             this.SMOOT_RATIO_TRANSLATION,
             this.MAX_INACTIVITY_MILLIS,
             this.PRESITION_TRANSLATION,
         );
-        this.translationZ1 = translationZ1Res.v;
+        this.scene.avatarStateSmoot.positionZ = translationZ1Res.v;
         this.translationZ1Last = translationZ1Res.t;
     }
 
@@ -99,8 +96,8 @@ export class WalkController extends SceneControllerAbstract {
             this.lastData.walkBody.UP_REFERENCE,
             this.scene.avatarState.rotationY,
         ).normalize();
-        this.destinationCameraLocation.x = this.translationX1 - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
-        this.destinationCameraLocation.z = this.translationZ1 - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.destinationCameraLocation.x = this.scene.avatarStateSmoot.positionX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.destinationCameraLocation.z = this.scene.avatarStateSmoot.positionZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
         this.lastCameraSmoot = makeSmootVector(
             camera.position,
             this.destinationCameraLocation,
@@ -109,9 +106,9 @@ export class WalkController extends SceneControllerAbstract {
             this.MAX_INACTIVITY_MILLIS,
         );
 
-        this.destinationLookAt.setX(this.translationX1);
+        this.destinationLookAt.setX(this.scene.avatarStateSmoot.positionX);
         this.destinationLookAt.setY(0);
-        this.destinationLookAt.setZ(this.translationZ1);
+        this.destinationLookAt.setZ(this.scene.avatarStateSmoot.positionZ);
         this.lookAtLastT = makeSmootVector(
             this.lookAtActual,
             this.destinationLookAt,
@@ -146,10 +143,11 @@ export class WalkController extends SceneControllerAbstract {
 
     computeTransformationMatrix() {
         this.updateValues();
+        this.scene.avatarStateSmoot.rotationY = this.scene.avatarState.rotationY;
         const translationMatrix = new THREE.Matrix4().makeTranslation(
-            this.translationX1,
+            this.scene.avatarStateSmoot.positionX,
             0,
-            this.translationZ1,
+            this.scene.avatarStateSmoot.positionZ,
         );
         const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarState.rotationY);
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(
