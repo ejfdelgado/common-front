@@ -79,6 +79,7 @@ export interface ControllerInitDataType {
 
 export interface AvatarBodyEvent {
     name: string;
+    voiceCommand?: string;
 }
 
 export interface GenericSizeType {

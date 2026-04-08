@@ -1,8 +1,7 @@
 # CommonFront
 
-Permitir guardar la secuencia de poses; filtrar solo los puntos relevantes.
-Permitir asignar una pose específica.
-Permitir reproducirlos.
+Permitir guardar la secuencia de poses; guardar el estado del skeleton (rotation+positions) + timestamp.
+Permitir asignar una pose específica o una secuencia de posiciones.
 
 Comparar poses y asignar un score.
 Agnostico de la orientación del avatar:

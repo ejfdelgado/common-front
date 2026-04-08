@@ -39,6 +39,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         }
         this.isComputing = true;
         try {
+            // Level 2
             const response = await this.scene.computeIK(poses);
             if (response == false) {
                 // Fire stop all controllers

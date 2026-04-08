@@ -68,9 +68,13 @@ export class ThreejsTestComponent extends CommonSpeech {
       commands: {
         "es-ES": {
           "guardar": "save",
+          "iniciar": "start",
+          "detener": "stop",
         },
         "en-US": {
           "save": "save",
+          "start": "start",
+          "stop": "stop",
         },
         "fr-FR": {}
       },
@@ -163,6 +167,7 @@ export class ThreejsTestComponent extends CommonSpeech {
       }
       this.updateVideoSize();
       if (this.poses.length > 0) {
+        // Level 1
         this.threeComponent.computeIK(this.poses, this.videoSize);
       }
     });

@@ -21,6 +21,7 @@ import { SceneWithAvatarComponent } from './SceneWithAvatarComponent';
 import { WalkController } from './controllers/WalkController';
 import { SoundFeedbackController } from './controllers/SoundFeedbackController';
 import { Stand2dController } from './controllers/Stand2dController';
+import { RecordPoseController } from './controllers/RecordPoseController';
 
 @Component({
   standalone: true,
@@ -44,6 +45,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   walkController: WalkController = new WalkController(this.events);
   soundFeedbackController: SoundFeedbackController = new SoundFeedbackController(this.events);
   stand2dController: Stand2dController = new Stand2dController(this.events);
+  recordPoseController: RecordPoseController = new RecordPoseController(this.events);
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -79,9 +81,10 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     this.sceneCreated.resolve();
     // Add controllers
     // The order matters...
-    this.addController(this.walkController);
+    //this.addController(this.walkController);
     this.addController(this.soundFeedbackController);
     this.addController(this.stand2dController);
+    this.addController(this.recordPoseController);
     this.loop();
   }
 
@@ -126,5 +129,9 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
       return;
     }
     this.scene.executeCommand(command);
+    this.events.emit({
+      name: "VOICE_COMMAND",
+      voiceCommand: command.command,
+    });
   }
 }
