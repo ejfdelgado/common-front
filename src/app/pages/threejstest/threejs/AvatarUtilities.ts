@@ -187,3 +187,84 @@ export function computeBodyPointAverage(name: string, list: BodyKeyPointData[]) 
     avg.score = avg.score / size;
     return avg;
 };
+
+export function makeSmootVector(
+    actual: THREE.Vector3, 
+    destination: THREE.Vector3, 
+    lastTime: number, 
+    smootRatio: number, 
+    maxInactivityMillis: number,
+) {
+    const actualT = Date.now();
+    if (lastTime == 0) {
+        return actualT;
+    }
+    const diffTime = actualT - lastTime;
+    if (diffTime > maxInactivityMillis) {
+        return actualT;
+    }
+
+    const trayectoria = new THREE.Vector3(
+        destination.x - actual.x,
+        destination.y - actual.y,
+        destination.z - actual.z,
+    );
+    const length = trayectoria.length();
+    trayectoria.normalize();
+    const thisStep = diffTime * smootRatio;
+    const currentStep = Math.min(thisStep, length);
+    if (length >= 0.0001) {
+        trayectoria.multiplyScalar(currentStep);
+        actual.x += trayectoria.x;
+        actual.y += trayectoria.y;
+        actual.z += trayectoria.z;
+    } else {
+        actual.x = destination.x;
+        actual.y = destination.y;
+        actual.z = destination.z;
+    }
+    return actualT;
+}
+
+export function makeSmootValue(
+    actual: number,
+    destination: number,
+    lastTime: number,
+    smootRatio: number,
+    maxInactivityMillis: number,
+    presition: number = 0.0001
+) {
+    const actualT = Date.now();
+    if (lastTime == 0) {
+        return {
+            t: actualT,
+            v: actual,
+        };
+    }
+    const diffTime = actualT - lastTime;
+    if (diffTime > maxInactivityMillis) {
+        return {
+            t: actualT,
+            v: actual,
+        };
+    }
+
+    let trayectoria = destination - actual;
+    const totalDistance = Math.abs(trayectoria);
+    if (trayectoria > 0) {
+        trayectoria = 1;
+    } else {
+        trayectoria = -1;
+    }
+    const currentDelta = diffTime * smootRatio;
+    const currentStep = Math.min(currentDelta, totalDistance);
+    if (totalDistance > presition) {
+        actual += trayectoria * currentStep;
+    } else {
+        actual = destination;
+    }
+    return {
+        t: actualT,
+        v: actual,
+    };
+}
