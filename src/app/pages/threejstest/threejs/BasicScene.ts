@@ -10,10 +10,19 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { decode } from "@msgpack/msgpack";
 import { CameraByPassShader } from './shaders/CameraByPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 
 const ROOT_PATH = "/assets/models/";
 
 export class BasicScene extends BasicAvatarScene {
+
+  composer: EffectComposer | null = null;
+
   lights: Array<THREE.Light> = [];
   bounds: DOMRect;
   previousTime = performance.now();
@@ -63,6 +72,9 @@ export class BasicScene extends BasicAvatarScene {
     this.renderer.setSize(this.bounds.width, this.bounds.height);
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.background = new THREE.Color(0x333333);
+
+    this.setupEffects();
+
     this.initializeAvatar();
     this.initializeScenario();
 
@@ -76,6 +88,48 @@ export class BasicScene extends BasicAvatarScene {
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
     this.loadCharacters();
+  }
+
+  setupEffects() {
+    if (!this.camera || !this.renderer) {
+      return;
+    }
+    this.composer = new EffectComposer(this.renderer);
+
+    const renderPass = new RenderPass(this, this.camera);
+    this.composer.addPass(renderPass);
+
+    const outlinePass = new OutlinePass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      this,
+      this.camera
+    );
+
+    this.configureHalo(outlinePass);
+
+    this.composer.addPass(outlinePass);
+
+    // optional anti-alias
+    /*
+    const fxaaPass = new ShaderPass(FXAAShader);
+    const pixelRatio = this.renderer.getPixelRatio();
+    fxaaPass.material.uniforms['resolution'].value.set(
+      1 / (window.innerWidth * pixelRatio),
+      1 / (window.innerHeight * pixelRatio)
+    );
+    this.composer.addPass(fxaaPass);
+    */
+
+    const smaaPass = new SMAAPass();
+    this.composer.addPass(smaaPass);
+  }
+
+  configureHalo(outlinePass: OutlinePass) {
+    outlinePass.edgeStrength = 3.0;
+    outlinePass.edgeGlow = 1.0;
+    outlinePass.edgeThickness = 1.0;
+    outlinePass.visibleEdgeColor.set('#00ffff'); // halo color
+    outlinePass.hiddenEdgeColor.set('#000000');
   }
 
   async initializeScenario() {
@@ -133,14 +187,20 @@ export class BasicScene extends BasicAvatarScene {
     const delta = (currentTime - this.previousTime) / 1000;
   }
 
+  // the resize event is fired here
   setBounds(bounds: DOMRect) {
     this.bounds = bounds;
-    if (this.camera == null || this.renderer == null) {
+    if (this.camera == null || this.renderer == null || this.composer == null) {
       return;
     }
+    const pixelRatio = window.devicePixelRatio;
+
     this.camera.aspect = this.bounds.width / this.bounds.height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.bounds.width, this.bounds.height);
+    this.composer.setSize(this.bounds.width, this.bounds.height);
+    this.renderer.setPixelRatio(pixelRatio);
+    this.composer.setPixelRatio(pixelRatio);
   }
 
   executeCommand(command: RecognizedCommand) {
