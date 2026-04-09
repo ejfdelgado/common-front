@@ -2,15 +2,19 @@ import * as THREE from 'three';
 
 const CameraByPassShader = (
     camera: THREE.PerspectiveCamera,
+    d1: number,
+    d2: number,
+    d3: number,
+    d4: number,
 ) => {
     return (
         shader: THREE.WebGLProgramParametersWithUniforms,
     ) => {
         shader.uniforms['cameraPos'] = { value: camera.position };
-        shader.uniforms['nearFade'] = { value: 0 };
-        shader.uniforms['farFade'] = { value: 20 };
-        shader.uniforms['near2'] = { value: 30 };
-        shader.uniforms['far2'] = { value: 45 };
+        shader.uniforms['nearFade'] = { value: d1 };
+        shader.uniforms['farFade'] = { value: d2 };
+        shader.uniforms['near2'] = { value: d3 };
+        shader.uniforms['far2'] = { value: d4 };
 
         shader.vertexShader = shader.vertexShader
             .replace(

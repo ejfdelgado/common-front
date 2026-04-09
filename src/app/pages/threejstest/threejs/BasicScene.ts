@@ -83,7 +83,7 @@ export class BasicScene extends BasicAvatarScene {
     scenario.scale.set(1.5, 1.5, 1.5);
 
     if (this.camera) {
-      const shader = CameraByPassShader(this.camera);
+      const shader = CameraByPassShader(this.camera, 0, 15, 30, 45);
       scenario.traverse((child: any) => {
         if (child.isMesh && child.material) {
           const materials = Array.isArray(child.material)
@@ -92,7 +92,8 @@ export class BasicScene extends BasicAvatarScene {
 
           materials.forEach((material: any) => {
             material.transparent = true;
-            //material.depthWrite = false;
+            material.side = THREE.FrontSide;
+            //material.depthWrite = false;//this does not work
             //material.opacity = 0.5;
             material.onBeforeCompile = shader;
           });
