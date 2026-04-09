@@ -1,5 +1,12 @@
 # CommonFront
 
+Optimizar las llaves del esqueleto; textos cortos.
+El binario puede no tener las llaves, solo ordenarlas alfabeticamente.
+
+Permitir usar un modelo en tiempo real con firestore.
+
+------------------------------------------------------------------------
+
 Comparar poses y asignar un score.
 Agnostico de la orientación del avatar:
 - Usando frente del avatar
@@ -37,7 +44,6 @@ Cada parte permite cargar también un mesh que permite deducir la altura por don
 
 Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
 Permitir interactuar con voz con los asistentes virtuales.
-Permitir usar un modelo en tiempo real con firestore.
 El sistema de navegación debe manejar colisiones para evitar overlaping.
 
 Agregar login con microsoft.

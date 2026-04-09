@@ -9,6 +9,7 @@ import { AnimatedElements, AVATAR_NAME, AvatarLocationState, StoredAvatarAnimati
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { decode } from "@msgpack/msgpack";
+import { CameraByPassShader } from './shaders/CameraByPass';
 
 const ROOT_PATH = "/assets/models/";
 
@@ -80,6 +81,25 @@ export class BasicScene extends BasicAvatarScene {
   async initializeScenario() {
     const scenario = await this.addModel({ name: "scene", url: "/assets/models/scene2.gltf" });
     scenario.scale.set(1.5, 1.5, 1.5);
+
+    if (this.camera) {
+      const shader = CameraByPassShader(this.camera);
+      scenario.traverse((child: any) => {
+        if (child.isMesh && child.material) {
+          const materials = Array.isArray(child.material)
+            ? child.material
+            : [child.material];
+
+          materials.forEach((material: any) => {
+            material.transparent = true;
+            //material.depthWrite = false;
+            //material.opacity = 0.5;
+            material.onBeforeCompile = shader;
+          });
+        }
+      });
+    }
+    //
   }
 
   async initializeAvatar() {
