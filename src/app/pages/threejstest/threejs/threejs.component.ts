@@ -100,8 +100,8 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     ) {
       this.scene.camera.updateProjectionMatrix();
       // Need to be changed
-      this.scene.composer.render();
       //this.scene.renderer.render(this.scene, this.scene.camera);
+      this.scene.composer.render();
       this.scene.orbitals.update();
       this.scene.animate();
       requestAnimationFrame(() => {

@@ -13,8 +13,6 @@ import { CameraByPassShader } from './shaders/CameraByPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 
 const ROOT_PATH = "/assets/models/";
@@ -22,6 +20,10 @@ const ROOT_PATH = "/assets/models/";
 export class BasicScene extends BasicAvatarScene {
 
   composer: EffectComposer | null = null;
+  outlinePass: OutlinePass | null = null;
+
+  animatedElements: AnimatedElements[] = [];
+  startingAnimationTime: number = Date.now();
 
   lights: Array<THREE.Light> = [];
   bounds: DOMRect;
@@ -99,34 +101,20 @@ export class BasicScene extends BasicAvatarScene {
     const renderPass = new RenderPass(this, this.camera);
     this.composer.addPass(renderPass);
 
-    const outlinePass = new OutlinePass(
+    this.outlinePass = new OutlinePass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       this,
       this.camera
     );
-
-    this.configureHalo(outlinePass);
-
-    this.composer.addPass(outlinePass);
-
-    // optional anti-alias
-    /*
-    const fxaaPass = new ShaderPass(FXAAShader);
-    const pixelRatio = this.renderer.getPixelRatio();
-    fxaaPass.material.uniforms['resolution'].value.set(
-      1 / (window.innerWidth * pixelRatio),
-      1 / (window.innerHeight * pixelRatio)
-    );
-    this.composer.addPass(fxaaPass);
-    */
-
+    this.configureHalo(this.outlinePass);
+    this.composer.addPass(this.outlinePass);
     const smaaPass = new SMAAPass();
     this.composer.addPass(smaaPass);
   }
 
   configureHalo(outlinePass: OutlinePass) {
     outlinePass.edgeStrength = 3.0;
-    outlinePass.edgeGlow = 1.0;
+    outlinePass.edgeGlow = 2.0;
     outlinePass.edgeThickness = 1.0;
     outlinePass.visibleEdgeColor.set('#00ffff'); // halo color
     outlinePass.hiddenEdgeColor.set('#000000');
@@ -201,6 +189,10 @@ export class BasicScene extends BasicAvatarScene {
     this.composer.setSize(this.bounds.width, this.bounds.height);
     this.renderer.setPixelRatio(pixelRatio);
     this.composer.setPixelRatio(pixelRatio);
+
+    if (this.outlinePass) {
+      this.outlinePass.setSize(this.bounds.width, this.bounds.height);
+    }
   }
 
   executeCommand(command: RecognizedCommand) {
@@ -228,12 +220,11 @@ export class BasicScene extends BasicAvatarScene {
         state: anim,
       });
 
-
+      if (this.outlinePass) {
+        this.outlinePass.selectedObjects = [object];
+      }
     });
   }
-
-  animatedElements: AnimatedElements[] = [];
-  startingAnimationTime: number = Date.now();
 
   animationHeartBeat() {
     const now = Date.now();
