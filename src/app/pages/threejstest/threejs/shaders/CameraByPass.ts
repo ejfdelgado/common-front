@@ -7,10 +7,10 @@ const CameraByPassShader = (
         shader: THREE.WebGLProgramParametersWithUniforms,
     ) => {
         shader.uniforms['cameraPos'] = { value: camera.position };
-        shader.uniforms['nearFade'] = { value: 99 };
-        shader.uniforms['farFade'] = { value: 100 };
-        shader.uniforms['near2'] = { value: 800.0 };
-        shader.uniforms['far2'] = { value: 1000.0 };
+        shader.uniforms['nearFade'] = { value: 0 };
+        shader.uniforms['farFade'] = { value: 20 };
+        shader.uniforms['near2'] = { value: 30 };
+        shader.uniforms['far2'] = { value: 45 };
 
         shader.vertexShader = shader.vertexShader
             .replace(
@@ -36,14 +36,13 @@ const CameraByPassShader = (
              varying vec3 vWorldPosition;`
             )
             .replace(
-                '#include <output_fragment>',
-                `
+                '#include <dithering_fragment>',
+                `#include <dithering_fragment>
             float d = distance(cameraPos, vWorldPosition);
 
             float fadeNear = smoothstep(nearFade, farFade, d);
             float fadeFar  = 1.0 - smoothstep(near2, far2, d);
             float alphaFactor = fadeNear * fadeFar;
-
             gl_FragColor = vec4(gl_FragColor.rgb, gl_FragColor.a * alphaFactor);
             `
             );
