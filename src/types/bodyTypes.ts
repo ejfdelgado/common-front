@@ -72,6 +72,7 @@ export interface ScenePoseEventType {
         [key: string]: BodyKeyPointData;
     },
     frontData: FrontComputationType,
+    leftArm: Point3D,
 }
 
 export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
@@ -143,4 +144,5 @@ export interface ComparableBody {
     front: Point3D;
     up: Point3D;
     left: Point3D;
+    leftArm: Point3D;
 }

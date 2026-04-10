@@ -18,6 +18,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         front: { x: 0, y: 0, z: 0, },
         left: { x: 0, y: 0, z: 0, },
         up: { x: 0, y: 0, z: 0, },
+        leftArm: { x: 0, y: 0, z: 0, },
     };
 
     constructor(
@@ -58,11 +59,13 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                     pose,
                     keypoints3DMap,
                     frontData,
+                    leftArm,
                 } = response;
                 this.walkBody.capture(keypoints3DMap, frontData);
                 this.comparableBody.front = frontData.front;
                 this.comparableBody.left = frontData.left;
                 this.comparableBody.up = frontData.up;
+                this.comparableBody.leftArm = leftArm;
                 const keypoints2DMap: {
                     [key: string]: BodyKeyPointData;
                 } = {};
@@ -77,6 +80,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                         keypoints3DMap,
                         keypoints2DMap,
                         frontData,
+                        leftArm,
                         walkBody: this.walkBody,
                         videoSize,
                     });

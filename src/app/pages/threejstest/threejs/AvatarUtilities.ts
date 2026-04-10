@@ -1,5 +1,5 @@
 import { BodyPoseKey } from "@mytypes/BodyParts";
-import { BodyData, BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
+import { BodyData, BodyKeyPointData, FrontComputationType, Point3D } from "@mytypes/bodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -53,9 +53,51 @@ export function computeComparableBody(
     const keypoints3DMap = getKeypoints3DMap(pose);
     // Generate front vector
     const frontData = computeAvatarFront(keypoints3DMap);
+    // Common raw canonical coordinates
+    const { front, up, left } = frontData;
+    const dotProduct = (v1: Point3D, v2: Point3D) => {
+        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    }
+    const toCanonical = (v: Point3D): Point3D => {
+        const p = {
+            x: dotProduct(v, front),
+            y: dotProduct(v, left),
+            z: dotProduct(v, up),
+        };
+        const len = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+        return {
+            x: p.x / len,
+            y: p.y / len,
+            z: p.z / len,
+        };
+    };
+
+    const leftShoulder = keypoints3DMap[BodyPoseKey.left_shoulder];
+    const leftElbow = keypoints3DMap[BodyPoseKey.left_elbow];
+    const leftWrist = keypoints3DMap[BodyPoseKey.left_wrist];
+
+    const rightShoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
+    const rightElbow = keypoints3DMap[BodyPoseKey.right_elbow];
+    const rightWrist = keypoints3DMap[BodyPoseKey.right_wrist];
+
+    const leftHip = keypoints3DMap[BodyPoseKey.left_hip];
+    const leftKnee = keypoints3DMap[BodyPoseKey.left_knee];
+    const leftHeel = keypoints3DMap[BodyPoseKey.left_heel];
+
+    const rightHip = keypoints3DMap[BodyPoseKey.right_hip];
+    const rightKnee = keypoints3DMap[BodyPoseKey.right_knee];
+    const rightHeel = keypoints3DMap[BodyPoseKey.right_heel];
+
+    const leftArm = toCanonical({
+        x: leftElbow.x - leftShoulder.x,
+        y: leftElbow.y - leftShoulder.y,
+        z: leftElbow.z - leftShoulder.z,
+    });
+
     return {
         keypoints3DMap,
         frontData,
+        leftArm,
     };
 }
 
