@@ -221,7 +221,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_knee_r],
-                effector: bonesIdMap[AvatarBoneEnum.foot_r],
+                effector: bonesIdMap[AvatarBoneEnum.knee_r],
                 links: [
                     {
                         index: bonesIdMap[AvatarBoneEnum.hip_r],
@@ -231,10 +231,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_foot_r],
-                effector: bonesIdMap[AvatarBoneEnum.foot2_r],
+                effector: bonesIdMap[AvatarBoneEnum.foot_r],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.foot_r],
+                        index: bonesIdMap[AvatarBoneEnum.knee_r],
                         rotationMin: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(-90 - 45)),
                         rotationMax: new THREE.Vector3(
@@ -248,7 +248,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_knee_l],
-                effector: bonesIdMap[AvatarBoneEnum.foot_l],
+                effector: bonesIdMap[AvatarBoneEnum.knee_l],
                 links: [
                     {
                         index: bonesIdMap[AvatarBoneEnum.hip_l],
@@ -258,10 +258,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_foot_l],
-                effector: bonesIdMap[AvatarBoneEnum.foot2_l],
+                effector: bonesIdMap[AvatarBoneEnum.foot_l],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.foot_l],
+                        index: bonesIdMap[AvatarBoneEnum.knee_l],
                         rotationMin: new THREE.Vector3(
                             0, 0, 0),
                         rotationMax: new THREE.Vector3(
@@ -276,10 +276,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             //
             {
                 target: bonesIdMap[AvatarBoneEnum.target_shoulder_r],
-                effector: bonesIdMap[AvatarBoneEnum.arm_r],
+                effector: bonesIdMap[AvatarBoneEnum.shoulder_r],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.elbow_r],
+                        index: bonesIdMap[AvatarBoneEnum.chest_r],
                         rotationMin: new THREE.Vector3(
                             -Math.PI, -Math.PI, -Math.PI),
                         rotationMax: new THREE.Vector3(
@@ -290,10 +290,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_shoulder_l],
-                effector: bonesIdMap[AvatarBoneEnum.arm_l],
+                effector: bonesIdMap[AvatarBoneEnum.shoulder_l],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.elbow_l],
+                        index: bonesIdMap[AvatarBoneEnum.chest_l],
                         rotationMin: new THREE.Vector3(
                             -Math.PI, -Math.PI, -Math.PI),
                         rotationMax: new THREE.Vector3(
@@ -305,20 +305,20 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             //
             {
                 target: bonesIdMap[AvatarBoneEnum.target_elbow_r],
-                effector: bonesIdMap[AvatarBoneEnum.hand_r],
+                effector: bonesIdMap[AvatarBoneEnum.elbow_r],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.arm_r],
+                        index: bonesIdMap[AvatarBoneEnum.shoulder_r],
                     },
                 ],
                 iteration: iteration,
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_elbow_l],
-                effector: bonesIdMap[AvatarBoneEnum.hand_l],
+                effector: bonesIdMap[AvatarBoneEnum.elbow_l],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.arm_l],
+                        index: bonesIdMap[AvatarBoneEnum.shoulder_l],
                     },
                 ],
                 iteration: iteration,
@@ -326,34 +326,34 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             //
             {
                 target: bonesIdMap[AvatarBoneEnum.target_hand_r],
-                effector: bonesIdMap[AvatarBoneEnum.hand2_r],
+                effector: bonesIdMap[AvatarBoneEnum.hand_r],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.hand_r],
+                        index: bonesIdMap[AvatarBoneEnum.elbow_r],
                         rotationMin: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(-150)),
                         rotationMax: new THREE.Vector3(
                             0, 0, 0),
                     },
                     {
-                        index: bonesIdMap[AvatarBoneEnum.arm_r],
+                        index: bonesIdMap[AvatarBoneEnum.shoulder_r],
                     },
                 ],
                 iteration: iteration,
             },
             {
                 target: bonesIdMap[AvatarBoneEnum.target_hand_l],
-                effector: bonesIdMap[AvatarBoneEnum.hand2_l],
+                effector: bonesIdMap[AvatarBoneEnum.hand_l],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.hand_l],
+                        index: bonesIdMap[AvatarBoneEnum.elbow_l],
                         rotationMin: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(-150)),
                         rotationMax: new THREE.Vector3(
                             0, 0, 0),
                     },
                     {
-                        index: bonesIdMap[AvatarBoneEnum.arm_l],
+                        index: bonesIdMap[AvatarBoneEnum.shoulder_l],
                     },
                 ],
                 iteration: iteration,
