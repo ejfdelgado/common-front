@@ -49,4 +49,8 @@ export enum BodyPoseKey {
     right_wrist = "right_wrist",
     left_elbow = "left_elbow",
     left_wrist = "left_wrist",
+    left_hip = "left_hip",
+    right_hip = "right_hip",
+    nose = "nose",
+    
 }

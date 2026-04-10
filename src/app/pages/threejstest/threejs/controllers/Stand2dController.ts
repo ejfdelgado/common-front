@@ -3,6 +3,7 @@ import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { computeBodyPointAverage } from "../AvatarUtilities";
 import { SignalLowPass } from "../SignalLowPass";
 import * as THREE from 'three';
+import { BodyPoseKey } from "@mytypes/BodyParts";
 
 export class Stand2dController extends SceneControllerAbstract {
     HORIZONTAL_DISPLACEMENT_PONDERATION = 1.2;
@@ -21,8 +22,8 @@ export class Stand2dController extends SceneControllerAbstract {
 
         const focusPoints: BodyKeyPointData[] = [];
 
-        focusPoints.push(points['left_heel']);
-        focusPoints.push(points['right_heel']);
+        focusPoints.push(points[BodyPoseKey.left_heel]);
+        focusPoints.push(points[BodyPoseKey.right_heel]);
 
         this.min3DYValue = focusPoints.map(a => a.y).reduce((yVal, minVal, currentIndex, array) => {
             if (yVal < minVal) {
@@ -37,8 +38,8 @@ export class Stand2dController extends SceneControllerAbstract {
         this.videoSize;
         const { keypoints2DMap } = this.lastData;
         const yPos: number[] = [];
-        const leftHeel = keypoints2DMap["left_heel"];
-        const rightHeel = keypoints2DMap["right_heel"];
+        const leftHeel = keypoints2DMap[BodyPoseKey.left_heel];
+        const rightHeel = keypoints2DMap[BodyPoseKey.right_heel];
         if (leftHeel.score > this.MIN_SCORE) {
             yPos.push(leftHeel.y);
         }
@@ -57,9 +58,9 @@ export class Stand2dController extends SceneControllerAbstract {
             }
         }
         const head = computeBodyPointAverage("", [
-            keypoints2DMap["nose"],
-            keypoints2DMap["left_ear"],
-            keypoints2DMap["right_ear"],
+            keypoints2DMap[BodyPoseKey.nose],
+            keypoints2DMap[BodyPoseKey.left_ear],
+            keypoints2DMap[BodyPoseKey.right_ear],
         ]);
 
         const floorSignal = this.videoSize.height - currenMinY;
@@ -76,10 +77,10 @@ export class Stand2dController extends SceneControllerAbstract {
 
         // X position
         const center = computeBodyPointAverage("", [
-            keypoints2DMap["left_hip"],
-            keypoints2DMap["right_hip"],
-            keypoints2DMap["left_heel"],
-            keypoints2DMap["right_heel"],
+            keypoints2DMap[BodyPoseKey.left_hip],
+            keypoints2DMap[BodyPoseKey.right_hip],
+            keypoints2DMap[BodyPoseKey.left_heel],
+            keypoints2DMap[BodyPoseKey.right_heel],
         ]);
         const xShift = this.videoSize.width / 2 - center.x;
 

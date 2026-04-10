@@ -1,4 +1,5 @@
 import { EventEmitter } from "@angular/core";
+import { BodyPoseKey } from "@mytypes/BodyParts";
 import { AvatarBodyEvent, BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
@@ -84,18 +85,24 @@ export class WalkBody {
     }
 
     computeHeight() {
-        const hipCenter = this.computeAverageByNames(['left_hip', 'right_hip']);
-        const nosePoint = this.points['nose'];
+        const hipCenter = this.computeAverageByNames([
+            BodyPoseKey.left_hip,
+            BodyPoseKey.right_hip,
+        ]);
+        const nosePoint = this.points[BodyPoseKey.nose];
         const distance1 = this.computeDistance(nosePoint, hipCenter);
-        const footCenter = this.computeAverageByNames(['left_heel', 'right_heel']);
+        const footCenter = this.computeAverageByNames([
+            BodyPoseKey.left_heel,
+            BodyPoseKey.right_heel,
+        ]);
         const distance2 = this.computeDistance(hipCenter, footCenter);
         return distance1 + distance2;
     }
 
     computeRightHand() {
         // left hand up
-        const height = this.points['nose'].y;
-        const wrist = this.points['right_wrist'];
+        const height = this.points[BodyPoseKey.nose].y;
+        const wrist = this.points[BodyPoseKey.right_wrist];
         const wristHeight = wrist.y;
         const onThreshold = 1.1 * height;
         const offTHreshold = 0.9 * height;
@@ -115,8 +122,8 @@ export class WalkBody {
 
     computeLeftHand() {
         // left hand up
-        const height = this.points['nose'].y;
-        const wrist = this.points['left_wrist'];
+        const height = this.points[BodyPoseKey.nose].y;
+        const wrist = this.points[BodyPoseKey.left_wrist];
         const wristHeight = wrist.y;
         const onThreshold = 1.1 * height;
         const offTHreshold = 0.9 * height;
@@ -139,8 +146,14 @@ export class WalkBody {
     }
 
     computeHandGet() {
-        const distance = this.computeDistanceByName('left_wrist', 'right_wrist');
-        const average = this.computeAverageByNames(['left_wrist', 'right_wrist']);
+        const distance = this.computeDistanceByName(
+            BodyPoseKey.left_wrist,
+            BodyPoseKey.right_wrist
+        );
+        const average = this.computeAverageByNames([
+            BodyPoseKey.left_wrist,
+            BodyPoseKey.right_wrist,
+        ]);
         if (distance <= this.HANDS_CLOSE) {
             if (this.handsClose == false) {
                 this.clapLocation.set(average.x, average.y, average.z);
@@ -162,8 +175,8 @@ export class WalkBody {
 
     walkLogic() {
         let differenceAbs = 0;
-        const leftHeelIx = this.points['left_heel'];
-        const rightHeelIx = this.points['right_heel'];
+        const leftHeelIx = this.points[BodyPoseKey.left_heel];
+        const rightHeelIx = this.points[BodyPoseKey.right_heel];
         const leftHeight = leftHeelIx.y;
         const rightHeight = rightHeelIx.y;
         const difference = leftHeight - rightHeight;
@@ -216,27 +229,21 @@ export class WalkBody {
         }
     }
 
-    // Remove or move this
-    /*
-    placeLight(light: THREE.PointLight) {
-        light.position.x = this.translationX;
-        light.position.y = this.height * 2;
-        light.position.z = this.translationZ;
-    }
-    */
-
     checkTPose() {
         // right_shoulder y left_shoulder Y
-        const average = this.computeAverageByNames(['right_shoulder', 'left_shoulder']);
+        const average = this.computeAverageByNames([
+            BodyPoseKey.right_shoulder,
+            BodyPoseKey.left_shoulder,
+        ]);
         const referenceY = average.y;
 
         // right_elbow left_elbow Y
-        const m1 = Math.abs(this.points['right_elbow'].y - referenceY);
-        const m2 = Math.abs(this.points['left_elbow'].y - referenceY);
+        const m1 = Math.abs(this.points[BodyPoseKey.right_elbow].y - referenceY);
+        const m2 = Math.abs(this.points[BodyPoseKey.left_elbow].y - referenceY);
 
         // right_wrist left_wrist Y
-        const m3 = Math.abs(this.points['right_wrist'].y - referenceY);
-        const m4 = Math.abs(this.points['left_wrist'].y - referenceY);
+        const m3 = Math.abs(this.points[BodyPoseKey.right_wrist].y - referenceY);
+        const m4 = Math.abs(this.points[BodyPoseKey.left_wrist].y - referenceY);
 
         if (
             m1 < this.MIN_T_POSE_THRESHOLD &&
