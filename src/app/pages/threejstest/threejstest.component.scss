@@ -74,6 +74,12 @@
     border: 0;
 }
 
+.head_up_log {
+    align-items: end;
+    font-size: 2rem;
+    line-height: 2rem;
+}
+
 @media (max-width: 500px) {
     .video_parent {
         width: 100px;

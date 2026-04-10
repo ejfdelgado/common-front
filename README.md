@@ -5,7 +5,7 @@
 Comparar poses y asignar un score.
 Agnostico de la orientación del avatar:
 - Usando frente del avatar
-- Angulos de antebrazo y femur relativos al frente del avatar, usando 3 ejes de coordenadas canónico.
+- Angulos de antebrazo y femur relativos al frente del avatar, usando 3 ejes de coordenadas canónico con respecto al eje de coordenadas del avatar.
 - Angulo mímimo de brazo relativo a antebrazo y de pie relativo a femur.
 
 ------------------------------------------------------------------------
@@ -14,6 +14,7 @@ Evitar que se vuelva loco cuando no detecta bien el body.
 
 Agregar a manos y pies capacidad de colision (aplicar matriz a la pose y evaluar manos o pies)
 para detectar cuando el usuario toca algo.
+Agregar controlador tipo menú 3D.
 
 Agregar mundo para:
 - Evaluar equilibrio.
@@ -35,7 +36,6 @@ Permitir construir un mundo 3d:
 Permitiendo cargar N partes el mundo:
 Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
 min, x, y, z, max, x, y, z.
-Cada parte permite cargar también un mesh que permite deducir la altura por donde camina.
 
 Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
 Permitir interactuar con voz con los asistentes virtuales.

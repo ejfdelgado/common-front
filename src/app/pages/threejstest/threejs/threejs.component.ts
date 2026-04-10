@@ -3,9 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { BasicScene } from './BasicScene';
@@ -43,6 +45,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
   restoreInterval: NodeJS.Timeout | null = null;
+  @Output() headUpLog: EventEmitter<any> = new EventEmitter();
   // controllers
   walkController: WalkController = new WalkController(this.events);
   soundFeedbackController: SoundFeedbackController = new SoundFeedbackController(this.events);
@@ -108,10 +111,18 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
       this.scene.composer.render();
       this.scene.orbitals.update();
       this.scene.animate();
+      this.updateHeadsUpLog();
       requestAnimationFrame(() => {
         this.loop();
       });
     }
+  }
+
+  updateHeadsUpLog() {
+    if (!this.scene) {
+      return;
+    }
+    this.headUpLog.emit(this.scene.avatarState);
   }
 
   public computeDimensions() {

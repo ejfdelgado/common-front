@@ -42,6 +42,7 @@ export class ThreejsTestComponent extends CommonSpeech {
   started: boolean = false;
   activity: Wait | null = null;
   poses: BodyData[] = [];
+  headUpLogData: any = {};
 
   videoSize: GenericSizeType = {
     width: 0,
@@ -276,5 +277,10 @@ export class ThreejsTestComponent extends CommonSpeech {
         onlyVisible: true,
         truncateDrawRange: true
       });
+  }
+
+  headUpLog(event: any) {
+    this.headUpLogData = event;
+    //this.cdr.detectChanges();
   }
 }
