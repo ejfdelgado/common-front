@@ -1,9 +1,7 @@
 # CommonFront
 
-Optimizar las llaves del esqueleto; textos cortos.
-El binario puede no tener las llaves, solo ordenarlas alfabeticamente.
-
-Permitir usar un modelo en tiempo real con firestore.
+Usar constantes y un enum para los nombres de los huesos del avatar.
+Igualmente usar para la detección del cuerpo.
 
 ------------------------------------------------------------------------
 
