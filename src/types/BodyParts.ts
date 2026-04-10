@@ -1,12 +1,12 @@
 
 export enum AvatarBoneEnum {
     pelvis = "a",
-    hip_l = "b",
-    leg_l = "c",
+    pelvis_l = "b",
+    hip_l = "c",
     foot_l = "d",
     foot2_l = "e",
-    hip_r = "f",
-    leg_r = "g",
+    pelvis_r = "f",
+    hip_r = "g",
     foot_r = "h",
     foot2_r = "i",
     trunk = "j",
@@ -20,18 +20,18 @@ export enum AvatarBoneEnum {
     hand2_r = "r",
     head = "s",
     head2 = "t",
-    target_arm_l = "0",
-    target_arm_r = "1",
+    target_head = "9",
     target_chest = "2",
-    target_elbow_l = "3",
-    target_elbow_r = "4",
-    target_foot_l = "5",
-    target_foot_r = "6",
+    target_shoulder_l = "3",
+    target_shoulder_r = "4",
+    target_elbow_l = "0",
+    target_elbow_r = "1",
     target_hand_l = "7",
     target_hand_r = "8",
-    target_head = "9",
     target_knee_l = "_",
     target_knee_r = "-",
+    target_foot_l = "5",
+    target_foot_r = "6",
 }
 
 export enum BodyPoseKey {
@@ -52,5 +52,5 @@ export enum BodyPoseKey {
     left_hip = "left_hip",
     right_hip = "right_hip",
     nose = "nose",
-    
+
 }

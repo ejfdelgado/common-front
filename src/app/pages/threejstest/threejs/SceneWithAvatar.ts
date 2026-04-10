@@ -224,7 +224,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 effector: bonesIdMap[AvatarBoneEnum.foot_r],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.leg_r],
+                        index: bonesIdMap[AvatarBoneEnum.hip_r],
                     },
                 ],
                 iteration: iteration,
@@ -241,7 +241,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                             0, 0, 0)
                     },
                     {
-                        index: bonesIdMap[AvatarBoneEnum.leg_r],
+                        index: bonesIdMap[AvatarBoneEnum.hip_r],
                     },
                 ],
                 iteration: iteration,
@@ -251,7 +251,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 effector: bonesIdMap[AvatarBoneEnum.foot_l],
                 links: [
                     {
-                        index: bonesIdMap[AvatarBoneEnum.leg_l],
+                        index: bonesIdMap[AvatarBoneEnum.hip_l],
                     },
                 ],
                 iteration: iteration,
@@ -268,14 +268,14 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                             0, 0, THREE.MathUtils.degToRad(90 + 45))
                     },
                     {
-                        index: bonesIdMap[AvatarBoneEnum.leg_l],
+                        index: bonesIdMap[AvatarBoneEnum.hip_l],
                     },
                 ],
                 iteration: iteration,
             },
             //
             {
-                target: bonesIdMap[AvatarBoneEnum.target_elbow_r],
+                target: bonesIdMap[AvatarBoneEnum.target_shoulder_r],
                 effector: bonesIdMap[AvatarBoneEnum.arm_r],
                 links: [
                     {
@@ -289,7 +289,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 iteration: iteration,
             },
             {
-                target: bonesIdMap[AvatarBoneEnum.target_elbow_l],
+                target: bonesIdMap[AvatarBoneEnum.target_shoulder_l],
                 effector: bonesIdMap[AvatarBoneEnum.arm_l],
                 links: [
                     {
@@ -304,7 +304,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             //
             {
-                target: bonesIdMap[AvatarBoneEnum.target_arm_r],
+                target: bonesIdMap[AvatarBoneEnum.target_elbow_r],
                 effector: bonesIdMap[AvatarBoneEnum.hand_r],
                 links: [
                     {
@@ -314,7 +314,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 iteration: iteration,
             },
             {
-                target: bonesIdMap[AvatarBoneEnum.target_arm_l],
+                target: bonesIdMap[AvatarBoneEnum.target_elbow_l],
                 effector: bonesIdMap[AvatarBoneEnum.hand_l],
                 links: [
                     {
@@ -474,11 +474,11 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 { "source": BodyPoseKey.right_knee, "target": AvatarBoneEnum.target_knee_r },
                 { "source": BodyPoseKey.right_heel, "target": AvatarBoneEnum.target_foot_r },
                 //
-                { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_elbow_r },
-                { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_arm_r },
+                { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
+                { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
                 { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
-                { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_elbow_l },
-                { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_arm_l },
+                { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
+                { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
                 { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
                 //
                 { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
@@ -501,6 +501,10 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             } else {
                 console.log("No ikSolver!");
             }
+
+            // Here it is!
+
+
             return {
                 pose,
                 keypoints3DMap,

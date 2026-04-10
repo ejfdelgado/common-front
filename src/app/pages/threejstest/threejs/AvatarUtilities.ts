@@ -1,4 +1,4 @@
-import { BodyPoseKey } from "@mytypes/BodyParts";
+import { AvatarBoneEnum, BodyPoseKey } from "@mytypes/BodyParts";
 import { BodyData, BodyKeyPointData, FrontComputationType, Point3D } from "@mytypes/bodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
@@ -45,6 +45,12 @@ export function getKeypoints3DMap(pose: BodyData): { [key: string]: BodyKeyPoint
         keypoints3DMap[el.name] = el;
     });
     return keypoints3DMap;
+}
+
+export function computeComparableBody2(
+    model: THREE.Object3D<THREE.Object3DEventMap>
+) {
+    //const frontData = computeAvatarFront2(model);
 }
 
 export function computeComparableBody(
@@ -119,6 +125,23 @@ export function computeComparableBody(
     };
 }
 
+/*
+export function computeAvatarFront2(
+    model: THREE.Object3D<THREE.Object3DEventMap>
+): FrontComputationType {
+    const left_shoulder = model.getObjectByName(AvatarBoneEnum.);
+    const right_shoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
+    const left_hip = keypoints3DMap[BodyPoseKey.left_hip];
+    const right_hip = keypoints3DMap[BodyPoseKey.right_hip];
+    return computeAvatarFrontInternal(
+        left_shoulder,
+        right_shoulder,
+        left_hip,
+        right_hip,
+    );
+}
+*/
+
 export function computeAvatarFront(
     keypoints3DMap: { [key: string]: BodyKeyPointData },
 ): FrontComputationType {
@@ -126,6 +149,20 @@ export function computeAvatarFront(
     const right_shoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
     const left_hip = keypoints3DMap[BodyPoseKey.left_hip];
     const right_hip = keypoints3DMap[BodyPoseKey.right_hip];
+    return computeAvatarFrontInternal(
+        left_shoulder,
+        right_shoulder,
+        left_hip,
+        right_hip,
+    );
+}
+
+export function computeAvatarFrontInternal(
+    left_shoulder: BodyKeyPointData,
+    right_shoulder: BodyKeyPointData,
+    left_hip: BodyKeyPointData,
+    right_hip: BodyKeyPointData
+): FrontComputationType {
 
     const v1 = new THREE.Vector3(
         left_hip.x - right_hip.x,
