@@ -91,15 +91,17 @@ export class WalkController extends SceneControllerAbstract {
 
         // Rotation
         this.scene.avatarStateSmoot.rotationY = this.scene.avatarState.rotationY;
+        this.scene.avatarStateSmoot.positionY = this.scene.avatarState.positionY;
     }
 
     placeCamera(camera: THREE.PerspectiveCamera, orbitals: OrbitControls) {
-        this.destinationCameraLocation.y = this.lastData.walkBody.height * this.CAMERA_HEIGTH_RATIO;
         const advanceFront = this.lastData.walkBody.FRONT_REFERENCE.clone().applyAxisAngle(
             this.lastData.walkBody.UP_REFERENCE,
             this.scene.avatarStateSmoot.rotationY,
         ).normalize();
+
         this.destinationCameraLocation.x = this.scene.avatarStateSmoot.positionX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
+        this.destinationCameraLocation.y = this.lastData.walkBody.height * this.CAMERA_HEIGTH_RATIO + this.scene.avatarStateSmoot.positionY;
         this.destinationCameraLocation.z = this.scene.avatarStateSmoot.positionZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
         this.lastCameraSmoot = makeSmootVector(
             camera.position,
@@ -110,7 +112,7 @@ export class WalkController extends SceneControllerAbstract {
         );
 
         this.destinationLookAt.setX(this.scene.avatarStateSmoot.positionX);
-        this.destinationLookAt.setY(0);
+        this.destinationLookAt.setY(this.scene.avatarStateSmoot.positionY);
         this.destinationLookAt.setZ(this.scene.avatarStateSmoot.positionZ);
         this.lookAtLastT = makeSmootVector(
             this.lookAtActual,
@@ -158,6 +160,4 @@ export class WalkController extends SceneControllerAbstract {
             rotationMatrix,
         );
     }
-
-
 }

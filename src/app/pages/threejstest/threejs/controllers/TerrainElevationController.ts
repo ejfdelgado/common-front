@@ -9,12 +9,17 @@ export class TerrainElevationController extends SceneControllerAbstract {
     override async update(): Promise<ControllerUpdateResponse> {
         const state = this.scene.avatarState;
         const { positionX, positionZ } = state;
-        // TODO Given the x,z coordinates, must ray cast vertically the terrain
+        // Given the x,z coordinates, must ray cast vertically the terrain
         let yTerrain = this.scene.getFirstHitFromTopToDown(positionX, positionZ);
+        if (yTerrain === null) {
+            state.positionY = 0;
+        } else {
+            state.positionY = yTerrain;
+        }
         // Then get the height of the terrain and set the matrix
         this.transformationMatrix = new THREE.Matrix4().makeTranslation(
             0,
-            yTerrain === null ? 0 : yTerrain,
+            state.positionY,
             0,
         );
         return {

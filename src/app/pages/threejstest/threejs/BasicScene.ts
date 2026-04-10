@@ -31,11 +31,13 @@ export class BasicScene extends BasicAvatarScene {
   canvasRef: HTMLCanvasElement;
   avatarState: AvatarLocationState = {
     positionX: 0,
+    positionY: 0,
     positionZ: 0,
     rotationY: 0,
   };
   avatarStateSmoot: AvatarLocationState = {
     positionX: 0,
+    positionY: 0,
     positionZ: 0,
     rotationY: 0,
   };
@@ -292,9 +294,11 @@ export class BasicScene extends BasicAvatarScene {
     }
     const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
 
+    const positionY = this.getFirstHitFromTopToDown(positionX, positionZ);
+
     const translationMatrix = new THREE.Matrix4().makeTranslation(
       positionX,
-      0,// Check height with terrain
+      positionY === null ? 0 : positionY,
       positionZ,
     );
 
