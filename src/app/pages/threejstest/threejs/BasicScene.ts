@@ -211,7 +211,7 @@ export class BasicScene extends BasicAvatarScene {
       // Load animation
       const anim = await this.loadAnimation();
 
-      //anim.lr = [1, 1, Math.PI];
+      anim.lr = [2, 2, Math.PI];
 
       this.animatedElements.push({
         avatar: object,
@@ -295,7 +295,7 @@ export class BasicScene extends BasicAvatarScene {
       positionZ,
     );
 
-    if (useFixedGlobalLocRot) {
+    if (true) {
       // Location
       matrixTransforms.push(translationMatrix);
       // Rotation
@@ -306,6 +306,7 @@ export class BasicScene extends BasicAvatarScene {
     const matrix = arrayToMatrix(state.matrix);
     matrixTransforms.push(matrix);
 
+    /*
     if (!useFixedGlobalLocRot) {
       // Location
       matrixTransforms.push(translationMatrix);
@@ -313,6 +314,7 @@ export class BasicScene extends BasicAvatarScene {
       matrixTransforms.push(rotationMatrix);
 
     }
+    */
 
 
     for (const m of matrixTransforms) {
