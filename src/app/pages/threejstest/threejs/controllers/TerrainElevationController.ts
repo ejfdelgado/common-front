@@ -10,7 +10,7 @@ export class TerrainElevationController extends SceneControllerAbstract {
         const state = this.scene.avatarState;
         const { positionX, positionZ } = state;
         // TODO Given the x,z coordinates, must ray cast vertically the terrain
-        let yTerrain = 0;
+        let yTerrain = this.scene.getFirstHitFromTopToDown(positionX, positionZ);
         // Then get the height of the terrain and set the matrix
         this.transformationMatrix = new THREE.Matrix4().makeTranslation(
             0,

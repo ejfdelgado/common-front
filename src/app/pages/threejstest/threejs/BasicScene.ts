@@ -40,6 +40,8 @@ export class BasicScene extends BasicAvatarScene {
     rotationY: 0,
   };
 
+  terrainMeshes: THREE.Mesh[] = [];
+
   constructor(
     canvasRef: any,
     bounds: DOMRect,
@@ -89,7 +91,7 @@ export class BasicScene extends BasicAvatarScene {
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
-    this.loadCharacters();
+    //this.loadCharacters();
   }
 
   setupEffects() {
@@ -121,7 +123,7 @@ export class BasicScene extends BasicAvatarScene {
   }
 
   async initializeScenario() {
-    const scenario = await this.addModel({ name: "scene", url: "/assets/models/scene2.gltf" });
+    const scenario = await this.addModel({ name: "scene", url: "/assets/models/scenario.glb" });
     scenario.scale.set(1.5, 1.5, 1.5);
 
     if (this.camera) {
@@ -135,10 +137,11 @@ export class BasicScene extends BasicAvatarScene {
           materials.forEach((material: any) => {
             material.transparent = true;
             material.side = THREE.FrontSide;
-            //material.depthWrite = false;//this does not work
-            //material.opacity = 0.5;
             material.onBeforeCompile = shader;
           });
+        }
+        if (child.name.startsWith("terrain_")) {
+          this.terrainMeshes.push(child);
         }
       });
     }
@@ -295,31 +298,25 @@ export class BasicScene extends BasicAvatarScene {
       positionZ,
     );
 
-    if (true) {
-      // Location
-      matrixTransforms.push(translationMatrix);
-      // Rotation
-      matrixTransforms.push(rotationMatrix);
-    }
-
+    // Location
+    matrixTransforms.push(translationMatrix);
+    // Rotation
+    matrixTransforms.push(rotationMatrix);
     // Local displacement
     const matrix = arrayToMatrix(state.matrix);
     matrixTransforms.push(matrix);
-
-    /*
-    if (!useFixedGlobalLocRot) {
-      // Location
-      matrixTransforms.push(translationMatrix);
-      // Rotation
-      matrixTransforms.push(rotationMatrix);
-
-    }
-    */
-
 
     for (const m of matrixTransforms) {
       result.multiply(m);
     }
     avatar.matrix.copy(result);
+  }
+
+  getFirstHitFromTopToDown(x: number, z: number) {
+    let highestY: number = 0;
+    for (let i=0; i<this.terrainMeshes.length; i++) {
+      
+    }
+    return highestY;
   }
 }
