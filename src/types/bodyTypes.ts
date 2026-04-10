@@ -25,6 +25,11 @@ export interface FrontComputationType {
     z: number;
     angle: number;
     angle_deg: number;
+    front: {
+        x: number,
+        y: number,
+        z: number,
+    }
 };
 
 export interface BoneBackupType {
@@ -129,3 +134,11 @@ export interface AnimatedElements {
 }
 
 export const AVATAR_ANIM_VERSION = "1.0";
+
+export interface ComparableBody {
+    front: {
+        x: number,
+        y: number,
+        z: number,
+    };
+}

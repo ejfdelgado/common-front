@@ -13,35 +13,42 @@ export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPoint
     const right_hip = keypoints3DMap[BodyPoseKey.right_hip];
 
     const v1 = new THREE.Vector3(
-        left_hip.x - right_hip.x, 
-        left_hip.y - right_hip.y, 
+        left_hip.x - right_hip.x,
+        left_hip.y - right_hip.y,
         left_hip.z - right_hip.z
     );
     const v2 = new THREE.Vector3(
-        right_shoulder.x - right_hip.x, 
-        right_shoulder.y - right_hip.y, 
+        right_shoulder.x - right_hip.x,
+        right_shoulder.y - right_hip.y,
         right_shoulder.z - right_hip.z
     );
     const front1 = new THREE.Vector3().crossVectors(v1, v2).normalize();
 
     const v1p = new THREE.Vector3(
-        right_shoulder.x - left_shoulder.x, 
-        right_shoulder.y - left_shoulder.y, 
+        right_shoulder.x - left_shoulder.x,
+        right_shoulder.y - left_shoulder.y,
         right_shoulder.z - left_shoulder.z
     );
     const v2p = new THREE.Vector3(
-        left_hip.x - left_shoulder.x, 
-        left_hip.y - left_shoulder.y, 
+        left_hip.x - left_shoulder.x,
+        left_hip.y - left_shoulder.y,
         left_hip.z - left_shoulder.z,
     );
     const front2 = new THREE.Vector3().crossVectors(v1p, v2p).normalize();
 
     const FRONT_REFERENCE = new THREE.Vector3(-1, 0, 0);
-    const front = new THREE.Vector3(0, 0, 0);
-    front.setX((front1.x + front2.x) / 2);
-    front.setY(0);
-    front.setZ((front1.z + front2.z) / 2);
+
+    const frontAll = new THREE.Vector3(
+        (front1.x + front2.x) / 2,
+        (front1.y + front2.y) / 2,
+        (front1.z + front2.z) / 2
+    );
+    const front = new THREE.Vector3(
+        frontAll.x,
+        0,
+        frontAll.z);
     front.normalize();
+    frontAll.normalize();
 
     const angle = FRONT_REFERENCE.angleTo(front);
 
@@ -50,6 +57,11 @@ export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPoint
         z: front.z,
         angle: (front.z < 0 ? -1 : 1) * angle,
         angle_deg: 0,
+        front: {
+            x: frontAll.x,
+            y: frontAll.y,
+            z: frontAll.z,
+        }
     };
     response.angle_deg = response.angle * 180 / Math.PI;
     return response;

@@ -2,7 +2,7 @@ import { CommonComponent } from '@components/common.component';
 import { BasicScene } from './BasicScene';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { AVATAR_NAME, AvatarBodyEvent, BodyData, BodyKeyPointData, GenericSizeType } from '@mytypes/bodyTypes';
+import { AVATAR_NAME, AvatarBodyEvent, BodyData, BodyKeyPointData, ComparableBody, GenericSizeType } from '@mytypes/bodyTypes';
 import { SceneControllerAbstract } from './SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import { WalkBody } from './WalkBody';
@@ -14,6 +14,13 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
     walkBody: WalkBody = new WalkBody(this.events);
+    comparableBody: ComparableBody = {
+        front: {
+            x: 0,
+            y: 0,
+            z: 0,
+        }
+    };
 
     constructor(
         public override sanitizer: DomSanitizer,
@@ -55,6 +62,9 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                     frontData,
                 } = response;
                 this.walkBody.capture(keypoints3DMap, frontData);
+                this.comparableBody.front.x = frontData.front.x;
+                this.comparableBody.front.y = frontData.front.y;
+                this.comparableBody.front.z = frontData.front.z;
                 const keypoints2DMap: {
                     [key: string]: BodyKeyPointData;
                 } = {};

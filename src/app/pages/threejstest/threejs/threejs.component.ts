@@ -122,7 +122,14 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     if (!this.scene) {
       return;
     }
-    this.headUpLog.emit(this.scene.avatarState);
+    const temp = {
+      front: {
+        x: this.comparableBody.front.x.toFixed(2),
+        y: this.comparableBody.front.y.toFixed(2),
+        z: this.comparableBody.front.z.toFixed(2),
+      }
+    }
+    this.headUpLog.emit(temp);
   }
 
   public computeDimensions() {
