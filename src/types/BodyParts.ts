@@ -1,5 +1,5 @@
 
-enum AvatarBoneEnum {
+export enum AvatarBoneEnum {
     pelvis = "pelvis",
     hip_l = "hipL",
     leg_l = "legL",
@@ -32,4 +32,21 @@ enum AvatarBoneEnum {
     target_head = "target_head",
     target_knee_l = "target_kneeL",
     target_knee_r = "target_kneeR",
+}
+
+export enum BodyPoseKey {
+    right_shoulder = "right_shoulder",
+    left_shoulder = "left_shoulder",
+    right_ear = "right_ear",
+    left_ear = "left_ear",
+    target_chest = "target_chest",
+    target_head = "target_head",
+    left_knee = "left_knee",
+    left_heel = "left_heel",
+    right_knee = "right_knee",
+    right_heel = "right_heel",
+    right_elbow = "right_elbow",
+    right_wrist = "right_wrist",
+    left_elbow = "left_elbow",
+    left_wrist = "left_wrist",
 }

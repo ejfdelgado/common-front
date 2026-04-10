@@ -22,6 +22,7 @@ import {
     getHigherAvatarScoredPose,
 } from './AvatarUtilities';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
+import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 
 export abstract class BasicAvatarScene extends THREE.Scene {
 
@@ -199,85 +200,85 @@ export abstract class BasicAvatarScene extends THREE.Scene {
 
         const ikModel: any[] = [
             {
-                target: bonesIdMap['target_chest'],
-                effector: bonesIdMap['head'],
+                target: bonesIdMap[AvatarBoneEnum.target_chest],
+                effector: bonesIdMap[AvatarBoneEnum.head],
                 links: [
-                    { index: bonesIdMap['trunk'], },
-                    //{ index: bonesIdMap['pelvis'], },
+                    { index: bonesIdMap[AvatarBoneEnum.trunk], },
+                    //{ index: bonesIdMap[AvatarBoneEnum.pelvis], },
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_head'],
-                effector: bonesIdMap['head2'],
+                target: bonesIdMap[AvatarBoneEnum.target_head],
+                effector: bonesIdMap[AvatarBoneEnum.head2],
                 links: [
-                    { index: bonesIdMap['head'], },
-                    { index: bonesIdMap['trunk'], },
-                    //{index: bonesIdMap['pelvis'],},
+                    { index: bonesIdMap[AvatarBoneEnum.head], },
+                    { index: bonesIdMap[AvatarBoneEnum.trunk], },
+                    //{index: bonesIdMap[AvatarBoneEnum.pelvis],},
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_kneeR'],
-                effector: bonesIdMap['footR'],
+                target: bonesIdMap[AvatarBoneEnum.target_knee_r],
+                effector: bonesIdMap[AvatarBoneEnum.foot_r],
                 links: [
                     {
-                        index: bonesIdMap['legR'],
+                        index: bonesIdMap[AvatarBoneEnum.leg_r],
                     },
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_footR'],
-                effector: bonesIdMap['foot2R'],
+                target: bonesIdMap[AvatarBoneEnum.target_foot_r],
+                effector: bonesIdMap[AvatarBoneEnum.foot2_r],
                 links: [
                     {
-                        index: bonesIdMap['footR'],
+                        index: bonesIdMap[AvatarBoneEnum.foot_r],
                         rotationMin: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(-90 - 45)),
                         rotationMax: new THREE.Vector3(
                             0, 0, 0)
                     },
                     {
-                        index: bonesIdMap['legR'],
+                        index: bonesIdMap[AvatarBoneEnum.leg_r],
                     },
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_kneeL'],
-                effector: bonesIdMap['footL'],
+                target: bonesIdMap[AvatarBoneEnum.target_knee_l],
+                effector: bonesIdMap[AvatarBoneEnum.foot_l],
                 links: [
                     {
-                        index: bonesIdMap['legL'],
+                        index: bonesIdMap[AvatarBoneEnum.leg_l],
                     },
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_footL'],
-                effector: bonesIdMap['foot2L'],
+                target: bonesIdMap[AvatarBoneEnum.target_foot_l],
+                effector: bonesIdMap[AvatarBoneEnum.foot2_l],
                 links: [
                     {
-                        index: bonesIdMap['footL'],
+                        index: bonesIdMap[AvatarBoneEnum.foot_l],
                         rotationMin: new THREE.Vector3(
                             0, 0, 0),
                         rotationMax: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(90 + 45))
                     },
                     {
-                        index: bonesIdMap['legL'],
+                        index: bonesIdMap[AvatarBoneEnum.leg_l],
                     },
                 ],
                 iteration: iteration,
             },
             //
             {
-                target: bonesIdMap['target_elbowR'],
-                effector: bonesIdMap['armR'],
+                target: bonesIdMap[AvatarBoneEnum.target_elbow_r],
+                effector: bonesIdMap[AvatarBoneEnum.arm_r],
                 links: [
                     {
-                        index: bonesIdMap['elbowR'],
+                        index: bonesIdMap[AvatarBoneEnum.elbow_r],
                         rotationMin: new THREE.Vector3(
                             -Math.PI, -Math.PI, -Math.PI),
                         rotationMax: new THREE.Vector3(
@@ -287,11 +288,11 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_elbowL'],
-                effector: bonesIdMap['armL'],
+                target: bonesIdMap[AvatarBoneEnum.target_elbow_l],
+                effector: bonesIdMap[AvatarBoneEnum.arm_l],
                 links: [
                     {
-                        index: bonesIdMap['elbowL'],
+                        index: bonesIdMap[AvatarBoneEnum.elbow_l],
                         rotationMin: new THREE.Vector3(
                             -Math.PI, -Math.PI, -Math.PI),
                         rotationMax: new THREE.Vector3(
@@ -302,56 +303,56 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             },
             //
             {
-                target: bonesIdMap['target_armR'],
-                effector: bonesIdMap['handR'],
+                target: bonesIdMap[AvatarBoneEnum.target_arm_r],
+                effector: bonesIdMap[AvatarBoneEnum.hand_r],
                 links: [
                     {
-                        index: bonesIdMap['armR'],
+                        index: bonesIdMap[AvatarBoneEnum.arm_r],
                     },
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_armL'],
-                effector: bonesIdMap['handL'],
+                target: bonesIdMap[AvatarBoneEnum.target_arm_l],
+                effector: bonesIdMap[AvatarBoneEnum.hand_l],
                 links: [
                     {
-                        index: bonesIdMap['armL'],
+                        index: bonesIdMap[AvatarBoneEnum.arm_l],
                     },
                 ],
                 iteration: iteration,
             },
             //
             {
-                target: bonesIdMap['target_handR'],
-                effector: bonesIdMap['hand2R'],
+                target: bonesIdMap[AvatarBoneEnum.target_hand_r],
+                effector: bonesIdMap[AvatarBoneEnum.hand2_r],
                 links: [
                     {
-                        index: bonesIdMap['handR'],
+                        index: bonesIdMap[AvatarBoneEnum.hand_r],
                         rotationMin: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(-150)),
                         rotationMax: new THREE.Vector3(
                             0, 0, 0),
                     },
                     {
-                        index: bonesIdMap['armR'],
+                        index: bonesIdMap[AvatarBoneEnum.arm_r],
                     },
                 ],
                 iteration: iteration,
             },
             {
-                target: bonesIdMap['target_handL'],
-                effector: bonesIdMap['hand2L'],
+                target: bonesIdMap[AvatarBoneEnum.target_hand_l],
+                effector: bonesIdMap[AvatarBoneEnum.hand2_l],
                 links: [
                     {
-                        index: bonesIdMap['handL'],
+                        index: bonesIdMap[AvatarBoneEnum.hand_l],
                         rotationMin: new THREE.Vector3(
                             0, 0, THREE.MathUtils.degToRad(-150)),
                         rotationMax: new THREE.Vector3(
                             0, 0, 0),
                     },
                     {
-                        index: bonesIdMap['armL'],
+                        index: bonesIdMap[AvatarBoneEnum.arm_l],
                     },
                 ],
                 iteration: iteration,
@@ -448,7 +449,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             });
 
             // Generate front vector
-            const pelvisBone = model.getObjectByName("pelvis");
+            const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
             const frontData = computeAvatarFront(keypoints3DMap);
             if (pelvisBone) {
                 if (this.originalPelvisRotation == null) {
@@ -459,14 +460,14 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             }
 
             // avg(left_shoulder, right_shoulder) => target_chest
-            pose.keypoints3D.push(computeBodyPointAverage("target_chest", [
-                keypoints3DMap["right_shoulder"],
-                keypoints3DMap["left_shoulder"],
+            pose.keypoints3D.push(computeBodyPointAverage(BodyPoseKey.target_chest, [
+                keypoints3DMap[BodyPoseKey.right_shoulder],
+                keypoints3DMap[BodyPoseKey.left_shoulder],
             ]));
             // avg(left_ear, right_ear) => target_head
-            pose.keypoints3D.push(computeBodyPointAverage("target_head", [
-                keypoints3DMap["right_ear"],
-                keypoints3DMap["left_ear"],
+            pose.keypoints3D.push(computeBodyPointAverage(BodyPoseKey.target_head, [
+                keypoints3DMap[BodyPoseKey.right_ear],
+                keypoints3DMap[BodyPoseKey.left_ear],
             ]));
 
             pose.keypoints3D.forEach((el) => {
@@ -474,20 +475,20 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             });
 
             const MAPPING_TARGETS = [
-                { "source": "left_knee", "target": "target_kneeL" },
-                { "source": "left_heel", "target": "target_footL" },
-                { "source": "right_knee", "target": "target_kneeR" },
-                { "source": "right_heel", "target": "target_footR" },
+                { "source": BodyPoseKey.left_knee, "target": AvatarBoneEnum.target_knee_l },
+                { "source": BodyPoseKey.left_heel, "target": AvatarBoneEnum.target_foot_l },
+                { "source": BodyPoseKey.right_knee, "target": AvatarBoneEnum.target_knee_r },
+                { "source": BodyPoseKey.right_heel, "target": AvatarBoneEnum.target_foot_r },
                 //
-                { "source": "right_shoulder", "target": "target_elbowR" },
-                { "source": "right_elbow", "target": "target_armR" },
-                { "source": "right_wrist", "target": "target_handR" },
-                { "source": "left_shoulder", "target": "target_elbowL" },
-                { "source": "left_elbow", "target": "target_armL" },
-                { "source": "left_wrist", "target": "target_handL" },
+                { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_elbow_r },
+                { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_arm_r },
+                { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
+                { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_elbow_l },
+                { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_arm_l },
+                { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
                 //
-                { "source": "target_chest", "target": "target_chest" },
-                { "source": "target_head", "target": "target_head" },
+                { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
+                { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
             ];
             for (let i = 0; i < MAPPING_TARGETS.length; i++) {
                 const { source, target } = MAPPING_TARGETS[i];
