@@ -435,11 +435,14 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 return false;
             }
 
-            const { 
-                keypoints3DMap, 
+            const {
+                keypoints3DMap,
                 frontData,
-                leftArm
-             } = computeComparableBody(pose);
+                leftArm,
+                rightArm,
+                leftLeg,
+                rightLeg,
+            } = computeComparableBody(pose);
 
             const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
             if (pelvisBone) {
@@ -503,6 +506,9 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 keypoints3DMap,
                 frontData,
                 leftArm,
+                rightArm,
+                leftLeg,
+                rightLeg,
             };
         } catch (err) {
             console.log(err);

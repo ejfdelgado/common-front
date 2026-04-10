@@ -93,11 +93,29 @@ export function computeComparableBody(
         y: leftElbow.y - leftShoulder.y,
         z: leftElbow.z - leftShoulder.z,
     });
+    const rightArm = toCanonical({
+        x: rightElbow.x - rightShoulder.x,
+        y: rightElbow.y - rightShoulder.y,
+        z: rightElbow.z - rightShoulder.z,
+    });
+    const leftLeg = toCanonical({
+        x: leftKnee.x - leftHip.x,
+        y: leftKnee.y - leftHip.y,
+        z: leftKnee.z - leftHip.z,
+    });
+    const rightLeg = toCanonical({
+        x: rightKnee.x - rightHip.x,
+        y: rightKnee.y - rightHip.y,
+        z: rightKnee.z - rightHip.z,
+    });
 
     return {
         keypoints3DMap,
         frontData,
         leftArm,
+        rightArm,
+        leftLeg,
+        rightLeg,
     };
 }
 
