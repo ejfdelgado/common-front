@@ -89,7 +89,7 @@ export class BasicScene extends BasicAvatarScene {
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
-    this.loadCharacters();
+    //this.loadCharacters();
   }
 
   setupEffects() {
