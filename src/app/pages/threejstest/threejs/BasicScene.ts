@@ -93,7 +93,7 @@ export class BasicScene extends BasicAvatarScene {
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
-    //this.loadCharacters();
+    this.loadCharacters();
   }
 
   setupEffects() {
@@ -216,7 +216,7 @@ export class BasicScene extends BasicAvatarScene {
       // Load animation
       const anim = await this.loadAnimation();
 
-      anim.lr = [2, 2, Math.PI];
+      //anim.lr = [2, 2, Math.PI];
 
       this.animatedElements.push({
         avatar: object,
