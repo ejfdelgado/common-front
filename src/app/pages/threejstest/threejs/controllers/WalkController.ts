@@ -88,13 +88,16 @@ export class WalkController extends SceneControllerAbstract {
         );
         this.scene.avatarStateSmoot.positionZ = translationZ1Res.v;
         this.translationZ1Last = translationZ1Res.t;
+
+        // Rotation
+        this.scene.avatarStateSmoot.rotationY = this.scene.avatarState.rotationY;
     }
 
     placeCamera(camera: THREE.PerspectiveCamera, orbitals: OrbitControls) {
         this.destinationCameraLocation.y = this.lastData.walkBody.height * this.CAMERA_HEIGTH_RATIO;
         const advanceFront = this.lastData.walkBody.FRONT_REFERENCE.clone().applyAxisAngle(
             this.lastData.walkBody.UP_REFERENCE,
-            this.scene.avatarState.rotationY,
+            this.scene.avatarStateSmoot.rotationY,
         ).normalize();
         this.destinationCameraLocation.x = this.scene.avatarStateSmoot.positionX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
         this.destinationCameraLocation.z = this.scene.avatarStateSmoot.positionZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
@@ -143,13 +146,13 @@ export class WalkController extends SceneControllerAbstract {
 
     computeTransformationMatrix() {
         this.updateValues();
-        this.scene.avatarStateSmoot.rotationY = this.scene.avatarState.rotationY;
+        
         const translationMatrix = new THREE.Matrix4().makeTranslation(
             this.scene.avatarStateSmoot.positionX,
             0,
             this.scene.avatarStateSmoot.positionZ,
         );
-        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarState.rotationY);
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarStateSmoot.rotationY);
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(
             translationMatrix,
             rotationMatrix,

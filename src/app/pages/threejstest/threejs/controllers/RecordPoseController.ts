@@ -48,7 +48,14 @@ export class RecordPoseController extends SceneControllerAbstract {
                     const rotation = child.rotation;
                     state.bones.push({
                         n: name,
-                        v: [position.x, position.y, position.z, rotation.x, rotation.y, rotation.z],
+                        v: [
+                            position.x, 
+                            position.y, 
+                            position.z, 
+                            rotation.x, 
+                            rotation.y, 
+                            rotation.z,
+                        ],
                     });
                 }
             });

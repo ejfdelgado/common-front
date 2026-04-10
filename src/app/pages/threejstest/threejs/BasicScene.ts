@@ -89,7 +89,7 @@ export class BasicScene extends BasicAvatarScene {
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
-    //this.loadCharacters();
+    this.loadCharacters();
   }
 
   setupEffects() {
@@ -211,7 +211,7 @@ export class BasicScene extends BasicAvatarScene {
       // Load animation
       const anim = await this.loadAnimation();
 
-      anim.lr = [1, -1, Math.PI];
+      //anim.lr = [1, -1, Math.PI];
 
       this.animatedElements.push({
         avatar: object,
@@ -272,11 +272,9 @@ export class BasicScene extends BasicAvatarScene {
         boneTarget.rotation.set(v[3], v[4], v[5]);
       }
     }
-    const matrix = arrayToMatrix(state.matrix);
     avatar.matrixAutoUpdate = false;
     const result = new THREE.Matrix4().identity();
     const matrixTransforms: THREE.Matrix4[] = [];
-    matrixTransforms.push(matrix);
 
     let positionX = state.lr[0];
     let positionZ = state.lr[1];
@@ -286,6 +284,11 @@ export class BasicScene extends BasicAvatarScene {
       positionZ = lr[1];
       rotationY = lr[2];
     }
+
+    // Local displacement
+    const matrix = arrayToMatrix(state.matrix);
+    matrixTransforms.push(matrix);
+
     // Location
     const translationMatrix = new THREE.Matrix4().makeTranslation(
       positionX,
