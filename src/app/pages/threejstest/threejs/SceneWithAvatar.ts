@@ -1,7 +1,6 @@
 import {
     AVATAR_NAME,
     BodyData,
-    BodyKeyPointData,
     BoneBackupType,
     ItemModelRef,
     ScenePoseEventType,
@@ -18,8 +17,10 @@ import * as THREE from 'three';
 import {
     computeAvatarFront,
     computeBodyPointAverage,
+    computeComparableBody,
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
+    getKeypoints3DMap,
 } from './AvatarUtilities';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
@@ -434,39 +435,9 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 return false;
             }
 
-            // Check facing front? or back
-            // Check shoulder X difference on 2D
-            let faceFront = true;
-            const leftShoulder2D = pose.keypoints.find(a => a.name == BodyPoseKey.left_shoulder);
-            const rightShoulder2D = pose.keypoints.find(a => a.name == BodyPoseKey.right_shoulder);
-            if (leftShoulder2D && rightShoulder2D) {
-                const diff = leftShoulder2D.x - rightShoulder2D.x;
-                if (diff < 0) {
-                    faceFront = false;
-                }
-            }
+            const { keypoints3DMap, frontData } = computeComparableBody(pose);
 
-            const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
-            pose.keypoints3D.forEach((sourceData) => {
-                const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
-                sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
-                // In order to fix a weir rotation to front
-                sourceCoord.applyAxisAngle(
-                    new THREE.Vector3(1, 0, 0),
-                    THREE.MathUtils.degToRad(faceFront ? 14 : -4)
-                );
-                sourceData.x = sourceCoord.x;
-                sourceData.y = sourceCoord.y;
-                sourceData.z = sourceCoord.z;
-            });
-            // Generate map
-            pose.keypoints3D.forEach((el) => {
-                keypoints3DMap[el.name] = el;
-            });
-
-            // Generate front vector
             const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
-            const frontData = computeAvatarFront(keypoints3DMap);
             if (pelvisBone) {
                 if (this.originalPelvisRotation == null) {
                     this.originalPelvisRotation = pelvisBone.rotation.clone();

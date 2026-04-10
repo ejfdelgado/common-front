@@ -6,7 +6,62 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const textureLoader = new TextureLoader();
 
-export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPointData }): FrontComputationType {
+export function isFacingFront(pose: BodyData) {
+    // Check facing front? or back
+    // Check shoulder X difference on 2D
+    let faceFront = true;
+    const leftShoulder2D = pose.keypoints.find(a => a.name == BodyPoseKey.left_shoulder);
+    const rightShoulder2D = pose.keypoints.find(a => a.name == BodyPoseKey.right_shoulder);
+    if (leftShoulder2D && rightShoulder2D) {
+        const diff = leftShoulder2D.x - rightShoulder2D.x;
+        if (diff < 0) {
+            faceFront = false;
+        }
+    }
+    return faceFront;
+}
+
+export function fixBodyPose(pose: BodyData) {
+    const faceFront = isFacingFront(pose);
+    pose.keypoints3D.forEach((sourceData) => {
+        const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
+        sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+        // In order to fix a weir rotation to front
+        sourceCoord.applyAxisAngle(
+            new THREE.Vector3(1, 0, 0),
+            THREE.MathUtils.degToRad(faceFront ? 14 : -4)
+        );
+        sourceData.x = sourceCoord.x;
+        sourceData.y = sourceCoord.y;
+        sourceData.z = sourceCoord.z;
+    });
+}
+
+export function getKeypoints3DMap(pose: BodyData): { [key: string]: BodyKeyPointData } {
+    fixBodyPose(pose);
+    const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
+    // Generate map
+    pose.keypoints3D.forEach((el) => {
+        keypoints3DMap[el.name] = el;
+    });
+    return keypoints3DMap;
+}
+
+export function computeComparableBody(
+    pose: BodyData
+) {
+    const keypoints3DMap = getKeypoints3DMap(pose);
+    // Generate front vector
+    const frontData = computeAvatarFront(keypoints3DMap);
+    return {
+        keypoints3DMap,
+        frontData,
+    };
+}
+
+export function computeAvatarFront(
+    keypoints3DMap: { [key: string]: BodyKeyPointData },
+): FrontComputationType {
     const left_shoulder = keypoints3DMap[BodyPoseKey.left_shoulder];
     const right_shoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
     const left_hip = keypoints3DMap[BodyPoseKey.left_hip];
