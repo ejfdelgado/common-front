@@ -26,6 +26,7 @@ import { Stand2dController } from './controllers/Stand2dController';
 import { RecordPoseController } from './controllers/RecordPoseController';
 import { HttpClient } from '@angular/common/http';
 import { TerrainElevationController } from './controllers/TerrainElevationController';
+import { Point3D } from '@mytypes/bodyTypes';
 
 @Component({
   standalone: true,
@@ -122,12 +123,17 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     if (!this.scene) {
       return;
     }
+    const toFixed = (point: Point3D) => {
+      return {
+        x: point.x.toFixed(2),
+        y: point.y.toFixed(2),
+        z: point.z.toFixed(2),
+      };
+    }
     const temp = {
-      front: {
-        x: this.comparableBody.front.x.toFixed(2),
-        y: this.comparableBody.front.y.toFixed(2),
-        z: this.comparableBody.front.z.toFixed(2),
-      }
+      //front: toFixed(this.comparableBody.front), // se evidencia en x
+      //up: toFixed(this.comparableBody.up), // se evidencia en x
+      left: toFixed(this.comparableBody.left), // se evidencia en y
     }
     this.headUpLog.emit(temp);
   }

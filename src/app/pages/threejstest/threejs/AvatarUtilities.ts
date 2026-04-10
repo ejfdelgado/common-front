@@ -52,6 +52,15 @@ export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPoint
 
     const angle = FRONT_REFERENCE.angleTo(front);
 
+    // Compute up to compute left
+    const up = new THREE.Vector3(
+        (v2.x - v2p.x) / 2,
+        (v2.y - v2p.y) / 2,
+        (v2.z - v2p.z) / 2,
+    );
+    up.normalize();
+    const left = new THREE.Vector3().crossVectors(up, frontAll).normalize();
+
     const response: FrontComputationType = {
         x: front.x,
         z: front.z,
@@ -61,6 +70,16 @@ export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPoint
             x: frontAll.x,
             y: frontAll.y,
             z: frontAll.z,
+        },
+        left: {
+            x: left.x,
+            y: left.y,
+            z: left.z,
+        },
+        up: {
+            x: up.x,
+            y: up.y,
+            z: up.z,
         }
     };
     response.angle_deg = response.angle * 180 / Math.PI;

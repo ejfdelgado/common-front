@@ -15,11 +15,9 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
     walkBody: WalkBody = new WalkBody(this.events);
     comparableBody: ComparableBody = {
-        front: {
-            x: 0,
-            y: 0,
-            z: 0,
-        }
+        front: { x: 0, y: 0, z: 0, },
+        left: { x: 0, y: 0, z: 0, },
+        up: { x: 0, y: 0, z: 0, },
     };
 
     constructor(
@@ -62,9 +60,9 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                     frontData,
                 } = response;
                 this.walkBody.capture(keypoints3DMap, frontData);
-                this.comparableBody.front.x = frontData.front.x;
-                this.comparableBody.front.y = frontData.front.y;
-                this.comparableBody.front.z = frontData.front.z;
+                this.comparableBody.front = frontData.front;
+                this.comparableBody.left = frontData.left;
+                this.comparableBody.up = frontData.up;
                 const keypoints2DMap: {
                     [key: string]: BodyKeyPointData;
                 } = {};

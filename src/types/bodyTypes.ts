@@ -20,16 +20,20 @@ export interface BodyState {
     data: any;
 }
 
+export interface Point3D {
+    x: number;
+    y: number;
+    z: number;
+};
+
 export interface FrontComputationType {
     x: number;
     z: number;
     angle: number;
     angle_deg: number;
-    front: {
-        x: number,
-        y: number,
-        z: number,
-    }
+    front: Point3D,
+    left: Point3D,
+    up: Point3D,
 };
 
 export interface BoneBackupType {
@@ -136,9 +140,7 @@ export interface AnimatedElements {
 export const AVATAR_ANIM_VERSION = "1.0";
 
 export interface ComparableBody {
-    front: {
-        x: number,
-        y: number,
-        z: number,
-    };
+    front: Point3D;
+    up: Point3D;
+    left: Point3D;
 }
