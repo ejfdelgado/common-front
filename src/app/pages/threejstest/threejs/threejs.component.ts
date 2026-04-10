@@ -23,6 +23,7 @@ import { SoundFeedbackController } from './controllers/SoundFeedbackController';
 import { Stand2dController } from './controllers/Stand2dController';
 import { RecordPoseController } from './controllers/RecordPoseController';
 import { HttpClient } from '@angular/common/http';
+import { TerrainElevationController } from './controllers/TerrainElevationController';
 
 @Component({
   standalone: true,
@@ -47,6 +48,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   soundFeedbackController: SoundFeedbackController = new SoundFeedbackController(this.events);
   stand2dController: Stand2dController = new Stand2dController(this.events);
   recordPoseController: RecordPoseController = new RecordPoseController(this.events);
+  terrainController: TerrainElevationController = new TerrainElevationController(this.events);
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -83,9 +85,11 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     this.sceneCreated.resolve();
     // Add controllers
     // The order matters...
+    this.addController(this.terrainController);
     this.addController(this.walkController);
-    this.addController(this.soundFeedbackController);
     this.addController(this.stand2dController);
+
+    this.addController(this.soundFeedbackController);
     this.addController(this.recordPoseController);
     this.loop();
   }

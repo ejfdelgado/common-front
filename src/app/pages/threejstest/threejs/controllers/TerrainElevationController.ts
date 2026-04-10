@@ -14,7 +14,7 @@ export class TerrainElevationController extends SceneControllerAbstract {
         // Then get the height of the terrain and set the matrix
         this.transformationMatrix = new THREE.Matrix4().makeTranslation(
             0,
-            yTerrain,
+            yTerrain === null ? 0 : yTerrain,
             0,
         );
         return {

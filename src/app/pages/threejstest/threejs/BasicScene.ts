@@ -312,10 +312,20 @@ export class BasicScene extends BasicAvatarScene {
     avatar.matrix.copy(result);
   }
 
-  getFirstHitFromTopToDown(x: number, z: number) {
-    let highestY: number = 0;
-    for (let i=0; i<this.terrainMeshes.length; i++) {
-      
+  getFirstHitFromTopToDown(x: number, z: number): number | null {
+    const raycaster = new THREE.Raycaster();
+    const origin = new THREE.Vector3(x, 100000, z);
+    const direction = new THREE.Vector3(0, -1, 0);
+    raycaster.set(origin, direction);
+
+    let highestY: number | null = null;
+    for (let i = 0; i < this.terrainMeshes.length; i++) {
+      const hits = raycaster.intersectObject(this.terrainMeshes[i], false);
+      for (const hit of hits) {
+        if (highestY === null || hit.point.y > highestY) {
+          highestY = hit.point.y;
+        }
+      }
     }
     return highestY;
   }
