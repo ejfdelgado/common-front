@@ -106,7 +106,7 @@ export interface StoredAvatarBoneState {
 }
 
 export interface StoredAvatarState {
-    t: number;
+    t: number;//millis
     bones: StoredAvatarBoneState[],
     matrix: number[],
     lr: number[],//positionX, positionZ, rotationY
@@ -114,6 +114,7 @@ export interface StoredAvatarState {
 }
 
 export interface StoredAvatarAnimation {
+    v: string;
     a: StoredAvatarState[];
     frameId?: number;
     lr?: number[],// If this is assigned, the state is overrided with this
@@ -125,3 +126,5 @@ export interface AnimatedElements {
     startingTime: number;
     loop: boolean;
 }
+
+export const AVATAR_ANIM_VERSION = "1.0";

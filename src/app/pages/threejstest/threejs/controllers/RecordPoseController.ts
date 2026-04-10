@@ -1,4 +1,11 @@
-import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME, StoredAvatarAnimation, StoredAvatarState } from "@mytypes/bodyTypes";
+import {
+    ControllerUpdateResponse,
+    AvatarBodyEvent,
+    AVATAR_NAME,
+    StoredAvatarAnimation,
+    StoredAvatarState,
+    AVATAR_ANIM_VERSION,
+} from "@mytypes/bodyTypes";
 import { SceneControllerAbstract } from "../SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
@@ -10,7 +17,7 @@ export class RecordPoseController extends SceneControllerAbstract {
     recordingStartTime: number = 0;
     lastRecorded: number = 0;
     MAX_STATES_PER_SECOND: number = 10;
-    history: StoredAvatarAnimation = { a: [] };
+    history: StoredAvatarAnimation = { v: AVATAR_ANIM_VERSION, a: [] };
     transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
 
     override async update(): Promise<ControllerUpdateResponse> {
@@ -62,7 +69,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         if (event.name == "VOICE_COMMAND") {
             if (event.voiceCommand == "start") {
                 this.recording = true;
-                this.history = { a: [] };
+                this.history = { v: AVATAR_ANIM_VERSION, a: [] };
                 this.recordingStartTime = Date.now();
             } else if (event.voiceCommand == "stop") {
                 this.recording = false;
