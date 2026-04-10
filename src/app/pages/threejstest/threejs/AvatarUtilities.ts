@@ -47,10 +47,28 @@ export function getKeypoints3DMap(pose: BodyData): { [key: string]: BodyKeyPoint
     return keypoints3DMap;
 }
 
+const dotProduct = (v1: Point3D, v2: Point3D) => {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+const toCanonical = (v: Point3D, front: Point3D, left: Point3D, up: Point3D): Point3D => {
+    const p = {
+        x: dotProduct(v, front),
+        y: dotProduct(v, left),
+        z: dotProduct(v, up),
+    };
+    const len = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+    return {
+        x: p.x / len,
+        y: p.y / len,
+        z: p.z / len,
+    };
+};
+
 export function computeComparableBody2(
     model: THREE.Object3D<THREE.Object3DEventMap>
 ) {
-    //const frontData = computeAvatarFront2(model);
+    // Generate front vector
+    const frontData = computeAvatarFrontModel(model);
 }
 
 export function computeComparableBody(
@@ -58,25 +76,9 @@ export function computeComparableBody(
 ) {
     const keypoints3DMap = getKeypoints3DMap(pose);
     // Generate front vector
-    const frontData = computeAvatarFront(keypoints3DMap);
+    const frontData = computeAvatarFrontFromPose(keypoints3DMap);
     // Common raw canonical coordinates
     const { front, up, left } = frontData;
-    const dotProduct = (v1: Point3D, v2: Point3D) => {
-        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-    }
-    const toCanonical = (v: Point3D): Point3D => {
-        const p = {
-            x: dotProduct(v, front),
-            y: dotProduct(v, left),
-            z: dotProduct(v, up),
-        };
-        const len = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-        return {
-            x: p.x / len,
-            y: p.y / len,
-            z: p.z / len,
-        };
-    };
 
     const leftShoulder = keypoints3DMap[BodyPoseKey.left_shoulder];
     const leftElbow = keypoints3DMap[BodyPoseKey.left_elbow];
@@ -98,22 +100,22 @@ export function computeComparableBody(
         x: leftElbow.x - leftShoulder.x,
         y: leftElbow.y - leftShoulder.y,
         z: leftElbow.z - leftShoulder.z,
-    });
+    }, front, left, up);
     const rightArm = toCanonical({
         x: rightElbow.x - rightShoulder.x,
         y: rightElbow.y - rightShoulder.y,
         z: rightElbow.z - rightShoulder.z,
-    });
+    }, front, left, up);
     const leftLeg = toCanonical({
         x: leftKnee.x - leftHip.x,
         y: leftKnee.y - leftHip.y,
         z: leftKnee.z - leftHip.z,
-    });
+    }, front, left, up);
     const rightLeg = toCanonical({
         x: rightKnee.x - rightHip.x,
         y: rightKnee.y - rightHip.y,
         z: rightKnee.z - rightHip.z,
-    });
+    }, front, left, up);
 
     return {
         keypoints3DMap,
@@ -125,24 +127,34 @@ export function computeComparableBody(
     };
 }
 
-/*
-export function computeAvatarFront2(
+export function vector2Point3D(i: THREE.Vector3): Point3D {
+    return {
+        x: i.x,
+        y: i.y,
+        z: i.z,
+    }
+}
+
+export function computeAvatarFrontModel(
     model: THREE.Object3D<THREE.Object3DEventMap>
 ): FrontComputationType {
-    const left_shoulder = model.getObjectByName(AvatarBoneEnum.);
-    const right_shoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
-    const left_hip = keypoints3DMap[BodyPoseKey.left_hip];
-    const right_hip = keypoints3DMap[BodyPoseKey.right_hip];
+    const left_shoulder = model.getObjectByName(AvatarBoneEnum.shoulder_l);
+    const right_shoulder = model.getObjectByName(AvatarBoneEnum.shoulder_r);
+    const left_hip = model.getObjectByName(AvatarBoneEnum.hip_l);
+    const right_hip = model.getObjectByName(AvatarBoneEnum.hip_r);
+    if (!left_shoulder || !right_shoulder || !left_hip || !right_hip) {
+        throw Error("cant compute");
+    }
     return computeAvatarFrontInternal(
-        left_shoulder,
-        right_shoulder,
-        left_hip,
-        right_hip,
+        left_shoulder.position,
+        right_shoulder.position,
+        left_hip.position,
+        right_hip.position,
     );
 }
-*/
 
-export function computeAvatarFront(
+
+export function computeAvatarFrontFromPose(
     keypoints3DMap: { [key: string]: BodyKeyPointData },
 ): FrontComputationType {
     const left_shoulder = keypoints3DMap[BodyPoseKey.left_shoulder];
@@ -158,10 +170,10 @@ export function computeAvatarFront(
 }
 
 export function computeAvatarFrontInternal(
-    left_shoulder: BodyKeyPointData,
-    right_shoulder: BodyKeyPointData,
-    left_hip: BodyKeyPointData,
-    right_hip: BodyKeyPointData
+    left_shoulder: Point3D,
+    right_shoulder: Point3D,
+    left_hip: Point3D,
+    right_hip: Point3D
 ): FrontComputationType {
 
     const v1 = new THREE.Vector3(

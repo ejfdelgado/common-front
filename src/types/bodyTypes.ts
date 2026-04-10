@@ -2,10 +2,13 @@ import { BasicScene } from 'app/pages/threejstest/threejs/BasicScene';
 import { WalkBody } from 'app/pages/threejstest/threejs/WalkBody';
 import * as THREE from 'three';
 
-export interface BodyKeyPointData {
+export interface Point3D {
     x: number;
     y: number;
     z: number;
+};
+
+export interface BodyKeyPointData extends Point3D {
     score: number;
     name: string;
 }
@@ -19,12 +22,6 @@ export interface BodyData {
 export interface BodyState {
     data: any;
 }
-
-export interface Point3D {
-    x: number;
-    y: number;
-    z: number;
-};
 
 export interface FrontComputationType {
     x: number;

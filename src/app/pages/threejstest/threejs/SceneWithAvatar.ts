@@ -15,12 +15,10 @@ import {
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import * as THREE from 'three';
 import {
-    computeAvatarFront,
     computeBodyPointAverage,
     computeComparableBody,
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
-    getKeypoints3DMap,
 } from './AvatarUtilities';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
