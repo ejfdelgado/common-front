@@ -73,7 +73,7 @@ export class BasicScene extends BasicAvatarScene {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setSize(this.bounds.width, this.bounds.height);
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
-    this.background = new THREE.Color(0x333333);
+    this.background = new THREE.Color(0xBBBBFF);
 
     this.setupEffects();
 
@@ -211,7 +211,7 @@ export class BasicScene extends BasicAvatarScene {
       // Load animation
       const anim = await this.loadAnimation();
 
-      //anim.lr = [1, -1, Math.PI];
+      //anim.lr = [1, 1, Math.PI];
 
       this.animatedElements.push({
         avatar: object,
@@ -279,27 +279,41 @@ export class BasicScene extends BasicAvatarScene {
     let positionX = state.lr[0];
     let positionZ = state.lr[1];
     let rotationY = state.lr[2];
+
+    let useFixedGlobalLocRot = false;
     if (lr && lr.length == 3) {
       positionX = lr[0];
       positionZ = lr[1];
       rotationY = lr[2];
+      useFixedGlobalLocRot = true;
+    }
+    const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
+
+    const translationMatrix = new THREE.Matrix4().makeTranslation(
+      positionX,
+      0,// Check height with terrain
+      positionZ,
+    );
+
+    if (useFixedGlobalLocRot) {
+      // Location
+      matrixTransforms.push(translationMatrix);
+      // Rotation
+      matrixTransforms.push(rotationMatrix);
     }
 
     // Local displacement
     const matrix = arrayToMatrix(state.matrix);
     matrixTransforms.push(matrix);
 
-    // Location
-    const translationMatrix = new THREE.Matrix4().makeTranslation(
-      positionX,
-      0,// Check height with terrain
-      positionZ,
-    );
-    matrixTransforms.push(translationMatrix);
+    if (!useFixedGlobalLocRot) {
+      // Location
+      matrixTransforms.push(translationMatrix);
+      // Rotation
+      matrixTransforms.push(rotationMatrix);
 
-    // Rotation
-    const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
-    matrixTransforms.push(rotationMatrix);
+    }
+
 
     for (const m of matrixTransforms) {
       result.multiply(m);
