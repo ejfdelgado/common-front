@@ -1,3 +1,4 @@
+import { BodyPoseKey } from "@mytypes/BodyParts";
 import { BodyData, BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
@@ -6,17 +7,33 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 const textureLoader = new TextureLoader();
 
 export function computeAvatarFront(keypoints3DMap: { [key: string]: BodyKeyPointData }): FrontComputationType {
-    const left_shoulder = keypoints3DMap['left_shoulder'];
-    const right_shoulder = keypoints3DMap['right_shoulder'];
-    const left_hip = keypoints3DMap['left_hip'];
-    const right_hip = keypoints3DMap['right_hip'];
+    const left_shoulder = keypoints3DMap[BodyPoseKey.left_shoulder];
+    const right_shoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
+    const left_hip = keypoints3DMap[BodyPoseKey.left_hip];
+    const right_hip = keypoints3DMap[BodyPoseKey.right_hip];
 
-    const v1 = new THREE.Vector3(left_hip.x - right_hip.x, left_hip.y - right_hip.y, left_hip.z - right_hip.z);
-    const v2 = new THREE.Vector3(right_shoulder.x - right_hip.x, right_shoulder.y - right_hip.y, right_shoulder.z - right_hip.z);
+    const v1 = new THREE.Vector3(
+        left_hip.x - right_hip.x, 
+        left_hip.y - right_hip.y, 
+        left_hip.z - right_hip.z
+    );
+    const v2 = new THREE.Vector3(
+        right_shoulder.x - right_hip.x, 
+        right_shoulder.y - right_hip.y, 
+        right_shoulder.z - right_hip.z
+    );
     const front1 = new THREE.Vector3().crossVectors(v1, v2).normalize();
 
-    const v1p = new THREE.Vector3(right_shoulder.x - left_shoulder.x, right_shoulder.y - left_shoulder.y, right_shoulder.z - left_shoulder.z);
-    const v2p = new THREE.Vector3(left_hip.x - left_shoulder.x, left_hip.y - left_shoulder.y, left_hip.z - left_shoulder.z);
+    const v1p = new THREE.Vector3(
+        right_shoulder.x - left_shoulder.x, 
+        right_shoulder.y - left_shoulder.y, 
+        right_shoulder.z - left_shoulder.z
+    );
+    const v2p = new THREE.Vector3(
+        left_hip.x - left_shoulder.x, 
+        left_hip.y - left_shoulder.y, 
+        left_hip.z - left_shoulder.z,
+    );
     const front2 = new THREE.Vector3().crossVectors(v1p, v2p).normalize();
 
     const FRONT_REFERENCE = new THREE.Vector3(-1, 0, 0);
@@ -46,11 +63,20 @@ export function computeAvatarScore(pose: BodyData) {
     let scoreComputation: number = 0;
     let countScores: number = 0;
 
-    scoreComputation += Math.max(keypoints3DMap["right_shoulder"].score, keypoints3DMap["left_shoulder"].score);
+    scoreComputation += Math.max(
+        keypoints3DMap[BodyPoseKey.right_shoulder].score,
+        keypoints3DMap[BodyPoseKey.left_shoulder].score
+    );
     countScores++;
-    scoreComputation += Math.max(keypoints3DMap["right_ear"].score, keypoints3DMap["left_ear"].score);
+    scoreComputation += Math.max(
+        keypoints3DMap[BodyPoseKey.right_ear].score,
+        keypoints3DMap[BodyPoseKey.left_ear].score
+    );
     countScores++;
-    scoreComputation += Math.max(keypoints3DMap["right_heel"].score, keypoints3DMap["left_heel"].score);
+    scoreComputation += Math.max(
+        keypoints3DMap[BodyPoseKey.right_heel].score,
+        keypoints3DMap[BodyPoseKey.left_heel].score
+    );
     countScores++;
     const score = 100 * scoreComputation / countScores;
     return score;
