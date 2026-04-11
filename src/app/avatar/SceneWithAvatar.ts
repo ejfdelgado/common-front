@@ -28,7 +28,7 @@ import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { CameraByPassShader } from './shaders/CameraByPass';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 
-export abstract class BasicAvatarScene extends THREE.Scene {
+export abstract class SceneWithAvatar extends THREE.Scene {
 
     camera: THREE.PerspectiveCamera | null = null;
     renderer: THREE.WebGLRenderer | null = null;
