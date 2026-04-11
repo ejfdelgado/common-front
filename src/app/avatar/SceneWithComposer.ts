@@ -2,6 +2,7 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { SceneWithAvatar } from "./SceneWithAvatar";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
+import { CameraByPassShader } from './shaders/CameraByPass';
 import {
     AnimatedElements,
     ROOT_PATH,
@@ -241,6 +242,30 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
             }, (err) => {
                 //reject(err);
             });
+        });
+    }
+
+    makeObjectTransparentToCamera(
+        scenario: THREE.Object3D<THREE.Object3DEventMap>,
+        camera: THREE.PerspectiveCamera,
+        d1: number,
+        d2: number,
+        d3: number,
+        d4: number,
+    ) {
+        const shader = CameraByPassShader(camera, d1, d2, d3, d4);
+        scenario.traverse((child: any) => {
+            if (child.isMesh && child.material) {
+                const materials = Array.isArray(child.material)
+                    ? child.material
+                    : [child.material];
+
+                materials.forEach((material: any) => {
+                    material.transparent = true;
+                    material.side = THREE.FrontSide;
+                    material.onBeforeCompile = shader;
+                });
+            }
         });
     }
 }

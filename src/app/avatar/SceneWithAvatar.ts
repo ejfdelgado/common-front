@@ -24,7 +24,6 @@ import {
     replaceAvatarSkin,
 } from '@avatar/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
-import { CameraByPassShader } from './shaders/CameraByPass';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 
 export abstract class SceneWithAvatar extends THREE.Scene {
@@ -589,30 +588,6 @@ export abstract class SceneWithAvatar extends THREE.Scene {
             return;
         }
         replaceAvatarSkin(avatar, url);
-    }
-
-    makeObjectTransparentToCamera(
-        scenario: THREE.Object3D<THREE.Object3DEventMap>,
-        camera: THREE.PerspectiveCamera,
-        d1: number,
-        d2: number,
-        d3: number,
-        d4: number,
-    ) {
-        const shader = CameraByPassShader(camera, d1, d2, d3, d4);
-        scenario.traverse((child: any) => {
-            if (child.isMesh && child.material) {
-                const materials = Array.isArray(child.material)
-                    ? child.material
-                    : [child.material];
-
-                materials.forEach((material: any) => {
-                    material.transparent = true;
-                    material.side = THREE.FrontSide;
-                    material.onBeforeCompile = shader;
-                });
-            }
-        });
     }
 
     executeCommand(command: RecognizedCommand) {
