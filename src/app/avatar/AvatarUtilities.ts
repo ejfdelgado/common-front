@@ -713,3 +713,53 @@ export function arrayToMatrix(array: number[]): THREE.Matrix4 {
 
     return matrix;
 }
+
+export function computeAverage(
+    points: BodyKeyPointData[],
+) {
+    const nuevo: BodyKeyPointData = {
+        name: "avg", score: 0, x: 0, y: 0, z: 0
+    };
+    points.forEach(a => {
+        nuevo.x += a.x;
+        nuevo.y += a.y;
+        nuevo.z += a.z;
+        nuevo.score += a.score;
+    });
+    const tam = points.length;
+    nuevo.x = nuevo.x / tam;
+    nuevo.y = nuevo.y / tam;
+    nuevo.z = nuevo.z / tam;
+    nuevo.score = nuevo.score / tam;
+    return nuevo;
+}
+
+export function computeAverageByNames(
+    names: string[],
+    points: { [key: string]: BodyKeyPointData },
+) {
+    const selected = names.map((name: string) => {
+        return points[name];
+    });
+    return computeAverage(selected);
+}
+
+export function computeDistance(a: BodyKeyPointData, b: BodyKeyPointData) {
+    const distance = new THREE.Vector3(a.x, a.y, a.z).distanceTo(new THREE.Vector3(b.x, b.y, b.z));
+    return distance;
+}
+
+export function computeHeight(points: { [key: string]: BodyKeyPointData }) {
+    const hipCenter = computeAverageByNames([
+        BodyPoseKey.left_hip,
+        BodyPoseKey.right_hip,
+    ], points);
+    const nosePoint = points[BodyPoseKey.nose];
+    const distance1 = computeDistance(nosePoint, hipCenter);
+    const footCenter = computeAverageByNames([
+        BodyPoseKey.left_heel,
+        BodyPoseKey.right_heel,
+    ], points);
+    const distance2 = computeDistance(hipCenter, footCenter);
+    return distance1 + distance2;
+}

@@ -6,12 +6,13 @@ import {
     FrontComputationType,
 } from "@mytypes/BodyTypes";
 import * as THREE from 'three';
+import { computeHeight } from "./AvatarUtilities";
 
 export class WalkBody {
     now: number = 0;
     sideState: number = 0;
     height: number = 0;
-    
+
     points: { [key: string]: BodyKeyPointData } = {};
     frontData!: FrontComputationType;
     HANDS_CLOSE = 0.3;
@@ -41,55 +42,8 @@ export class WalkBody {
         this.now = new Date().getTime();
         this.points = points;
         this.frontData = frontData;
-        this.height = this.computeHeight();
+        this.height = computeHeight(this.points);
         this.walkLogic();
-    }
-
-    computeDistance(a: BodyKeyPointData, b: BodyKeyPointData) {
-        const distance = new THREE.Vector3(a.x, a.y, a.z).distanceTo(new THREE.Vector3(b.x, b.y, b.z));
-        return distance;
-    }
-
-
-
-    computeAverage(points: BodyKeyPointData[]) {
-        const nuevo: BodyKeyPointData = {
-            name: "avg", score: 0, x: 0, y: 0, z: 0
-        };
-        points.forEach(a => {
-            nuevo.x += a.x;
-            nuevo.y += a.y;
-            nuevo.z += a.z;
-            nuevo.score += a.score;
-        });
-        const tam = points.length;
-        nuevo.x = nuevo.x / tam;
-        nuevo.y = nuevo.y / tam;
-        nuevo.z = nuevo.z / tam;
-        nuevo.score = nuevo.score / tam;
-        return nuevo;
-    }
-
-    computeAverageByNames(names: string[]) {
-        const points = names.map((name: string) => {
-            return this.points[name];
-        });
-        return this.computeAverage(points);
-    }
-
-    computeHeight() {
-        const hipCenter = this.computeAverageByNames([
-            BodyPoseKey.left_hip,
-            BodyPoseKey.right_hip,
-        ]);
-        const nosePoint = this.points[BodyPoseKey.nose];
-        const distance1 = this.computeDistance(nosePoint, hipCenter);
-        const footCenter = this.computeAverageByNames([
-            BodyPoseKey.left_heel,
-            BodyPoseKey.right_heel,
-        ]);
-        const distance2 = this.computeDistance(hipCenter, footCenter);
-        return distance1 + distance2;
     }
 
     walkLogic() {
