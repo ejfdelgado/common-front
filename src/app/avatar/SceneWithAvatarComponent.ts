@@ -54,10 +54,10 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         videoSize: GenericSizeType,
     ) {
         if (!this.scene) {
-            return;
+            return null;
         }
         if (this.isComputing) {
-            return;
+            return null;
         }
         this.isComputing = true;
         try {
@@ -118,6 +118,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                     }
                 }
             }
+            return response;
         } catch (err) {
             throw err;
         } finally {

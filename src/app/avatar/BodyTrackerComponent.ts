@@ -90,10 +90,17 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             if (this.poses.length > 0) {
                 // Level 1
                 try {
-                    await threeComponent.computeIKLevel1(this.poses, this.videoSize);
-                    if (this.errorState != null) {
-                        this.errorState = null;
-                        this.cdr.detectChanges();
+                    const response = await threeComponent.computeIKLevel1(this.poses, this.videoSize);
+                    if (response == false) {
+                        // Means no body
+                        throw new Error("-1");
+                    } else if (response == null) {
+                        // means system error
+                    } else {
+                        if (this.errorState != null) {
+                            this.errorState = null;
+                            this.cdr.detectChanges();
+                        }
                     }
                 } catch (err: any) {
                     if (err.message == "-1") {
