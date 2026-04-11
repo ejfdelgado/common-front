@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { BodyKeyPointData, BodyState } from '@mytypes/bodyTypes';
+import { BodyKeyPointData, BodyState } from '@mytypes/BodyTypes';
 import { ModuloSonido } from '@services/sonido.service';
 import { EventEmitter } from '@angular/core';
 

@@ -26,7 +26,7 @@ import { Stand2dController } from '@avatar/controllers/Stand2dController';
 import { RecordPoseController } from '@avatar/controllers/RecordPoseController';
 import { HttpClient } from '@angular/common/http';
 import { TerrainElevationController } from '@avatar/controllers/TerrainElevationController';
-import { Point3D } from '@mytypes/bodyTypes';
+import { Point3D } from '@mytypes/BodyTypes';
 
 @Component({
   standalone: true,

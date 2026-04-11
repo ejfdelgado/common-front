@@ -1,15 +1,22 @@
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { AVATAR_NAME, AvatarBodyEvent, BodyData, BodyKeyPointData, ComparableBody, GenericSizeType } from '@mytypes/bodyTypes';
+import { 
+    AVATAR_NAME, 
+    AvatarBodyEvent, 
+    BodyData, 
+    BodyKeyPointData, 
+    ComparableBody, 
+    GenericSizeType,
+ } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import { WalkBody } from '@avatar/WalkBody';
 import * as THREE from 'three';
-import { ComposerAvatarScene } from './ComposerAvatarScene';
+import { SceneWithComposer } from './SceneWithComposer';
 
 export abstract class SceneWithAvatarComponent extends CommonComponent {
-    scene: ComposerAvatarScene | null = null;
+    scene: SceneWithComposer | null = null;
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();

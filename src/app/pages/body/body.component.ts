@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { tracker } from '@tools/tracker.js';
-import { BodyData, BodyState } from '@mytypes/bodyTypes';
+import { BodyData, BodyState } from '@mytypes/BodyTypes';
 import { ThreejsBodyComponent } from './threejs-body/threejs-body.component';
 import { ModuloSonido } from '@services/sonido.service';
 import { CommonComponent } from '@components/common.component';

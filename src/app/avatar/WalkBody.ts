@@ -4,7 +4,7 @@ import {
     AvatarBodyEvent, 
     BodyKeyPointData, 
     FrontComputationType,
- } from "@mytypes/bodyTypes";
+ } from "@mytypes/BodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
 

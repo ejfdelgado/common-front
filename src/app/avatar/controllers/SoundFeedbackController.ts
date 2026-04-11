@@ -1,7 +1,7 @@
 import {
     AvatarBodyEvent,
     ControllerUpdateResponse,
-} from "@mytypes/bodyTypes";
+} from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { ModuloSonido } from "@services/sonido.service";
 

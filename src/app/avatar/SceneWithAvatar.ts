@@ -5,7 +5,7 @@ import {
     BoneBackupType,
     ItemModelRef,
     ScenePoseEventType,
-} from '@mytypes/bodyTypes';
+} from '@mytypes/BodyTypes';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';

@@ -5,7 +5,7 @@ import {
     StoredAvatarAnimation,
     StoredAvatarState,
     AVATAR_ANIM_VERSION,
-} from "@mytypes/bodyTypes";
+} from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';

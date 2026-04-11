@@ -13,7 +13,10 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { ModuloSonido } from '@services/sonido.service';
 import { tracker } from '@tools/tracker.js';
-import { BodyData, BodyKeyPointData, GenericSizeType } from '@mytypes/bodyTypes';
+import {
+  BodyData,
+  GenericSizeType,
+} from '@mytypes/BodyTypes';
 import * as tf from '@tensorflow/tfjs';
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';

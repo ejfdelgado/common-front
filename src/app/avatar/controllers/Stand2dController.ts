@@ -2,7 +2,7 @@ import {
     AvatarBodyEvent, 
     BodyKeyPointData, 
     ControllerUpdateResponse,
- } from "@mytypes/bodyTypes";
+ } from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { computeBodyPointAverage } from "@avatar/AvatarUtilities";
 import { SignalLowPass } from "@avatar/SignalLowPass";

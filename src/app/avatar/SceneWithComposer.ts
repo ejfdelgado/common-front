@@ -1,7 +1,12 @@
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { SceneWithAvatar } from "./SceneWithAvatar";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
-import { AnimatedElements, ROOT_PATH, StoredAvatarAnimation, StoredAvatarState } from "@mytypes/bodyTypes";
+import { 
+    AnimatedElements, 
+    ROOT_PATH, 
+    StoredAvatarAnimation, 
+    StoredAvatarState,
+ } from "@mytypes/BodyTypes";
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import * as THREE from 'three';
@@ -10,7 +15,7 @@ import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
 
-export abstract class ComposerAvatarScene extends SceneWithAvatar {
+export abstract class SceneWithComposer extends SceneWithAvatar {
 
     previousTime = performance.now();
     composer: EffectComposer | null = null;

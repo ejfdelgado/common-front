@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BasicScene } from './BasicScene';
-import { BodyData, BodyState } from '@mytypes/bodyTypes';
+import { BodyData, BodyState } from '@mytypes/BodyTypes';
 
 @Component({
   selector: 'app-threejs-body',

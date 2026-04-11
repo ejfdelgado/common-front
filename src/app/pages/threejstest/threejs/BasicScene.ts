@@ -4,11 +4,11 @@ import { IndicatorService } from '@services/indicator.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import {
   ROOT_PATH,
-} from '@mytypes/bodyTypes';
+} from '@mytypes/BodyTypes';
 import { HttpClient } from '@angular/common/http';
-import { ComposerAvatarScene } from '@avatar/ComposerAvatarScene';
+import { SceneWithComposer } from '@avatar/SceneWithComposer';
 
-export class BasicScene extends ComposerAvatarScene {
+export class BasicScene extends SceneWithComposer {
 
   lights: Array<THREE.Light> = [];
   canvasRef: HTMLCanvasElement;

@@ -8,7 +8,7 @@ import {
     FrontComputationType,
     Point3D,
     SimpleComparable,
-} from "@mytypes/bodyTypes";
+} from "@mytypes/BodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';

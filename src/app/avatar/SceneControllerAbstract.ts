@@ -4,13 +4,13 @@ import {
     ControllerUpdateResponse,
     GenericSizeType,
     ScenePoseAndWalkEventType,
-} from "@mytypes/bodyTypes";
+} from "@mytypes/BodyTypes";
 import { EventEmitter } from "@angular/core";
-import { ComposerAvatarScene } from "./ComposerAvatarScene";
+import { SceneWithComposer } from "./SceneWithComposer";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;
-    scene!: ComposerAvatarScene;
+    scene!: SceneWithComposer;
     lastData!: ScenePoseAndWalkEventType;
     videoSize!: GenericSizeType;
 

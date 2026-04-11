@@ -1,7 +1,7 @@
 import {
     AvatarBodyEvent,
     ControllerUpdateResponse,
-} from "@mytypes/bodyTypes";
+} from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';

@@ -1,6 +1,6 @@
 import { WalkBody } from '@avatar/WalkBody';
 import * as THREE from 'three';
-import { ComposerAvatarScene } from '@avatar/ComposerAvatarScene';
+import { SceneWithComposer } from '@avatar/SceneWithComposer';
 
 export const ROOT_PATH = "/assets/models/";
 
@@ -94,7 +94,7 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
 }
 
 export interface ControllerInitDataType {
-    scene: ComposerAvatarScene,
+    scene: SceneWithComposer,
 }
 
 export interface AvatarBodyEvent {

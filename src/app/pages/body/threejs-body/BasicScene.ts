@@ -1,6 +1,6 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
-import { BodyData, BodyKeyPointData, BodyState } from '@mytypes/bodyTypes';
+import { BodyData, BodyKeyPointData, BodyState } from '@mytypes/BodyTypes';
 import { WalkBody } from './WalkBody';
 import { MyHelper } from './MyHelper';
 import { MyAsset, MyAssetInData } from './MyAsset';
