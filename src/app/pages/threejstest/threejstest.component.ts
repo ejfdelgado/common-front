@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -21,7 +22,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
-import { enterFullscreen } from '@tools/ScreenUtils';
 
 @Component({
   selector: 'app-threejstest',
@@ -40,14 +40,14 @@ import { enterFullscreen } from '@tools/ScreenUtils';
     '../../../threejs_styles.scss',
   ],
 })
-export class ThreejsTestComponent extends BodyTrackerComponent {
+export class ThreejsTestComponent extends BodyTrackerComponent implements AfterViewInit {
 
   @ViewChild("three_component") threeComponent!: ThreejsComponent;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;
   headUpLogData: any = {};
 
   constructor(
-    public cdr: ChangeDetectorRef,
+    public override cdr: ChangeDetectorRef,
     public override voiceSrv: VoiceRecognitionService,
     public override speechSrv: SpeechSynthesisService,
     public override indicatorSrv: IndicatorService,
@@ -56,6 +56,7 @@ export class ThreejsTestComponent extends BodyTrackerComponent {
     public override fullScreenSrv: FullscreenService,
   ) {
     super(
+      cdr,
       voiceSrv,
       speechSrv,
       indicatorSrv,
@@ -113,7 +114,7 @@ export class ThreejsTestComponent extends BodyTrackerComponent {
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
   }
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
     const promise = this.indicatorSrv.start();
     const promises = [];
     promises.push(this.initializeBodyTracker(
@@ -123,12 +124,7 @@ export class ThreejsTestComponent extends BodyTrackerComponent {
     promises.push(this.speechSrv.init());
     await Promise.all(promises);
     promise.done();
-  }
-
-  override async startTracking() {
-    await super.startTracking();
-    enterFullscreen();
-    this.activity = this.indicatorSrv.start();
+    this.cdr.detectChanges();
   }
 
   headUpLog(event: any) {

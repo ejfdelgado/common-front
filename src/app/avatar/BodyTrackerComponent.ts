@@ -1,6 +1,6 @@
-import { ElementRef } from "@angular/core";
+import { ChangeDetectorRef, ElementRef } from "@angular/core";
 import { BodyData, GenericSizeType } from "@mytypes/BodyTypes";
-import { Wait } from "@services/indicator.service";
+import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import { tracker } from '@tools/tracker.js';
 import * as THREE from 'three';
@@ -8,9 +8,17 @@ import { ThreejsComponent } from "app/pages/threejstest/threejs/threejs.componen
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { CommonSpeech } from "app/pages/commonSpeech";
 import * as tf from '@tensorflow/tfjs';
+import { enterFullscreen, exitFullscreen } from "@tools/ScreenUtils";
+import { VoiceRecognitionService } from "@services/voicerecognition.service";
+import { SpeechSynthesisService } from "@services/speechsynthesis.service";
+import { BooleanStateService } from "@services/boolean-state.service";
+import { DomSanitizer } from "@angular/platform-browser";
+import { FullscreenService } from "@services/fullscreen.service";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
 
+    errorState: string | null = null;
+    initialized: boolean = false;
     started: boolean = false;
     activity: Wait | null = null;
     videoRef!: ElementRef<HTMLVideoElement>;
@@ -20,6 +28,25 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         height: 0,
     };
     trackerSubscription: Function | null = null;
+
+    constructor(
+        public cdr: ChangeDetectorRef,
+        public override voiceSrv: VoiceRecognitionService,
+        public override speechSrv: SpeechSynthesisService,
+        public override indicatorSrv: IndicatorService,
+        public override booleanService: BooleanStateService,
+        public override sanitizer: DomSanitizer,
+        public override fullScreenSrv: FullscreenService,
+    ) {
+        super(
+            voiceSrv,
+            speechSrv,
+            indicatorSrv,
+            booleanService,
+            sanitizer,
+            fullScreenSrv,
+        );
+    }
 
     async initializeBodyTracker(
         videoR: ElementRef<HTMLVideoElement>,
@@ -64,21 +91,23 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                 // Level 1
                 try {
                     await threeComponent.computeIKLevel1(this.poses, this.videoSize);
+                    if (this.errorState != null) {
+                        this.errorState = null;
+                        this.cdr.detectChanges();
+                    }
                 } catch (err: any) {
                     if (err.message == "-1") {
                         // Means person is detected, but must fit all in the camera
-
+                        if (this.errorState != err.message) {
+                            this.errorState = err.message;
+                            this.cdr.detectChanges();
+                        }
                     }
                 }
             }
         }) as any;
         this.trackerSubscription = unsubscribe;
-    }
-
-    async startTracking() {
-        this.started = true;
-        ModuloSonido.play('/assets/sounds/button.mp3');
-        tracker.run('camera');
+        this.initialized = true;
     }
 
     updateVideoSize() {
@@ -95,14 +124,6 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             width,
             height,
         };
-    }
-
-    async stopTracking() {
-        if (this.trackerSubscription) {
-            this.trackerSubscription();
-            this.trackerSubscription = null;
-        }
-        tracker.pause();
     }
 
     downloadTextPlain(filename = 'model.json') {
@@ -195,5 +216,53 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                 onlyVisible: true,
                 truncateDrawRange: true
             });
+    }
+
+    stopTracking() {
+        location.reload();
+        /*
+        if (this.trackerSubscription) {
+            this.trackerSubscription();
+            this.trackerSubscription = null;
+        }
+        try {
+            tracker.pause();
+        } catch (err) {
+            this.videoRef.nativeElement.pause();
+        }
+        */
+    }
+
+    startTracking() {
+        this.started = true;
+        tracker.run('camera');
+    }
+
+    stopAll() {
+        try {
+            ModuloSonido.play('/assets/sounds/button.mp3');
+            this.stopListening();
+            this.stopTracking();
+            exitFullscreen();
+            this.started = false;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    startAll() {
+        this.activity = this.indicatorSrv.start();
+        try {
+            ModuloSonido.play('/assets/sounds/button.mp3');
+            this.startTracking();
+            this.startListening();
+            enterFullscreen();
+            this.started = true;
+        } catch (err) {
+            console.log(err);
+            if (this.activity) {
+                this.activity.done();
+            }
+        }
     }
 }
