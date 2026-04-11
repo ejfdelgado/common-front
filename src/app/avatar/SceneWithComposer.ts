@@ -1,12 +1,13 @@
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { SceneWithAvatar } from "./SceneWithAvatar";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
-import { 
-    AnimatedElements, 
-    ROOT_PATH, 
-    StoredAvatarAnimation, 
+import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
+import {
+    AnimatedElements,
+    ROOT_PATH,
+    StoredAvatarAnimation,
     StoredAvatarState,
- } from "@mytypes/BodyTypes";
+} from "@mytypes/BodyTypes";
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import * as THREE from 'three';
@@ -222,6 +223,24 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
             if (child.name.startsWith("terrain_")) {
                 this.terrainMeshes.push(child);
             }
+        });
+    }
+
+    setHDRSky(url: string) {
+        return new Promise<void>((resolve, reject) => {
+            new HDRLoader().load(url, (texture) => {
+                texture.mapping = THREE.EquirectangularReflectionMapping;
+                if (this.renderer) {
+                    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+                    const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+                    this.environment = envMap;
+                    this.background = envMap;
+                    this.environmentIntensity = 0.3;
+                }
+                resolve();
+            }, (err) => {
+                //reject(err);
+            });
         });
     }
 }

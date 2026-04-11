@@ -23,7 +23,6 @@ import {
     getHigherAvatarScoredPose,
     replaceAvatarSkin,
 } from '@avatar/AvatarUtilities';
-import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { CameraByPassShader } from './shaders/CameraByPass';
 import { RecognizedCommand } from '@services/voicerecognition.service';
@@ -536,24 +535,6 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         }
     }
 
-    setHDRSky(url: string) {
-        return new Promise<void>((resolve, reject) => {
-            new HDRLoader().load(url, (texture) => {
-                texture.mapping = THREE.EquirectangularReflectionMapping;
-                if (this.renderer) {
-                    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-                    const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-                    this.environment = envMap;
-                    this.background = envMap;
-                    this.environmentIntensity = 0.3;
-                }
-                resolve();
-            }, (err) => {
-                //reject(err);
-            });
-        });
-    }
-
     async addAvatar(
         url: string,
         camera: THREE.PerspectiveCamera,
@@ -613,8 +594,12 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     makeObjectTransparentToCamera(
         scenario: THREE.Object3D<THREE.Object3DEventMap>,
         camera: THREE.PerspectiveCamera,
+        d1: number,
+        d2: number,
+        d3: number,
+        d4: number,
     ) {
-        const shader = CameraByPassShader(camera, 0, 15, 30, 45);
+        const shader = CameraByPassShader(camera, d1, d2, d3, d4);
         scenario.traverse((child: any) => {
             if (child.isMesh && child.material) {
                 const materials = Array.isArray(child.material)
