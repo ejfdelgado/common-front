@@ -11,7 +11,6 @@ import {
 } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
-import { WalkBody } from '@avatar/WalkBody';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
 
@@ -20,7 +19,6 @@ export abstract class ComponentWithAvatar extends CommonComponent {
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
-    walkBody: WalkBody = new WalkBody(this.events);
     stateBody: StateBody = {
         height: 1,
         isTPose: false,
@@ -82,7 +80,6 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                     keypoints3DMap,
                     frontData,
                 } = response;
-                this.walkBody.capture(keypoints3DMap, frontData);
                 this.stateBody.front = frontData.front;
                 this.stateBody.left = frontData.left;
                 this.stateBody.up = frontData.up;
@@ -101,7 +98,6 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                         keypoints2DMap,
                         frontData,
                         stateBody: this.stateBody,
-                        walkBody: this.walkBody,
                         videoSize,
                     });
                     const temp = await controller.update();

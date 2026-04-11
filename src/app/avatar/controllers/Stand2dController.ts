@@ -1,8 +1,8 @@
-import { 
-    AvatarBodyEvent, 
-    BodyKeyPointData, 
+import {
+    AvatarBodyEvent,
+    BodyKeyPointData,
     ControllerUpdateResponse,
- } from "@mytypes/BodyTypes";
+} from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { computeBodyPointAverage } from "@avatar/AvatarUtilities";
 import { SignalLowPass } from "@avatar/SignalLowPass";
@@ -21,13 +21,11 @@ export class Stand2dController extends SceneControllerAbstract {
     min3DYValue: number = 0;
 
     computeMin3DY() {
-        const { walkBody } = this.lastData;
-        const { points } = walkBody;
 
         const focusPoints: BodyKeyPointData[] = [];
 
-        focusPoints.push(points[BodyPoseKey.left_heel]);
-        focusPoints.push(points[BodyPoseKey.right_heel]);
+        focusPoints.push(this.lastData.keypoints3DMap[BodyPoseKey.left_heel]);
+        focusPoints.push(this.lastData.keypoints3DMap[BodyPoseKey.right_heel]);
 
         this.min3DYValue = focusPoints.map(a => a.y).reduce((yVal, minVal, currentIndex, array) => {
             if (yVal < minVal) {

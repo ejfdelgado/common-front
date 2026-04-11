@@ -144,7 +144,7 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
       //up: toFixed(this.stateBody.up), // se evidencia en x
       //left: toFixed(this.stateBody.left), // se evidencia en y
       //leftArm: toFixed(this.stateBody.comparable.leftArm),
-      rightArm: toFixed(this.stateBody.comparable.rightArm),
+      //rightArm: toFixed(this.stateBody.comparable.rightArm),
       //leftLeg: toFixed(this.stateBody.comparable.leftLeg),
       //rightLeg: toFixed(this.stateBody.comparable.rightLeg),
       //handL: this.stateBody.comparable.handL.toFixed(0),

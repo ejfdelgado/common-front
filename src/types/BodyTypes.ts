@@ -1,4 +1,3 @@
-import { WalkBody } from '@avatar/WalkBody';
 import * as THREE from 'three';
 import { SceneWithComposer } from '@avatar/SceneWithComposer';
 
@@ -85,10 +84,12 @@ export interface ScenePoseEventType {
 }
 
 export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
-    walkBody: WalkBody,
     stateBody: StateBody,
     videoSize: GenericSizeType,
     keypoints2DMap: {
+        [key: string]: BodyKeyPointData;
+    },
+    keypoints3DMap: {
         [key: string]: BodyKeyPointData;
     },
 }

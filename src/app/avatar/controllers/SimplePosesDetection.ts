@@ -1,3 +1,4 @@
+import { computeHeight } from "@avatar/AvatarUtilities";
 import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { ControllerUpdateResponse, AvatarBodyEvent, ComparableBody } from "@mytypes/BodyTypes";
 
@@ -7,6 +8,7 @@ export class SimplePosesDetection extends SceneControllerAbstract {
 
     override async update(): Promise<ControllerUpdateResponse> {
         const comparable = this.lastData.stateBody.comparable;
+        this.computeHeight();
         this.computeLeftHand(comparable);
         this.computeRightHand(comparable);
         this.checkTPose(comparable);
@@ -85,5 +87,9 @@ export class SimplePosesDetection extends SceneControllerAbstract {
                 });
             }
         }
+    }
+
+    computeHeight() {
+        this.lastData.stateBody.height = computeHeight(this.lastData.keypoints3DMap);
     }
 }
