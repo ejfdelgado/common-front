@@ -217,4 +217,14 @@ export abstract class ComposerAvatarScene extends BasicAvatarScene {
     executeCommand(command: RecognizedCommand) {
         console.log(command);
     }
+
+    autoDetectTerrainMeshes(
+        scenario: THREE.Object3D<THREE.Object3DEventMap>,
+    ) {
+        scenario.traverse((child: any) => {
+            if (child.name.startsWith("terrain_")) {
+                this.terrainMeshes.push(child);
+            }
+        });
+    }
 }

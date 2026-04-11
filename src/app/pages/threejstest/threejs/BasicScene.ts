@@ -1,12 +1,8 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 import { IndicatorService } from '@services/indicator.service';
-import { RecognizedCommand } from '@services/voicerecognition.service';
-import { replaceAvatarSkin } from '@avatar/AvatarUtilities';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import {
-  AVATAR_NAME,
-  AvatarLocationState,
   ROOT_PATH,
 } from '@mytypes/bodyTypes';
 import { HttpClient } from '@angular/common/http';
@@ -74,23 +70,8 @@ export class BasicScene extends ComposerAvatarScene {
     scenario.scale.set(1.5, 1.5, 1.5);
 
     if (this.camera) {
-      const shader = CameraByPassShader(this.camera, 0, 15, 30, 45);
-      scenario.traverse((child: any) => {
-        if (child.isMesh && child.material) {
-          const materials = Array.isArray(child.material)
-            ? child.material
-            : [child.material];
-
-          materials.forEach((material: any) => {
-            material.transparent = true;
-            material.side = THREE.FrontSide;
-            material.onBeforeCompile = shader;
-          });
-        }
-        if (child.name.startsWith("terrain_")) {
-          this.terrainMeshes.push(child);
-        }
-      });
+      this.makeObjectTransparentToCamera(scenario, this.camera);
+      this.autoDetectTerrainMeshes(scenario);
     }
     //
   }
@@ -110,13 +91,5 @@ export class BasicScene extends ComposerAvatarScene {
     } finally {
       loading.done();
     }
-  }
-
-  replaceAvatarSkin(url: string) {
-    const avatar = this.getObjectByName(AVATAR_NAME);
-    if (!avatar) {
-      return;
-    }
-    replaceAvatarSkin(avatar, url);
   }
 }

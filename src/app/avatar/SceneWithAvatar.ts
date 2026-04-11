@@ -21,9 +21,11 @@ import {
     computeComparableFromModel,
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
-} from './AvatarUtilities';
+    replaceAvatarSkin,
+} from '@avatar/AvatarUtilities';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
+import { CameraByPassShader } from './shaders/CameraByPass';
 
 export abstract class BasicAvatarScene extends THREE.Scene {
 
@@ -596,6 +598,34 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 //setRotationBoneLocation(object, "pelvis", 0, 0, 0);
                 resolve(object);
             });
+        });
+    }
+
+    replaceAvatarSkin(url: string) {
+        const avatar = this.getObjectByName(AVATAR_NAME);
+        if (!avatar) {
+            return;
+        }
+        replaceAvatarSkin(avatar, url);
+    }
+
+    makeObjectTransparentToCamera(
+        scenario: THREE.Object3D<THREE.Object3DEventMap>,
+        camera: THREE.PerspectiveCamera,
+    ) {
+        const shader = CameraByPassShader(camera, 0, 15, 30, 45);
+        scenario.traverse((child: any) => {
+            if (child.isMesh && child.material) {
+                const materials = Array.isArray(child.material)
+                    ? child.material
+                    : [child.material];
+
+                materials.forEach((material: any) => {
+                    material.transparent = true;
+                    material.side = THREE.FrontSide;
+                    material.onBeforeCompile = shader;
+                });
+            }
         });
     }
 }
