@@ -133,10 +133,38 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                 state: anim,
             });
 
-            if (this.outlinePass) {
-                this.outlinePass.selectedObjects = [object];
-            }
+            // This make it highlighted
+            this.highlightOn(object);
         });
+    }
+
+    highlightOn(obj: THREE.Object3D<THREE.Object3DEventMap>) {
+        if (!this.outlinePass) {
+            return;
+        }
+        const index = this.outlinePass.selectedObjects.indexOf(obj);
+        if (index < 0) {
+            this.outlinePass.selectedObjects.push(obj);
+        }
+    }
+
+    highlightOff(obj: THREE.Object3D<THREE.Object3DEventMap>) {
+        if (!this.outlinePass) {
+            return;
+        }
+        const index = this.outlinePass.selectedObjects.indexOf(obj);
+        if (index >= 0) {
+            this.outlinePass.selectedObjects.splice(index, 1);
+        }
+    }
+
+    async loadAnimation(): Promise<StoredAvatarAnimation> {
+        const loaded = await firstValueFrom(
+            this.http.get(ROOT_PATH + "animations/animation.bin",
+                { responseType: 'arraybuffer' },
+            ));
+        const model = decode(loaded);
+        return model as StoredAvatarAnimation;
     }
 
     override getFirstHitFromTopToDown(x: number, z: number): number | null {
@@ -157,17 +185,11 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         return highestY;
     }
 
-    async loadAnimation(): Promise<StoredAvatarAnimation> {
-        const loaded = await firstValueFrom(this.http.get(ROOT_PATH + "animations/animation.bin", { responseType: 'arraybuffer' }));
-        const model = decode(loaded);
-        return model as StoredAvatarAnimation;
-    }
-
     autoDetectTerrainMeshes(
         scenario: THREE.Object3D<THREE.Object3DEventMap>,
     ) {
         scenario.traverse((child: any) => {
-            if (child.name.startsWith("terrain_")) {
+            if (child.name.toLocaleLowerCase().startsWith("terrain_")) {
                 this.terrainMeshes.push(child);
             }
         });
