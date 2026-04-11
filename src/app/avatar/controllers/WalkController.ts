@@ -7,6 +7,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
 import { makeSmootValue, makeSmootVector } from "@avatar/AvatarUtilities";
 
+const FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
+const UP_REFERENCE = new THREE.Vector3(0, 1, 0);
+
 export class WalkController extends SceneControllerAbstract {
     // constants 
     PRESITION_TRANSLATION: number = 0.0000001;
@@ -98,13 +101,13 @@ export class WalkController extends SceneControllerAbstract {
     }
 
     placeCamera(camera: THREE.PerspectiveCamera, orbitals: OrbitControls) {
-        const advanceFront = this.lastData.walkBody.FRONT_REFERENCE.clone().applyAxisAngle(
-            this.lastData.walkBody.UP_REFERENCE,
+        const advanceFront = FRONT_REFERENCE.clone().applyAxisAngle(
+            UP_REFERENCE,
             this.scene.avatarStateSmoot.rotationY,
         ).normalize();
 
         this.destinationCameraLocation.x = this.scene.avatarStateSmoot.positionX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
-        this.destinationCameraLocation.y = this.lastData.walkBody.height * this.CAMERA_HEIGTH_RATIO + this.scene.avatarStateSmoot.positionY;
+        this.destinationCameraLocation.y = this.lastData.stateBody.height * this.CAMERA_HEIGTH_RATIO + this.scene.avatarStateSmoot.positionY;
         this.destinationCameraLocation.z = this.scene.avatarStateSmoot.positionZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
         this.lastCameraSmoot = makeSmootVector(
             camera.position,
@@ -135,8 +138,6 @@ export class WalkController extends SceneControllerAbstract {
         } = this.lastData;
 
         const {
-            FRONT_REFERENCE,
-            UP_REFERENCE,
             stepSize,
         } = walkBody;
 

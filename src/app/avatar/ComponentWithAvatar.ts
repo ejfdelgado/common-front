@@ -22,6 +22,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
     walkBody: WalkBody = new WalkBody(this.events);
     stateBody: StateBody = {
+        height: 1,
         isTPose: false,
         front: { x: 0, y: 0, z: 0, },
         left: { x: 0, y: 0, z: 0, },

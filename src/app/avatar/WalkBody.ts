@@ -5,31 +5,23 @@ import {
     BodyKeyPointData,
     FrontComputationType,
 } from "@mytypes/BodyTypes";
-import * as THREE from 'three';
-import { computeHeight } from "./AvatarUtilities";
 
 export class WalkBody {
     now: number = 0;
     sideState: number = 0;
-    height: number = 0;
 
     points: { [key: string]: BodyKeyPointData } = {};
     frontData!: FrontComputationType;
     HANDS_CLOSE = 0.3;
     HANDS_NOT_CLOSE = 0.35;
     MOVEMENT_THRESHOLD = 0.1; // Step detection
-    FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
-    UP_REFERENCE = new THREE.Vector3(0, 1, 0);
+
     MIN_MILLIS_BETWEEN_STEPS: number = 1000;
 
     // Walking variables
     stepSize: number = 0;
     maxDifference: number = 0;
-    overpassLastMax: boolean = false;
-    public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     lastStepTime: number = 0;
-
-    MIN_T_POSE_THRESHOLD: number = 0.25;
 
     constructor(private events: EventEmitter<AvatarBodyEvent>) {
 
@@ -41,8 +33,6 @@ export class WalkBody {
     ) {
         this.now = new Date().getTime();
         this.points = points;
-        this.frontData = frontData;
-        this.height = computeHeight(this.points);
         this.walkLogic();
     }
 
