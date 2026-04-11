@@ -158,6 +158,7 @@ export interface ComparableBody extends SimpleComparable {
 }
 
 export interface StateBody {
+    isTPose: boolean;
     front: Point3D;
     up: Point3D;
     left: Point3D;

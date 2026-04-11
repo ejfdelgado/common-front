@@ -2,7 +2,6 @@ import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { ControllerUpdateResponse, AvatarBodyEvent, ComparableBody } from "@mytypes/BodyTypes";
 
 export class SimplePosesDetection extends SceneControllerAbstract {
-
     handUpLeft: boolean = false;
     handUpRight: boolean = false;
 
@@ -58,6 +57,31 @@ export class SimplePosesDetection extends SceneControllerAbstract {
                     name: "RIGHT_HAND_UP_OFF",
                 });
                 this.handUpRight = false;
+            }
+        }
+    }
+
+    checkTPose(comparable: ComparableBody) {
+        const leftHandT = comparable.leftArm.y > 0.8
+            && comparable.handL < 15; // Max 15°
+        const rightHandT = comparable.rightArm.y < -0.8
+            && comparable.handR < 15; // Max 15°
+        const isTPose = leftHandT && rightHandT;
+        if (
+            isTPose
+        ) {
+            if (!this.lastData.stateBody.isTPose) {
+                this.lastData.stateBody.isTPose = true;
+                this.events.emit({
+                    name: "T_POSE_ON",
+                });
+            }
+        } else {
+            if (this.lastData.stateBody.isTPose) {
+                this.lastData.stateBody.isTPose = false;
+                this.events.emit({
+                    name: "T_POSE_OFF",
+                });
             }
         }
     }

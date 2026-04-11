@@ -5,7 +5,6 @@ import {
     BodyKeyPointData,
     FrontComputationType,
 } from "@mytypes/BodyTypes";
-import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
 
 export class WalkBody {
@@ -28,7 +27,7 @@ export class WalkBody {
     overpassLastMax: boolean = false;
     public clapLocation: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
     lastStepTime: number = 0;
-    isTPose: boolean = false;
+
     MIN_T_POSE_THRESHOLD: number = 0.25;
 
     constructor(private events: EventEmitter<AvatarBodyEvent>) {
@@ -44,7 +43,6 @@ export class WalkBody {
         this.frontData = frontData;
         this.height = this.computeHeight();
         this.computeHandGet();
-        this.checkTPose();
         this.walkLogic();
     }
 
@@ -167,9 +165,11 @@ export class WalkBody {
 
         if (makeStep) {
             let forward = 1;
+            /*
             if (this.isTPose) {
                 forward = -1;
             }
+            */
             if (forward > 0) {
                 this.events.emit({
                     name: "MAKE_STEP_FORWARD",
@@ -183,46 +183,7 @@ export class WalkBody {
         }
     }
 
-    checkTPose() {
-        // right_shoulder y left_shoulder Y
-        const average = this.computeAverageByNames([
-            BodyPoseKey.right_shoulder,
-            BodyPoseKey.left_shoulder,
-        ]);
-        const referenceY = average.y;
-
-        // right_elbow left_elbow Y
-        const m1 = Math.abs(this.points[BodyPoseKey.right_elbow].y - referenceY);
-        const m2 = Math.abs(this.points[BodyPoseKey.left_elbow].y - referenceY);
-
-        // right_wrist left_wrist Y
-        const m3 = Math.abs(this.points[BodyPoseKey.right_wrist].y - referenceY);
-        const m4 = Math.abs(this.points[BodyPoseKey.left_wrist].y - referenceY);
-
-        if (
-            m1 < this.MIN_T_POSE_THRESHOLD &&
-            m2 < this.MIN_T_POSE_THRESHOLD &&
-            m3 < this.MIN_T_POSE_THRESHOLD &&
-            m4 < this.MIN_T_POSE_THRESHOLD
-        ) {
-            if (!this.isTPose) {
-                this.isTPose = true;
-                this.events.emit({
-                    name: "T_POSE_ON",
-                });
-            }
-        } else {
-            if (this.isTPose) {
-                this.isTPose = false;
-                this.events.emit({
-                    name: "T_POSE_OFF",
-                });
-            }
-        }
-    }
-
     off() {
         this.handsClose = false;
-        this.isTPose = false;
     }
 }
