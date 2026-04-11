@@ -82,11 +82,11 @@ export interface ScenePoseEventType {
         [key: string]: BodyKeyPointData;
     },
     frontData: FrontComputationType;
-    comparable: SimpleComparable;
 }
 
 export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
     walkBody: WalkBody,
+    stateBody: StateBody,
     videoSize: GenericSizeType,
     keypoints2DMap: {
         [key: string]: BodyKeyPointData;
@@ -110,6 +110,7 @@ export interface GenericSizeType {
 
 export interface ControllerUpdateResponse {
     avatarTransform?: THREE.Matrix4;
+    comparable?: ComparableBody;
 }
 
 export const AVATAR_NAME = "avatar";
@@ -150,9 +151,15 @@ export interface AnimatedElements {
 
 export const AVATAR_ANIM_VERSION = "1.0";
 
-export interface ComparableBody {
+export interface ComparableBody extends SimpleComparable {
     front: Point3D;
     up: Point3D;
     left: Point3D;
-    comparable: SimpleComparable;
+}
+
+export interface StateBody {
+    front: Point3D;
+    up: Point3D;
+    left: Point3D;
+    comparable: ComparableBody;
 }

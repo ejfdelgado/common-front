@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { SceneWithAvatarComponent } from '@avatar/SceneWithAvatarComponent';
+import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { WalkController } from '@avatar/controllers/WalkController';
 import { SoundFeedbackController } from '@avatar/controllers/SoundFeedbackController';
 import { Stand2dController } from '@avatar/controllers/Stand2dController';
@@ -27,6 +27,7 @@ import { RecordPoseController } from '@avatar/controllers/RecordPoseController';
 import { HttpClient } from '@angular/common/http';
 import { TerrainElevationController } from '@avatar/controllers/TerrainElevationController';
 import { Point3D } from '@mytypes/BodyTypes';
+import { ComparableController } from '@avatar/controllers/ComparableController';
 
 @Component({
   standalone: true,
@@ -39,7 +40,7 @@ import { Point3D } from '@mytypes/BodyTypes';
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
-export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ThreejsComponent extends ComponentWithAvatar implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   bounds: DOMRect | null = null;
@@ -48,6 +49,7 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
   restoreInterval: NodeJS.Timeout | null = null;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
   // controllers
+  comparableController: ComparableController = new ComparableController(this.events);
   walkController: WalkController = new WalkController(this.events);
   soundFeedbackController: SoundFeedbackController = new SoundFeedbackController(this.events);
   stand2dController: Stand2dController = new Stand2dController(this.events);
@@ -89,6 +91,9 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
     this.sceneCreated.resolve();
     // Add controllers
     // The order matters...
+
+    this.addController(this.comparableController);
+
     this.addController(this.terrainController);
     this.addController(this.walkController);
     this.addController(this.stand2dController);
@@ -131,17 +136,17 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
       };
     }
     const temp = {
-      //front: toFixed(this.comparableBody.front), // se evidencia en x
-      //up: toFixed(this.comparableBody.up), // se evidencia en x
-      //left: toFixed(this.comparableBody.left), // se evidencia en y
-      //leftArm: toFixed(this.comparableBody.comparable.leftArm),
-      //rightArm: toFixed(this.comparableBody.comparable.rightArm),
-      //leftLeg: toFixed(this.comparableBody.comparable.leftLeg),
-      //rightLeg: toFixed(this.comparableBody.comparable.rightLeg),
-      //handL: this.comparableBody.comparable.handL.toFixed(0),
-      //handR: this.comparableBody.comparable.handR.toFixed(0),
-      //footL: this.comparableBody.comparable.footL.toFixed(0),
-      //footR: this.comparableBody.comparable.footR.toFixed(0),
+      //front: toFixed(this.stateBody.front), // se evidencia en x
+      //up: toFixed(this.stateBody.up), // se evidencia en x
+      //left: toFixed(this.stateBody.left), // se evidencia en y
+      //leftArm: toFixed(this.stateBody.comparable.leftArm),
+      //rightArm: toFixed(this.stateBody.comparable.rightArm),
+      //leftLeg: toFixed(this.stateBody.comparable.leftLeg),
+      //rightLeg: toFixed(this.stateBody.comparable.rightLeg),
+      //handL: this.stateBody.comparable.handL.toFixed(0),
+      //handR: this.stateBody.comparable.handR.toFixed(0),
+      //footL: this.stateBody.comparable.footL.toFixed(0),
+      //footR: this.stateBody.comparable.footR.toFixed(0),
     }
     this.headUpLog.emit(temp);
   }

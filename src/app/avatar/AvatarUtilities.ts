@@ -5,6 +5,7 @@ import {
 import {
     BodyData,
     BodyKeyPointData,
+    ComparableBody,
     FrontComputationType,
     GenericSizeType,
     Point3D,
@@ -118,7 +119,7 @@ const toCanonical = (v: Point3D, front: Point3D, left: Point3D, up: Point3D): Po
 
 export function computeComparableFromModel(
     model: THREE.Object3D<THREE.Object3DEventMap>
-) {
+): ComparableBody {
     // Generate front vector
     const frontData = computeAvatarFrontModel(model);
     // Common raw canonical coordinates
@@ -187,12 +188,10 @@ export function computeComparableFromModel(
     } = comparable;
 
     return {
-        comparable: {
-            leftArm, leftLeg, rightArm, rightLeg,
-            front, up, left,
-            handL, handR,
-            footL, footR,
-        }
+        leftArm, leftLeg, rightArm, rightLeg,
+        front, up, left,
+        handL, handR,
+        footL, footR,
     };
 }
 

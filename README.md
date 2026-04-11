@@ -1,7 +1,5 @@
 # CommonFront
 
-Agregar un booleano para hacer mirror.
-
 Mover a un controlador la lógica de calcular el comparable.
 Guardar el comparable en el Scene de avatar.
 
@@ -74,6 +72,8 @@ En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser v
 
 Permitir cargar el mundo haciendo referencia al modelo guardado previamente.
 Permitir cargar unicamente la región donde está ubicado el usuario.
+
+Fix mirror al caminar.
 
 -------------------------------------------------------------------
 

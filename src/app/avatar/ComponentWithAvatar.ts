@@ -8,6 +8,7 @@ import {
     BodyKeyPointData,
     ComparableBody,
     GenericSizeType,
+    StateBody,
 } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
@@ -15,17 +16,20 @@ import { WalkBody } from '@avatar/WalkBody';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
 
-export abstract class SceneWithAvatarComponent extends CommonComponent {
+export abstract class ComponentWithAvatar extends CommonComponent {
     scene: SceneWithComposer | null = null;
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
     walkBody: WalkBody = new WalkBody(this.events);
-    comparableBody: ComparableBody = {
+    stateBody: StateBody = {
         front: { x: 0, y: 0, z: 0, },
         left: { x: 0, y: 0, z: 0, },
         up: { x: 0, y: 0, z: 0, },
         comparable: {
+            front: { x: 0, y: 0, z: 0, },
+            left: { x: 0, y: 0, z: 0, },
+            up: { x: 0, y: 0, z: 0, },
             leftArm: { x: 0, y: 0, z: 0, },
             rightArm: { x: 0, y: 0, z: 0, },
             leftLeg: { x: 0, y: 0, z: 0, },
@@ -76,13 +80,11 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                     pose,
                     keypoints3DMap,
                     frontData,
-                    comparable,
                 } = response;
                 this.walkBody.capture(keypoints3DMap, frontData);
-                this.comparableBody.front = frontData.front;
-                this.comparableBody.left = frontData.left;
-                this.comparableBody.up = frontData.up;
-                this.comparableBody.comparable = comparable;
+                this.stateBody.front = frontData.front;
+                this.stateBody.left = frontData.left;
+                this.stateBody.up = frontData.up;
                 const keypoints2DMap: {
                     [key: string]: BodyKeyPointData;
                 } = {};
@@ -97,7 +99,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                         keypoints3DMap,
                         keypoints2DMap,
                         frontData,
-                        comparable,
+                        stateBody: this.stateBody,
                         walkBody: this.walkBody,
                         videoSize,
                     });

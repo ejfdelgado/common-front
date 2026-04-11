@@ -545,14 +545,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 console.log("No ikSolver!");
             }
 
-            // Here it is!
-            const { comparable } = computeComparableFromModel(model);
-
             return {
                 pose,
                 keypoints3DMap,
                 frontData,
-                comparable,
             };
         } catch (err) {
             throw err;
