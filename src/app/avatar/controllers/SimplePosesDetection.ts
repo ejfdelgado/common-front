@@ -9,6 +9,7 @@ export class SimplePosesDetection extends SceneControllerAbstract {
         const comparable = this.lastData.stateBody.comparable;
         this.computeLeftHand(comparable);
         this.computeRightHand(comparable);
+        this.checkTPose(comparable);
         return {};
     }
     override async stop(): Promise<void> {

@@ -11,7 +11,7 @@ export class WalkBody {
     now: number = 0;
     sideState: number = 0;
     height: number = 0;
-    handsClose: boolean = false;
+    
     points: { [key: string]: BodyKeyPointData } = {};
     frontData!: FrontComputationType;
     HANDS_CLOSE = 0.3;
@@ -42,7 +42,6 @@ export class WalkBody {
         this.points = points;
         this.frontData = frontData;
         this.height = this.computeHeight();
-        this.computeHandGet();
         this.walkLogic();
     }
 
@@ -51,11 +50,7 @@ export class WalkBody {
         return distance;
     }
 
-    computeDistanceByName(aName: string, bName: string) {
-        const a = this.points[aName];
-        const b = this.points[bName];
-        return this.computeDistance(a, b);
-    }
+
 
     computeAverage(points: BodyKeyPointData[]) {
         const nuevo: BodyKeyPointData = {
@@ -95,34 +90,6 @@ export class WalkBody {
         ]);
         const distance2 = this.computeDistance(hipCenter, footCenter);
         return distance1 + distance2;
-    }
-
-    computeHandGet() {
-        const distance = this.computeDistanceByName(
-            BodyPoseKey.left_wrist,
-            BodyPoseKey.right_wrist
-        );
-        const average = this.computeAverageByNames([
-            BodyPoseKey.left_wrist,
-            BodyPoseKey.right_wrist,
-        ]);
-        if (distance <= this.HANDS_CLOSE) {
-            if (this.handsClose == false) {
-                this.clapLocation.set(average.x, average.y, average.z);
-                this.handsClose = true;
-                this.events.emit({
-                    name: "HANDS_JOINED_ON",
-                });
-            }
-        } else if (distance > this.HANDS_NOT_CLOSE) {
-            if (this.handsClose == true) {
-                //ModuloSonido.play('/assets/sounds/off.mp3', false);
-                this.handsClose = false;
-                this.events.emit({
-                    name: "HANDS_JOINED_OFF",
-                });
-            }
-        }
     }
 
     walkLogic() {
@@ -181,9 +148,5 @@ export class WalkBody {
             }
             this.stepSize = 0;
         }
-    }
-
-    off() {
-        this.handsClose = false;
     }
 }
