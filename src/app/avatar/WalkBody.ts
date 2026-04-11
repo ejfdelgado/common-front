@@ -12,7 +12,6 @@ export class WalkBody {
     now: number = 0;
     sideState: number = 0;
     height: number = 0;
-    handUpLeft: boolean = false;
     handUpRight: boolean = false;
     handsClose: boolean = false;
     points: { [key: string]: BodyKeyPointData } = {};
@@ -45,7 +44,6 @@ export class WalkBody {
         this.points = points;
         this.frontData = frontData;
         this.height = this.computeHeight();
-        this.computeLeftHand();
         this.computeRightHand();
         this.computeHandGet();
         this.checkTPose();
@@ -120,31 +118,6 @@ export class WalkBody {
             if (this.handUpRight == true) {
                 //ModuloSonido.play('/assets/sounds/off.mp3', false);
                 this.handUpRight = false;
-            }
-        }
-    }
-
-    computeLeftHand() {
-        // left hand up
-        const height = this.points[BodyPoseKey.nose].y;
-        const wrist = this.points[BodyPoseKey.left_wrist];
-        const wristHeight = wrist.y;
-        const onThreshold = 1.1 * height;
-        const offTHreshold = 0.9 * height;
-        if (wristHeight > onThreshold) {
-            if (!this.handUpLeft) {
-                this.events.emit({
-                    name: "LEFT_HAND_UP_ON",
-                });
-                this.handUpLeft = true;
-            }
-        }
-        if (wristHeight < offTHreshold) {
-            if (this.handUpLeft) {
-                this.events.emit({
-                    name: "LEFT_HAND_UP_OFF",
-                });
-                this.handUpLeft = false;
             }
         }
     }
@@ -272,7 +245,6 @@ export class WalkBody {
     }
 
     off() {
-        this.handUpLeft = false;
         this.handUpRight = false;
         this.handsClose = false;
         this.isTPose = false;

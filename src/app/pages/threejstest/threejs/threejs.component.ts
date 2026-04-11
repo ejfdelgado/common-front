@@ -28,6 +28,8 @@ import { HttpClient } from '@angular/common/http';
 import { TerrainElevationController } from '@avatar/controllers/TerrainElevationController';
 import { Point3D } from '@mytypes/BodyTypes';
 import { ComparableController } from '@avatar/controllers/ComparableController';
+import { SimplePosesDetection } from '@avatar/controllers/SimplePosesDetection';
+import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 
 @Component({
   standalone: true,
@@ -49,12 +51,13 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
   restoreInterval: NodeJS.Timeout | null = null;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
   // controllers
-  comparableController: ComparableController = new ComparableController(this.events);
-  walkController: WalkController = new WalkController(this.events);
-  soundFeedbackController: SoundFeedbackController = new SoundFeedbackController(this.events);
-  stand2dController: Stand2dController = new Stand2dController(this.events);
-  recordPoseController: RecordPoseController = new RecordPoseController(this.events);
-  terrainController: TerrainElevationController = new TerrainElevationController(this.events);
+  comparableController: SceneControllerAbstract = new ComparableController(this.events);
+  simplePosesDetection: SceneControllerAbstract = new SimplePosesDetection(this.events);
+  walkController: SceneControllerAbstract = new WalkController(this.events);
+  soundFeedbackController: SceneControllerAbstract = new SoundFeedbackController(this.events);
+  stand2dController: SceneControllerAbstract = new Stand2dController(this.events);
+  recordPoseController: SceneControllerAbstract = new RecordPoseController(this.events);
+  terrainController: SceneControllerAbstract = new TerrainElevationController(this.events);
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -93,6 +96,7 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
     // The order matters...
 
     this.addController(this.comparableController);
+    this.addController(this.simplePosesDetection);
 
     this.addController(this.terrainController);
     this.addController(this.walkController);
