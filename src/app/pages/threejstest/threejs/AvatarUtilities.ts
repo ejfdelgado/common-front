@@ -47,6 +47,10 @@ export function getKeypoints3DMap(pose: BodyData): { [key: string]: BodyKeyPoint
     return keypoints3DMap;
 }
 
+export function getKeypoints3DMapSimple(pose: BodyData): { [key: string]: Point3D } {
+    return getKeypoints3DMap(pose);
+}
+
 const dotProduct = (v1: Point3D, v2: Point3D) => {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
@@ -69,6 +73,8 @@ export function computeComparableBody2(
 ) {
     // Generate front vector
     const frontData = computeAvatarFrontModel(model);
+    // Common raw canonical coordinates
+    const { front, up, left } = frontData;
 }
 
 export function computeComparableBody(
@@ -96,6 +102,48 @@ export function computeComparableBody(
     const rightKnee = keypoints3DMap[BodyPoseKey.right_knee];
     const rightHeel = keypoints3DMap[BodyPoseKey.right_heel];
 
+    const comparable = computeComparableBodyInternal(
+        front,
+        up,
+        left,
+        leftShoulder,
+        leftElbow,
+        leftWrist,
+        rightShoulder,
+        rightElbow,
+        rightWrist,
+        leftHip,
+        leftKnee,
+        leftHeel,
+        rightHip,
+        rightKnee,
+        rightHeel
+    );
+
+    return {
+        keypoints3DMap,
+        frontData,
+        comparable,
+    }
+}
+
+export function computeComparableBodyInternal(
+    front: Point3D,
+    up: Point3D,
+    left: Point3D,
+    leftShoulder: Point3D,
+    leftElbow: Point3D,
+    leftWrist: Point3D,
+    rightShoulder: Point3D,
+    rightElbow: Point3D,
+    rightWrist: Point3D,
+    leftHip: Point3D,
+    leftKnee: Point3D,
+    leftHeel: Point3D,
+    rightHip: Point3D,
+    rightKnee: Point3D,
+    rightHeel: Point3D,
+) {
     const leftArm = toCanonical({
         x: leftElbow.x - leftShoulder.x,
         y: leftElbow.y - leftShoulder.y,
@@ -118,8 +166,6 @@ export function computeComparableBody(
     }, front, left, up);
 
     return {
-        keypoints3DMap,
-        frontData,
         leftArm,
         rightArm,
         leftLeg,

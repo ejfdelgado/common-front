@@ -134,10 +134,10 @@ export class ThreejsComponent extends SceneWithAvatarComponent implements OnInit
       //front: toFixed(this.comparableBody.front), // se evidencia en x
       //up: toFixed(this.comparableBody.up), // se evidencia en x
       //left: toFixed(this.comparableBody.left), // se evidencia en y
-      //leftArm: toFixed(this.comparableBody.leftArm),
-      //rightArm: toFixed(this.comparableBody.rightArm),
-      //leftLeg: toFixed(this.comparableBody.leftLeg),
-      rightLeg: toFixed(this.comparableBody.rightLeg),
+      //leftArm: toFixed(this.comparableBody.comparable.leftArm),
+      //rightArm: toFixed(this.comparableBody.comparable.rightArm),
+      //leftLeg: toFixed(this.comparableBody.comparable.leftLeg),
+      //rightLeg: toFixed(this.comparableBody.comparable.rightLeg),
     }
     this.headUpLog.emit(temp);
   }
