@@ -26,6 +26,7 @@ import {
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { CameraByPassShader } from './shaders/CameraByPass';
+import { RecognizedCommand } from '@services/voicerecognition.service';
 
 export abstract class BasicAvatarScene extends THREE.Scene {
 
@@ -627,5 +628,9 @@ export abstract class BasicAvatarScene extends THREE.Scene {
                 });
             }
         });
+    }
+
+    executeCommand(command: RecognizedCommand) {
+        console.log(command);
     }
 }

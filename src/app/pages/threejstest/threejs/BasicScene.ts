@@ -6,7 +6,6 @@ import {
   ROOT_PATH,
 } from '@mytypes/bodyTypes';
 import { HttpClient } from '@angular/common/http';
-import { CameraByPassShader } from '@avatar/shaders/CameraByPass';
 import { ComposerAvatarScene } from '@avatar/ComposerAvatarScene';
 
 export class BasicScene extends ComposerAvatarScene {
@@ -23,9 +22,6 @@ export class BasicScene extends ComposerAvatarScene {
     super(bounds, http);
     this.canvasRef = canvasRef;
     const params = getUrlQueryParams();
-    setInterval(() => {
-      this.animationHeartBeat();
-    }, 100);
   }
 
   override initialize(): void {
@@ -49,7 +45,6 @@ export class BasicScene extends ComposerAvatarScene {
     this.background = new THREE.Color(0xBBBBFF);
 
     this.setupEffects();
-
     this.initializeAvatar();
     this.initializeScenario();
 
@@ -62,13 +57,12 @@ export class BasicScene extends ComposerAvatarScene {
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
-    //this.loadCharacters();
+    this.loadCharacters();
   }
 
   async initializeScenario() {
     const scenario = await this.addModel({ name: "scene", url: "/assets/models/scenario.glb" });
-    scenario.scale.set(1.5, 1.5, 1.5);
-
+    scenario.scale.set(1.5, 1.5, 1.5);// TODO scale directly on source, not here!
     if (this.camera) {
       this.makeObjectTransparentToCamera(scenario, this.camera);
       this.autoDetectTerrainMeshes(scenario);

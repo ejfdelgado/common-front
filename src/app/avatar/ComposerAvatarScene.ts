@@ -9,7 +9,6 @@ import { arrayToMatrix } from "./AvatarUtilities";
 import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
-import { RecognizedCommand } from "@services/voicerecognition.service";
 
 export abstract class ComposerAvatarScene extends BasicAvatarScene {
 
@@ -32,8 +31,7 @@ export abstract class ComposerAvatarScene extends BasicAvatarScene {
     abstract initialize(): void;
 
     animate() {
-        const currentTime = performance.now();
-        const delta = (currentTime - this.previousTime) / 1000;
+        this.animationHeartBeat();
     }
 
     setupEffects() {
@@ -89,13 +87,8 @@ export abstract class ComposerAvatarScene extends BasicAvatarScene {
         const sceneTime = now - this.startingAnimationTime;
         for (let i = 0; i < this.animatedElements.length; i++) {
             const { avatar, state, loop, startingTime } = this.animatedElements[i];
-            let { a, frameId, lr } = state;
+            const { a, lr } = state;
             // Busco el frame de acuerdo al tiempo
-
-            let startingIndex = 0;
-            if (frameId !== undefined) {
-                startingIndex = frameId;
-            }
             for (let j = 0; j < a.length; j++) {
                 const pos = a[j];
                 if (startingTime + pos.t > sceneTime) {
@@ -171,7 +164,10 @@ export abstract class ComposerAvatarScene extends BasicAvatarScene {
 
     async loadCharacters() {
         const autoAdd: boolean = true;
-        this.addModel({ name: "friend", url: ROOT_PATH + "avatar005.glb", }, autoAdd).then(async (object) => {
+        this.addModel({
+            name: "friend",
+            url: ROOT_PATH + "avatar005.glb",
+        }, autoAdd).then(async (object) => {
             // Load animation
             const anim = await this.loadAnimation();
 
@@ -212,10 +208,6 @@ export abstract class ComposerAvatarScene extends BasicAvatarScene {
         const loaded = await firstValueFrom(this.http.get(ROOT_PATH + "animations/animation.bin", { responseType: 'arraybuffer' }));
         const model = decode(loaded);
         return model as StoredAvatarAnimation;
-    }
-
-    executeCommand(command: RecognizedCommand) {
-        console.log(command);
     }
 
     autoDetectTerrainMeshes(
