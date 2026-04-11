@@ -7,18 +7,15 @@ import {
 } from "@mytypes/BodyTypes";
 
 export class WalkBody {
-    now: number = 0;
-    sideState: number = 0;
-
     points: { [key: string]: BodyKeyPointData } = {};
     frontData!: FrontComputationType;
-    HANDS_CLOSE = 0.3;
-    HANDS_NOT_CLOSE = 0.35;
-    MOVEMENT_THRESHOLD = 0.1; // Step detection
 
+    MOVEMENT_THRESHOLD = 0.1;
     MIN_MILLIS_BETWEEN_STEPS: number = 1000;
 
     // Walking variables
+    now: number = 0;
+    sideState: number = 0;
     stepSize: number = 0;
     maxDifference: number = 0;
     lastStepTime: number = 0;
