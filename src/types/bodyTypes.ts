@@ -70,6 +70,8 @@ export interface SimpleComparable {
     rightLeg: Point3D;
     handL: number;
     handR: number;
+    footL: number;
+    footR: number;
 };
 
 export interface ScenePoseEventType {

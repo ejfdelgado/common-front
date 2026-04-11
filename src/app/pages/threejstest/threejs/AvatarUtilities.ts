@@ -1,5 +1,5 @@
 import { AvatarBoneEnum, BodyPoseKey } from "@mytypes/BodyParts";
-import { BodyData, BodyKeyPointData, FrontComputationType, Point3D } from "@mytypes/bodyTypes";
+import { BodyData, BodyKeyPointData, FrontComputationType, Point3D, SimpleComparable } from "@mytypes/bodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -127,13 +127,23 @@ export function computeComparableFromModel(
         rightHeel.getWorldPosition(new THREE.Vector3()),
     );
 
-    const { leftArm, leftLeg, rightArm, rightLeg, handL, handR } = comparable;
+    const {
+        leftArm,
+        leftLeg,
+        rightArm,
+        rightLeg,
+        handL,
+        handR,
+        footL,
+        footR,
+    } = comparable;
 
     return {
         comparable: {
             leftArm, leftLeg, rightArm, rightLeg,
             front, up, left,
             handL, handR,
+            footL, footR,
         }
     };
 }
@@ -167,7 +177,7 @@ export function computeComparableBodyInternal(
     rightHip: Point3D,
     rightKnee: Point3D,
     rightHeel: Point3D,
-) {
+): SimpleComparable {
     const leftArm = toCanonical({
         x: leftElbow.x - leftShoulder.x,
         y: leftElbow.y - leftShoulder.y,
@@ -207,6 +217,8 @@ export function computeComparableBodyInternal(
         rightLeg,
         handL: angleDegreesBetween(leftWrist, leftElbow, leftShoulder),
         handR: angleDegreesBetween(rightWrist, rightElbow, rightShoulder),
+        footL: angleDegreesBetween(leftHeel, leftKnee, leftHip),
+        footR: angleDegreesBetween(rightHeel, rightKnee, rightHip),
     };
 }
 
