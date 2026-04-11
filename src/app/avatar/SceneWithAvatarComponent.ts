@@ -52,6 +52,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
     async computeIKLevel1(
         poses: BodyData[],
         videoSize: GenericSizeType,
+        mirror: boolean,
     ) {
         if (!this.scene) {
             return null;
@@ -62,7 +63,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         this.isComputing = true;
         try {
             // Level 2
-            const response = await this.scene.computeIKLevel2(poses, videoSize);
+            const response = await this.scene.computeIKLevel2(poses, videoSize, mirror);
             if (response == false) {
                 // Fire stop all controllers
                 for (let i = 0; i < this.controllers.length; i++) {

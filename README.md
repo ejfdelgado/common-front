@@ -1,7 +1,5 @@
 # CommonFront
 
-Usar los puntos 2d para saber si los pies salen y si la cabeza sale.
-
 Agregar un booleano para hacer mirror.
 
 Mover a un controlador la lógica de calcular el comparable.

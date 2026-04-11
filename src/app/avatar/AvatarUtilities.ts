@@ -31,12 +31,44 @@ export function isFacingFront(pose: BodyData) {
     return faceFront;
 }
 
-export function fixBodyPose(pose: BodyData) {
+export function mirrorPose(pose: BodyData) {
+    const mirrorFunction = (el: BodyKeyPointData) => {
+        const tokens = el.name.split("_");
+        if (tokens[0] == "right") {
+            tokens[0] = "left";
+        } else if (tokens[0] == "left") {
+            tokens[0] = "right";
+        }
+        el.name = tokens.join("_");
+        el.z = -1 * el.z;
+    };
+    pose.keypoints3D.forEach(mirrorFunction);
+    pose.keypoints.forEach(mirrorFunction);
+}
+
+export function fixBodyPose(
+    pose: BodyData,
+    mirror: boolean,
+) {
     const faceFront = isFacingFront(pose);
     pose.keypoints3D.forEach((sourceData) => {
         const sourceCoord = new THREE.Vector3(sourceData.x, sourceData.y, sourceData.z);
         sourceCoord.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
         // In order to fix a weir rotation to front
+        let fixAngle = 0;
+        if (mirror) {
+            if (faceFront) {
+                fixAngle = -4;
+            } else {
+                fixAngle = 14;
+            }
+        } else {
+            if (faceFront) {
+                fixAngle = 14;
+            } else {
+                fixAngle = -4;
+            }
+        }
         sourceCoord.applyAxisAngle(
             new THREE.Vector3(1, 0, 0),
             THREE.MathUtils.degToRad(faceFront ? 14 : -4)
@@ -47,8 +79,11 @@ export function fixBodyPose(pose: BodyData) {
     });
 }
 
-export function getKeypoints3DMap(pose: BodyData): { [key: string]: BodyKeyPointData } {
-    fixBodyPose(pose);
+export function getKeypoints3DMap(
+    pose: BodyData,
+    mirror: boolean,
+): { [key: string]: BodyKeyPointData } {
+    fixBodyPose(pose, mirror);
     const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
     // Generate map
     pose.keypoints3D.forEach((el) => {
@@ -57,8 +92,11 @@ export function getKeypoints3DMap(pose: BodyData): { [key: string]: BodyKeyPoint
     return keypoints3DMap;
 }
 
-export function getKeypoints3DMapSimple(pose: BodyData): { [key: string]: Point3D } {
-    return getKeypoints3DMap(pose);
+export function getKeypoints3DMapSimple(
+    pose: BodyData,
+    mirror: boolean,
+): { [key: string]: Point3D } {
+    return getKeypoints3DMap(pose, mirror);
 }
 
 const dotProduct = (v1: Point3D, v2: Point3D) => {
@@ -159,9 +197,10 @@ export function computeComparableFromModel(
 }
 
 export function computeComparableBody(
-    pose: BodyData
+    pose: BodyData,
+    mirror: boolean,
 ) {
-    const keypoints3DMap = getKeypoints3DMap(pose);
+    const keypoints3DMap = getKeypoints3DMap(pose, mirror);
     // Generate front vector
     const frontData = computeAvatarFrontFromPose(keypoints3DMap);
 

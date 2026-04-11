@@ -2,6 +2,7 @@ import {
     AVATAR_NAME,
     AvatarLocationState,
     BodyData,
+    BodyKeyPointData,
     BoneBackupType,
     GenericSizeType,
     ItemModelRef,
@@ -25,6 +26,7 @@ import {
     getHigherAvatarScoredPose,
     replaceAvatarSkin,
     arrayToMatrix,
+    mirrorPose,
 } from '@avatar/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
@@ -427,8 +429,9 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     async computeIKLevel2(
         poses: BodyData[],
         videoSize: GenericSizeType,
+        mirror: boolean,
     ): Promise<null | false | ScenePoseEventType> {
-        const response = await this.computeIKInternal(poses, videoSize);
+        const response = await this.computeIKInternal(poses, videoSize, mirror);
         return response;
     }
 
@@ -439,6 +442,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     async computeIKInternal(
         poses: BodyData[],
         videoSize: GenericSizeType,
+        mirror: boolean,
     ): Promise<null | false | ScenePoseEventType> {
         if (this.computingIK) {
             return null;
@@ -468,10 +472,15 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 return false;
             }
 
+            // Intercept for mirroring if necesarry
+            if (mirror) {
+                mirrorPose(pose);
+            }
+
             const {
                 keypoints3DMap,
                 frontData,
-            } = computeComparableBody(pose);
+            } = computeComparableBody(pose, mirror);
 
             const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
             if (pelvisBone) {

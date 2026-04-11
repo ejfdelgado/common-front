@@ -16,7 +16,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
-
+    mirror: boolean = false;
     errorState: string | null = null;
     initialized: boolean = false;
     started: boolean = false;
@@ -90,7 +90,11 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             if (this.poses.length > 0) {
                 // Level 1
                 try {
-                    const response = await threeComponent.computeIKLevel1(this.poses, this.videoSize);
+                    const response = await threeComponent.computeIKLevel1(
+                        this.poses,
+                        this.videoSize,
+                        this.mirror,
+                    );
                     if (response == false) {
                         // Means no body
                         throw new Error("-1");
