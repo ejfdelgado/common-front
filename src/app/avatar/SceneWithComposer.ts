@@ -23,14 +23,12 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     animatedElements: AnimatedElements[] = [];
     startingAnimationTime: number = Date.now();
     terrainMeshes: THREE.Mesh[] = [];
-    bounds: DOMRect;
 
     constructor(
         bounds: DOMRect,
         public http: HttpClient,
     ) {
-        super();
-        this.bounds = bounds;
+        super(bounds);
     }
 
     abstract initialize(): void;

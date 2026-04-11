@@ -1,14 +1,14 @@
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { 
-    AVATAR_NAME, 
-    AvatarBodyEvent, 
-    BodyData, 
-    BodyKeyPointData, 
-    ComparableBody, 
+import {
+    AVATAR_NAME,
+    AvatarBodyEvent,
+    BodyData,
+    BodyKeyPointData,
+    ComparableBody,
     GenericSizeType,
- } from '@mytypes/BodyTypes';
+} from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import { WalkBody } from '@avatar/WalkBody';
@@ -49,7 +49,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         });
     }
 
-    async computeIK(
+    async computeIKLevel1(
         poses: BodyData[],
         videoSize: GenericSizeType,
     ) {
@@ -62,7 +62,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
         this.isComputing = true;
         try {
             // Level 2
-            const response = await this.scene.computeIK(poses);
+            const response = await this.scene.computeIKLevel2(poses, videoSize);
             if (response == false) {
                 // Fire stop all controllers
                 for (let i = 0; i < this.controllers.length; i++) {
@@ -119,7 +119,7 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
                 }
             }
         } catch (err) {
-            console.log(err);
+            throw err;
         } finally {
             this.isComputing = false;
         }

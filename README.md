@@ -1,6 +1,11 @@
 # CommonFront
 
-usar los puntos 2d para saber si los pies salen y si la cabeza sale.
+Usar los puntos 2d para saber si los pies salen y si la cabeza sale.
+
+Agregar un booleano para hacer mirror.
+
+Mover a un controlador la lógica de calcular el comparable.
+Guardar el comparable en el Scene de avatar.
 
 comparacion: (3 numeros de salida)
 angulo entre front y front
@@ -13,8 +18,6 @@ producto punto normalizado min -1 max 1
 extremidades lejanas: (4 numeros de salida)
 abs(angulo-angulo)
 
-agregar un booleano para hacer mirror.
-
 Interactuar con menu.
 Izquierda, derecha, aplauso.
 patada salir.
@@ -22,10 +25,6 @@ patada salir.
 interactuar con botones:
 esfera
 cuadrado.
-
-agregar version a animación.
-comprimir los nombres de los huesos.
-puede ser en orden alfabetico.
 
 ------------------------------------------------------------------------
 

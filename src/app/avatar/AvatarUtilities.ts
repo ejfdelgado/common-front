@@ -6,6 +6,7 @@ import {
     BodyData,
     BodyKeyPointData,
     FrontComputationType,
+    GenericSizeType,
     Point3D,
     SimpleComparable,
 } from "@mytypes/BodyTypes";
@@ -359,11 +360,60 @@ export function computeAvatarFrontInternal(
     return response;
 };
 
-export function computeAvatarScore(pose: BodyData) {
+export function isAllPersonInsideCamera(
+    pose: BodyData,
+    videoSize: GenericSizeType,
+    percentageTop: number = 0.1,
+    percentageBottom: number = 0.1,
+) {
+    const top = videoSize.height * percentageTop;
+    const bottom = videoSize.height * (1 - percentageBottom);
+    const relevantYs: number[] = [];
+
+    const relevantPoints = [
+        BodyPoseKey.nose,
+        BodyPoseKey.left_ear,
+        BodyPoseKey.right_ear,
+        BodyPoseKey.left_heel,
+        BodyPoseKey.right_heel,
+        BodyPoseKey.left_knee,
+        BodyPoseKey.right_knee,
+    ];
+
+    // Itero una vez
+    pose.keypoints.forEach((p) => {
+        if (relevantPoints.indexOf(p.name as BodyPoseKey) >= 0) {
+            relevantYs.push(p.y);
+        }
+    });
+
+    const min = Math.min(...relevantYs);
+    const max = Math.max(...relevantYs);
+
+    if (
+        top < min
+        && bottom > max
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+export function computeAvatarScore(
+    pose: BodyData,
+    videoSize: GenericSizeType,
+) {
     const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
     pose.keypoints3D.forEach((el) => {
         keypoints3DMap[el.name] = el;
     });
+
+    const isPersonInside = isAllPersonInsideCamera(pose, videoSize);
+    if (!isPersonInside) {
+        return -1;
+    }
+
     let scoreComputation: number = 0;
     let countScores: number = 0;
 
@@ -386,9 +436,12 @@ export function computeAvatarScore(pose: BodyData) {
     return score;
 };
 
-export function getHigherAvatarScoredPose(poses: BodyData[]) {
+export function getHigherAvatarScoredPose(
+    poses: BodyData[],
+    videoSize: GenericSizeType,
+) {
     return poses.map((pose) => {
-        const score = computeAvatarScore(pose);
+        const score = computeAvatarScore(pose, videoSize);
         return {
             score,
             pose,

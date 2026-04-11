@@ -3,6 +3,7 @@ import {
     AvatarLocationState,
     BodyData,
     BoneBackupType,
+    GenericSizeType,
     ItemModelRef,
     ScenePoseEventType,
     StoredAvatarState,
@@ -29,7 +30,7 @@ import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 
 export abstract class SceneWithAvatar extends THREE.Scene {
-
+    bounds: DOMRect;
     camera: THREE.PerspectiveCamera | null = null;
     renderer: THREE.WebGLRenderer | null = null;
     orbitals: OrbitControls | null = null;
@@ -54,6 +55,13 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         positionZ: 0,
         rotationY: 0,
     };
+
+    constructor(
+        bounds: DOMRect,
+    ) {
+        super();
+        this.bounds = bounds;
+    }
 
 
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
@@ -416,8 +424,11 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         }
     }
 
-    async computeIK(poses: BodyData[]): Promise<null | false | ScenePoseEventType> {
-        const response = await this.computeIKInternal(poses);
+    async computeIKLevel2(
+        poses: BodyData[],
+        videoSize: GenericSizeType,
+    ): Promise<null | false | ScenePoseEventType> {
+        const response = await this.computeIKInternal(poses, videoSize);
         return response;
     }
 
@@ -425,7 +436,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
      * @param poses 
      * @returns null - System is bussy, false - imposible to track, ok
      */
-    async computeIKInternal(poses: BodyData[]): Promise<null | false | ScenePoseEventType> {
+    async computeIKInternal(
+        poses: BodyData[],
+        videoSize: GenericSizeType,
+    ): Promise<null | false | ScenePoseEventType> {
         if (this.computingIK) {
             return null;
         }
@@ -439,7 +453,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.restoreBackupOnNextComputation = false;
             }
             const model = this.getObjectByName(AVATAR_NAME);
-            const { pose, score } = getHigherAvatarScoredPose(poses);
+            const { pose, score } = getHigherAvatarScoredPose(poses, videoSize);
+            if (score < 0) {
+                throw new Error(`${score}`);
+            }
             if (score < 90) {
                 // Not all body in view
                 this.computingIK = false;
@@ -529,8 +546,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 comparable,
             };
         } catch (err) {
-            console.log(err);
-            return false;
+            throw err;
         } finally {
             this.computingIK = false;
         }

@@ -163,7 +163,7 @@ export class ThreejsTestComponent extends CommonSpeech {
     tracker.enable3D = false;
     // tracker.run('video') // takes video from a movie file (e.g., mp4)
     // tracker.run('stream') // takes video from an m3u8 online stream
-    tracker.on('beforeupdate', (poses: any) => {
+    tracker.on('beforeupdate', async (poses: any) => {
       this.poses = poses;
       if (this.activity) {
         this.activity.done();
@@ -172,7 +172,14 @@ export class ThreejsTestComponent extends CommonSpeech {
       this.updateVideoSize();
       if (this.poses.length > 0) {
         // Level 1
-        this.threeComponent.computeIK(this.poses, this.videoSize);
+        try {
+          await this.threeComponent.computeIKLevel1(this.poses, this.videoSize);
+        } catch (err: any) {
+          if (err.message == "-1") {
+            // Means person is detected, but must fit all in the camera
+            
+          }
+        }
       }
     });
   }
