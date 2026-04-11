@@ -19,6 +19,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
+    restoreInterval: NodeJS.Timeout | null = null;
     stateBody: StateBody = {
         height: 1,
         isTPose: false,
@@ -146,5 +147,37 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         await control.destroy();
         this.controllers.splice(index, 1);
         return true;
+    }
+
+    startSkeletonGuardinan() {
+        this.restoreInterval = setInterval(() => {
+            if (!this.scene) {
+                return;
+            }
+            this.scene.restoreBackupOnNextComputation = true;
+        }, 5 * 1000);
+    }
+
+    updateHeadsUpLog() { }
+
+    loop() {
+        if (
+            this.scene
+            && this.scene.camera
+            && this.scene.renderer
+            && this.scene.orbitals
+            && this.scene.composer
+        ) {
+            this.scene.camera.updateProjectionMatrix();
+            // Need to be changed
+            //this.scene.renderer.render(this.scene, this.scene.camera);
+            this.scene.composer.render();
+            this.scene.orbitals.update();
+            this.scene.animate();
+            this.updateHeadsUpLog();
+            requestAnimationFrame(() => {
+                this.loop();
+            });
+        }
     }
 }

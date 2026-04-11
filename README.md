@@ -1,8 +1,5 @@
 # CommonFront
 
-Mover a un controlador la lógica de calcular el comparable.
-Guardar el comparable en el Scene de avatar.
-
 comparacion: (3 numeros de salida)
 angulo entre front y front
 entre left y left y up y up.

@@ -48,7 +48,6 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
   bounds: DOMRect | null = null;
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
-  restoreInterval: NodeJS.Timeout | null = null;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
   // controllers
   comparableController: SceneControllerAbstract = new ComparableController(this.events);
@@ -107,28 +106,7 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
     this.loop();
   }
 
-  loop() {
-    if (
-      this.scene
-      && this.scene.camera
-      && this.scene.renderer
-      && this.scene.orbitals
-      && this.scene.composer
-    ) {
-      this.scene.camera.updateProjectionMatrix();
-      // Need to be changed
-      //this.scene.renderer.render(this.scene, this.scene.camera);
-      this.scene.composer.render();
-      this.scene.orbitals.update();
-      this.scene.animate();
-      this.updateHeadsUpLog();
-      requestAnimationFrame(() => {
-        this.loop();
-      });
-    }
-  }
-
-  updateHeadsUpLog() {
+  override updateHeadsUpLog() {
     if (!this.scene) {
       return;
     }
@@ -168,15 +146,6 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
       this.onResize({});
     }, 0);
     this.startSkeletonGuardinan();
-  }
-
-  startSkeletonGuardinan() {
-    this.restoreInterval = setInterval(() => {
-      if (!this.scene) {
-        return;
-      }
-      this.scene.restoreBackupOnNextComputation = true;
-    }, 5 * 1000);
   }
 
   executeCommand(command: RecognizedCommand) {
