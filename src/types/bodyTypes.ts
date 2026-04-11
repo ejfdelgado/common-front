@@ -1,6 +1,8 @@
-import { BasicScene } from 'app/pages/threejstest/threejs/BasicScene';
-import { WalkBody } from 'app/pages/threejstest/threejs/WalkBody';
+import { WalkBody } from '@avatar/WalkBody';
 import * as THREE from 'three';
+import { BasicAvatarScene } from '@avatar/SceneWithAvatar';
+
+export const ROOT_PATH = "/assets/models/";
 
 export interface Point3D {
     x: number;
@@ -92,7 +94,7 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
 }
 
 export interface ControllerInitDataType {
-    scene: BasicScene,
+    scene: BasicAvatarScene,
 }
 
 export interface AvatarBodyEvent {

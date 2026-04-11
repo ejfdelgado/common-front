@@ -19,13 +19,13 @@ import { FormsModule } from '@angular/forms';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { SceneWithAvatarComponent } from './SceneWithAvatarComponent';
-import { WalkController } from './controllers/WalkController';
-import { SoundFeedbackController } from './controllers/SoundFeedbackController';
-import { Stand2dController } from './controllers/Stand2dController';
-import { RecordPoseController } from './controllers/RecordPoseController';
+import { SceneWithAvatarComponent } from '@avatar/SceneWithAvatarComponent';
+import { WalkController } from '@avatar/controllers/WalkController';
+import { SoundFeedbackController } from '@avatar/controllers/SoundFeedbackController';
+import { Stand2dController } from '@avatar/controllers/Stand2dController';
+import { RecordPoseController } from '@avatar/controllers/RecordPoseController';
 import { HttpClient } from '@angular/common/http';
-import { TerrainElevationController } from './controllers/TerrainElevationController';
+import { TerrainElevationController } from '@avatar/controllers/TerrainElevationController';
 import { Point3D } from '@mytypes/bodyTypes';
 
 @Component({

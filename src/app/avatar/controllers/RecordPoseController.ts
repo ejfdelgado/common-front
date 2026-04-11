@@ -6,10 +6,10 @@ import {
     StoredAvatarState,
     AVATAR_ANIM_VERSION,
 } from "@mytypes/bodyTypes";
-import { SceneControllerAbstract } from "../SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
-import { matrixToArray } from "../AvatarUtilities";
+import { matrixToArray } from "@avatar/AvatarUtilities";
 
 export class RecordPoseController extends SceneControllerAbstract {
 

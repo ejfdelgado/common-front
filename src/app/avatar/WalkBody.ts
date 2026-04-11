@@ -1,6 +1,10 @@
 import { EventEmitter } from "@angular/core";
 import { BodyPoseKey } from "@mytypes/BodyParts";
-import { AvatarBodyEvent, BodyKeyPointData, FrontComputationType } from "@mytypes/bodyTypes";
+import { 
+    AvatarBodyEvent, 
+    BodyKeyPointData, 
+    FrontComputationType,
+ } from "@mytypes/bodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
 

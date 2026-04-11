@@ -42,6 +42,9 @@
       "@mytypes/*": [
         "types/*"
       ],
+      "@avatar/*": [
+        "app/avatar/*"
+      ],
     },
     "types": [
       "three"

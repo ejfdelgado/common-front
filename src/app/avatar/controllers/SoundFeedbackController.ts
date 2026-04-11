@@ -1,5 +1,8 @@
-import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/bodyTypes";
-import { SceneControllerAbstract } from "../SceneControllerAbstract";
+import {
+    AvatarBodyEvent,
+    ControllerUpdateResponse,
+} from "@mytypes/bodyTypes";
+import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { ModuloSonido } from "@services/sonido.service";
 
 export class SoundFeedbackController extends SceneControllerAbstract {

@@ -1,5 +1,14 @@
-import { AvatarBoneEnum, BodyPoseKey } from "@mytypes/BodyParts";
-import { BodyData, BodyKeyPointData, FrontComputationType, Point3D, SimpleComparable } from "@mytypes/bodyTypes";
+import {
+    AvatarBoneEnum,
+    BodyPoseKey,
+} from "@mytypes/BodyParts";
+import {
+    BodyData,
+    BodyKeyPointData,
+    FrontComputationType,
+    Point3D,
+    SimpleComparable,
+} from "@mytypes/bodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';

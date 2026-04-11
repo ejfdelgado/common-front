@@ -1,10 +1,16 @@
-import { AvatarBodyEvent, ControllerInitDataType, ControllerUpdateResponse, GenericSizeType, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
-import { BasicScene } from "./BasicScene";
+import {
+    AvatarBodyEvent,
+    ControllerInitDataType,
+    ControllerUpdateResponse,
+    GenericSizeType,
+    ScenePoseAndWalkEventType,
+} from "@mytypes/bodyTypes";
+import { BasicAvatarScene } from "@avatar/SceneWithAvatar";
 import { EventEmitter } from "@angular/core";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;
-    scene!: BasicScene;
+    scene!: BasicAvatarScene;
     lastData!: ScenePoseAndWalkEventType;
     videoSize!: GenericSizeType;
 

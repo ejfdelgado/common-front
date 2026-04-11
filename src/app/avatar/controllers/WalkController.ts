@@ -1,8 +1,11 @@
-import { AvatarBodyEvent, BodyKeyPointData, ControllerUpdateResponse, ScenePoseAndWalkEventType } from "@mytypes/bodyTypes";
-import { SceneControllerAbstract } from "../SceneControllerAbstract";
+import {
+    AvatarBodyEvent,
+    ControllerUpdateResponse,
+} from "@mytypes/bodyTypes";
+import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
-import { makeSmootValue, makeSmootVector } from "../AvatarUtilities";
+import { makeSmootValue, makeSmootVector } from "@avatar/AvatarUtilities";
 
 export class WalkController extends SceneControllerAbstract {
     // constants 
@@ -148,7 +151,7 @@ export class WalkController extends SceneControllerAbstract {
 
     computeTransformationMatrix() {
         this.updateValues();
-        
+
         const translationMatrix = new THREE.Matrix4().makeTranslation(
             this.scene.avatarStateSmoot.positionX,
             0,

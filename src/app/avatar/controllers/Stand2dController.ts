@@ -1,7 +1,11 @@
-import { AvatarBodyEvent, BodyKeyPointData, ControllerUpdateResponse } from "@mytypes/bodyTypes";
-import { SceneControllerAbstract } from "../SceneControllerAbstract";
-import { computeBodyPointAverage } from "../AvatarUtilities";
-import { SignalLowPass } from "../SignalLowPass";
+import { 
+    AvatarBodyEvent, 
+    BodyKeyPointData, 
+    ControllerUpdateResponse,
+ } from "@mytypes/bodyTypes";
+import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { computeBodyPointAverage } from "@avatar/AvatarUtilities";
+import { SignalLowPass } from "@avatar/SignalLowPass";
 import * as THREE from 'three';
 import { BodyPoseKey } from "@mytypes/BodyParts";
 
