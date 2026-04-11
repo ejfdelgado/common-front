@@ -23,6 +23,8 @@ export class SoundFeedbackController extends SceneControllerAbstract {
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "LEFT_HAND_UP_ON") {
             ModuloSonido.play('/assets/sounds/on1.mp3', false);
+        } else if (event.name == "RIGHT_HAND_UP_ON") {
+            ModuloSonido.play('/assets/sounds/on2.mp3', false);
         } else if (event.name == "HANDS_JOINED_ON") {
             ModuloSonido.play('/assets/sounds/clap.mp3', false);
         } else if (event.name == "T_POSE_ON") {

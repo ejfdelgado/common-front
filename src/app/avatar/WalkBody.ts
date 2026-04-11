@@ -1,10 +1,10 @@
 import { EventEmitter } from "@angular/core";
 import { BodyPoseKey } from "@mytypes/BodyParts";
-import { 
-    AvatarBodyEvent, 
-    BodyKeyPointData, 
+import {
+    AvatarBodyEvent,
+    BodyKeyPointData,
     FrontComputationType,
- } from "@mytypes/BodyTypes";
+} from "@mytypes/BodyTypes";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
 
@@ -12,7 +12,6 @@ export class WalkBody {
     now: number = 0;
     sideState: number = 0;
     height: number = 0;
-    handUpRight: boolean = false;
     handsClose: boolean = false;
     points: { [key: string]: BodyKeyPointData } = {};
     frontData!: FrontComputationType;
@@ -44,7 +43,6 @@ export class WalkBody {
         this.points = points;
         this.frontData = frontData;
         this.height = this.computeHeight();
-        this.computeRightHand();
         this.computeHandGet();
         this.checkTPose();
         this.walkLogic();
@@ -99,27 +97,6 @@ export class WalkBody {
         ]);
         const distance2 = this.computeDistance(hipCenter, footCenter);
         return distance1 + distance2;
-    }
-
-    computeRightHand() {
-        // left hand up
-        const height = this.points[BodyPoseKey.nose].y;
-        const wrist = this.points[BodyPoseKey.right_wrist];
-        const wristHeight = wrist.y;
-        const onThreshold = 1.1 * height;
-        const offTHreshold = 0.9 * height;
-        if (wristHeight > onThreshold) {
-            if (this.handUpRight == false) {
-                ModuloSonido.play('/assets/sounds/on2.mp3', false);
-                this.handUpRight = true;
-            }
-        }
-        if (wristHeight < offTHreshold) {
-            if (this.handUpRight == true) {
-                //ModuloSonido.play('/assets/sounds/off.mp3', false);
-                this.handUpRight = false;
-            }
-        }
     }
 
     computeHandGet() {
@@ -245,7 +222,6 @@ export class WalkBody {
     }
 
     off() {
-        this.handUpRight = false;
         this.handsClose = false;
         this.isTPose = false;
     }
