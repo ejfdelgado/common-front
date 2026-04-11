@@ -1,5 +1,18 @@
 # CommonFront
 
+------------------------------------------------------------------------
+Agregar a manos y pies capacidad de colision (aplicar matriz a la pose y evaluar manos o pies)
+para detectar cuando el usuario toca algo.
+Agregar controlador tipo menú 3D.
+
+Interactuar con menu.
+Izquierda, derecha, aplauso.
+patada salir.
+
+interactuar con botones:
+esfera
+cuadrado.
+------------------------------------------------------------------------
 comparacion: (3 numeros de salida)
 angulo entre front y front
 entre left y left y up y up.
@@ -10,31 +23,7 @@ producto punto normalizado min -1 max 1
 
 extremidades lejanas: (4 numeros de salida)
 abs(angulo-angulo)
-
-Interactuar con menu.
-Izquierda, derecha, aplauso.
-patada salir.
-
-interactuar con botones:
-esfera
-cuadrado.
-
 ------------------------------------------------------------------------
-
-Comparar poses y asignar un score.
-Agnostico de la orientación del avatar:
-- Usando frente del avatar
-- Angulos de antebrazo y femur relativos al frente del avatar, usando 3 ejes de coordenadas canónico con respecto al eje de coordenadas del avatar.
-- Angulo mímimo de brazo relativo a antebrazo y de pie relativo a femur.
-
-------------------------------------------------------------------------
-
-Evitar que se vuelva loco cuando no detecta bien el body.
-
-Agregar a manos y pies capacidad de colision (aplicar matriz a la pose y evaluar manos o pies)
-para detectar cuando el usuario toca algo.
-Agregar controlador tipo menú 3D.
-
 Agregar mundo para:
 - Evaluar equilibrio.
 - Evaluar hasta donde puede pegar patadas con el pie.
