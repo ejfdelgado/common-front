@@ -5,6 +5,7 @@ import {
     BoneBackupType,
     ItemModelRef,
     ScenePoseEventType,
+    StoredAvatarState,
 } from '@mytypes/BodyTypes';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
@@ -22,6 +23,7 @@ import {
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
     replaceAvatarSkin,
+    arrayToMatrix,
 } from '@avatar/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
@@ -592,5 +594,61 @@ export abstract class SceneWithAvatar extends THREE.Scene {
 
     executeCommand(command: RecognizedCommand) {
         console.log(command);
+    }
+
+    applyAvatarState(
+        avatar: THREE.Object3D<THREE.Object3DEventMap>,
+        state: StoredAvatarState,
+        lr?: number[],
+    ) {
+        for (let i = 0; i < state.bones.length; i++) {
+            const { n, v } = state.bones[i];
+            const boneTarget = avatar.getObjectByName(n);
+            if (boneTarget) {
+                boneTarget.position.set(v[0], v[1], v[2]);
+                boneTarget.rotation.set(v[3], v[4], v[5]);
+            }
+        }
+        avatar.matrixAutoUpdate = false;
+        const result = new THREE.Matrix4().identity();
+        const matrixTransforms: THREE.Matrix4[] = [];
+
+        let positionX = state.lr[0];
+        let positionZ = state.lr[1];
+        let rotationY = state.lr[2];
+
+        let useFixedGlobalLocRot = false;
+        if (lr && lr.length == 3) {
+            positionX = lr[0];
+            positionZ = lr[1];
+            rotationY = lr[2];
+            useFixedGlobalLocRot = true;
+        }
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
+
+        const positionY = this.getFirstHitFromTopToDown(positionX, positionZ);
+
+        const translationMatrix = new THREE.Matrix4().makeTranslation(
+            positionX,
+            positionY === null ? 0 : positionY,
+            positionZ,
+        );
+
+        // Location
+        matrixTransforms.push(translationMatrix);
+        // Rotation
+        matrixTransforms.push(rotationMatrix);
+        // Local displacement
+        const matrix = arrayToMatrix(state.matrix);
+        matrixTransforms.push(matrix);
+
+        for (const m of matrixTransforms) {
+            result.multiply(m);
+        }
+        avatar.matrix.copy(result);
+    }
+
+    getFirstHitFromTopToDown(x: number, z: number): number | null {
+        return 0;
     }
 }
