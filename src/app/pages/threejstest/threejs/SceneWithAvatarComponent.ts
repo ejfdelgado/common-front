@@ -23,6 +23,8 @@ export abstract class SceneWithAvatarComponent extends CommonComponent {
             rightArm: { x: 0, y: 0, z: 0, },
             leftLeg: { x: 0, y: 0, z: 0, },
             rightLeg: { x: 0, y: 0, z: 0, },
+            handL: 0,
+            handR: 0,
         }
     };
 

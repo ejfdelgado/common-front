@@ -63,18 +63,22 @@ export interface PawLocation {
     y: number;
 };
 
+export interface SimpleComparable {
+    leftArm: Point3D;
+    rightArm: Point3D;
+    leftLeg: Point3D;
+    rightLeg: Point3D;
+    handL: number;
+    handR: number;
+};
+
 export interface ScenePoseEventType {
     pose: BodyData,
     keypoints3DMap: {
         [key: string]: BodyKeyPointData;
     },
     frontData: FrontComputationType;
-    comparable: {
-        leftArm: Point3D;
-        rightArm: Point3D;
-        leftLeg: Point3D;
-        rightLeg: Point3D;
-    }
+    comparable: SimpleComparable;
 }
 
 export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
@@ -146,10 +150,5 @@ export interface ComparableBody {
     front: Point3D;
     up: Point3D;
     left: Point3D;
-    comparable: {
-        leftArm: Point3D;
-        rightArm: Point3D;
-        leftLeg: Point3D;
-        rightLeg: Point3D;
-    };
+    comparable: SimpleComparable;
 }

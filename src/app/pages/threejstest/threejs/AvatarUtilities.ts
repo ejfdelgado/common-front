@@ -127,7 +127,15 @@ export function computeComparableFromModel(
         rightHeel.getWorldPosition(new THREE.Vector3()),
     );
 
-    return { comparable };
+    const { leftArm, leftLeg, rightArm, rightLeg, handL, handR } = comparable;
+
+    return {
+        comparable: {
+            leftArm, leftLeg, rightArm, rightLeg,
+            front, up, left,
+            handL, handR,
+        }
+    };
 }
 
 export function computeComparableBody(
@@ -181,11 +189,24 @@ export function computeComparableBodyInternal(
         z: rightKnee.z - rightHip.z,
     }, front, left, up);
 
+    const angleDegreesBetween = (
+        pA1: Point3D,
+        pA2: Point3D,
+        pA3: Point3D,
+    ) => {
+        const a = new THREE.Vector3(pA1.x - pA2.x, pA1.y - pA2.y, pA1.z - pA2.z);
+        const b = new THREE.Vector3(pA2.x - pA3.x, pA2.y - pA3.y, pA2.z - pA3.z);
+        const angle = a.angleTo(b);
+        return angle * 180 / Math.PI;
+    };
+
     return {
         leftArm,
         rightArm,
         leftLeg,
         rightLeg,
+        handL: angleDegreesBetween(leftWrist, leftElbow, leftShoulder),
+        handR: angleDegreesBetween(rightWrist, rightElbow, rightShoulder),
     };
 }
 
