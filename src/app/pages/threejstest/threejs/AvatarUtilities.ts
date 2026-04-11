@@ -68,13 +68,66 @@ const toCanonical = (v: Point3D, front: Point3D, left: Point3D, up: Point3D): Po
     };
 };
 
-export function computeComparableBody2(
+export function computeComparableFromModel(
     model: THREE.Object3D<THREE.Object3DEventMap>
 ) {
     // Generate front vector
     const frontData = computeAvatarFrontModel(model);
     // Common raw canonical coordinates
     const { front, up, left } = frontData;
+
+    const leftShoulder = model.getObjectByName(AvatarBoneEnum.shoulder_l);
+    const leftElbow = model.getObjectByName(AvatarBoneEnum.elbow_l);
+    const leftWrist = model.getObjectByName(AvatarBoneEnum.hand_l);
+
+    const rightShoulder = model.getObjectByName(AvatarBoneEnum.shoulder_r);
+    const rightElbow = model.getObjectByName(AvatarBoneEnum.elbow_r);
+    const rightWrist = model.getObjectByName(AvatarBoneEnum.hand_r);
+
+    const leftHip = model.getObjectByName(AvatarBoneEnum.hip_l);
+    const leftKnee = model.getObjectByName(AvatarBoneEnum.knee_l);
+    const leftHeel = model.getObjectByName(AvatarBoneEnum.foot_l);
+
+    const rightHip = model.getObjectByName(AvatarBoneEnum.hip_r);
+    const rightKnee = model.getObjectByName(AvatarBoneEnum.knee_r);
+    const rightHeel = model.getObjectByName(AvatarBoneEnum.foot_r);
+
+    if (
+        !leftShoulder
+        || !leftElbow
+        || !leftWrist
+        || !rightShoulder
+        || !rightElbow
+        || !rightWrist
+        || !leftHip
+        || !leftKnee
+        || !leftHeel
+        || !rightHip
+        || !rightKnee
+        || !rightHeel
+    ) {
+        throw new Error("Not found");
+    }
+
+    const comparable = computeComparableBodyInternal(
+        front,
+        up,
+        left,
+        leftShoulder.getWorldPosition(new THREE.Vector3()),
+        leftElbow.getWorldPosition(new THREE.Vector3()),
+        leftWrist.getWorldPosition(new THREE.Vector3()),
+        rightShoulder.getWorldPosition(new THREE.Vector3()),
+        rightElbow.getWorldPosition(new THREE.Vector3()),
+        rightWrist.getWorldPosition(new THREE.Vector3()),
+        leftHip.getWorldPosition(new THREE.Vector3()),
+        leftKnee.getWorldPosition(new THREE.Vector3()),
+        leftHeel.getWorldPosition(new THREE.Vector3()),
+        rightHip.getWorldPosition(new THREE.Vector3()),
+        rightKnee.getWorldPosition(new THREE.Vector3()),
+        rightHeel.getWorldPosition(new THREE.Vector3()),
+    );
+
+    return { comparable };
 }
 
 export function computeComparableBody(
@@ -83,47 +136,10 @@ export function computeComparableBody(
     const keypoints3DMap = getKeypoints3DMap(pose);
     // Generate front vector
     const frontData = computeAvatarFrontFromPose(keypoints3DMap);
-    // Common raw canonical coordinates
-    const { front, up, left } = frontData;
-
-    const leftShoulder = keypoints3DMap[BodyPoseKey.left_shoulder];
-    const leftElbow = keypoints3DMap[BodyPoseKey.left_elbow];
-    const leftWrist = keypoints3DMap[BodyPoseKey.left_wrist];
-
-    const rightShoulder = keypoints3DMap[BodyPoseKey.right_shoulder];
-    const rightElbow = keypoints3DMap[BodyPoseKey.right_elbow];
-    const rightWrist = keypoints3DMap[BodyPoseKey.right_wrist];
-
-    const leftHip = keypoints3DMap[BodyPoseKey.left_hip];
-    const leftKnee = keypoints3DMap[BodyPoseKey.left_knee];
-    const leftHeel = keypoints3DMap[BodyPoseKey.left_heel];
-
-    const rightHip = keypoints3DMap[BodyPoseKey.right_hip];
-    const rightKnee = keypoints3DMap[BodyPoseKey.right_knee];
-    const rightHeel = keypoints3DMap[BodyPoseKey.right_heel];
-
-    const comparable = computeComparableBodyInternal(
-        front,
-        up,
-        left,
-        leftShoulder,
-        leftElbow,
-        leftWrist,
-        rightShoulder,
-        rightElbow,
-        rightWrist,
-        leftHip,
-        leftKnee,
-        leftHeel,
-        rightHip,
-        rightKnee,
-        rightHeel
-    );
 
     return {
         keypoints3DMap,
         frontData,
-        comparable,
     }
 }
 
@@ -188,14 +204,19 @@ export function computeAvatarFrontModel(
     const right_shoulder = model.getObjectByName(AvatarBoneEnum.shoulder_r);
     const left_hip = model.getObjectByName(AvatarBoneEnum.hip_l);
     const right_hip = model.getObjectByName(AvatarBoneEnum.hip_r);
-    if (!left_shoulder || !right_shoulder || !left_hip || !right_hip) {
+    if (
+        !left_shoulder
+        || !right_shoulder
+        || !left_hip
+        || !right_hip
+    ) {
         throw Error("cant compute");
     }
     return computeAvatarFrontInternal(
-        left_shoulder.position,
-        right_shoulder.position,
-        left_hip.position,
-        right_hip.position,
+        left_shoulder.getWorldPosition(new THREE.Vector3()),
+        right_shoulder.getWorldPosition(new THREE.Vector3()),
+        left_hip.getWorldPosition(new THREE.Vector3()),
+        right_hip.getWorldPosition(new THREE.Vector3()),
     );
 }
 

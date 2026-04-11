@@ -17,6 +17,7 @@ import * as THREE from 'three';
 import {
     computeBodyPointAverage,
     computeComparableBody,
+    computeComparableFromModel,
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
 } from './AvatarUtilities';
@@ -436,7 +437,6 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             const {
                 keypoints3DMap,
                 frontData,
-                comparable,
             } = computeComparableBody(pose);
 
             const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
@@ -493,12 +493,17 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             }
             if (this.ikSolver) {
                 this.ikSolver.update();
+                
+                const skinnedMesh = getAvatarSkinnedMesh(model);
+                if (skinnedMesh) {
+                    skinnedMesh.updateMatrixWorld(true);
+                }
             } else {
                 console.log("No ikSolver!");
             }
 
             // Here it is!
-
+            const { comparable } = computeComparableFromModel(model);
 
             return {
                 pose,
