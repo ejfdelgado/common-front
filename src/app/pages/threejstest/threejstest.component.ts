@@ -21,6 +21,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
+import { enterFullscreen } from '@tools/ScreenUtils';
 
 @Component({
   selector: 'app-threejstest',
@@ -126,6 +127,7 @@ export class ThreejsTestComponent extends BodyTrackerComponent {
 
   override async startTracking() {
     await super.startTracking();
+    enterFullscreen();
     this.activity = this.indicatorSrv.start();
   }
 

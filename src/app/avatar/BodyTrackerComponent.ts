@@ -77,7 +77,6 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
 
     async startTracking() {
         this.started = true;
-        //this.enterFullScreen();
         ModuloSonido.play('/assets/sounds/button.mp3');
         tracker.run('camera');
     }
