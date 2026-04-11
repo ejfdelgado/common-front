@@ -20,7 +20,6 @@ import { ThreejsComponent } from "./threejs/threejs.component";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { Fullscreen } from '@components/fullscreen/fullscreen';
 import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
 
 @Component({
@@ -31,7 +30,6 @@ import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
     FormsModule,
     MatIconModule,
     ThreejsComponent,
-    Fullscreen,
   ],
   templateUrl: './threejstest.component.html',
   encapsulation: ViewEncapsulation.None,
