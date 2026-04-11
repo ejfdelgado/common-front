@@ -5,12 +5,12 @@ import {
     GenericSizeType,
     ScenePoseAndWalkEventType,
 } from "@mytypes/bodyTypes";
-import { BasicAvatarScene } from "@avatar/SceneWithAvatar";
 import { EventEmitter } from "@angular/core";
+import { ComposerAvatarScene } from "./ComposerAvatarScene";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;
-    scene!: BasicAvatarScene;
+    scene!: ComposerAvatarScene;
     lastData!: ScenePoseAndWalkEventType;
     videoSize!: GenericSizeType;
 

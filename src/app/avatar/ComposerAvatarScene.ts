@@ -9,8 +9,11 @@ import { arrayToMatrix } from "./AvatarUtilities";
 import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
+import { RecognizedCommand } from "@services/voicerecognition.service";
 
-export class ComposerAvatarScene extends BasicAvatarScene {
+export abstract class ComposerAvatarScene extends BasicAvatarScene {
+
+    previousTime = performance.now();
     composer: EffectComposer | null = null;
     outlinePass: OutlinePass | null = null;
     animatedElements: AnimatedElements[] = [];
@@ -24,6 +27,13 @@ export class ComposerAvatarScene extends BasicAvatarScene {
     ) {
         super();
         this.bounds = bounds;
+    }
+
+    abstract initialize(): void;
+
+    animate() {
+        const currentTime = performance.now();
+        const delta = (currentTime - this.previousTime) / 1000;
     }
 
     setupEffects() {
@@ -202,5 +212,9 @@ export class ComposerAvatarScene extends BasicAvatarScene {
         const loaded = await firstValueFrom(this.http.get(ROOT_PATH + "animations/animation.bin", { responseType: 'arraybuffer' }));
         const model = decode(loaded);
         return model as StoredAvatarAnimation;
+    }
+
+    executeCommand(command: RecognizedCommand) {
+        console.log(command);
     }
 }

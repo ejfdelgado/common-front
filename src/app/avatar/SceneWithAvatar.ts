@@ -1,5 +1,6 @@
 import {
     AVATAR_NAME,
+    AvatarLocationState,
     BodyData,
     BoneBackupType,
     ItemModelRef,
@@ -37,6 +38,19 @@ export abstract class BasicAvatarScene extends THREE.Scene {
     BONE_MAP_ORIGINAL_ROTATION: Map<string, THREE.Euler> = new Map();
     computingIK: boolean = false;
     originalPelvisRotation: THREE.Euler | null = null;
+
+    avatarState: AvatarLocationState = {
+        positionX: 0,
+        positionY: 0,
+        positionZ: 0,
+        rotationY: 0,
+    };
+    avatarStateSmoot: AvatarLocationState = {
+        positionX: 0,
+        positionY: 0,
+        positionZ: 0,
+        rotationY: 0,
+    };
 
 
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
@@ -493,7 +507,7 @@ export abstract class BasicAvatarScene extends THREE.Scene {
             }
             if (this.ikSolver) {
                 this.ikSolver.update();
-                
+
                 const skinnedMesh = getAvatarSkinnedMesh(model);
                 if (skinnedMesh) {
                     skinnedMesh.updateMatrixWorld(true);

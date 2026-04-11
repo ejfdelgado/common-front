@@ -16,21 +16,7 @@ import { ComposerAvatarScene } from '@avatar/ComposerAvatarScene';
 export class BasicScene extends ComposerAvatarScene {
 
   lights: Array<THREE.Light> = [];
-
-  previousTime = performance.now();
   canvasRef: HTMLCanvasElement;
-  avatarState: AvatarLocationState = {
-    positionX: 0,
-    positionY: 0,
-    positionZ: 0,
-    rotationY: 0,
-  };
-  avatarStateSmoot: AvatarLocationState = {
-    positionX: 0,
-    positionY: 0,
-    positionZ: 0,
-    rotationY: 0,
-  };
 
   constructor(
     canvasRef: any,
@@ -46,7 +32,7 @@ export class BasicScene extends ComposerAvatarScene {
     }, 100);
   }
 
-  initialize() {
+  override initialize(): void {
     this.camera = new THREE.PerspectiveCamera(
       25,
       this.bounds.width / this.bounds.height,
@@ -133,15 +119,4 @@ export class BasicScene extends ComposerAvatarScene {
     }
     replaceAvatarSkin(avatar, url);
   }
-
-  animate() {
-    const currentTime = performance.now();
-    const delta = (currentTime - this.previousTime) / 1000;
-  }
-
-  executeCommand(command: RecognizedCommand) {
-    console.log(command);
-  }
-
-
 }
