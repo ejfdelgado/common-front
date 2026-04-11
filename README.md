@@ -1,5 +1,32 @@
 # CommonFront
 
+usar los puntos 2d para saber si los pies salen y si la cabeza sale.
+
+comparacion: (3 numeros de salida)
+angulo entre front y front
+entre left y left y up y up.
+
+extremidades cercanas: (4 numeros salida)
+comparacion vectorial:
+producto punto normalizado min -1 max 1
+
+extremidades lejanas: (4 numeros de salida)
+abs(angulo-angulo)
+
+agregar un booleano para hacer mirror.
+
+Interactuar con menu.
+Izquierda, derecha, aplauso.
+patada salir.
+
+interactuar con botones:
+esfera
+cuadrado.
+
+agregar version a animación.
+comprimir los nombres de los huesos.
+puede ser en orden alfabetico.
+
 ------------------------------------------------------------------------
 
 Comparar poses y asignar un score.

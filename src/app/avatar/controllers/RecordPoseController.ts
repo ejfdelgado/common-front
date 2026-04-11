@@ -10,6 +10,7 @@ import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
 import { matrixToArray } from "@avatar/AvatarUtilities";
+import { EXPORTED_BONES } from "@mytypes/BodyParts";
 
 export class RecordPoseController extends SceneControllerAbstract {
 
@@ -41,24 +42,27 @@ export class RecordPoseController extends SceneControllerAbstract {
                 //d: difference,
                 bones: [],
             };
-            avatar.traverse((child: any) => {
-                if (child.isBone || child.type === 'Bone') {
-                    const name = child.name;
-                    const position = child.position;
-                    const rotation = child.rotation;
-                    state.bones.push({
-                        n: name,
-                        v: [
-                            position.x, 
-                            position.y, 
-                            position.z, 
-                            rotation.x, 
-                            rotation.y, 
-                            rotation.z,
-                        ],
-                    });
+            // Only export specific bones
+            for (let i = 0; i < EXPORTED_BONES.length; i++) {
+                const name = EXPORTED_BONES[i];
+                const child = avatar.getObjectByName(name);
+                if (!child) {
+                    continue;
                 }
-            });
+                const position = child.position;
+                const rotation = child.rotation;
+                state.bones.push({
+                    n: name,
+                    v: [
+                        position.x,
+                        position.y,
+                        position.z,
+                        rotation.x,
+                        rotation.y,
+                        rotation.z,
+                    ],
+                });
+            }
             this.history.a.push(state);
         }
         this.lastRecorded = now;

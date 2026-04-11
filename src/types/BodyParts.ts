@@ -32,7 +32,30 @@ export enum AvatarBoneEnum {
     target_knee_r = "-",
     target_foot_l = "5",
     target_foot_r = "6",
-}
+};
+
+export const EXPORTED_BONES = [
+    AvatarBoneEnum.pelvis,
+    AvatarBoneEnum.pelvis_l,
+    AvatarBoneEnum.hip_l,
+    AvatarBoneEnum.knee_l,
+    AvatarBoneEnum.foot_l,
+    AvatarBoneEnum.pelvis_r,
+    AvatarBoneEnum.hip_r,
+    AvatarBoneEnum.knee_r,
+    AvatarBoneEnum.foot_r,
+    AvatarBoneEnum.trunk,
+    AvatarBoneEnum.chest_l,
+    AvatarBoneEnum.shoulder_l,
+    AvatarBoneEnum.elbow_l,
+    AvatarBoneEnum.hand_l,
+    AvatarBoneEnum.chest_r,
+    AvatarBoneEnum.shoulder_r,
+    AvatarBoneEnum.elbow_r,
+    AvatarBoneEnum.hand_r,
+    AvatarBoneEnum.head,
+    AvatarBoneEnum.head2,
+];
 
 export enum BodyPoseKey {
     right_shoulder = "right_shoulder",
