@@ -219,8 +219,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
     }
 
     stopTracking() {
-        location.reload();
-        /*
+        // TODO, this function does not work!
         if (this.trackerSubscription) {
             this.trackerSubscription();
             this.trackerSubscription = null;
@@ -230,7 +229,6 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         } catch (err) {
             this.videoRef.nativeElement.pause();
         }
-        */
     }
 
     startTracking() {
@@ -242,9 +240,10 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         try {
             ModuloSonido.play('/assets/sounds/button.mp3');
             this.stopListening();
-            this.stopTracking();
             exitFullscreen();
             this.started = false;
+            location.reload();
+            //this.stopTracking();
         } catch (err) {
             console.log(err);
         }
