@@ -101,11 +101,11 @@ export class WalkController extends SceneControllerAbstract {
 
         if (makeStep) {
             let forward = 1;
-            /*
-            if (this.isTPose) {
+
+            if (this.lastData.stateBody.isTPose) {
                 forward = -1;
             }
-            */
+
             if (forward > 0) {
                 this.makeStep(1);
                 this.events.emit({
