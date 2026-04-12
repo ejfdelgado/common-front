@@ -7,6 +7,7 @@ import {
 import { EventEmitter } from "@angular/core";
 import { SceneWithComposer } from "./SceneWithComposer";
 import { ControllerInitDataType } from "@mytypes/BodyTypesExtra";
+import { ControlProxy } from "./workers/ControlProxy";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;
@@ -14,7 +15,10 @@ export abstract class SceneControllerAbstract {
     lastData!: ScenePoseAndWalkEventType;
     videoSize!: GenericSizeType;
 
-    constructor(public events: EventEmitter<AvatarBodyEvent>) {
+    constructor(
+        public events: EventEmitter<AvatarBodyEvent>,
+        public controlProxy: ControlProxy,
+    ) {
 
     }
 

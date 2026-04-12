@@ -30,6 +30,7 @@ import { Point3D } from '@mytypes/BodyTypes';
 import { ComparableController } from '@avatar/controllers/ComparableController';
 import { SimplePosesDetection } from '@avatar/controllers/SimplePosesDetection';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
+import { HandsCloseController } from '@avatar/controllers/HandsCloseController';
 
 @Component({
   standalone: true,
@@ -50,13 +51,14 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
   hasMobile: boolean;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
   // controllers
-  comparableController: SceneControllerAbstract = new ComparableController(this.events);
-  simplePosesDetection: SceneControllerAbstract = new SimplePosesDetection(this.events);
-  walkController: SceneControllerAbstract = new WalkController(this.events);
-  soundFeedbackController: SceneControllerAbstract = new SoundFeedbackController(this.events);
-  stand2dController: SceneControllerAbstract = new Stand2dController(this.events);
-  recordPoseController: SceneControllerAbstract = new RecordPoseController(this.events);
-  terrainController: SceneControllerAbstract = new TerrainElevationController(this.events);
+  comparableController: SceneControllerAbstract = new ComparableController(this.events, this.controlProxy);
+  simplePosesDetection: SceneControllerAbstract = new SimplePosesDetection(this.events, this.controlProxy);
+  handsCloseController: HandsCloseController = new HandsCloseController(this.events, this.controlProxy);
+  walkController: SceneControllerAbstract = new WalkController(this.events, this.controlProxy);
+  soundFeedbackController: SceneControllerAbstract = new SoundFeedbackController(this.events, this.controlProxy);
+  stand2dController: SceneControllerAbstract = new Stand2dController(this.events, this.controlProxy);
+  recordPoseController: SceneControllerAbstract = new RecordPoseController(this.events, this.controlProxy);
+  terrainController: SceneControllerAbstract = new TerrainElevationController(this.events, this.controlProxy);
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -96,6 +98,7 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
 
     this.addController(this.comparableController);
     this.addController(this.simplePosesDetection);
+    this.addController(this.handsCloseController);
 
     this.addController(this.terrainController);
     this.addController(this.walkController);

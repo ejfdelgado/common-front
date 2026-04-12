@@ -27,6 +27,8 @@ export class SimplePosesDetection extends SceneControllerAbstract {
     computeLeftHand(comparable: ComparableBody) {
         const isArmUp = comparable.leftArm.z > 0.8
             && comparable.handL < 15; // Max 15°
+        const isArmDown = comparable.leftArm.z < 0.7
+            || comparable.handL > 20; // Max 15°
         if (isArmUp) {
             if (!this.handUpLeft) {
                 this.events.emit({
@@ -34,7 +36,7 @@ export class SimplePosesDetection extends SceneControllerAbstract {
                 });
                 this.handUpLeft = true;
             }
-        } else {
+        } else if (isArmDown) {
             if (this.handUpLeft) {
                 this.events.emit({
                     name: "LEFT_HAND_UP_OFF",
@@ -47,6 +49,8 @@ export class SimplePosesDetection extends SceneControllerAbstract {
     computeRightHand(comparable: ComparableBody) {
         const isArmUp = comparable.rightArm.z > 0.8 // 1 is totally up 
             && comparable.handR < 15; // Max 15°
+        const isArmDown = comparable.rightArm.z < 0.7
+            || comparable.handR > 20; // Max 15°
         if (isArmUp) {
             if (!this.handUpRight) {
                 this.events.emit({
@@ -54,7 +58,7 @@ export class SimplePosesDetection extends SceneControllerAbstract {
                 });
                 this.handUpRight = true;
             }
-        } else {
+        } else if (isArmDown) {
             if (this.handUpRight) {
                 this.events.emit({
                     name: "RIGHT_HAND_UP_OFF",
@@ -70,6 +74,12 @@ export class SimplePosesDetection extends SceneControllerAbstract {
         const rightHandT = comparable.rightArm.y < -0.8
             && comparable.handR < 15; // Max 15°
         const isTPose = leftHandT && rightHandT;
+
+        const leftHandNotT = comparable.leftArm.y < 0.7
+            && comparable.handL > 20; // Max 15°
+        const rightHandNotT = comparable.rightArm.y > -0.7
+            && comparable.handR > 20; // Max 15°
+        const isNotTPose = leftHandNotT || rightHandNotT;
         if (
             isTPose
         ) {
@@ -79,7 +89,7 @@ export class SimplePosesDetection extends SceneControllerAbstract {
                     name: "T_POSE_ON",
                 });
             }
-        } else {
+        } else if (isNotTPose) {
             if (this.lastData.stateBody.isTPose) {
                 this.lastData.stateBody.isTPose = false;
                 this.events.emit({

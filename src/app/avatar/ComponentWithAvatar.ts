@@ -72,8 +72,8 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             // Level 2
             await this.controlProxy.setCurrentData({ poses, videoSize, mirror });
             const response = await this.scene.computeIKLevel2(
-                poses, 
-                videoSize, 
+                poses,
+                videoSize,
                 mirror,
                 this.controlProxy,
             );

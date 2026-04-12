@@ -643,12 +643,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         let positionZ = state.lr[1];
         let rotationY = state.lr[2];
 
-        let useFixedGlobalLocRot = false;
         if (lr && lr.length == 3) {
             positionX = lr[0];
             positionZ = lr[1];
             rotationY = lr[2];
-            useFixedGlobalLocRot = true;
         }
         const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
 
