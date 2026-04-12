@@ -62,7 +62,6 @@ export class BasicScene extends SceneWithComposer {
 
   async initializeScenario() {
     const scenario = await this.addModel({ name: "scene", url: "/assets/models/scenario.glb" });
-    scenario.scale.set(1.5, 1.5, 1.5);// TODO scale directly on source, not here!
     if (this.camera) {
       this.makeObjectTransparentToCamera(scenario, this.camera, 0, 15, 30, 45);
       this.autoDetectTerrainMeshes(scenario);
