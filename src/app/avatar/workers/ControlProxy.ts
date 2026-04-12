@@ -1,7 +1,7 @@
 import { AbstractControllerExecutor } from "./AbstractControllerExecutor";
 
-export class ControllerExecutor extends AbstractControllerExecutor {
-    
+export class ControlProxy extends AbstractControllerExecutor {
+
     async getSome(arg: number) {
         return arg * 100;
     }

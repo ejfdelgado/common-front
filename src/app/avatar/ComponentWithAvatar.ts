@@ -13,11 +13,11 @@ import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
-import { ControllerExecutor } from './workers/ControllerExecutor';
+import { ControlProxy } from './workers/ControlProxy';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
 
-    controllerExecutor: ControllerExecutor = new ControllerExecutor();
+    controlProxy: ControlProxy = new ControlProxy();
     scene: SceneWithComposer | null = null;
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
@@ -70,9 +70,9 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         this.isComputing = true;
         try {
             // Level 2
-            const temp = await this.controllerExecutor.getOther(3);
+            const temp = await this.controlProxy.getOther(3);
             console.log(temp);
-            const stored = await this.controllerExecutor.getValue();
+            const stored = await this.controlProxy.getValue();
             console.log(`stored = ${stored}`);
             const response = await this.scene.computeIKLevel2(poses, videoSize, mirror);
             if (response == false) {

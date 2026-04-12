@@ -1,5 +1,5 @@
 
-export class ControllerWorker {
+export class WorkerControlForked {
     val: number = 0;
 
     constructor(

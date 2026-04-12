@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { ControllerWorker } from "./ControllerWorker";
+import { WorkerControlForked } from "./WorkerControlForked";
 
 const pending = new Map();
 
@@ -45,6 +45,6 @@ self.onmessage = async (e) => {
     }
 };
 
-const instance = new ControllerWorker(callMain);
+const instance = new WorkerControlForked(callMain);
 
 self.postMessage({ type: 'READY' });
