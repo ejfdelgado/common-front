@@ -4,7 +4,7 @@ import { WorkerControlForked } from "./WorkerControlForked";
 
 const pending = new Map();
 
-function callMain(funName: string, argument: any) {
+function callMain(funName: string, argument: any = {}) {
     return new Promise((resolve, reject) => {
         const id = crypto.randomUUID();
         pending.set(id, { resolve, reject });

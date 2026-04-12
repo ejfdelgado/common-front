@@ -1,4 +1,7 @@
 
+// If need to call the main thread
+// return await this.callMain("getSome", arg);
+
 export class WorkerControlForked {
     val: number = 0;
 

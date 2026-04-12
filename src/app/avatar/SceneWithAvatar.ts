@@ -2,7 +2,6 @@ import {
     AVATAR_NAME,
     AvatarLocationState,
     BodyData,
-    BodyKeyPointData,
     BoneBackupType,
     GenericSizeType,
     ItemModelRef,
@@ -21,7 +20,6 @@ import * as THREE from 'three';
 import {
     computeBodyPointAverage,
     computeComparableBody,
-    computeComparableFromModel,
     getAvatarSkinnedMesh,
     getHigherAvatarScoredPose,
     replaceAvatarSkin,
