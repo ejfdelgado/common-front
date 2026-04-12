@@ -4,14 +4,14 @@
 import { WorkerData } from "@mytypes/BodyTypes";
 
 export class WorkerControlForked {
-    //data: WorkerData | null = null;
+    data: WorkerData | null = null;
 
     constructor(
         public callMain: Function,
     ) { }
-    /*
+    
     async setCurrentData(data: WorkerData) {
         this.data = data;
     }
-    */
+    
 };
