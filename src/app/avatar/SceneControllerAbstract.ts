@@ -1,12 +1,12 @@
 import {
     AvatarBodyEvent,
-    ControllerInitDataType,
     ControllerUpdateResponse,
     GenericSizeType,
     ScenePoseAndWalkEventType,
 } from "@mytypes/BodyTypes";
 import { EventEmitter } from "@angular/core";
 import { SceneWithComposer } from "./SceneWithComposer";
+import { ControllerInitDataType } from "@mytypes/BodyTypesExtra";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;

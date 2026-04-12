@@ -1,27 +1,17 @@
 
 // If need to call the main thread
 // return await this.callMain("getSome", arg);
+import { WorkerData } from "@mytypes/BodyTypes";
 
 export class WorkerControlForked {
-    val: number = 0;
+    //data: WorkerData | null = null;
 
     constructor(
-        private callMain: Function,
-    ) {
-
+        public callMain: Function,
+    ) { }
+    /*
+    async setCurrentData(data: WorkerData) {
+        this.data = data;
     }
-
-    async setValue(val: number) {
-        this.val = val;
-        return `Ok ${val}`;
-    }
-
-    async getSome(arg: number) {
-        return await this.callMain("getSome", arg);
-    }
-
-    async getValue() {
-        const computed = await this.getSome(this.val);
-        return computed;
-    }
+    */
 };

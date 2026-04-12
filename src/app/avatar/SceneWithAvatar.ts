@@ -148,7 +148,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                         }
                     );
                 } else {
-                    alert(`No loader for ${item.url}`);
+                    console.error(`No loader for ${item.url}`);
                 }
             }
         });

@@ -44,7 +44,7 @@ export class BasicScene extends SceneWithComposer {
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.background = new THREE.Color(0xBBBBFF);
 
-    this.setupEffects();
+    this.setupEffects(window.innerWidth, window.innerHeight);
     this.initializeAvatar();
     this.initializeScenario();
 

@@ -78,7 +78,7 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
   public onResize(event: any) {
     this.computeDimensions();
     if (this.scene != null && this.bounds != null) {
-      this.scene.setBounds(this.bounds);
+      this.scene.setBounds(this.bounds, window.devicePixelRatio);
     }
   }
 

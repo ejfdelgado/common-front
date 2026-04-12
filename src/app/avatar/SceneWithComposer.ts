@@ -37,7 +37,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         this.animationHeartBeat();
     }
 
-    setupEffects() {
+    setupEffects(innerWidth: number, innerHeight: number) {
         if (!this.camera || !this.renderer) {
             return;
         }
@@ -47,7 +47,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         this.composer.addPass(renderPass);
 
         this.outlinePass = new OutlinePass(
-            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            new THREE.Vector2(innerWidth, innerHeight),
             this,
             this.camera
         );
@@ -66,12 +66,12 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     }
 
     // the resize event is fired here
-    setBounds(bounds: DOMRect) {
+    setBounds(bounds: DOMRect, devicePixelRatio: number) {
         this.bounds = bounds;
         if (this.camera == null || this.renderer == null || this.composer == null) {
             return;
         }
-        const pixelRatio = window.devicePixelRatio;
+        const pixelRatio = devicePixelRatio;
 
         this.camera.aspect = this.bounds.width / this.bounds.height;
         this.camera.updateProjectionMatrix();

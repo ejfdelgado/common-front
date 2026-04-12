@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SceneWithComposer } from '@avatar/SceneWithComposer';
+
 
 export const ROOT_PATH = "/assets/models/";
 
@@ -94,9 +94,7 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
     },
 }
 
-export interface ControllerInitDataType {
-    scene: SceneWithComposer,
-}
+
 
 export interface AvatarBodyEvent {
     name: string;
@@ -165,4 +163,10 @@ export interface StateBody {
     up: Point3D;
     left: Point3D;
     comparable: ComparableBody;
+}
+
+export interface WorkerData {
+    poses: BodyData[];
+    videoSize: GenericSizeType;
+    mirror: boolean;
 }
