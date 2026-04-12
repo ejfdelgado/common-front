@@ -206,6 +206,7 @@ export function computeComparableBody(
     return {
         keypoints3DMap,
         frontData,
+        pose,
     }
 }
 

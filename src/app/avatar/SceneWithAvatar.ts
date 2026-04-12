@@ -463,7 +463,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.restoreBackupOnNextComputation = false;
             }
             const model = this.getObjectByName(AVATAR_NAME);
-            const { pose, score } = await workerProxy.getHigherAvatarScoredPose();
+            let { pose, score } = await workerProxy.getHigherAvatarScoredPose();
             if (score < 0) {
                 throw new Error(`${score}`);
             }
@@ -483,10 +483,11 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 mirrorPose(pose);
             }
 
-            const {
-                keypoints3DMap,
-                frontData,
-            } = computeComparableBody(pose, mirror);
+            const comparable1 = await workerProxy.computeComparableBody(pose, mirror);
+            const keypoints3DMap = comparable1.keypoints3DMap;
+            const frontData = comparable1.frontData;
+            // overwrite pose, as log it was fixed
+            pose = comparable1.pose;
 
             const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
             if (pelvisBone) {
