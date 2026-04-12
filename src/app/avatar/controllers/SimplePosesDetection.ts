@@ -76,9 +76,9 @@ export class SimplePosesDetection extends SceneControllerAbstract {
         const isTPose = leftHandT && rightHandT;
 
         const leftHandNotT = comparable.leftArm.y < 0.7
-            && comparable.handL > 20; // Max 15°
+            || comparable.handL > 20; // Max 15°
         const rightHandNotT = comparable.rightArm.y > -0.7
-            && comparable.handR > 20; // Max 15°
+            || comparable.handR > 20; // Max 15°
         const isNotTPose = leftHandNotT || rightHandNotT;
         if (
             isTPose
