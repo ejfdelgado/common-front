@@ -16,15 +16,15 @@ export class ControllerExecutor {
         );
         this.ready = new Promise((resolve, reject) => {
             this.worker.onmessage = async (event) => {
-                const { type, payload, id, success, result } = event.data;
+                const { type, payload, id, success } = event.data;
                 if (type === 'READY') {
                     this.isReady = true;
                     resolve();
                 } else if (type == "RESPONSE_WORKER") {
                     if (success === true) {
-                        this.pending.get(id)?.resolve(result);
+                        this.pending.get(id)?.resolve(payload);
                     } else {
-                        this.pending.get(id)?.reject(result);
+                        this.pending.get(id)?.reject(payload);
                     }
                     this.pending.delete(id);
                 } else if (type == "CALL_MAIN") {
@@ -34,14 +34,14 @@ export class ControllerExecutor {
                         this.worker.postMessage({
                             id,
                             type: 'RESPONSE_MAIN',
-                            result,
+                            payload: result,
                             success: true,
                         });
                     } catch (err) {
                         this.worker.postMessage({
                             id,
                             type: 'RESPONSE_MAIN',
-                            err,
+                            payload: err,
                             success: false,
                         });
                     }

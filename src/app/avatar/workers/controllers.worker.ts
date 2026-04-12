@@ -3,18 +3,22 @@
 const pending = new Map();
 
 function callMain(funName: string, argument: any) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const id = crypto.randomUUID();
-        pending.set(id, { resolve });
+        pending.set(id, { resolve, reject });
         const payload = { funName, argument };
         self.postMessage({ id, type: 'CALL_MAIN', payload });
     });
 }
 
 self.onmessage = async (e) => {
-    const { type, payload, id } = e.data;
+    const { type, payload, id, success } = e.data;
     if (type == 'RESPONSE_MAIN') {
-        pending.get(id)?.resolve(payload);
+        if (success === true) {
+            pending.get(id)?.resolve(payload);
+        } else {
+            pending.get(id)?.reject(payload);
+        }
         pending.delete(id);
     } else if (type == 'CALL_WORKER') {
         const { funName, argument } = payload;
@@ -23,14 +27,14 @@ self.onmessage = async (e) => {
             self.postMessage({
                 id,
                 type: 'RESPONSE_WORKER',
-                result,
+                payload: result,
                 success: true,
             });
         } catch (err) {
             self.postMessage({
                 id,
                 type: 'RESPONSE_WORKER',
-                err,
+                payload: err,
                 success: false,
             });
         }
@@ -56,7 +60,8 @@ class ControllerWorker {
     }
 
     async getValue() {
-        return this.val;
+        const computed = await this.getSome(this.val);
+        return computed;
     }
 }
 
