@@ -47,6 +47,7 @@ export class BasicScene extends SceneWithComposer {
     this.setupEffects(window.innerWidth, window.innerHeight);
     this.initializeAvatar();
     this.initializeScenario();
+    this.initializeControlls();
 
     const light = new THREE.AmbientLight(0xFFFFFF);
     this.add(light);

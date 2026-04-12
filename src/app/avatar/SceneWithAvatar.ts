@@ -28,6 +28,8 @@ import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
 
+export const ROOT_PATH = "/assets/models/";
+
 export abstract class SceneWithAvatar extends THREE.Scene {
     bounds: DOMRect;
     camera: THREE.PerspectiveCamera | null = null;
@@ -674,5 +676,41 @@ export abstract class SceneWithAvatar extends THREE.Scene {
 
     getFirstHitFromTopToDown(x: number, z: number): number | null {
         return 0;
+    }
+
+    addCubeControll() {
+        return new Promise((resolve, reject) => {
+            this.addModel({ name: "", url: ROOT_PATH + "cube001.glb" }, false).then((obj) => {
+                const addCube = (name: string, imageUrl: string) => {
+                    const aCube = obj.clone();
+                    aCube.name = name;
+                    aCube.traverse((child: any) => {
+                        if (child.isMesh && child.material) { }
+                        const materials = Array.isArray(child.material)
+                            ? child.material
+                            : [child.material];
+
+                        materials.forEach((material: any) => {
+                            material.transparent = true;
+                            material.opacity = 1;//0 invisible, 1 visible
+                            material.side = THREE.FrontSide;
+                        });
+                    });
+                    replaceAvatarSkin(aCube, ROOT_PATH + imageUrl, 0);
+                    this.add(aCube);
+                };
+
+                //addCube("cube_a", "a_cube.jpg");
+                addCube("cube_b", "b_cube.jpg");
+
+                resolve(obj);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    async initializeControlls() {
+        const cube = await this.addCubeControll();
     }
 }

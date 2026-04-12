@@ -490,7 +490,11 @@ export function getHigherAvatarScoredPose(
     })[0];
 }
 
-export function replaceAvatarSkin(model: THREE.Object3D<THREE.Object3DEventMap>, url: string) {
+export function replaceAvatarSkin(
+    model: THREE.Object3D<THREE.Object3DEventMap>,
+    url: string,
+    useNormalScale: number = 1,
+) {
     const newTexture = textureLoader.load(url);
     newTexture.colorSpace = THREE.SRGBColorSpace;
     newTexture.flipY = false;
@@ -501,8 +505,10 @@ export function replaceAvatarSkin(model: THREE.Object3D<THREE.Object3DEventMap>,
             child.material.roughness = 0.8;
             child.material.needsUpdate = true;
             //child.material.roughnessMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_Roughness.jpg');
-            child.material.normalMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_NormalGL.jpg');
-            child.material.normalScale.set(1, 1);
+            if (useNormalScale !== 0) {
+                child.material.normalMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_NormalGL.jpg');
+                child.material.normalScale.set(useNormalScale, useNormalScale);
+            }
         }
     });
 }

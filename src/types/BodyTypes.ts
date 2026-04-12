@@ -1,4 +1,3 @@
-import { ControlProxy } from '@avatar/workers/ControlProxy';
 import * as THREE from 'three';
 
 
