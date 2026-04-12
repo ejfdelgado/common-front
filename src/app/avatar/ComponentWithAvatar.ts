@@ -71,7 +71,12 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         try {
             // Level 2
             await this.controlProxy.setCurrentData({ poses, videoSize, mirror });
-            const response = await this.scene.computeIKLevel2(poses, videoSize, mirror);
+            const response = await this.scene.computeIKLevel2(
+                poses, 
+                videoSize, 
+                mirror,
+                this.controlProxy,
+            );
             if (response == false) {
                 // Fire stop all controllers
                 for (let i = 0; i < this.controllers.length; i++) {

@@ -28,6 +28,7 @@ import {
 } from '@avatar/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
+import { ControlProxy } from './workers/ControlProxy';
 
 export abstract class SceneWithAvatar extends THREE.Scene {
     bounds: DOMRect;
@@ -428,8 +429,14 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         poses: BodyData[],
         videoSize: GenericSizeType,
         mirror: boolean,
+        workerProxy: ControlProxy,
     ): Promise<null | false | ScenePoseEventType> {
-        const response = await this.computeIKInternal(poses, videoSize, mirror);
+        const response = await this.computeIKInternal(
+            poses,
+            videoSize,
+            mirror,
+            workerProxy,
+        );
         return response;
     }
 
@@ -441,6 +448,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         poses: BodyData[],
         videoSize: GenericSizeType,
         mirror: boolean,
+        workerProxy: ControlProxy,
     ): Promise<null | false | ScenePoseEventType> {
         if (this.computingIK) {
             return null;
@@ -455,7 +463,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.restoreBackupOnNextComputation = false;
             }
             const model = this.getObjectByName(AVATAR_NAME);
-            const { pose, score } = getHigherAvatarScoredPose(poses, videoSize);
+            const { pose, score } = await workerProxy.getHigherAvatarScoredPose();
             if (score < 0) {
                 throw new Error(`${score}`);
             }

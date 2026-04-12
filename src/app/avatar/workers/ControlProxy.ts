@@ -1,4 +1,4 @@
-import { WorkerData } from "@mytypes/BodyTypes";
+import { BodyData, WorkerData } from "@mytypes/BodyTypes";
 import { AbstractControllerExecutor } from "./AbstractControllerExecutor";
 
 // If need to call worker:
@@ -11,5 +11,9 @@ export class ControlProxy extends AbstractControllerExecutor {
     async setCurrentData(data: WorkerData) {
         this.data = data;
         await this.callWorker("setCurrentData", data);
+    }
+
+    async getHigherAvatarScoredPose(): Promise<{ pose: BodyData, score: number }> {
+        return await this.callWorker("getHigherAvatarScoredPose") as any;
     }
 }
