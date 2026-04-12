@@ -1,5 +1,8 @@
 # CommonFront
 
+Blender:
+Ajustar el tema de los brazos
+Ajustar el escalado del escenario de prueba 1.5
 ------------------------------------------------------------------------
 Agregar a manos y pies capacidad de colision (aplicar matriz a la pose y evaluar manos o pies)
 para detectar cuando el usuario toca algo.

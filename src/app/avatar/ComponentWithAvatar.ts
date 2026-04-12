@@ -13,8 +13,11 @@ import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
+import { ControllerExecutor } from './workers/ControllerExecutor';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
+
+    controllerExecutor: ControllerExecutor = new ControllerExecutor();
     scene: SceneWithComposer | null = null;
     controllers: SceneControllerAbstract[] = [];
     isComputing: boolean = false;
@@ -67,6 +70,9 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         this.isComputing = true;
         try {
             // Level 2
+            console.log("Antes");
+            const temp = await this.controllerExecutor.getOther(1);
+            console.log(temp);
             const response = await this.scene.computeIKLevel2(poses, videoSize, mirror);
             if (response == false) {
                 // Fire stop all controllers

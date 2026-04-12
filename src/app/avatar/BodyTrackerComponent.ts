@@ -261,6 +261,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
     }
 
     startAll() {
+        this.errorState = "-1";
         this.activity = this.indicatorSrv.start();
         try {
             ModuloSonido.play('/assets/sounds/button.mp3');
