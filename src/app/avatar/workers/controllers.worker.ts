@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
 
+import { ControllerWorker } from "./ControllerWorker";
+
 const pending = new Map();
 
 function callMain(funName: string, argument: any) {
@@ -43,28 +45,6 @@ self.onmessage = async (e) => {
     }
 };
 
-class ControllerWorker {
-    val: number = 0;
-
-    constructor() {
-
-    }
-
-    async setValue(val: number) {
-        this.val = val;
-        return `Ok ${val}`;
-    }
-
-    async getSome(arg: number) {
-        return await callMain("getSome", arg);
-    }
-
-    async getValue() {
-        const computed = await this.getSome(this.val);
-        return computed;
-    }
-}
-
-const instance = new ControllerWorker();
+const instance = new ControllerWorker(callMain);
 
 self.postMessage({ type: 'READY' });
