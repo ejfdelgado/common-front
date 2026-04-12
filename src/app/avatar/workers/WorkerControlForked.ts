@@ -3,9 +3,14 @@
 // return await this.callMain("getSome", arg);
 import { computeComparableBody, getHigherAvatarScoredPose } from "@avatar/AvatarUtilities";
 import { BodyData, BodyKeyPointData, FrontComputationType, WorkerData } from "@mytypes/BodyTypes";
+import {
+    CCDIKSolver,
+    CCDIKHelper,
+} from 'three/examples/jsm/animation/CCDIKSolver.js';
 
 export class WorkerControlForked {
     data: WorkerData | null = null;
+    ikSolver: CCDIKSolver | null = null;
 
     constructor(
         public callMain: Function,

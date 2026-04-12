@@ -19,9 +19,7 @@ import { TransformControls } from 'three/examples/jsm/controls/TransformControls
 import * as THREE from 'three';
 import {
     computeBodyPointAverage,
-    computeComparableBody,
     getAvatarSkinnedMesh,
-    getHigherAvatarScoredPose,
     replaceAvatarSkin,
     arrayToMatrix,
     mirrorPose,
