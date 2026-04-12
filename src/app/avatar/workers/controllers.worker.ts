@@ -54,6 +54,10 @@ class ControllerWorker {
     async getSome(arg: number) {
         return await callMain("getSome", arg);
     }
+
+    async getValue() {
+        return this.val;
+    }
 }
 
 const instance = new ControllerWorker();

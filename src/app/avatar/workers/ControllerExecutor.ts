@@ -54,7 +54,7 @@ export class ControllerExecutor {
         });
     }
 
-    async callWorker(funName: string, argument: any) {
+    async callWorker(funName: string, argument: any = {}) {
         return new Promise((resolve, reject) => {
             const id = crypto.randomUUID();
             this.pending.set(id, { resolve, reject });
@@ -69,5 +69,9 @@ export class ControllerExecutor {
 
     async getOther(arg: number) {
         return await this.callWorker("setValue", arg);
+    }
+
+    async getValue() {
+        return await this.callWorker("getValue");
     }
 }

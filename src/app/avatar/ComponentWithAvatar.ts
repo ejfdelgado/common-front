@@ -70,9 +70,10 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         this.isComputing = true;
         try {
             // Level 2
-            console.log("Antes");
-            const temp = await this.controllerExecutor.getOther(1);
+            const temp = await this.controllerExecutor.getOther(3);
             console.log(temp);
+            const stored = await this.controllerExecutor.getValue();
+            console.log(stored);
             const response = await this.scene.computeIKLevel2(poses, videoSize, mirror);
             if (response == false) {
                 // Fire stop all controllers
