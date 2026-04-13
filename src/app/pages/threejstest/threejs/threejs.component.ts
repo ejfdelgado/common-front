@@ -127,6 +127,7 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
       //footL: this.stateBody.comparable.footL.toFixed(0),
       //footR: this.stateBody.comparable.footR.toFixed(0),
       //isMobile: this.isMobile(),
+      //isTPose: this.stateBody.isTPose,
     }
     this.headUpLog.emit(temp);
   }

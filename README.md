@@ -1,6 +1,5 @@
 # CommonFront
 
-corregir T pose porque ya no lo detecta ni va hacia atrás.
 Agregar menú a la izquierda y barra de navegación arriba.
 Agregar capacidad de conciencia de firestore.
 Ajustar el hacer stop, no reload() sino desconectar toda la cadena de ejecución en adelante.

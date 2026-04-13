@@ -70,18 +70,20 @@ export class SimplePosesDetection extends SceneControllerAbstract {
 
     checkTPose(comparable: ComparableBody) {
         const FIRST_ARTICULATION_THRESHOLD = 0.7;
-        const SECOND_ARTICULATION_THRESHOLD = 15;
+        const SECOND_ARTICULATION_THRESHOLD = 35;
         const leftHandT = comparable.leftArm.y > FIRST_ARTICULATION_THRESHOLD
             && comparable.handL < SECOND_ARTICULATION_THRESHOLD; // Max 15°
         const rightHandT = comparable.rightArm.y < -1 * FIRST_ARTICULATION_THRESHOLD
             && comparable.handR < SECOND_ARTICULATION_THRESHOLD; // Max 15°
         const isTPose = leftHandT && rightHandT;
 
+
         const leftHandNotT = comparable.leftArm.y < (FIRST_ARTICULATION_THRESHOLD - 0.1)
             || comparable.handL > (SECOND_ARTICULATION_THRESHOLD + 5); // Max 15°
         const rightHandNotT = comparable.rightArm.y > -1 * (FIRST_ARTICULATION_THRESHOLD - 0.1)
             || comparable.handR > (SECOND_ARTICULATION_THRESHOLD + 5); // Max 15°
         const isNotTPose = leftHandNotT || rightHandNotT;
+
         if (
             isTPose
         ) {
