@@ -15,11 +15,12 @@ export class WalkController extends SceneControllerAbstract {
     // constants 
     PRESITION_TRANSLATION: number = 0.0000001;
     MAX_INACTIVITY_MILLIS: number = 3000;
-    SMOOT_RATIO: number = 0.006 * 0.3;
-    SMOOT_RATIO_TRANSLATION: number = 0.006 * 0.3;
+    SMOOT_RATIO: number = 0.006 * 1.2;
+    SMOOT_RATIO_TRANSLATION: number = 0.006 * 1.2;
     CAMERA_HEIGTH_RATIO: number = 4;
     CAMERA_DISTANCE_TO_AVATAR: number = 14;
     ROTATION_AMOUNT: number = 0.25;
+    AUTOROTATION_AMOUNT: number = 0.04;
     STEP_AMOUNT: number = 3;// Walked distance on every step
     // variables
     destinationCameraLocation = new THREE.Vector3(0, 0, 0);
@@ -45,20 +46,33 @@ export class WalkController extends SceneControllerAbstract {
     stepSize: number = 0;
     maxDifference: number = 0;
     lastStepTime: number = 0;
-
+    lastTime: number = 0;
 
     override async update(): Promise<ControllerUpdateResponse> {
         const { camera, orbitals } = this.scene;
         this.walkLogic();
         if (camera && orbitals) {
             orbitals.enabled = false;
+            this.checkAutoRotation();
             this.computeTransformationMatrix();
             // Affect the scene camera
             this.placeCamera(camera, orbitals);
         }
+        this.lastTime = this.now;
         return {
             avatarTransform: this.transformationMatrix,
         };
+    }
+
+    checkAutoRotation() {
+        const {
+            frontData,
+        } = this.lastData;
+        const offsetAngle = (frontData.angle + Math.PI / 2);
+        if (Math.abs(offsetAngle) > THREE.MathUtils.degToRad(20)) {
+            const difftime = (this.now - this.lastTime)/25;
+            this.scene.avatarState.rotationY += difftime * offsetAngle * this.AUTOROTATION_AMOUNT;
+        }
     }
 
     walkLogic() {
@@ -220,7 +234,9 @@ export class WalkController extends SceneControllerAbstract {
             0,
             this.scene.avatarStateSmoot.positionZ,
         );
-        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarStateSmoot.rotationY);
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(
+            this.scene.avatarStateSmoot.rotationY,
+        );
         this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(
             translationMatrix,
             rotationMatrix,

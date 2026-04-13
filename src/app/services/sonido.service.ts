@@ -11,6 +11,13 @@ export interface CreateSoundDataType {
 	loop?: boolean;
 }
 
+function dispose(audioEl: HTMLAudioElement) {
+	audioEl.pause();          // Stop any ongoing playback
+	audioEl.src = '';         // Release the media resource
+	audioEl.load();           // Reset the element (flushes buffers)
+	audioEl.remove();         // Remove from DOM (if appended)
+}
+
 export class ModuloSonido {
 	static sonidos: { [key: string]: any } = {};
 	static sincId: string | null = null;
@@ -88,6 +95,9 @@ export class ModuloSonido {
 			} else {
 				// Play multiple instances
 				const clone: HTMLAudioElement = ref.cloneNode() as HTMLAudioElement;
+				clone.addEventListener('ended', () => {
+					dispose(clone);
+				});
 				clone.play();
 			}
 		}

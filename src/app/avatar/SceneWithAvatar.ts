@@ -487,6 +487,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         try {
             const model = this.getObjectByName(AVATAR_NAME);
             let { pose, score } = await workerProxy.getHigherAvatarScoredPose();
+            if (!model || !pose) {
+                this.computingIK = false;
+                return false;
+            }
             if (score < 0) {
                 // Person does not fit the camera
                 throw new Error(`${score}`);
@@ -505,17 +509,13 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 // but the in the real case it is bad
                 // It falls here and derive in T pose or erroneous
                 // body IK
-                
+
                 // Good score, but it was asked to restore
                 // Then use from T pose...
                 if (this.restoreBackupOnNextComputation) {
                     this.restoreTBoneBackup(AVATAR_NAME);
                     this.restoreBackupOnNextComputation = false;
                 }
-            }
-            if (!model || !pose) {
-                this.computingIK = false;
-                return false;
             }
 
             // Intercept for mirroring if necesarry
@@ -599,6 +599,9 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 frontData,
             };
         } catch (err) {
+            try {
+                this.restoreBoneBackup(AVATAR_NAME);
+            } catch (err) { }
             throw err;
         } finally {
             this.computingIK = false;
