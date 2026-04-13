@@ -127,6 +127,10 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                         model.matrix.copy(result);
                     }
                 }
+                for (let i = 0; i < this.controllers.length; i++) {
+                    const controller = this.controllers[i];
+                    await controller.postUpdate();
+                }
             }
             return response;
         } catch (err) {

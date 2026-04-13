@@ -31,6 +31,7 @@ import { ComparableController } from '@avatar/controllers/ComparableController';
 import { SimplePosesDetection } from '@avatar/controllers/SimplePosesDetection';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
 import { HandsCloseController } from '@avatar/controllers/HandsCloseController';
+import { CubeController } from '@avatar/controllers/CubeController';
 
 @Component({
   standalone: true,
@@ -50,15 +51,6 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
-  // controllers
-  comparableController: SceneControllerAbstract = new ComparableController(this.events, this.controlProxy);
-  simplePosesDetection: SceneControllerAbstract = new SimplePosesDetection(this.events, this.controlProxy);
-  handsCloseController: HandsCloseController = new HandsCloseController(this.events, this.controlProxy);
-  walkController: SceneControllerAbstract = new WalkController(this.events, this.controlProxy);
-  soundFeedbackController: SceneControllerAbstract = new SoundFeedbackController(this.events, this.controlProxy);
-  stand2dController: SceneControllerAbstract = new Stand2dController(this.events, this.controlProxy);
-  recordPoseController: SceneControllerAbstract = new RecordPoseController(this.events, this.controlProxy);
-  terrainController: SceneControllerAbstract = new TerrainElevationController(this.events, this.controlProxy);
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -96,16 +88,18 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
     // Add controllers
     // The order matters...
 
-    this.addController(this.comparableController);
-    this.addController(this.simplePosesDetection);
-    this.addController(this.handsCloseController);
+    this.addController(new ComparableController(this.events, this.controlProxy));
+    this.addController(new SimplePosesDetection(this.events, this.controlProxy));
+    this.addController(new HandsCloseController(this.events, this.controlProxy));
 
-    this.addController(this.terrainController);
-    this.addController(this.walkController);
-    this.addController(this.stand2dController);
+    this.addController(new TerrainElevationController(this.events, this.controlProxy));
+    this.addController(new WalkController(this.events, this.controlProxy));
+    this.addController(new Stand2dController(this.events, this.controlProxy));
 
-    this.addController(this.soundFeedbackController);
-    this.addController(this.recordPoseController);
+    this.addController(new SoundFeedbackController(this.events, this.controlProxy));
+    this.addController(new RecordPoseController(this.events, this.controlProxy));
+
+    this.addController(new CubeController(this.events, this.controlProxy));
     this.loop();
   }
 

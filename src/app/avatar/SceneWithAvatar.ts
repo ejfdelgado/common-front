@@ -682,25 +682,20 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         return new Promise((resolve, reject) => {
             this.addModel({ name: "", url: ROOT_PATH + "cube001.glb" }, false).then((obj) => {
                 const addCube = (name: string, imageUrl: string) => {
-                    const aCube = obj.clone();
+                    const aCube = obj.clone(true);
                     aCube.name = name;
                     aCube.traverse((child: any) => {
-                        if (child.isMesh && child.material) { }
-                        const materials = Array.isArray(child.material)
-                            ? child.material
-                            : [child.material];
-
-                        materials.forEach((material: any) => {
-                            material.transparent = true;
-                            material.opacity = 1;//0 invisible, 1 visible
-                            material.side = THREE.FrontSide;
-                        });
+                        if (child.isMesh && child.material) {
+                            child.material = child.material.clone();
+                            child.material.transparent = true;
+                            child.material.opacity = 1;//0 invisible, 1 visible
+                            child.material.side = THREE.FrontSide;
+                        }
                     });
                     replaceAvatarSkin(aCube, ROOT_PATH + imageUrl, 0);
                     this.add(aCube);
                 };
-
-                //addCube("cube_a", "a_cube.jpg");
+                addCube("cube_a", "a_cube.jpg");
                 addCube("cube_b", "b_cube.jpg");
 
                 resolve(obj);

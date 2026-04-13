@@ -34,6 +34,10 @@ export abstract class SceneControllerAbstract {
 
     abstract update(): Promise<ControllerUpdateResponse>;
 
+    async postUpdate(): Promise<void> {
+        return;
+    } 
+
     abstract stop(): Promise<void>;
 
     abstract destroy(): Promise<void>;
