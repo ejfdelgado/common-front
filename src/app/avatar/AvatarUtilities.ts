@@ -403,7 +403,7 @@ export function isAllPersonInsideCamera(
     pose: BodyData,
     videoSize: GenericSizeType,
     percentageTop: number = 0.1,
-    percentageBottom: number = 0.1,
+    percentageBottom: number = 0,
 ) {
     const top = videoSize.height * percentageTop;
     const bottom = videoSize.height * (1 - percentageBottom);

@@ -81,8 +81,14 @@ export class ModuloSonido {
 			}
 			ref.play();
 		} else {
-			if (typeof startMillis == "number" && startMillis != 0) {
-				ref.currentTime = startMillis / 1000;
+			if (loop) {
+				if (typeof startMillis == "number" && startMillis != 0) {
+					ref.currentTime = startMillis / 1000;
+				}
+			} else {
+				// Play multiple instances
+				const clone: HTMLAudioElement = ref.cloneNode() as HTMLAudioElement;
+				clone.play();
 			}
 		}
 		return ref;

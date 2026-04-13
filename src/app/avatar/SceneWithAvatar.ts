@@ -36,6 +36,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     renderer: THREE.WebGLRenderer | null = null;
     orbitals: OrbitControls | null = null;
     bonesBackup: { [key: string]: BoneBackupType[] } = {};
+    tPoseBackup: { [key: string]: BoneBackupType[] } = {};
     fbxLoader = new FBXLoader();
     gltfLoader = new GLTFLoader();
     restoreBackupOnNextComputation: boolean = false;
@@ -64,14 +65,26 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         this.bounds = bounds;
     }
 
-
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
+        this.makeBoneBackupInternal(model, this.bonesBackup);
+    }
+
+    makeTPoseBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
+        this.makeBoneBackupInternal(model, this.tPoseBackup);
+    }
+
+    makeBoneBackupInternal(
+        model: THREE.Object3D<THREE.Object3DEventMap>,
+        destiny: {
+            [key: string]: BoneBackupType[];
+        }
+    ) {
         const name = model.name;
-        this.bonesBackup[name] = [];
+        destiny[name] = [];
         const makeBackupBone = (boneName: string) => {
             const bone = model.getObjectByName(boneName);
             if (bone) {
-                this.bonesBackup[name].push({
+                destiny[name].push({
                     boneName,
                     position: bone.position.clone(),
                     rotation: bone.rotation.clone(),
@@ -85,10 +98,23 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         });
     }
 
+    restoreTBoneBackup(name: string) {
+        this.restoreBoneBackupInternal(name, this.tPoseBackup);
+    }
+
     restoreBoneBackup(name: string) {
+        this.restoreBoneBackupInternal(name, this.bonesBackup);
+    }
+
+    restoreBoneBackupInternal(
+        name: string,
+        origin: {
+            [key: string]: BoneBackupType[];
+        }
+    ) {
         const model = this.getObjectByName(name);
         if (model) {
-            this.bonesBackup[name].forEach((bk) => {
+            origin[name].forEach((bk) => {
                 const bone = model.getObjectByName(bk.boneName);
                 if (bone) {
                     bone.position.x = bk.position.x;
@@ -221,6 +247,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         //createControlFor("target_handL");
 
         this.makeBoneBackup(model);
+        this.makeTPoseBoneBackup(model);
 
         const iteration = 10;
 
@@ -458,20 +485,27 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         }
         this.computingIK = true;
         try {
-            if (this.restoreBackupOnNextComputation) {
-                this.restoreBoneBackup(AVATAR_NAME);
-                this.restoreBackupOnNextComputation = false;
-            }
             const model = this.getObjectByName(AVATAR_NAME);
             let { pose, score } = await workerProxy.getHigherAvatarScoredPose();
             if (score < 0) {
                 throw new Error(`${score}`);
             }
             if (score < 90) {
-                // Not all body in view
+                if (this.restoreBackupOnNextComputation) {
+                    this.restoreBoneBackup(AVATAR_NAME);
+                    this.restoreBackupOnNextComputation = false;
+                }
+                // Not all body in view or not trusty
                 this.computingIK = false;
                 this.restoreBackupOnNextComputation = true;
                 return false;
+            } else {
+                // Good score, but it was asked to restore
+                // Then use from T pose...
+                if (this.restoreBackupOnNextComputation) {
+                    this.restoreTBoneBackup(AVATAR_NAME);
+                    this.restoreBackupOnNextComputation = false;
+                }
             }
             if (!model || !pose) {
                 this.computingIK = false;
@@ -548,6 +582,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 if (skinnedMesh) {
                     skinnedMesh.updateMatrixWorld(true);
                 }
+                this.makeBoneBackup(model);
             } else {
                 console.log("No ikSolver!");
             }

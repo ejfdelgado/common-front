@@ -64,7 +64,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             BlazePoseHeavy
             BlazePoseFull
             */
-        tracker.setModel('BlazePoseLite');
+        tracker.setModel('BlazePoseFull');
         /*
         tracker.detectorConfig = {
             modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,

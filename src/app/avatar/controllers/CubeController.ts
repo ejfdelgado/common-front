@@ -93,11 +93,6 @@ export class CubeController extends SceneControllerAbstract {
                     }
                 }
             });
-
-            // Assign opacity
-            if (config.material) {
-                config.material.opacity = 1;
-            }
         });
 
 
@@ -140,6 +135,7 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOn(config.model);
                 }
                 if (!config.selected) {
+                    config.material.opacity = 1;
                     config.selected = true;
                     this.events.emit({
                         name: config.eventName + "ON",
@@ -150,6 +146,7 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOff(config.model);
                 }
                 if (config.selected) {
+                    config.material.opacity = 0.5;
                     config.selected = false;
                     this.events.emit({
                         name: config.eventName + "OFF",

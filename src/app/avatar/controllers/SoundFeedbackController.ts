@@ -31,6 +31,14 @@ export class SoundFeedbackController extends SceneControllerAbstract {
             ModuloSonido.play('/assets/sounds/bang.mp3', false);
         } else if (event.name == "JUMP_ON") {
             ModuloSonido.play('/assets/sounds/mario-coin.mp3', false);
+        } else if (event.name == "CUBE_A_SELECT_ON") {
+            ModuloSonido.play('/assets/sounds/piano_do.mp3', false);
+        } else if (event.name == "CUBE_B_SELECT_ON") {
+            ModuloSonido.play('/assets/sounds/piano_re.mp3', false);
+        } else if (event.name == "CUBE_C_SELECT_ON") {
+            ModuloSonido.play('/assets/sounds/piano_mi.mp3', false);
+        } else if (event.name == "CUBE_D_SELECT_ON") {
+            ModuloSonido.play('/assets/sounds/piano_fa.mp3', false);
         } else if ([
             "MAKE_STEP_FORWARD",
             "MAKE_STEP_BACKWARD",
