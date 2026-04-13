@@ -688,7 +688,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                         if (child.isMesh && child.material) {
                             child.material = child.material.clone();
                             child.material.transparent = true;
-                            child.material.opacity = 1;//0 invisible, 1 visible
+                            child.material.opacity = 0;//0 invisible, 1 visible
                             child.material.side = THREE.FrontSide;
                         }
                     });
@@ -697,6 +697,8 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 };
                 addCube("cube_a", "a_cube.jpg");
                 addCube("cube_b", "b_cube.jpg");
+                addCube("cube_c", "c_cube.jpg");
+                addCube("cube_d", "d_cube.jpg");
 
                 resolve(obj);
             }).catch((err) => {
