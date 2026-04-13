@@ -64,7 +64,11 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             BlazePoseHeavy
             BlazePoseFull
             */
-        tracker.setModel('BlazePoseFull');
+        if (this.isMobile()) {
+            tracker.setModel('BlazePoseLite');
+        } else {
+            tracker.setModel('BlazePoseFull');
+        }
         /*
         tracker.detectorConfig = {
             modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
@@ -266,7 +270,9 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         try {
             ModuloSonido.play('/assets/sounds/button.mp3');
             this.startTracking();
-            this.startListening();
+            if (!this.isMobile()) {
+                this.startListening();
+            }
             enterFullscreen();
             this.started = true;
         } catch (err) {

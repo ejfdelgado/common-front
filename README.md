@@ -1,18 +1,6 @@
 # CommonFront
 
 ------------------------------------------------------------------------
-Agregar a manos y pies capacidad de colision (aplicar matriz a la pose y evaluar manos o pies)
-para detectar cuando el usuario toca algo.
-Agregar controlador tipo menú 3D.
-
-Interactuar con menu.
-Izquierda, derecha, aplauso.
-patada salir.
-
-interactuar con botones:
-esfera
-cuadrado.
-------------------------------------------------------------------------
 comparacion: (3 numeros de salida)
 angulo entre front y front
 entre left y left y up y up.

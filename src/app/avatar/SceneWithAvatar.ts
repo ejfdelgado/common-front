@@ -488,6 +488,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
             const model = this.getObjectByName(AVATAR_NAME);
             let { pose, score } = await workerProxy.getHigherAvatarScoredPose();
             if (score < 0) {
+                // Person does not fit the camera
                 throw new Error(`${score}`);
             }
             if (score < 90) {
@@ -500,6 +501,11 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.restoreBackupOnNextComputation = true;
                 return false;
             } else {
+                // TODO, some times the scores are marked as good
+                // but the in the real case it is bad
+                // It falls here and derive in T pose or erroneous
+                // body IK
+                
                 // Good score, but it was asked to restore
                 // Then use from T pose...
                 if (this.restoreBackupOnNextComputation) {
