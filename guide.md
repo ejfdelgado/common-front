@@ -32,7 +32,7 @@ match /pro-document/{document=**} {
 
 If the collection must be read only by owners
 ```
-match /pro-knowledge/{document=**} {
+match /pro-room-private/{document=**} {
     allow read: if
     request.auth != null && request.auth.uid in resource.data.owners;
 }
@@ -51,7 +51,6 @@ author (asc), updated (desc), __name__ (desc)
 Whe using owners
 
 ```
-[] owners, search (asc), updated (desc), __name__ (desc)
 [] owners, updated (desc), __name__ (desc)
 ```
 
