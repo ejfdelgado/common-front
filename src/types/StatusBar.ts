@@ -7,6 +7,11 @@ export interface MenuOptionType {
     opened?: boolean;
 }
 
+export interface StatusBarConfigType {
+    hamburgerHighlight?: boolean;
+}
+
+
 export interface MenuConfigType {
-    
+
 }

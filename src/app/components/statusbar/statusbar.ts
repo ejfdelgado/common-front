@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '@services/auth.service';
 import { SideMenuService } from '@services/side-menu.service';
-import { MenuOptionType } from 'types/StatusBar';
+import { MenuOptionType, StatusBarConfigType } from 'types/StatusBar';
 
 @Component({
   selector: 'app-statusbar',
@@ -24,6 +24,7 @@ import { MenuOptionType } from 'types/StatusBar';
 })
 export class Statusbar {
   @Input() iconSmall: boolean = true;
+  @Input() config: StatusBarConfigType = {};
   @Input() options: MenuOptionType[] = [];
   @Input() title: string = "";
   user: User | null = null;

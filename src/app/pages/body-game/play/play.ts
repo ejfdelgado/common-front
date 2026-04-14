@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { MenuConfigType, MenuOptionType } from '@mytypes/StatusBar';
+import { MenuOptionType, StatusBarConfigType } from '@mytypes/StatusBar';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTracker } from './components/body-tracker/body-tracker';
@@ -33,6 +33,9 @@ const MODEL_NAME_PARENT = "room-private";
 })
 export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
 
+  statusBarConfig: StatusBarConfigType = {
+    hamburgerHighlight: true,
+  };
   menuOptions: MenuOptionType[] = [];
   room: RoomGameType | null = null;
 

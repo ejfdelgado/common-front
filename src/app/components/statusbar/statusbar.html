@@ -1,13 +1,12 @@
 <div class="main_container">
     <div class="menu_container">
         @if (iconSmall) {
-        <button mat-icon-button color="primary" (click)="toggleSideNav()"
-            aria-label="Open menu">
-            <mat-icon>menu</mat-icon>
+        <button mat-icon-button color="primary" (click)="toggleSideNav()" aria-label="Open menu">
+            <mat-icon [ngClass]="{'white_subtitle': config.hamburgerHighlight===true}">menu</mat-icon>
         </button>
         } @else {
         <button mat-fab color="primary" (click)="toggleSideNav()" aria-label="Open menu">
-            <mat-icon>menu</mat-icon>
+            <mat-icon [ngClass]="{'white_subtitle': config.hamburgerHighlight===true}">menu</mat-icon>
         </button>
         }
     </div>
