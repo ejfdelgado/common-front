@@ -33,7 +33,7 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
 
 export const ROOT_PATH = "/assets/models/";
-const USE_WORKER = false;
+const USE_WORKER = true;
 
 export abstract class SceneWithAvatar extends THREE.Scene {
     bounds: DOMRect;

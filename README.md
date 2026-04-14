@@ -1,7 +1,5 @@
 # CommonFront
 
-Crear un arreglo de sonidos
-verificar en qué punto se hace el low pressure
 Agregar menú a la izquierda y barra de navegación arriba.
 Agregar capacidad de conciencia de firestore.
 Ajustar el hacer stop, no reload() sino desconectar toda la cadena de ejecución en adelante.
@@ -52,7 +50,9 @@ En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser v
 Permitir cargar el mundo haciendo referencia al modelo guardado previamente.
 Permitir cargar unicamente la región donde está ubicado el usuario.
 
+Bugs:
 Fix mirror al caminar.
+Crear un arreglo de sonidos
 
 -------------------------------------------------------------------
 
