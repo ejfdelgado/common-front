@@ -93,10 +93,12 @@ const routes: Routes = [
         path: 'clients/index',
         loadComponent: () => import('./pages/clients/index/index').then(m => m.ClientIndexComponent),
     },
+    /*
     {
         path: 'game/walk',
         loadComponent: () => import('./pages/body/body.component').then(m => m.BodyComponent),
     },
+    */
     {
         path: 'threejs',
         loadComponent: () => import('./pages/threejstest/threejstest.component').then(m => m.ThreejsTestComponent),
