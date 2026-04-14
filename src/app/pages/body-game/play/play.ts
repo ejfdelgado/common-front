@@ -65,7 +65,9 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.sideMenuSrv.getState().subscribe(() => {
-      this.trackerComponent.onResize();
+      setTimeout(() => {
+        this.trackerComponent.onResize();
+      }, 500);
     });
   }
 

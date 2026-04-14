@@ -1,6 +1,7 @@
 <div class="full_screen container_vertical">
     <canvas id="canvas" width="500" height="500"></canvas>
     <app-avatar-container #three_component (headUpLog)="headUpLog($event)"></app-avatar-container>
+    
     @if (initialized && !started) {
     <div class="start_container no_mouse">
         <button class="start_button" (click)="startAll()">
@@ -12,7 +13,6 @@
     <!--div class="top_absolute no_mouse container_vertical gap_10 padding_20 head_up_log">
         <pre class="white_subtitle">{{ headUpLogData | json }}</pre>
     </div-->
-
 
     <div class="bottom_absolute container_vertical padding_10">
         <span class="words_space">
