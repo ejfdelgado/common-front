@@ -93,12 +93,14 @@ const routes: Routes = [
         path: 'clients/index',
         loadComponent: () => import('./pages/clients/index/index').then(m => m.ClientIndexComponent),
     },
-    /*
     {
-        path: 'game/walk',
-        loadComponent: () => import('./pages/body/body.component').then(m => m.BodyComponent),
+        path: 'action/rooms',
+        loadComponent: () => import('./pages/body-game/rooms/rooms').then(m => m.RoomsComponent),
     },
-    */
+    {
+        path: 'action/play',
+        loadComponent: () => import('./pages/body-game/play/play').then(m => m.PlayComponent),
+    },
     {
         path: 'threejs',
         loadComponent: () => import('./pages/threejstest/threejstest.component').then(m => m.ThreejsTestComponent),
