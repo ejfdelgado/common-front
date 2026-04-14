@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { MenuOptionType } from '@mytypes/StatusBar';
+import { AuthService } from '@services/auth.service';
+import { FullscreenService } from '@services/fullscreen.service';
 
 @Component({
   selector: 'app-play',
@@ -16,7 +20,28 @@ import { MenuOptionType } from '@mytypes/StatusBar';
   templateUrl: './play.html',
   styleUrl: './play.scss',
 })
-export class PlayComponent {
+export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
+
   menuOptions: MenuOptionType[] = [];
+
+  constructor(
+    public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
+    public override authSrv: AuthService,
+    public override cdr: ChangeDetectorRef,
+    //
+  ) {
+    super(sanitizer, fullScreenSrv, authSrv, cdr);
+  }
+
+  ngOnInit(): void {
+
+  }
+
+  ngOnDestroy(): void {
+
+  }
+
+
 
 }
