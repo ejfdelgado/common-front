@@ -14,6 +14,7 @@ import { SpeechSynthesisService } from "@services/speechsynthesis.service";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
+import { ComponentWithAvatar } from "./ComponentWithAvatar";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
     mirror: boolean = false;
@@ -50,7 +51,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
 
     async initializeBodyTracker(
         videoR: ElementRef<HTMLVideoElement>,
-        threeComponent: ThreejsComponent,
+        threeComponent: ComponentWithAvatar,
     ) {
         await tf.ready();
         this.videoRef = videoR;

@@ -1,1 +1,43 @@
-<p>body-tracker works!</p>
+<div class="full_screen container_vertical">
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <app-avatar-container #three_component (headUpLog)="headUpLog($event)"></app-avatar-container>
+    @if (initialized && !started) {
+    <div class="start_container no_mouse">
+        <button class="start_button" (click)="startAll()">
+            <mat-icon>play_arrow</mat-icon>
+            <span>Start</span>
+        </button>
+    </div>
+    }
+    <!--div class="top_absolute no_mouse container_vertical gap_10 padding_20 head_up_log">
+        <pre class="white_subtitle">{{ headUpLogData | json }}</pre>
+    </div-->
+
+
+    <div class="bottom_absolute container_vertical padding_10">
+        <span class="words_space">
+            @for (word of words; track word.id) {
+            <span [ngStyle]="{'color': word.color}" class="one_word white_subtitle">{{ word.word }} </span>
+            }
+        </span>
+        <div class="container_horizontal centered">
+            @if (started) {
+            <button class="button_simple font_red" (click)="stopAll()"><mat-icon class="white">stop</mat-icon></button>
+            }
+        </div>
+    </div>
+</div>
+<div class="full_screen no_mouse container_vertical">
+    <div class="video_grand_parent">
+        <div class="video_parent">
+            <video #video id="video" width="50" height="50">
+                <source src="">
+            </video>
+            @if (errorState == "-1") {
+            <div class="miss_avatar_parent">
+                <img src="/assets/icons/miss_avatar.svg">
+            </div>
+            }
+        </div>
+    </div>
+</div>
