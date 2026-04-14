@@ -45,9 +45,10 @@ import { CubeController } from '@avatar/controllers/CubeController';
   styleUrls: ['./threejs.component.css'],
 })
 export class ThreejsComponent extends ComponentWithAvatar implements OnInit, AfterViewInit, OnDestroy {
+
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
-  bounds: DOMRect | null = null;
+
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
@@ -62,18 +63,20 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
     super(sanitizer, fullScreenSrv);
     this.hasMobile = this.isMobile();
   }
+
   ngOnDestroy(): void {
     if (this.restoreInterval) {
       clearInterval(this.restoreInterval);
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  public onResize(event: any) {
-    this.computeDimensions();
-    if (this.scene != null && this.bounds != null) {
-      this.scene.setBounds(this.bounds, window.devicePixelRatio);
-    }
+  public override getParentRef(): ElementRef {
+    return this.parentRef;
+  }
+
+  @HostListener('window:resize', [])
+  override onResize() {
+    super.onResize();
   }
 
   ngAfterViewInit(): void {
@@ -132,17 +135,9 @@ export class ThreejsComponent extends ComponentWithAvatar implements OnInit, Aft
     this.headUpLog.emit(temp);
   }
 
-  public computeDimensions() {
-    if (!this.parentRef) {
-      return;
-    }
-    const parentNativeElement = this.parentRef.nativeElement;
-    this.bounds = parentNativeElement.getBoundingClientRect();
-  }
-
   ngOnInit(): void {
     setTimeout(() => {
-      this.onResize({});
+      this.onResize();
     }, 0);
     this.startSkeletonGuardinan();
   }

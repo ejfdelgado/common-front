@@ -21,6 +21,7 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
+import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 
 @Component({
   selector: 'app-threejstest',
@@ -128,5 +129,9 @@ export class ThreejsTestComponent extends BodyTrackerComponent implements AfterV
   headUpLog(event: any) {
     this.headUpLogData = event;
     //this.cdr.detectChanges();
+  }
+
+  override getAvatarContainer(): ComponentWithAvatar {
+    return this.threeComponent;
   }
 }

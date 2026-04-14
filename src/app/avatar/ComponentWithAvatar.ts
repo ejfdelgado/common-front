@@ -10,13 +10,14 @@ import {
     StateBody,
 } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
-import { EventEmitter } from '@angular/core';
+import { ElementRef, EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
 import { ControlProxy } from './workers/ControlProxy';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
 
+    bounds: DOMRect | null = null;
     controlProxy: ControlProxy = new ControlProxy();
     scene: SceneWithComposer | null = null;
     controllers: SceneControllerAbstract[] = [];
@@ -54,6 +55,23 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                 controller.onEvent(event);
             });
         });
+    }
+
+    public abstract getParentRef(): ElementRef;
+
+    public onResize() {
+        this.computeDimensions();
+        if (this.scene != null && this.bounds != null) {
+            this.scene.setBounds(this.bounds, window.devicePixelRatio);
+        }
+    }
+
+    public computeDimensions() {
+        if (!this.getParentRef()) {
+            return;
+        }
+        const parentNativeElement = this.getParentRef().nativeElement;
+        this.bounds = parentNativeElement.getBoundingClientRect();
     }
 
     async computeIKLevel1(

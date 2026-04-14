@@ -129,4 +129,8 @@ export class BodyTracker extends BodyTrackerComponent implements AfterViewInit {
     this.headUpLogData = event;
     //this.cdr.detectChanges();
   }
+
+  override getAvatarContainer(): AvatarContainer {
+    return this.threeComponent;
+  }
 }

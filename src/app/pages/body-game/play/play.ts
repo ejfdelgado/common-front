@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
@@ -16,6 +16,8 @@ import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { FirestoreService } from '@services/firestore.service';
 import { AssistantDataType } from '@mytypes/ragTypes';
+import { SideMenuService } from '@services/side-menu.service';
+import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -33,6 +35,7 @@ const MODEL_NAME_PARENT = "room-private";
 })
 export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
 
+  @ViewChild("tracker_component") trackerComponent!: BodyTrackerComponent;
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };
@@ -48,6 +51,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     private uiNotificationSrv: UINotificationSrv,
     private dialog: MatDialog,
     private firestoreSrv: FirestoreService,
+    public sideMenuSrv: SideMenuService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -58,6 +62,10 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       callback: () => {
         this.openPermissions();
       },
+    });
+
+    this.sideMenuSrv.getState().subscribe(() => {
+      this.trackerComponent.onResize();
     });
   }
 
