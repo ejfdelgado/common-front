@@ -103,7 +103,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                         // Means no body
                         throw new Error("-1");
                     } else if (response == null) {
-                        // means system error
+                        // means system is bussy or no yet ready
                     } else {
                         if (this.errorState != null) {
                             this.errorState = null;

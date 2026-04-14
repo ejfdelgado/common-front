@@ -1,5 +1,7 @@
 # CommonFront
 
+Crear un arreglo de sonidos
+verificar en qué punto se hace el low pressure
 Agregar menú a la izquierda y barra de navegación arriba.
 Agregar capacidad de conciencia de firestore.
 Ajustar el hacer stop, no reload() sino desconectar toda la cadena de ejecución en adelante.

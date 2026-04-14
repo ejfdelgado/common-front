@@ -2,7 +2,9 @@ import {
     AVATAR_NAME,
     AvatarLocationState,
     BodyData,
+    BodyKeyPointData,
     BoneBackupType,
+    FrontComputationType,
     GenericSizeType,
     ItemModelRef,
     ScenePoseEventType,
@@ -23,12 +25,15 @@ import {
     replaceAvatarSkin,
     arrayToMatrix,
     mirrorPose,
+    getHigherAvatarScoredPose,
+    computeComparableBody,
 } from '@avatar/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
 
 export const ROOT_PATH = "/assets/models/";
+const USE_WORKER = false;
 
 export abstract class SceneWithAvatar extends THREE.Scene {
     bounds: DOMRect;
@@ -486,7 +491,19 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         this.computingIK = true;
         try {
             const model = this.getObjectByName(AVATAR_NAME);
-            let { pose, score } = await workerProxy.getHigherAvatarScoredPose();
+            let pose: BodyData | null = null;
+            let score: number = 0;
+            if (USE_WORKER) {
+                // with worker
+                const higherResponse = await workerProxy.getHigherAvatarScoredPose();
+                pose = higherResponse.pose;
+                score = higherResponse.score;
+            } else {
+                // in main thread
+                const higherResponse = getHigherAvatarScoredPose(poses, videoSize);
+                pose = higherResponse.pose;
+                score = higherResponse.score;
+            }
             if (!model || !pose) {
                 this.computingIK = false;
                 return false;
@@ -496,20 +513,11 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 throw new Error(`${score}`);
             }
             if (score < 90) {
-                if (this.restoreBackupOnNextComputation) {
-                    this.restoreBoneBackup(AVATAR_NAME);
-                    this.restoreBackupOnNextComputation = false;
-                }
+                // this.restoreBoneBackup(AVATAR_NAME);
                 // Not all body in view or not trusty
                 this.computingIK = false;
-                this.restoreBackupOnNextComputation = true;
                 return false;
             } else {
-                // TODO, some times the scores are marked as good
-                // but the in the real case it is bad
-                // It falls here and derive in T pose or erroneous
-                // body IK
-
                 // Good score, but it was asked to restore
                 // Then use from T pose...
                 if (this.restoreBackupOnNextComputation) {
@@ -523,11 +531,22 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 mirrorPose(pose);
             }
 
-            const comparable1 = await workerProxy.computeComparableBody(pose, mirror);
-            const keypoints3DMap = comparable1.keypoints3DMap;
-            const frontData = comparable1.frontData;
-            // overwrite pose, as log it was fixed
-            pose = comparable1.pose;
+            let keypoints3DMap: {
+                [key: string]: BodyKeyPointData;
+            } = {};
+            let frontData: FrontComputationType | null = null;
+
+            if (USE_WORKER) {
+                const comparable1 = await workerProxy.computeComparableBody(pose, mirror);
+                keypoints3DMap = comparable1.keypoints3DMap;
+                frontData = comparable1.frontData;
+                // overwrite pose, as log it was fixed
+                pose = comparable1.pose;
+            } else {
+                const comparable1 = computeComparableBody(pose, mirror);
+                keypoints3DMap = comparable1.keypoints3DMap;
+                frontData = comparable1.frontData;
+            }
 
             const pelvisBone = model.getObjectByName(AvatarBoneEnum.pelvis);
             if (pelvisBone) {
