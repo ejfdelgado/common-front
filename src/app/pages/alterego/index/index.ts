@@ -39,7 +39,6 @@ const MODEL_NAME_CLONE = "pubknowledge";
 export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnDestroy {
   menuOptions: MenuOptionType[] = [];
   notes: AssistantDataType[] = [];
-  liveSubscription: Unsubscribe | null = null;
   searchable: string = "";
   authSubscription: Subscription | null = null;
   cardConfig: CardDocDataType = {
