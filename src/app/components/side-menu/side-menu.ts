@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { SideMenuService } from '@services/side-menu.service';
 import { Subscription } from 'rxjs';
-import { MenuOptionType } from 'types/StatusBar';
+import { MenuConfigType, MenuOptionType } from 'types/StatusBar';
 
 @Component({
   selector: 'app-side-menu',
@@ -19,6 +19,7 @@ export class SideMenu implements OnDestroy {
 
   @Input() logoImage: string = "./assets/img/logo.png";
   @Input() options: MenuOptionType[] = [];
+  @Input() config: MenuConfigType = {};
 
   opened: boolean = true;
   subscription!: Subscription;

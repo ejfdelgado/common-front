@@ -6,3 +6,7 @@ export interface MenuOptionType {
     children?: MenuOptionType[];
     opened?: boolean;
 }
+
+export interface MenuConfigType {
+    
+}

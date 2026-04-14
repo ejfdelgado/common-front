@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { MenuOptionType } from '@mytypes/StatusBar';
+import { MenuConfigType, MenuOptionType } from '@mytypes/StatusBar';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTracker } from './components/body-tracker/body-tracker';
