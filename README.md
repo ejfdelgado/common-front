@@ -126,7 +126,7 @@ npx ng generate component --standalone --skip-tests components/login-options
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/body-game/play
+npx ng generate component --standalone --skip-tests pages/body-game/play/components/avatar-container
 ```
 
 ```bash
