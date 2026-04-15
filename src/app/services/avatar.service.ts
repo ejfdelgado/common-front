@@ -19,6 +19,7 @@ export class AvatarService {
                     defaultMode: "mode00",
                     modes: {
                         "mode00": {
+                            mirror: true,
                             defaultPosition: {
                                 positionX: 0,
                                 positionY: 0,
@@ -30,7 +31,7 @@ export class AvatarService {
                                 far: 1000,
                                 fov: 30,
                                 lookAt: { x: 0, y: 1, z: 0 },
-                                position: { x: 0, y: 1, z: -5 },
+                                position: { x: 0, y: 1, z: 5 },
                             },
                             defaultSenario: "scenario01",
                             scenarios: {
@@ -47,6 +48,7 @@ export class AvatarService {
                             ]
                         },
                         "mode01": {
+                            mirror: false,
                             defaultPosition: {
                                 positionX: 3,
                                 positionY: 0,

@@ -7,6 +7,7 @@ export interface WorldAvatar {
 }
 
 export interface GameMode {
+    mirror: boolean;
     defaultPosition: AvatarLocationState;
     defaultCameraState: CameraState;
     defaultSenario: string;

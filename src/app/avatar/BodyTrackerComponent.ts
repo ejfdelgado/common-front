@@ -37,6 +37,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         defaultMode: "mode",
         modes: {
             "mode": {
+                mirror: false,
                 defaultPosition: {
                     positionX: 0,
                     positionY: 0,
@@ -366,6 +367,8 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         if (!mode || !avatarContainer.scene) {
             return;
         }
+        // Set general config
+        this.mirror = mode.mirror;
         // Place the avatar
         const position = mode.defaultPosition;
         avatarContainer.scene.forceAvatarState(position);
