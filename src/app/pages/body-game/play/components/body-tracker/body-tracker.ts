@@ -21,6 +21,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
 import { AvatarContainer } from '../avatar-container/avatar-container';
+import { AvatarService } from '@services/avatar.service';
 
 @Component({
   selector: 'app-body-tracker',
@@ -52,6 +53,7 @@ export class BodyTracker extends BodyTrackerComponent implements AfterViewInit {
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public override avatarSrv: AvatarService,
   ) {
     super(
       cdr,
@@ -61,6 +63,7 @@ export class BodyTracker extends BodyTrackerComponent implements AfterViewInit {
       booleanService,
       sanitizer,
       fullScreenSrv,
+      avatarSrv,
     );
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);

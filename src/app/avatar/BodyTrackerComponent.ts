@@ -14,12 +14,14 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
+import { AvatarService } from "@services/avatar.service";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
     mirror: boolean = false;
     errorState: string | null = null;
     initialized: boolean = false;
     started: boolean = false;
+    calledLastTime: boolean = false;
     activity: Wait | null = null;
     videoRef!: ElementRef<HTMLVideoElement>;
     poses: BodyData[] = [];
@@ -37,6 +39,8 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         public override booleanService: BooleanStateService,
         public override sanitizer: DomSanitizer,
         public override fullScreenSrv: FullscreenService,
+        //
+        public avatarSrv: AvatarService,
     ) {
         super(
             voiceSrv,
@@ -86,6 +90,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         // tracker.run('stream') // takes video from an m3u8 online stream
         const { unsubscribe } = tracker.on('beforeupdate', async (poses: any) => {
             if (!this.started) {
+                this.calledLastTime = true;
                 return;
             }
             this.poses = poses;
@@ -238,7 +243,6 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
 
     stopTracking() {
         // TODO, this function does not work!
-        /*
         if (this.trackerSubscription) {
             this.trackerSubscription();
             this.trackerSubscription = null;
@@ -248,7 +252,6 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         } catch (err) {
             this.videoRef.nativeElement.pause();
         }
-        */
     }
 
     startTracking() {
@@ -256,15 +259,11 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
     }
 
     stopAll() {
-        try {
-            ModuloSonido.play('/assets/sounds/button.mp3');
-            this.stopListening();
-            exitFullscreen();
-            this.stopTracking();
-            this.started = false;
-        } catch (err) {
-            console.log(err);
-        }
+        //this.stopTracking();
+        this.stopListening();
+        exitFullscreen();
+        ModuloSonido.play('/assets/sounds/button.mp3');
+        this.started = false;
     }
 
     startAll() {
@@ -290,5 +289,34 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
 
     public onResize() {
         this.getAvatarContainer().onResize();
+    }
+
+    public async stopSafetly() {
+        if (this.started) {
+            this.stopAll();
+            this.calledLastTime = false;
+            await new Promise<void>((resolve, reject) => {
+                const interval = setInterval(() => {
+                    if (this.calledLastTime === true) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 500);
+                setTimeout(() => {
+                    reject("Timeout exceed");
+                    //Reload?
+                }, 2000);
+            });
+        }
+    }
+
+    public async loadWorld(url: string) {
+        const promise = this.avatarSrv.loadWorld(url);
+        try {
+            await this.stopSafetly();
+            const world = await promise;
+        } catch (err) {
+            console.log(err);
+        }
     }
 }

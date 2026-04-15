@@ -22,6 +22,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
+import { AvatarService } from '@services/avatar.service';
 
 @Component({
   selector: 'app-threejstest',
@@ -53,6 +54,7 @@ export class ThreejsTestComponent extends BodyTrackerComponent implements AfterV
     public override booleanService: BooleanStateService,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public override avatarSrv: AvatarService,
   ) {
     super(
       cdr,
@@ -62,6 +64,7 @@ export class ThreejsTestComponent extends BodyTrackerComponent implements AfterV
       booleanService,
       sanitizer,
       fullScreenSrv,
+      avatarSrv,
     );
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
