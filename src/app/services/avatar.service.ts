@@ -16,7 +16,7 @@ export class AvatarService {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const model: WorldAvatar = {
-                    defaultMode: "mode00",
+                    defaultMode: "mode01",
                     modes: {
                         "mode00": {
                             mirror: true,

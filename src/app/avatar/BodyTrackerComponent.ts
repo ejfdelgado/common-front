@@ -369,9 +369,6 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         }
         // Set general config
         this.mirror = mode.mirror;
-        // Place the avatar
-        const position = mode.defaultPosition;
-        avatarContainer.scene.forceAvatarState(position, mode.mirror);
         // Place the camera
         const camera = mode.defaultCameraState;
         avatarContainer.scene.forceCameraState(camera);
@@ -387,6 +384,16 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         // Add scenario
         const scenario = mode.scenarios[mode.defaultSenario];
         avatarContainer.scene.initializeScenario(scenario);
+
+        // Place the avatar
+        const position = mode.defaultPosition;
+        // Search the correct height
+        let postY = avatarContainer.scene.getFirstHitFromTopToDown(position.positionX, position.positionZ);
+        if (!postY) {
+            postY = 0;
+        }
+        position.positionY = postY + 0.8;
+        avatarContainer.scene.forceAvatarState(position, mode.mirror);
 
         // Add characters
     }
