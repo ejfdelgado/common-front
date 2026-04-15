@@ -347,13 +347,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
     }
 
-    public async loadWorld(url: string) {
+    public async loadWorld(url: string, defaultMode?: string) {
         const loading = this.indicatorSrv.start();
         const promise = this.avatarSrv.loadWorld(url);
         try {
             await this.stopSafetly();
             this.world = await promise;
-            this.applyMode(this.world.defaultMode);
+            this.applyMode(defaultMode ? defaultMode : this.world.defaultMode);
         } catch (err) {
             console.log(err);
         } finally {
@@ -362,6 +362,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
 
     public async applyMode(id: string) {
+        console.log(`applyMode ${id}`);
         const mode = this.world.modes[id];
         const avatarContainer = this.getAvatarContainer();
 

@@ -69,7 +69,16 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       icon: "home",
       children: [],
       callback: () => {
-        this.trackerComponent.loadWorld("");
+        this.trackerComponent.loadWorld("", "mode00");
+      },
+    });
+
+    this.menuOptions.push({
+      label: "World 2",
+      icon: "home",
+      children: [],
+      callback: () => {
+        this.trackerComponent.loadWorld("", "mode01");
       },
     });
 
