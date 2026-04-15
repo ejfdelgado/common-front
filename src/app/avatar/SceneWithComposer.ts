@@ -14,6 +14,7 @@ import * as THREE from 'three';
 import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
+import { GameScenario } from "@mytypes/WorldAvatar";
 
 export abstract class SceneWithComposer extends SceneWithAvatar {
 
@@ -233,5 +234,30 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                 });
             }
         });
+    }
+
+    previousLoadedMeshes: THREE.Object3D<THREE.Object3DEventMap>[] = [];
+    async initializeScenario(scene: GameScenario) {
+        // Clean terrains
+        this.terrainMeshes = [];
+        // Clean old loaded scenario
+        for (let i = 0; i < this.previousLoadedMeshes.length; i++) {
+            const old = this.previousLoadedMeshes[i];
+            this.remove(old);
+        }
+        // Load and add new
+        // TODO optimize to load only the mesh close to the avatar
+        for (let i = 0; i < scene.meshes.length; i++) {
+            const specification = scene.meshes[i];
+            const scenario = await this.addModel({
+                name: specification.name,
+                url: specification.url,
+            });
+            this.autoDetectTerrainMeshes(scenario);
+            if (this.camera) {
+                this.makeObjectTransparentToCamera(scenario, this.camera, 0, 15, 30, 45);
+            }
+        }
+        //
     }
 }

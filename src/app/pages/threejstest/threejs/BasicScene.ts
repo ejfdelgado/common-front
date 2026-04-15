@@ -46,7 +46,6 @@ export class BasicScene extends SceneWithComposer {
 
     this.setupEffects(window.innerWidth, window.innerHeight);
     this.initializeAvatar();
-    this.initializeScenario();
     this.initializeControlls();
 
     const light = new THREE.AmbientLight(0xFFFFFF);
@@ -59,15 +58,6 @@ export class BasicScene extends SceneWithComposer {
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
 
     //this.loadCharacters();
-  }
-
-  async initializeScenario() {
-    const scenario = await this.addModel({ name: "scene", url: "/assets/models/scenario.glb" });
-    if (this.camera) {
-      this.makeObjectTransparentToCamera(scenario, this.camera, 0, 15, 30, 45);
-      this.autoDetectTerrainMeshes(scenario);
-    }
-    //
   }
 
   async initializeAvatar() {
