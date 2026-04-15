@@ -257,6 +257,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                 name: specification.name,
                 url: specification.url,
             });
+            this.previousLoadedMeshes.push(scenario);
             this.autoDetectTerrainMeshes(scenario);
             if (this.camera) {
                 this.makeObjectTransparentToCamera(scenario, this.camera, 0, 15, 30, 45);

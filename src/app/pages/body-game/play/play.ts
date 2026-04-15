@@ -69,7 +69,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       icon: "home",
       children: [],
       callback: () => {
-        this.trackerComponent.loadWorld("", "mode00");
+        this.trackerComponent.loadWorld("", "mode01");
       },
     });
 
@@ -78,7 +78,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       icon: "home",
       children: [],
       callback: () => {
-        this.trackerComponent.loadWorld("", "mode01");
+        this.trackerComponent.loadWorld("", "mode00");
       },
     });
 

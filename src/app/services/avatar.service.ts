@@ -36,6 +36,8 @@ export class AvatarService {
                             defaultSenario: "scenario01",
                             scenarios: {
                                 "scenario01": {
+                                    useComposer: true,
+                                    background: { color: { r: 0.5, g: 1, b: 0.5 } },
                                     characters: [],
                                     meshes: []
                                 }
@@ -43,7 +45,7 @@ export class AvatarService {
                             controllers: [
                                 { id: GameControllerEnum.ComparableController, params: {} },
                                 { id: GameControllerEnum.Stand2dController, params: {} },
-                                { id: GameControllerEnum.CubeController, params: {} },
+                                { id: GameControllerEnum.CubeController, params: { enabled: false } },
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                             ]
                         },
@@ -85,7 +87,7 @@ export class AvatarService {
                                 { id: GameControllerEnum.Stand2dController, params: {} },
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                                 { id: GameControllerEnum.RecordPoseController, params: {} },
-                                { id: GameControllerEnum.CubeController, params: {} },
+                                { id: GameControllerEnum.CubeController, params: { enabled: false } },
                             ]
                         }
                     }

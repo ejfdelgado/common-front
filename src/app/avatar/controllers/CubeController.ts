@@ -152,6 +152,9 @@ export class CubeController extends SceneControllerAbstract {
     }
 
     override async postUpdate() {
+        if (!this.enabled) {
+            return;
+        }
         const model = this.scene.getObjectByName(AVATAR_NAME);
         if (!model) { return; }
         const handL = model.getObjectByName(AvatarBoneEnum.hand_l);

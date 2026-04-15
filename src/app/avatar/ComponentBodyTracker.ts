@@ -362,7 +362,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
 
     public async applyMode(id: string) {
-        console.log(`applyMode ${id}`);
         const mode = this.world.modes[id];
         const avatarContainer = this.getAvatarContainer();
 
