@@ -375,15 +375,17 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         // Define controllers
         const controllers = mode.controllers;
         await avatarContainer.removeAllControllers();
+        const controllersPromises: any[] = [];
         for (let i = 0; i < controllers.length; i++) {
             const config = controllers[i];
             const controller = avatarContainer.createController(config);
-            avatarContainer.addController(controller);
+            controllersPromises.push(avatarContainer.addController(controller));
             controller.setParams(config.params);
         }
+        await Promise.all(controllersPromises);
         // Add scenario
         const scenario = mode.scenarios[mode.defaultSenario];
-        avatarContainer.scene.initializeScenario(scenario);
+        await avatarContainer.scene.initializeScenario(scenario);
 
         // Place the avatar
         const position = mode.defaultPosition;
@@ -392,7 +394,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         if (!postY) {
             postY = 0;
         }
-        position.positionY = postY + 0.8;
+        position.positionY = postY + 0.88;
         avatarContainer.scene.forceAvatarState(position, mode.mirror);
 
         // Add characters
