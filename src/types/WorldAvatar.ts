@@ -1,4 +1,4 @@
-import { AvatarLocationState } from "./BodyTypes";
+import { AvatarLocationState, Point3D } from "./BodyTypes";
 
 // The intentatio is to persist this data
 export interface WorldAvatar {
@@ -8,6 +8,7 @@ export interface WorldAvatar {
 
 export interface GameMode {
     defaultPosition: AvatarLocationState;
+    defaultCameraState: CameraState;
     defaultSenario: string;
     controllers: GameController[];
     scenarios: { [key: string]: GameScenario };
@@ -15,10 +16,25 @@ export interface GameMode {
 
 export interface GameScenario {
     meshes: GameMesh[];
+    characters: GameCharacter[];
 }
 
 export interface GameMesh {
+    name: string;
     url: string;
+}
+
+export interface GameAnimation {
+    name: string;
+    url: string;
+}
+
+export interface CameraState {
+    position: Point3D;
+    lookAt: Point3D;
+    fov: number;
+    near: number;
+    far: number;
 }
 
 export enum GameControllerEnum {
@@ -36,4 +52,10 @@ export enum GameControllerEnum {
 export interface GameController {
     id: GameControllerEnum;
     params: { [key: string]: any };
+}
+
+export interface GameCharacter {
+    meshes: GameMesh;
+    defaultAnimation: string;
+    animations: { [key: string]: GameAnimation };
 }

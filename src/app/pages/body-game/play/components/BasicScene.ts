@@ -51,7 +51,6 @@ export class BasicScene extends SceneWithComposer {
 
     const light = new THREE.AmbientLight(0xFFFFFF);
     this.add(light);
-
     const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
     pointLight.position.set(0, 5, 0);
     this.add(pointLight);

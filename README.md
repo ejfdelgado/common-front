@@ -6,7 +6,6 @@
 2. Permitir cargar y descargar configuraciones (activity indicator).
 La configuración debe tener:
 - Posición inicial de la cámara.
-- Cuales controladores usar, el orden importa, tal vez agregarles parámetros.
 
 ------------------------------------------------------------------------
 
