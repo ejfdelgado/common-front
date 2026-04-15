@@ -780,14 +780,20 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         if (!avatar) {
             return;
         }
-        avatar.position.copy(new THREE.Vector3(
+        avatar.matrixAutoUpdate = false;
+        const translationMatrix = new THREE.Matrix4().makeTranslation(
             state.positionX,
             state.positionY,
-            state.positionZ));
-        avatar.rotation.copy(new THREE.Euler(
-            0,
+            state.positionZ,
+        );
+        const rotationMatrix = new THREE.Matrix4().makeRotationY(
             state.rotationY + (mirror ? Math.PI : 0),
-            0));
+        );
+        const result = new THREE.Matrix4().multiplyMatrices(
+            translationMatrix,
+            rotationMatrix,
+        );
+        avatar.matrix.copy(result);
         Object.assign(this.avatarState, state);
         Object.assign(this.avatarStateSmoot, state);
     }
@@ -810,6 +816,9 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         );
         orbitals.enabled = false;
         camera.position.copy(cameraPosition);
+
+        // In degrees
+        camera.fov = state.fov;
 
         camera.lookAt(cameraLookAt);
         orbitals.target.set(cameraLookAt.x, cameraLookAt.y, cameraLookAt.z);

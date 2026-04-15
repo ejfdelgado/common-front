@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef } from "@angular/core";
-import { BodyData, GenericSizeType } from "@mytypes/BodyTypes";
+import { AVATAR_NAME, BodyData, GenericSizeType } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import { tracker } from '@tools/tracker.js';
@@ -399,6 +399,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             postY = 0;
         }
         position.positionY = postY + 0.88;
+        // Restore T pose transformation
+        avatarContainer.scene.restoreTBoneBackup(AVATAR_NAME);
+        // Clean old transformation
         avatarContainer.scene.forceAvatarState(position, mode.mirror);
 
         // Add characters

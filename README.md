@@ -1,13 +1,8 @@
 # CommonFront
 
-Create GameAction -> call setProps de some controller with some attributes.
-
 ------------------------------------------------------------------------
 
-Al iniciar, sin definir ningun escenario:
-Ubicar el avatar y la camara en frente.
-llamando el mismo loadMode()
-Poder definir la altura correctamente después de cargar el escenario si haber hecho play aún.
+Create GameAction -> call setProps de some controller with some attributes.
 
 ------------------------------------------------------------------------
 
