@@ -362,17 +362,14 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         const mode = this.world.modes[id];
         const avatarContainer = this.getAvatarContainer();
 
-        if (!mode) {
+        if (!mode || !avatarContainer.scene) {
             return;
         }
         //Ubicar el avatar
         const position = mode.defaultPosition;
-        avatarContainer.scene?.forceAvatarState(
-            position.positionX,
-            position.positionY,
-            position.positionZ,
-            position.rotationY,
-        );
-
+        avatarContainer.scene.forceAvatarState(position);
+        //Place the camera
+        const camera = mode.defaultCameraState;
+        avatarContainer.scene.forceCameraState(camera);
     }
 }

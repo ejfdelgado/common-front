@@ -31,6 +31,7 @@ import {
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
+import { CameraState } from '@mytypes/WorldAvatar';
 
 export const ROOT_PATH = "/assets/models/";
 const USE_WORKER = true;
@@ -774,12 +775,41 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         const cube = await this.addCubeControll();
     }
 
-    forceAvatarState(x: number, y: number, z: number, rotY: number) {
+    forceAvatarState(state: AvatarLocationState) {
         const avatar = this.getObjectByName(AVATAR_NAME);
         if (!avatar) {
             return;
         }
-        avatar.position.copy(new THREE.Vector3(x, y, z,));
-        avatar.rotation.copy(new THREE.Euler(0, rotY, 0))
+        avatar.position.copy(new THREE.Vector3(
+            state.positionX,
+            state.positionY,
+            state.positionZ));
+        avatar.rotation.copy(new THREE.Euler(0, state.rotationY, 0));
+        Object.assign(this.avatarState, state);
+        Object.assign(this.avatarStateSmoot, state);
+    }
+
+    forceCameraState(state: CameraState) {
+        const camera = this.camera;
+        const orbitals = this.orbitals;
+        if (!camera || !orbitals) {
+            return;
+        }
+        const cameraPosition = new THREE.Vector3(
+            state.position.x,
+            state.position.y,
+            state.position.z,
+        );
+        const cameraLookAt = new THREE.Vector3(
+            state.lookAt.x,
+            state.lookAt.y,
+            state.lookAt.z,
+        );
+        orbitals.enabled = false;
+        camera.position.copy(cameraPosition);
+
+        camera.lookAt(cameraLookAt);
+        orbitals.target.set(cameraLookAt.x, cameraLookAt.y, cameraLookAt.z);
+        orbitals.enabled = true;
     }
 }
