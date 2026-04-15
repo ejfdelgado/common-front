@@ -1,9 +1,21 @@
 # CommonFront
 
+------------------------------------------------------------------------
+
+1. Crear mínimo de configuración.
+2. Permitir cargar y descargar configuraciones (activity indicator).
+La configuración debe tener:
+- Posición inicial de la cámara.
+- Cuales controladores usar, el orden importa, tal vez agregarles parámetros.
+
+------------------------------------------------------------------------
+
+Colocar en el menú superior derecho:
+- Opción de render o no composite.
+- Idioma de salida de voz
+
 Cuando se hace el setup de un controller, invocaar una función para hacer por ejemplo que los cubos
 se vean!
-Agregar menú a la izquierda y barra de navegación arriba.
-Agregar capacidad de conciencia de firestore.
 Ajustar el hacer stop, no reload() sino desconectar toda la cadena de ejecución en adelante.
 ------------------------------------------------------------------------
 comparacion: (3 numeros de salida)

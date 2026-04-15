@@ -3,6 +3,11 @@ import * as THREE from 'three';
 
 export const ROOT_PATH = "/assets/models/";
 
+export interface Point2D {
+    x: number;
+    y: number;
+};
+
 export interface Point3D {
     x: number;
     y: number;
