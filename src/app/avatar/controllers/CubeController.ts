@@ -18,7 +18,7 @@ export interface CubeConfigType {
 };
 
 export class CubeController extends SceneControllerAbstract {
-
+    enabled: boolean = false;
     cubes: {
         [key: string]: CubeConfigType,
     } = {
@@ -63,11 +63,20 @@ export class CubeController extends SceneControllerAbstract {
     override setParams(params: {
         [key: string]: any;
     }) {
+        // Dangerous but flexible
+        Object.assign(this, params);
+        if (this.enabled) {
+            this.setOpacity(OPACITY_LOW);
+        } else {
+            this.setOpacity(0);
+        }
+    }
+
+    setOpacity(val: number) {
         Object.keys(this.cubes).forEach((name: string) => {
             const config = this.getCubeConfig(name);
             if (!config) { return; }
-            config.material.opacity = OPACITY_LOW;
-
+            config.material.opacity = val;
         });
     }
 
@@ -93,7 +102,9 @@ export class CubeController extends SceneControllerAbstract {
     }
 
     override async update(): Promise<ControllerUpdateResponse> {
-
+        if (!this.enabled) {
+            return {};
+        }
         const rotationMatrix = new THREE.Matrix4()
             .makeRotationY(this.scene.avatarStateSmoot.rotationY);
 
@@ -127,7 +138,6 @@ export class CubeController extends SceneControllerAbstract {
                 }
             });
         });
-
 
         return {};
     }

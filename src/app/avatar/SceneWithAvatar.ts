@@ -775,7 +775,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         const cube = await this.addCubeControll();
     }
 
-    forceAvatarState(state: AvatarLocationState) {
+    forceAvatarState(state: AvatarLocationState, mirror: boolean) {
         const avatar = this.getObjectByName(AVATAR_NAME);
         if (!avatar) {
             return;
@@ -784,7 +784,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
             state.positionX,
             state.positionY,
             state.positionZ));
-        avatar.rotation.copy(new THREE.Euler(0, state.rotationY, 0));
+        avatar.rotation.copy(new THREE.Euler(
+            0,
+            state.rotationY + (mirror ? Math.PI : 0),
+            0));
         Object.assign(this.avatarState, state);
         Object.assign(this.avatarStateSmoot, state);
     }

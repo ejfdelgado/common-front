@@ -371,7 +371,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         this.mirror = mode.mirror;
         // Place the avatar
         const position = mode.defaultPosition;
-        avatarContainer.scene.forceAvatarState(position);
+        avatarContainer.scene.forceAvatarState(position, mode.mirror);
         // Place the camera
         const camera = mode.defaultCameraState;
         avatarContainer.scene.forceCameraState(camera);

@@ -1,13 +1,15 @@
 # CommonFront
 
+Buscar el x,z -> terrain, place avatar height.
+Create GameAction -> call setProps de some controller with some attributes.
+
+Al iniciar, sin definir ningun escenario:
+Ubicar el avatar y la camara en frente.
+llamando el mismo loadMode()
+
 ------------------------------------------------------------------------
 
-1. Crear mínimo de configuración.
-2. Permitir cargar y descargar configuraciones (activity indicator).
-Permitir construir un mundo 3d:
-Permitiendo cargar N partes el mundo:
-Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
-min, x, y, z, max, x, y, z.
+Poder definir la altura correctamente después de cargar el escenario si haber hecho play aún.
 
 ------------------------------------------------------------------------
 
