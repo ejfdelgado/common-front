@@ -23,6 +23,7 @@ import { SoundFeedbackController } from './controllers/SoundFeedbackController';
 import { Stand2dController } from './controllers/Stand2dController';
 import { TerrainElevationController } from './controllers/TerrainElevationController';
 import { WalkController } from './controllers/WalkController';
+import { CubeController } from './controllers/CubeController';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
 
@@ -232,7 +233,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         if (config.id == GameControllerEnum.ComparableController) {
             return new ComparableController(this.events, this.controlProxy);
         } else if (config.id == GameControllerEnum.CubeController) {
-            return new ComparableController(this.events, this.controlProxy);
+            return new CubeController(this.events, this.controlProxy);
         } else if (config.id == GameControllerEnum.HandsCloseController) {
             return new HandsCloseController(this.events, this.controlProxy);
         } else if (config.id == GameControllerEnum.RecordPoseController) {
