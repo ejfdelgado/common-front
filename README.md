@@ -2,13 +2,14 @@
 
 ------------------------------------------------------------------------
 
-Create GameAction -> call setProps de some controller with some attributes.
-
-------------------------------------------------------------------------
-
+Use visibility=false when person is not present in video.
+Add support when no logged user exists, also, support when user login.
 Colocar en el menú superior derecho:
 - Opción de render o no composite.
 - Idioma de salida de voz
+Create GameAction -> call setProps de some controller with some attributes.
+Add characters.
+Support for assets on bucket, not in local.
 
 ------------------------------------------------------------------------
 comparacion: (3 numeros de salida)

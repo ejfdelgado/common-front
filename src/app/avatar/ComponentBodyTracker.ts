@@ -353,7 +353,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         try {
             await this.stopSafetly();
             this.world = await promise;
-            this.applyMode(defaultMode ? defaultMode : this.world.defaultMode);
+            await this.applyMode(defaultMode ? defaultMode : this.world.defaultMode);
         } catch (err) {
             console.log(err);
         } finally {
@@ -376,14 +376,12 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         // Define controllers
         const controllers = mode.controllers;
         await avatarContainer.removeAllControllers();
-        const controllersPromises: any[] = [];
         for (let i = 0; i < controllers.length; i++) {
             const config = controllers[i];
             const controller = avatarContainer.createController(config);
-            controllersPromises.push(avatarContainer.addController(controller));
+            await avatarContainer.addController(controller);
             controller.setParams(config.params);
         }
-        await Promise.all(controllersPromises);
         // Add scenario
         const scenario = mode.scenarios[mode.defaultSenario];
         if (scenario.useComposer) {

@@ -95,9 +95,16 @@ export class ModuloSonido {
 			} else {
 				// Play multiple instances
 				const clone: HTMLAudioElement = ref.cloneNode() as HTMLAudioElement;
+				clone.volume = volume;
+				if (ModuloSonido.sincId) {
+					clone.setSinkId(ModuloSonido.sincId);
+				}
 				clone.addEventListener('ended', () => {
 					dispose(clone);
 				});
+				if (typeof startMillis == "number") {
+					clone.currentTime = startMillis / 1000;
+				}
 				clone.play();
 			}
 		}
