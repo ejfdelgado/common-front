@@ -45,10 +45,15 @@ export class AvatarService {
                                 }
                             },
                             controllers: [
-                                {
-                                    id: GameControllerEnum.ComparableController,
-                                    params: {}
-                                }
+                                { id: GameControllerEnum.ComparableController, params: {} },
+                                { id: GameControllerEnum.SimplePosesDetection, params: {} },
+                                { id: GameControllerEnum.HandsCloseController, params: {} },
+                                { id: GameControllerEnum.TerrainElevationController, params: {} },
+                                { id: GameControllerEnum.WalkController, params: {} },
+                                { id: GameControllerEnum.Stand2dController, params: {} },
+                                { id: GameControllerEnum.SoundFeedbackController, params: {} },
+                                { id: GameControllerEnum.RecordPoseController, params: {} },
+                                { id: GameControllerEnum.CubeController, params: {} },
                             ]
                         }
                     }

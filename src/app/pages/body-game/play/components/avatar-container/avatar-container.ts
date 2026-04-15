@@ -88,21 +88,6 @@ export class AvatarContainer extends ComponentWithAvatar implements OnInit, Afte
     this.scene = new BasicScene(theCanvas, this.bounds, this.indicatorSrv, this.http);
     this.scene.initialize();
     this.sceneCreated.resolve();
-    // Add controllers
-    // The order matters...
-
-    this.addController(new ComparableController(this.events, this.controlProxy));
-    this.addController(new SimplePosesDetection(this.events, this.controlProxy));
-    this.addController(new HandsCloseController(this.events, this.controlProxy));
-
-    this.addController(new TerrainElevationController(this.events, this.controlProxy));
-    this.addController(new WalkController(this.events, this.controlProxy));
-    this.addController(new Stand2dController(this.events, this.controlProxy));
-
-    this.addController(new SoundFeedbackController(this.events, this.controlProxy));
-    this.addController(new RecordPoseController(this.events, this.controlProxy));
-
-    this.addController(new CubeController(this.events, this.controlProxy));
     this.loop();
   }
 
