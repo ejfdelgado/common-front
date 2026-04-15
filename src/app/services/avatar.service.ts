@@ -16,8 +16,36 @@ export class AvatarService {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const model: WorldAvatar = {
-                    defaultMode: "mode01",
+                    defaultMode: "mode00",
                     modes: {
+                        "mode00": {
+                            defaultPosition: {
+                                positionX: 0,
+                                positionY: 0,
+                                positionZ: 0,
+                                rotationY: 0,
+                            },
+                            defaultCameraState: {
+                                near: 0.1,
+                                far: 1000,
+                                fov: 30,
+                                lookAt: { x: 0, y: 1, z: 0 },
+                                position: { x: 0, y: 1, z: -5 },
+                            },
+                            defaultSenario: "scenario01",
+                            scenarios: {
+                                "scenario01": {
+                                    characters: [],
+                                    meshes: []
+                                }
+                            },
+                            controllers: [
+                                { id: GameControllerEnum.ComparableController, params: {} },
+                                { id: GameControllerEnum.Stand2dController, params: {} },
+                                { id: GameControllerEnum.CubeController, params: {} },
+                                { id: GameControllerEnum.SoundFeedbackController, params: {} },
+                            ]
+                        },
                         "mode01": {
                             defaultPosition: {
                                 positionX: 3,

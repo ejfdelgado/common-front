@@ -240,6 +240,10 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     async initializeScenario(scene: GameScenario) {
         // Clean terrains
         this.terrainMeshes = [];
+        // Clean highlighted meshes
+        if (this.outlinePass) {
+            this.outlinePass.selectedObjects = [];
+        }
         // Clean old loaded scenario
         for (let i = 0; i < this.previousLoadedMeshes.length; i++) {
             const old = this.previousLoadedMeshes[i];
