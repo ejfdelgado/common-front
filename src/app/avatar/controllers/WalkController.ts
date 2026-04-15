@@ -5,7 +5,7 @@ import {
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
-import { makeSmootValue, makeSmootVector } from "@avatar/AvatarUtilities";
+import { makeSmootValue, makeSmootVector } from "@avatar/utils/AvatarUtilities";
 import { BodyPoseKey } from "@mytypes/BodyParts";
 
 const FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);

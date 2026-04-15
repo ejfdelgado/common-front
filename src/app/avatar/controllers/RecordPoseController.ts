@@ -9,7 +9,7 @@ import {
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
-import { matrixToArray } from "@avatar/AvatarUtilities";
+import { matrixToArray } from "@avatar/utils/AvatarUtilities";
 import { EXPORTED_BONES } from "@mytypes/BodyParts";
 
 export class RecordPoseController extends SceneControllerAbstract {

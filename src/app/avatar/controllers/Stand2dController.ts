@@ -4,8 +4,8 @@ import {
     ControllerUpdateResponse,
 } from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
-import { computeBodyPointAverage } from "@avatar/AvatarUtilities";
-import { SignalLowPass } from "@avatar/SignalLowPass";
+import { computeBodyPointAverage } from "@avatar/utils/AvatarUtilities";
+import { SignalLowPass } from "@avatar/utils/SignalLowPass";
 import * as THREE from 'three';
 import { BodyPoseKey } from "@mytypes/BodyParts";
 

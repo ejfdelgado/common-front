@@ -1,7 +1,7 @@
 
 // If need to call the main thread
 // return await this.callMain("getSome", arg);
-import { computeComparableBody, getHigherAvatarScoredPose } from "@avatar/AvatarUtilities";
+import { computeComparableBody, getHigherAvatarScoredPose } from "@avatar/utils/AvatarUtilities";
 import { BodyData, BodyKeyPointData, FrontComputationType, WorkerData } from "@mytypes/BodyTypes";
 
 export class WorkerControlForked {

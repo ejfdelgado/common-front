@@ -1,4 +1,4 @@
-import { computeHeight } from "@avatar/AvatarUtilities";
+import { computeHeight } from "@avatar/utils/AvatarUtilities";
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { ControllerUpdateResponse, AvatarBodyEvent, ComparableBody } from "@mytypes/BodyTypes";
 

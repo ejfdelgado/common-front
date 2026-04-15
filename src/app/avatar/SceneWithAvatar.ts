@@ -27,7 +27,7 @@ import {
     mirrorPose,
     getHigherAvatarScoredPose,
     computeComparableBody,
-} from '@avatar/AvatarUtilities';
+} from '@avatar/utils/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
