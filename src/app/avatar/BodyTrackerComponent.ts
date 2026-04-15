@@ -85,6 +85,9 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         // tracker.run('video') // takes video from a movie file (e.g., mp4)
         // tracker.run('stream') // takes video from an m3u8 online stream
         const { unsubscribe } = tracker.on('beforeupdate', async (poses: any) => {
+            if (!this.started) {
+                return;
+            }
             this.poses = poses;
             if (this.activity) {
                 this.activity.done();
@@ -235,6 +238,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
 
     stopTracking() {
         // TODO, this function does not work!
+        /*
         if (this.trackerSubscription) {
             this.trackerSubscription();
             this.trackerSubscription = null;
@@ -244,10 +248,10 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         } catch (err) {
             this.videoRef.nativeElement.pause();
         }
+        */
     }
 
     startTracking() {
-        this.started = true;
         tracker.run('camera');
     }
 
@@ -256,9 +260,8 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             ModuloSonido.play('/assets/sounds/button.mp3');
             this.stopListening();
             exitFullscreen();
+            this.stopTracking();
             this.started = false;
-            location.reload();
-            //this.stopTracking();
         } catch (err) {
             console.log(err);
         }
