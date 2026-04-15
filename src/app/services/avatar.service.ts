@@ -65,6 +65,9 @@ export class AvatarService {
                             defaultSenario: "scenario01",
                             scenarios: {
                                 "scenario01": {
+                                    background: {
+                                        color: { r: 187, g: 187, b: 255 }
+                                    },
                                     characters: [],
                                     meshes: [
                                         {

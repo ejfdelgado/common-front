@@ -262,6 +262,10 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                 this.makeObjectTransparentToCamera(scenario, this.camera, 0, 15, 30, 45);
             }
         }
-        //
+        // Update background if needed
+        const bgColor = scene.background?.color;
+        if (bgColor) {
+            this.background = new THREE.Color(bgColor.r, bgColor.g, bgColor.b);
+        }
     }
 }

@@ -42,7 +42,6 @@ export class BasicScene extends SceneWithComposer {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setSize(this.bounds.width, this.bounds.height);
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
-    this.background = new THREE.Color(0xBBBBFF);
 
     this.setupEffects(window.innerWidth, window.innerHeight);
     this.initializeAvatar();

@@ -15,7 +15,16 @@ export interface GameMode {
     scenarios: { [key: string]: GameScenario };
 }
 
+export interface ColorType {
+    r: number;
+    g: number;
+    b: number;
+}
+
 export interface GameScenario {
+    background?: {
+        color?: ColorType;
+    },
     meshes: GameMesh[];
     characters: GameCharacter[];
 }

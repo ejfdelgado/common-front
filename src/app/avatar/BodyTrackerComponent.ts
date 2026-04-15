@@ -53,6 +53,9 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                 defaultSenario: "scenario",
                 scenarios: {
                     "scenario": {
+                        background: {
+                            color: { r: 255, g: 255, b: 255 }
+                        },
                         characters: [],
                         meshes: [],
                     }

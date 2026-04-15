@@ -66,10 +66,19 @@ export class CubeController extends SceneControllerAbstract {
         // Dangerous but flexible
         Object.assign(this, params);
         if (this.enabled) {
+            this.setVisibility(true);
             this.setOpacity(OPACITY_LOW);
         } else {
-            this.setOpacity(0);
+            this.setVisibility(false);
         }
+    }
+
+    setVisibility(val: boolean) {
+        Object.keys(this.cubes).forEach((name: string) => {
+            const config = this.getCubeConfig(name);
+            if (!config || !config.model) { return; }
+            config.model.visible = val;
+        });
     }
 
     setOpacity(val: number) {
