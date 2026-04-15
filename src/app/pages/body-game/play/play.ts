@@ -64,6 +64,15 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       },
     });
 
+    this.menuOptions.push({
+      label: "World 1",
+      icon: "home",
+      children: [],
+      callback: () => {
+        this.trackerComponent.loadWorld("");
+      },
+    });
+
     this.sideMenuSrv.getState().subscribe(() => {
       setTimeout(() => {
         this.trackerComponent.onResize();

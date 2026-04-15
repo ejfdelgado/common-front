@@ -31,4 +31,8 @@ export class SideMenuService {
     getState() {
         return this.state;
     }
+
+    fireState() {
+        this.state.next(this.opened);
+    }
 }

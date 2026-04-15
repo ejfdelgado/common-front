@@ -21,6 +21,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
     errorState: string | null = null;
     initialized: boolean = false;
     started: boolean = false;
+    trackerStarted: boolean = false;
     calledLastTime: boolean = false;
     activity: Wait | null = null;
     videoRef!: ElementRef<HTMLVideoElement>;
@@ -255,7 +256,10 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
     }
 
     startTracking() {
-        tracker.run('camera');
+        if (!this.trackerStarted) {
+            tracker.run('camera');
+            this.trackerStarted = true;
+        }
     }
 
     stopAll() {
@@ -299,10 +303,11 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                 const interval = setInterval(() => {
                     if (this.calledLastTime === true) {
                         clearInterval(interval);
+                        clearTimeout(timeout);
                         resolve();
                     }
-                }, 500);
-                setTimeout(() => {
+                }, 100);
+                const timeout = setTimeout(() => {
                     reject("Timeout exceed");
                     //Reload?
                 }, 2000);
@@ -311,12 +316,15 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
     }
 
     public async loadWorld(url: string) {
+        const loading = this.indicatorSrv.start();
         const promise = this.avatarSrv.loadWorld(url);
         try {
             await this.stopSafetly();
             const world = await promise;
         } catch (err) {
             console.log(err);
+        } finally {
+            loading.done();
         }
     }
 }

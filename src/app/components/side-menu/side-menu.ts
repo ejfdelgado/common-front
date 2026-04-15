@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { SideMenuService } from '@services/side-menu.service';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { MenuConfigType, MenuOptionType } from 'types/StatusBar';
   templateUrl: './side-menu.html',
   styleUrl: './side-menu.scss',
 })
-export class SideMenu implements OnDestroy {
+export class SideMenu implements OnDestroy, AfterViewInit {
 
   @Input() logoImage: string = "./assets/img/logo.png";
   @Input() options: MenuOptionType[] = [];
@@ -33,6 +33,10 @@ export class SideMenu implements OnDestroy {
       this.opened = val;
       cdr.detectChanges();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.sideMenuSrv.fireState();
   }
 
   ngOnDestroy(): void {
