@@ -66,7 +66,7 @@ export class AvatarService {
                             scenarios: {
                                 "scenario01": {
                                     useComposer: true,
-                                    //background: { color: { r: 187, g: 187, b: 255 } },
+                                    background: { color: { r: 0.5, g: 0.5, b: 1 } },
                                     characters: [],
                                     meshes: [
                                         {
