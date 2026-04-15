@@ -22,6 +22,7 @@ export interface ColorType {
 }
 
 export interface GameScenario {
+    useComposer?: boolean;
     background?: {
         color?: ColorType;
     },

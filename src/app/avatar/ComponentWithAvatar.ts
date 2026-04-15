@@ -9,7 +9,7 @@ import {
     GenericSizeType,
     StateBody,
 } from '@mytypes/BodyTypes';
-import { SceneControllerAbstract } from '@avatar/SceneControllerAbstract';
+import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import { ElementRef, EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
@@ -27,7 +27,7 @@ import { CubeController } from './controllers/CubeController';
 import { PromiseEmitter } from '@tools/PromiseEmitter';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
-
+    useComposer: boolean = false;
     sceneCreated: PromiseEmitter = new PromiseEmitter();
     bounds: DOMRect | null = null;
     controlProxy: ControlProxy = new ControlProxy();
@@ -220,8 +220,11 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         ) {
             this.scene.camera.updateProjectionMatrix();
             // Need to be changed
-            //this.scene.renderer.render(this.scene, this.scene.camera);
-            this.scene.composer.render();
+            if (!this.useComposer) {
+                this.scene.renderer.render(this.scene, this.scene.camera);
+            } else {
+                this.scene.composer.render();
+            }
             this.scene.orbitals.update();
             this.scene.animate();
             this.updateHeadsUpLog();

@@ -3,7 +3,7 @@ import {
     BodyKeyPointData,
     ControllerUpdateResponse,
 } from "@mytypes/BodyTypes";
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { computeBodyPointAverage } from "@avatar/AvatarUtilities";
 import { SignalLowPass } from "@avatar/SignalLowPass";
 import * as THREE from 'three';

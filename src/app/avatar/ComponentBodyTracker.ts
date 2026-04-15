@@ -17,7 +17,7 @@ import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import { WorldAvatar } from "@mytypes/WorldAvatar";
 
-export abstract class BodyTrackerComponent extends CommonSpeech {
+export abstract class ComponentBodyTracker extends CommonSpeech {
     mirror: boolean = false;
     errorState: string | null = null;
     initialized: boolean = false;
@@ -53,9 +53,8 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                 defaultSenario: "scenario",
                 scenarios: {
                     "scenario": {
-                        background: {
-                            color: { r: 255, g: 255, b: 255 }
-                        },
+                        useComposer: true,
+                        //background: { color: { r: 255, g: 255, b: 255 } },
                         characters: [],
                         meshes: [],
                     }
@@ -387,6 +386,9 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         await Promise.all(controllersPromises);
         // Add scenario
         const scenario = mode.scenarios[mode.defaultSenario];
+        if (scenario.useComposer) {
+            avatarContainer.useComposer = scenario.useComposer;
+        }
         await avatarContainer.scene.initializeScenario(scenario);
 
         // Place the avatar

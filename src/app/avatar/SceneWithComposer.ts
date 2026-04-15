@@ -19,6 +19,7 @@ import { GameScenario } from "@mytypes/WorldAvatar";
 export abstract class SceneWithComposer extends SceneWithAvatar {
 
     previousTime = performance.now();
+    previousLoadedMeshes: THREE.Object3D<THREE.Object3DEventMap>[] = [];
     composer: EffectComposer | null = null;
     outlinePass: OutlinePass | null = null;
     animatedElements: AnimatedElements[] = [];
@@ -236,7 +237,6 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         });
     }
 
-    previousLoadedMeshes: THREE.Object3D<THREE.Object3DEventMap>[] = [];
     async initializeScenario(scene: GameScenario) {
         // Clean terrains
         this.terrainMeshes = [];

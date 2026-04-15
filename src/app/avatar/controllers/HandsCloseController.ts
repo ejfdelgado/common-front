@@ -1,5 +1,5 @@
 import { computeAverageByNames, computeDistance } from "@avatar/AvatarUtilities";
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { BodyPoseKey } from "@mytypes/BodyParts";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 

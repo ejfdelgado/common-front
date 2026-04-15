@@ -1,5 +1,5 @@
 import { computeHeight } from "@avatar/AvatarUtilities";
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { ControllerUpdateResponse, AvatarBodyEvent, ComparableBody } from "@mytypes/BodyTypes";
 
 export class SimplePosesDetection extends SceneControllerAbstract {

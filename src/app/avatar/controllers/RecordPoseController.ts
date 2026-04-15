@@ -6,7 +6,7 @@ import {
     StoredAvatarState,
     AVATAR_ANIM_VERSION,
 } from "@mytypes/BodyTypes";
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
 import { matrixToArray } from "@avatar/AvatarUtilities";

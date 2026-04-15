@@ -17,7 +17,7 @@ import { getUrlQueryParams } from '@tools/UrlUtil';
 import { FirestoreService } from '@services/firestore.service';
 import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
-import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
+import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -35,7 +35,7 @@ const MODEL_NAME_PARENT = "room-private";
 })
 export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild("tracker_component") trackerComponent!: BodyTrackerComponent;
+  @ViewChild("tracker_component") trackerComponent!: ComponentBodyTracker;
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };

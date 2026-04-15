@@ -19,7 +19,7 @@ import { IndicatorService } from "@services/indicator.service";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { BodyTrackerComponent } from '@avatar/BodyTrackerComponent';
+import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { AvatarContainer } from '../avatar-container/avatar-container';
 import { AvatarService } from '@services/avatar.service';
 
@@ -39,7 +39,7 @@ import { AvatarService } from '@services/avatar.service';
     '../../../../../../threejs_styles.scss',
   ],
 })
-export class BodyTracker extends BodyTrackerComponent implements AfterViewInit {
+export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
 
   @ViewChild("three_component") threeComponent!: AvatarContainer;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;

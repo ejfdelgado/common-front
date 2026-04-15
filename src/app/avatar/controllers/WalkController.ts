@@ -2,7 +2,7 @@ import {
     AvatarBodyEvent,
     ControllerUpdateResponse,
 } from "@mytypes/BodyTypes";
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from 'three';
 import { makeSmootValue, makeSmootVector } from "@avatar/AvatarUtilities";

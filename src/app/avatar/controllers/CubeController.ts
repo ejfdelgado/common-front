@@ -1,4 +1,4 @@
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { AvatarBoneEnum } from "@mytypes/BodyParts";
 import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from "@mytypes/BodyTypes";
 import * as THREE from 'three';

@@ -2,7 +2,7 @@ import {
     AvatarBodyEvent, 
     ControllerUpdateResponse,
  } from "@mytypes/BodyTypes";
-import { SceneControllerAbstract } from "@avatar/SceneControllerAbstract";
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import * as THREE from 'three';
 
 export class TerrainElevationController extends SceneControllerAbstract {
