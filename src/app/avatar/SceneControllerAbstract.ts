@@ -36,11 +36,17 @@ export abstract class SceneControllerAbstract {
 
     async postUpdate(): Promise<void> {
         return;
-    } 
+    }
 
     abstract stop(): Promise<void>;
 
     abstract destroy(): Promise<void>;
 
     abstract onEvent(event: AvatarBodyEvent): void;
+
+    setParams(params: {
+        [key: string]: any;
+    }) {
+
+    }
 }

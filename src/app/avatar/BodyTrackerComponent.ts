@@ -382,6 +382,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
             const config = controllers[i];
             const controller = avatarContainer.createController(config);
             avatarContainer.addController(controller);
+            controller.setParams(config.params);
         }
         // Add scenario
         const scenario = mode.scenarios[mode.defaultSenario];

@@ -15,9 +15,6 @@ Colocar en el menú superior derecho:
 - Opción de render o no composite.
 - Idioma de salida de voz
 
-Cuando se hace el setup de un controller, invocaar una función para hacer por ejemplo que los cubos
-se vean!
-Ajustar el hacer stop, no reload() sino desconectar toda la cadena de ejecución en adelante.
 ------------------------------------------------------------------------
 comparacion: (3 numeros de salida)
 angulo entre front y front
@@ -41,11 +38,6 @@ Hacer un vestier.
 - Interact with body.
 - Interact with voice commands.
 
-Usar menú de arriba para alojar:
-- Play/Pause. (voice on/of) (camera pose on/off)
-- Idioma.
-- Login/Logout
-
 Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
 Permitir interactuar con voz con los asistentes virtuales.
 El sistema de navegación debe manejar colisiones para evitar overlaping.
@@ -57,7 +49,6 @@ En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser v
 
 -------------------------------------------------------------------
 
-Permitir cargar el mundo haciendo referencia al modelo guardado previamente.
 Permitir cargar unicamente la región donde está ubicado el usuario.
 
 Bugs:

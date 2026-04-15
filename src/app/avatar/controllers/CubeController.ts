@@ -4,19 +4,23 @@ import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from "@mytypes
 import * as THREE from 'three';
 
 const SIDE_SHIFT = 0.8;
+const OPACITY_LOW = 0.5;
+const OPACITY_HIGH = 1;
+
+export interface CubeConfigType {
+    local: THREE.Matrix4;
+    height: number,
+    sphere: any;
+    model: THREE.Object3D<THREE.Object3DEventMap> | null | undefined;
+    material: any;
+    selected: boolean;
+    eventName: string;
+};
 
 export class CubeController extends SceneControllerAbstract {
 
     cubes: {
-        [key: string]: {
-            local: THREE.Matrix4;
-            height: number,
-            sphere: any;
-            model: THREE.Object3D<THREE.Object3DEventMap> | null | undefined;
-            material: any;
-            selected: boolean;
-            eventName: string;
-        }
+        [key: string]: CubeConfigType,
     } = {
             "cube_a": {
                 eventName: "CUBE_A_SELECT_",
@@ -56,18 +60,47 @@ export class CubeController extends SceneControllerAbstract {
             },
         };
 
+    override setParams(params: {
+        [key: string]: any;
+    }) {
+        Object.keys(this.cubes).forEach((name: string) => {
+            const config = this.getCubeConfig(name);
+            if (!config) { return; }
+            config.material.opacity = OPACITY_LOW;
+
+        });
+    }
+
+    getCubeConfig(name: string): CubeConfigType | null | undefined {
+        const config = this.cubes[name];
+        let cubeObject = config.model;
+        if (!cubeObject) {
+            cubeObject = this.scene.getObjectByName(name);
+            config.model = cubeObject;
+        }
+        if (!cubeObject) { return; }
+        cubeObject.traverse((mesh: any) => {
+            if (mesh.isMesh) {
+                const sphere = mesh.geometry.boundingSphere.clone();
+                sphere.applyMatrix4(mesh.matrixWorld);
+                config.sphere = sphere;
+                if (mesh.material) {
+                    config.material = mesh.material;
+                }
+            }
+        });
+        return config;
+    }
+
     override async update(): Promise<ControllerUpdateResponse> {
 
         const rotationMatrix = new THREE.Matrix4()
             .makeRotationY(this.scene.avatarStateSmoot.rotationY);
 
         Object.keys(this.cubes).forEach((name: string) => {
-            const config = this.cubes[name];
+            const config = this.getCubeConfig(name);
+            if (!config) { return; }
             let cubeObject = config.model;
-            if (!cubeObject) {
-                cubeObject = this.scene.getObjectByName(name);
-                config.model = cubeObject;
-            }
             if (!cubeObject) { return; }
 
             const translationMatrix = new THREE.Matrix4().makeTranslation(
@@ -135,7 +168,7 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOn(config.model);
                 }
                 if (!config.selected) {
-                    config.material.opacity = 1;
+                    config.material.opacity = OPACITY_HIGH;
                     config.selected = true;
                     this.events.emit({
                         name: config.eventName + "ON",
@@ -146,7 +179,7 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOff(config.model);
                 }
                 if (config.selected) {
-                    config.material.opacity = 0.5;
+                    config.material.opacity = OPACITY_LOW;
                     config.selected = false;
                     this.events.emit({
                         name: config.eventName + "OFF",
