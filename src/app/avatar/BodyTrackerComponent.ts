@@ -4,7 +4,6 @@ import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import { tracker } from '@tools/tracker.js';
 import * as THREE from 'three';
-import { ThreejsComponent } from "app/pages/threejstest/threejs/threejs.component";
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { CommonSpeech } from "app/pages/commonSpeech";
 import * as tf from '@tensorflow/tfjs';
@@ -15,7 +14,6 @@ import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
-import { AvatarContainer } from "app/pages/body-game/play/components/avatar-container/avatar-container";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
     mirror: boolean = false;

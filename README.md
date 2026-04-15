@@ -4,8 +4,10 @@
 
 1. Crear mínimo de configuración.
 2. Permitir cargar y descargar configuraciones (activity indicator).
-La configuración debe tener:
-- Posición inicial de la cámara.
+Permitir construir un mundo 3d:
+Permitiendo cargar N partes el mundo:
+Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
+min, x, y, z, max, x, y, z.
 
 ------------------------------------------------------------------------
 
@@ -43,11 +45,6 @@ Usar menú de arriba para alojar:
 - Play/Pause. (voice on/of) (camera pose on/off)
 - Idioma.
 - Login/Logout
-
-Permitir construir un mundo 3d:
-Permitiendo cargar N partes el mundo:
-Cuando se carga el objeto 3d se calcula el bounding box y se agrega junto con el archivo
-min, x, y, z, max, x, y, z.
 
 Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
 Permitir interactuar con voz con los asistentes virtuales.
