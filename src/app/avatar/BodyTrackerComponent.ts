@@ -15,8 +15,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
-import { GameController, GameControllerEnum, WorldAvatar } from "@mytypes/WorldAvatar";
-import { ComparableController } from "./controllers/ComparableController";
+import { WorldAvatar } from "@mytypes/WorldAvatar";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
     mirror: boolean = false;
@@ -49,7 +48,7 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
                     far: 1000,
                     fov: 25,
                     lookAt: { x: 0, y: 0, z: 0 },
-                    position: { x: 10, y: 5, z: 10 },
+                    position: { x: 0, y: 1, z: -10 },
                 },
                 defaultSenario: "scenario",
                 scenarios: {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
@@ -33,7 +33,7 @@ const MODEL_NAME_PARENT = "room-private";
   templateUrl: './play.html',
   styleUrl: './play.scss',
 })
-export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
+export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild("tracker_component") trackerComponent!: BodyTrackerComponent;
   statusBarConfig: StatusBarConfigType = {
@@ -80,6 +80,9 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
   }
 
+  ngAfterViewInit(): void {
+    this.trackerComponent.applyMode("mode");
+  }
 
   async openPermissions() {
     if (!this.room) {

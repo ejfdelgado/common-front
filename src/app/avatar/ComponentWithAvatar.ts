@@ -24,9 +24,11 @@ import { Stand2dController } from './controllers/Stand2dController';
 import { TerrainElevationController } from './controllers/TerrainElevationController';
 import { WalkController } from './controllers/WalkController';
 import { CubeController } from './controllers/CubeController';
+import { PromiseEmitter } from '@tools/PromiseEmitter';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
 
+    sceneCreated: PromiseEmitter = new PromiseEmitter();
     bounds: DOMRect | null = null;
     controlProxy: ControlProxy = new ControlProxy();
     scene: SceneWithComposer | null = null;

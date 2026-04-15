@@ -11,26 +11,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BasicScene } from '../BasicScene';
-import { IndicatorService, Wait } from '@services/indicator.service';
+import { IndicatorService } from '@services/indicator.service';
 import { MatIconModule } from '@angular/material/icon';
-import { PromiseEmitter } from "@tools/PromiseEmitter";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
-import { WalkController } from '@avatar/controllers/WalkController';
-import { SoundFeedbackController } from '@avatar/controllers/SoundFeedbackController';
-import { Stand2dController } from '@avatar/controllers/Stand2dController';
-import { RecordPoseController } from '@avatar/controllers/RecordPoseController';
 import { HttpClient } from '@angular/common/http';
-import { TerrainElevationController } from '@avatar/controllers/TerrainElevationController';
 import { Point3D } from '@mytypes/BodyTypes';
-import { ComparableController } from '@avatar/controllers/ComparableController';
-import { SimplePosesDetection } from '@avatar/controllers/SimplePosesDetection';
-import { HandsCloseController } from '@avatar/controllers/HandsCloseController';
-import { CubeController } from '@avatar/controllers/CubeController';
 
 
 @Component({
@@ -49,7 +39,6 @@ export class AvatarContainer extends ComponentWithAvatar implements OnInit, Afte
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
 
-  sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
 

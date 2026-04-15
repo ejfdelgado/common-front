@@ -102,10 +102,6 @@ const routes: Routes = [
         loadComponent: () => import('./pages/body-game/play/play').then(m => m.PlayComponent),
     },
     {
-        path: 'threejs',
-        loadComponent: () => import('./pages/threejstest/threejstest.component').then(m => m.ThreejsTestComponent),
-    },
-    {
         path: '**',
         redirectTo: '404',
     },
