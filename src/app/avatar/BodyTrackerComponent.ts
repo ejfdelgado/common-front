@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef } from "@angular/core";
-import { BodyData, GenericSizeType } from "@mytypes/BodyTypes";
+import { AVATAR_NAME, BodyData, GenericSizeType } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import { tracker } from '@tools/tracker.js';
@@ -15,6 +15,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
+import { WorldAvatar } from "@mytypes/WorldAvatar";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
     mirror: boolean = false;
@@ -31,6 +32,34 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         height: 0,
     };
     trackerSubscription: Function | null = null;
+    world: WorldAvatar = {
+        defaultMode: "mode",
+        modes: {
+            "mode": {
+                defaultPosition: {
+                    positionX: 0,
+                    positionY: 0,
+                    positionZ: 0,
+                    rotationY: 0,
+                },
+                defaultCameraState: {
+                    near: 0.1,
+                    far: 1000,
+                    fov: 25,
+                    lookAt: { x: 0, y: 0, z: 0 },
+                    position: { x: 10, y: 5, z: 10 },
+                },
+                defaultSenario: "scenario",
+                scenarios: {
+                    "scenario": {
+                        characters: [],
+                        meshes: [],
+                    }
+                },
+                controllers: []
+            }
+        }
+    };
 
     constructor(
         public cdr: ChangeDetectorRef,
@@ -320,11 +349,30 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         const promise = this.avatarSrv.loadWorld(url);
         try {
             await this.stopSafetly();
-            const world = await promise;
+            this.world = await promise;
+            this.applyMode(this.world.defaultMode);
         } catch (err) {
             console.log(err);
         } finally {
             loading.done();
         }
+    }
+
+    public async applyMode(id: string) {
+        const mode = this.world.modes[id];
+        const avatarContainer = this.getAvatarContainer();
+
+        if (!mode) {
+            return;
+        }
+        //Ubicar el avatar
+        const position = mode.defaultPosition;
+        avatarContainer.scene?.forceAvatarState(
+            position.positionX,
+            position.positionY,
+            position.positionZ,
+            position.rotationY,
+        );
+
     }
 }

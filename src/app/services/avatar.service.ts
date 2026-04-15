@@ -20,17 +20,17 @@ export class AvatarService {
                     modes: {
                         "mode01": {
                             defaultPosition: {
-                                positionX: 0,
+                                positionX: 3,
                                 positionY: 0,
-                                positionZ: 0,
-                                rotationY: 0,
+                                positionZ: 3,
+                                rotationY: Math.PI / 2,
                             },
                             defaultCameraState: {
                                 near: 0.1,
                                 far: 1000,
                                 fov: 25,
-                                lookAt: { x: 0, y: 0, z: 0 },
-                                position: { x: 10, y: 5, z: 10 },
+                                lookAt: { x: 3, y: 0, z: 3 },
+                                position: { x: -10, y: 5, z: 10 },
                             },
                             defaultSenario: "scenario01",
                             scenarios: {

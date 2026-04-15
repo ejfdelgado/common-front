@@ -773,4 +773,13 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     async initializeControlls() {
         const cube = await this.addCubeControll();
     }
+
+    forceAvatarState(x: number, y: number, z: number, rotY: number) {
+        const avatar = this.getObjectByName(AVATAR_NAME);
+        if (!avatar) {
+            return;
+        }
+        avatar.position.copy(new THREE.Vector3(x, y, z,));
+        avatar.rotation.copy(new THREE.Euler(0, rotY, 0))
+    }
 }
