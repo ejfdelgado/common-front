@@ -14,6 +14,15 @@ import { ElementRef, EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
 import { ControlProxy } from './workers/ControlProxy';
+import { GameController, GameControllerEnum } from '@mytypes/WorldAvatar';
+import { ComparableController } from './controllers/ComparableController';
+import { HandsCloseController } from './controllers/HandsCloseController';
+import { RecordPoseController } from './controllers/RecordPoseController';
+import { SimplePosesDetection } from './controllers/SimplePosesDetection';
+import { SoundFeedbackController } from './controllers/SoundFeedbackController';
+import { Stand2dController } from './controllers/Stand2dController';
+import { TerrainElevationController } from './controllers/TerrainElevationController';
+import { WalkController } from './controllers/WalkController';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
 
@@ -180,6 +189,13 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         return true;
     }
 
+    async removeAllControllers() {
+        while (this.controllers.length > 0) {
+            const [controller] = this.controllers.splice(0, 1);
+            await this.removeController(controller);
+        }
+    }
+
     startSkeletonGuardinan() {
         this.restoreInterval = setInterval(() => {
             if (!this.scene) {
@@ -210,5 +226,30 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                 this.loop();
             });
         }
+    }
+
+    public createController(config: GameController) {
+        if (config.id == GameControllerEnum.ComparableController) {
+            return new ComparableController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.CubeController) {
+            return new ComparableController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.HandsCloseController) {
+            return new HandsCloseController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.RecordPoseController) {
+            return new RecordPoseController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.SimplePosesDetection) {
+            return new SimplePosesDetection(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.SoundFeedbackController) {
+            return new SoundFeedbackController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.Stand2dController) {
+            return new Stand2dController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.TerrainElevationController) {
+            return new TerrainElevationController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.WalkController) {
+            return new WalkController(this.events, this.controlProxy);
+        } else {
+            throw new Error("Unknown controller");
+        }
+
     }
 }

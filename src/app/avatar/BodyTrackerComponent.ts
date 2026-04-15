@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef } from "@angular/core";
-import { AVATAR_NAME, BodyData, GenericSizeType } from "@mytypes/BodyTypes";
+import { BodyData, GenericSizeType } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import { tracker } from '@tools/tracker.js';
@@ -15,7 +15,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
-import { WorldAvatar } from "@mytypes/WorldAvatar";
+import { GameController, GameControllerEnum, WorldAvatar } from "@mytypes/WorldAvatar";
+import { ComparableController } from "./controllers/ComparableController";
 
 export abstract class BodyTrackerComponent extends CommonSpeech {
     mirror: boolean = false;
@@ -365,11 +366,22 @@ export abstract class BodyTrackerComponent extends CommonSpeech {
         if (!mode || !avatarContainer.scene) {
             return;
         }
-        //Ubicar el avatar
+        // Place the avatar
         const position = mode.defaultPosition;
         avatarContainer.scene.forceAvatarState(position);
-        //Place the camera
+        // Place the camera
         const camera = mode.defaultCameraState;
         avatarContainer.scene.forceCameraState(camera);
+        // Define controllers
+        const controllers = mode.controllers;
+        await avatarContainer.removeAllControllers();
+        for (let i = 0; i < controllers.length; i++) {
+            const config = controllers[i];
+            const controller = avatarContainer.createController(config);
+            avatarContainer.addController(controller);
+        }
+        // Add scene
+
+        // Add characters
     }
 }
