@@ -2,11 +2,9 @@ import { ChangeDetectorRef, ElementRef } from "@angular/core";
 import { AVATAR_NAME, BodyData, GenericSizeType } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
-import { tracker } from '@tools/tracker.js';
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { CommonSpeech } from "app/pages/commonSpeech";
-import * as tf from '@tensorflow/tfjs';
 import { enterFullscreen, exitFullscreen } from "@tools/ScreenUtils";
 import { VoiceRecognitionService } from "@services/voicerecognition.service";
 import { SpeechSynthesisService } from "@services/speechsynthesis.service";
@@ -26,12 +24,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     calledLastTime: boolean = false;
     activity: Wait | null = null;
     videoRef!: ElementRef<HTMLVideoElement>;
+    canvasRef!: ElementRef<HTMLCanvasElement>;
+    threeComponent!: ComponentWithAvatar;
     poses: BodyData[] = [];
     videoSize: GenericSizeType = {
         width: 0,
         height: 0,
     };
-    trackerSubscription: Function | null = null;
     world: WorldAvatar = {
         defaultMode: "mode",
         modes: {
@@ -90,81 +89,55 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         canvasR: ElementRef<HTMLCanvasElement>,
         threeComponent: ComponentWithAvatar,
     ) {
-        await tf.ready();
         this.videoRef = videoR;
-        /*
-            MoveNetSinglePoseLightning
-            MoveNetSinglePoseThunder
-            MoveNetMultiPoseLightning
-            PoseNetMobileNetV1
-            PoseNetResNet50
-            BlazePoseLite
-            BlazePoseHeavy
-            BlazePoseFull
-            */
-        if (this.isMobile()) {
-            tracker.setModel('BlazePoseLite');
-        } else {
-            tracker.setModel('BlazePoseFull');
+        this.canvasRef = canvasR;
+        this.threeComponent = threeComponent;
+
+        // camera stuff
+
+        this.initialized = true;
+    }
+
+    async updatePose(poses: any) {
+        if (!this.started) {
+            this.calledLastTime = true;
+            return;
         }
-        /*
-        tracker.detectorConfig = {
-            modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
-            enableSmoothing: true,
-            multiPoseMaxDimension: 256,
-            enableTracking: true,
-            trackerType: poseDetection.TrackerType.BoundingBox
+        this.poses = poses;
+        if (this.activity) {
+            this.activity.done();
+            this.activity = null;
         }
-        tracker.minScore = 0.35;
-        */
-        tracker.elCanvas = '#canvas';
-        tracker.elVideo = '#video';
-        tracker.enable3D = false;
-        // tracker.run('video') // takes video from a movie file (e.g., mp4)
-        // tracker.run('stream') // takes video from an m3u8 online stream
-        const { unsubscribe } = tracker.on('beforeupdate', async (poses: any) => {
-            if (!this.started) {
-                this.calledLastTime = true;
-                return;
-            }
-            this.poses = poses;
-            if (this.activity) {
-                this.activity.done();
-                this.activity = null;
-            }
-            this.updateVideoSize();
-            if (this.poses.length > 0) {
-                // Level 1
-                try {
-                    const response = await threeComponent.computeIKLevel1(
-                        this.poses,
-                        this.videoSize,
-                        this.mirror,
-                    );
-                    if (response == false) {
-                        // Means no body
-                        throw new Error("-1");
-                    } else if (response == null) {
-                        // means system is bussy or no yet ready
-                    } else {
-                        if (this.errorState != null) {
-                            this.errorState = null;
-                            this.cdr.detectChanges();
-                        }
+        this.updateVideoSize();
+        if (this.poses.length > 0) {
+            // Level 1
+            try {
+                const response = await this.threeComponent.computeIKLevel1(
+                    this.poses,
+                    this.videoSize,
+                    this.mirror,
+                );
+                if (response == false) {
+                    // Means no body
+                    throw new Error("-1");
+                } else if (response == null) {
+                    // means system is bussy or no yet ready
+                } else {
+                    if (this.errorState != null) {
+                        this.errorState = null;
+                        this.cdr.detectChanges();
                     }
-                } catch (err: any) {
-                    if (err.message == "-1") {
-                        // Means person is detected, but must fit all in the camera
-                        if (this.errorState != err.message) {
-                            this.errorState = err.message;
-                            this.cdr.detectChanges();
-                        }
+                }
+            } catch (err: any) {
+                if (err.message == "-1") {
+                    // Means person is detected, but must fit all in the camera
+                    if (this.errorState != err.message) {
+                        this.errorState = err.message;
+                        this.cdr.detectChanges();
                     }
                 }
             }
-        }) as any;
-        this.trackerSubscription = unsubscribe;
-        this.initialized = true;
+        }
     }
 
     updateVideoSize() {
@@ -277,20 +250,12 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     stopTracking() {
         // TODO, this function does not work!
-        if (this.trackerSubscription) {
-            this.trackerSubscription();
-            this.trackerSubscription = null;
-        }
-        try {
-            tracker.pause();
-        } catch (err) {
-            this.videoRef.nativeElement.pause();
-        }
+
     }
 
     startTracking() {
         if (!this.trackerStarted) {
-            tracker.run('camera');
+            // Do something
             this.trackerStarted = true;
         }
     }
