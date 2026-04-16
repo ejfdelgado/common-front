@@ -102,6 +102,14 @@ const routes: Routes = [
         loadComponent: () => import('./pages/body-game/play/play').then(m => m.PlayComponent),
     },
     {
+        path: 'action/pose',
+        loadComponent: () => import('./pages/body-game/experiments/media-pipe-pose/media-pipe-pose').then(m => m.MediaPipePose),
+    },
+    {
+        path: 'action/hand',
+        loadComponent: () => import('./pages/body-game/experiments/media-pipe-hand/media-pipe-hand').then(m => m.MediaPipeHand),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
