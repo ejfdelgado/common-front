@@ -1,4 +1,7 @@
-<button (click)="connectToRoom()">Connect</button>
 @if (room) {
 <button (click)="broadcastBinaryData()">Send binary data</button>
+<button (click)="disconnectFromRoom()">Disconnect</button>
+} @else {
+<button (click)="connectToRoom()">Connect</button>
 }
+<pre>{{ commonData | json }}</pre>

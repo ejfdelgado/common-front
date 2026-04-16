@@ -18,7 +18,6 @@ import { FirestoreService } from '@services/firestore.service';
 import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
 import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
-import { SelectOptionType } from 'app/pages/commonSpeech';
 import { Router } from '@angular/router';
 
 const MODEL_NAME_PARENT = "room-private";
