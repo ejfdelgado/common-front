@@ -431,6 +431,8 @@ export function isAllPersonInsideCamera(
     const min = Math.min(...relevantYs);
     const max = Math.max(...relevantYs);
 
+    console.log(min, max);
+
     if (
         top < min
         && bottom > max

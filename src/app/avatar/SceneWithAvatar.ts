@@ -34,7 +34,7 @@ import { ControlProxy } from './workers/ControlProxy';
 import { CameraState } from '@mytypes/WorldAvatar';
 
 export const ROOT_PATH = "/assets/models/";
-const USE_WORKER = true;
+const USE_WORKER = false;
 
 export abstract class SceneWithAvatar extends THREE.Scene {
     bounds: DOMRect;
@@ -509,6 +509,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.computingIK = false;
                 return false;
             }
+            //console.log(`score = ${score}`);
             if (score < 0) {
                 // Person does not fit the camera
                 throw new Error(`${score}`);
