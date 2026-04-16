@@ -183,6 +183,8 @@ https://chat.pais.tv
 
 https://chat.pais.tv#/alterego/use?col=pubknowledge&id=A0Awcqw4y26UXLVsOcxh
 
+https://pais.tv/#/action/hand
+
 ```
 gsutil cors get gs://pro-ejflab-assets
 ```

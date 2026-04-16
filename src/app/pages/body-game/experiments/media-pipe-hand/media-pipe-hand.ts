@@ -1,14 +1,11 @@
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
-import { defaultFirebaseApp } from '@services/firebase';
 import {
-  ActionReceiver,
   ActionSender,
   DataPayload,
-  joinRoom,
   Room
 } from '@trystero-p2p/firebase';
-import { encode, decode } from "@msgpack/msgpack";
 import { CommonModule } from '@angular/common';
+import { P2PService, P2PStatus } from '@services/p2p.service';
 
 const appId = 'ejfexperiments';
 
@@ -27,11 +24,21 @@ export class MediaPipeHand implements AfterViewInit {
   localStream: MediaStream | null = null;
   remoteAudios: HTMLAudioElement[] = [];
   commonData: { [key: string]: any } = {};
+  status: P2PStatus = { value: "offline" };
 
   constructor(
+    public p2pSrv: P2PService,
     public cdr: ChangeDetectorRef,
   ) {
-
+    this.p2pSrv.status.subscribe((ev) => {
+      this.status = ev;
+      this.cdr.detectChanges();
+    });
+    this.p2pSrv.events.subscribe((ev) => {
+      const { peer, payload } = ev;
+      this.commonData[peer] = payload;
+      this.cdr.detectChanges();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -39,73 +46,16 @@ export class MediaPipeHand implements AfterViewInit {
   }
 
   async disconnectFromRoom() {
-    if (this.localStream) {
-      if (this.room) {
-        this.room.removeStream(this.localStream);
-      }
-      this.localStream.getTracks().forEach(t => t.stop());
-      this.localStream = null;
-    }
-    for (const audio of this.remoteAudios) {
-      audio.pause();
-      audio.srcObject = null;
-    }
-    this.remoteAudios = [];
-    this.sendBinaryData = null;
-    if (this.room) {
-      await this.room.leave();
-      this.room = null;
-    }
+    await this.p2pSrv.disconnectFromRoom();
     this.cdr.detectChanges();
   }
 
   async connectToRoom() {
-    this.room = await joinRoom({
-      firebaseApp: defaultFirebaseApp,
-      appId,
-    }, 'room-1');
-
-    const [sendBinaryData, receiveBinaryData] = this.room.makeAction('binary-data');
-    this.sendBinaryData = sendBinaryData;
-    this.listenBinaryData(receiveBinaryData);
-
-    this.room.onPeerJoin((peerId) => {
-      if (this.localStream) {
-        this.room!.addStream(this.localStream, peerId);
-      }
-    });
-    this.room.onPeerLeave((peerId) => {
-      //
-    });
-    this.room.onPeerStream((stream) => {
-      const audio = new Audio();
-      audio.srcObject = stream;
-      audio.play();
-      this.remoteAudios.push(audio);
-    });
-    requestAnimationFrame(() => {
-      this.startVoiceCall();
-    });
-  }
-
-  async startVoiceCall() {
-    if (!this.room) return;
-    this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    this.room.addStream(this.localStream);
+    await this.p2pSrv.connectToRoom('room-1');
   }
 
   async broadcastBinaryData() {
-    if (!this.sendBinaryData) return;
     const sample = { t: Date.now() };
-    const encoded = encode(sample);
-    await this.sendBinaryData(encoded);
-  }
-
-  listenBinaryData(receiveBinaryData: ActionReceiver<DataPayload>) {
-    receiveBinaryData((data, peerId) => {
-      const model = decode(data as Uint8Array);
-      this.commonData[peerId] = model;
-      this.cdr.detectChanges();
-    });
+    this.p2pSrv.broadcastBinaryData(sample);
   }
 }
