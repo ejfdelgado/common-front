@@ -1,6 +1,7 @@
 import {
     AvatarBoneEnum,
     BodyPoseKey,
+    MediaPipeRelation,
 } from "@mytypes/BodyParts";
 import {
     BodyData,
@@ -14,6 +15,7 @@ import {
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { Pose, Results } from '@mediapipe/pose';
 
 const textureLoader = new TextureLoader();
 
@@ -769,4 +771,40 @@ export function computeHeight(points: { [key: string]: BodyKeyPointData }) {
     ], points);
     const distance2 = computeDistance(hipCenter, footCenter);
     return distance1 + distance2;
+}
+
+export function convertMediaPipeToCurrent(orig: Results) {
+    const list2d = orig.poseLandmarks;
+    const list3d = orig.poseWorldLandmarks;
+    const response: BodyData = {
+        score: 0,
+        keypoints: [],
+        keypoints3D: [],
+    };
+
+    const keypoints = response.keypoints;
+    const keypoints3D = response.keypoints3D;
+
+    for (let i = 0; i < MediaPipeRelation.length; i++) {
+        const name = MediaPipeRelation[i];
+        // 2d
+        const ref2d = list2d[i];
+        keypoints.push({
+            name,
+            score: ref2d.visibility ? ref2d.visibility : 0,
+            x: ref2d.x,
+            y: ref2d.y,
+            z: ref2d.z,
+        });
+        //3d
+        const ref3d = list3d[i];
+        keypoints3D.push({
+            name,
+            score: ref3d.visibility ? ref3d.visibility : 0,
+            x: ref3d.x,
+            y: ref3d.y,
+            z: ref3d.z,
+        });
+    }
+    return response;
 }

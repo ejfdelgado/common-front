@@ -3,6 +3,7 @@ import { Pose, Results } from '@mediapipe/pose';
 import { Camera } from '@mediapipe/camera_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { POSE_CONNECTIONS } from '@mediapipe/pose';
+import { convertMediaPipeToCurrent } from '@avatar/utils/AvatarUtilities';
 
 
 @Component({
@@ -94,13 +95,15 @@ export class MediaPipePose implements AfterViewInit {
     if (!this.lastResults) {
       return;
     }
-    console.log(JSON.stringify(this.lastResults.poseWorldLandmarks, null, 4));
+    const converted = convertMediaPipeToCurrent(this.lastResults);
+    console.log(JSON.stringify(converted.keypoints3D, null, 4));
   }
 
   print2D() {
     if (!this.lastResults) {
       return;
     }
-    console.log(JSON.stringify(this.lastResults.poseLandmarks, null, 4));
+    const converted = convertMediaPipeToCurrent(this.lastResults);
+    console.log(JSON.stringify(converted.keypoints, null, 4));
   }
 }
