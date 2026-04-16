@@ -2,8 +2,8 @@
 
 ------------------------------------------------------------------------
 
-Use visibility=false when person is not present in video.
-Add support when no logged user exists, also, support when user login.
+Optimizar la busqueda del punto Y, tal vez precargando en un Three?
+
 Colocar en el menú superior derecho:
 - Opción de render o no composite.
 - Idioma de salida de voz

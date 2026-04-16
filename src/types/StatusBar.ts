@@ -5,6 +5,8 @@ export interface MenuOptionType {
     callback?: Function,
     children?: MenuOptionType[];
     opened?: boolean;
+    visible?: boolean;
+    name?: string;
 }
 
 export interface StatusBarConfigType {

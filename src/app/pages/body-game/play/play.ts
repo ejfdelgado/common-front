@@ -57,7 +57,9 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
 
     this.menuOptions.push({
       label: "Permissions",
+      name: "permissions",
       icon: "lock",
+      visible: false,
       children: [],
       callback: () => {
         this.openPermissions();
@@ -65,8 +67,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "World 1",
-      icon: "home",
+      label: "scenario",
+      icon: "public",
       children: [],
       callback: () => {
         this.trackerComponent.loadWorld("", "mode01");
@@ -74,8 +76,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "World 2",
-      icon: "home",
+      label: "Wardrove",
+      icon: "checkroom",
       children: [],
       callback: () => {
         this.trackerComponent.loadWorld("", "mode00");
@@ -87,6 +89,24 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.trackerComponent.onResize();
       }, 500);
     });
+
+    this.authSrv.authState$.subscribe(async (user) => {
+      try {
+        this.updateLogedMenuOptions();
+        await this.loadCollection();
+      } catch (err: any) {
+        this.uiNotificationSrv.show(err.message);
+      }
+    });
+  }
+
+  updateLogedMenuOptions() {
+    const visible = !!this.user;
+    this.menuOptions
+      .filter(a => a.name && ['permissions'].indexOf(a.name) >= 0)
+      .forEach((e) => {
+        e.visible = visible;
+      })
   }
 
   ngAfterViewInit(): void {
@@ -113,11 +133,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   }
 
   async ngOnInit(): Promise<void> {
-    try {
-      await this.loadCollection();
-    } catch (err: any) {
-      this.uiNotificationSrv.show(err.message);
-    }
+
   }
 
   async loadCollection() {
