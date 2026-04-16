@@ -20,6 +20,7 @@ import { SideMenuService } from '@services/side-menu.service';
 import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { Router } from '@angular/router';
 import { P2PService, P2PStatus } from '@services/p2p.service';
+import { Subscription } from 'rxjs';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -44,6 +45,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   menuOptions: MenuOptionType[] = [];
   room: RoomGameType | null = null;
   status: P2PStatus = { value: "offline" };
+  p2pStatusSubscription: Subscription | null = null;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -60,7 +62,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
-    this.p2pSrv.status.subscribe((ev) => {
+    this.p2pStatusSubscription = this.p2pSrv.status.subscribe((ev) => {
       this.status = ev;
       const found = this.menuOptions.find(a => a.name == "end_call");
       if (found) {
@@ -265,6 +267,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   }
 
   ngOnDestroy(): void {
-
+    if (this.p2pStatusSubscription) {
+      this.p2pStatusSubscription.unsubscribe();
+    }
   }
 }
