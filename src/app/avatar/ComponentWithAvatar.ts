@@ -91,7 +91,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         videoSize: GenericSizeType,
         mirror: boolean,
     ) {
-        if (!this.scene) {
+        if (!this.scene || poses.length == 0) {
             return null;
         }
         if (this.isComputing) {

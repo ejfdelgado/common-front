@@ -774,6 +774,9 @@ export function computeHeight(points: { [key: string]: BodyKeyPointData }) {
 }
 
 export function convertMediaPipeToCurrent(orig: Results) {
+    if (!orig.poseLandmarks || !orig.poseWorldLandmarks) {
+        return null;
+    }
     const list2d = orig.poseLandmarks;
     const list3d = orig.poseWorldLandmarks;
     const response: BodyData = {

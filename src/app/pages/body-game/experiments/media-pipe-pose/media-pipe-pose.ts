@@ -96,6 +96,7 @@ export class MediaPipePose implements AfterViewInit {
       return;
     }
     const converted = convertMediaPipeToCurrent(this.lastResults);
+    if (!converted) { return; }
     console.log(JSON.stringify(converted.keypoints3D, null, 4));
   }
 
@@ -104,6 +105,7 @@ export class MediaPipePose implements AfterViewInit {
       return;
     }
     const converted = convertMediaPipeToCurrent(this.lastResults);
+    if (!converted) { return; }
     console.log(JSON.stringify(converted.keypoints, null, 4));
   }
 }

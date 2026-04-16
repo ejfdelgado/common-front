@@ -111,7 +111,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         } as any);
         this.poseTracker.onResults((results) => {
             const converted = convertMediaPipeToCurrent(results);
-            this.updatePose([converted]);
+            if (converted) {
+                this.updatePose([converted]);
+            }
         });
 
         this.initialized = true;
@@ -123,10 +125,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             return;
         }
         this.poses = poses;
-        if (this.activity) {
-            this.activity.done();
-            this.activity = null;
-        }
         this.updateVideoSize();
         if (this.poses.length > 0) {
             // Level 1
@@ -268,7 +266,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
 
     stopTracking() {
-        if (!this.camera || this.trackerStarted) {
+        if (!this.camera || !this.trackerStarted) {
             return;
         }
         this.camera.stop();
@@ -278,15 +276,15 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     startTracking() {
         if (!this.trackerStarted) {
-            // Do something
             const video = this.videoRef.nativeElement;
             this.camera = new Camera(video, {
                 onFrame: async () => {
                     await this.poseTracker.send({ image: video });
                 },
-                //width: 640,
-                //height: 480
+                width: 640,
+                height: 480
             });
+            this.camera.start();
             this.trackerStarted = true;
         }
     }
@@ -312,6 +310,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             this.started = true;
         } catch (err) {
             console.log(err);
+
+        } finally {
             if (this.activity) {
                 this.activity.done();
             }
