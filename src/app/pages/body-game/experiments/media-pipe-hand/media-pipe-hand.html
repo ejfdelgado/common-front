@@ -1,3 +1,4 @@
-<p>media-pipe-hand works!</p>
-<button (click)="startVoiceCall()">Start Voice Call</button>
+<button (click)="connectToRoom()">Connect</button>
+@if (room) {
 <button (click)="broadcastBinaryData()">Send binary data</button>
+}

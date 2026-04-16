@@ -17,7 +17,7 @@ export class MediaPipeHand implements AfterViewInit {
   localStream: MediaStream | null = null;
 
   ngAfterViewInit(): void {
-    this.connectToRoom();
+
   }
 
   async connectToRoom() {
@@ -31,19 +31,20 @@ export class MediaPipeHand implements AfterViewInit {
     this.listenBinaryData(receiveBinaryData);
 
     this.room.onPeerJoin((peerId) => {
-      console.log('peer joined:', peerId);
       if (this.localStream) {
         this.room!.addStream(this.localStream, peerId);
       }
     });
     this.room.onPeerLeave((peerId) => {
-      console.log('peer left:', peerId);
+      //
     });
     this.room.onPeerStream((stream, peerId) => {
-      console.log('received audio stream from:', peerId);
       const audio = new Audio();
       audio.srcObject = stream;
       audio.play();
+    });
+    requestAnimationFrame(() => {
+      this.startVoiceCall();
     });
   }
 
