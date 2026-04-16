@@ -31,9 +31,10 @@ export class MediaPipePose implements AfterViewInit {
     pose.setOptions({
       modelComplexity: 1,        // 0 (fast) | 1 | 2 (accurate)
       smoothLandmarks: true,
+      smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5
-    });
+    } as any);
 
     // 2. Handle results — draw skeleton on canvas
     pose.onResults((results) => {
@@ -41,15 +42,22 @@ export class MediaPipePose implements AfterViewInit {
 
       // Mirror the camera feed
       ctx.save();
-      ctx.scale(-1, 1);
-      ctx.drawImage(results.image, -canvas.width, 0, canvas.width, canvas.height);
+      ctx.scale(1, 1);
+      ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
       ctx.restore();
 
+      // Draw 2D skeleton overlay using normalized image landmarks
       if (results.poseLandmarks) {
         drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS,
           { color: '#00FF00', lineWidth: 2 });
         drawLandmarks(ctx, results.poseLandmarks,
           { color: '#FF0000', lineWidth: 1, radius: 4 });
+      }
+
+      // 3D world landmarks: origin at hips center, coordinates in meters
+      // Each point: { x, y, z, visibility }
+      if (results.poseWorldLandmarks) {
+        //console.log('3D world landmarks:', results.poseWorldLandmarks);
       }
     });
 
