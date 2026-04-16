@@ -1,5 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { Pose } from '@mediapipe/pose';
+import { Pose, Results } from '@mediapipe/pose';
 import { Camera } from '@mediapipe/camera_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { POSE_CONNECTIONS } from '@mediapipe/pose';
@@ -12,6 +12,8 @@ import { POSE_CONNECTIONS } from '@mediapipe/pose';
   styleUrl: './media-pipe-pose.scss',
 })
 export class MediaPipePose implements AfterViewInit {
+  camera: Camera | null = null;
+  lastResults: Results | null = null;
   ngAfterViewInit(): void {
     const video: HTMLVideoElement = document.getElementById('video') as HTMLVideoElement;
     const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement;
@@ -38,6 +40,7 @@ export class MediaPipePose implements AfterViewInit {
 
     // 2. Handle results — draw skeleton on canvas
     pose.onResults((results) => {
+      this.lastResults = results;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Mirror the camera feed
@@ -62,7 +65,7 @@ export class MediaPipePose implements AfterViewInit {
     });
 
     // 3. Start the camera loop
-    const camera = new Camera(video, {
+    this.camera = new Camera(video, {
       onFrame: async () => {
         await pose.send({ image: video });
       },
@@ -70,7 +73,34 @@ export class MediaPipePose implements AfterViewInit {
       height: 480
     });
 
-    camera.start();
+
   }
 
+  start() {
+    if (!this.camera) {
+      return;
+    }
+    this.camera.start();
+  }
+
+  stop() {
+    if (!this.camera) {
+      return;
+    }
+    this.camera.stop();
+  }
+
+  print3D() {
+    if (!this.lastResults) {
+      return;
+    }
+    console.log(JSON.stringify(this.lastResults.poseWorldLandmarks, null, 4));
+  }
+
+  print2D() {
+    if (!this.lastResults) {
+      return;
+    }
+    console.log(JSON.stringify(this.lastResults.poseLandmarks, null, 4));
+  }
 }
