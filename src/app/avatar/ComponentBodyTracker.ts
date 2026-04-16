@@ -14,6 +14,9 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import { WorldAvatar } from "@mytypes/WorldAvatar";
+import { Pose, Results } from '@mediapipe/pose';
+import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
+import { Camera } from '@mediapipe/camera_utils';
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     mirror: boolean = false;
@@ -23,9 +26,11 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     trackerStarted: boolean = false;
     calledLastTime: boolean = false;
     activity: Wait | null = null;
+    camera: Camera | null = null;
     videoRef!: ElementRef<HTMLVideoElement>;
     canvasRef!: ElementRef<HTMLCanvasElement>;
     threeComponent!: ComponentWithAvatar;
+    poseTracker!: Pose;
     poses: BodyData[] = [];
     videoSize: GenericSizeType = {
         width: 0,
@@ -94,6 +99,20 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         this.threeComponent = threeComponent;
 
         // camera stuff
+        this.poseTracker = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+        this.poseTracker.setOptions({
+            modelComplexity: 1,        // 0 (fast) | 1 | 2 (accurate)
+            smoothLandmarks: true,
+            smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        } as any);
+        this.poseTracker.onResults((results) => {
+            const converted = convertMediaPipeToCurrent(results);
+            this.updatePose([converted]);
+        });
 
         this.initialized = true;
     }
@@ -249,19 +268,31 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
 
     stopTracking() {
-        // TODO, this function does not work!
-
+        if (!this.camera || this.trackerStarted) {
+            return;
+        }
+        this.camera.stop();
+        this.camera = null;
+        this.trackerStarted = false;
     }
 
     startTracking() {
         if (!this.trackerStarted) {
             // Do something
+            const video = this.videoRef.nativeElement;
+            this.camera = new Camera(video, {
+                onFrame: async () => {
+                    await this.poseTracker.send({ image: video });
+                },
+                //width: 640,
+                //height: 480
+            });
             this.trackerStarted = true;
         }
     }
 
     stopAll() {
-        //this.stopTracking();
+        this.stopTracking();
         this.stopListening();
         exitFullscreen();
         ModuloSonido.play('/assets/sounds/button.mp3');
