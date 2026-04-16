@@ -72,6 +72,9 @@ export class CommonSpeech extends CommonComponent {
         this.speechSrv.init();
     }
 
+    getLang(id: string) {
+        return this.langs.find(e => e.id == id);
+    }
 
     removeEmojis(text: string) {
         return text.replace(/\p{Emoji}/gu, '');

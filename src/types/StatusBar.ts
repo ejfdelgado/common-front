@@ -2,6 +2,7 @@
 export interface MenuOptionType {
     label: string;
     icon?: string;
+    isPlainIcon?: boolean;
     callback?: Function,
     children?: MenuOptionType[];
     opened?: boolean;

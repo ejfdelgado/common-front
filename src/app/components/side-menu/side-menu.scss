@@ -80,11 +80,11 @@
     cursor: pointer;
 }
 
-.navigation_parent .items_parent li span {
+.navigation_parent .items_parent li span.label {
     flex: 1;
 }
 
-.navigation_parent.close .items_parent li span,
+.navigation_parent.close .items_parent li span.label,
 .navigation_parent.close .toggle_children {
     display: none;
 }

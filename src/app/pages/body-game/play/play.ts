@@ -18,6 +18,7 @@ import { FirestoreService } from '@services/firestore.service';
 import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
 import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
+import { SelectOptionType } from 'app/pages/commonSpeech';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -58,7 +59,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     this.menuOptions.push({
       label: "Permissions",
       name: "permissions",
-      icon: "lock",
+      isPlainIcon: true,
+      icon: "🔒",
       visible: false,
       children: [],
       callback: () => {
@@ -68,7 +70,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
 
     this.menuOptions.push({
       label: "scenario",
-      icon: "public",
+      isPlainIcon: true,
+      icon: "🌎",
       children: [],
       callback: () => {
         this.trackerComponent.loadWorld("", "mode01");
@@ -77,11 +80,52 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
 
     this.menuOptions.push({
       label: "Wardrove",
-      icon: "checkroom",
+      isPlainIcon: true,
+      icon: "👖",
       children: [],
       callback: () => {
         this.trackerComponent.loadWorld("", "mode00");
       },
+    });
+
+    this.menuOptions.push({
+      label: "Voice",
+      icon: "record_voice_over",
+      children: [
+        {
+          label: "Español",
+          icon: "🇪🇸",
+          isPlainIcon: true,
+          callback: () => {
+            const lang = this.trackerComponent.getLang("es-ES");
+            if (lang) {
+              this.trackerComponent.defineLanguage(lang);
+            }
+          },
+        },
+        {
+          label: "English",
+          icon: "🇬🇧",
+          isPlainIcon: true,
+          callback: () => {
+            const lang = this.trackerComponent.getLang("en-US");
+            if (lang) {
+              this.trackerComponent.defineLanguage(lang);
+            }
+          },
+        },
+        {
+          label: "Français",
+          icon: "🇫🇷",
+          isPlainIcon: true,
+          callback: () => {
+            const lang = this.trackerComponent.getLang("fr-FR");
+            if (lang) {
+              this.trackerComponent.defineLanguage(lang);
+            }
+          },
+        }
+      ],
     });
 
     this.sideMenuSrv.getState().subscribe(() => {

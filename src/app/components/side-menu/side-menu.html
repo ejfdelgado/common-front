@@ -13,9 +13,13 @@
                 <li>
                     <div class="title" (click)="callItem(option)">
                         @if (option.icon) {
+                        @if (option.isPlainIcon === true) {
+                        <span>{{ option.icon }}</span>
+                        } @else {
                         <mat-icon>{{ option.icon }}</mat-icon>
                         }
-                        <span>{{ option.label }}</span>
+                        }
+                        <span class="label">{{ option.label }}</span>
                     </div>
                     <ul class="second_level">
                         @for(option2 of option.children; track option2.label) {
@@ -23,9 +27,13 @@
                         <li>
                             <div class="title higlight" (click)="toggleChildren(option2, $event)">
                                 @if (option2.icon) {
+                                @if (option2.isPlainIcon === true) {
+                                <span>{{ option2.icon }}</span>
+                                } @else {
                                 <mat-icon>{{ option2.icon }}</mat-icon>
                                 }
-                                <span>{{ option2.label }}</span>
+                                }
+                                <span class="label">{{ option2.label }}</span>
                                 @if (option2.children && option2.children.length > 0) {
                                 @if (option2.opened) {
                                 <mat-icon class="toggle_children">keyboard_arrow_down</mat-icon>
@@ -37,14 +45,20 @@
                             @if (option2.opened) {
                             <ul class="second_level">
                                 @for(option3 of option2.children; track option3.label) {
+                                @if (option3.visible !== false) {
                                 <li>
                                     <div class="title higlight" (click)="callItem(option3)">
                                         @if (option3.icon) {
+                                        @if (option3.isPlainIcon === true) {
+                                        <span>{{ option3.icon }}</span>
+                                        } @else {
                                         <mat-icon>{{ option3.icon }}</mat-icon>
                                         }
-                                        <span>{{ option3.label }}</span>
+                                        }
+                                        <span class="label">{{ option3.label }}</span>
                                     </div>
                                 </li>
+                                }
                                 }
                             </ul>
                             }
