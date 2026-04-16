@@ -87,6 +87,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     async initializeBodyTracker(
         videoR: ElementRef<HTMLVideoElement>,
+        canvasR: ElementRef<HTMLCanvasElement>,
         threeComponent: ComponentWithAvatar,
     ) {
         await tf.ready();

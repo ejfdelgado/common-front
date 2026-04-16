@@ -41,8 +41,9 @@ import { AvatarService } from '@services/avatar.service';
 })
 export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
 
-  @ViewChild("three_component") threeComponent!: AvatarContainer;
+  @ViewChild("three_component") avatarContainer!: AvatarContainer;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas') canvasRefGlobal!: ElementRef<HTMLCanvasElement>;
   headUpLogData: any = {};
 
   constructor(
@@ -107,7 +108,7 @@ export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
 
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
-      this.threeComponent.executeCommand(command);
+      this.avatarContainer.executeCommand(command);
       if (command.command == "save") {
         this.downloadTextPlain();
       }
@@ -120,7 +121,8 @@ export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
     const promises = [];
     promises.push(this.initializeBodyTracker(
       this.videoRefGlobal,
-      this.threeComponent,
+      this.canvasRefGlobal,
+      this.avatarContainer,
     ));
     promises.push(this.speechSrv.init());
     await Promise.all(promises);
@@ -134,6 +136,6 @@ export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
   }
 
   override getAvatarContainer(): AvatarContainer {
-    return this.threeComponent;
+    return this.avatarContainer;
   }
 }
