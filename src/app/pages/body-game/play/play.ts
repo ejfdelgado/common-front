@@ -19,6 +19,7 @@ import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
 import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { Router } from '@angular/router';
+import { P2PService, P2PStatus } from '@services/p2p.service';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -42,6 +43,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   };
   menuOptions: MenuOptionType[] = [];
   room: RoomGameType | null = null;
+  status: P2PStatus = { value: "offline" };
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -54,8 +56,30 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     private firestoreSrv: FirestoreService,
     public sideMenuSrv: SideMenuService,
     private router: Router,
+    public p2pSrv: P2PService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
+
+    this.p2pSrv.status.subscribe((ev) => {
+      this.status = ev;
+      const found = this.menuOptions.find(a => a.name == "end_call");
+      if (found) {
+        found.visible = ev.value == "online";
+      }
+      this.cdr.detectChanges();
+    });
+
+    this.menuOptions.push({
+      label: "End call",
+      name: "end_call",
+      isPlainIcon: true,
+      icon: "❌",
+      visible: false,
+      children: [],
+      callback: () => {
+        this.p2pSrv.disconnectFromRoom();
+      },
+    });
 
     this.menuOptions.push({
       label: "Permissions",
