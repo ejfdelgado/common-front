@@ -5,6 +5,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyBBOoITozdPrj-6JihAOutw_xO1mK7icb4",
     authDomain: "ejfexperiments.firebaseapp.com",
     projectId: "ejfexperiments",
+    databaseURL: "https://ejfexperiments-default-rtdb.firebaseio.com",
     storageBucket: "ejfexperiments.firebasestorage.app",
     messagingSenderId: "1066977671859",
     appId: "1:1066977671859:web:064cd6d0e9549fa7094ec6",
