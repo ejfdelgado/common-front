@@ -789,22 +789,26 @@ export function convertMediaPipeToCurrent(orig: Results) {
         const name = MediaPipeRelation[i];
         // 2d
         const ref2d = list2d[i];
+        const score2d = ref2d.visibility ? ref2d.visibility : 0;
         keypoints.push({
             name,
-            score: ref2d.visibility ? ref2d.visibility : 0,
+            score: score2d,
             x: ref2d.x,
             y: ref2d.y,
             z: ref2d.z,
         });
         //3d
         const ref3d = list3d[i];
+        const score3d = ref3d.visibility ? ref3d.visibility : 0;
         keypoints3D.push({
             name,
-            score: ref3d.visibility ? ref3d.visibility : 0,
+            score: score3d,
             x: ref3d.x,
             y: ref3d.y,
             z: ref3d.z,
         });
+        response.score += score3d;
     }
+    response.score = response.score / 33;
     return response;
 }
