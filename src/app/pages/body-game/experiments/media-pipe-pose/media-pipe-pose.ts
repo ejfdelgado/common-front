@@ -4,6 +4,7 @@ import { Camera } from '@mediapipe/camera_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { POSE_CONNECTIONS } from '@mediapipe/pose';
 import { convertMediaPipeToCurrent } from '@avatar/utils/AvatarUtilities';
+import { GenericSizeType } from '@mytypes/BodyTypes';
 
 
 @Component({
@@ -95,7 +96,11 @@ export class MediaPipePose implements AfterViewInit {
     if (!this.lastResults) {
       return;
     }
-    const converted = convertMediaPipeToCurrent(this.lastResults);
+    const videoSize: GenericSizeType = {
+      width: 640,
+      height: 480,
+    };
+    const converted = convertMediaPipeToCurrent(this.lastResults, videoSize);
     if (!converted) { return; }
     console.log(JSON.stringify(converted.keypoints3D, null, 4));
   }
@@ -104,7 +109,11 @@ export class MediaPipePose implements AfterViewInit {
     if (!this.lastResults) {
       return;
     }
-    const converted = convertMediaPipeToCurrent(this.lastResults);
+    const videoSize: GenericSizeType = {
+      width: 640,
+      height: 480,
+    };
+    const converted = convertMediaPipeToCurrent(this.lastResults, videoSize);
     if (!converted) { return; }
     console.log(JSON.stringify(converted.keypoints, null, 4));
   }

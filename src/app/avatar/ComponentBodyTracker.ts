@@ -110,7 +110,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             minTrackingConfidence: 0.5
         } as any);
         this.poseTracker.onResults((results) => {
-            const converted = convertMediaPipeToCurrent(results);
+            const converted = convertMediaPipeToCurrent(results, this.videoSize);
             if (converted) {
                 this.updatePose([converted]);
             }

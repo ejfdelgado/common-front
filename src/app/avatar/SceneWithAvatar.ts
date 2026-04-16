@@ -509,7 +509,6 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.computingIK = false;
                 return false;
             }
-            //console.log(`score = ${score}`);
             if (score < 0) {
                 // Person does not fit the camera
                 throw new Error(`${score}`);

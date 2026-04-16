@@ -431,8 +431,6 @@ export function isAllPersonInsideCamera(
     const min = Math.min(...relevantYs);
     const max = Math.max(...relevantYs);
 
-    console.log(min, max);
-
     if (
         top < min
         && bottom > max
@@ -775,7 +773,7 @@ export function computeHeight(points: { [key: string]: BodyKeyPointData }) {
     return distance1 + distance2;
 }
 
-export function convertMediaPipeToCurrent(orig: Results) {
+export function convertMediaPipeToCurrent(orig: Results, videoSize: GenericSizeType) {
     if (!orig.poseLandmarks || !orig.poseWorldLandmarks) {
         return null;
     }
@@ -798,8 +796,8 @@ export function convertMediaPipeToCurrent(orig: Results) {
         keypoints.push({
             name,
             score: score2d,
-            x: ref2d.x,
-            y: ref2d.y,
+            x: ref2d.x * videoSize.width,
+            y: ref2d.y * videoSize.height,
             z: ref2d.z,
         });
         //3d
