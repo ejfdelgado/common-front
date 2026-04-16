@@ -11,7 +11,7 @@
                 @for(option of options; track option.label) {
                 @if (option.visible !== false) {
                 <li>
-                    <div class="title" (click)="callItem(option)">
+                    <div class="title" (click)="callItem(option)" [ngClass]="{'in_use': option.inUse}">
                         @if (option.icon) {
                         @if (option.isPlainIcon === true) {
                         <span>{{ option.icon }}</span>
@@ -25,7 +25,8 @@
                         @for(option2 of option.children; track option2.label) {
                         @if (option2.visible !== false) {
                         <li>
-                            <div class="title higlight" (click)="toggleChildren(option2, $event)">
+                            <div class="title higlight" (click)="toggleChildren(option2, $event)"
+                                [ngClass]="{'in_use': option2.inUse}">
                                 @if (option2.icon) {
                                 @if (option2.isPlainIcon === true) {
                                 <span>{{ option2.icon }}</span>
@@ -47,7 +48,8 @@
                                 @for(option3 of option2.children; track option3.label) {
                                 @if (option3.visible !== false) {
                                 <li>
-                                    <div class="title higlight" (click)="callItem(option3)">
+                                    <div class="title higlight" (click)="callItem(option3)"
+                                        [ngClass]="{'in_use': option3.inUse}">
                                         @if (option3.icon) {
                                         @if (option3.isPlainIcon === true) {
                                         <span>{{ option3.icon }}</span>

@@ -1,12 +1,10 @@
 # CommonFront
 
+peer 2 peer synchornization
+
 ------------------------------------------------------------------------
 
 Optimizar la busqueda del punto Y, tal vez precargando en un Three?
-
-Colocar en el menú superior derecho:
-- Opción de render o no composite.
-- Idioma de salida de voz
 Create GameAction -> call setProps de some controller with some attributes.
 Add characters.
 Support for assets on bucket, not in local.

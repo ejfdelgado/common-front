@@ -8,6 +8,7 @@ export interface MenuOptionType {
     opened?: boolean;
     visible?: boolean;
     name?: string;
+    inUse?: boolean;
 }
 
 export interface StatusBarConfigType {

@@ -19,6 +19,7 @@ import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
 import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { SelectOptionType } from 'app/pages/commonSpeech';
+import { Router } from '@angular/router';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -53,6 +54,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     private dialog: MatDialog,
     private firestoreSrv: FirestoreService,
     public sideMenuSrv: SideMenuService,
+    private router: Router,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -69,63 +71,87 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "scenario",
+      label: "Scenarios",
       isPlainIcon: true,
       icon: "🌎",
-      children: [],
-      callback: () => {
-        this.trackerComponent.loadWorld("", "mode01");
-      },
-    });
-
-    this.menuOptions.push({
-      label: "Wardrove",
-      isPlainIcon: true,
-      icon: "👖",
-      children: [],
-      callback: () => {
-        this.trackerComponent.loadWorld("", "mode00");
-      },
+      children: [
+        {
+          label: "Park",
+          isPlainIcon: true,
+          icon: "🏞️",
+          children: [],
+          callback: () => {
+            this.trackerComponent.loadWorld("", "mode01");
+          },
+        },
+        {
+          label: "Wardrove",
+          isPlainIcon: true,
+          icon: "👖",
+          children: [],
+          callback: () => {
+            this.trackerComponent.loadWorld("", "mode00");
+          },
+        }
+      ],
     });
 
     this.menuOptions.push({
       label: "Voice",
+      name: "langs",
       icon: "record_voice_over",
       children: [
         {
           label: "Español",
+          name: "es-ES",
           icon: "🇪🇸",
           isPlainIcon: true,
           callback: () => {
             const lang = this.trackerComponent.getLang("es-ES");
             if (lang) {
               this.trackerComponent.defineLanguage(lang);
+              this.updateCurrentLang();
             }
           },
         },
         {
           label: "English",
+          name: "en-US",
           icon: "🇬🇧",
           isPlainIcon: true,
           callback: () => {
             const lang = this.trackerComponent.getLang("en-US");
             if (lang) {
               this.trackerComponent.defineLanguage(lang);
+              this.updateCurrentLang();
             }
           },
         },
         {
           label: "Français",
+          name: "fr-FR",
           icon: "🇫🇷",
           isPlainIcon: true,
           callback: () => {
             const lang = this.trackerComponent.getLang("fr-FR");
             if (lang) {
               this.trackerComponent.defineLanguage(lang);
+              this.updateCurrentLang();
             }
           },
         }
       ],
+    });
+
+    this.menuOptions.push({
+      label: "Back to rooms",
+      icon: "arrow_back",
+      children: [],
+      callback: () => {
+        this.router.navigate([`action/rooms`], {
+          queryParams: {}
+        });
+      },
     });
 
     this.sideMenuSrv.getState().subscribe(() => {
@@ -136,8 +162,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
 
     this.authSrv.authState$.subscribe(async (user) => {
       try {
-        this.updateLogedMenuOptions();
         await this.loadCollection();
+        this.updateLogedMenuOptions();
       } catch (err: any) {
         this.uiNotificationSrv.show(err.message);
       }
@@ -149,12 +175,30 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     this.menuOptions
       .filter(a => a.name && ['permissions'].indexOf(a.name) >= 0)
       .forEach((e) => {
-        e.visible = visible;
+        if (e.name == "permissions") {
+          e.visible = visible && !!this.room;
+        } else {
+          e.visible = visible;
+        }
       })
+  }
+
+  updateCurrentLang() {
+    const lang = this.trackerComponent.currentLang;
+    const children = this.menuOptions
+      .find(a => a.name == "langs")?.children;
+    if (!children) {
+      return;
+    }
+    children.filter(a => a.name && ["es-ES", "en-US", "fr-FR"].indexOf(a.name) >= 0)
+      .forEach((a) => {
+        a.inUse = a.name == lang;
+      });
   }
 
   ngAfterViewInit(): void {
     this.trackerComponent.applyMode("mode");
+    this.updateCurrentLang();
   }
 
   async openPermissions() {

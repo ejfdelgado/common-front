@@ -72,6 +72,11 @@
     color: black;
 }
 
+.items_parent li .title.in_use {
+    background-color: #d1d9ff !important;
+    color: black !important;
+}
+
 .items_parent li .title {
     display: flex;
     flex-direction: row;
