@@ -14,11 +14,14 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import { WorldAvatar } from "@mytypes/WorldAvatar";
-import { Pose, Results } from '@mediapipe/pose';
+import { Pose } from '@mediapipe/pose';
 import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
 import { Camera } from '@mediapipe/camera_utils';
+import { P2PService } from "@services/p2p.service";
+import { RoomGameType } from "@mytypes/ActionGameTypes";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
+    room: RoomGameType | null = null;
     mirror: boolean = false;
     errorState: string | null = null;
     initialized: boolean = false;
@@ -78,6 +81,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         public override fullScreenSrv: FullscreenService,
         //
         public avatarSrv: AvatarService,
+        public p2pSrv: P2PService,
     ) {
         super(
             voiceSrv,
@@ -307,6 +311,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 this.startListening();
             }
             enterFullscreen();
+            if (this.room) {
+                this.p2pSrv.connectToRoom(this.room.id);
+            }
             this.started = true;
         } catch (err) {
             console.log(err);
@@ -315,6 +322,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             if (this.activity) {
                 this.activity.done();
             }
+        }
+    }
+
+    setRoomData(room: RoomGameType | null) {
+        this.room = room;
+        if (room === null) {
+            this.p2pSrv.disconnectFromRoom();
         }
     }
 

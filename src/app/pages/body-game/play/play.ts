@@ -235,6 +235,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       } else {
         this.room = null;
       }
+      this.trackerComponent.setRoomData(this.room);
       this.cdr.detectChanges();
     }
   }
@@ -242,7 +243,4 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   ngOnDestroy(): void {
 
   }
-
-
-
 }

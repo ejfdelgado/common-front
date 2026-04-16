@@ -22,6 +22,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { AvatarContainer } from '../avatar-container/avatar-container';
 import { AvatarService } from '@services/avatar.service';
+import { P2PService } from '@services/p2p.service';
 
 @Component({
   selector: 'app-body-tracker',
@@ -55,6 +56,7 @@ export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
     public override avatarSrv: AvatarService,
+    public override p2pSrv: P2PService,
   ) {
     super(
       cdr,
@@ -65,6 +67,7 @@ export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
       sanitizer,
       fullScreenSrv,
       avatarSrv,
+      p2pSrv,
     );
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
