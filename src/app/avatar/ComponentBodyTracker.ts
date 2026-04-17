@@ -166,7 +166,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                             // Get the data and apply it to the avatar
                             const avatar = avatarContainer.scene.getObjectByName(name);
                             if (avatar) {
-                                avatarContainer.scene.applyAvatarState(avatar, payload);
+                                avatarContainer.scene.applyAvatarState(avatar, event.data);
                             }
                         } else if (event.type == "mode") {
                             this.applyMode(event.data);
