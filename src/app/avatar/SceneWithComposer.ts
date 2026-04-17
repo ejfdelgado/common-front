@@ -17,6 +17,21 @@ import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
 import { CharacterSpec, GameScenario } from "@mytypes/WorldAvatar";
 
+interface TerrainTriangle {
+    a: THREE.Vector3;
+    b: THREE.Vector3;
+    c: THREE.Vector3;
+}
+
+interface TerrainGrid {
+    minX: number;
+    minZ: number;
+    cellSize: number;
+    cols: number;
+    rows: number;
+    cells: Map<number, TerrainTriangle[]>;
+}
+
 export abstract class SceneWithComposer extends SceneWithAvatar {
 
     previousTime = performance.now();
@@ -26,6 +41,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     animatedElements: AnimatedElements[] = [];
     startingAnimationTime: number = Date.now();
     terrainMeshes: THREE.Mesh[] = [];
+    private terrainGrid: TerrainGrid | null = null;
 
     constructor(
         bounds: DOMRect,
@@ -199,24 +215,111 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     }
 
     indexTerrain() {
+        this.terrainGrid = null;
         const meshes = this.terrainMeshes;
-    }
+        if (meshes.length === 0) return;
 
-    override getFirstHitFromTopToDown(x: number, z: number): number | null {
-        const raycaster = new THREE.Raycaster();
-        const origin = new THREE.Vector3(x, 100000, z);
-        const direction = new THREE.Vector3(0, -1, 0);
-        raycaster.set(origin, direction);
+        const triangles: TerrainTriangle[] = [];
+        let minX = Infinity, maxX = -Infinity;
+        let minZ = Infinity, maxZ = -Infinity;
 
-        let highestY: number | null = null;
-        for (let i = 0; i < this.terrainMeshes.length; i++) {
-            const hits = raycaster.intersectObject(this.terrainMeshes[i], false);
-            for (const hit of hits) {
-                if (highestY === null || hit.point.y > highestY) {
-                    highestY = hit.point.y;
+        for (const mesh of meshes) {
+            mesh.updateWorldMatrix(true, false);
+            const matrix = mesh.matrixWorld;
+            const geo = mesh.geometry;
+            const posAttr = geo.attributes['position'] as THREE.BufferAttribute;
+
+            const getVertex = (i: number): THREE.Vector3 => {
+                return new THREE.Vector3().fromBufferAttribute(posAttr, i).applyMatrix4(matrix);
+            };
+
+            const addTriangle = (ia: number, ib: number, ic: number) => {
+                const a = getVertex(ia), b = getVertex(ib), c = getVertex(ic);
+                triangles.push({ a, b, c });
+                for (const v of [a, b, c]) {
+                    if (v.x < minX) minX = v.x;
+                    if (v.x > maxX) maxX = v.x;
+                    if (v.z < minZ) minZ = v.z;
+                    if (v.z > maxZ) maxZ = v.z;
+                }
+            };
+
+            if (geo.index) {
+                const idx = geo.index;
+                for (let i = 0; i < idx.count; i += 3) {
+                    addTriangle(idx.getX(i), idx.getX(i + 1), idx.getX(i + 2));
+                }
+            } else {
+                for (let i = 0; i < posAttr.count; i += 3) {
+                    addTriangle(i, i + 1, i + 2);
                 }
             }
         }
+
+        if (triangles.length === 0) return;
+
+        const extent = Math.max(maxX - minX, maxZ - minZ);
+        const cellSize = Math.max(1, Math.ceil(extent / 50));
+        const cols = Math.ceil((maxX - minX) / cellSize) + 1;
+        const rows = Math.ceil((maxZ - minZ) / cellSize) + 1;
+        const cells = new Map<number, TerrainTriangle[]>();
+
+        for (const tri of triangles) {
+            const txMin = Math.min(tri.a.x, tri.b.x, tri.c.x);
+            const txMax = Math.max(tri.a.x, tri.b.x, tri.c.x);
+            const tzMin = Math.min(tri.a.z, tri.b.z, tri.c.z);
+            const tzMax = Math.max(tri.a.z, tri.b.z, tri.c.z);
+
+            const colMin = Math.max(0, Math.floor((txMin - minX) / cellSize));
+            const colMax = Math.min(cols - 1, Math.floor((txMax - minX) / cellSize));
+            const rowMin = Math.max(0, Math.floor((tzMin - minZ) / cellSize));
+            const rowMax = Math.min(rows - 1, Math.floor((tzMax - minZ) / cellSize));
+
+            for (let r = rowMin; r <= rowMax; r++) {
+                for (let c = colMin; c <= colMax; c++) {
+                    const k = r * cols + c;
+                    if (!cells.has(k)) cells.set(k, []);
+                    cells.get(k)!.push(tri);
+                }
+            }
+        }
+
+        this.terrainGrid = { minX, minZ, cellSize, cols, rows, cells };
+    }
+
+    override getFirstHitFromTopToDown(x: number, z: number): number | null {
+        if (!this.terrainGrid) {
+            // Fallback to brute-force if index has not been built yet
+            const raycaster = new THREE.Raycaster();
+            raycaster.set(new THREE.Vector3(x, 100000, z), new THREE.Vector3(0, -1, 0));
+            let highestY: number | null = null;
+            for (const mesh of this.terrainMeshes) {
+                for (const hit of raycaster.intersectObject(mesh, false)) {
+                    if (highestY === null || hit.point.y > highestY) highestY = hit.point.y;
+                }
+            }
+            return highestY;
+        }
+
+        const { minX, minZ, cellSize, cols, rows, cells } = this.terrainGrid;
+        const col = Math.floor((x - minX) / cellSize);
+        const row = Math.floor((z - minZ) / cellSize);
+
+        if (col < 0 || col >= cols || row < 0 || row >= rows) return null;
+
+        const candidates = cells.get(row * cols + col);
+        if (!candidates) return null;
+
+        const ray = new THREE.Ray(new THREE.Vector3(x, 100000, z), new THREE.Vector3(0, -1, 0));
+        const target = new THREE.Vector3();
+        let highestY: number | null = null;
+
+        for (const tri of candidates) {
+            if (ray.intersectTriangle(tri.a, tri.b, tri.c, false, target) !== null) {
+                if (highestY === null || target.y > highestY) highestY = target.y;
+            }
+        }
+
         return highestY;
     }
 
@@ -298,6 +401,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                 this.makeObjectTransparentToCamera(scenario, this.camera, 0, 15, 30, 45);
             }
         }
+        this.indexTerrain();
         // Update background if needed
         const bgColor = scene.background?.color;
         if (bgColor) {
