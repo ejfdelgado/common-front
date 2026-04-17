@@ -718,9 +718,6 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 boneTarget.rotation.set(v[3], v[4], v[5]);
             }
         }
-        avatar.matrixAutoUpdate = false;
-        const result = new THREE.Matrix4().identity();
-        const matrixTransforms: THREE.Matrix4[] = [];
 
         let positionX = state.lr[0];
         let positionZ = state.lr[1];
@@ -731,6 +728,25 @@ export abstract class SceneWithAvatar extends THREE.Scene {
             positionZ = lr[1];
             rotationY = lr[2];
         }
+        this.applyLR(
+            avatar,
+            positionX,
+            positionZ,
+            rotationY,
+            state,
+        );
+    }
+
+    applyLR(
+        avatar: THREE.Object3D<THREE.Object3DEventMap>,
+        positionX: number,
+        positionZ: number,
+        rotationY: number,
+        state?: StoredAvatarState,
+    ) {
+        avatar.matrixAutoUpdate = false;
+        const result = new THREE.Matrix4().identity();
+        const matrixTransforms: THREE.Matrix4[] = [];
         const rotationMatrix = new THREE.Matrix4().makeRotationY(rotationY);
 
         const positionY = this.getFirstHitFromTopToDown(positionX, positionZ);
@@ -746,8 +762,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         // Rotation
         matrixTransforms.push(rotationMatrix);
         // Local displacement
-        const matrix = arrayToMatrix(state.matrix);
-        matrixTransforms.push(matrix);
+        if (state) {
+            const matrix = arrayToMatrix(state.matrix);
+            matrixTransforms.push(matrix);
+        }
 
         for (const m of matrixTransforms) {
             result.multiply(m);

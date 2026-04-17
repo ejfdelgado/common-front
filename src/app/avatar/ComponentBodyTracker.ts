@@ -115,10 +115,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                             return;
                         }
                         const autoAdd: boolean = true;
-                        await avatarContainer.scene.addModel({
+                        const avatar = await avatarContainer.scene.addModel({
                             name: name,
                             url: ROOT_PATH + "avatar005.glb",
                         }, autoAdd);
+                        avatarContainer.scene.applyLR(
+                            avatar, 0, 0, 0
+                        );
                     });
                     this.p2pSrv.peerLeave.subscribe(async (peerId) => {
                         const name = getPeerAvatarName(peerId);
