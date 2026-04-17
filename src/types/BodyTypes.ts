@@ -118,6 +118,7 @@ export interface ControllerUpdateResponse {
 }
 
 export const AVATAR_NAME = "avatar";
+export const AVATAR_PELVIS_HEIGHT = 0.88;
 
 export interface AvatarLocationState {
     positionX: number;

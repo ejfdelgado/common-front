@@ -743,6 +743,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         positionZ: number,
         rotationY: number,
         state?: StoredAvatarState,
+        positionY2?: number,
     ) {
         avatar.matrixAutoUpdate = false;
         const result = new THREE.Matrix4().identity();
@@ -753,7 +754,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
 
         const translationMatrix = new THREE.Matrix4().makeTranslation(
             positionX,
-            positionY === null ? 0 : positionY,
+            (positionY === null ? 0 : positionY) + (positionY2 ? positionY2 : 0),
             positionZ,
         );
 

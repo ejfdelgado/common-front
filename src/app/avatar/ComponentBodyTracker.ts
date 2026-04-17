@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef } from "@angular/core";
-import { AVATAR_NAME, BodyData, GenericSizeType, ROOT_PATH } from "@mytypes/BodyTypes";
+import { AVATAR_NAME, AVATAR_PELVIS_HEIGHT, BodyData, GenericSizeType, ROOT_PATH } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
@@ -77,6 +77,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
     };
 
+    connectedPeerIds: string[] = [];
+
     constructor(
         public cdr: ChangeDetectorRef,
         public override voiceSrv: VoiceRecognitionService,
@@ -102,6 +104,18 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             if (status.value == "offline") {
                 // destroy the room
                 this.roomLive = null;
+                // Remove all peers
+                this.connectedPeerIds.forEach((peerId) => {
+                    const avatarContainer = this.getAvatarContainer();
+                    if (!avatarContainer || !avatarContainer.scene) {
+                        return;
+                    }
+                    const name = getPeerAvatarName(peerId);
+                    const avatar = avatarContainer.scene.getObjectByName(name);
+                    if (avatar) {
+                        avatarContainer.scene.remove(avatar);
+                    }
+                });
             } else if (status.value == "online") {
                 // get the room
                 if (status.room) {
@@ -109,6 +123,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                     // Subscribe to room events
                     this.p2pSrv.peerJoin.subscribe(async (peerId) => {
                         const name = getPeerAvatarName(peerId);
+                        this.connectedPeerIds.push(peerId);
                         // Add an avatar to represent this peer
                         const avatarContainer = this.getAvatarContainer();
                         if (!avatarContainer || !avatarContainer.scene) {
@@ -120,11 +135,15 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                             url: ROOT_PATH + "avatar005.glb",
                         }, autoAdd);
                         avatarContainer.scene.applyLR(
-                            avatar, 0, 0, 0
+                            avatar, 0, 0, 0, undefined, AVATAR_PELVIS_HEIGHT
                         );
                     });
                     this.p2pSrv.peerLeave.subscribe(async (peerId) => {
                         const name = getPeerAvatarName(peerId);
+                        const peerIndex = this.connectedPeerIds.indexOf(peerId);
+                        if (peerIndex >= 0) {
+                            this.connectedPeerIds.splice(peerIndex, 1);
+                        }
                         const avatarContainer = this.getAvatarContainer();
                         if (!avatarContainer || !avatarContainer.scene) {
                             return;
@@ -471,7 +490,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         if (!postY) {
             postY = 0;
         }
-        position.positionY = postY + 0.88;
+        position.positionY = postY + AVATAR_PELVIS_HEIGHT;
         // Restore T pose transformation
         avatarContainer.scene.restoreTBoneBackup(AVATAR_NAME);
         // Clean old transformation
