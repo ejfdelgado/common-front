@@ -859,3 +859,7 @@ export function getStoredAvatarState(
     }
     return state;
 }
+
+export function getPeerAvatarName(peerId: string) {
+    return `usr_${peerId}`;
+}

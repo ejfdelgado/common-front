@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef } from "@angular/core";
-import { AVATAR_NAME, BodyData, GenericSizeType } from "@mytypes/BodyTypes";
+import { AVATAR_NAME, BodyData, GenericSizeType, ROOT_PATH } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
@@ -15,16 +15,18 @@ import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import { WorldAvatar } from "@mytypes/WorldAvatar";
 import { Pose } from '@mediapipe/pose';
-import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
+import { convertMediaPipeToCurrent, getPeerAvatarName } from "./utils/AvatarUtilities";
 import { Camera } from '@mediapipe/camera_utils';
 import { P2PService } from "@services/p2p.service";
 import { RoomGameType } from "@mytypes/ActionGameTypes";
 import {
     User,
 } from '@angular/fire/auth';
+import { Room } from "@trystero-p2p/firebase";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
+    roomLive: Room | null = null;
     mirror: boolean = false;
     errorState: string | null = null;
     initialized: boolean = false;
@@ -95,6 +97,44 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             sanitizer,
             fullScreenSrv,
         );
+
+        this.p2pSrv.status.subscribe((status) => {
+            if (status.value == "offline") {
+                // destroy the room
+                this.roomLive = null;
+            } else if (status.value == "online") {
+                // get the room
+                if (status.room) {
+                    this.roomLive = status.room;
+                    // Subscribe to room events
+                    this.p2pSrv.peerJoin.subscribe(async (peerId) => {
+                        const name = getPeerAvatarName(peerId);
+                        // Add an avatar to represent this peer
+                        const avatarContainer = this.getAvatarContainer();
+                        if (!avatarContainer || !avatarContainer.scene) {
+                            return;
+                        }
+                        const autoAdd: boolean = true;
+                        await avatarContainer.scene.addModel({
+                            name: name,
+                            url: ROOT_PATH + "avatar005.glb",
+                        }, autoAdd);
+                    });
+                    this.p2pSrv.peerLeave.subscribe(async (peerId) => {
+                        const name = getPeerAvatarName(peerId);
+                        const avatarContainer = this.getAvatarContainer();
+                        if (!avatarContainer || !avatarContainer.scene) {
+                            return;
+                        }
+                        // Remove the avatar representing this peer
+                        const avatar = avatarContainer.scene.getObjectByName(name);
+                        if (avatar) {
+                            avatarContainer.scene.remove(avatar);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     setUser(user: User | null) {

@@ -14,6 +14,7 @@ const appId = 'ejfexperiments';
 
 export interface P2PStatus {
     value: "online" | "offline";
+    room?: Room;
 }
 
 export interface P2PMessage {
@@ -31,6 +32,8 @@ export class P2PService {
     remoteAudios: HTMLAudioElement[] = [];
     events: EventEmitter<P2PMessage> = new EventEmitter();
     status: EventEmitter<P2PStatus> = new EventEmitter();
+    peerJoin: EventEmitter<string> = new EventEmitter();
+    peerLeave: EventEmitter<string> = new EventEmitter();
 
     async connectToRoom(roomId: string) {
         try {
@@ -42,6 +45,8 @@ export class P2PService {
                 appId,
             }, roomId);
 
+            this.status.emit({ value: "online", room: this.room });
+
             const [sendBinaryData, receiveBinaryData] = this.room.makeAction('binary-data');
             this.sendBinaryData = sendBinaryData;
             this.listenBinaryData(receiveBinaryData);
@@ -50,9 +55,10 @@ export class P2PService {
                 if (this.localStream) {
                     this.room!.addStream(this.localStream, peerId);
                 }
+                this.peerJoin.emit(peerId);
             });
             this.room.onPeerLeave((peerId) => {
-                //
+                this.peerLeave.emit(peerId);
             });
             this.room.onPeerStream((stream) => {
                 const audio = new Audio();
@@ -63,7 +69,6 @@ export class P2PService {
             requestAnimationFrame(() => {
                 this.startVoiceCall();
             });
-            this.status.emit({ value: "online" });
         } catch (err) {
             this.status.emit({ value: "offline" });
             throw err;
