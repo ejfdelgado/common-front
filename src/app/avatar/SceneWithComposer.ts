@@ -5,6 +5,7 @@ import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { CameraByPassShader } from './shaders/CameraByPass';
 import {
     AnimatedElements,
+    AnimationSpecType,
     ROOT_PATH,
     StoredAvatarAnimation,
 } from "@mytypes/BodyTypes";
@@ -14,7 +15,7 @@ import * as THREE from 'three';
 import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
-import { GameScenario } from "@mytypes/WorldAvatar";
+import { CharacterSpec, GameScenario } from "@mytypes/WorldAvatar";
 
 export abstract class SceneWithComposer extends SceneWithAvatar {
 
@@ -115,27 +116,42 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         }
     }
 
-    async loadCharacters() {
+    async loadCharacter(detail: CharacterSpec) {
         const autoAdd: boolean = true;
-        this.addModel({
-            name: "friend",
+        await this.addModel({
+            name: detail.name,
             url: ROOT_PATH + "avatar005.glb",
-        }, autoAdd).then(async (object) => {
-            // Load animation
-            const anim = await this.loadAnimation();
+        }, autoAdd);
+        // TODO, preload animations?
+    }
 
-            //anim.lr = [2, 2, Math.PI];
-
+    // applyAnimationToCharacter("friend", {"animations/animation.bin", true, [2, 2, Math.PI]});
+    async applyAnimationToCharacter(
+        characterName: string,
+        spec: AnimationSpecType,
+    ) {
+        const avatar = this.getObjectByName(characterName);
+        if (!avatar) {
+            return;
+        }
+        const old = this.animatedElements.find(a => a.avatar == avatar);
+        const anim = await this.loadAnimation(spec.animationUrl);
+        if (spec.lr && spec.lr.length == 3) {
+            anim.lr = spec.lr;
+        }
+        const now = Date.now();
+        const sceneTime = now - this.startingAnimationTime;
+        if (old) {
+            old.startingTime = sceneTime;
+            old.state = anim;
+        } else {
             this.animatedElements.push({
-                avatar: object,
-                loop: true,
-                startingTime: 0,
+                avatar: avatar,
+                loop: spec.loop,
+                startingTime: sceneTime,
                 state: anim,
             });
-
-            // This make it highlighted
-            this.highlightOn(object);
-        });
+        }
     }
 
     highlightOn(obj: THREE.Object3D<THREE.Object3DEventMap>) {
@@ -158,9 +174,9 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         }
     }
 
-    async loadAnimation(): Promise<StoredAvatarAnimation> {
+    async loadAnimation(url: string): Promise<StoredAvatarAnimation> {
         const loaded = await firstValueFrom(
-            this.http.get(ROOT_PATH + "animations/animation.bin",
+            this.http.get(ROOT_PATH + url,
                 { responseType: 'arraybuffer' },
             ));
         const model = decode(loaded);

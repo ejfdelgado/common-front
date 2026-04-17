@@ -1,4 +1,4 @@
-import { AvatarLocationState, Point3D } from "./BodyTypes";
+import { AnimationSpecType, AvatarLocationState, Point3D } from "./BodyTypes";
 
 // The intentatio is to persist this data
 export interface WorldAvatar {
@@ -13,6 +13,13 @@ export interface GameMode {
     defaultSenario: string;
     controllers: GameController[];
     scenarios: { [key: string]: GameScenario };
+    characters?: CharacterSpec[];
+}
+
+export interface CharacterSpec {
+    name: string;
+    defaultAnimation?: string;
+    animations: { [key: string]: AnimationSpecType },
 }
 
 export interface ColorType {

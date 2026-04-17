@@ -134,10 +134,49 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         }
     }
 
+    cacheModelLoader: { [key: string]: Promise<any> } = {};
+
+    async loadWithCache(loader: any, url: string) {
+        //if (url in this.cacheModelLoader) {
+        if (false) {
+            const temp = await this.cacheModelLoader[url];
+            return temp;
+        } else {
+            const promise = new Promise((resolve, reject) => {
+                loader.load(
+                    url,
+                    async (response: any) => {
+                        let object = null;
+                        if (loader == this.gltfLoader) {
+                            //console.log(response.scene.children[0]);
+                            /*
+                            const group = new THREE.Object3D(); // or new THREE.Group();
+                            response.scene.children.forEach((obj: any) => group.add(obj));
+                            object = group;
+                            */
+                            object = response.scene.children[0];
+                        } else {
+                            object = response;
+                        }
+                        resolve(object);
+                    },
+                    (xhr: any) => {
+                        //console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+                    },
+                    (error: any) => {
+                        reject(error);
+                    }
+                );
+            });
+            this.cacheModelLoader[url] = promise;
+            return promise;
+        }
+    }
+
     async addModel(
         item: ItemModelRef, autoAdd: boolean = true
     ): Promise<THREE.Object3D<THREE.Object3DEventMap>> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const url = item.url;
             const partes = /([^.]+)$/.exec(item.url.toLocaleLowerCase());
             // gets extension
@@ -149,37 +188,15 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 };
                 const loader: any = MAPEO_LOADERS[partes[1]];
                 if (loader) {
-                    loader.load(
-                        url,
-                        async (response: any) => {
-                            let object = null;
-                            if (loader == this.gltfLoader) {
-                                //console.log(response.scene.children[0]);
-                                /*
-                                const group = new THREE.Object3D(); // or new THREE.Group();
-                                response.scene.children.forEach((obj: any) => group.add(obj));
-                                object = group;
-                                */
-                                object = response.scene.children[0];
-                            } else {
-                                object = response;
-                            }
-                            object.name = item.name;
-                            if (object != null) {
-                                if (autoAdd) {
-                                    //inspectAvatarObject(object);
-                                    this.add(object);
-                                }
-                            }
-                            resolve(object);
-                        },
-                        (xhr: any) => {
-                            //console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-                        },
-                        (error: any) => {
-                            reject(error);
+                    const object = (await this.loadWithCache(loader, url));
+                    object.name = item.name;
+                    if (object != null) {
+                        if (autoAdd) {
+                            //inspectAvatarObject(object);
+                            this.add(object);
                         }
-                    );
+                    }
+                    resolve(object);
                 } else {
                     console.error(`No loader for ${item.url}`);
                 }

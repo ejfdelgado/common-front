@@ -70,7 +70,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                         meshes: [],
                     }
                 },
-                controllers: []
+                controllers: [],
             }
         }
     };
@@ -422,5 +422,38 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         avatarContainer.scene.forceAvatarState(position, mode.mirror);
 
         // Add characters
+        if (mode.characters) {
+            const promises: Promise<any>[] = [];
+            for (let i = 0; i < mode.characters.length; i++) {
+                const spec = mode.characters[i];
+                promises.push(new Promise<void>(async (resolve, reject) => {
+                    try {
+                        if (!avatarContainer.scene) {
+                            return;
+                        }
+                        //console.log(`Loading character ${spec.name}`);
+                        await avatarContainer.scene.loadCharacter(spec);
+                        //console.log(`Loading character ${spec.name} Ok!`);
+                        if (spec.defaultAnimation) {
+                            const anim = spec.animations[spec.defaultAnimation];
+                            if (anim) {
+                                //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name}`);
+                                await avatarContainer.scene.applyAnimationToCharacter(
+                                    spec.name,
+                                    anim,
+                                );
+                                //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name} Ok!`);
+                            }
+                        }
+                        resolve();
+                    } catch (err) {
+                        reject(err);
+                    }
+                }));
+
+            }
+            await Promise.all(promises);
+        }
+        //console.log("All loaded");
     }
 }

@@ -3,14 +3,12 @@ import {
     AvatarBodyEvent,
     AVATAR_NAME,
     StoredAvatarAnimation,
-    StoredAvatarState,
     AVATAR_ANIM_VERSION,
 } from "@mytypes/BodyTypes";
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
-import { getStoredAvatarState, matrixToArray } from "@avatar/utils/AvatarUtilities";
-import { EXPORTED_BONES } from "@mytypes/BodyParts";
+import { getStoredAvatarState } from "@avatar/utils/AvatarUtilities";
 
 export class RecordPoseController extends SceneControllerAbstract {
 

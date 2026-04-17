@@ -175,3 +175,9 @@ export interface WorkerData {
     videoSize: GenericSizeType;
     mirror: boolean;
 }
+
+export interface AnimationSpecType {
+    animationUrl: string,
+    loop: boolean,
+    lr?: number[],
+}

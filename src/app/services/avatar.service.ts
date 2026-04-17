@@ -88,7 +88,19 @@ export class AvatarService {
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                                 { id: GameControllerEnum.RecordPoseController, params: {} },
                                 { id: GameControllerEnum.CubeController, params: { enabled: false } },
-                            ]
+                            ],
+                            characters: [
+                                {
+                                    name: "friend",
+                                    defaultAnimation: "initial",
+                                    animations: {
+                                        "initial": {
+                                            animationUrl: "animations/animation.bin",
+                                            loop: true,
+                                        }
+                                    }
+                                }
+                            ],
                         }
                     }
                 };
