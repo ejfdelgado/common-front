@@ -6,6 +6,7 @@ import {
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import * as THREE from 'three';
 import { getStoredAvatarState } from "@avatar/utils/AvatarUtilities";
+import { GameAction } from "@mytypes/ActionGameTypes";
 
 export class SharePoseController extends SceneControllerAbstract {
 
@@ -29,7 +30,11 @@ export class SharePoseController extends SceneControllerAbstract {
                 this.scene.avatarStateSmoot,
                 avatar,
             );
-            this.p2pSrv.broadcastBinaryData(state);
+            const command: GameAction = {
+                type: "pos",
+                data: state,
+            }
+            this.p2pSrv.broadcastBinaryData(command);
         }
         this.lastRecorded = now;
         return {};

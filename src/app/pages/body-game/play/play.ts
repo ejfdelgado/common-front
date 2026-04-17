@@ -106,7 +106,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           icon: "🏞️",
           children: [],
           callback: () => {
-            this.trackerComponent.loadWorld("", "mode01");
+            //this.trackerComponent.loadWorld("", "mode01");
+            this.trackerComponent.applyMode("mode01", true);
           },
         },
         {
@@ -115,7 +116,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           icon: "👖",
           children: [],
           callback: () => {
-            this.trackerComponent.loadWorld("", "mode00");
+            //this.trackerComponent.loadWorld("", "mode00");
+            this.trackerComponent.applyMode("mode00", true);
           },
         }
       ],
@@ -225,6 +227,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.trackerComponent.setUser(null);
       }
     });
+    this.trackerComponent.loadWorld("", "mode01");
   }
 
   async openPermissions() {

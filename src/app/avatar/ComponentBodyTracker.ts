@@ -18,7 +18,7 @@ import { Pose } from '@mediapipe/pose';
 import { convertMediaPipeToCurrent, getPeerAvatarName } from "./utils/AvatarUtilities";
 import { Camera } from '@mediapipe/camera_utils';
 import { P2PService } from "@services/p2p.service";
-import { RoomGameType } from "@mytypes/ActionGameTypes";
+import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import {
     User,
 } from '@angular/fire/auth';
@@ -156,15 +156,20 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                     });
                     this.p2pSrv.events.subscribe((ev) => {
                         const { peer, payload } = ev;
-                        const name = getPeerAvatarName(peer);
-                        const avatarContainer = this.getAvatarContainer();
-                        if (!avatarContainer || !avatarContainer.scene) {
-                            return;
-                        }
-                        // Get the data and apply it to the avatar
-                        const avatar = avatarContainer.scene.getObjectByName(name);
-                        if (avatar) {
-                            avatarContainer.scene.applyAvatarState(avatar, payload);
+                        const event: GameAction = payload;
+                        if (event.type == "pos") {
+                            const name = getPeerAvatarName(peer);
+                            const avatarContainer = this.getAvatarContainer();
+                            if (!avatarContainer || !avatarContainer.scene) {
+                                return;
+                            }
+                            // Get the data and apply it to the avatar
+                            const avatar = avatarContainer.scene.getObjectByName(name);
+                            if (avatar) {
+                                avatarContainer.scene.applyAvatarState(avatar, payload);
+                            }
+                        } else if (event.type == "mode") {
+                            this.applyMode(event.data);
                         }
                     });
                 }
@@ -441,13 +446,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
     }
 
-    public async loadWorld(url: string, defaultMode?: string) {
+    public async loadWorld(url: string, defaultMode?: string, notifyPeers?: boolean) {
         const loading = this.indicatorSrv.start();
         const promise = this.avatarSrv.loadWorld(url);
         try {
             await this.stopSafetly();
             this.world = await promise;
-            await this.applyMode(defaultMode ? defaultMode : this.world.defaultMode);
+            await this.applyMode(defaultMode ? defaultMode : this.world.defaultMode, notifyPeers);
         } catch (err) {
             console.log(err);
         } finally {
@@ -455,13 +460,22 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
     }
 
-    public async applyMode(id: string) {
+    public async applyMode(id: string, notifyPeers?: boolean) {
         const mode = this.world.modes[id];
         const avatarContainer = this.getAvatarContainer();
 
         if (!mode || !avatarContainer.scene) {
             return;
         }
+        if (notifyPeers === true) {
+            // Sends others the change intention
+            const command: GameAction = {
+                type: "mode",
+                data: id,
+            }
+            this.p2pSrv.broadcastBinaryData(command);
+        }
+
         // Set general config
         this.mirror = mode.mirror;
         // Place the camera

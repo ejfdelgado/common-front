@@ -91,7 +91,7 @@ export class AvatarService {
                                 { id: GameControllerEnum.CubeController, params: { enabled: false } },
                             ],
                             characters: [
-                                {
+                                /*{
                                     name: "friend",
                                     defaultAnimation: "initial",
                                     animations: {
@@ -100,7 +100,7 @@ export class AvatarService {
                                             loop: true,
                                         }
                                     }
-                                }
+                                }*/
                             ],
                         }
                     }
