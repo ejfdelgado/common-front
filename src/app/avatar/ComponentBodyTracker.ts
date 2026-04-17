@@ -19,6 +19,9 @@ import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
 import { Camera } from '@mediapipe/camera_utils';
 import { P2PService } from "@services/p2p.service";
 import { RoomGameType } from "@mytypes/ActionGameTypes";
+import {
+    User,
+} from '@angular/fire/auth';
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
@@ -35,6 +38,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     threeComponent!: ComponentWithAvatar;
     poseTracker!: Pose;
     poses: BodyData[] = [];
+    currentUser: User | null = null;
     videoSize: GenericSizeType = {
         width: 0,
         height: 0,
@@ -91,6 +95,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             sanitizer,
             fullScreenSrv,
         );
+    }
+
+    setUser(user: User | null) {
+        this.currentUser = user;
     }
 
     async initializeBodyTracker(

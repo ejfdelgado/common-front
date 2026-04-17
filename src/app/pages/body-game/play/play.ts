@@ -191,6 +191,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.updateLogedMenuOptions();
       } catch (err: any) {
         this.uiNotificationSrv.show(err.message);
+      } finally {
+        this.trackerComponent.setUser(user);
       }
     });
   }
