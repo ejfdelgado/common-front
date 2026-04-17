@@ -198,6 +198,10 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         return model as StoredAvatarAnimation;
     }
 
+    indexTerrain() {
+        const meshes = this.terrainMeshes;
+    }
+
     override getFirstHitFromTopToDown(x: number, z: number): number | null {
         const raycaster = new THREE.Raycaster();
         const origin = new THREE.Vector3(x, 100000, z);

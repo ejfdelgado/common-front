@@ -1,6 +1,5 @@
 # CommonFront
 
-Send scenario changes by webrtc.
 Optimizar la busqueda del punto Y, tal vez precargando en un Three?
 
 ------------------------------------------------------------------------
