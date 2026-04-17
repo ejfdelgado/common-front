@@ -9,7 +9,7 @@ import {
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { encode } from "@msgpack/msgpack";
 import * as THREE from 'three';
-import { matrixToArray } from "@avatar/utils/AvatarUtilities";
+import { getStoredAvatarState, matrixToArray } from "@avatar/utils/AvatarUtilities";
 import { EXPORTED_BONES } from "@mytypes/BodyParts";
 
 export class RecordPoseController extends SceneControllerAbstract {
@@ -31,38 +31,12 @@ export class RecordPoseController extends SceneControllerAbstract {
         const avatar = this.scene.getObjectByName(AVATAR_NAME);
         if (avatar) {
             // Traverse all the skeleton and store position and rotation
-            const state: StoredAvatarState = {
-                t: now - this.recordingStartTime,
-                matrix: matrixToArray(this.transformationMatrix),
-                lr: [
-                    this.scene.avatarStateSmoot.positionX,
-                    this.scene.avatarStateSmoot.positionZ,
-                    this.scene.avatarStateSmoot.rotationY,
-                ],
-                //d: difference,
-                bones: [],
-            };
-            // Only export specific bones
-            for (let i = 0; i < EXPORTED_BONES.length; i++) {
-                const name = EXPORTED_BONES[i];
-                const child = avatar.getObjectByName(name);
-                if (!child) {
-                    continue;
-                }
-                const position = child.position;
-                const rotation = child.rotation;
-                state.bones.push({
-                    n: name,
-                    v: [
-                        position.x,
-                        position.y,
-                        position.z,
-                        rotation.x,
-                        rotation.y,
-                        rotation.z,
-                    ],
-                });
-            }
+            const state = getStoredAvatarState(
+                now - this.recordingStartTime,
+                this.transformationMatrix,
+                this.scene.avatarStateSmoot,
+                avatar,
+            );
             this.history.a.push(state);
         }
         this.lastRecorded = now;

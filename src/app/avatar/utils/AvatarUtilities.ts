@@ -1,9 +1,11 @@
 import {
     AvatarBoneEnum,
     BodyPoseKey,
+    EXPORTED_BONES,
     MediaPipeRelation,
 } from "@mytypes/BodyParts";
 import {
+    AvatarLocationState,
     BodyData,
     BodyKeyPointData,
     ComparableBody,
@@ -11,6 +13,7 @@ import {
     GenericSizeType,
     Point3D,
     SimpleComparable,
+    StoredAvatarState,
 } from "@mytypes/BodyTypes";
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
@@ -814,4 +817,45 @@ export function convertMediaPipeToCurrent(orig: Results, videoSize: GenericSizeT
     }
     response.score = response.score / 33;
     return response;
+}
+
+export function getStoredAvatarState(
+    t: number,
+    matrix2d: THREE.Matrix4,
+    location: AvatarLocationState,
+    avatar: THREE.Object3D<THREE.Object3DEventMap>,
+): StoredAvatarState {
+    const state: StoredAvatarState = {
+        t,
+        matrix: matrixToArray(matrix2d),
+        lr: [
+            location.positionX,
+            location.positionZ,
+            location.rotationY,
+        ],
+        //d: difference,
+        bones: [],
+    };
+    // Only export specific bones
+    for (let i = 0; i < EXPORTED_BONES.length; i++) {
+        const name = EXPORTED_BONES[i];
+        const child = avatar.getObjectByName(name);
+        if (!child) {
+            continue;
+        }
+        const position = child.position;
+        const rotation = child.rotation;
+        state.bones.push({
+            n: name,
+            v: [
+                position.x,
+                position.y,
+                position.z,
+                rotation.x,
+                rotation.y,
+                rotation.z,
+            ],
+        });
+    }
+    return state;
 }
