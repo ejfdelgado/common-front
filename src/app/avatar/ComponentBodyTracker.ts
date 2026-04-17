@@ -421,6 +421,11 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         // Clean old transformation
         avatarContainer.scene.forceAvatarState(position, mode.mirror);
 
+        // Remove all animations
+        avatarContainer.scene.clearAnimations();
+        // Remove old characters
+        avatarContainer.scene.removeAllCharacters();
+
         // Add characters
         if (mode.characters) {
             const promises: Promise<any>[] = [];

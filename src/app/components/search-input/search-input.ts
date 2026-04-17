@@ -26,6 +26,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class SearchInputComponent extends CommonComponent {
 
   @Output() search = new EventEmitter<string>();
+  @Output() changed = new EventEmitter<string>();
   searchCtrl = new FormControl('');
 
   constructor(
@@ -33,6 +34,9 @@ export class SearchInputComponent extends CommonComponent {
     public override sanitizer: DomSanitizer,
   ) {
     super(sanitizer, fullScreenSrv);
+    this.searchCtrl.valueChanges.subscribe((el) => {
+      this.changed.emit(el as string);
+    });
   }
 
   onSearch(): void {

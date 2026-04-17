@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Search users</h2>
 <mat-dialog-content>
-    <app-search-input (search)="searchUser($event)"></app-search-input>
+    <app-search-input (changed)="getNewSearchText($event)" (search)="searchUser($event)"></app-search-input>
     <div class="users_container_scrolled">
         <div class="users_container">
             @for (user of usersMatched; track user.uid) {
@@ -11,4 +11,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    @if (searched.trim().length > 0) {
+    <button mat-button mat-flat-button color="primary" (click)="searchUser(searched)">
+        <mat-icon>search</mat-icon>Search</button>
+    }
 </mat-dialog-actions>

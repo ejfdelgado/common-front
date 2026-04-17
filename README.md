@@ -1,11 +1,12 @@
 # CommonFront
 
-peer 2 peer synchornization
-en on peer connected -> addModel con el id del usuario.
-en on peer disconnect -> remove model con el id del usuario.
+en on peer connected -> addModel con el id del webrtc.
+en on peer disconnect -> remove model con el id del webrtc.
+
 en evento de position, si no está agregado el avatar con id dado, ignorar.
-Limpiar la lista de animations.
-Elimar los viejos characters.
+
+Send scneario changes by webrtc.
+Volumen de sonido proporcional a la distancia.
 
 ------------------------------------------------------------------------
 

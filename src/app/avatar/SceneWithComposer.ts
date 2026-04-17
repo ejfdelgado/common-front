@@ -116,13 +116,28 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         }
     }
 
+    characterList: CharacterSpec[] = [];
     async loadCharacter(detail: CharacterSpec) {
         const autoAdd: boolean = true;
         await this.addModel({
             name: detail.name,
             url: ROOT_PATH + "avatar005.glb",
         }, autoAdd);
+        this.characterList.push(detail);
         // TODO, preload animations?
+    }
+
+    removeAllCharacters() {
+        this.characterList.forEach((detail) => {
+            const model = this.getObjectByName(detail.name);
+            if (model) {
+                this.remove(model);
+            }
+        });
+    }
+
+    clearAnimations() {
+        this.animatedElements = [];
     }
 
     // applyAnimationToCharacter("friend", {"animations/animation.bin", true, [2, 2, Math.PI]});

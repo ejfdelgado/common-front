@@ -184,17 +184,6 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.trackerComponent.onResize();
       }, 500);
     });
-
-    this.authSrv.authState$.subscribe(async (user) => {
-      try {
-        await this.loadCollection();
-        this.updateLogedMenuOptions();
-      } catch (err: any) {
-        this.uiNotificationSrv.show(err.message);
-      } finally {
-        this.trackerComponent.setUser(user);
-      }
-    });
   }
 
   updateLogedMenuOptions() {
@@ -226,6 +215,16 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   ngAfterViewInit(): void {
     this.trackerComponent.applyMode("mode");
     this.updateCurrentLang();
+    this.authSrv.authState$.subscribe(async (user) => {
+      try {
+        await this.loadCollection();
+        this.updateLogedMenuOptions();
+      } catch (err: any) {
+        this.uiNotificationSrv.show(err.message);
+      } finally {
+        this.trackerComponent.setUser(null);
+      }
+    });
   }
 
   async openPermissions() {

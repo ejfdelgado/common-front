@@ -23,6 +23,7 @@ import { UserCard } from '../user-card/user-card';
 export class SearchUser {
 
   usersMatched: User[] = [];
+  searched: string = "";
 
   constructor(
     private dialogRef: MatDialogRef<SearchUser>,
@@ -53,5 +54,9 @@ export class SearchUser {
 
   selectUser(user: User) {
     this.dialogRef.close(user);
+  }
+
+  getNewSearchText(val: string) {
+    this.searched = val;
   }
 }
