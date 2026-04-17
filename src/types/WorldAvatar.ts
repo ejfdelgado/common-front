@@ -64,6 +64,7 @@ export enum GameControllerEnum {
     SoundFeedbackController = "SoundFeedbackController",
     Stand2dController = "Stand2dController",
     TerrainElevationController = "TerrainElevationController",
+    SharePoseController = "SharePoseController",
     WalkController = "WalkController",
 }
 

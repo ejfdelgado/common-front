@@ -25,6 +25,7 @@ import { TerrainElevationController } from './controllers/TerrainElevationContro
 import { WalkController } from './controllers/WalkController';
 import { CubeController } from './controllers/CubeController';
 import { PromiseEmitter } from '@tools/PromiseEmitter';
+import { SharePoseController } from './controllers/SharePoseController';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
     useComposer: boolean = false;
@@ -251,6 +252,8 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             return new Stand2dController(this.events, this.controlProxy);
         } else if (config.id == GameControllerEnum.TerrainElevationController) {
             return new TerrainElevationController(this.events, this.controlProxy);
+        } else if (config.id == GameControllerEnum.SharePoseController) {
+            return new SharePoseController(this.events, this.controlProxy);
         } else if (config.id == GameControllerEnum.WalkController) {
             return new WalkController(this.events, this.controlProxy);
         } else {
