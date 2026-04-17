@@ -26,6 +26,7 @@ import { WalkController } from './controllers/WalkController';
 import { CubeController } from './controllers/CubeController';
 import { PromiseEmitter } from '@tools/PromiseEmitter';
 import { SharePoseController } from './controllers/SharePoseController';
+import { P2PService } from '@services/p2p.service';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
     useComposer: boolean = false;
@@ -61,6 +62,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
     constructor(
         public override sanitizer: DomSanitizer,
         public override fullScreenSrv: FullscreenService,
+        public p2pSrv: P2PService,
     ) {
         super(sanitizer, fullScreenSrv);
         this.events.subscribe((event) => {
@@ -237,25 +239,25 @@ export abstract class ComponentWithAvatar extends CommonComponent {
 
     public createController(config: GameController) {
         if (config.id == GameControllerEnum.ComparableController) {
-            return new ComparableController(this.events, this.controlProxy);
+            return new ComparableController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.CubeController) {
-            return new CubeController(this.events, this.controlProxy);
+            return new CubeController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.HandsCloseController) {
-            return new HandsCloseController(this.events, this.controlProxy);
+            return new HandsCloseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.RecordPoseController) {
-            return new RecordPoseController(this.events, this.controlProxy);
+            return new RecordPoseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.SimplePosesDetection) {
-            return new SimplePosesDetection(this.events, this.controlProxy);
+            return new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.SoundFeedbackController) {
-            return new SoundFeedbackController(this.events, this.controlProxy);
+            return new SoundFeedbackController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.Stand2dController) {
-            return new Stand2dController(this.events, this.controlProxy);
+            return new Stand2dController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.TerrainElevationController) {
-            return new TerrainElevationController(this.events, this.controlProxy);
+            return new TerrainElevationController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.SharePoseController) {
-            return new SharePoseController(this.events, this.controlProxy);
+            return new SharePoseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.WalkController) {
-            return new WalkController(this.events, this.controlProxy);
+            return new WalkController(this.events, this.controlProxy, this.p2pSrv);
         } else {
             throw new Error("Unknown controller");
         }

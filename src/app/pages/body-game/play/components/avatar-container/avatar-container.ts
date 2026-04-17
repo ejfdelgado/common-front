@@ -21,6 +21,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
 import { Point3D } from '@mytypes/BodyTypes';
+import { P2PService } from '@services/p2p.service';
 
 
 @Component({
@@ -43,13 +44,15 @@ export class AvatarContainer extends ComponentWithAvatar implements OnInit, Afte
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private indicatorSrv: IndicatorService,
-    private cdr: ChangeDetectorRef,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public override p2pSrv: P2PService,
+    //
+    private indicatorSrv: IndicatorService,
+    private cdr: ChangeDetectorRef,
     private http: HttpClient,
   ) {
-    super(sanitizer, fullScreenSrv);
+    super(sanitizer, fullScreenSrv, p2pSrv);
     this.hasMobile = this.isMobile();
   }
 

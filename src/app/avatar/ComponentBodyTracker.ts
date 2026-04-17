@@ -132,6 +132,19 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                             avatarContainer.scene.remove(avatar);
                         }
                     });
+                    this.p2pSrv.events.subscribe((ev) => {
+                        const { peer, payload } = ev;
+                        const name = getPeerAvatarName(peer);
+                        const avatarContainer = this.getAvatarContainer();
+                        if (!avatarContainer || !avatarContainer.scene) {
+                            return;
+                        }
+                        // Get the data and apply it to the avatar
+                        const avatar = avatarContainer.scene.getObjectByName(name);
+                        if (avatar) {
+                            avatarContainer.scene.applyAvatarState(avatar, payload);
+                        }
+                    });
                 }
             }
         });

@@ -29,7 +29,7 @@ export class SharePoseController extends SceneControllerAbstract {
                 this.scene.avatarStateSmoot,
                 avatar,
             );
-
+            this.p2pSrv.broadcastBinaryData(state);
         }
         this.lastRecorded = now;
         return {};

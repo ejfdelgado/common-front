@@ -8,6 +8,7 @@ import { EventEmitter } from "@angular/core";
 import { SceneWithComposer } from "../SceneWithComposer";
 import { ControllerInitDataType } from "@mytypes/BodyTypesExtra";
 import { ControlProxy } from "../workers/ControlProxy";
+import { P2PService } from "@services/p2p.service";
 
 export abstract class SceneControllerAbstract {
     now: number = 0;
@@ -18,6 +19,7 @@ export abstract class SceneControllerAbstract {
     constructor(
         public events: EventEmitter<AvatarBodyEvent>,
         public controlProxy: ControlProxy,
+        public p2pSrv: P2PService,
     ) {
 
     }
