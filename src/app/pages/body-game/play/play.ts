@@ -227,7 +227,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.trackerComponent.setUser(null);
       }
     });
-    this.trackerComponent.loadWorld("", "mode01");
+    this.trackerComponent.loadWorld("", "mode00");
   }
 
   async openPermissions() {

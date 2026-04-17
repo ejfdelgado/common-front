@@ -82,6 +82,57 @@ export class AvatarService {
                             controllers: [
                                 { id: GameControllerEnum.ComparableController, params: {} },
                                 { id: GameControllerEnum.SimplePosesDetection, params: {} },
+                                { id: GameControllerEnum.TerrainElevationController, params: {} },
+                                { id: GameControllerEnum.WalkController, params: {} },
+                                { id: GameControllerEnum.Stand2dController, params: {} },
+                                { id: GameControllerEnum.SoundFeedbackController, params: {} },
+                                { id: GameControllerEnum.SharePoseController, params: {} },
+                            ],
+                            characters: [
+                                /*{
+                                    name: "friend",
+                                    defaultAnimation: "initial",
+                                    animations: {
+                                        "initial": {
+                                            animationUrl: "animations/animation.bin",
+                                            loop: true,
+                                        }
+                                    }
+                                }*/
+                            ],
+                        },
+                        "mode02": {
+                            mirror: false,
+                            defaultPosition: {
+                                positionX: 3,
+                                positionY: 0,
+                                positionZ: 3,
+                                rotationY: Math.PI / 2,
+                            },
+                            defaultCameraState: {
+                                near: 0.1,
+                                far: 1000,
+                                fov: 25,
+                                lookAt: { x: 3, y: 0, z: 3 },
+                                position: { x: -10, y: 5, z: 10 },
+                            },
+                            defaultSenario: "scenario01",
+                            scenarios: {
+                                "scenario01": {
+                                    useComposer: true,
+                                    background: { color: { r: 0.5, g: 0.5, b: 1 } },
+                                    characters: [],
+                                    meshes: [
+                                        {
+                                            name: "scenario_a",
+                                            url: "/assets/models/scenario.glb",
+                                        }
+                                    ]
+                                }
+                            },
+                            controllers: [
+                                { id: GameControllerEnum.ComparableController, params: {} },
+                                { id: GameControllerEnum.SimplePosesDetection, params: {} },
                                 { id: GameControllerEnum.HandsCloseController, params: {} },
                                 { id: GameControllerEnum.TerrainElevationController, params: {} },
                                 { id: GameControllerEnum.WalkController, params: {} },
