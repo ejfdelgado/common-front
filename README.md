@@ -1,11 +1,11 @@
 # CommonFront
 
-Optimizar la busqueda del punto Y, tal vez precargando en un Three?
+Permitir personalizar el avatar de cada uno.
+Support for assets on bucket, not in local.
 
 ------------------------------------------------------------------------
 
 Create GameAction -> call setProps de some controller with some attributes.
-Support for assets on bucket, not in local.
 Volumen de sonido proporcional a la distancia.
 
 ------------------------------------------------------------------------
