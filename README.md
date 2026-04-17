@@ -1,19 +1,13 @@
 # CommonFront
 
-en on peer connected -> addModel con el id del webrtc.
-en on peer disconnect -> remove model con el id del webrtc.
-
-en evento de position, si no está agregado el avatar con id dado, ignorar.
-
-Send scneario changes by webrtc.
-Volumen de sonido proporcional a la distancia.
+Send scenario changes by webrtc.
+Optimizar la busqueda del punto Y, tal vez precargando en un Three?
 
 ------------------------------------------------------------------------
 
-Optimizar la busqueda del punto Y, tal vez precargando en un Three?
 Create GameAction -> call setProps de some controller with some attributes.
-Add characters.
 Support for assets on bucket, not in local.
+Volumen de sonido proporcional a la distancia.
 
 ------------------------------------------------------------------------
 comparacion: (3 numeros de salida)
