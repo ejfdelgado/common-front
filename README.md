@@ -203,8 +203,6 @@ gsutil cors get gs://pro-ejflab-assets
 - camera capture support for landscape and selfie weird! or use rotate, mirror.
 
 - Place thumbnail scroll of gallery after next or previous button.
-- Add multilanguage, service, and pipe.
-- Add alert service with support of multilanguage, multiaction.
 
 - Create an email field.
 - Create address widget with map and address search.
