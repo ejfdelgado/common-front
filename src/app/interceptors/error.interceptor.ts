@@ -26,7 +26,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     ): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
-                let errorMessage = 'An error occurred';
+                let errorMessage: string | null = null;
 
                 if (error.error instanceof ErrorEvent) {
                     // Client-side error
@@ -35,30 +35,36 @@ export class ErrorInterceptor implements HttpInterceptor {
                     // Server-side error
                     errorMessage = error.error?.message || error.message;
 
-                    switch (error.status) {
-                        case 400:
-                            errorMessage = error.error?.message || 'Bad request';
-                            break;
-                        case 401:
-                            // Handled by AuthInterceptor
-                            break;
-                        case 403:
-                            errorMessage = 'You do not have permission to access this resource';
-                            this.router.navigate(['/forbidden']);
-                            break;
-                        case 404:
-                            errorMessage = 'Resource not found';
-                            break;
-                        case 429:
-                            errorMessage = 'Too many requests. Please try again later';
-                            break;
-                        case 500:
-                            errorMessage = 'Internal server error';
-                            break;
-                        case 503:
-                            errorMessage = 'Service temporarily unavailable';
-                            break;
+                    if (!errorMessage) {
+                        switch (error.status) {
+                            case 400:
+                                errorMessage = error.error?.message || 'Bad request';
+                                break;
+                            case 401:
+                                // Handled by AuthInterceptor
+                                break;
+                            case 403:
+                                errorMessage = 'You do not have permission to access this resource';
+                                this.router.navigate(['/forbidden']);
+                                break;
+                            case 404:
+                                errorMessage = 'Resource not found';
+                                break;
+                            case 429:
+                                errorMessage = 'Too many requests. Please try again later';
+                                break;
+                            case 500:
+                                errorMessage = 'Internal server error';
+                                break;
+                            case 503:
+                                errorMessage = 'Service temporarily unavailable';
+                                break;
+                        }
                     }
+                }
+
+                if (!errorMessage) {
+                    errorMessage = 'An error occurred';
                 }
 
                 // Show error message to user (except for 401)

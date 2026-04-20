@@ -7,6 +7,11 @@
         }
     },
     "shared_with": {
-        "title": "Shared with"
+        "title": "Shared with",
+        "buttons": {
+            "add": "Add user",
+            "save": "Save",
+            "cancel": "Cancel"
+        }
     }
 }
