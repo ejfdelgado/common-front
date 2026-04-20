@@ -10,15 +10,19 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { UserCard } from '../user-card/user-card';
+import { TranslatePipe } from '@pipes/translate.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shared-with',
   standalone: true,
   imports: [
+    CommonModule,
     MatDialogModule,
     MatButtonModule,
     MatIcon,
     UserCard,
+    TranslatePipe,
   ],
   templateUrl: './shared-with.html',
   styleUrl: './shared-with.scss',
@@ -29,7 +33,6 @@ export class SharedWith extends CommonComponent {
   id: string = "";
   changesCount: number = 0;
   mode: string = "";
-  title: string = "Shared with";
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -46,9 +49,6 @@ export class SharedWith extends CommonComponent {
     this.collection = config.collection;
     this.id = config.id;
     this.mode = config.mode;
-    if (config.title) {
-      this.title = config.title;
-    }
     this.userSrv.getSharedUsers(this.collection, this.id).then((users) => {
       this.users = users;
       this.cdr.detectChanges();

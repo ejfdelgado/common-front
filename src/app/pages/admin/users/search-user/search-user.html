@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Search users</h2>
+<h2 mat-dialog-title>{{ 'search_user.title' | translate : 'admin' | async }}</h2>
 <mat-dialog-content>
     <app-search-input (changed)="getNewSearchText($event)" (search)="searchUser($event)"></app-search-input>
     <div class="users_container_scrolled">
@@ -10,9 +10,9 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>{{ 'search_user.buttons.cancel' | translate : 'admin' | async }}</button>
     @if (searched.trim().length > 0) {
     <button mat-button mat-flat-button color="primary" (click)="searchUser(searched)">
-        <mat-icon>search</mat-icon>Search</button>
+        <mat-icon>search</mat-icon>{{ 'search_user.buttons.search' | translate : 'admin' | async }}</button>
     }
 </mat-dialog-actions>

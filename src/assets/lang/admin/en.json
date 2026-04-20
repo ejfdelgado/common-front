@@ -1,0 +1,12 @@
+{
+    "search_user": {
+        "title": "Search users by email",
+        "buttons": {
+            "search": "Search",
+            "cancel": "Cancel"
+        }
+    },
+    "shared_with": {
+        "title": "Shared with"
+    }
+}

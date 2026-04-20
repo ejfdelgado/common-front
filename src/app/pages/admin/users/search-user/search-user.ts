@@ -6,16 +6,20 @@ import { SearchInputComponent } from '@components/search-input/search-input';
 import { UsersService } from '@services/users.service';
 import { User } from '@angular/fire/auth';
 import { UserCard } from '../user-card/user-card';
+import { TranslatePipe } from '@pipes/translate.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-search-user',
   standalone: true,
   imports: [
+    CommonModule,
     MatDialogModule,
     MatButtonModule,
     MatIcon,
     SearchInputComponent,
     UserCard,
+    TranslatePipe,
   ],
   templateUrl: './search-user.html',
   styleUrl: './search-user.scss',

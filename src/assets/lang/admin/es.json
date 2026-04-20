@@ -1,0 +1,12 @@
+{
+    "search_user": {
+        "title": "Buscar usuarios por correo",
+        "buttons": {
+            "search": "Buscar",
+            "cancel": "Cancelar"
+        }
+    },
+    "shared_with": {
+        "title": "Compartido con"
+    }
+}
