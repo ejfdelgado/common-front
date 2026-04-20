@@ -1,8 +1,5 @@
 # CommonFront
 
-Separar el código webrtc en una clase abstracta aparte.
-TODOS los controllers deben tener el boolean enabled.
-
 Permitir resaltar el borde de los 4.
 Store in firestore the last selected mode, then when people come back, could see the same mode.
 Hacer un popup con un drop down que permita seleccionar la cámara.

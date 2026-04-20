@@ -11,6 +11,7 @@ import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "@services/p2p.service";
 
 export abstract class SceneControllerAbstract {
+    enabled: boolean = true;
     now: number = 0;
     scene!: SceneWithComposer;
     lastData!: ScenePoseAndWalkEventType;

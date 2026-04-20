@@ -18,7 +18,7 @@ export interface CubeConfigType {
 };
 
 export class CubeController extends SceneControllerAbstract {
-    enabled: boolean = false;
+    
     cubes: {
         [key: string]: CubeConfigType,
     } = {
