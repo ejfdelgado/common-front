@@ -1,0 +1,22 @@
+<div mat-dialog-title>
+    <header>
+        <h1 class="centrado">{{ title | translate:translateFolder:model | async }}</h1>
+        <span class="boton_cerrar" [mat-dialog-close]>
+            <mat-icon>close</mat-icon>
+        </span>
+    </header>
+</div>
+<div mat-dialog-content>
+    <div class="alert_image_container" *ngIf="imageUrl !== undefined">
+        <img src="{{ imageUrl }}" />
+    </div>
+    <p *ngIf="!!data.ishtml" [innerHtml]="text | translate:translateFolder:model | async"></p>
+    <p *ngIf="!data.ishtml">{{ text | translate:translateFolder:model | async }}</p>
+</div>
+<div mat-dialog-actions class="bottom_buttons">
+    <button *ngFor="let someChoice of choices" class="btn"
+        [ngClass]="someChoice.class ? someChoice.class : 'btn-primary'" (click)="selectChoice(someChoice.val)">
+        <mat-icon *ngIf="someChoice.icon" class="peque">{{ someChoice.icon }}</mat-icon>
+        <span>{{ someChoice.txt | translate:translateFolder:model | async }}</span>
+    </button>
+</div>
