@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IndicatorService } from './indicator.service';
+import { getUrlQueryParams } from '@tools/UrlUtil';
 
 @Injectable({
     providedIn: 'root',
@@ -70,7 +71,7 @@ export class ConfigService {
 
     getCurrentLanguage() {
         let currentLang = 'en';
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = getUrlQueryParams();
         const queryParamLanguage = urlParams.get('l');
         if (queryParamLanguage) {
             currentLang = queryParamLanguage;
