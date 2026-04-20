@@ -1,5 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe } from '@pipes/translate.pipe';
 
 export interface GenericChoiceData {
   txt: string;
@@ -22,6 +25,13 @@ export interface GenericData {
 
 @Component({
   selector: 'app-generic',
+  standalone: true,
+  imports: [
+    TranslatePipe,
+    CommonModule,
+    MatDialogClose,
+    MatIconModule,
+  ],
   templateUrl: './generic.component.html',
   styleUrls: ['./generic.component.css'],
 })

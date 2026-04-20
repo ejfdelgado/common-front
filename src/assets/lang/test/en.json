@@ -2,9 +2,12 @@
   "say_hi": "Hello",
   "popups": {
     "alert": {
-      "text": "Text"
+      "title": "Alert!",
+      "text": "Some extra info about ${userName}"
     },
     "choices": {
+      "yes": "Yes",
+      "no": "No",
       "ok": "Ok"
     }
   }

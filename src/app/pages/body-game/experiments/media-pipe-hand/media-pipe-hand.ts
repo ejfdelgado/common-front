@@ -7,6 +7,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { P2PService, P2PStatus } from '@services/p2p.service';
 import { TranslatePipe } from '@pipes/translate.pipe';
+import { ModalService } from '@services/modal.service';
+import { GenericData } from 'app/modals/generic/generic.component';
 
 const appId = 'ejfexperiments';
 
@@ -31,6 +33,7 @@ export class MediaPipeHand implements AfterViewInit {
   constructor(
     public p2pSrv: P2PService,
     public cdr: ChangeDetectorRef,
+    public modalSrv: ModalService,
   ) {
     this.p2pSrv.status.subscribe((ev) => {
       this.status = ev;
@@ -59,5 +62,29 @@ export class MediaPipeHand implements AfterViewInit {
   async broadcastBinaryData() {
     const sample = { t: Date.now() };
     this.p2pSrv.broadcastBinaryData(sample);
+  }
+
+  public async confirmThis(userName: string) {
+    const popUpParameter: GenericData = {
+      translateFolder: 'test',
+      title: 'popups.alert.title',
+      txt: 'popups.alert.text',
+      model: {
+        userName,
+      },
+      ishtml: true,
+      choices: [
+        { txt: 'popups.choices.yes', val: 'yes', icon: "check" },
+        { txt: 'popups.choices.no', val: 'no', icon: "close", class: "secondary_button" },
+      ],
+    };
+    const modalResponse = (await this.modalSrv.generic(popUpParameter)) as {
+      choice: string;
+    };
+
+    if (!modalResponse || modalResponse.choice === 'no') {
+      return false;
+    }
+    return true;
   }
 }
