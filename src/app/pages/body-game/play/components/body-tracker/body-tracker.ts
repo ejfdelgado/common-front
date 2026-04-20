@@ -19,10 +19,10 @@ import { IndicatorService } from "@services/indicator.service";
 import { BooleanStateService } from "@services/boolean-state.service";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { AvatarContainer } from '../avatar-container/avatar-container';
 import { AvatarService } from '@services/avatar.service';
 import { P2PService } from '@services/p2p.service';
+import { ComponentP2P } from '@avatar/ComponentP2P';
 
 @Component({
   selector: 'app-body-tracker',
@@ -40,7 +40,7 @@ import { P2PService } from '@services/p2p.service';
     '../../../../../../threejs_styles.scss',
   ],
 })
-export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
+export class BodyTracker extends ComponentP2P implements AfterViewInit {
 
   @ViewChild("three_component") avatarContainer!: AvatarContainer;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;
@@ -59,13 +59,13 @@ export class BodyTracker extends ComponentBodyTracker implements AfterViewInit {
     public override p2pSrv: P2PService,
   ) {
     super(
-      cdr,
       voiceSrv,
       speechSrv,
       indicatorSrv,
       booleanService,
       sanitizer,
       fullScreenSrv,
+      cdr,
       avatarSrv,
       p2pSrv,
     );

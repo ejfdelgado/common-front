@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedComponent } from '@components/authenticated.component';
@@ -17,10 +24,10 @@ import { getUrlQueryParams } from '@tools/UrlUtil';
 import { FirestoreService } from '@services/firestore.service';
 import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
-import { ComponentBodyTracker } from '@avatar/ComponentBodyTracker';
 import { Router } from '@angular/router';
 import { P2PService, P2PStatus } from '@services/p2p.service';
 import { Subscription } from 'rxjs';
+import { ComponentP2P } from '@avatar/ComponentP2P';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -38,7 +45,7 @@ const MODEL_NAME_PARENT = "room-private";
 })
 export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild("tracker_component") trackerComponent!: ComponentBodyTracker;
+  @ViewChild("tracker_component") trackerComponent!: ComponentP2P;
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };
