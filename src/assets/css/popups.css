@@ -1,3 +1,5 @@
+
+
 .mat-mdc-dialog-title::before {
     height: 0 !important;
 }
@@ -26,11 +28,12 @@
 
 [mat-dialog-title] h1 {
     flex: 1;
-    margin-bottom: 8px !important;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 7px;
+    margin: 0;
+    font-size: 1.5rem;
 }
 
 [mat-dialog-title] .boton_cerrar {
@@ -56,13 +59,17 @@
     flex-direction: row;
     font-size: 1rem;
     line-height: 1.5625rem;
-    padding: 0;
     border-bottom: 1px solid lightgray;
     gap: 15px;
+    padding: 0 20px 10px 20px;
 }
 
 [mat-dialog-title] header h1 {
     flex: 1;
+}
+
+[mat-dialog-content] {
+    padding: 20px;
 }
 
 .alert_image_container {

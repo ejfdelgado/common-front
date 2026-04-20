@@ -35,7 +35,7 @@ export interface GenericData {
   templateUrl: './generic.component.html',
   styleUrls: [
     './generic.component.css',
-    '../../styles/popups.css',
+    '../../../assets/css/popups.css',
   ],
 })
 export class GenericComponent implements OnInit {
