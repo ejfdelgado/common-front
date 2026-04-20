@@ -12,11 +12,13 @@ import { getPeerAvatarName } from "./utils/AvatarUtilities";
 import { AVATAR_PELVIS_HEIGHT, ROOT_PATH } from "@mytypes/BodyTypes";
 import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import { Room } from "@trystero-p2p/firebase";
-import { ModuloSonido } from "@services/sonido.service";
-import { enterFullscreen } from "@tools/ScreenUtils";
+import { Subscription } from "rxjs";
 
 export abstract class ComponentP2P extends ComponentBodyTracker {
     roomLive: Room | null = null;
+    subscriptionPeerJoin: Subscription | null = null;
+    subscriptionPeerLeave: Subscription | null = null;
+    subscriptionPeerEvents: Subscription | null = null;
     constructor(
         public override voiceSrv: VoiceRecognitionService,
         public override speechSrv: SpeechSynthesisService,
@@ -44,6 +46,10 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
             if (status.value == "offline") {
                 // destroy the room
                 this.roomLive = null;
+                // Destroy subscriptions
+                this.subscriptionPeerJoin?.unsubscribe();
+                this.subscriptionPeerLeave?.unsubscribe();
+                this.subscriptionPeerEvents?.unsubscribe();
                 // Remove all peers
                 this.connectedPeerIds.forEach((peerId) => {
                     const avatarContainer = this.getAvatarContainer();
@@ -61,7 +67,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                 if (status.room) {
                     this.roomLive = status.room;
                     // Subscribe to room events
-                    this.p2pSrv.peerJoin.subscribe(async (peerId) => {
+                    this.subscriptionPeerJoin = this.p2pSrv.peerJoin.subscribe(async (peerId) => {
                         const name = getPeerAvatarName(peerId);
                         this.connectedPeerIds.push(peerId);
                         // Add an avatar to represent this peer
@@ -78,7 +84,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                             avatar, 0, 0, 0, undefined, AVATAR_PELVIS_HEIGHT
                         );
                     });
-                    this.p2pSrv.peerLeave.subscribe(async (peerId) => {
+                    this.subscriptionPeerLeave = this.p2pSrv.peerLeave.subscribe(async (peerId) => {
                         const name = getPeerAvatarName(peerId);
                         const peerIndex = this.connectedPeerIds.indexOf(peerId);
                         if (peerIndex >= 0) {
@@ -94,7 +100,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                             avatarContainer.scene.remove(avatar);
                         }
                     });
-                    this.p2pSrv.events.subscribe((ev) => {
+                    this.subscriptionPeerEvents = this.p2pSrv.events.subscribe((ev) => {
                         const { peer, payload } = ev;
                         const event: GameAction = payload;
                         if (event.type == "pos") {

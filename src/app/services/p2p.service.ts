@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { defaultFirebaseApp } from '@services/firebase';
 import {
     ActionReceiver,
@@ -38,8 +37,10 @@ export class P2PService {
     async connectToRoom(roomId: string) {
         try {
             if (this.room !== null) {
-                await this.disconnectFromRoom();
+                //await this.disconnectFromRoom();
+                return;
             }
+
             this.room = await joinRoom({
                 firebaseApp: defaultFirebaseApp,
                 appId,

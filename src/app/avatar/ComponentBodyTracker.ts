@@ -20,13 +20,12 @@ import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import { WorldAvatar } from "@mytypes/WorldAvatar";
 import { Pose } from '@mediapipe/pose';
-import { convertMediaPipeToCurrent, getPeerAvatarName } from "./utils/AvatarUtilities";
+import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
 import { Camera } from '@mediapipe/camera_utils';
 import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import {
     User,
 } from '@angular/fire/auth';
-import { Room } from "@trystero-p2p/firebase";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
