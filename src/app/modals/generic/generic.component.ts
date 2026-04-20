@@ -33,7 +33,10 @@ export interface GenericData {
     MatIconModule,
   ],
   templateUrl: './generic.component.html',
-  styleUrls: ['./generic.component.css'],
+  styleUrls: [
+    './generic.component.css',
+    '../../styles/popups.css',
+  ],
 })
 export class GenericComponent implements OnInit {
   text: string = 'Sin detalle';

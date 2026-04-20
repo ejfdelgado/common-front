@@ -1,0 +1,84 @@
+.mat-mdc-dialog-title::before {
+    height: 0 !important;
+}
+
+.mat-mdc-dialog-content form {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid lightgray;
+    gap: 15px;
+}
+
+/* .mat-mdc-dialog-actions */
+.bottom_buttons {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px !important;
+    padding: 16px !important;
+    justify-content: flex-end !important;
+}
+
+[mat-dialog-title] {
+    display: flex;
+    margin: 20px 0 0 0;
+}
+
+[mat-dialog-title] h1 {
+    flex: 1;
+    margin-bottom: 8px !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+}
+
+[mat-dialog-title] .boton_cerrar {
+    cursor: pointer;
+    color: rgb(158, 158, 158);
+    position: relative;
+    left: 0;
+    margin-left: 10px;
+}
+
+[mat-dialog-title] .boton_cerrar:hover {
+    color: rgb(57, 57, 57);
+}
+
+[mat-dialog-title] {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+[mat-dialog-title] header {
+    display: flex;
+    flex-direction: row;
+    font-size: 1rem;
+    line-height: 1.5625rem;
+    padding: 0;
+    border-bottom: 1px solid lightgray;
+    gap: 15px;
+}
+
+[mat-dialog-title] header h1 {
+    flex: 1;
+}
+
+.alert_image_container {
+    text-align: center;
+}
+
+.alert_image_container img {
+    height: 25vh;
+}
+
+@media screen and (max-width: 400px) {
+    .bottom_buttons {
+        flex-direction: column;
+    }
+
+    .bottom_buttons button {
+        width: 100%;
+    }
+}
