@@ -13,5 +13,9 @@
             "save": "Guardar",
             "cancel": "Cancelar"
         }
+    },
+    "confirm_remove": {
+        "title": "Seguro?",
+        "txt": "Vas a sacar a \"${user.displayName}\" (${user.email}) de los dueños."
     }
 }

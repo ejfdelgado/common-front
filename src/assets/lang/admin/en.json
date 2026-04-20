@@ -13,5 +13,9 @@
             "save": "Save",
             "cancel": "Cancel"
         }
+    },
+    "confirm_remove": {
+        "title": "Sure?",
+        "txt": "You will remove \"${user.displayName}\" (${user.email}) from owners."
     }
 }

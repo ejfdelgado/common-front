@@ -12,6 +12,7 @@ import { ConfirmDialogService } from '@services/confirm-dialog.service';
 import { UserCard } from '../user-card/user-card';
 import { TranslatePipe } from '@pipes/translate.pipe';
 import { CommonModule } from '@angular/common';
+import { ModalService } from '@services/modal.service';
 
 @Component({
   selector: 'app-shared-with',
@@ -42,7 +43,7 @@ export class SharedWith extends CommonComponent {
     public cdr: ChangeDetectorRef,
     public userSrv: UsersService,
     private dialog: MatDialog,
-    public confirmSrv: ConfirmDialogService,
+    private modalSrv: ModalService,
   ) {
     super(sanitizer, fullScreenSrv);
     const config = JSON.parse(JSON.stringify(data));
@@ -70,9 +71,11 @@ export class SharedWith extends CommonComponent {
   }
 
   async removeUser(user: User) {
-    const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
-      message: `You will remove "${user.displayName}" (${user.email}) from owners.`,
+    const confirm = await this.modalSrv.confirm({
+      title: "confirm_remove.title",
+      txt: "confirm_remove.txt",
+      translateFolder: "admin",
+      model: { user },
     });
     if (!confirm) {
       return;
