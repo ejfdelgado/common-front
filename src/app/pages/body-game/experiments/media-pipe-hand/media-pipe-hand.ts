@@ -64,6 +64,17 @@ export class MediaPipeHand implements AfterViewInit {
     this.p2pSrv.broadcastBinaryData(sample);
   }
 
+  public async alert() {
+    this.modalSrv.alert({
+      translateFolder: "test",
+      title: 'popups.alert.title',
+      txt: 'popups.alert.text',
+      model: {
+        userName: "Pepito",
+      },
+    });
+  }
+
   public async confirmReal(userName: string) {
     const desition = (await this.modalSrv.confirm({
       title: 'popups.alert.title',

@@ -3,9 +3,30 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfigService } from './config.service';
 import { GenericComponent, GenericData } from 'app/modals/generic/generic.component';
 
+export interface AlertDataButton {
+  class?: string;
+  color?: string;// deprecated
+  label?: string;
+  action?: Function;
+  icon?: string;
+}
+
 export interface ConfirmData {
   txt?: string;
   title?: string;
+  translateFolder?: string | null;
+  model?: any;
+  imageUrl?: string;
+}
+
+export interface AlertData {
+  title?: string;
+  txt?: string;
+  isUrl?: boolean;
+  ishtml?: boolean;
+  buttons?: Array<AlertDataButton>;
+  payload?: any;
+  autoCloseMilis?: number;
   translateFolder?: string | null;
   model?: any;
   imageUrl?: string;
@@ -94,5 +115,22 @@ export class ModalService {
       // Case when close window
       return null;
     }
+  }
+
+  async alert(payload: AlertData) {
+    const homologation: GenericData = {
+      txt: payload.txt,
+      ishtml: payload.ishtml,
+      title: payload.title,
+      translateFolder: payload.translateFolder,
+      model: payload.model,
+      choices: [
+        {
+          txt: this.translate('ok'),
+          val: '0'
+        }
+      ],
+    };
+    return this.generic(homologation);
   }
 }
