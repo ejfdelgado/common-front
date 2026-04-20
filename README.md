@@ -1,6 +1,5 @@
 # CommonFront
 
-Cuando la persona no sale en el video mostrar un avatar mas sencillo.
 Separar el código webrtc en una clase abstracta aparte.
 TODOS los controllers deben tener el boolean enabled.
 
