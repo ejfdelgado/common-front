@@ -117,16 +117,10 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
         });
     }
 
-    startAll() {
-        this.errorState = "-1";
+    override startAll() {
         this.activity = this.indicatorSrv.start();
         try {
-            ModuloSonido.play('/assets/sounds/button.mp3');
-            this.startTracking();
-            if (!this.isMobile()) {
-                this.startListening();
-            }
-            enterFullscreen();
+            super.startAll();
             if (this.room) {
                 this.p2pSrv.connectToRoom(this.room.id);
             }
@@ -139,6 +133,11 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                 this.activity.done();
             }
         }
+    }
+
+    override stopAll() {
+        super.stopAll();
+        this.started = false;
     }
 
     setRoomData(room: RoomGameType | null) {

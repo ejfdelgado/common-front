@@ -307,12 +307,21 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
     }
 
+    startAll() {
+        this.errorState = "-1";
+        ModuloSonido.play('/assets/sounds/button.mp3');
+        this.startTracking();
+        if (!this.isMobile()) {
+            this.startListening();
+        }
+        enterFullscreen();
+    }
+
     stopAll() {
         this.stopTracking();
         this.stopListening();
         exitFullscreen();
         ModuloSonido.play('/assets/sounds/button.mp3');
-        this.started = false;
     }
 
     abstract getAvatarContainer(): ComponentWithAvatar;
