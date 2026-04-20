@@ -1,11 +1,11 @@
 # CommonFront
 
-Add placeholder email on security search.
-Cuando la persona no sale en el video mostrar un avatar mas sencillo. Permitir resaltar el borde de los 4.
-Mirror X video.
-Store in firestore the last selected mode, then when people come back, could see the same mode.
+Cuando la persona no sale en el video mostrar un avatar mas sencillo.
 Separar el código webrtc en una clase abstracta aparte.
 TODOS los controllers deben tener el boolean enabled.
+
+Permitir resaltar el borde de los 4.
+Store in firestore the last selected mode, then when people come back, could see the same mode.
 Hacer un popup con un drop down que permita seleccionar la cámara.
 
 Permitir personalizar el avatar de cada uno.

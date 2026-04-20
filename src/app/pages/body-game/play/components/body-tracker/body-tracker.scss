@@ -63,6 +63,7 @@
 .video_preview {
     height: 20vh;
     width: auto;
+    transform: scaleX(-1);
     /* maintains aspect ratio */
 }
 
