@@ -6,6 +6,7 @@ import {
 } from '@trystero-p2p/firebase';
 import { CommonModule } from '@angular/common';
 import { P2PService, P2PStatus } from '@services/p2p.service';
+import { TranslatePipe } from '@pipes/translate.pipe';
 
 const appId = 'ejfexperiments';
 
@@ -14,6 +15,7 @@ const appId = 'ejfexperiments';
   standalone: true,
   imports: [
     CommonModule,
+    TranslatePipe,
   ],
   templateUrl: './media-pipe-hand.html',
   styleUrl: './media-pipe-hand.scss',
