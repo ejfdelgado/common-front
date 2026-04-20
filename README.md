@@ -258,27 +258,3 @@ css masonry
 }
 
 -----
-
-private async confirmLoadState(userName: string) {
-  const popUpParameter: GenericData = {
-    translateFolder: 'nogales_assessment_single',
-    title: 'popups.load_previous.title',
-    txt: 'popups.load_previous.text',
-    model: {
-      userName,
-    },
-    ishtml: true,
-    choices: [
-      { txt: 'popups.choices.yes_word', val: 'yes', icon: "check" },
-      { txt: 'popups.choices.no_word', val: 'no', icon: "close", class: "secondary_button" },
-    ],
-  };
-  const modalResponse = (await this.modalSrv.generic(popUpParameter)) as {
-    choice: string;
-  };
-
-  if (!modalResponse || modalResponse.choice === 'no') {
-    return false;
-  }
-  return true;
-}

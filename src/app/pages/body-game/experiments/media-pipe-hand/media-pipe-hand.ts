@@ -64,6 +64,18 @@ export class MediaPipeHand implements AfterViewInit {
     this.p2pSrv.broadcastBinaryData(sample);
   }
 
+  public async confirmReal(userName: string) {
+    const desition = (await this.modalSrv.confirm({
+      title: 'popups.alert.title',
+      txt: 'popups.alert.text',
+      translateFolder: "test",
+      model: {
+        userName,
+      },
+    }));
+    console.log(`desition = ${desition}`);
+  }
+
   public async confirmThis(userName: string) {
     const popUpParameter: GenericData = {
       translateFolder: 'test',
@@ -75,12 +87,14 @@ export class MediaPipeHand implements AfterViewInit {
       ishtml: true,
       choices: [
         { txt: 'popups.choices.yes', val: 'yes', icon: "check" },
-        { txt: 'popups.choices.no', val: 'no', icon: "close", class: "secondary_button" },
+        { txt: 'popups.choices.no', val: 'no', icon: "close", class: "btn-secondary" },
       ],
     };
     const modalResponse = (await this.modalSrv.generic(popUpParameter)) as {
       choice: string;
     };
+
+    console.log(`modalResponse = ${JSON.stringify(modalResponse)}`);
 
     if (!modalResponse || modalResponse.choice === 'no') {
       return false;
