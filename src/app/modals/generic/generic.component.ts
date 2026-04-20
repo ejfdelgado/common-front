@@ -17,7 +17,6 @@ export interface GenericData {
   title?: string;
   timeout?: number;
   choices?: Array<GenericChoiceData>;
-  callback?: string;
   translateFolder?: any
   model?: any;
   imageUrl?: string;
@@ -44,7 +43,6 @@ export class GenericComponent implements OnInit {
   imageUrl?: string;
   timeout: number = 0; // means no timeout
   choices: Array<GenericChoiceData> = [];
-  callback: string = '';
   translateFolder: string | null = null;
   model: any = null;
   constructor(
@@ -63,9 +61,6 @@ export class GenericComponent implements OnInit {
     if (data.choices instanceof Array) {
       this.choices = data.choices;
     }
-    if (typeof data.callback == 'string') {
-      this.callback = data.callback;
-    }
     if (typeof data.translateFolder == 'string') {
       this.translateFolder = data.translateFolder;
     }
@@ -80,7 +75,6 @@ export class GenericComponent implements OnInit {
     if (this.timeout > 0) {
       setTimeout(() => {
         this.dialogRef.close({
-          callback: this.callback,
           choice: '', //Empty choice...
         });
       }, this.timeout);
@@ -89,7 +83,6 @@ export class GenericComponent implements OnInit {
 
   selectChoice(choice: string) {
     this.dialogRef.close({
-      callback: this.callback,
       choice,
     });
   }
