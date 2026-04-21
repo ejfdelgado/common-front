@@ -91,10 +91,11 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "Permissions",
+      label: "menu.friends",
+      translateFolder: "avatar",
       name: "permissions",
       isPlainIcon: true,
-      icon: "🔒",
+      icon: "👫",
       visible: false,
       children: [],
       callback: () => {

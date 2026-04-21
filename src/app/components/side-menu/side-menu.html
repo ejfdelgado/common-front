@@ -19,7 +19,11 @@
                         <mat-icon>{{ option.icon }}</mat-icon>
                         }
                         }
+                        @if (option.translateFolder) {
+                        <span class="label">{{ option.label | translate : option.translateFolder | async }}</span>
+                        } @else {
                         <span class="label">{{ option.label }}</span>
+                        }
                     </div>
                     <ul class="second_level">
                         @for(option2 of option.children; track option2.label) {

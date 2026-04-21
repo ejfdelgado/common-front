@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe } from '@pipes/translate.pipe';
 import { SideMenuService } from '@services/side-menu.service';
 import { Subscription } from 'rxjs';
 import { MenuConfigType, MenuOptionType } from 'types/StatusBar';
@@ -11,6 +12,7 @@ import { MenuConfigType, MenuOptionType } from 'types/StatusBar';
   imports: [
     CommonModule,
     MatIconModule,
+    TranslatePipe,
   ],
   templateUrl: './side-menu.html',
   styleUrl: './side-menu.scss',

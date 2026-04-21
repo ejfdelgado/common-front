@@ -1,6 +1,7 @@
 
 export interface MenuOptionType {
     label: string;
+    translateFolder?: string;
     icon?: string;
     isPlainIcon?: boolean;
     callback?: Function,

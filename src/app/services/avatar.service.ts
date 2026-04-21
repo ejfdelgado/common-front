@@ -116,7 +116,7 @@ export class AvatarService {
                         "mode02": {
                             menu: {
                                 name: "Park II",
-                                icon: "🏞️",
+                                icon: "🎄",
                             },
                             mirror: false,
                             defaultPosition: {
