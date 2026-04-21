@@ -29,6 +29,9 @@ import { P2PService, P2PStatus } from '@services/p2p.service';
 import { Subscription } from 'rxjs';
 import { ComponentP2P } from '@avatar/ComponentP2P';
 import { ModuloSonido } from '@services/sonido.service';
+import { CameraPickerDialogComponent } from '@components/fields/camera-picker/camera-picker-dialog';
+import { CameraDataType } from '@mytypes/CameraTypes';
+import { ConfigService } from '@services/config.service';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -40,6 +43,7 @@ const MODEL_NAME_PARENT = "room-private";
     Statusbar,
     SideMenu,
     BodyTracker,
+    CameraPickerDialogComponent,
   ],
   templateUrl: './play.html',
   styleUrl: './play.scss',
@@ -67,6 +71,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     public sideMenuSrv: SideMenuService,
     private router: Router,
     public p2pSrv: P2PService,
+    public configSrv: ConfigService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -116,9 +121,23 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           visible: false,
           children: [],
           callback: () => {
+            this.emitToc();
             this.openPermissions();
           },
-        }
+        },
+        {
+          label: "menu.camera",
+          translateFolder: "avatar",
+          name: "camera",
+          isPlainIcon: true,
+          icon: "🎥",
+          visible: true,
+          children: [],
+          callback: () => {
+            this.emitToc();
+            this.openCameraPicker();
+          },
+        },
       ]
     });
 
@@ -177,11 +196,31 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
   }
 
+  openCameraPicker() {
+    const ref = this.dialog.open(CameraPickerDialogComponent, {
+      data: {
+        currentCamera: this.configSrv.getCamera(),
+      },
+      disableClose: true,
+      width: '480px',
+    });
+
+    ref.afterClosed().subscribe((result: CameraDataType | null) => {
+      if (result) {
+
+      }
+    });
+  }
+
+  emitToc() {
+    ModuloSonido.play("/assets/sounds/message.mp3");
+  }
+
   useLanguage(name: string) {
     const lang = this.trackerComponent.getLang(name);
     if (lang) {
       this.trackerComponent.defineLanguage(lang);
-      ModuloSonido.play("/assets/sounds/message.mp3");
+      this.emitToc();
       this.updateCurrentLang();
     }
   }
@@ -239,7 +278,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
             children: [],
             callback: async () => {
               await this.trackerComponent.applyMode(name, true);
-              ModuloSonido.play("/assets/sounds/message.mp3");
+              this.emitToc();;
               scenariosMenu.children?.forEach(m => {
                 m.inUse = m.name === name;
               });
