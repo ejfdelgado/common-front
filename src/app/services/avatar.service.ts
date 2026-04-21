@@ -17,6 +17,10 @@ export class AvatarService {
             setTimeout(() => {
                 const model: WorldAvatar = {
                     defaultMode: "mode01",
+                    config: {
+                        useLivePeer: false,
+                        useVoice: true,
+                    },
                     modes: {
                         "mode00": {
                             mirror: true,

@@ -127,8 +127,10 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
         this.activity = this.indicatorSrv.start();
         try {
             super.startAll();
-            if (this.room) {
-                this.p2pSrv.connectToRoom(this.room.id);
+            if (this.world.config.useLivePeer) {
+                if (this.room) {
+                    this.p2pSrv.connectToRoom(this.room.id);
+                }
             }
             this.started = true;
         } catch (err) {

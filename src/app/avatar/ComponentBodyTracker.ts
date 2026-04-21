@@ -49,6 +49,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     };
     world: WorldAvatar = {
         defaultMode: "mode",
+        config: {
+            useLivePeer: false,
+            useVoice: false,
+        },
         modes: {
             "mode": {
                 mirror: false,
@@ -310,7 +314,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         this.errorState = "-1";
         ModuloSonido.play('/assets/sounds/button.mp3');
         this.startTracking();
-        if (!this.isMobile()) {
+        if (this.world.config.useVoice) {
             this.startListening();
         }
         enterFullscreen();

@@ -3,7 +3,13 @@ import { AnimationSpecType, AvatarLocationState, Point3D } from "./BodyTypes";
 // The intentatio is to persist this data
 export interface WorldAvatar {
     defaultMode: string;
+    config: WorldConfig,
     modes: { [key: string]: GameMode };
+}
+
+export interface WorldConfig {
+    useLivePeer: boolean;
+    useVoice: boolean;
 }
 
 export interface GameMode {
