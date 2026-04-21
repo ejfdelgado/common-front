@@ -49,6 +49,7 @@ export class MicPickerDialogComponent implements AfterViewInit, OnDestroy {
   private audioContext: AudioContext | null = null;
   private analyser: AnalyserNode | null = null;
   private animationId: number | null = null;
+  private onDeviceChange = () => this.refreshMics();
 
   constructor(
     public dialogRef: MatDialogRef<MicPickerDialogComponent>,
@@ -61,6 +62,7 @@ export class MicPickerDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   async ngAfterViewInit() {
+    navigator.mediaDevices.addEventListener('devicechange', this.onDeviceChange);
     await this.loadMics();
     if (this.mics.length > 0 && !this.selectedMicId) {
       this.selectedMicId = this.mics[0].id;
@@ -73,7 +75,25 @@ export class MicPickerDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    navigator.mediaDevices.removeEventListener('devicechange', this.onDeviceChange);
     this.stopStream();
+  }
+
+  async refreshMics() {
+    const previousId = this.selectedMicId;
+    await this.loadMics();
+
+    const stillPresent = this.mics.some(m => m.id === previousId);
+    if (!stillPresent) {
+      this.selectedMicId = this.mics[0]?.id ?? '';
+    }
+
+    this.cdr.detectChanges();
+
+    if (this.selectedMicId && (!stillPresent || !this.stream)) {
+      await this.startMic(this.selectedMicId);
+      this.cdr.detectChanges();
+    }
   }
 
   async loadMics() {
@@ -83,11 +103,12 @@ export class MicPickerDialogComponent implements AfterViewInit, OnDestroy {
 
       const devices = await navigator.mediaDevices.enumerateDevices();
       this.mics = devices
-        .filter(d => d.kind === 'audioinput')
+        .filter(d => ['audioinput'].indexOf(d.kind) >= 0)
         .map((d, i) => ({
           id: d.deviceId,
           name: d.label || `Microphone ${i + 1}`,
         }));
+      this.permissionDenied = false;
     } catch {
       this.permissionDenied = true;
     }

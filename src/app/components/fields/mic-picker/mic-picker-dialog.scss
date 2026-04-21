@@ -15,6 +15,15 @@
   width: 100%;
 }
 
+.boton_refresh {
+  cursor: pointer;
+  color: rgb(158, 158, 158);
+
+  &:hover {
+    color: rgb(57, 57, 57);
+  }
+}
+
 .no-mic {
   display: flex;
   flex-direction: column;
