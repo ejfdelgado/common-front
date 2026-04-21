@@ -1,7 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { FullscreenService } from '@services/fullscreen.service';
+
+export interface CameraDataType {
+  id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-camera-picker',
@@ -14,11 +21,19 @@ import { CommonComponent } from '@components/common.component';
 })
 export class CameraPicker extends CommonComponent implements ControlValueAccessor {
 
-  writeValue(obj: any): void {
+  constructor(
+    public cdr: ChangeDetectorRef,
+    public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
+  ) {
+    super(sanitizer, fullScreenSrv);
+  }
+
+  writeValue(value: CameraDataType | null): void {
     throw new Error('Method not implemented.');
   }
+  
   setDisabledState?(isDisabled: boolean): void {
     throw new Error('Method not implemented.');
   }
-
 }
