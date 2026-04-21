@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { FullscreenService } from '@services/fullscreen.service';
@@ -15,6 +16,7 @@ export interface CameraDataType {
   standalone: true,
   imports: [
     CommonModule,
+    MatIconModule,
   ],
   templateUrl: './camera-picker.html',
   styleUrl: './camera-picker.scss',
@@ -32,7 +34,7 @@ export class CameraPicker extends CommonComponent implements ControlValueAccesso
   writeValue(value: CameraDataType | null): void {
     throw new Error('Method not implemented.');
   }
-  
+
   setDisabledState?(isDisabled: boolean): void {
     throw new Error('Method not implemented.');
   }
