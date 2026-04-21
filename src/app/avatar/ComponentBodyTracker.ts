@@ -26,6 +26,7 @@ import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import {
     User,
 } from '@angular/fire/auth';
+import { ConfigService } from "@services/config.service";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
@@ -99,6 +100,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         //
         public cdr: ChangeDetectorRef,
         public avatarSrv: AvatarService,
+        public configSrv: ConfigService,
     ) {
         super(
             voiceSrv,
@@ -299,15 +301,19 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         this.trackerStarted = false;
     }
 
-    startTracking() {
+    async startTracking() {
         if (!this.trackerStarted) {
-            const video = this.videoRef.nativeElement;
-            this.camera = new Camera(video, {
+            const videoElement = this.videoRef.nativeElement;
+            const selectedCamera = this.configSrv.getCamera();
+            if (!selectedCamera) {
+                throw new Error("No camera selected");
+            }
+            this.camera = new Camera(videoElement, {
                 onFrame: async () => {
-                    await this.poseTracker.send({ image: video });
+                    await this.poseTracker.send({ image: videoElement });
                 },
                 width: 640,
-                height: 480
+                height: 480,
             });
             this.camera.start();
             this.trackerStarted = true;

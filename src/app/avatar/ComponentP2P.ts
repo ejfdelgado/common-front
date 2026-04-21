@@ -13,6 +13,7 @@ import { AVATAR_PELVIS_HEIGHT, ROOT_PATH } from "@mytypes/BodyTypes";
 import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import { Room } from "@trystero-p2p/firebase";
 import { Subscription } from "rxjs";
+import { ConfigService } from "@services/config.service";
 
 export abstract class ComponentP2P extends ComponentBodyTracker {
     roomLive: Room | null = null;
@@ -28,6 +29,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
         public override fullScreenSrv: FullscreenService,
         public override cdr: ChangeDetectorRef,
         public override avatarSrv: AvatarService,
+        public override configSrv: ConfigService,
         //
         public p2pSrv: P2PService,
     ) {
@@ -40,6 +42,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
             fullScreenSrv,
             cdr,
             avatarSrv,
+            configSrv,
         );
 
         this.p2pSrv.status.subscribe((status) => {
