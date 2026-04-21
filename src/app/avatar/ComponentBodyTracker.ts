@@ -360,7 +360,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         ModuloSonido.play('/assets/sounds/button.mp3');
         this.startTracking();
         if (this.world.config.useVoice) {
-            this.startListening();
+            if (!this.isMobile()) {
+                this.startListening();
+            }
         }
         enterFullscreen();
     }
