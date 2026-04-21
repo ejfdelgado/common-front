@@ -1,11 +1,10 @@
 # CommonFront
 
-Permitir resaltar el borde de los 4.
-Store in firestore the last selected mode, then when people come back, could see the same mode.
-Hacer un popup con un drop down que permita seleccionar la cámara.
-
 Permitir personalizar el avatar de cada uno.
 Support for assets on bucket, not in local.
+
+Store in firestore the last selected mode, then when people come back, could see the same mode.
+Hacer un popup con un drop down que permita seleccionar la cámara.
 
 Hacer una manera para pedir acceso cuando no tiene acceso.
 
@@ -51,8 +50,10 @@ En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser v
 Permitir cargar unicamente la región donde está ubicado el usuario.
 
 Bugs:
+Crear un arreglo de sonidos.
+Eliminar ConfirmDialogService.
 Fix mirror al caminar.
-Crear un arreglo de sonidos
+Permitir resaltar el borde de los 4.
 
 -------------------------------------------------------------------
 
@@ -120,7 +121,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/login-options
+npx ng generate component --standalone --skip-tests components/fields/camera-picker
 ```
 
 ```bash
