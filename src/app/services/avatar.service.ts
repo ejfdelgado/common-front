@@ -16,13 +16,17 @@ export class AvatarService {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const model: WorldAvatar = {
-                    defaultMode: "mode01",
+                    defaultMode: "mode00",
                     config: {
                         useLivePeer: false,
                         useVoice: true,
                     },
                     modes: {
                         "mode00": {
+                            menu: {
+                                name: "Wardrove",
+                                icon: "👖",
+                            },
                             mirror: true,
                             defaultPosition: {
                                 positionX: 0,
@@ -55,6 +59,10 @@ export class AvatarService {
                             ]
                         },
                         "mode01": {
+                            menu: {
+                                name: "Park I",
+                                icon: "🏞️",
+                            },
                             mirror: false,
                             defaultPosition: {
                                 positionX: 3,
@@ -106,6 +114,10 @@ export class AvatarService {
                             ],
                         },
                         "mode02": {
+                            menu: {
+                                name: "Park II",
+                                icon: "🏞️",
+                            },
                             mirror: false,
                             defaultPosition: {
                                 positionX: 3,

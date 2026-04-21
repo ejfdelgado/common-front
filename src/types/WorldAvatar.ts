@@ -13,6 +13,10 @@ export interface WorldConfig {
 }
 
 export interface GameMode {
+    menu: {
+        name: string;
+        icon: string;
+    },
     mirror: boolean;
     defaultPosition: AvatarLocationState;
     defaultCameraState: CameraState;

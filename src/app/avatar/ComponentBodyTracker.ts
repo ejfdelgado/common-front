@@ -55,6 +55,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         },
         modes: {
             "mode": {
+                menu: {
+                    name: "",
+                    icon: "",
+                },
                 mirror: false,
                 defaultPosition: {
                     positionX: 0,
@@ -365,6 +369,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         } finally {
             loading.done();
         }
+        return this.world;
     }
 
     public abstract broadcastBinaryData(command: GameAction): Promise<void>;

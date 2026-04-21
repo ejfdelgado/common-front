@@ -104,30 +104,10 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
 
     this.menuOptions.push({
       label: "Scenarios",
+      name: "scenarios",
       isPlainIcon: true,
       icon: "🌎",
-      children: [
-        {
-          label: "Park",
-          isPlainIcon: true,
-          icon: "🏞️",
-          children: [],
-          callback: () => {
-            //this.trackerComponent.loadWorld("", "mode01");
-            this.trackerComponent.applyMode("mode01", true);
-          },
-        },
-        {
-          label: "Wardrove",
-          isPlainIcon: true,
-          icon: "👖",
-          children: [],
-          callback: () => {
-            //this.trackerComponent.loadWorld("", "mode00");
-            this.trackerComponent.applyMode("mode00", true);
-          },
-        }
-      ],
+      children: [],
     });
 
     this.menuOptions.push({
@@ -221,7 +201,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       });
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     this.trackerComponent.applyMode("mode");
     this.updateCurrentLang();
     this.authSrv.authState$.subscribe(async (user) => {
@@ -234,7 +214,28 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.trackerComponent.setUser(null);
       }
     });
-    this.trackerComponent.loadWorld("", "mode00");
+    const world = await this.trackerComponent.loadWorld("");
+    if (world) {
+      const scenariosMenu = this.menuOptions
+        .find(a => a.name && ['scenarios'].indexOf(a.name) >= 0);
+      if (scenariosMenu) {
+        scenariosMenu.children = [];
+        const modeKeys = Object.keys(world.modes);
+        scenariosMenu.children = modeKeys.map(name => {
+          const reference = world.modes[name];
+          return {
+            label: reference.menu.name,
+            isPlainIcon: true,
+            icon: reference.menu.icon,
+            children: [],
+            callback: () => {
+              this.trackerComponent.applyMode(name, true);
+            },
+          }
+        });
+        this.cdr.detectChanges();
+      }
+    }
   }
 
   async openPermissions() {
