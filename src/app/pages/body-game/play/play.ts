@@ -105,7 +105,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "Scenarios",
+      label: "menu.scenarios",
+      translateFolder: "avatar",
       name: "scenarios",
       isPlainIcon: true,
       icon: "🌎",
@@ -113,7 +114,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "Voice",
+      label: "menu.voice_lang",
+      translateFolder: "avatar",
       name: "langs",
       icon: "record_voice_over",
       children: [
@@ -160,7 +162,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "Back to rooms",
+      label: "menu.back_rooms",
+      translateFolder: "avatar",
       icon: "arrow_back",
       children: [],
       callback: () => {

@@ -1,6 +1,9 @@
 {
     "menu": {
         "friends": "Friends",
+        "scenarios": "Scenarios",
+        "voice_lang": "Voice language",
+        "back_rooms": "Back to game rooms",
         "end_call": "End call"
     }
 }

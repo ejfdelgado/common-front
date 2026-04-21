@@ -1,6 +1,9 @@
 {
     "menu": {
         "friends": "Amigos",
+        "scenarios": "Escenarios",
+        "voice_lang": "Idioma de voz",
+        "back_rooms": "Regresar a salón de juegos",
         "end_call": "Colgar llamada"
     }
 }
