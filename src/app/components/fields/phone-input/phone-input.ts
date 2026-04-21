@@ -108,18 +108,15 @@ export class PhoneInputComponent extends CommonComponent
         return this.latestErrors;
       }
       this.latestErrors = { required: true };
-      //this.cdr.detectChanges();
       return this.latestErrors;
     }
 
     if (!this.phoneRegex.test(this.value.number)) {
       this.latestErrors = { invalidPhone: true };
-      //this.cdr.detectChanges();
       return this.latestErrors;
     }
 
     this.latestErrors = null;
-    //this.cdr.detectChanges();
     return this.latestErrors;
   }
 

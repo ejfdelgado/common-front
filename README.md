@@ -4,9 +4,10 @@ Permitir personalizar el avatar de cada uno.
 Support for assets on bucket, not in local.
 
 Store in firestore the last selected mode, then when people come back, could see the same mode.
-Hacer un popup con un drop down que permita seleccionar la cámara.
+Integrar la selección de cámara.
 
 Hacer una manera para pedir acceso cuando no tiene acceso.
+Create a microphone picker.
 
 ------------------------------------------------------------------------
 
@@ -121,7 +122,7 @@ ng serve
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests components/fields/camera-picker
+npx ng generate component --standalone --skip-tests components/fields/mic-picker
 ```
 
 ```bash
