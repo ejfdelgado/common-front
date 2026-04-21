@@ -1,8 +1,5 @@
 import { CameraInterface, CameraOptions } from "@mediapipe/camera_utils";
 
-export interface CameraOptionsExt extends CameraOptions {
-    deviceId: string;
-}
 
 export class Camera implements CameraInterface {
 
