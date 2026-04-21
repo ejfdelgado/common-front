@@ -92,32 +92,39 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "menu.friends",
-      translateFolder: "avatar",
-      name: "permissions",
-      isPlainIcon: true,
-      icon: "👫",
-      visible: false,
-      children: [],
-      callback: () => {
-        this.openPermissions();
-      },
-    });
-
-    this.menuOptions.push({
       label: "menu.scenarios",
       translateFolder: "avatar",
       name: "scenarios",
-      isPlainIcon: true,
-      icon: "🌎",
+      icon: "remove",
       children: [],
+    });
+
+    this.menuOptions.push({
+      label: "menu.config",
+      translateFolder: "avatar",
+      name: "config",
+      icon: "remove",
+      children: [
+        {
+          label: "menu.friends",
+          translateFolder: "avatar",
+          name: "loged_permissions",
+          isPlainIcon: true,
+          icon: "👫",
+          visible: false,
+          children: [],
+          callback: () => {
+            this.openPermissions();
+          },
+        }
+      ]
     });
 
     this.menuOptions.push({
       label: "menu.voice_lang",
       translateFolder: "avatar",
       name: "langs",
-      icon: "record_voice_over",
+      icon: "remove",
       children: [
         {
           label: "Español",
@@ -183,14 +190,11 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
   updateLogedMenuOptions() {
     const visible = !!this.user;
     this.menuOptions
-      .filter(a => a.name && ['permissions'].indexOf(a.name) >= 0)
+      .find(a => a.name && ['config']
+        .indexOf(a.name) >= 0)?.children?.filter(a => a.name && a.name.startsWith("loged_"))
       .forEach((e) => {
-        if (e.name == "permissions") {
-          e.visible = visible && !!this.room;
-        } else {
-          e.visible = visible;
-        }
-      })
+        e.visible = visible && !!this.room;
+      });;
   }
 
   updateCurrentLang() {
@@ -232,9 +236,13 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
             label: reference.menu.name,
             isPlainIcon: true,
             icon: reference.menu.icon,
+            name: name,
             children: [],
-            callback: () => {
-              this.trackerComponent.applyMode(name, true);
+            callback: async () => {
+              await this.trackerComponent.applyMode(name, true);
+              scenariosMenu.children?.forEach(m => {
+                m.inUse = m.name === name;
+              })
             },
           }
         });

@@ -1,6 +1,7 @@
 {
     "menu": {
         "friends": "Friends",
+        "config": "Configuration",
         "scenarios": "Scenarios",
         "voice_lang": "Voice language",
         "back_rooms": "Back to game rooms",
