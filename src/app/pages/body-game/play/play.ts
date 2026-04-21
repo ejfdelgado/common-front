@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { P2PService, P2PStatus } from '@services/p2p.service';
 import { Subscription } from 'rxjs';
 import { ComponentP2P } from '@avatar/ComponentP2P';
+import { ModuloSonido } from '@services/sonido.service';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -88,6 +89,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       children: [],
       callback: () => {
         this.p2pSrv.disconnectFromRoom();
+        ModuloSonido.play("/assets/sounds/hangdown.mp3");
       },
     });
 
@@ -135,6 +137,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
             const lang = this.trackerComponent.getLang("es-ES");
             if (lang) {
               this.trackerComponent.defineLanguage(lang);
+              ModuloSonido.play("/assets/sounds/message.mp3");
               this.updateCurrentLang();
             }
           },
@@ -148,6 +151,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
             const lang = this.trackerComponent.getLang("en-US");
             if (lang) {
               this.trackerComponent.defineLanguage(lang);
+              ModuloSonido.play("/assets/sounds/message.mp3");
               this.updateCurrentLang();
             }
           },
@@ -161,6 +165,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
             const lang = this.trackerComponent.getLang("fr-FR");
             if (lang) {
               this.trackerComponent.defineLanguage(lang);
+              ModuloSonido.play("/assets/sounds/message.mp3");
               this.updateCurrentLang();
             }
           },
@@ -240,6 +245,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
             children: [],
             callback: async () => {
               await this.trackerComponent.applyMode(name, true);
+              ModuloSonido.play("/assets/sounds/message.mp3");
               scenariosMenu.children?.forEach(m => {
                 m.inUse = m.name === name;
               });
