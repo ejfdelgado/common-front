@@ -16,6 +16,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MyTemplate } from "ejfdelgado-common-ts";
 import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
 import { FormsModule } from '@angular/forms';
+import { ConfigService } from '@services/config.service';
 
 @Component({
   selector: 'app-index',
@@ -99,6 +100,7 @@ export class Index implements AfterViewInit {
     public cdr: ChangeDetectorRef,
     public locationSrv: LocationService,
     public sanitizer: DomSanitizer,
+    public configSrv: ConfigService,
   ) {
     this.authSrv.authState$.subscribe(user => {
       if (user) {
@@ -107,6 +109,7 @@ export class Index implements AfterViewInit {
         console.log('Logged out');
       }
     });
+    this.model['camera'] = this.configSrv.getCamera();
   }
 
   ngAfterViewInit(): void {

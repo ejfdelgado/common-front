@@ -16,11 +16,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { FullscreenService } from '@services/fullscreen.service';
 import { CameraPickerDialogComponent } from './camera-picker-dialog';
-
-export interface CameraDataType {
-  id: string;
-  name: string;
-}
+import { CameraDataType } from '@mytypes/CameraTypes';
+import { ConfigService } from '@services/config.service';
 
 @Component({
   selector: 'app-camera-picker',
@@ -54,6 +51,7 @@ export class CameraPicker extends CommonComponent implements ControlValueAccesso
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
     private dialog: MatDialog,
+    public configSrv: ConfigService,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -80,6 +78,7 @@ export class CameraPicker extends CommonComponent implements ControlValueAccesso
     ref.afterClosed().subscribe((result: CameraDataType | null) => {
       if (result) {
         this.value = result;
+        this.configSrv.setCamera(result);
         this.onChange(result);
         this.onTouched();
         this.cdr.markForCheck();

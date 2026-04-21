@@ -15,7 +15,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { CameraDataType } from './camera-picker';
+import { CameraDataType } from '@mytypes/CameraTypes';
 
 export interface CameraPickerDialogData {
   currentCamera: CameraDataType | null;
