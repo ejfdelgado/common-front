@@ -45,7 +45,22 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
   cameras: CameraDataType[] = [];
   selectedCameraId: string = '';
   private stream: MediaStream | null = null;
+  private onDeviceChange = () => this.handleDeviceChange();
 
+  private async handleDeviceChange() {
+    const previousId = this.selectedCameraId;
+    await this.loadCameras();
+
+    const stillExists = this.cameras.some(c => c.id === previousId);
+    if (!stillExists) {
+      this.stopStream();
+      this.selectedCameraId = this.cameras.length > 0 ? this.cameras[0].id : '';
+      if (this.selectedCameraId) {
+        await this.startCamera(this.selectedCameraId);
+      }
+    }
+    this.cdr.detectChanges();
+  }
 
   constructor(
     public dialogRef: MatDialogRef<CameraPickerDialogComponent>,
@@ -73,9 +88,11 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
       await this.startCamera(this.selectedCameraId);
       this.cdr.detectChanges();
     });
+    navigator.mediaDevices.addEventListener('devicechange', this.onDeviceChange);
   }
 
   ngOnDestroy() {
+    navigator.mediaDevices.removeEventListener('devicechange', this.onDeviceChange);
     this.stopStream();
   }
 
