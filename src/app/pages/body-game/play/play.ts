@@ -207,7 +207,6 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
 
     ref.afterClosed().subscribe((result: CameraDataType | null) => {
       if (result) {
-        console.log(JSON.stringify(result, null, 4));
         this.configSrv.setCamera(result);
       }
     });

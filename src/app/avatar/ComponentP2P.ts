@@ -14,6 +14,7 @@ import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import { Room } from "@trystero-p2p/firebase";
 import { Subscription } from "rxjs";
 import { ConfigService } from "@services/config.service";
+import { MatDialog } from "@angular/material/dialog";
 
 export abstract class ComponentP2P extends ComponentBodyTracker {
     roomLive: Room | null = null;
@@ -30,6 +31,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
         public override cdr: ChangeDetectorRef,
         public override avatarSrv: AvatarService,
         public override configSrv: ConfigService,
+        public override dialog: MatDialog,
         //
         public p2pSrv: P2PService,
     ) {
@@ -43,6 +45,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
             cdr,
             avatarSrv,
             configSrv,
+            dialog,
         );
 
         this.p2pSrv.status.subscribe((status) => {
@@ -126,10 +129,10 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
         });
     }
 
-    override startAll() {
-        this.activity = this.indicatorSrv.start();
+    override async startAll() {
         try {
-            super.startAll();
+            await super.startAll();
+            this.activity = this.indicatorSrv.start();
             if (this.world.config.useLivePeer) {
                 if (this.room) {
                     this.p2pSrv.connectToRoom(this.room.id);

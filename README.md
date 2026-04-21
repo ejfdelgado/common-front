@@ -4,7 +4,6 @@ Permitir personalizar el avatar de cada uno.
 Support for assets on bucket, not in local.
 
 Store in firestore the last selected mode, then when people come back, could see the same mode.
-Integrar la selección de cámara.
 
 Hacer una manera para pedir acceso cuando no tiene acceso.
 Create a microphone picker.

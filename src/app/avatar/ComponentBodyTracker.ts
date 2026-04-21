@@ -28,6 +28,9 @@ import {
 } from '@angular/fire/auth';
 import { ConfigService } from "@services/config.service";
 import { Camera } from "./Camera";
+import { CameraPickerDialogComponent } from "@components/fields/camera-picker/camera-picker-dialog";
+import { CameraDataType } from "@mytypes/CameraTypes";
+import { MatDialog } from "@angular/material/dialog";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
@@ -102,6 +105,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         public cdr: ChangeDetectorRef,
         public avatarSrv: AvatarService,
         public configSrv: ConfigService,
+        public dialog: MatDialog,
     ) {
         super(
             voiceSrv,
@@ -322,8 +326,37 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
     }
 
-    startAll() {
+    async openCameraPicker() {
+        const ref = this.dialog.open(CameraPickerDialogComponent, {
+            data: {
+                currentCamera: this.configSrv.getCamera(),
+            },
+            disableClose: true,
+            width: '480px',
+        });
+
+        return new Promise((resolve, reject) => {
+            ref.afterClosed().subscribe((result: CameraDataType | null) => {
+                if (result) {
+                    this.configSrv.setCamera(result);
+                    resolve(result);
+                } else {
+                    reject();
+                }
+            });
+        });
+    }
+
+    async checkCameraSeleceted() {
+        const actual = this.configSrv.getCamera();
+        if (!actual) {
+            await this.openCameraPicker();
+        }
+    }
+
+    async startAll() {
         this.errorState = "-1";
+        await this.checkCameraSeleceted();
         ModuloSonido.play('/assets/sounds/button.mp3');
         this.startTracking();
         if (this.world.config.useVoice) {
