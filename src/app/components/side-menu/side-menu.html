@@ -1,4 +1,5 @@
-<div class="navigation_parent animated" [ngClass]="{'open': opened, 'close': !opened}">
+<div class="navigation_parent animated" [ngStyle]="{'font-size': fontSize}"
+    [ngClass]="{'open': opened, 'close': !opened}">
     <div class="logo_parent">
         <div class="logo_parent_stretch">
             <img [src]="logoImage">

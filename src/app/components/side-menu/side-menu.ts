@@ -22,6 +22,7 @@ export class SideMenu implements OnDestroy, AfterViewInit {
   @Input() logoImage: string = "./assets/img/logo.png";
   @Input() options: MenuOptionType[] = [];
   @Input() config: MenuConfigType = {};
+  @Input() fontSize: string = "small";
 
   opened: boolean = true;
   subscription!: Subscription;
