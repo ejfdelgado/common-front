@@ -1,1 +1,10 @@
-<p>camera-picker works!</p>
+<mat-form-field appearance="outline" class="camera-field">
+  <mat-label>{{ label }}</mat-label>
+  <input matInput [value]="value?.name ?? ''" readonly [disabled]="disabled" />
+  <mat-icon
+    matSuffix
+    class="picker-icon"
+    [class.disabled]="disabled"
+    (click)="openPicker()"
+  >search</mat-icon>
+</mat-form-field>

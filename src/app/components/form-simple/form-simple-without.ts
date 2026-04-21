@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
+import { CameraPicker } from '@components/fields/camera-picker/camera-picker';
 
 @Component({
   selector: 'app-form-simple-without',
@@ -42,6 +43,7 @@ import { JsonEditorComponent } from '@components/json-editor/json-editor.compone
     MDInput,
     MatSelectModule,
     JsonEditorComponent,
+    CameraPicker,
   ],
   templateUrl: './form-simple-without.html',
   styleUrl: './form-simple-without.scss',

@@ -110,6 +110,10 @@ const routes: Routes = [
         loadComponent: () => import('./pages/body-game/experiments/media-pipe-hand/media-pipe-hand').then(m => m.MediaPipeHand),
     },
     {
+        path: 'index',
+        loadComponent: () => import('./pages/index/index').then(m => m.Index),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },

@@ -62,6 +62,7 @@ export class Index implements AfterViewInit {
       }
     },
     { label: "Raw", type: "json_raw", key: "raw", required: false },
+    { label: "Camera", type: "camera-picker", key: "camera", required: false },
     /*
     { label: "Descripción", type: "md", key: "document", md: { maxHeight: "30em", minHeight: "3em" } },
     { label: "Descripción", type: "contenteditable", key: "description" },
@@ -85,7 +86,11 @@ export class Index implements AfterViewInit {
   ];
   model: FlatJsonDataType = {
     "gallery": [],
-    "raw": null
+    "raw": null,
+    "camera": {
+      "id": "7b47c2a1009a679cbeefdc6eaa74cc849af3f0a1a9cd40ef8b51da3da453fb3c",
+      "name": "Integrated Camera (5986:2175)"
+    }
   };
 
   constructor(

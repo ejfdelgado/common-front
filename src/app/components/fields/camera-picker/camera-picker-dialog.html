@@ -1,0 +1,44 @@
+<div mat-dialog-title>
+  <header>
+    <h1>
+      <mat-icon>videocam</mat-icon>
+      Select Camera
+    </h1>
+    <span class="boton_cerrar" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </span>
+  </header>
+</div>
+
+<div mat-dialog-content>
+  <div class="video-wrapper">
+    @if (cameras.length === 0) {
+      <div class="no-camera">
+        <mat-icon>videocam_off</mat-icon>
+        <span>No cameras available or permission denied</span>
+      </div>
+    } @else {
+      <video #videoElement autoplay playsinline muted class="camera-preview"></video>
+    }
+  </div>
+
+  <mat-form-field appearance="outline" class="camera-select-field">
+    <mat-label>Camera</mat-label>
+    <mat-select [(ngModel)]="selectedCameraId" (selectionChange)="onCameraChange()">
+      @for (camera of cameras; track camera.id) {
+        <mat-option [value]="camera.id">{{ camera.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions class="bottom_buttons">
+  <button class="btn btn-secondary" (click)="cancel()">
+    <mat-icon class="peque">close</mat-icon>
+    <span>Cancel</span>
+  </button>
+  <button class="btn btn-primary" (click)="accept()" [disabled]="cameras.length === 0">
+    <mat-icon class="peque">check</mat-icon>
+    <span>Accept</span>
+  </button>
+</div>

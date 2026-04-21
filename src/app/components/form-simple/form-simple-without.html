@@ -46,6 +46,8 @@
         } @else if (field.type=='image-gallery') {
         <app-image-gallery [formControl]="formControlMap[field.key]"
             [config]="castImageGalleryType(field).gallery"></app-image-gallery>
+        } @else if (field.type=='camera-picker') {
+        <app-camera-picker [formControl]="formControlMap[field.key]"></app-camera-picker>
         } @else if (field.type=='md') {
         <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label"
             [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight" [label]="field.label"
