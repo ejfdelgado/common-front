@@ -1,5 +1,6 @@
 {
     "menu": {
-        "friends": "Friends"
+        "friends": "Friends",
+        "end_call": "End call"
     }
 }

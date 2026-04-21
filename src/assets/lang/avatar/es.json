@@ -1,5 +1,6 @@
 {
     "menu": {
-        "friends": "Amigos"
+        "friends": "Amigos",
+        "end_call": "Colgar llamada"
     }
 }

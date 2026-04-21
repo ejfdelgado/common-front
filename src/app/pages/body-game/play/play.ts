@@ -79,10 +79,11 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
 
     this.menuOptions.push({
-      label: "End call",
+      label: "menu.end_call",
+      translateFolder: "avatar",
       name: "end_call",
       isPlainIcon: true,
-      icon: "❌",
+      icon: "🚪",
       visible: false,
       children: [],
       callback: () => {

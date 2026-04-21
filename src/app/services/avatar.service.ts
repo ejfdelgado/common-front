@@ -18,7 +18,7 @@ export class AvatarService {
                 const model: WorldAvatar = {
                     defaultMode: "mode00",
                     config: {
-                        useLivePeer: false,
+                        useLivePeer: true,
                         useVoice: true,
                     },
                     modes: {
