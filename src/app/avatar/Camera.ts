@@ -26,6 +26,7 @@ export class Camera implements CameraInterface {
             alert('No navigator.mediaDevices.getUserMedia exists.');
         }
         const { width, height, deviceId } = this.options;
+        console.log(`deviceId = ${deviceId}`);
         return navigator.mediaDevices.getUserMedia({
             video: {
                 deviceId: deviceId,
