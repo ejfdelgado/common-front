@@ -113,19 +113,6 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       icon: "remove",
       children: [
         {
-          label: "menu.friends",
-          translateFolder: "avatar",
-          name: "loged_permissions",
-          isPlainIcon: true,
-          icon: "👫",
-          visible: false,
-          children: [],
-          callback: () => {
-            this.emitToc();
-            this.openPermissions();
-          },
-        },
-        {
           label: "menu.camera",
           translateFolder: "avatar",
           name: "camera",
@@ -136,6 +123,19 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           callback: () => {
             this.emitToc();
             this.openCameraPicker();
+          },
+        },
+        {
+          label: "menu.friends",
+          translateFolder: "avatar",
+          name: "loged_permissions",
+          isPlainIcon: true,
+          icon: "👫",
+          visible: false,
+          children: [],
+          callback: () => {
+            this.emitToc();
+            this.openPermissions();
           },
         },
       ]

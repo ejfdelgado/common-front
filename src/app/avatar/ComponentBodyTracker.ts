@@ -310,6 +310,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 throw new Error("No camera selected");
             }
             this.camera = new Camera(videoElement, {
+                deviceId: selectedCamera.id,
                 onFrame: async () => {
                     await this.poseTracker.send({ image: videoElement });
                 },

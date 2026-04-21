@@ -1,5 +1,9 @@
 import { CameraInterface, CameraOptions } from "@mediapipe/camera_utils";
 
+export interface CameraOptionsExt extends CameraOptions {
+    deviceId?: string;
+}
+
 const DEFAULT_OPTIONS: Required<Omit<CameraOptions, 'onFrame'>> = {
     facingMode: 'user',
     width: 640,
@@ -8,21 +12,27 @@ const DEFAULT_OPTIONS: Required<Omit<CameraOptions, 'onFrame'>> = {
 
 export class Camera implements CameraInterface {
     private video: HTMLVideoElement;
-    private options: CameraOptions & typeof DEFAULT_OPTIONS;
+    private options: CameraOptionsExt & typeof DEFAULT_OPTIONS;
     private stream: MediaStream | undefined;
     private lastTime: number = 0;
 
-    constructor(video: HTMLVideoElement, options: CameraOptions) {
+    constructor(video: HTMLVideoElement, options: CameraOptionsExt) {
         this.video = video;
-        this.options = Object.assign({}, DEFAULT_OPTIONS, options) as CameraOptions & typeof DEFAULT_OPTIONS;
+        this.options = Object.assign({}, DEFAULT_OPTIONS, options) as CameraOptionsExt & typeof DEFAULT_OPTIONS;
     }
 
     async start(): Promise<void> {
         if (!navigator.mediaDevices?.getUserMedia) {
             alert('No navigator.mediaDevices.getUserMedia exists.');
         }
-        const { facingMode, width, height } = this.options;
-        return navigator.mediaDevices.getUserMedia({ video: { facingMode, width, height } })
+        const { width, height, deviceId } = this.options;
+        return navigator.mediaDevices.getUserMedia({
+            video: {
+                deviceId: deviceId,
+                width,
+                height,
+            }
+        })
             .then((stream) => { this.attach(stream); })
             .catch((err) => {
                 const msg = 'Failed to acquire camera feed: ' + err;
