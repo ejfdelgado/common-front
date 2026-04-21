@@ -134,12 +134,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           icon: "🇪🇸",
           isPlainIcon: true,
           callback: () => {
-            const lang = this.trackerComponent.getLang("es-ES");
-            if (lang) {
-              this.trackerComponent.defineLanguage(lang);
-              ModuloSonido.play("/assets/sounds/message.mp3");
-              this.updateCurrentLang();
-            }
+            this.useLanguage("es-ES");
           },
         },
         {
@@ -148,12 +143,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           icon: "🇬🇧",
           isPlainIcon: true,
           callback: () => {
-            const lang = this.trackerComponent.getLang("en-US");
-            if (lang) {
-              this.trackerComponent.defineLanguage(lang);
-              ModuloSonido.play("/assets/sounds/message.mp3");
-              this.updateCurrentLang();
-            }
+            this.useLanguage("en-US");
           },
         },
         {
@@ -162,12 +152,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
           icon: "🇫🇷",
           isPlainIcon: true,
           callback: () => {
-            const lang = this.trackerComponent.getLang("fr-FR");
-            if (lang) {
-              this.trackerComponent.defineLanguage(lang);
-              ModuloSonido.play("/assets/sounds/message.mp3");
-              this.updateCurrentLang();
-            }
+            this.useLanguage("fr-FR");
           },
         }
       ],
@@ -190,6 +175,15 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
         this.trackerComponent.onResize();
       }, 500);
     });
+  }
+
+  useLanguage(name: string) {
+    const lang = this.trackerComponent.getLang(name);
+    if (lang) {
+      this.trackerComponent.defineLanguage(lang);
+      ModuloSonido.play("/assets/sounds/message.mp3");
+      this.updateCurrentLang();
+    }
   }
 
   updateLogedMenuOptions() {
