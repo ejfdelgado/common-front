@@ -25,15 +25,11 @@ export class Camera implements CameraInterface {
         if (!navigator.mediaDevices?.getUserMedia) {
             alert('No navigator.mediaDevices.getUserMedia exists.');
         }
-        const { width, height, deviceId } = this.options;
-        console.log(`deviceId = ${deviceId}`);
-        return navigator.mediaDevices.getUserMedia({
-            video: {
-                deviceId: deviceId,
-                width,
-                height,
-            }
-        })
+        const { facingMode, width, height, deviceId } = this.options;
+        const videoConstraints: MediaTrackConstraints = deviceId
+            ? { deviceId: { exact: deviceId }, width, height }
+            : { facingMode, width, height };
+        return navigator.mediaDevices.getUserMedia({ video: videoConstraints })
             .then((stream) => { this.attach(stream); })
             .catch((err) => {
                 const msg = 'Failed to acquire camera feed: ' + err;
