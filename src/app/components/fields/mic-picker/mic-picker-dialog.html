@@ -1,0 +1,49 @@
+<div mat-dialog-title>
+  <header>
+    <h1>
+      <mat-icon>mic</mat-icon>
+      Select Microphone
+    </h1>
+    <span class="boton_cerrar" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </span>
+  </header>
+</div>
+
+<div mat-dialog-content>
+  @if (permissionDenied) {
+    <div class="no-mic">
+      <mat-icon>mic_off</mat-icon>
+      <span>Microphone permission denied</span>
+    </div>
+  } @else if (mics.length === 0) {
+    <div class="no-mic">
+      <mat-icon>mic_off</mat-icon>
+      <span>No microphones available</span>
+    </div>
+  } @else {
+    <div class="meter-wrapper">
+      <canvas #meterCanvas class="volume-meter" width="440" height="24"></canvas>
+    </div>
+
+    <mat-form-field appearance="outline" class="mic-select-field">
+      <mat-label>Microphone</mat-label>
+      <mat-select [(ngModel)]="selectedMicId" (selectionChange)="onMicChange()">
+        @for (mic of mics; track mic.id) {
+          <mat-option [value]="mic.id">{{ mic.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+</div>
+
+<div mat-dialog-actions class="bottom_buttons">
+  <button class="btn btn-secondary" (click)="cancel()">
+    <mat-icon class="peque">close</mat-icon>
+    <span>Cancel</span>
+  </button>
+  <button class="btn btn-primary" (click)="accept()" [disabled]="mics.length === 0 || permissionDenied">
+    <mat-icon class="peque">check</mat-icon>
+    <span>Accept</span>
+  </button>
+</div>

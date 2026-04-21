@@ -1,0 +1,18 @@
+.mic-field {
+  width: 100%;
+}
+
+.picker-icon {
+  cursor: pointer;
+  color: inherit;
+
+  &:hover {
+    color: var(--mat-sys-primary, #1976d2);
+  }
+
+  &.disabled {
+    cursor: default;
+    opacity: 0.38;
+    pointer-events: none;
+  }
+}
