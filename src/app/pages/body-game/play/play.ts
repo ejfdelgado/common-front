@@ -230,7 +230,7 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       if (scenariosMenu) {
         scenariosMenu.children = [];
         const modeKeys = Object.keys(world.modes);
-        scenariosMenu.children = modeKeys.map(name => {
+        scenariosMenu.children = modeKeys.sort((a, b) => b.localeCompare(a)).map(name => {
           const reference = world.modes[name];
           return {
             label: reference.menu.name,
@@ -242,9 +242,12 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
               await this.trackerComponent.applyMode(name, true);
               scenariosMenu.children?.forEach(m => {
                 m.inUse = m.name === name;
-              })
+              });
             },
           }
+        });
+        scenariosMenu.children?.forEach(m => {
+          m.inUse = m.name === world.defaultMode;
         });
         this.cdr.detectChanges();
       }
