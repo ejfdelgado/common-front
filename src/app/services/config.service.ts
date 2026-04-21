@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IndicatorService } from './indicator.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
-import { CameraDataType } from '@mytypes/CameraTypes';
+import { CameraDataType, MicDataType } from '@mytypes/CameraTypes';
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +11,7 @@ export class ConfigService {
     COOKIE_NAME = 'noglang';
     COOKIE_NAME_LOG = 'loglevel';
     COOKIE_NAME_CAMERA = 'local_camera';
+    COOKIE_NAME_MIC = 'local_mic';
     keyPromises: any = {};
     renderer: any;
 
@@ -27,6 +28,20 @@ export class ConfigService {
     getCamera(): CameraDataType | null {
         try {
             const old = this.getCookie(this.COOKIE_NAME_CAMERA) || 'null';
+            const parsed = JSON.parse(old);
+            return parsed;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    setMic(val: MicDataType) {
+        this.setCookie(this.COOKIE_NAME_MIC, JSON.stringify(val), 1000);
+    }
+
+    getMic(): MicDataType | null {
+        try {
+            const old = this.getCookie(this.COOKIE_NAME_MIC) || 'null';
             const parsed = JSON.parse(old);
             return parsed;
         } catch (err) {

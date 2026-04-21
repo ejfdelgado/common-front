@@ -64,6 +64,7 @@ export class Index implements AfterViewInit {
     },
     { label: "Raw", type: "json_raw", key: "raw", required: false },
     { label: "Camera", type: "camera-picker", key: "camera", required: false },
+    { label: "Mic", type: "mic-picker", key: "mic", required: false },
     /*
     { label: "Descripción", type: "md", key: "document", md: { maxHeight: "30em", minHeight: "3em" } },
     { label: "Descripción", type: "contenteditable", key: "description" },
@@ -110,6 +111,7 @@ export class Index implements AfterViewInit {
       }
     });
     this.model['camera'] = this.configSrv.getCamera();
+    this.model['mic'] = this.configSrv.getMic();
   }
 
   ngAfterViewInit(): void {

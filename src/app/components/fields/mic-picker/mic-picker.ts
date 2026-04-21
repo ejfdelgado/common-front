@@ -78,6 +78,7 @@ export class MicPicker extends CommonComponent implements ControlValueAccessor {
     ref.afterClosed().subscribe((result: MicDataType | null) => {
       if (result) {
         this.value = result;
+        this.configSrv.setMic(result);
         this.onChange(result);
         this.onTouched();
         this.cdr.markForCheck();

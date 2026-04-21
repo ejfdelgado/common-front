@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
 import { CameraPicker } from '@components/fields/camera-picker/camera-picker';
+import { MicPicker } from '@components/fields/mic-picker/mic-picker';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -46,6 +47,7 @@ import { CameraPicker } from '@components/fields/camera-picker/camera-picker';
     MatSelectModule,
     JsonEditorComponent,
     CameraPicker,
+    MicPicker,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',

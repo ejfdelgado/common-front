@@ -21,7 +21,8 @@ export interface FieldDataType {
     "json_raw" |
     "phone" |
     "image-gallery" |
-    "camera-picker"
+    "camera-picker" | 
+    "mic-picker"
     ;
     label: string;
     key: string;
