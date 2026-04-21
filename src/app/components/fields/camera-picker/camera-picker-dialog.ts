@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -44,12 +45,12 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
   cameras: CameraDataType[] = [];
   selectedCameraId: string = '';
   private stream: MediaStream | null = null;
-  private viewReady = false;
-  private pendingDeviceId: string | null = null;
+
 
   constructor(
     public dialogRef: MatDialogRef<CameraPickerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CameraPickerDialogData,
+    public cdr: ChangeDetectorRef,
   ) {
     if (data.currentCamera) {
       this.selectedCameraId = data.currentCamera.id;
@@ -57,25 +58,21 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
   }
 
   async ngOnInit() {
+
+  }
+
+  async ngAfterViewInit() {
     await this.loadCameras();
     if (this.cameras.length > 0) {
       if (!this.selectedCameraId) {
         this.selectedCameraId = this.cameras[0].id;
       }
-      if (this.viewReady) {
-        await this.startCamera(this.selectedCameraId);
-      } else {
-        this.pendingDeviceId = this.selectedCameraId;
-      }
     }
-  }
-
-  async ngAfterViewInit() {
-    this.viewReady = true;
-    if (this.pendingDeviceId) {
-      await this.startCamera(this.pendingDeviceId);
-      this.pendingDeviceId = null;
-    }
+    this.cdr.detectChanges();
+    requestAnimationFrame(async () => {
+      await this.startCamera(this.selectedCameraId);
+      this.cdr.detectChanges();
+    });
   }
 
   ngOnDestroy() {
@@ -111,6 +108,8 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
       });
       if (this.videoElement?.nativeElement) {
         this.videoElement.nativeElement.srcObject = this.stream;
+      } else {
+        console.log("No native element yet!");
       }
     } catch (err) {
       console.error('Error starting camera:', err);
