@@ -1,17 +1,21 @@
 # CommonFront
 
+Agregar soporte para multiples escenarios.
+Garantizar soporte para cuando el usuario no está logeado.
+Que pueda cargar el escenario.
+
+Girar más lento.
 Permitir personalizar el avatar de cada uno.
 Support for assets on bucket, not in local.
 
-Store in firestore the last selected mode, then when people come back, could see the same mode.
+Store in firestore the last selected mode, 
+then when people come back, could see the same mode.
 
 Hacer una manera para pedir acceso cuando no tiene acceso.
-Create a microphone picker.
 
 ------------------------------------------------------------------------
 
 Create GameAction -> call setProps de some controller with some attributes.
-Volumen de sonido proporcional a la distancia.
 
 ------------------------------------------------------------------------
 comparacion: (3 numeros de salida)
@@ -25,6 +29,7 @@ producto punto normalizado min -1 max 1
 extremidades lejanas: (4 numeros de salida)
 abs(angulo-angulo)
 ------------------------------------------------------------------------
+
 Agregar mundo para:
 - Evaluar equilibrio.
 - Evaluar hasta donde puede pegar patadas con el pie.
@@ -32,28 +37,25 @@ Agregar mundo para:
 - Trotoar sin parar.
 - Ritmo (tambores).
 
-Hacer un vestier.
-- Interact with body.
-- Interact with voice commands.
-
-Permitir que cuando aplaude, sirva para agarrar objetos y trasladarlos.
-Permitir interactuar con voz con los asistentes virtuales.
-El sistema de navegación debe manejar colisiones para evitar overlaping.
+El sistema de navegación debe manejar colisiones para evitar overlap con el ambiente.
 
 Agregar soporte para animaciones largas.
 
-Agregar login con microsoft.
-En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser varios?
 
 -------------------------------------------------------------------
 
 Permitir cargar unicamente la región donde está ubicado el usuario.
 
-Bugs:
+Which list:
+Permitir interactuar con voz con los asistentes virtuales.
+Volumen de sonido proporcional a la distancia.
 Crear un arreglo de sonidos.
 Eliminar ConfirmDialogService.
 Fix mirror al caminar.
 Permitir resaltar el borde de los 4.
+Create a microphone picker.
+Agregar login con microsoft.
+En los eventos tal vez enviar el walkBody, porque en algún momento pueden ser varios?
 
 -------------------------------------------------------------------
 

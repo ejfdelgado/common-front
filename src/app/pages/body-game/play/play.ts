@@ -43,7 +43,6 @@ const MODEL_NAME_PARENT = "room-private";
     Statusbar,
     SideMenu,
     BodyTracker,
-    CameraPickerDialogComponent,
   ],
   templateUrl: './play.html',
   styleUrl: './play.scss',
