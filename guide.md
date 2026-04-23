@@ -48,7 +48,7 @@ author (asc), updated (desc), __name__ (desc)
 [] search, author (asc), updated (desc), __name__ (desc)
 ```
 
-Whe using owners
+When using owners
 
 ```
 [] owners, updated (desc), __name__ (desc)
@@ -57,6 +57,9 @@ Whe using owners
 ## The Components
 
 After creating the component, configure:
+```
+npx ng generate component --standalone --skip-tests pages/pug/index-pug
+```
 
 ### App routing 
 Configure file common-front/src/app/app.routes.ts

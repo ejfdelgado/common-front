@@ -8,7 +8,7 @@ Girar más lento.
 Permitir personalizar el avatar de cada uno.
 Support for assets on bucket, not in local.
 
-Store in firestore the last selected mode, 
+Store in firestore the last selected mode.
 then when people come back, could see the same mode.
 
 Hacer una manera para pedir acceso cuando no tiene acceso.
@@ -31,6 +31,8 @@ abs(angulo-angulo)
 ------------------------------------------------------------------------
 
 Agregar mundo para:
+- Quiz sseleccionando las opciones con el cuerpo. Preguntas aleatorias.
+- Just dance.
 - Evaluar equilibrio.
 - Evaluar hasta donde puede pegar patadas con el pie.
 - Máximo tiempo con los brazos a los lados.
@@ -127,7 +129,8 @@ npx ng generate component --standalone --skip-tests components/fields/mic-picker
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/body-game/experiments/media-pipe-hand
+npx ng generate component --standalone --skip-tests pages/pug/index-pug
+npx ng generate component --standalone --skip-tests pages/pug/detail-pug
 ```
 
 ```bash

@@ -114,6 +114,14 @@ const routes: Routes = [
         loadComponent: () => import('./pages/index/index').then(m => m.Index),
     },
     {
+        path: 'pug/all',
+        loadComponent: () => import('./pages/pug/index-pug/index-pug').then(m => m.IndexPug),
+    },
+    {
+        path: 'pug/detail',
+        loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
