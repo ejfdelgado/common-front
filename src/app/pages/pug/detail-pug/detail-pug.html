@@ -1,1 +1,17 @@
-<p>detail-pug works!</p>
+<div class="main_container">
+    <div class="photo_container">
+        <app-side-menu [options]="menuOptions"></app-side-menu>
+        <div class="inner_photo_container">
+            <app-statusbar [title]="getTitle()"></app-statusbar>
+            <div class="dynamic_content">
+                <div class="container_grid_docs_found">
+                    <div class="container_grid_docs_found_scroll">
+                        @if (collection) {
+                        <app-form-simple-with #inner_form [fields]="fields" [model]="collection"></app-form-simple-with>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
