@@ -50,7 +50,7 @@ export class BasicScene extends THREE.Scene {
   initialize(debug: boolean = true, addGridHelper: boolean = true) {
     // setup camera
     this.camera = new THREE.PerspectiveCamera(
-      95,
+      35,
       this.bounds.width / this.bounds.height,
       0.1,
       1000
@@ -72,9 +72,20 @@ export class BasicScene extends THREE.Scene {
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitals.enableDamping = true;
 
+    const ambient = new THREE.AmbientLight(0xefefef, 1);
+    this.add(ambient);
+
+    const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    pointLight.position.set(0, 5, 0);
+    this.add(pointLight);
+
     this.addModel({
       name: "pug",
       url: "/assets/models/pug.glb"
+    }, true);
+    this.addModel({
+      name: "pug",
+      url: "/assets/models/pug2.glb"
     }, true);
   }
 
