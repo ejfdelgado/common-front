@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { isMobile } from '@tools/mobile';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { ItemModelRef } from '@mytypes/BodyTypes';
 
 const BASE_BUCKET = `https://storage.googleapis.com/pro-ejflab-assets`;
 
@@ -32,6 +35,9 @@ export class BasicScene extends THREE.Scene {
   canvasRef: HTMLCanvasElement;
   hasMobile = isMobile();
 
+  fbxLoader = new FBXLoader();
+  gltfLoader = new GLTFLoader();
+
   constructor(canvasRef: any, bounds: DOMRect, indicatorSrv: IndicatorService) {
     super();
     this.canvasRef = canvasRef;
@@ -59,16 +65,17 @@ export class BasicScene extends THREE.Scene {
     this.renderer.setSize(this.bounds.width, this.bounds.height);
 
     this.camera.rotation.order = "YXZ";
-    this.camera.up.set(0, 0, 1);
-
-    //this.camera.position.set(0, 1.6, 0); this.camera.lookAt(0, 1.6, 1);
-    this.camera.position.set(0, 0, 0); this.camera.lookAt(0, 0, -1);
-
-
-    this.camera.position.z = 1;
+    this.camera.up.set(0, 1, 0);
+    this.camera.position.set(10, 10, 10);
+    this.camera.lookAt(0, 0, 0);
     // sets up the camera's orbital controls
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
     this.orbitals.enableDamping = true;
+
+    this.addModel({
+      name: "pug",
+      url: "/assets/models/pug.glb"
+    }, true);
   }
 
   localRender() {
@@ -93,5 +100,66 @@ export class BasicScene extends THREE.Scene {
 
   animate() {
 
+  }
+
+  async addModel(
+    item: ItemModelRef, autoAdd: boolean = true
+  ): Promise<THREE.Object3D<THREE.Object3DEventMap>> {
+    return new Promise(async (resolve, reject) => {
+      const url = item.url;
+      const partes = /([^.]+)$/.exec(item.url.toLocaleLowerCase());
+      // gets extension
+      if (partes != null) {
+        const MAPEO_LOADERS: { [key: string]: any } = {
+          fbx: this.fbxLoader,
+          glb: this.gltfLoader,
+          gltf: this.gltfLoader,
+        };
+        const loader: any = MAPEO_LOADERS[partes[1]];
+        if (loader) {
+          const object = (await this.loadWithCache(loader, url));
+          object.name = item.name;
+          if (object != null) {
+            if (autoAdd) {
+              //inspectAvatarObject(object);
+              this.add(object);
+            }
+          }
+          resolve(object);
+        } else {
+          console.error(`No loader for ${item.url}`);
+        }
+      }
+    });
+  }
+
+  async loadWithCache(loader: any, url: string): Promise<THREE.Object3D<THREE.Object3DEventMap>> {
+    const promise = new Promise<any>((resolve, reject) => {
+      loader.load(
+        url,
+        async (response: any) => {
+          let object = null;
+          if (loader == this.gltfLoader) {
+            //console.log(response.scene.children[0]);
+            /*
+            const group = new THREE.Object3D(); // or new THREE.Group();
+            response.scene.children.forEach((obj: any) => group.add(obj));
+            object = group;
+            */
+            object = response.scene.children[0];
+          } else {
+            object = response;
+          }
+          resolve(object);
+        },
+        (xhr: any) => {
+          //console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+        },
+        (error: any) => {
+          reject(error);
+        }
+      );
+    });
+    return promise;
   }
 }
