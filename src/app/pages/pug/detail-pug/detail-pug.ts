@@ -238,7 +238,9 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     }
     scaledCtx.putImageData(outputData, 0, 0);
 
-    canvas.getContext('2d')!.drawImage(scaledCanvas, 0, 0);
+    const targetCtx = canvas.getContext('2d')!;
+    targetCtx.clearRect(0, 0, canvas.width, canvas.height);
+    targetCtx.drawImage(scaledCanvas, 0, 0);
   }
 
   async renderWordCloud() {
