@@ -1,4 +1,3 @@
-
 .theparent canvas {
   flex: 1;
 }
@@ -6,5 +5,5 @@
 .container_vertical {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  height: 100%;
 }

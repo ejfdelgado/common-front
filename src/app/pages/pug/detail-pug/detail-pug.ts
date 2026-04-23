@@ -24,6 +24,7 @@ import { AllFieldsDataType, ImageGalleryType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
 import WordCloud from 'wordcloud';
 import { ThreejsComponent } from '../components/threejs/threejs.component';
+import { MatIcon } from '@angular/material/icon';
 
 const MODEL_NAME = "pug";
 
@@ -42,6 +43,7 @@ export interface DocumentDataType extends BasicDataType {
     FormSimpleWith,
     SideMenu,
     ThreejsComponent,
+    MatIcon,
   ],
   templateUrl: './detail-pug.html',
   styleUrls: [
