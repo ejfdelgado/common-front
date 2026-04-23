@@ -151,9 +151,10 @@ export class IndexPug extends AuthenticatedComponent implements OnInit, OnDestro
       }
       const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
       const pagingOptions: PageDataType = {
-        collectionName: MODEL_NAME, searchText: searchable,
+        collectionName: MODEL_NAME,
+        searchText: searchable,
         orderColumn: "updated",
-        author: this.user?.uid,
+        //author: this.user?.uid,
         orderDirection: "desc",
         top: 20,
       };
@@ -181,7 +182,7 @@ export class IndexPug extends AuthenticatedComponent implements OnInit, OnDestro
     const { id, title, description, updated } = model;
     this.shareSrv.share({
       collection: MODEL_NAME,
-      path: "/docs/this",
+      path: "/pug/detail",
       id,
       title,
       description,
@@ -190,7 +191,7 @@ export class IndexPug extends AuthenticatedComponent implements OnInit, OnDestro
   }
 
   async openDocument(model: any) {
-    this.router.navigate([`docs/this`], {
+    this.router.navigate([`pug/detail`], {
       queryParams: { col: MODEL_NAME, id: model.id }
     });
   }
