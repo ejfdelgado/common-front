@@ -18,6 +18,7 @@ import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { epochTo } from '@tools/DateUtils';
+import { escapeHtml, html2text } from '@tools/HtmlUtil';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
 import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType } from 'types/fieldsTypes';
@@ -169,35 +170,45 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   }
 
   renderWordCloud() {
-    const canvas = document.getElementById('wordcloud') as HTMLCanvasElement;
-    if (!canvas) {
+    const canvas1 = document.getElementById('wordcloud1') as HTMLCanvasElement;
+    const canvas2 = document.getElementById('wordcloud2') as HTMLCanvasElement;
+    if (!canvas1 || !canvas2) {
       console.error('Canvas element not found');
       return;
     }
 
-    WordCloud(canvas, {
-      list: this.words,
+    const words1 = this.words.filter((a, i) => {
+      return i % 2 == 0;
+    });
+    const words2 = this.words.filter((a, i) => {
+      return i % 2 == 1;
+    });
+
+    const config = {
+      list: [],
       gridSize: 2,
       weightFactor: 2,
       fontFamily: 'Finger Paint, cursive, sans-serif',
-      color: (word, weight) => {
+      color: (word: string, weight: number) => {
         return '#000000';
       },
       backgroundColor: '#ffffff',
       rotateRatio: 0.5,
       rotationSteps: 2,
-    });
+    };
+
+    WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
+    WordCloud(canvas2, Object.assign({}, config, { list: words2 }));
   }
 
   jsonDataChange(data: any) {
-    //console.log(JSON.stringify(data));
     if (data.key == "json") {
       const text = data.val.description;
       const parts = text.split(/<\/?div>/);
       const realWords = parts.filter((e: string) => { return e.trim().length > 0 });
       const tam = realWords.length;
       this.words = realWords.map((word: string, i: number) => {
-        return [word, tam - i];
+        return [html2text(word), tam - i];
       });
     }
   }
