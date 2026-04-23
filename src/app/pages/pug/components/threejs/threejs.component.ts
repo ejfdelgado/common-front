@@ -34,6 +34,7 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
+  private animationFrameId: number | null = null;
 
   sceneCreated: PromiseEmitter = new PromiseEmitter();
 
@@ -50,7 +51,11 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   }
 
   ngOnDestroy(): void {
-    
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+    this.scene = null;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -79,7 +84,7 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
       this.scene.renderer?.render(this.scene, this.scene.camera);
       this.scene.orbitals?.update();
       this.scene.animate();
-      requestAnimationFrame(() => {
+      this.animationFrameId = requestAnimationFrame(() => {
         this.loop();
       });
     }
