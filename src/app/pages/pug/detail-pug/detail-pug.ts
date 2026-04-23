@@ -61,7 +61,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
         template: "pugs/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
         fields: [
           {
-            label: "Descripción", type: "contenteditable", key: "description", contenteditable: {
+            label: "Lista de palabras", type: "contenteditable", key: "description", contenteditable: {
               configs: {
                 useBold: false,
                 useEmoji: true,
