@@ -61,6 +61,7 @@ export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
   };
   changedSubscription!: Subscription;
   @Output() innerModelChanged: EventEmitter<any> = new EventEmitter();
+  @Output() jsonDataChange: EventEmitter<{ key: string, val: any }> = new EventEmitter();
 
   set model(val: FlatJsonDataType) {
     this._model = val;
@@ -98,5 +99,12 @@ export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
     for (let i = 0; i < temp.length; i++) {
       await temp[i].syncIfNeeded();
     }
+  }
+
+  jsonDataChangeFun(key: string, val: any) {
+    this.jsonDataChange.emit({
+      key,
+      val,
+    });
   }
 }

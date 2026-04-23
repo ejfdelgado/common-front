@@ -145,6 +145,18 @@ export abstract class FormSimple implements DifferedStore {
     };
   }
 
+  getCurrentValues() {
+    const dataArray = this.form.value.dynamicFields;
+    const data: { [key: string]: any } = {};
+    for (let i = 0; i < this.fieldNames.length; i++) {
+      const fieldName = this.fieldNames[i];
+      if (!data["id"] || this.formControlMap[fieldName].dirty) {
+        data[fieldName] = dataArray[i];
+      }
+    }
+    return data;
+  }
+
   castImageType(el: FieldDataType): FieldImageDataType {
     return (el as FieldImageDataType);
   }

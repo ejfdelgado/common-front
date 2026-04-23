@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
+import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
@@ -19,8 +20,9 @@ import { ShareSrv } from '@services/share.service';
 import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
-import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType, MDDataType } from 'types/fieldsTypes';
+import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
+import WordCloud from 'wordcloud';
 
 const MODEL_NAME = "pug";
 
@@ -52,6 +54,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   searchable: string = "";
   collection: BasicDataType | null = null;
   cardActions: string[] = [];
+  words: [string, number][] = [];
   fields: AllFieldsDataType[] = [
     {
       label: "Json",
@@ -76,18 +79,19 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   ];
 
   constructor(
-    private indicatorSrv: IndicatorService,
+    public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
     public override authSrv: AuthService,
+    public override cdr: ChangeDetectorRef,
+    //
+    private indicatorSrv: IndicatorService,
     private http: HttpClient,
     private fileSrv: FileService,
     private firestoreSrv: FirestoreService,
-    public override cdr: ChangeDetectorRef,
     public locationSrv: LocationService,
     private dialog: MatDialog,
-    public override sanitizer: DomSanitizer,
     public shareSrv: ShareSrv,
     private router: Router,
-    public override fullScreenSrv: FullscreenService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -138,12 +142,9 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
         this.collection = temp as BasicDataType;
-        const field1 = (this.fields[0] as FieldJSONDataType);
+
         const title = this.collection.title + " - " + epochTo(this.collection.updated);
         document.title = title;
-
-        //const field2 = (field1.json.fields[0] as MDDataType);
-        //field2.md.saveName = title;
       } else {
         this.collection = null;
       }
@@ -164,6 +165,40 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       };
       const complete = Object.assign({}, this.collection, data);
       await this.firestoreSrv.createUpdate(MODEL_NAME, complete, conf);
+    }
+  }
+
+  renderWordCloud() {
+    const canvas = document.getElementById('wordcloud') as HTMLCanvasElement;
+    if (!canvas) {
+      console.error('Canvas element not found');
+      return;
+    }
+
+    WordCloud(canvas, {
+      list: this.words,
+      gridSize: 2,
+      weightFactor: 2,
+      fontFamily: 'Finger Paint, cursive, sans-serif',
+      color: (word, weight) => {
+        return '#000000';
+      },
+      backgroundColor: '#ffffff',
+      rotateRatio: 0.5,
+      rotationSteps: 2,
+    });
+  }
+
+  jsonDataChange(data: any) {
+    //console.log(JSON.stringify(data));
+    if (data.key == "json") {
+      const text = data.val.description;
+      const parts = text.split(/<\/?div>/);
+      const realWords = parts.filter((e: string) => { return e.trim().length > 0 });
+      const tam = realWords.length;
+      this.words = realWords.map((word: string, i: number) => {
+        return [word, tam - i];
+      });
     }
   }
 }

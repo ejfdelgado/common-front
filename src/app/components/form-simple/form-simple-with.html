@@ -39,7 +39,7 @@
         <app-image-field [formControl]="formControlMap[field.key]"
             [config]="castImageType(field).image"></app-image-field>
         } @else if (field.type=='json') {
-        <app-json-field [formControl]="formControlMap[field.key]" [config]="castJSONType(field).json"></app-json-field>
+        <app-json-field [formControl]="formControlMap[field.key]" (dataChange)="jsonDataChangeFun(field.key, $event)" [config]="castJSONType(field).json"></app-json-field>
         } @else if (field.type=='phone') {
         <app-phone-input [formControl]="formControlMap[field.key]" [label]="field.label"
             [isRequired]="field.required"></app-phone-input>

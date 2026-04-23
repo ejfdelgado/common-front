@@ -8,7 +8,9 @@ import {
   OnDestroy,
   ViewChild,
   OnInit,
-  AfterViewInit
+  AfterViewInit,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import {
   AbstractControl,
@@ -26,7 +28,6 @@ import { FileService } from '@services/file.srv';
 import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 import { sortify } from 'ejfdelgado-common-ts';
-import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { JSONDetailDataType } from 'types/fieldsTypes';
@@ -62,6 +63,7 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
 
   @Input() label: string = "";
   @Input() config!: JSONDetailDataType;
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
 
   value: ComponentDataType = null;
   disabled = false;
@@ -85,6 +87,7 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
 
   ngAfterViewInit(): void {
     this.changeSubscription = this.innerForm.onModelChange((model: FlatJsonDataType) => {
+      this.dataChange.emit(model);
       Object.assign(this.model, model);
       this.hasMementoChanged();
     });

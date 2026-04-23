@@ -6,8 +6,10 @@
             <div class="dynamic_content">
                 <div class="container_grid_docs_found">
                     <div class="container_grid_docs_found_scroll">
+                        <canvas id="wordcloud" width="1024" height="512"></canvas>
+                        <button (click)="renderWordCloud()">Generate</button>
                         @if (collection) {
-                        <app-form-simple-with #inner_form [fields]="fields" [model]="collection"></app-form-simple-with>
+                        <app-form-simple-with #inner_form (jsonDataChange)="jsonDataChange($event)" [fields]="fields" [model]="collection"></app-form-simple-with>
                         }
                     </div>
                 </div>
