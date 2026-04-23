@@ -96,9 +96,13 @@ export abstract class FormSimple implements DifferedStore {
   }
 
   setFormValue(key: string, value: any) {
-    this.formControlMap[key].setValue(value);
-    this.formControlMap[key].markAsPristine();
-    this.formControlMap[key].markAsUntouched();
+    if (key in this.formControlMap) {
+      this.formControlMap[key].setValue(value);
+      this.formControlMap[key].markAsPristine();
+      this.formControlMap[key].markAsUntouched();
+    } else {
+      console.log(`Key "${key}" not found on field list ${JSON.stringify(Object.keys(this.formControlMap))}`);
+    }
   }
 
   get dynamicFields() {

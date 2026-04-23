@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWith } from '@components/form-simple/form-simple-with';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
@@ -18,12 +17,13 @@ import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
 import { epochTo } from '@tools/DateUtils';
-import { escapeHtml, html2text } from '@tools/HtmlUtil';
+import { html2text } from '@tools/HtmlUtil';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
-import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType } from 'types/fieldsTypes';
+import { AllFieldsDataType, ImageGalleryType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
 import WordCloud from 'wordcloud';
+import { ThreejsComponent } from '../components/threejs/threejs.component';
 
 const MODEL_NAME = "pug";
 
@@ -41,6 +41,7 @@ export interface DocumentDataType extends BasicDataType {
     Statusbar,
     FormSimpleWith,
     SideMenu,
+    ThreejsComponent,
   ],
   templateUrl: './detail-pug.html',
   styleUrls: [
