@@ -243,43 +243,60 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     targetCtx.drawImage(scaledCanvas, 0, 0);
   }
 
-  async renderWordCloud() {
-    const canvas1 = document.getElementById('wordcloud1') as HTMLCanvasElement;
-    const canvas2 = document.getElementById('wordcloud2') as HTMLCanvasElement;
-    const maskImg = await this.getMaskLoaded();
-
-    if (!canvas1 || !canvas2) {
-      console.error('Canvas element not found');
-      return;
+  async waitUntilFont(font: string): Promise<void> {
+    await document.fonts.load(`16px "${font}"`);
+    if (!document.fonts.check(`16px "${font}"`)) {
+      await new Promise<void>((resolve) => {
+        document.fonts.ready.then(() => resolve());
+      });
     }
+  }
 
-    const words1 = this.words.filter((a, i) => {
-      return i % 2 == 0;
-    });
-    const words2 = this.words.filter((a, i) => {
-      return i % 2 == 1;
-    });
+  async renderWordCloud() {
+    const wait = this.indicatorSrv.start();
+    try {
+      const canvas1 = document.getElementById('wordcloud1') as HTMLCanvasElement;
+      const canvas2 = document.getElementById('wordcloud2') as HTMLCanvasElement;
+      const maskImg = await this.getMaskLoaded();
+      await this.waitUntilFont("Finger Paint");
 
-    const backgroundColor = '#ffffff';
-    const config = {
-      list: [],
-      gridSize: 2,
-      weightFactor: 2,
-      fontFamily: 'Finger Paint, cursive, sans-serif',
-      color: (word: string, weight: number) => {
-        return '#000000';
-      },
-      backgroundColor,
-      rotateRatio: 0.5,
-      rotationSteps: 2,
-    };
-    WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
+      if (!canvas1 || !canvas2) {
+        console.error('Canvas element not found');
+        return;
+      }
 
-    this.applyMaskToCanvas(canvas2, maskImg, backgroundColor);
-    WordCloud(canvas2, Object.assign({}, config, {
-      list: words2,
-      clearCanvas: false,
-    }));
+      const words1 = this.words.filter((a, i) => {
+        return i % 2 == 0;
+      });
+      const words2 = this.words.filter((a, i) => {
+        return i % 2 == 1;
+      });
+
+      const backgroundColor = '#ffffff';
+      const config = {
+        list: [],
+        gridSize: 2,
+        weightFactor: 1,
+        fontFamily: 'Finger Paint, cursive, sans-serif',
+        color: (word: string, weight: number) => {
+          return '#000000';
+        },
+        backgroundColor,
+        rotateRatio: 0.5,
+        rotationSteps: 2,
+      };
+      WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
+
+      this.applyMaskToCanvas(canvas2, maskImg, backgroundColor);
+      WordCloud(canvas2, Object.assign({}, config, {
+        list: words2,
+        clearCanvas: false,
+      }));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      wait.done();
+    }
   }
 
   jsonDataChange(data: any) {
