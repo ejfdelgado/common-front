@@ -5,29 +5,35 @@
     <!-- Toolbar -->
     @if (focused || !discrete) {
     <div class="toolbar">
+        @if (!configs || configs.useBold) {
         <button type="button" (mousedown)="format('bold')" aria-label="Bold">
             <b>b</b>
         </button>
-
+        }
+        @if (!configs || configs.useItalic) {
         <button type="button" (mousedown)="format('italic')" aria-label="Italic">
             <i>It</i>
         </button>
-
+        }
+        @if (!configs || configs.useUnderline) {
         <button type="button" (mousedown)="format('underline')" aria-label="Underline">
             <u>u</u>
         </button>
-
+        }
+        @if (!configs || configs.useEmoji) {
         <button type="button" (mousedown)="openEmoticons()" aria-label="Italic">
             <span>😎</span>
         </button>
+        }
     </div>
     }
     <div #scrollContainer class="scrolled_content"
         [ngStyle]="{'min-height': (minHeight ? minHeight : 'unset'), 'max-height': (maxHeight ? maxHeight : 'unset')}">
-        <div #editable [ngClass]="{'with_focus': focused, 'empty': isEmpty()}" class="editable-input" contenteditable="true" role="textbox"
-            aria-multiline="false" [attr.data-placeholder]="placeholder" [class.empty]="!value"
-            [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" (focus)="onFocus()" (blur)="onBlur()"
-            (input)="onInput()" (keyup)="saveSelection()" (mouseup)="saveSelection()" (paste)="onPaste($event)">
+        <div #editable [ngClass]="{'with_focus': focused, 'empty': isEmpty()}" class="editable-input"
+            contenteditable="true" role="textbox" aria-multiline="false" [attr.data-placeholder]="placeholder"
+            [class.empty]="!value" [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" (focus)="onFocus()"
+            (blur)="onBlur()" (input)="onInput()" (keyup)="saveSelection()" (mouseup)="saveSelection()"
+            (paste)="onPaste($event)">
         </div>
 
     </div>

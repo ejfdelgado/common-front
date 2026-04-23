@@ -28,6 +28,7 @@
         } @else if (field.type=='contenteditable') {
         <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]" [placeholder]="field.label"
             [maxHeight]="getContentEditable(field).maxHeight" [label]="field.label"
+            [configs]="getContentEditable(field).configs"
             [minHeight]="getContentEditable(field).minHeight"></app-editable-input>
         } @else if (field.type=='toggle') {
         <app-on-off-toggle [label]="field.label" [iconName]="getToggle(field).iconName"

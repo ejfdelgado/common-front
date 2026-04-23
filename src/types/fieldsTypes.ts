@@ -21,7 +21,7 @@ export interface FieldDataType {
     "json_raw" |
     "phone" |
     "image-gallery" |
-    "camera-picker" | 
+    "camera-picker" |
     "mic-picker"
     ;
     label: string;
@@ -58,9 +58,17 @@ export interface ContenteditableDataType extends FieldDataType {
     contenteditable: ContentEditableDetailDataType;
 }
 
+export interface ContentEditableDetailConfigDataType {
+    useBold: boolean;
+    useItalic: boolean;
+    useUnderline: boolean;
+    useEmoji: boolean;
+}
+
 export interface ContentEditableDetailDataType {
     maxHeight?: string;
     minHeight?: string;
+    configs?: ContentEditableDetailConfigDataType;
 }
 
 // MD

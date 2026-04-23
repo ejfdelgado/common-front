@@ -18,6 +18,7 @@ import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { escapeHtml } from '@tools/HtmlUtil';
+import { ContentEditableDetailConfigDataType } from '@mytypes/fieldsTypes';
 
 @Component({
   selector: 'app-editable-input',
@@ -47,6 +48,7 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   @Input() label?: string;
   @Input() minHeight?: string | null = null;
   @Input() maxHeight?: string | null = null;
+  @Input() configs?: ContentEditableDetailConfigDataType | null;
 
   @Output() enter = new EventEmitter<string>();
 
