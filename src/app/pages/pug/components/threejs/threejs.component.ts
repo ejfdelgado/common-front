@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -28,7 +29,7 @@ import { FullscreenService } from '@services/fullscreen.service';
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
-export class ThreejsComponent extends CommonComponent implements OnInit, AfterViewInit {
+export class ThreejsComponent extends CommonComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
   scene: BasicScene | null = null;
@@ -46,6 +47,10 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
   ) {
     super(sanitizer, fullScreenSrv);
     this.hasMobile = this.isMobile();
+  }
+
+  ngOnDestroy(): void {
+    
   }
 
   @HostListener('window:resize', ['$event'])

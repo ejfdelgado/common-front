@@ -35,7 +35,6 @@ const MODEL_NAME = "pug";
     CommonModule,
     MatButtonModule,
     Statusbar,
-    SearchInputComponent,
     CardDoc,
     SideMenu,
   ],
