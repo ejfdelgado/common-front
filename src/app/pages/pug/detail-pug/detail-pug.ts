@@ -184,6 +184,63 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     return maskImg;
   }
 
+  private applyMaskToCanvas(canvas: HTMLCanvasElement, maskImg: HTMLImageElement, backgroundColor: string): void {
+    // Step 1: convert mask image to binary: dark opaque pixels → shape, bright/transparent → background
+    const maskCanvas = document.createElement('canvas');
+    maskCanvas.width = maskImg.naturalWidth;
+    maskCanvas.height = maskImg.naturalHeight;
+    const maskCtx = maskCanvas.getContext('2d')!;
+    maskCtx.drawImage(maskImg, 0, 0);
+
+    const srcData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height);
+    const binaryData = maskCtx.createImageData(srcData);
+    for (let i = 0; i < srcData.data.length; i += 4) {
+      const tone = srcData.data[i] + srcData.data[i + 1] + srcData.data[i + 2];
+      const alpha = srcData.data[i + 3];
+      if (alpha < 128 || tone > 128 * 3) {
+        // background: white transparent
+        binaryData.data[i] = binaryData.data[i + 1] = binaryData.data[i + 2] = 255;
+        binaryData.data[i + 3] = 0;
+      } else {
+        // shape: black opaque
+        binaryData.data[i] = binaryData.data[i + 1] = binaryData.data[i + 2] = 0;
+        binaryData.data[i + 3] = 255;
+      }
+    }
+    maskCtx.putImageData(binaryData, 0, 0);
+
+    // Step 2: get bgPixel from backgroundColor
+    const bctx = document.createElement('canvas').getContext('2d')!;
+    bctx.fillStyle = backgroundColor;
+    bctx.fillRect(0, 0, 1, 1);
+    const bgPixel = bctx.getImageData(0, 0, 1, 1).data;
+
+    // Step 3: scale binary mask to canvas size and remap pixels to bgPixel variants
+    const scaledCanvas = document.createElement('canvas');
+    scaledCanvas.width = canvas.width;
+    scaledCanvas.height = canvas.height;
+    const scaledCtx = scaledCanvas.getContext('2d')!;
+    scaledCtx.drawImage(maskCanvas, 0, 0, maskCanvas.width, maskCanvas.height, 0, 0, canvas.width, canvas.height);
+
+    const scaledData = scaledCtx.getImageData(0, 0, canvas.width, canvas.height);
+    const outputData = scaledCtx.createImageData(scaledData);
+    for (let i = 0; i < scaledData.data.length; i += 4) {
+      outputData.data[i] = bgPixel[0];
+      outputData.data[i + 1] = bgPixel[1];
+      outputData.data[i + 2] = bgPixel[2];
+      if (scaledData.data[i + 3] > 128) {
+        // shape area → exact bgPixel → available for words
+        outputData.data[i + 3] = bgPixel[3];
+      } else {
+        // background area → bgPixel alpha-1 → forbidden (differs from bgPixel)
+        outputData.data[i + 3] = bgPixel[3] ? bgPixel[3] - 1 : 0;
+      }
+    }
+    scaledCtx.putImageData(outputData, 0, 0);
+
+    canvas.getContext('2d')!.drawImage(scaledCanvas, 0, 0);
+  }
+
   async renderWordCloud() {
     const canvas1 = document.getElementById('wordcloud1') as HTMLCanvasElement;
     const canvas2 = document.getElementById('wordcloud2') as HTMLCanvasElement;
@@ -201,6 +258,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       return i % 2 == 1;
     });
 
+    const backgroundColor = '#ffffff';
     const config = {
       list: [],
       gridSize: 2,
@@ -209,15 +267,16 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       color: (word: string, weight: number) => {
         return '#000000';
       },
-      backgroundColor: '#ffffff',
+      backgroundColor,
       rotateRatio: 0.5,
       rotationSteps: 2,
     };
     WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
+
+    this.applyMaskToCanvas(canvas2, maskImg, backgroundColor);
     WordCloud(canvas2, Object.assign({}, config, {
       list: words2,
-      maskImage: maskImg,
-      //clearCanvas: false,
+      clearCanvas: false,
     }));
   }
 
