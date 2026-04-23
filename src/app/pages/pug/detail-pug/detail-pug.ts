@@ -169,9 +169,26 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     }
   }
 
-  renderWordCloud() {
+  async getMaskLoaded(): Promise<HTMLImageElement> {
+    const maskImg = document.getElementById('mask') as HTMLImageElement;
+    if (!maskImg) {
+      throw new Error("No mask image");
+    }
+    if (!maskImg.complete) {
+      return new Promise((resolve, reject) => {
+        maskImg.onload = () => {
+          resolve(maskImg);
+        };
+      });
+    }
+    return maskImg;
+  }
+
+  async renderWordCloud() {
     const canvas1 = document.getElementById('wordcloud1') as HTMLCanvasElement;
     const canvas2 = document.getElementById('wordcloud2') as HTMLCanvasElement;
+    const maskImg = await this.getMaskLoaded();
+
     if (!canvas1 || !canvas2) {
       console.error('Canvas element not found');
       return;
@@ -196,9 +213,12 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       rotateRatio: 0.5,
       rotationSteps: 2,
     };
-
     WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
-    WordCloud(canvas2, Object.assign({}, config, { list: words2 }));
+    WordCloud(canvas2, Object.assign({}, config, {
+      list: words2,
+      maskImage: maskImg,
+      //clearCanvas: false,
+    }));
   }
 
   jsonDataChange(data: any) {

@@ -1,6 +1,6 @@
 declare module 'wordcloud' {
     export default function WordCloud(
-        element: HTMLElement,
+        element: HTMLElement | HTMLElement[],
         options: WordCloud.Options
     ): void;
 
