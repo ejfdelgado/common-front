@@ -100,4 +100,11 @@ export class ThreejsComponent extends CommonComponent implements OnInit, AfterVi
       this.onResize({});
     }, 0);
   }
+
+
+  replacePugSkin(
+    canvas: HTMLCanvasElement,
+  ) {
+    this.scene?.replacePugSkin(canvas);
+  }
 }

@@ -44,10 +44,9 @@ export class BasicScene extends THREE.Scene {
     this.bounds = bounds;
     this.indicatorSrv = indicatorSrv;
   }
-  /**
-   * Initializes the scene by adding lights, and the geometry
-   */
-  initialize(debug: boolean = true, addGridHelper: boolean = true) {
+
+
+  initialize() {
     // setup camera
     this.camera = new THREE.PerspectiveCamera(
       35,
@@ -79,14 +78,37 @@ export class BasicScene extends THREE.Scene {
     pointLight.position.set(0, 5, 0);
     this.add(pointLight);
 
-    this.addModel({
-      name: "pug",
+    const promises: Promise<THREE.Object3D<THREE.Object3DEventMap>>[] = [];
+    promises.push(this.addModel({
+      name: "pugTextured",
       url: "/assets/models/pug.glb"
-    }, true);
-    this.addModel({
-      name: "pug",
+    }, true));
+    promises.push(this.addModel({
+      name: "pugOther",
       url: "/assets/models/pug2.glb"
-    }, true);
+    }, true));
+  }
+
+  replacePugSkin(
+    canvas: HTMLCanvasElement,
+  ) {
+    const model = this.getObjectByName("pugTextured");
+    if (!model) {
+      return;
+    }
+    const newTexture = new THREE.CanvasTexture(canvas);
+    newTexture.colorSpace = THREE.SRGBColorSpace;
+    newTexture.flipY = false;
+    model.traverse((child: any) => {
+      if (child.isMesh && child.material) {
+        child.material.map = newTexture;
+        /*
+        child.material.metalness = 0.0;
+        child.material.roughness = 0.8;
+        */
+        child.material.needsUpdate = true;
+      }
+    });
   }
 
   localRender() {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -52,6 +52,10 @@ export interface DocumentDataType extends BasicDataType {
 })
 export class DetailPug extends AuthenticatedComponent implements OnInit {
   @ViewChild('inner_form') innerForm!: FormSimpleWith;
+  @ViewChild("three_pug_component") threePugComponent!: ThreejsComponent;
+  @ViewChild('full_texture') canvasFullTexture!: ElementRef;
+  @ViewChild('word_cloud_1') canvasWordCloud1!: ElementRef;
+  @ViewChild('word_cloud_2') canvasWordCloud2!: ElementRef;
   menuOptions: MenuOptionType[] = [];
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
@@ -258,8 +262,8 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   async renderWordCloud() {
     const wait = this.indicatorSrv.start();
     try {
-      const canvas1 = document.getElementById('wordcloud1') as HTMLCanvasElement;
-      const canvas2 = document.getElementById('wordcloud2') as HTMLCanvasElement;
+      const canvas1 = this.canvasWordCloud1.nativeElement as HTMLCanvasElement;
+      const canvas2 = this.canvasWordCloud2.nativeElement as HTMLCanvasElement;
       const maskImg = await this.getMaskLoaded();
       await this.waitUntilFont("Finger Paint");
 
@@ -312,5 +316,10 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
         return [html2text(word), tam - i];
       });
     }
+  }
+
+  async check() {
+    const canvas = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
+    this.threePugComponent.replacePugSkin(canvas);
   }
 }

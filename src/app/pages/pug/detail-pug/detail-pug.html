@@ -4,7 +4,7 @@
         <div class="inner_photo_container">
             <app-statusbar [title]="getTitle()"></app-statusbar>
             <div class="dynamic_content">
-                <app-threejs class="content_column"></app-threejs>
+                <app-threejs #three_pug_component class="content_column"></app-threejs>
                 <div class="content_column">
                     @if (collection) {
                     <app-form-simple-with #inner_form (jsonDataChange)="jsonDataChange($event)" [fields]="fields"
@@ -19,12 +19,17 @@
                             <mat-icon>save</mat-icon>
                             Guardar
                         </button>
+                        <button mat-button (click)="check()">
+                            <mat-icon>check</mat-icon>
+                            Check
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="invisible">
-                <canvas id="wordcloud1" width="512" height="512"></canvas>
-                <canvas id="wordcloud2" width="512" height="512"></canvas>
+                <canvas #full_texture width="2362" height="945"></canvas>
+                <canvas #word_cloud_1 width="945" height="1148"></canvas>
+                <canvas #word_cloud_2 width="945" height="1148"></canvas>
                 <img id="mask" src="/assets/img/pug/pug_mask.png" />
             </div>
         </div>
