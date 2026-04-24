@@ -88,3 +88,6 @@ pug.pais.tv
 
 On the registar add:
 CNAME	ghs.googlehosted.com	pug
+
+### Remember to adjust the CORS
+run.tf CORS_MAIN_ALLOWED_ORIGIN
