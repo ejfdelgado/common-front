@@ -179,6 +179,11 @@ if (["localhost"].indexOf(location.hostname) >= 0) {
         path: 'clients/main',
         loadComponent: () => import('./pages/clients/main/main').then(m => m.ClientMainComponent),
     });
+} else if (["pug.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: 'pug/detail',
+        loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
+    });
 }
 
 export { routes };

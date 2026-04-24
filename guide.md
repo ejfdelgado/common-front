@@ -69,3 +69,22 @@ Configure file common-front/src/app/app.routes.ts
     loadComponent: () => import('./pages/books/book-collection/book-collection').then(m => m.BookCollection),
 },
 ```
+
+# Adjust a subdomain
+
+### On file app.routes.ts add at bottom:
+```
+if (["pug.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: 'pug/detail',
+        loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
+    });
+}
+```
+
+### Check on App Engine > Settings > Custom domains:
+Add a custom domain: 
+pug.pais.tv
+
+On the registar add:
+CNAME	ghs.googlehosted.com	pug
