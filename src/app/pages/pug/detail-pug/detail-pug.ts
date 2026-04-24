@@ -280,15 +280,21 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       const words1 = this.words.filter((a, i) => {
         return i % 2 == 0;
       });
+      words1.forEach((a, i) => {
+        a[1] = words1.length - i;
+      });
       const words2 = this.words.filter((a, i) => {
         return i % 2 == 1;
+      });
+      words2.forEach((a, i) => {
+        a[1] = words2.length - i;
       });
 
       const backgroundColor = '#ffffff';
       const config = {
         list: [],
         gridSize: 1,
-        weightFactor: 4,
+        weightFactor: 2*70 / (Math.max(words1.length, words2.length)),
         fontFamily: 'Finger Paint, cursive, sans-serif',
         color: (word: string, weight: number) => {
           return '#000000';
@@ -349,7 +355,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, destW, destH);
 
-    const marginBottom = 50;
+    const marginBottom = 23;
 
     // Step 2: left canvas rotated 90° CW, placed at screen top-left (0, 0).
     // After CW rotation: local (lx, ly) → screen (-ly + tx, lx + ty).
