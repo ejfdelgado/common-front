@@ -287,8 +287,8 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       const backgroundColor = '#ffffff';
       const config = {
         list: [],
-        gridSize: 2,
-        weightFactor: 1,
+        gridSize: 1,
+        weightFactor: 4,
         fontFamily: 'Finger Paint, cursive, sans-serif',
         color: (word: string, weight: number) => {
           return '#000000';
@@ -349,6 +349,8 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, destW, destH);
 
+    const marginBottom = 50;
+
     // Step 2: left canvas rotated 90° CW, placed at screen top-left (0, 0).
     // After CW rotation: local (lx, ly) → screen (-ly + tx, lx + ty).
     // Bounding box X: [tx - srcH, tx], Y: [ty, ty + srcW].
@@ -356,7 +358,8 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     ctx.save();
     ctx.translate(leftCanvas.height, 0);
     ctx.rotate(Math.PI / 2);
-    ctx.drawImage(leftCanvas, 0, 0);
+    //ctx.translate(marginBottom, 0);
+    ctx.drawImage(leftCanvas, 0, -marginBottom);
     ctx.restore();
 
     // Step 3: right canvas rotated 90° CCW, top at y=0, right edge at destW.
@@ -366,7 +369,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     ctx.save();
     ctx.translate(destW - rightCanvas.height, rightCanvas.width);
     ctx.rotate(-Math.PI / 2);
-    ctx.drawImage(rightCanvas, 0, 0);
+    ctx.drawImage(rightCanvas, 0, -marginBottom);
     ctx.restore();
 
     this.threePugComponent.replacePugSkin(finalComposition);
