@@ -319,6 +319,8 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   }
 
   async check() {
+    const canvas1 = this.canvasWordCloud1.nativeElement as HTMLCanvasElement;
+    const canvas2 = this.canvasWordCloud2.nativeElement as HTMLCanvasElement;
     const canvas = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
     this.threePugComponent.replacePugSkin(canvas);
   }
