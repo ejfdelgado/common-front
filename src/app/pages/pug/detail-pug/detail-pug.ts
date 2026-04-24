@@ -322,6 +322,35 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
     const leftCanvas = this.canvasWordCloud1.nativeElement as HTMLCanvasElement;
     const rightCanvas = this.canvasWordCloud2.nativeElement as HTMLCanvasElement;
+
+    const ctx = finalComposition.getContext('2d')!;
+    const destW = finalComposition.width;
+    const destH = finalComposition.height;
+
+    // Step 1: fill white
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, destW, destH);
+
+    // Step 2: left canvas rotated 90° CW, placed at screen top-left (0, 0).
+    // After CW rotation: local (lx, ly) → screen (-ly + tx, lx + ty).
+    // Bounding box X: [tx - srcH, tx], Y: [ty, ty + srcW].
+    // To anchor at (0,0): tx = srcH, ty = 0.
+    ctx.save();
+    ctx.translate(leftCanvas.height, 0);
+    ctx.rotate(Math.PI / 2);
+    ctx.drawImage(leftCanvas, 0, 0);
+    ctx.restore();
+
+    // Step 3: right canvas rotated 90° CCW, top at y=0, right edge at destW.
+    // After CCW rotation: local (lx, ly) → screen (ly + tx, -lx + ty).
+    // Bounding box X: [tx, tx + srcH], Y: [ty - srcW, ty].
+    // To anchor top at 0 and right at destW: ty = srcW, tx = destW - srcH.
+    ctx.save();
+    ctx.translate(destW - rightCanvas.height, rightCanvas.width);
+    ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(rightCanvas, 0, 0);
+    ctx.restore();
+
     this.threePugComponent.replacePugSkin(finalComposition);
   }
 }
