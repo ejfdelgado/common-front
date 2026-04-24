@@ -259,6 +259,11 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     }
   }
 
+  async makeAll() {
+    await this.renderWordCloud();
+    await this.compose();
+  }
+
   async renderWordCloud() {
     const wait = this.indicatorSrv.start();
     try {
@@ -292,13 +297,26 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
         rotateRatio: 0.5,
         rotationSteps: 2,
       };
-      WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
 
+      const promise1 = new Promise<void>((resolve) => {
+        canvas1.addEventListener('wordcloudstop', () => {
+          resolve();
+        }, { once: true });
+      });
+      WordCloud(canvas1, Object.assign({}, config, { list: words1 }));
+      await promise1;
+
+      const promise2 = new Promise<void>((resolve) => {
+        canvas2.addEventListener('wordcloudstop', () => {
+          resolve();
+        }, { once: true });
+      });
       this.applyMaskToCanvas(canvas2, maskImg, backgroundColor);
       WordCloud(canvas2, Object.assign({}, config, {
         list: words2,
         clearCanvas: false,
       }));
+      await promise2;
     } catch (err) {
       console.log(err);
     } finally {
