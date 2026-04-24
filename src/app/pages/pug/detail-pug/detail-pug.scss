@@ -45,6 +45,16 @@
     gap: 20px;
 }
 
+.side_form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.column_equal {
+    flex: 1;
+}
+
 .action_buttons_parent {
     display: flex;
     flex-direction: row;
@@ -53,4 +63,13 @@
 
 .action_buttons_parent button {
     flex: 1;
+}
+
+.thumbnails canvas,
+.thumbnails img {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 200px;
+    border: 1px solid;
 }

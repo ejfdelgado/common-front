@@ -7,30 +7,32 @@
                 <app-threejs #three_pug_component class="content_column"></app-threejs>
                 <div class="content_column">
                     @if (collection) {
-                    <app-form-simple-with #inner_form (jsonDataChange)="jsonDataChange($event)" [fields]="fields"
+                    <app-form-simple-with #inner_form class="column_equal" (jsonDataChange)="jsonDataChange($event)" [fields]="fields"
                         [model]="collection"></app-form-simple-with>
                     }
-                    <div class="action_buttons_parent">
-                        <button mat-flat-button color="primary" (click)="renderWordCloud()">
-                            <mat-icon>check</mat-icon>
-                            Generar
-                        </button>
-                        <button mat-button (click)="save()">
-                            <mat-icon>save</mat-icon>
-                            Guardar
-                        </button>
-                        <button mat-button (click)="check()">
-                            <mat-icon>check</mat-icon>
-                            Check
-                        </button>
+                    <div class="side_form column_equal">
+                        <div class="action_buttons_parent">
+                            <button mat-flat-button color="primary" (click)="renderWordCloud()">
+                                <mat-icon>check</mat-icon>
+                                Generar
+                            </button>
+                            <button mat-button (click)="save()">
+                                <mat-icon>save</mat-icon>
+                                Guardar
+                            </button>
+                            <button mat-button (click)="check()">
+                                <mat-icon>check</mat-icon>
+                                Check
+                            </button>
+                        </div>
+                        <div class="thumbnails">
+                            <canvas #full_texture width="2362" height="945"></canvas>
+                            <canvas #word_cloud_1 width="945" height="1148"></canvas>
+                            <canvas #word_cloud_2 width="945" height="1148"></canvas>
+                            <img id="mask" src="/assets/img/pug/pug_mask.png" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="invisible">
-                <canvas #full_texture width="2362" height="945"></canvas>
-                <canvas #word_cloud_1 width="945" height="1148"></canvas>
-                <canvas #word_cloud_2 width="945" height="1148"></canvas>
-                <img id="mask" src="/assets/img/pug/pug_mask.png" />
             </div>
         </div>
     </div>
