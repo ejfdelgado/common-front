@@ -175,6 +175,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
               finalComposition,
             );
             this.simpleCanvasTextureReplace();
+            await this.generateQRCode();
           }
         } else {
           this.collection = null;
@@ -373,11 +374,29 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
         clearCanvas: false,
       }));
       await promise2;
+
+      this.placeQROnCanvas();
+
     } catch (err) {
       console.log(err);
     } finally {
       wait.done();
     }
+  }
+
+  placeQROnCanvas() {
+    // Place QR code on canvas2
+    const canvas2 = this.canvasWordCloud2.nativeElement as HTMLCanvasElement;
+    const canvasQR = this.canvasQR.nativeElement;
+    const ctx = canvas2.getContext('2d')!;
+    ctx.save();
+    //ctx.translate(leftCanvas.height, 0);
+    ctx.drawImage(
+      canvasQR,
+      canvas2.width - canvasQR.width,
+      canvas2.height - canvasQR.height,
+    );
+    ctx.restore();
   }
 
   jsonDataChange(data: any) {

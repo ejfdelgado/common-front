@@ -1,11 +1,7 @@
 # CommonFront
 
-usar mascara
-Usar QR
-Agregar field de escala.
-Poner el origen del marrano en su centro de masa, no abajo.
-
 ajustar para movil.
+Agregar field de escala.
 
 -----
 
