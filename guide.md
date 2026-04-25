@@ -91,3 +91,5 @@ CNAME	ghs.googlehosted.com	pug
 
 ### Remember to adjust the CORS
 run.tf CORS_MAIN_ALLOWED_ORIGIN
+
+and maybe adjust the CORS for the bucket where to read.
