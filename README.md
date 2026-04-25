@@ -1,5 +1,6 @@
 # CommonFront
 
+pasar los tamaños al código
 usar mascara
 Usar QR
 Agregar field de escala.

@@ -320,10 +320,10 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
       const maskImg = await this.getMaskLoaded();
       await this.waitUntilFont("Finger Paint");
 
-      if (!canvas1 || !canvas2) {
-        console.error('Canvas element not found');
-        return;
-      }
+      canvas1.width = 1000;
+      canvas1.height = 937;
+      canvas2.width = 1000;
+      canvas2.height = 937;
 
       const words1 = this.words.filter((a, i) => {
         return i % 2 == 0;
