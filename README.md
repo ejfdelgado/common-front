@@ -1,6 +1,5 @@
 # CommonFront
 
-Agregar field de escala.
 Ajustar la rotación: los objetos, no la camara.
 
 -----

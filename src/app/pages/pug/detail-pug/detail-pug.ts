@@ -67,6 +67,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
   searchable: string = "";
   collection: PugDataType | null = null;
   cardActions: string[] = [];
+  fontSize: number = 140;
   words: [string, number][] = [];
   fields: AllFieldsDataType[] = [
     {
@@ -82,7 +83,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
             key: "size",
             slider: {
               min: 1,
-              max: 150,
+              max: 200,
             }
           },
           {
@@ -354,7 +355,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
       const config = {
         list: [],
         gridSize: 1,
-        weightFactor: 2 * 70 / (Math.max(words1.length, words2.length)),
+        weightFactor: this.fontSize / (Math.max(words1.length, words2.length)),
         fontFamily: 'Finger Paint, cursive, sans-serif',
         color: (word: string, weight: number) => {
           return '#000000';
@@ -417,6 +418,9 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
       this.words = realWords.map((word: string, i: number) => {
         return [html2text(word), tam - i];
       });
+      if (typeof data.val.size == "number") {
+        this.fontSize = data.val.size;
+      }
     }
   }
 

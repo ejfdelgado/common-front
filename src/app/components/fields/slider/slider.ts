@@ -65,4 +65,18 @@ export class SliderComponent extends CommonComponent implements ControlValueAcce
     this.onChange(this.value);
     this.onTouched();
   }
+
+  getMin() {
+    if (this.config) {
+      return this.config.min;
+    }
+    return 0;
+  }
+
+  getMax() {
+    if (this.config) {
+      return this.config.max;
+    }
+    return 100;
+  }
 }

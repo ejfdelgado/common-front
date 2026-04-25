@@ -1,13 +1,6 @@
 <div class="field_container noselect" [ngClass]="{'disabled': disabled}">
   <span class="slider_label">{{ label }}</span>
-  <input
-    class="slider_input"
-    type="range"
-    [min]="config?.min ?? 0"
-    [max]="config?.max ?? 100"
-    [value]="value ?? config?.min ?? 0"
-    [disabled]="disabled"
-    (input)="onSliderChange($event)"
-  />
-  <span class="slider_value">{{ value ?? config?.min ?? 0 }}</span>
+  <input class="slider_input" type="range" [min]="getMin()" [max]="getMax()" [value]="value ?? getMin()"
+    [disabled]="disabled" (input)="onSliderChange($event)" />
+  <span class="slider_value">{{ value ?? getMin() }}</span>
 </div>
