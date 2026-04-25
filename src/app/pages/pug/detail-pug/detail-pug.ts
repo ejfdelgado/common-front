@@ -150,31 +150,39 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
   }
 
   async loadCollection() {
-    const params = getUrlQueryParams();
-    const col = params.get("col");
-    const id = params.get("id");
-    if (col && id) {
-      const temp = await this.firestoreSrv.readById(col, id);
-      if (temp) {
-        this.collection = temp as PugDataType;
+    const wait = this.indicatorSrv.start();
+    try {
 
-        const title = this.collection.title + " - " + epochTo(this.collection.updated);
-        document.title = title;
+      const params = getUrlQueryParams();
+      const col = params.get("col");
+      const id = params.get("id");
+      if (col && id) {
+        const temp = await this.firestoreSrv.readById(col, id);
+        if (temp) {
+          this.collection = temp as PugDataType;
 
-        if (this.collection.imageTextureUrl) {
-          // Must load the image and paint it over the canvas.
-          const realUrl = getBucketFilePath(this.collection.imageTextureUrl);
-          const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
-          await paintUrlImageOnCanvas(
-            realUrl,
-            finalComposition,
-          );
-          this.simpleCanvasTextureReplace();
+          const title = this.collection.title + " - " + epochTo(this.collection.updated);
+          document.title = title;
+
+          if (this.collection.imageTextureUrl) {
+            // Must load the image and paint it over the canvas.
+            const realUrl = getBucketFilePath(this.collection.imageTextureUrl);
+            const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
+            await paintUrlImageOnCanvas(
+              realUrl,
+              finalComposition,
+            );
+            this.simpleCanvasTextureReplace();
+          }
+        } else {
+          this.collection = null;
         }
-      } else {
-        this.collection = null;
+        this.cdr.detectChanges();
       }
-      this.cdr.detectChanges();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      wait.done();
     }
   }
 

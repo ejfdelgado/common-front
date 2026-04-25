@@ -1,11 +1,11 @@
 # CommonFront
 
-Al guardar, permitir guardar la imagen dentro del json.
-
 usar mascara
 Usar QR
 Agregar field de escala.
 Poner el origen del marrano en su centro de masa, no abajo.
+
+-----
 
 Agregar soporte para multiples escenarios.
 Garantizar soporte para cuando el usuario no está logeado.
