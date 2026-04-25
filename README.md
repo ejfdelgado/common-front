@@ -1,6 +1,5 @@
 # CommonFront
 
-ajustar para movil.
 Agregar field de escala.
 
 -----

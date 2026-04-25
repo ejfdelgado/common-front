@@ -73,3 +73,13 @@
     max-height: 200px;
     border: 1px solid;
 }
+
+@media (max-width: "500px") {
+    .dynamic_content {
+        flex-direction: column;
+    }
+
+    app-threejs {
+        max-height: 33vh;
+    }
+}
