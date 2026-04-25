@@ -468,7 +468,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
     const url = this.shareSrv.getSharedURL({
       collection: MODEL_NAME,
       id: this.collection.id,
-      path: "pug/detail",
+      path: "",
     });
     // Side in pixels
     const qrCodeSide = 300;

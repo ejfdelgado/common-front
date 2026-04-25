@@ -1,6 +1,7 @@
 # CommonFront
 
-Ajustar la rotación: los objetos, no la camara.
+Solo guardar la imagen cuando realmente ha cambiado el render.
+Crear un thumbnail de acuerdo a la imagen guardada.
 
 -----
 

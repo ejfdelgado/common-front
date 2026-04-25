@@ -176,13 +176,13 @@ if (["localhost"].indexOf(location.hostname) >= 0) {
     });
 } else if (["clients.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
-        path: 'clients/main',
+        path: '',
         loadComponent: () => import('./pages/clients/main/main').then(m => m.ClientMainComponent),
     });
 } else if (["pug.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
-        path: 'pug/all',
-        loadComponent: () => import('./pages/pug/index-pug/index-pug').then(m => m.IndexPug),
+        path: '',
+        loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
     });
 }
 
