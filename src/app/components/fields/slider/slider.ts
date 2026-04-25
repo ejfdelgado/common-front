@@ -59,4 +59,12 @@ export class SliderComponent extends CommonComponent implements ControlValueAcce
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
+
+  onSliderChange(event: Event): void {
+    if (this.disabled) return;
+    const input = event.target as HTMLInputElement;
+    this.value = Number(input.value);
+    this.onChange(this.value);
+    this.onTouched();
+  }
 }

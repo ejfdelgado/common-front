@@ -7,6 +7,31 @@
     font-size: 1.1em;
 }
 
+.slider_label {
+    white-space: nowrap;
+}
+
+.slider_input {
+    flex: 1;
+    cursor: pointer;
+    accent-color: currentColor;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+}
+
+.slider_value {
+    min-width: 2.5em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
 .disabled {
     cursor: not-allowed;
+
+    .slider_input {
+        pointer-events: none;
+    }
 }
