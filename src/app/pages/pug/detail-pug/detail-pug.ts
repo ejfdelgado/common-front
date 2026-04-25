@@ -27,7 +27,8 @@ import { ThreejsComponent } from '../components/threejs/threejs.component';
 import { MatIcon } from '@angular/material/icon';
 import { canvasToBlob, downloadCanvasImage } from '@tools/FileUtils';
 import { getBucketFilePath, getBucketPath } from '@tools/BucketPaths';
-import { paintUrlImageOnCanvas } from '@tools/CanvasUtils';
+import { drawCenteredText, paintUrlImageOnCanvas } from '@tools/CanvasUtils';
+import { toCanvas } from 'qrcode';
 
 const MODEL_NAME = "pug";
 
@@ -59,6 +60,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
   @ViewChild('full_texture') canvasFullTexture!: ElementRef;
   @ViewChild('word_cloud_1') canvasWordCloud1!: ElementRef;
   @ViewChild('word_cloud_2') canvasWordCloud2!: ElementRef;
+  @ViewChild('qrcanvas') canvasQR!: ElementRef;
   menuOptions: MenuOptionType[] = [];
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
@@ -432,5 +434,21 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
   download() {
     const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
     downloadCanvasImage(finalComposition);
+  }
+
+  async generateQRCode() {
+    if (!this.collection) {
+      return;
+    }
+    const url = this.shareSrv.getSharedURL({
+      collection: MODEL_NAME,
+      id: this.collection.id,
+      path: "pug/detail",
+    });
+    // Side in pixels
+    const qrCodeSide = 300;
+    const canvasQR = this.canvasQR.nativeElement;
+    await toCanvas(canvasQR, url, { width: qrCodeSide, });
+    drawCenteredText(canvasQR, "🐷", 34, qrCodeSide);
   }
 }

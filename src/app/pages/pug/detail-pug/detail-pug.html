@@ -24,11 +24,16 @@
                                 <mat-icon>download</mat-icon>
                                 Descargar
                             </button>
+                            <button mat-button (click)="generateQRCode()">
+                                <mat-icon>qr</mat-icon>
+                                QR
+                            </button>
                         </div>
-                        <div class="thumbnails invisible">
+                        <div class="thumbnails">
                             <canvas #full_texture width="2050" height="1000"></canvas>
                             <canvas #word_cloud_1 width="1" height="1"></canvas>
                             <canvas #word_cloud_2 width="1" height="1"></canvas>
+                            <canvas #qrcanvas width="1" height="1"></canvas>
                             <img id="mask" src="/assets/img/pug/pug_mask.png" />
                         </div>
                     </div>
