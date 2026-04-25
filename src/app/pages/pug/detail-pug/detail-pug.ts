@@ -294,7 +294,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
       const config = {
         list: [],
         gridSize: 1,
-        weightFactor: 2*70 / (Math.max(words1.length, words2.length)),
+        weightFactor: 2 * 70 / (Math.max(words1.length, words2.length)),
         fontFamily: 'Finger Paint, cursive, sans-serif',
         color: (word: string, weight: number) => {
           return '#000000';
@@ -379,5 +379,9 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     ctx.restore();
 
     this.threePugComponent.replacePugSkin(finalComposition);
+  }
+
+  download() {
+
   }
 }

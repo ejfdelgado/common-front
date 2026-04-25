@@ -1,12 +1,12 @@
 # CommonFront
 
-usar mascara
-Usar QR
-Agregar field de escala.
 Ajustar los botones.
 - Generar -> generar.
 - Guardar.
 - Descargar imagen para imprimir.
+usar mascara
+Usar QR
+Agregar field de escala.
 Poner el origen del marrano en su centro de masa, no abajo.
 
 Agregar soporte para multiples escenarios.

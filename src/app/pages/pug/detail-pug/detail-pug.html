@@ -12,7 +12,7 @@
                     }
                     <div class="side_form column_equal">
                         <div class="action_buttons_parent">
-                            <button mat-flat-button color="primary" (click)="renderWordCloud()">
+                            <button mat-flat-button color="primary" (click)="makeAll()">
                                 <mat-icon>check</mat-icon>
                                 Generar
                             </button>
@@ -20,9 +20,9 @@
                                 <mat-icon>save</mat-icon>
                                 Guardar
                             </button>
-                            <button mat-button (click)="makeAll()">
-                                <mat-icon>check</mat-icon>
-                                Compose
+                            <button mat-button (click)="download()">
+                                <mat-icon>download</mat-icon>
+                                Descargar
                             </button>
                         </div>
                         <div class="thumbnails invisible">
