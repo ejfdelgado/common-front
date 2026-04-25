@@ -100,6 +100,8 @@ export class FileService {
         if (!path) {
             throw new Error("No url image");
         }
+        // Remove always after the ?
+        path = path.replace(/\?.*$/, '');
         if (type == "bucket") {
             return this.bucketSrv.upload(path, blob, options);
         } else if (type == "hard_drive") {

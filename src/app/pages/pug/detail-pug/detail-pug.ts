@@ -26,7 +26,7 @@ import WordCloud from 'wordcloud';
 import { ThreejsComponent } from '../components/threejs/threejs.component';
 import { MatIcon } from '@angular/material/icon';
 import { canvasToBlob, downloadCanvasImage } from '@tools/FileUtils';
-import { getBucketPath } from '@tools/BucketPaths';
+import { getBucketFilePath, getBucketPath } from '@tools/BucketPaths';
 
 const MODEL_NAME = "pug";
 
@@ -155,6 +155,12 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
 
         const title = this.collection.title + " - " + epochTo(this.collection.updated);
         document.title = title;
+
+        if (this.collection.imageTextureUrl) {
+          // Must load the image and paint it over the canvas.
+          const realUrl = getBucketFilePath(this.collection.imageTextureUrl);
+          console.log(realUrl);
+        }
       } else {
         this.collection = null;
       }
@@ -182,11 +188,11 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
         {
           user: AuthService.userStatic,
         });
-      this.fileSrv.upload(
+      await this.fileSrv.upload(
         nextPath,
         lastBlob,
         "bucket",
-      )
+      );
       if (this.collection) {
         this.collection.imageTextureUrl = nextPath;
       }
