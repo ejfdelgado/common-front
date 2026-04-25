@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -27,6 +27,7 @@ import { ThreejsComponent } from '../components/threejs/threejs.component';
 import { MatIcon } from '@angular/material/icon';
 import { canvasToBlob, downloadCanvasImage } from '@tools/FileUtils';
 import { getBucketFilePath, getBucketPath } from '@tools/BucketPaths';
+import { paintUrlImageOnCanvas } from '@tools/CanvasUtils';
 
 const MODEL_NAME = "pug";
 
@@ -52,7 +53,7 @@ export interface PugDataType extends BasicDataType {
     './detail-pug.scss',
   ],
 })
-export class DetailPug extends AuthenticatedComponent implements OnInit {
+export class DetailPug extends AuthenticatedComponent implements OnInit, AfterViewInit {
   @ViewChild('inner_form') innerForm!: FormSimpleWith;
   @ViewChild("three_pug_component") threePugComponent!: ThreejsComponent;
   @ViewChild('full_texture') canvasFullTexture!: ElementRef;
@@ -140,8 +141,12 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.loadCollection();
+  }
+
+  ngOnInit(): void {
+
   }
 
   async loadCollection() {
@@ -159,7 +164,12 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
         if (this.collection.imageTextureUrl) {
           // Must load the image and paint it over the canvas.
           const realUrl = getBucketFilePath(this.collection.imageTextureUrl);
-          console.log(realUrl);
+          const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
+          paintUrlImageOnCanvas(
+            realUrl,
+            finalComposition,
+          );
+          this.threePugComponent.replacePugSkin(finalComposition);
         }
       } else {
         this.collection = null;
