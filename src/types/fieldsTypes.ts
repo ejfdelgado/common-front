@@ -22,7 +22,8 @@ export interface FieldDataType {
     "phone" |
     "image-gallery" |
     "camera-picker" |
-    "mic-picker"
+    "mic-picker" |
+    "slider"
     ;
     label: string;
     key: string;
@@ -141,7 +142,8 @@ export type AllFieldsDataType =
     MDDataType |
     ImageGalleryDataType |
     FieldToggleDataType |
-    FieldSelectDataType
+    FieldSelectDataType |
+    SliderDataType
     ;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
@@ -155,11 +157,16 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         MDDataType |
         ImageGalleryDataType |
         FieldToggleDataType |
-        FieldSelectDataType
+        FieldSelectDataType |
+        SliderDataType
     )[],
 }
 
-export interface SliderDetailDataType extends FieldDataType {
+export interface SliderDetailDataType {
     min: number;
     max: number;
+}
+
+export interface SliderDataType extends FieldDataType {
+    slider: SliderDetailDataType;
 }

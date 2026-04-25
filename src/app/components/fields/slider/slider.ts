@@ -15,8 +15,6 @@ import { CommonComponent } from '@components/common.component';
 import { SliderDetailDataType } from '@mytypes/fieldsTypes';
 import { FullscreenService } from '@services/fullscreen.service';
 
-export type SliderDataType = number | null;
-
 @Component({
   selector: 'app-slider',
   standalone: true,
@@ -38,7 +36,7 @@ export class SliderComponent extends CommonComponent implements ControlValueAcce
 
   @Input() label: string = "Value";
   @Input() config!: SliderDetailDataType;
-  value: SliderDataType = 0;
+  value: number | null = 0;
   disabled = false;
 
   constructor(
@@ -49,7 +47,7 @@ export class SliderComponent extends CommonComponent implements ControlValueAcce
     super(sanitizer, fullScreenSrv);
   }
 
-  writeValue(value: SliderDataType | null): void {
+  writeValue(value: number | null): void {
     this.value = value;
     try {
       this.cdr.detectChanges();

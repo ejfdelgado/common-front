@@ -77,6 +77,15 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
         template: "pugs/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json",
         fields: [
           {
+            label: "Tamaño",
+            type: "slider",
+            key: "size",
+            slider: {
+              min: 1,
+              max: 150,
+            }
+          },
+          {
             label: "Lista de palabras", type: "contenteditable", key: "description", contenteditable: {
               configs: {
                 useBold: false,

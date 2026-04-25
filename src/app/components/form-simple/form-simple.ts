@@ -17,7 +17,8 @@ import {
   FieldToggleDetailDataType,
   ImageGalleryDataType,
   MDDataType,
-  MDDetailDataType
+  MDDetailDataType,
+  SliderDataType
 } from 'types/fieldsTypes';
 
 export type FlatJsonDataType = { [key: string]: any };
@@ -194,6 +195,10 @@ export abstract class FormSimple implements DifferedStore {
 
   castChipType(el: FieldDataType): ChipDataType {
     return (el as ChipDataType);
+  }
+
+  castSliderType(el: FieldDataType): SliderDataType {
+    return (el as SliderDataType);
   }
 
   castImageGalleryType(el: FieldDataType): ImageGalleryDataType {

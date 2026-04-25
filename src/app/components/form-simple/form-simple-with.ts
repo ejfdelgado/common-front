@@ -24,6 +24,7 @@ import { CommonModule } from '@angular/common';
 import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
 import { CameraPicker } from '@components/fields/camera-picker/camera-picker';
 import { MicPicker } from '@components/fields/mic-picker/mic-picker';
+import { SliderComponent } from '@components/fields/slider/slider';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -48,6 +49,7 @@ import { MicPicker } from '@components/fields/mic-picker/mic-picker';
     JsonEditorComponent,
     CameraPicker,
     MicPicker,
+    SliderComponent,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',
