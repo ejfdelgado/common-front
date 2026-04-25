@@ -126,13 +126,6 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
       label: "OPCIONES",
       children: [
         {
-          label: "Guardar",
-          icon: "save",
-          callback: () => {
-            this.save();
-          },
-        },
-        {
           label: "Regresar",
           icon: "arrow_back",
           callback: () => {

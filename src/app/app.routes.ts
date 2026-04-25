@@ -181,8 +181,8 @@ if (["localhost"].indexOf(location.hostname) >= 0) {
     });
 } else if (["pug.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
-        path: 'pug/detail',
-        loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
+        path: 'pug/all',
+        loadComponent: () => import('./pages/pug/index-pug/index-pug').then(m => m.IndexPug),
     });
 }
 
