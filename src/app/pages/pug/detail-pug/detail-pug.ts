@@ -25,6 +25,7 @@ import { MenuOptionType } from 'types/StatusBar';
 import WordCloud from 'wordcloud';
 import { ThreejsComponent } from '../components/threejs/threejs.component';
 import { MatIcon } from '@angular/material/icon';
+import { downloadCanvasImage } from '@tools/FileUtils';
 
 const MODEL_NAME = "pug";
 
@@ -382,6 +383,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   }
 
   download() {
-
+    const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
+    downloadCanvasImage(finalComposition);
   }
 }
