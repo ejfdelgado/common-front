@@ -25,13 +25,14 @@ import { MenuOptionType } from 'types/StatusBar';
 import WordCloud from 'wordcloud';
 import { ThreejsComponent } from '../components/threejs/threejs.component';
 import { MatIcon } from '@angular/material/icon';
-import { downloadCanvasImage } from '@tools/FileUtils';
+import { canvasToBlob, downloadCanvasImage } from '@tools/FileUtils';
+import { getBucketPath } from '@tools/BucketPaths';
 
 const MODEL_NAME = "pug";
 
-export interface DocumentDataType extends BasicDataType {
-  description: string;
-  gallery: ImageGalleryType[];
+export interface PugDataType extends BasicDataType {
+  json?: string;
+  imageTextureUrl?: string;
 };
 
 @Component({
@@ -61,7 +62,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
   liveSubscription: Unsubscribe | null = null;
   liveMode: boolean = true;
   searchable: string = "";
-  collection: BasicDataType | null = null;
+  collection: PugDataType | null = null;
   cardActions: string[] = [];
   words: [string, number][] = [];
   fields: AllFieldsDataType[] = [
@@ -150,7 +151,7 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
     if (col && id) {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
-        this.collection = temp as BasicDataType;
+        this.collection = temp as PugDataType;
 
         const title = this.collection.title + " - " + epochTo(this.collection.updated);
         document.title = title;
@@ -172,6 +173,23 @@ export class DetailPug extends AuthenticatedComponent implements OnInit {
         autoAuthor: true,
         searchFields: ["title"],
       };
+      // mix: collection, data (form)
+      const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
+      const lastBlob = await canvasToBlob(finalComposition);
+      const nextPath = getBucketPath(
+        "pugs/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.png",
+        this.collection?.imageTextureUrl ? this.collection?.imageTextureUrl : "",
+        {
+          user: AuthService.userStatic,
+        });
+      this.fileSrv.upload(
+        nextPath,
+        lastBlob,
+        "bucket",
+      )
+      if (this.collection) {
+        this.collection.imageTextureUrl = nextPath;
+      }
       const complete = Object.assign({}, this.collection, data);
       await this.firestoreSrv.createUpdate(MODEL_NAME, complete, conf);
     }

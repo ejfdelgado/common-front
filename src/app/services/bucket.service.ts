@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { environment } from 'environments/environment';
 import { ApiResponse, UploadResponse } from 'types/file';
 import { IndicatorService } from './indicator.service';

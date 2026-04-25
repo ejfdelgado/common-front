@@ -1,9 +1,7 @@
 # CommonFront
 
-Ajustar los botones.
-- Generar -> generar.
-- Guardar.
-- Descargar imagen para imprimir.
+Al guardar, permitir guardar la imagen dentro del json.
+
 usar mascara
 Usar QR
 Agregar field de escala.
