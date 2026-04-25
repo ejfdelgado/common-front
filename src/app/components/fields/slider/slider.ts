@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { SliderDetailDataType } from '@mytypes/fieldsTypes';
 import { FullscreenService } from '@services/fullscreen.service';
 
 export type SliderDataType = number | null;
@@ -36,6 +37,7 @@ export type SliderDataType = number | null;
 export class SliderComponent extends CommonComponent implements ControlValueAccessor {
 
   @Input() label: string = "Value";
+  @Input() config!: SliderDetailDataType;
   value: SliderDataType = 0;
   disabled = false;
 

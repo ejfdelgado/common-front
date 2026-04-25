@@ -158,3 +158,8 @@ export interface JSONDetailDataType extends TemplateDetailDataType {
         FieldSelectDataType
     )[],
 }
+
+export interface SliderDetailDataType extends FieldDataType {
+    min: number;
+    max: number;
+}
