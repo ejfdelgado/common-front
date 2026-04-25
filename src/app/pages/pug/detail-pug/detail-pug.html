@@ -7,8 +7,8 @@
                 <app-threejs #three_pug_component class="content_column"></app-threejs>
                 <div class="content_column">
                     @if (collection) {
-                    <app-form-simple-with #inner_form class="column_equal" (jsonDataChange)="jsonDataChange($event)" [fields]="fields"
-                        [model]="collection"></app-form-simple-with>
+                    <app-form-simple-with #inner_form class="column_equal" (jsonDataChange)="jsonDataChange($event)"
+                        [fields]="fields" [model]="collection"></app-form-simple-with>
                     }
                     <div class="side_form column_equal">
                         <div class="action_buttons_parent">
@@ -23,6 +23,10 @@
                             <button mat-button (click)="download()">
                                 <mat-icon>download</mat-icon>
                                 Descargar
+                            </button>
+                            <button mat-button (click)="simpleCanvasTextureReplace()">
+                                <mat-icon>download</mat-icon>
+                                Replace
                             </button>
                         </div>
                         <div class="thumbnails invisible">

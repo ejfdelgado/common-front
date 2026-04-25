@@ -165,17 +165,22 @@ export class DetailPug extends AuthenticatedComponent implements OnInit, AfterVi
           // Must load the image and paint it over the canvas.
           const realUrl = getBucketFilePath(this.collection.imageTextureUrl);
           const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
-          paintUrlImageOnCanvas(
+          await paintUrlImageOnCanvas(
             realUrl,
             finalComposition,
           );
-          this.threePugComponent.replacePugSkin(finalComposition);
+          this.simpleCanvasTextureReplace();
         }
       } else {
         this.collection = null;
       }
       this.cdr.detectChanges();
     }
+  }
+
+  simpleCanvasTextureReplace() {
+    const finalComposition = this.canvasFullTexture.nativeElement as HTMLCanvasElement;
+    this.threePugComponent.replacePugSkin(finalComposition);
   }
 
   getCollectionName() {
