@@ -135,8 +135,8 @@ npx ng generate component --standalone --skip-tests components/fields/mic-picker
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/pug/index-pug
-npx ng generate component --standalone --skip-tests pages/pug/detail-pug
+npx ng generate component --standalone --skip-tests pages/english/index-english
+npx ng generate component --standalone --skip-tests pages/english/detail-english
 ```
 
 ```bash

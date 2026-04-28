@@ -122,6 +122,22 @@ const routes: Routes = [
         loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
     },
     {
+        path: 'paca/all',
+        loadComponent: () => import('./pages/paca/index-paca/index-paca').then(m => m.IndexPaca),
+    },
+    {
+        path: 'paca/detail',
+        loadComponent: () => import('./pages/paca/detail-paca/detail-paca').then(m => m.DetailPaca),
+    },
+    {
+        path: 'english/all',
+        loadComponent: () => import('./pages/english/index-english/index-english').then(m => m.IndexEnglish),
+    },
+    {
+        path: 'english/detail',
+        loadComponent: () => import('./pages/english/detail-english/detail-english').then(m => m.DetailEnglish),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },
