@@ -70,10 +70,22 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Add information",
-      icon: "add",
+      label: "Next events",
+      icon: "🗓️",
+      isPlainIcon: true,
       children: [],
-      callback: this.openDialog.bind(this),
+      callback: () => {
+        //this.openDialog();
+      },
+    });
+    this.menuOptions.push({
+      label: "Join an interest group",
+      icon: "💬",
+      isPlainIcon: true,
+      children: [],
+      callback: () => {
+        //this.openDialog();
+      },
     });
 
     this.authSubscription = this.authSrv.authState$.subscribe((user) => {

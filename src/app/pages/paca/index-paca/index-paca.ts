@@ -71,10 +71,31 @@ export class IndexPaca extends AuthenticatedComponent implements OnInit, OnDestr
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Agregar Paca",
-      icon: "add",
+      label: "Mapa de Pacas",
+      icon: "🌎",
+      isPlainIcon: true,
       children: [],
-      callback: this.openDialog.bind(this),
+      callback: () => {
+        //this.openDialog();
+      },
+    });
+    this.menuOptions.push({
+      label: "Registrar nueva Paca",
+      icon: "➕",
+      isPlainIcon: true,
+      children: [],
+      callback: () => {
+        //this.openDialog();
+      },
+    });
+    this.menuOptions.push({
+      label: "Ver indicadores ambientales",
+      icon: "📊",
+      isPlainIcon: true,
+      children: [],
+      callback: () => {
+        //this.openDialog();
+      },
     });
 
     this.authSubscription = this.authSrv.authState$.subscribe((user) => {
