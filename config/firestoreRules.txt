@@ -86,5 +86,11 @@ service cloud.firestore {
     match /pro-pug/{document=**} {
         allow read: if true;
     }
+    match /pro-paca/{document=**} {
+        allow read: if true;
+    }
+    match /pro-english/{document=**} {
+        allow read: if true;
+    }
   }
 }

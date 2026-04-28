@@ -1,1 +1,23 @@
-<p>index-paca works!</p>
+<div class="main_container">
+    <app-side-menu [options]="menuOptions" [fontSize]="'large'"></app-side-menu>
+    <div class="secondary_parent">
+        <app-statusbar [title]="'Pacas'"></app-statusbar>
+        <div class="dynamic_content">
+            <div class="container_grid_docs_found">
+                <div class="container_grid_docs_found_scroll">
+                    <div class="grid_docs_found">
+                        @for(paca of pacas; track paca.id) {
+                        <app-card-doc [config]="cardConfig" [model]="paca" [user]="user"
+                            (openDocument)="openDocument($event)" (createUpdate)="openDialog($event)"
+                            (delete)="deleteDocument($event)" [imageType]="'thumbnail'"
+                            (share)="localShare($event)"></app-card-doc>
+                        }
+                        <div class="see_more_parent" (click)="pageDocuments(false)">
+                            <p>More</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
