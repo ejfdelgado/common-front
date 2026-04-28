@@ -74,7 +74,7 @@ Configure file common-front/src/app/app.routes.ts
 
 ### On file app.routes.ts add at bottom:
 ```
-if (["pug.pais.tv"].indexOf(location.hostname) >= 0) {
+if (["subdomain.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
         path: 'pug/detail',
         loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
@@ -84,12 +84,10 @@ if (["pug.pais.tv"].indexOf(location.hostname) >= 0) {
 
 ### Check on App Engine > Settings > Custom domains:
 Add a custom domain: 
-pug.pais.tv
+subdomain.pais.tv
 
 On the registar add:
-CNAME	ghs.googlehosted.com	pug
+CNAME	ghs.googlehosted.com	subdomain
 
-### Remember to adjust the CORS
-run.tf CORS_MAIN_ALLOWED_ORIGIN
-
-Also adjust buckets_static.tf
+### Remember to adjust the CORS on the infra
+variables.tf cors_allowed
