@@ -200,6 +200,16 @@ if (["localhost"].indexOf(location.hostname) >= 0) {
         path: '',
         loadComponent: () => import('./pages/pug/detail-pug/detail-pug').then(m => m.DetailPug),
     });
+} else if (["paca.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/paca/index-paca/index-paca').then(m => m.IndexPaca),
+    });
+} else if (["english.pais.tv"].indexOf(location.hostname) >= 0) {
+    routes.unshift({
+        path: '',
+        loadComponent: () => import('./pages/english/index-english/index-english').then(m => m.IndexEnglish),
+    });
 }
 
 export { routes };
