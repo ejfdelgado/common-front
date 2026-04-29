@@ -3,7 +3,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "src",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -21,29 +20,34 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
+      "src/*": ["./src/*"],
+      "types/*": ["./src/types/*"],
+      "app/*": ["./src/app/*"],
+      "assets/*": ["./src/assets/*"],
+      "environments/*": ["./src/environments/*"],
       "@tools/*": [
-        "app/tools/*"
+        "./src/app/tools/*"
       ],
       "@services/*": [
-        "app/services/*"
+        "./src/app/services/*"
       ],
       "@components/*": [
-        "app/components/*"
+        "./src/app/components/*"
       ],
       "@interceptors/*": [
-        "app/interceptors/*"
+        "./src/app/interceptors/*"
       ],
       "@directives/*": [
-        "app/directives/*"
+        "./src/app/directives/*"
       ],
       "@pipes/*": [
-        "app/pipes/*"
+        "./src/app/pipes/*"
       ],
       "@mytypes/*": [
-        "types/*"
+        "./src/types/*"
       ],
       "@avatar/*": [
-        "app/avatar/*"
+        "./src/app/avatar/*"
       ],
     },
     "types": [
