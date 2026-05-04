@@ -35,7 +35,6 @@ const MODEL_NAME = "paca";
     CommonModule,
     MatButtonModule,
     Statusbar,
-    CardDoc,
     SideMenu,
   ],
   templateUrl: './index-paca.html',

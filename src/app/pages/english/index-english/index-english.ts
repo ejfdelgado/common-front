@@ -34,7 +34,6 @@ const MODEL_NAME = "english";
     CommonModule,
     MatButtonModule,
     Statusbar,
-    CardDoc,
     SideMenu,
   ],
   templateUrl: './index-english.html',

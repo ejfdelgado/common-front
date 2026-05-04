@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  signal,
+  effect,
+  untracked,
+  computed,
+  ViewChild
+} from '@angular/core';
 import { IndicatorService } from "@services/indicator.service";
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
 import { CommonModule } from '@angular/common';
@@ -37,6 +46,10 @@ export class Index implements AfterViewInit {
 
   openCamera$ = new Subject<void>();
   html: SafeHtml = "";
+  state = signal(0);
+  twice = computed(() => {
+    return this.state() * 2;
+  });
 
   config = {
     name: "demo",
@@ -112,6 +125,21 @@ export class Index implements AfterViewInit {
     });
     this.model['camera'] = this.configSrv.getCamera();
     this.model['mic'] = this.configSrv.getMic();
+
+    effect(() => {
+      untracked(() => {
+        console.log("twice:"+this.twice());
+      });
+      console.log("state:"+this.state());
+    });
+
+    this.state.set(3);
+  }
+
+  increment() {
+    this.state.update((old) => {
+      return old + 1;
+    });
   }
 
   ngAfterViewInit(): void {
