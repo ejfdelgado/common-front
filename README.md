@@ -167,12 +167,16 @@ Configure branding at:
 [Left right spanish](https://stg-playtolearn.storage.googleapis.com/index.html#/rightleft?lan=es-ES&n=5)
 
 [local song](https://localhost:4200/#/practicesong?q=runaway.json)
-
 [stage song](https://music.pais.tv/#/?q=hall_of_fame.json&t=1)
 [stage song](https://music.pais.tv/#/?q=unstopable.json&t=1)
 [stage song](https://music.pais.tv/#/?q=karma.json)
 [stage song](https://music.pais.tv/#/?q=love_song_to_the_earth.json)
 [stage song](https://music.pais.tv/#/?q=in_the_name_of_love2.json)
+https://music.pais.tv/#/?q=love_song_to_the_earth2.json
+https://music.pais.tv/#/?q=count_on_me.json
+https://music.pais.tv/#/?q=colors.json
+https://music.pais.tv/#/?q=what_a_wonderful_world.json
+https://music.pais.tv/#/?q=try_everything.json
 
 [love song](https://music.pais.tv/#/?q=love_song_to_the_earth.json)
 
@@ -189,16 +193,6 @@ Configure branding at:
 [Notes](https://stg-playtolearn.storage.googleapis.com/index.html#/notes)
 
 [Play sound](https://stg-playtolearn.storage.googleapis.com/index.html#/playsound)
-
-https://music.pais.tv/#/?q=love_song_to_the_earth2.json
-
-https://music.pais.tv/#/?q=count_on_me.json
-
-https://music.pais.tv/#/?q=colors.json
-
-https://music.pais.tv/#/?q=what_a_wonderful_world.json
-
-https://music.pais.tv/#/?q=try_everything.json
 
 https://chat.pais.tv
 
