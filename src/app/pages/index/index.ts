@@ -26,6 +26,7 @@ import { MyTemplate } from "ejfdelgado-common-ts";
 import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '@services/config.service';
+import { MoneyDisplayComponent, MoneyPipe, MoneyService } from '@ejflab/common-angular';
 
 @Component({
   selector: 'app-index',
@@ -35,6 +36,8 @@ import { ConfigService } from '@services/config.service';
     CameraCaptureComponent,
     FormSimpleWithout,
     FormsModule,
+    MoneyPipe,
+    MoneyDisplayComponent,
   ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
@@ -115,7 +118,9 @@ export class Index implements AfterViewInit {
     public locationSrv: LocationService,
     public sanitizer: DomSanitizer,
     public configSrv: ConfigService,
+    public moneySrv: MoneyService,
   ) {
+    console.log(this.moneySrv.format(45600));
     this.authSrv.authState$.subscribe(user => {
       if (user) {
         console.log('Logged in:', user.displayName);
@@ -128,9 +133,9 @@ export class Index implements AfterViewInit {
 
     effect(() => {
       untracked(() => {
-        console.log("twice:"+this.twice());
+        console.log("twice:" + this.twice());
       });
-      console.log("state:"+this.state());
+      console.log("state:" + this.state());
     });
 
     this.state.set(3);
