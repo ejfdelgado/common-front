@@ -38,6 +38,7 @@
     "@angular/material-moment-adapter": "^21.1.4",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@ejflab/common-angular": "^0.0.1",
     "@google/genai": "^1.41.0",
     "@googlemaps/js-api-loader": "^2.0.2",
     "@mediapipe/camera_utils": "^0.3.1675466862",
