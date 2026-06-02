@@ -60,7 +60,8 @@ export class DialogFormComponent {
         //Child component save()
         const { valid, data } = await this.innerForm.save();
         if (valid) {
-            await this.internalSave(data);
+            const response = await this.internalSave(data);
+            Object.assign(data, response);
             this.dialogRef.close(data);
         }
 
@@ -72,7 +73,8 @@ export class DialogFormComponent {
             searchFields: this.config.searchFields,
         };
         try {
-            await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
+            const response = await this.firestoreSrv.createUpdate(this.config.modelName, data, conf);
+            return response;
         } catch (err: any) {
             this.uiNotif.show(err.message);
             throw err;

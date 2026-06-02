@@ -129,7 +129,7 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.pageNotes(true);
+        this.openDocument({ model: result });
       }
     });
   }

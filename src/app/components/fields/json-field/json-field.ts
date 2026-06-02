@@ -118,9 +118,11 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
       if (isSecret) {
         pass = await this.askPasswordDialog();
         const encripted = await this.fileSrv.getRaw(getJSONUrl(this.value));
-        const publickKey = await this.confSrv.getPublicKey();
-        const decrypted = await decryptSecret(publickKey, encripted);
-        this.model = JSON.parse(new TextDecoder().decode(decrypted));
+        const decrypted = await decryptSecret(
+          pass,
+          encripted, 
+        );
+        this.model = JSON.parse(decrypted);
       } else {
         this.model = await this.fileSrv.getJSON(getJSONUrl(this.value));
       }
