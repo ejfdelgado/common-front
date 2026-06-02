@@ -30,6 +30,7 @@ import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
+import { decryptSecret } from '@tools/decryptSecret';
 import { sortify } from 'ejfdelgado-common-ts';
 import { Subscription } from 'rxjs';
 import { ParamsService } from 'src/app/services/params.service';
@@ -112,7 +113,17 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
 
   async reloadModel() {
     if (this.value) {
-      this.model = await this.fileSrv.getJSON(getJSONUrl(this.value));
+      const isSecret = this.config.secret;
+      let pass: string | undefined = undefined;
+      if (isSecret) {
+        pass = await this.askPasswordDialog();
+        const encripted = await this.fileSrv.getRaw(getJSONUrl(this.value));
+        const publickKey = await this.confSrv.getPublicKey();
+        const decrypted = await decryptSecret(publickKey, encripted);
+        this.model = JSON.parse(new TextDecoder().decode(decrypted));
+      } else {
+        this.model = await this.fileSrv.getJSON(getJSONUrl(this.value));
+      }
       const model = JSON.parse(JSON.stringify(this.model));
       const keys: string[] = Object.keys(model);
       for (let i = 0; i < keys.length; i++) {

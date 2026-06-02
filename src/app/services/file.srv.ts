@@ -264,6 +264,10 @@ export class FileService {
         ));
     }
 
+    getRaw(url: string): Promise<any> {
+        return firstValueFrom(this.http.get(url, { responseType: 'arraybuffer' }));
+    }
+
     getBinary(path: string) {
         return firstValueFrom(this.http.get(getBucketFilePath(path), { responseType: 'arraybuffer' }));
     }
