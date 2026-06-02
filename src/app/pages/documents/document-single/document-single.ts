@@ -157,6 +157,8 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
   }
 
   async save() {
+    // Apply the secret check
+    (this.fields[0] as FieldJSONDataType).json.secret = (this.collection as any).secret;
     const { valid, data } = await this.innerForm.save();
     if (valid) {
       const conf: FirestoreConfigDataType = {

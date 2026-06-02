@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { BucketService } from "./bucket.service";
-import { HardDriveService } from "./harddrive.service";
+import { BucketOptionsType, BucketService } from "./bucket.service";
+import { HardDriveOptionsType, HardDriveService } from "./harddrive.service";
 import { ApiResponse, UploadResponse } from "types/file";
 import { CameraCaptureComponent } from "@components/camera-capture/camera-capture";
 import { firstValueFrom, map } from 'rxjs';
@@ -95,7 +95,7 @@ export class FileService {
         path: string | null,
         blob: Blob,
         type: StorageType = "bucket",
-        options?: any,
+        options?: BucketOptionsType | HardDriveOptionsType,
     ): Promise<UploadResponse> {
         if (!path) {
             throw new Error("No url image");

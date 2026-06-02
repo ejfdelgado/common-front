@@ -6,7 +6,7 @@ import { ApiResponse, UploadResponse } from 'types/file';
 import { IndicatorService } from './indicator.service';
 
 export interface HardDriveOptionsType {
-
+    pass?: string;
 }
 
 @Injectable({
@@ -31,6 +31,9 @@ export class HardDriveService {
             const fileName = filePath.split('/').pop();
             formData.append('file_path', filePath);
             formData.append('file', blob, fileName);
+            if (options?.pass) {
+                formData.append('pass', options?.pass);
+            }
 
             const response = await firstValueFrom(this.http.post<UploadResponse>(environment.apiUrl + this.uploadUrl, formData));
             return response;

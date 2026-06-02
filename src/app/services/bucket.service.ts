@@ -9,6 +9,7 @@ import { UINotificationSrv } from './uinotifications.service';
 export interface BucketOptionsType {
     bucketName?: string;
     makePublic?: boolean;
+    pass?: string,
 }
 
 @Injectable({
@@ -41,7 +42,9 @@ export class BucketService {
             formData.append('file_path', bucketPath);
             formData.append('file', blob, fileName);
             formData.append('make_public', options?.makePublic === true ? "1" : "0");
-
+            if (options?.pass) {
+                formData.append('pass', options?.pass);
+            }
             const response = await firstValueFrom(this.http.post<UploadResponse>(`${environment.apiUrl}${this.uploadUrl}`, formData));
             return response;
         } catch (err: any) {

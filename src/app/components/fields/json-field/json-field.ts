@@ -19,8 +19,11 @@ import {
   NG_VALUE_ACCESSOR,
   ValidationErrors
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
+import { PasswordDialogComponent } from '@components/password-dialog/password-dialog';
+import { firstValueFrom } from 'rxjs';
 import { FlatJsonDataType } from '@components/form-simple/form-simple';
 import { FormSimpleWithout } from '@components/form-simple/form-simple-without';
 import { AuthService } from '@services/auth.service';
@@ -29,6 +32,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 import { sortify } from 'ejfdelgado-common-ts';
 import { Subscription } from 'rxjs';
+import { ParamsService } from 'src/app/services/params.service';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { JSONDetailDataType } from 'types/fieldsTypes';
 import { UploadResponse } from 'types/file';
@@ -77,8 +81,10 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
 
   constructor(
     private fileSrv: FileService,
+    private dialog: MatDialog,
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
+    public confSrv: ParamsService,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
   ) {
@@ -182,12 +188,28 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
         // Needs upload
         const rawFileName = this.value.split("?")[0];
         const promesas: Promise<UploadResponse>[] = [];
+
+        const isSecret = this.config.secret;
+        let pass: string | undefined = undefined;
+        if (isSecret) {
+          pass = await this.askPasswordDialog();
+        }
+
         const jsonString = JSON.stringify(this.model, null, 2);
         const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-        promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket"));
+        promesas.push(this.fileSrv.upload(rawFileName, jsonBlob, "bucket", { pass }));
         await Promise.all(promesas);
       }
     }
+  }
+
+  async askPasswordDialog(): Promise<string> {
+    const dialogRef = this.dialog.open(PasswordDialogComponent, {
+      width: '350px',
+      disableClose: true,
+      data: {},
+    });
+    return firstValueFrom(dialogRef.afterClosed());
   }
 
   isInvalid() {
