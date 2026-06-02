@@ -191,7 +191,7 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
 
   async openDocument(model: any) {
     this.router.navigate([`docs/this`], {
-      queryParams: { col: MODEL_NAME, id: model.id }
+      queryParams: { col: MODEL_NAME, id: model.model.id }
     });
   }
 

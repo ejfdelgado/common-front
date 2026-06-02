@@ -19,6 +19,7 @@ import { ShareSrv } from '@services/share.service';
 import { epochTo } from '@tools/DateUtils';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { Unsubscribe } from 'firebase/firestore';
+import { DialogFormComponent, FormDataType } from 'src/app/components/dialog-form/dialog-form.component';
 import { AllFieldsDataType, FieldJSONDataType, ImageGalleryType, MDDataType } from 'types/fieldsTypes';
 import { MenuOptionType } from 'types/StatusBar';
 
@@ -100,6 +101,13 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
           },
         },
         {
+          label: "Edit",
+          icon: "edit",
+          callback: () => {
+            this.openUpdateDialog({ model: this.collection });
+          },
+        },
+        {
           label: "Regresar",
           icon: "arrow_back",
           callback: () => {
@@ -158,5 +166,40 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
       const complete = Object.assign({}, this.collection, data);
       await this.firestoreSrv.createUpdate(MODEL_NAME, complete, conf);
     }
+  }
+
+  async openUpdateDialog(payload: any) {
+    let model: any = null;
+    if (payload) {
+      model = payload.model;
+    }
+    const formConfig: FormDataType = {
+      title: model ? "Actualizar" : "Crear",
+      autoAuthor: true,
+      modelName: MODEL_NAME,
+      searchFields: ["title"],
+      fields: [
+        { label: "Título", type: "text", key: "title", required: true },
+        { label: "Secret", type: "toggle", key: "secret", required: true },
+      ],
+      model: {
+        title: '',
+      }
+    };
+    if (model) {
+      formConfig.model = model;
+    }
+    const dialogRef = this.dialog.open(DialogFormComponent, {
+      width: '800px',
+      panelClass: 'custom-emoji-picker',
+      autoFocus: !this.isMobile(),
+      data: formConfig,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        Object.assign(this.collection as any, result);
+      }
+    });
   }
 }
