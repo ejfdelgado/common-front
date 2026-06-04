@@ -27,6 +27,7 @@ import {
     mirrorPose,
     getHigherAvatarScoredPose,
     computeComparableBody,
+    AvatarScore,
 } from '@avatar/utils/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
@@ -510,7 +511,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         try {
             const model = this.getObjectByName(AVATAR_NAME);
             let pose: BodyData | null = null;
-            let score: number = 0;
+            let score: AvatarScore = {
+                all: -1,
+                up: -1,
+            };
             if (USE_WORKER) {
                 // with worker
                 const higherResponse = await workerProxy.getHigherAvatarScoredPose();
@@ -520,17 +524,18 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 // in main thread
                 const higherResponse = getHigherAvatarScoredPose(poses, videoSize);
                 pose = higherResponse.pose;
-                score = higherResponse.score.all;
+                score = higherResponse.score;
             }
             if (!model || !pose) {
                 this.computingIK = false;
                 return false;
             }
-            if (score < 0) {
+            //console.log(score);
+            if (score.all < 0) {
                 // Person does not fit the camera
                 throw new Error(`${score}`);
             }
-            if (score < 90) {
+            if (score.all < 90) {
                 // this.restoreBoneBackup(AVATAR_NAME);
                 // Not all body in view or not trusty
                 this.computingIK = false;

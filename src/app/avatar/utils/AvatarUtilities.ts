@@ -501,7 +501,7 @@ export function isAllPersonInsideCamera(
     return response;
 }
 
-export interface AvatarSocore {
+export interface AvatarScore {
     up: number;
     all: number;
 }
@@ -509,43 +509,90 @@ export interface AvatarSocore {
 export function computeAvatarScore(
     pose: BodyData,
     videoSize: GenericSizeType,
-): AvatarSocore {
+): AvatarScore {
     const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
     pose.keypoints3D.forEach((el) => {
         keypoints3DMap[el.name] = el;
     });
 
     const isPersonInside = isAllPersonInsideCamera(pose, videoSize);
-    if (!isPersonInside.all && !isPersonInside.top) {
+    console.log(isPersonInside);
+    if (isPersonInside.all) {
+        // Al body inside, then compute same for all and top
+        let scoreComputation: number = 0;
+        let countScores: number = 0;
+
+        scoreComputation += Math.max(
+            keypoints3DMap[BodyPoseKey.right_shoulder].score,
+            keypoints3DMap[BodyPoseKey.left_shoulder].score
+        );
+        countScores++;
+        scoreComputation += Math.max(
+            keypoints3DMap[BodyPoseKey.right_ear].score,
+            keypoints3DMap[BodyPoseKey.left_ear].score
+        );
+        countScores++;
+        scoreComputation += Math.max(
+            keypoints3DMap[BodyPoseKey.right_heel].score,
+            keypoints3DMap[BodyPoseKey.left_heel].score
+        );
+        countScores++;
+        const score = 100 * scoreComputation / countScores;
+
+        return {
+            all: score,
+            up: score,
+        };
+    } else if (isPersonInside.top) {
+        // Al body inside, then compute same for all and top
+        let scoreComputation: number = 0;
+        let countScores: number = 0;
+
+        // Head
+        scoreComputation += Math.max(
+            keypoints3DMap[BodyPoseKey.right_ear].score,
+            keypoints3DMap[BodyPoseKey.left_ear].score
+        );
+        countScores++;
+        // Chest
+        scoreComputation += Math.max(
+            keypoints3DMap[BodyPoseKey.right_shoulder].score,
+            keypoints3DMap[BodyPoseKey.left_shoulder].score
+        );
+        countScores++;
+
+        scoreComputation += keypoints3DMap[BodyPoseKey.left_elbow].score;
+        countScores++;
+        scoreComputation += keypoints3DMap[BodyPoseKey.right_elbow].score;
+        countScores++;
+
+        scoreComputation += keypoints3DMap[BodyPoseKey.left_wrist].score;
+        countScores++;
+        scoreComputation += keypoints3DMap[BodyPoseKey.right_wrist].score;
+        countScores++;
+
+        scoreComputation += keypoints3DMap[BodyPoseKey.left_index].score;
+        countScores++;
+        scoreComputation += keypoints3DMap[BodyPoseKey.right_index].score;
+        countScores++;
+
+        scoreComputation += keypoints3DMap[BodyPoseKey.left_thumb].score;
+        countScores++;
+        scoreComputation += keypoints3DMap[BodyPoseKey.right_thumb].score;
+        countScores++;
+
+        const score = 100 * scoreComputation / countScores;
+
+        return {
+            all: -1,
+            up: score,
+        };
+    } else {
         return {
             up: -1,
             all: -1,
         };
     }
-
-    let scoreComputation: number = 0;
-    let countScores: number = 0;
-
-    scoreComputation += Math.max(
-        keypoints3DMap[BodyPoseKey.right_shoulder].score,
-        keypoints3DMap[BodyPoseKey.left_shoulder].score
-    );
-    countScores++;
-    scoreComputation += Math.max(
-        keypoints3DMap[BodyPoseKey.right_ear].score,
-        keypoints3DMap[BodyPoseKey.left_ear].score
-    );
-    countScores++;
-    scoreComputation += Math.max(
-        keypoints3DMap[BodyPoseKey.right_heel].score,
-        keypoints3DMap[BodyPoseKey.left_heel].score
-    );
-    countScores++;
-    const score = 100 * scoreComputation / countScores;
-    return {
-        all: score,
-        up: score,
-    };
 };
 
 export function getHigherAvatarScoredPose(
@@ -554,12 +601,18 @@ export function getHigherAvatarScoredPose(
 ) {
     const sortedPoses = poses.map((pose) => {
         const score = computeAvatarScore(pose, videoSize);
+        //console.log(score);
         return {
             score,
             pose,
         };
     }).sort((a, b) => {
-        return b.score.all - a.score.all;
+        let allDiff = b.score.all - a.score.all;
+        if (allDiff != 0) {
+            return allDiff;
+        } else {
+            return b.score.up - a.score.up;
+        }
     });
     // Returns the first pose
     return sortedPoses[0];
