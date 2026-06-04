@@ -38,6 +38,9 @@ jobs:
           EOF
           sudo chmod +x /usr/local/bin/ffplay
 
+      - name: Copy version
+        run: npm run copy_version
+
       - name: Build
         run: npm run build:prod
 

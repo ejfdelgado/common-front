@@ -1,6 +1,6 @@
 {
   "name": "common-front",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "scripts": {
     "bip": "ffplay /sound/finish.mp3 -nodisp -nostats -hide_banner -autoexit",
     "ng": "ng",
@@ -14,7 +14,8 @@
     "publish": "npm run build:prod && npm run deploy",
     "watch": "ng build --watch --configuration development",
     "myinstall": "npm install --legacy-peer-deps",
-    "analyze": "npx webpack-bundle-analyzer appengine/public/stats.json"
+    "analyze": "npx webpack-bundle-analyzer appengine/public/stats.json",
+    "copy_version": "node admin_manager.mjs copyVersion"
   },
   "prettier": {
     "printWidth": 100,

@@ -6,7 +6,8 @@ import {
   effect,
   untracked,
   computed,
-  ViewChild
+  ViewChild,
+  Inject
 } from '@angular/core';
 import { IndicatorService } from "@services/indicator.service";
 import { CameraCaptureComponent } from '@components/camera-capture/camera-capture';
@@ -119,6 +120,7 @@ export class Index implements AfterViewInit {
     public sanitizer: DomSanitizer,
     public configSrv: ConfigService,
     public moneySrv: MoneyService,
+    @Inject('appVersion') public appVersion: string,
   ) {
     console.log(this.moneySrv.format(45600));
     this.authSrv.authState$.subscribe(user => {

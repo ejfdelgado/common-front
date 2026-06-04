@@ -1,5 +1,8 @@
 # CommonFront
 
+Allow to know the current version
+Avoid to version package-lock, only if window developer is involved.
+
 npm install --legacy-peer-deps
 
 Solo guardar la imagen cuando realmente ha cambiado el render.

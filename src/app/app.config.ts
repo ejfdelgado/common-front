@@ -20,7 +20,7 @@ moment.locale(DATE_LOCALE);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: 'appVersion', useValue: '1.0.0' },
+    { provide: 'appVersion', useValue: '2.0.0' },
     provideFirebaseApp(() => {
       return defaultFirebaseApp;
     }
