@@ -120,6 +120,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             sanitizer,
             fullScreenSrv,
         );
+
+        this.pinchHand.subscribe((event) => {
+            console.log(JSON.stringify(event, null, 4));
+        });
     }
 
     setUser(user: User | null) {
@@ -194,8 +198,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         multiHandLandmarks: NormalizedLandmarkList,
         multiHandWorldLandmarks: LandmarkList,
     ) {
-        const PINCH_ON_THRESHOLD: number = 1;
-        const PINCH_OFF_THRESHOLD: number = 1;
+        // Hysteresis: ON requires closer contact than OFF to suppress noisy toggling
+        const PINCH_ON_THRESHOLD: number = 0.04;   // ~4 cm in world coords
+        const PINCH_OFF_THRESHOLD: number = 0.07;  // ~7 cm in world coords
+
         // Check the hand
         if (!this.pinchStateMap.has(handId)) {
             const defaultMap: Map<FingerPinch, boolean> = new Map();
@@ -209,13 +215,41 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             return;
         }
 
-        // 1. Use multiHandLandmarks and multiHandWorldLandmarks to check current pinch between Thumb / Finger and Thumb / Pinky
+        // 1. Measure 3D distances using world landmarks (metric scale, invariant to hand position)
+        const THUMB_TIP = 4;
+        const INDEX_FINGER_TIP = 8;
+        const PINKY_TIP = 20;
 
-        // 2. Use the this.pinchStateMap to deduce when to trigger this.pinchHand.emit(), Note: Use distinct distance thresholds to ON or OFF to reduce noisy toggle among ON or OFF
+        const thumb = multiHandWorldLandmarks[THUMB_TIP];
+        const indexFinger = multiHandWorldLandmarks[INDEX_FINGER_TIP];
+        const pinky = multiHandWorldLandmarks[PINKY_TIP];
 
-        // 3. Update the current state
+        const dist3D = (a: { x: number; y: number; z: number }, b: { x: number; y: number; z: number }) =>
+            Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2);
 
-        this.pinchHand.emit();
+        const distances: [FingerPinch, number][] = [
+            ["Thumb_Finger", dist3D(thumb, indexFinger)],
+            ["Thumb_Pinky", dist3D(thumb, pinky)],
+        ];
+
+        // 2. Apply hysteresis: emit only when state actually transitions
+        for (const [finger, dist] of distances) {
+            const wasActive = handMap.get(finger) ?? false;
+            let isActive = wasActive;
+
+            if (!wasActive && dist < PINCH_ON_THRESHOLD) {
+                isActive = true;
+            } else if (wasActive && dist > PINCH_OFF_THRESHOLD) {
+                isActive = false;
+            }
+
+            if (isActive !== wasActive) {
+                this.pinchHand.emit({ handId, finger, pinchState: isActive });
+            }
+
+            // 3. Update the current state
+            handMap.set(finger, isActive);
+        }
     }
 
     async updatePose(poses: any) {
