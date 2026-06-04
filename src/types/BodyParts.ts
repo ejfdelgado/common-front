@@ -114,10 +114,13 @@ const MediaPipeRelation = [
     BodyPoseKey.right_elbow,
     BodyPoseKey.left_wrist,
     BodyPoseKey.right_wrist,
+    //dedo menique
     BodyPoseKey.left_pinky,
     BodyPoseKey.right_pinky,
+    //dedo indice
     BodyPoseKey.left_index,
     BodyPoseKey.right_index,
+    //dedo pulgar
     BodyPoseKey.left_thumb,
     BodyPoseKey.right_thumb,
     BodyPoseKey.left_hip,

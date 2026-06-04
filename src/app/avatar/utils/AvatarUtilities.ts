@@ -404,58 +404,123 @@ export function computeAvatarFrontInternal(
     return response;
 };
 
+export interface PersonInCameraData {
+    top: boolean;
+    all: boolean;
+}
+
 export function isAllPersonInsideCamera(
     pose: BodyData,
     videoSize: GenericSizeType,
     percentageTop: number = 0.1,
     percentageBottom: number = 0,
-) {
+): PersonInCameraData {
+
+    const response: PersonInCameraData = {
+        top: false,
+        all: false,
+    }
+
     const top = videoSize.height * percentageTop;
     const bottom = videoSize.height * (1 - percentageBottom);
-    const relevantYs: number[] = [];
+    const width = videoSize.width;
 
-    const relevantPoints = [
+    const relevantPointsAll = [
+        //head
         BodyPoseKey.nose,
         BodyPoseKey.left_ear,
         BodyPoseKey.right_ear,
+        //bottom relevant
+        //talon
         BodyPoseKey.left_heel,
         BodyPoseKey.right_heel,
+        //rodilla
         BodyPoseKey.left_knee,
         BodyPoseKey.right_knee,
     ];
 
-    // Itero una vez
-    pose.keypoints.forEach((p) => {
-        if (relevantPoints.indexOf(p.name as BodyPoseKey) >= 0) {
-            relevantYs.push(p.y);
+    const relevantPointsTop = [
+        //head
+        BodyPoseKey.nose,
+        BodyPoseKey.left_ear,
+        BodyPoseKey.right_ear,
+        //top relevant
+        BodyPoseKey.left_shoulder,
+        BodyPoseKey.right_shoulder,
+        BodyPoseKey.left_elbow,
+        BodyPoseKey.right_elbow,
+        BodyPoseKey.left_wrist,
+        BodyPoseKey.right_wrist,
+        //dedo indice
+        BodyPoseKey.left_index,
+        BodyPoseKey.right_index,
+        //dedo pulgar
+        BodyPoseKey.left_thumb,
+        BodyPoseKey.right_thumb,
+    ];
+
+    const coreFunction = (constraint: BodyPoseKey[]): boolean => {
+        const relevantYsAll: number[] = [];
+        const relevantXsAll: number[] = [];
+        // Itero una vez
+        pose.keypoints.forEach((p) => {
+            if (relevantPointsAll.indexOf(p.name as BodyPoseKey) >= 0) {
+                relevantYsAll.push(p.y);
+                relevantXsAll.push(p.x);
+            }
+        });
+
+        const minY = Math.min(...relevantYsAll);
+        const maxY = Math.max(...relevantYsAll);
+        const minX = Math.min(...relevantXsAll);
+        const maxX = Math.max(...relevantXsAll);
+
+        if (
+            top < minY
+            && bottom > maxY
+            && minX > 0
+            && maxX < width
+        ) {
+            return true;
         }
-    });
-
-    const min = Math.min(...relevantYs);
-    const max = Math.max(...relevantYs);
-
-    if (
-        top < min
-        && bottom > max
-    ) {
-        return true;
+        return false;
     }
 
-    return false;
+
+
+    if (coreFunction(relevantPointsAll)) {
+        response.top = true;
+        response.all = true;
+    } else {
+        if (coreFunction(relevantPointsTop)) {
+            response.top = true;
+            response.all = false;
+        }
+    }
+
+    return response;
+}
+
+export interface AvatarSocore {
+    up: number;
+    all: number;
 }
 
 export function computeAvatarScore(
     pose: BodyData,
     videoSize: GenericSizeType,
-) {
+): AvatarSocore {
     const keypoints3DMap: { [key: string]: BodyKeyPointData } = {};
     pose.keypoints3D.forEach((el) => {
         keypoints3DMap[el.name] = el;
     });
 
     const isPersonInside = isAllPersonInsideCamera(pose, videoSize);
-    if (!isPersonInside) {
-        return -1;
+    if (!isPersonInside.all && !isPersonInside.top) {
+        return {
+            up: -1,
+            all: -1,
+        };
     }
 
     let scoreComputation: number = 0;
@@ -477,22 +542,27 @@ export function computeAvatarScore(
     );
     countScores++;
     const score = 100 * scoreComputation / countScores;
-    return score;
+    return {
+        all: score,
+        up: score,
+    };
 };
 
 export function getHigherAvatarScoredPose(
     poses: BodyData[],
     videoSize: GenericSizeType,
 ) {
-    return poses.map((pose) => {
+    const sortedPoses = poses.map((pose) => {
         const score = computeAvatarScore(pose, videoSize);
         return {
             score,
             pose,
         };
     }).sort((a, b) => {
-        return b.score - a.score;
-    })[0];
+        return b.score.all - a.score.all;
+    });
+    // Returns the first pose
+    return sortedPoses[0];
 }
 
 export function replaceAvatarSkin(

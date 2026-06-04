@@ -520,7 +520,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 // in main thread
                 const higherResponse = getHigherAvatarScoredPose(poses, videoSize);
                 pose = higherResponse.pose;
-                score = higherResponse.score;
+                score = higherResponse.score.all;
             }
             if (!model || !pose) {
                 this.computingIK = false;
