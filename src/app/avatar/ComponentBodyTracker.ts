@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, ElementRef } from "@angular/core";
+import { ChangeDetectorRef, ElementRef, EventEmitter } from "@angular/core";
 import {
     AVATAR_NAME,
     AVATAR_PELVIS_HEIGHT,
     BodyData,
     GenericSizeType,
+    HandPinchData,
 } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
@@ -19,7 +20,8 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import { WorldAvatar } from "@mytypes/WorldAvatar";
-import { Pose } from '@mediapipe/pose';
+import { LandmarkList, NormalizedLandmarkList, Pose } from '@mediapipe/pose';
+import { Hands } from '@mediapipe/hands';
 import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
 
 import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
@@ -31,6 +33,7 @@ import { Camera } from "./Camera";
 import { CameraPickerDialogComponent } from "@components/fields/camera-picker/camera-picker-dialog";
 import { CameraDataType } from "@mytypes/CameraTypes";
 import { MatDialog } from "@angular/material/dialog";
+import { FingerPinch, HandIdType } from "src/types/BodyParts";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
@@ -46,8 +49,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     canvasRef!: ElementRef<HTMLCanvasElement>;
     threeComponent!: ComponentWithAvatar;
     poseTracker!: Pose;
+    handsTracker!: Hands;
     poses: BodyData[] = [];
     currentUser: User | null = null;
+    pinchHand: EventEmitter<HandPinchData> = new EventEmitter();
     videoSize: GenericSizeType = {
         width: 0,
         height: 0,
@@ -130,7 +135,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         this.canvasRef = canvasR;
         this.threeComponent = threeComponent;
 
-        // camera stuff
+        // Body tracker
         this.poseTracker = new Pose({
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
         });
@@ -148,7 +153,67 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             }
         });
 
+        // Hands tracking
+        this.handsTracker = new Hands({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        });
+        this.handsTracker.setOptions({
+            maxNumHands: 2,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+        this.handsTracker.onResults((results) => {
+            const {
+                multiHandLandmarks,
+                multiHandWorldLandmarks,
+                multiHandedness,
+            } = results;
+            const HAND_TRESHOLD = 80;
+            for (let i = 0; i < multiHandedness.length; i++) {
+                const handScore = multiHandedness[0];
+                if (handScore.score > HAND_TRESHOLD) {
+                    const handId = handScore.label;
+                    const index = handScore.index;
+                    this.processHand(
+                        handId,
+                        multiHandLandmarks[index],
+                        multiHandWorldLandmarks[index],
+                    );
+                }
+            }
+        });
+
         this.initialized = true;
+    }
+
+    pinchStateMap: Map<HandIdType, Map<FingerPinch, boolean>> = new Map();
+
+    processHand(
+        handId: HandIdType,
+        multiHandLandmarks: NormalizedLandmarkList,
+        multiHandWorldLandmarks: LandmarkList,
+    ) {
+        // Check the hand
+        if (!this.pinchStateMap.has(handId)) {
+            const defaultMap: Map<FingerPinch, boolean> = new Map();
+            this.pinchStateMap.set(handId, defaultMap);
+            defaultMap.set("Thumb_Finger", false);
+            defaultMap.set("Thumb_Pinky", false);
+        }
+        // Check the finger
+        const handMap = this.pinchStateMap.get(handId);
+        if (!handMap) {
+            return;
+        }
+
+        // 1. Use multiHandLandmarks and multiHandWorldLandmarks to check current pinch between Thumb / Finger and Thumb / Pinky
+
+        // 2. Use the this.pinchStateMap to deduce when to trigger this.pinchHand.emit()
+
+        // 3. Update the current state
+
+        this.pinchHand.emit();
     }
 
     async updatePose(poses: any) {
@@ -317,6 +382,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 deviceId: selectedCamera.id,
                 onFrame: async () => {
                     await this.poseTracker.send({ image: videoElement });
+                    await this.handsTracker.send({ image: videoElement });
                 },
                 width: 640,
                 height: 480,

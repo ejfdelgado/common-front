@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FingerPinch, HandIdType } from './BodyParts';
 
 
 export const ROOT_PATH = "/assets/models/";
@@ -181,4 +182,10 @@ export interface AnimationSpecType {
     animationUrl: string,
     loop: boolean,
     lr?: number[],
+}
+
+export interface HandPinchData {
+    handId: HandIdType;
+    finger: FingerPinch;
+    pinchState: boolean;
 }

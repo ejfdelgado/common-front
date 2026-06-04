@@ -162,4 +162,7 @@ export const DEFAULT_BOTTOM_VALUES = [
     },
 ];
 
+export type HandIdType = 'Right'|'Left';
+export type FingerPinch = 'Thumb_Finger' | 'Thumb_Pinky';
+
 export { MediaPipeRelation };
