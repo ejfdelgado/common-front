@@ -530,11 +530,12 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.computingIK = false;
                 return false;
             }
-            if (score.all < 0) {
+            if (score.all < 0 && score.top < 0) {
                 // Person does not fit the camera
                 throw new Error(`${score}`);
             }
-            if (score.all < 90) {
+            const SCORE_THRESHOLD = 90;
+            if (score.all < SCORE_THRESHOLD && score.top < SCORE_THRESHOLD) {
                 // this.restoreBoneBackup(AVATAR_NAME);
                 // Not all body in view or not trusty
                 this.computingIK = false;
@@ -594,22 +595,42 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 keypoints3DMap[el.name] = el;
             });
 
-            const MAPPING_TARGETS = [
-                { "source": BodyPoseKey.left_knee, "target": AvatarBoneEnum.target_knee_l },
-                { "source": BodyPoseKey.left_heel, "target": AvatarBoneEnum.target_foot_l },
-                { "source": BodyPoseKey.right_knee, "target": AvatarBoneEnum.target_knee_r },
-                { "source": BodyPoseKey.right_heel, "target": AvatarBoneEnum.target_foot_r },
-                //
-                { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
-                { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
-                { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
-                { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
-                { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
-                { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
-                //
-                { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
-                { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
-            ];
+            let MAPPING_TARGETS: {
+                source: BodyPoseKey;
+                target: AvatarBoneEnum;
+            }[] = [];
+
+            if (score.all >= SCORE_THRESHOLD) {
+                MAPPING_TARGETS = [
+                    { "source": BodyPoseKey.left_knee, "target": AvatarBoneEnum.target_knee_l },
+                    { "source": BodyPoseKey.left_heel, "target": AvatarBoneEnum.target_foot_l },
+                    { "source": BodyPoseKey.right_knee, "target": AvatarBoneEnum.target_knee_r },
+                    { "source": BodyPoseKey.right_heel, "target": AvatarBoneEnum.target_foot_r },
+                    //
+                    { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
+                    { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
+                    { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
+                    { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
+                    { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
+                    { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
+                    //
+                    { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
+                    { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
+                ];
+            } else {
+                MAPPING_TARGETS = [
+                    { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
+                    { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
+                    { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
+                    { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
+                    { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
+                    { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
+                    //
+                    { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
+                    { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
+                ];
+            }
+
             for (let i = 0; i < MAPPING_TARGETS.length; i++) {
                 const { source, target } = MAPPING_TARGETS[i];
                 const targetBone = model.getObjectByName(target);
