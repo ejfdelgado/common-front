@@ -464,7 +464,7 @@ export function isAllPersonInsideCamera(
         const relevantXsAll: number[] = [];
         // Itero una vez
         pose.keypoints.forEach((p) => {
-            if (relevantPointsAll.indexOf(p.name as BodyPoseKey) >= 0) {
+            if (constraint.indexOf(p.name as BodyPoseKey) >= 0) {
                 relevantYsAll.push(p.y);
                 relevantXsAll.push(p.x);
             }
@@ -502,7 +502,7 @@ export function isAllPersonInsideCamera(
 }
 
 export interface AvatarScore {
-    up: number;
+    top: number;
     all: number;
 }
 
@@ -516,7 +516,6 @@ export function computeAvatarScore(
     });
 
     const isPersonInside = isAllPersonInsideCamera(pose, videoSize);
-    console.log(isPersonInside);
     if (isPersonInside.all) {
         // Al body inside, then compute same for all and top
         let scoreComputation: number = 0;
@@ -540,8 +539,8 @@ export function computeAvatarScore(
         const score = 100 * scoreComputation / countScores;
 
         return {
+            top: score,
             all: score,
-            up: score,
         };
     } else if (isPersonInside.top) {
         // Al body inside, then compute same for all and top
@@ -584,12 +583,12 @@ export function computeAvatarScore(
         const score = 100 * scoreComputation / countScores;
 
         return {
+            top: score,
             all: -1,
-            up: score,
         };
     } else {
         return {
-            up: -1,
+            top: -1,
             all: -1,
         };
     }
@@ -601,7 +600,6 @@ export function getHigherAvatarScoredPose(
 ) {
     const sortedPoses = poses.map((pose) => {
         const score = computeAvatarScore(pose, videoSize);
-        //console.log(score);
         return {
             score,
             pose,
@@ -611,7 +609,7 @@ export function getHigherAvatarScoredPose(
         if (allDiff != 0) {
             return allDiff;
         } else {
-            return b.score.up - a.score.up;
+            return b.score.top - a.score.top;
         }
     });
     // Returns the first pose

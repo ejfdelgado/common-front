@@ -513,7 +513,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
             let pose: BodyData | null = null;
             let score: AvatarScore = {
                 all: -1,
-                up: -1,
+                top: -1,
             };
             if (USE_WORKER) {
                 // with worker
@@ -530,7 +530,6 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 this.computingIK = false;
                 return false;
             }
-            //console.log(score);
             if (score.all < 0) {
                 // Person does not fit the camera
                 throw new Error(`${score}`);
