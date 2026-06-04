@@ -548,6 +548,49 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                     this.restoreBackupOnNextComputation = false;
                 }
             }
+            let type = "all";
+            if (score.all < SCORE_THRESHOLD) {
+                type = "top";
+            }
+
+            if (type == "top") {
+                // rewrite the knee and heel
+                const bones = [
+                    {
+                        "name": "left_knee",
+                        "x": 0.07426603138446808,
+                        "y": 0.42307138442993164,
+                        "z": 0.019249558448791504
+                    },
+                    {
+                        "name": "right_knee",
+                        "x": -0.09451748430728912,
+                        "y": 0.3935917913913727,
+                        "z": 0.03170658275485039
+                    },
+                    {
+                        "name": "left_heel",
+                        "x": 0.0934494286775589,
+                        "y": 0.8205045461654663,
+                        "z": 0.14703066647052765
+                    },
+                    {
+                        "name": "right_heel",
+                        "x": -0.08001966774463654,
+                        "y": 0.8012871146202087,
+                        "z": 0.18003836274147034
+                    },
+                ];
+                for (let i = 0; i < bones.length; i++) {
+                    const reference = bones[i];
+                    const target = pose.keypoints3D.find((destiny) => { return destiny.name == reference.name });
+                    if (target) {
+                        target.x = reference.x;
+                        target.y = reference.y;
+                        target.z = reference.z;
+                    }
+                }
+            }
 
             // Intercept for mirroring if necesarry
             if (mirror) {
@@ -600,36 +643,23 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 target: AvatarBoneEnum;
             }[] = [];
 
-            if (score.all >= SCORE_THRESHOLD) {
-                MAPPING_TARGETS = [
-                    { "source": BodyPoseKey.left_knee, "target": AvatarBoneEnum.target_knee_l },
-                    { "source": BodyPoseKey.left_heel, "target": AvatarBoneEnum.target_foot_l },
-                    { "source": BodyPoseKey.right_knee, "target": AvatarBoneEnum.target_knee_r },
-                    { "source": BodyPoseKey.right_heel, "target": AvatarBoneEnum.target_foot_r },
-                    //
-                    { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
-                    { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
-                    { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
-                    { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
-                    { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
-                    { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
-                    //
-                    { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
-                    { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
-                ];
-            } else {
-                MAPPING_TARGETS = [
-                    { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
-                    { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
-                    { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
-                    { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
-                    { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
-                    { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
-                    //
-                    { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
-                    { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
-                ];
-            }
+            MAPPING_TARGETS = [
+                { "source": BodyPoseKey.left_knee, "target": AvatarBoneEnum.target_knee_l },
+                { "source": BodyPoseKey.left_heel, "target": AvatarBoneEnum.target_foot_l },
+                { "source": BodyPoseKey.right_knee, "target": AvatarBoneEnum.target_knee_r },
+                { "source": BodyPoseKey.right_heel, "target": AvatarBoneEnum.target_foot_r },
+                //
+                { "source": BodyPoseKey.right_shoulder, "target": AvatarBoneEnum.target_shoulder_r },
+                { "source": BodyPoseKey.right_elbow, "target": AvatarBoneEnum.target_elbow_r },
+                { "source": BodyPoseKey.right_wrist, "target": AvatarBoneEnum.target_hand_r },
+                { "source": BodyPoseKey.left_shoulder, "target": AvatarBoneEnum.target_shoulder_l },
+                { "source": BodyPoseKey.left_elbow, "target": AvatarBoneEnum.target_elbow_l },
+                { "source": BodyPoseKey.left_wrist, "target": AvatarBoneEnum.target_hand_l },
+                //
+                { "source": BodyPoseKey.target_chest, "target": AvatarBoneEnum.target_chest },
+                { "source": BodyPoseKey.target_head, "target": AvatarBoneEnum.target_head },
+            ];
+
 
             for (let i = 0; i < MAPPING_TARGETS.length; i++) {
                 const { source, target } = MAPPING_TARGETS[i];
