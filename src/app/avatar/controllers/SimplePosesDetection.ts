@@ -104,6 +104,7 @@ export class SimplePosesDetection extends SceneControllerAbstract {
     }
 
     computeHeight() {
-        this.lastData.stateBody.height = computeHeight(this.lastData.keypoints3DMap);
+        const height = computeHeight(this.lastData.keypoints3DMap);
+        this.lastData.stateBody.height = height;
     }
 }

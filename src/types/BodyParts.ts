@@ -135,4 +135,31 @@ const MediaPipeRelation = [
     BodyPoseKey.right_foot_index,
 ];
 
+export const DEFAULT_BOTTOM_VALUES = [
+    {
+        "name": "left_knee",
+        "x": 0.07426603138446808,
+        "y": 0.42307138442993164,
+        "z": 0.019249558448791504
+    },
+    {
+        "name": "right_knee",
+        "x": -0.09451748430728912,
+        "y": 0.3935917913913727,
+        "z": 0.03170658275485039
+    },
+    {
+        "name": "left_heel",
+        "x": 0.0934494286775589,
+        "y": 0.8205045461654663,
+        "z": 0.14703066647052765
+    },
+    {
+        "name": "right_heel",
+        "x": -0.08001966774463654,
+        "y": 0.8012871146202087,
+        "z": 0.18003836274147034
+    },
+];
+
 export { MediaPipeRelation };

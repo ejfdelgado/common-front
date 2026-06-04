@@ -29,7 +29,7 @@ import {
     computeComparableBody,
     AvatarScore,
 } from '@avatar/utils/AvatarUtilities';
-import { AvatarBoneEnum, BodyPoseKey } from '@mytypes/BodyParts';
+import { AvatarBoneEnum, BodyPoseKey, DEFAULT_BOTTOM_VALUES } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
 import { CameraState } from '@mytypes/WorldAvatar';
@@ -554,35 +554,9 @@ export abstract class SceneWithAvatar extends THREE.Scene {
             }
 
             if (type == "top") {
-                // rewrite the knee and heel
-                const bones = [
-                    {
-                        "name": "left_knee",
-                        "x": 0.07426603138446808,
-                        "y": 0.42307138442993164,
-                        "z": 0.019249558448791504
-                    },
-                    {
-                        "name": "right_knee",
-                        "x": -0.09451748430728912,
-                        "y": 0.3935917913913727,
-                        "z": 0.03170658275485039
-                    },
-                    {
-                        "name": "left_heel",
-                        "x": 0.0934494286775589,
-                        "y": 0.8205045461654663,
-                        "z": 0.14703066647052765
-                    },
-                    {
-                        "name": "right_heel",
-                        "x": -0.08001966774463654,
-                        "y": 0.8012871146202087,
-                        "z": 0.18003836274147034
-                    },
-                ];
-                for (let i = 0; i < bones.length; i++) {
-                    const reference = bones[i];
+                // rewrite the default botton parts
+                for (let i = 0; i < DEFAULT_BOTTOM_VALUES.length; i++) {
+                    const reference = DEFAULT_BOTTOM_VALUES[i];
                     const target = pose.keypoints3D.find((destiny) => { return destiny.name == reference.name });
                     if (target) {
                         target.x = reference.x;
