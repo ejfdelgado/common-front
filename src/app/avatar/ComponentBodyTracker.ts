@@ -194,6 +194,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         multiHandLandmarks: NormalizedLandmarkList,
         multiHandWorldLandmarks: LandmarkList,
     ) {
+        const PINCH_ON_THRESHOLD: number = 1;
+        const PINCH_OFF_THRESHOLD: number = 1;
         // Check the hand
         if (!this.pinchStateMap.has(handId)) {
             const defaultMap: Map<FingerPinch, boolean> = new Map();
@@ -209,7 +211,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
         // 1. Use multiHandLandmarks and multiHandWorldLandmarks to check current pinch between Thumb / Finger and Thumb / Pinky
 
-        // 2. Use the this.pinchStateMap to deduce when to trigger this.pinchHand.emit()
+        // 2. Use the this.pinchStateMap to deduce when to trigger this.pinchHand.emit(), Note: Use distinct distance thresholds to ON or OFF to reduce noisy toggle among ON or OFF
 
         // 3. Update the current state
 
