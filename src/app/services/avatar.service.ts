@@ -56,6 +56,8 @@ export class AvatarService {
                                 { id: GameControllerEnum.CubeController, params: { enabled: false } },
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                                 { id: GameControllerEnum.SharePoseController, params: {} },
+                                { id: GameControllerEnum.FingerController, params: {} },
+                                
                             ]
                         },
                         "mode01": {

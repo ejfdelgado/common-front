@@ -27,6 +27,7 @@ import { CubeController } from './controllers/CubeController';
 import { PromiseEmitter } from '@tools/PromiseEmitter';
 import { SharePoseController } from './controllers/SharePoseController';
 import { P2PService } from '@services/p2p.service';
+import { FingerController } from './controllers/FingerController';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
     useComposer: boolean = false;
@@ -258,6 +259,8 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             return new SharePoseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.WalkController) {
             return new WalkController(this.events, this.controlProxy, this.p2pSrv);
+        } else if (config.id == GameControllerEnum.FingerController) {
+            return new FingerController(this.events, this.controlProxy, this.p2pSrv);
         } else {
             throw new Error("Unknown controller");
         }

@@ -76,6 +76,7 @@ export enum GameControllerEnum {
     TerrainElevationController = "TerrainElevationController",
     SharePoseController = "SharePoseController",
     WalkController = "WalkController",
+    FingerController = "FingerController",
 }
 
 export interface GameController {

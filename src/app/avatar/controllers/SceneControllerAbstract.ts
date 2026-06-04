@@ -9,6 +9,7 @@ import { SceneWithComposer } from "../SceneWithComposer";
 import { ControllerInitDataType } from "@mytypes/BodyTypesExtra";
 import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "@services/p2p.service";
+import { computeAverageByNames, computeDistance } from "@avatar/utils/AvatarUtilities";
 
 export abstract class SceneControllerAbstract {
     enabled: boolean = true;
@@ -39,6 +40,12 @@ export abstract class SceneControllerAbstract {
 
     async postUpdate(): Promise<void> {
         return;
+    }
+
+    computeDistanceByName(aName: string, bName: string) {
+        const a = this.lastData.keypoints3DMap[aName];
+        const b = this.lastData.keypoints3DMap[bName];
+        return computeDistance(a, b);
     }
 
     abstract stop(): Promise<void>;

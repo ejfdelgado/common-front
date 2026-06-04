@@ -1,4 +1,3 @@
-import { computeAverageByNames, computeDistance } from "@avatar/utils/AvatarUtilities";
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { BodyPoseKey } from "@mytypes/BodyParts";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
@@ -22,21 +21,17 @@ export class HandsCloseController extends SceneControllerAbstract {
 
     }
 
-    computeDistanceByName(aName: string, bName: string) {
-        const a = this.lastData.keypoints3DMap[aName];
-        const b = this.lastData.keypoints3DMap[bName];
-        return computeDistance(a, b);
-    }
-
     computeHandGet() {
         const distance = this.computeDistanceByName(
             BodyPoseKey.left_wrist,
             BodyPoseKey.right_wrist
         );
+        /*
         const average = computeAverageByNames([
             BodyPoseKey.left_wrist,
             BodyPoseKey.right_wrist,
         ], this.lastData.keypoints3DMap);
+        */
         if (distance <= this.HANDS_CLOSE) {
             if (this.handsClose == false) {
                 //this.clapLocation.set(average.x, average.y, average.z);
