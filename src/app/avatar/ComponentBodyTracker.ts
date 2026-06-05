@@ -173,7 +173,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 multiHandWorldLandmarks,
                 multiHandedness,
             } = results;
-            const HAND_TRESHOLD = 80;
+            const HAND_TRESHOLD = 0.8;
             for (let i = 0; i < multiHandedness.length; i++) {
                 const handScore = multiHandedness[0];
                 if (handScore.score > HAND_TRESHOLD) {
@@ -198,10 +198,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         multiHandLandmarks: NormalizedLandmarkList,
         multiHandWorldLandmarks: LandmarkList,
     ) {
-        console.log("processHand");
         // Hysteresis: ON requires closer contact than OFF to suppress noisy toggling
-        const PINCH_ON_THRESHOLD: number = 0.04;   // ~4 cm in world coords
-        const PINCH_OFF_THRESHOLD: number = 0.07;  // ~7 cm in world coords
+        const PINCH_ON_THRESHOLD: number = 0.03;   // ~4 cm in world coords
+        const PINCH_OFF_THRESHOLD: number = 0.05;  // ~7 cm in world coords
 
         // Check the hand
         if (!this.pinchStateMap.has(handId)) {
@@ -212,7 +211,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
         // Check the finger
         const handMap = this.pinchStateMap.get(handId);
-        if (!handMap) {
+        if (!handMap || !multiHandWorldLandmarks) {
             return;
         }
 
@@ -233,7 +232,11 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             ["Thumb_Pinky", dist3D(thumb, pinky)],
         ];
 
-        console.log(JSON.stringify(distances));
+        /*
+        if (handId == "Left") {
+            console.log(JSON.stringify(distances));
+        }
+        */
 
         // 2. Apply hysteresis: emit only when state actually transitions
         for (const [finger, dist] of distances) {
