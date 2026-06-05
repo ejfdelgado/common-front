@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { FingerPinch, HandIdType } from './BodyParts';
+import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 
 
 export const ROOT_PATH = "/assets/models/";
@@ -98,6 +99,11 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
     keypoints3DMap: {
         [key: string]: BodyKeyPointData;
     },
+    hands: Map<HandIdType, {
+        score: number,
+        multiHandLandmarks: NormalizedLandmarkList,
+        multiHandWorldLandmarks: LandmarkList,
+    }>
 }
 
 

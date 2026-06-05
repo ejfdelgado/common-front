@@ -162,7 +162,13 @@ export const DEFAULT_BOTTOM_VALUES = [
     },
 ];
 
-export type HandIdType = 'Right'|'Left';
+export type HandIdType = 'Right' | 'Left';
 export type FingerPinch = 'Thumb_Finger' | 'Thumb_Pinky';
+
+export enum HandKey {
+    THUMB_TIP = 4,
+    INDEX_FINGER_TIP = 8,
+    PINKY_TIP = 20,
+}
 
 export { MediaPipeRelation };

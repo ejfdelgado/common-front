@@ -28,6 +28,8 @@ import { PromiseEmitter } from '@tools/PromiseEmitter';
 import { SharePoseController } from './controllers/SharePoseController';
 import { P2PService } from '@services/p2p.service';
 import { FingerController } from './controllers/FingerController';
+import { HandIdType } from 'src/types/BodyParts';
+import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
     useComposer: boolean = false;
@@ -39,6 +41,11 @@ export abstract class ComponentWithAvatar extends CommonComponent {
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
     restoreInterval: NodeJS.Timeout | null = null;
+    hands: Map<HandIdType, {
+        score: number,
+        multiHandLandmarks: NormalizedLandmarkList,
+        multiHandWorldLandmarks: LandmarkList,
+    }> = new Map();
     stateBody: StateBody = {
         height: 1,
         isTPose: false,
@@ -136,6 +143,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                 const matrixTransforms: THREE.Matrix4[] = [];
                 for (let i = 0; i < this.controllers.length; i++) {
                     const controller = this.controllers[i];
+                    const hands = this.hands;
                     controller.preUpdate({
                         pose,
                         keypoints3DMap,
@@ -143,6 +151,7 @@ export abstract class ComponentWithAvatar extends CommonComponent {
                         frontData,
                         stateBody: this.stateBody,
                         videoSize,
+                        hands,
                     });
                     const temp = await controller.update();
                     if (temp.avatarTransform) {

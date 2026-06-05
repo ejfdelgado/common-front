@@ -33,7 +33,7 @@ import { Camera } from "./Camera";
 import { CameraPickerDialogComponent } from "@components/fields/camera-picker/camera-picker-dialog";
 import { CameraDataType } from "@mytypes/CameraTypes";
 import { MatDialog } from "@angular/material/dialog";
-import { FingerPinch, HandIdType } from "src/types/BodyParts";
+import { FingerPinch, HandIdType, HandKey } from "src/types/BodyParts";
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
     room: RoomGameType | null = null;
@@ -173,83 +173,19 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 multiHandWorldLandmarks,
                 multiHandedness,
             } = results;
-            const HAND_TRESHOLD = 0.8;
             for (let i = 0; i < multiHandedness.length; i++) {
                 const handScore = multiHandedness[i];
-                if (handScore.score > HAND_TRESHOLD) {
-                    const handId = handScore.label;
-                    const index = handScore.index;
-                    this.processHand(
-                        handId,
-                        multiHandLandmarks[index],
-                        multiHandWorldLandmarks[index],
-                    );
-                }
+                const handId = handScore.label;
+                const index = handScore.index;
+                this.threeComponent.hands.set(handId, {
+                    score: handScore.score,
+                    multiHandLandmarks: multiHandLandmarks[index],
+                    multiHandWorldLandmarks: multiHandWorldLandmarks[index],
+                });
             }
         });
 
         this.initialized = true;
-    }
-
-    pinchStateMap: Map<HandIdType, Map<FingerPinch, boolean>> = new Map();
-
-    processHand(
-        handId: HandIdType,
-        multiHandLandmarks: NormalizedLandmarkList,
-        multiHandWorldLandmarks: LandmarkList,
-    ) {
-        // Hysteresis: ON requires closer contact than OFF to suppress noisy toggling
-        const PINCH_ON_THRESHOLD: number = 0.03;   // ~4 cm in world coords
-        const PINCH_OFF_THRESHOLD: number = 0.05;  // ~7 cm in world coords
-
-        // Check the hand
-        if (!this.pinchStateMap.has(handId)) {
-            const defaultMap: Map<FingerPinch, boolean> = new Map();
-            this.pinchStateMap.set(handId, defaultMap);
-            defaultMap.set("Thumb_Finger", false);
-            defaultMap.set("Thumb_Pinky", false);
-        }
-        // Check the finger
-        const handMap = this.pinchStateMap.get(handId);
-        if (!handMap || !multiHandWorldLandmarks) {
-            return;
-        }
-
-        // 1. Measure 3D distances using world landmarks (metric scale, invariant to hand position)
-        const THUMB_TIP = 4;
-        const INDEX_FINGER_TIP = 8;
-        const PINKY_TIP = 20;
-
-        const thumb = multiHandWorldLandmarks[THUMB_TIP];
-        const indexFinger = multiHandWorldLandmarks[INDEX_FINGER_TIP];
-        const pinky = multiHandWorldLandmarks[PINKY_TIP];
-
-        const dist3D = (a: { x: number; y: number; z: number }, b: { x: number; y: number; z: number }) =>
-            Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2);
-
-        const distances: [FingerPinch, number][] = [
-            ["Thumb_Finger", dist3D(thumb, indexFinger)],
-            ["Thumb_Pinky", dist3D(thumb, pinky)],
-        ];
-
-        // 2. Apply hysteresis: emit only when state actually transitions
-        for (const [finger, dist] of distances) {
-            const wasActive = handMap.get(finger) ?? false;
-            let isActive = wasActive;
-
-            if (!wasActive && dist < PINCH_ON_THRESHOLD) {
-                isActive = true;
-            } else if (wasActive && dist > PINCH_OFF_THRESHOLD) {
-                isActive = false;
-            }
-
-            if (isActive !== wasActive) {
-                this.pinchHand.emit({ handId, finger, pinchState: isActive });
-            }
-
-            // 3. Update the current state
-            handMap.set(finger, isActive);
-        }
     }
 
     async updatePose(poses: any) {
