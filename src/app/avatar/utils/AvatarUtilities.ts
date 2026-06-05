@@ -984,3 +984,38 @@ export function getStoredAvatarState(
 export function getPeerAvatarName(peerId: string) {
     return `usr_${peerId}`;
 }
+
+function dot(a: Point3D, b: Point3D): number {
+  return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+function length(v: Point3D): number {
+  return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+/**
+ * Returns the smallest angle between two vectors in radians.
+ * Range: [0, Math.PI]
+ */
+export function angleBetween(a: Point3D, b: Point3D): number {
+  const lenA = length(a);
+  const lenB = length(b);
+
+  if (lenA === 0 || lenB === 0) {
+    throw new Error("Cannot compute angle with a zero-length vector");
+  }
+
+  let cosTheta = dot(a, b) / (lenA * lenB);
+
+  // Clamp to avoid NaN due to floating point errors
+  cosTheta = Math.max(-1, Math.min(1, cosTheta));
+
+  return Math.acos(cosTheta);
+}
+
+/**
+ * Returns the smallest angle in degrees.
+ */
+export function angleBetweenDegrees(a: Point3D, b: Point3D): number {
+  return angleBetween(a, b) * 180 / Math.PI;
+}

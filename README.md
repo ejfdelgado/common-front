@@ -1,6 +1,10 @@
 # CommonFront
 
-Allow to know the current version
+Detect close hand ON / OFF
+Detect pointing ON / OFF
+
+Allow to rotate given left hand close drag.
+
 Avoid to version package-lock, only if window developer is involved.
 
 npm install --legacy-peer-deps
