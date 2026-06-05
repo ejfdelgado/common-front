@@ -40,6 +40,26 @@ export class SoundFeedbackController extends SceneControllerAbstract {
         } else if (event.name == "CUBE_D_SELECT_ON") {
             ModuloSonido.play('/assets/sounds/piano_fa.mp3', false);
         } else if ([
+            "PINCH_Right_Thumb_Finger_ON",
+            "PINCH_Left_Thumb_Finger_ON",
+        ].indexOf(event.name) >= 0) {
+            ModuloSonido.play('/assets/sounds/marimba_on.mp3', false);
+        } else if ([
+            "PINCH_Right_Thumb_Finger_OFF",
+            "PINCH_Left_Thumb_Finger_OFF",
+        ].indexOf(event.name) >= 0) {
+            ModuloSonido.play('/assets/sounds/marimba_off.mp3', false);
+        } else if ([
+            "PINCH_Right_Thumb_Pinky_ON",
+            "PINCH_Left_Thumb_Pinky_ON",
+        ].indexOf(event.name) >= 0) {
+            ModuloSonido.play('/assets/sounds/marimba_on_2.mp3', false);
+        } else if ([
+            "PINCH_Right_Thumb_Pinky_OFF",
+            "PINCH_Left_Thumb_Pinky_OFF",
+        ].indexOf(event.name) >= 0) {
+            ModuloSonido.play('/assets/sounds/marimba_off_2.mp3', false);
+        } else if ([
             "MAKE_STEP_FORWARD",
             "MAKE_STEP_BACKWARD",
         ].indexOf(event.name) >= 0) {
