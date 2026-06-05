@@ -366,6 +366,14 @@ button .mdc-button__label img {
     height: 1em;
 }
 
+app-md-input code {
+    background-color: rgb(56, 56, 56);
+    color: white;
+    border-radius: 10px;
+    display: block;
+    padding: 15px;
+}
+
 @media (max-width: 800px) {
     .nogalespopup {
         max-width: 90vw;

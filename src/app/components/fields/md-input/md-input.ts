@@ -29,6 +29,17 @@ const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
     return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
     return "";
+  },
+  code({ text, lang }: any) {
+    const body = text.replace(/\n/g, '<br>');
+    const langClass = lang ? ` class="language-${lang}"` : '';
+    return `<pre><code${langClass}>${body}</code></pre>\n`;
+  },
+  codespan({ text }: any) {
+    return `<code>${text.replace(/\n/g, '<br>')}</code>`;
+  },
+  paragraph({ text }: any) {
+    return `<p>${text.replace(/\n/g, '<br>')}</p>\n`;
   }
 };
 

@@ -198,6 +198,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         multiHandLandmarks: NormalizedLandmarkList,
         multiHandWorldLandmarks: LandmarkList,
     ) {
+        console.log("processHand");
         // Hysteresis: ON requires closer contact than OFF to suppress noisy toggling
         const PINCH_ON_THRESHOLD: number = 0.04;   // ~4 cm in world coords
         const PINCH_OFF_THRESHOLD: number = 0.07;  // ~7 cm in world coords
@@ -231,6 +232,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             ["Thumb_Finger", dist3D(thumb, indexFinger)],
             ["Thumb_Pinky", dist3D(thumb, pinky)],
         ];
+
+        console.log(JSON.stringify(distances));
 
         // 2. Apply hysteresis: emit only when state actually transitions
         for (const [finger, dist] of distances) {
