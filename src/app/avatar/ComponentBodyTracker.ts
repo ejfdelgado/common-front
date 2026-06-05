@@ -175,7 +175,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             } = results;
             const HAND_TRESHOLD = 0.8;
             for (let i = 0; i < multiHandedness.length; i++) {
-                const handScore = multiHandedness[0];
+                const handScore = multiHandedness[i];
                 if (handScore.score > HAND_TRESHOLD) {
                     const handId = handScore.label;
                     const index = handScore.index;
@@ -231,12 +231,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             ["Thumb_Finger", dist3D(thumb, indexFinger)],
             ["Thumb_Pinky", dist3D(thumb, pinky)],
         ];
-
-        /*
-        if (handId == "Left") {
-            console.log(JSON.stringify(distances));
-        }
-        */
 
         // 2. Apply hysteresis: emit only when state actually transitions
         for (const [finger, dist] of distances) {
