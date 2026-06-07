@@ -215,3 +215,11 @@ export interface CursorPositioner {
     setCursor(data: CursorData): void;
     setCursorState(data: CursorStateData): void;
 }
+
+export interface CursorPointerGUI {
+    style: {
+        top: string,
+        left: string,
+    },
+    image: string,
+}

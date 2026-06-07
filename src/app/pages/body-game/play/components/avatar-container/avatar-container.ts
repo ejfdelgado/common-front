@@ -20,7 +20,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
-import { CursorData, CursorStateData, Point3D } from '@mytypes/BodyTypes';
+import { CursorData, CursorPointerGUI, CursorStateData, Point3D } from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';
 
 
@@ -132,7 +132,14 @@ export class AvatarContainer
     });
   }
 
-  leftCursor = {
+  leftCursor: CursorPointerGUI = {
+    style: {
+      top: "0px",
+      left: "0px",
+    },
+    image: "/assets/icons/eye.svg",
+  };
+  rightCursor: CursorPointerGUI = {
     style: {
       top: "0px",
       left: "0px",
@@ -149,19 +156,24 @@ export class AvatarContainer
     const y = bounds.height * data.y;
     const side = data.type;
 
+    let cursorGUI: CursorPointerGUI = this.rightCursor;
     if (side == "L") {
-      this.leftCursor.style.top = y + "px";
-      this.leftCursor.style.left = x + "px";
+      cursorGUI = this.leftCursor;
     }
+    cursorGUI.style.top = y + "px";
+    cursorGUI.style.left = x + "px";
   }
 
   override setCursorState(data: CursorStateData): void {
-    if (data.type == "L") {
-      if (data.state == "off") {
-        this.leftCursor.image = "/assets/icons/eye_off.svg";
-      } else {
-        this.leftCursor.image = "/assets/icons/eye.svg";
-      }
+    const side = data.type;
+    let cursorGUI: CursorPointerGUI = this.rightCursor;
+    if (side == "L") {
+      cursorGUI = this.leftCursor;
+    }
+    if (data.state == "off") {
+      cursorGUI.image = "/assets/icons/eye_off.svg";
+    } else {
+      cursorGUI.image = "/assets/icons/eye.svg";
     }
   }
 }
