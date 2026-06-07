@@ -28,7 +28,21 @@ export class ArmsPointerController extends SceneControllerAbstract {
         // 180° means arms down
         // 90° means arms pointing to the front
         // Also compute ray traicing
-        console.log(this.computeCursor(leftHand));
+        const leftPointer = this.computeCursor(leftHand);
+        const rightPointer = this.computeCursor(rightHand);
+
+        if (this.cursorDisplay) {
+            this.cursorDisplay.setCursor({
+                type: "L",
+                x: leftPointer.x,
+                y: leftPointer.y,
+            });
+            this.cursorDisplay.setCursor({
+                type: "R",
+                x: rightPointer.x,
+                y: rightPointer.y,
+            });
+        }
 
         return {};
     }
@@ -36,8 +50,8 @@ export class ArmsPointerController extends SceneControllerAbstract {
     computeCursor(arrow: Point3D) {
 
         return {
-            x: Math.round((1 - (1 - arrow.y) * 0.5) * window.innerWidth),
-            y: Math.round(((1 - arrow.z) * 0.5) * window.innerHeight),
+            x: ((1 - (1 - arrow.y) * 0.5)),
+            y: (((1 - arrow.z) * 0.5)),
         };
     }
 

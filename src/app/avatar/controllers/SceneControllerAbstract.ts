@@ -1,6 +1,7 @@
 import {
     AvatarBodyEvent,
     ControllerUpdateResponse,
+    CursorPositioner,
     GenericSizeType,
     ScenePoseAndWalkEventType,
 } from "@mytypes/BodyTypes";
@@ -17,6 +18,7 @@ export abstract class SceneControllerAbstract {
     scene!: SceneWithComposer;
     lastData!: ScenePoseAndWalkEventType;
     videoSize!: GenericSizeType;
+    cursorDisplay: CursorPositioner | null = null;
 
     constructor(
         public events: EventEmitter<AvatarBodyEvent>,
@@ -53,6 +55,10 @@ export abstract class SceneControllerAbstract {
     abstract destroy(): Promise<void>;
 
     abstract onEvent(event: AvatarBodyEvent): void;
+
+    setCursorDisplay(cursorDisplay: CursorPositioner) {
+        this.cursorDisplay = cursorDisplay;
+    }
 
     setParams(params: {
         [key: string]: any;

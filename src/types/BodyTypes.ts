@@ -199,3 +199,19 @@ export interface HandPinchData {
     finger: FingerPinch;
     pinchState: boolean;
 }
+
+export interface CursorData {
+    x: number;
+    y: number;
+    type: "L" | "R";
+}
+
+export interface CursorStateData {
+    type: "L" | "R";
+    state: "on" | "off";
+}
+
+export interface CursorPositioner {
+    setCursor(data: CursorData): void;
+    setCursorState(data: CursorStateData): void;
+}

@@ -1,4 +1,3 @@
-
 .theparent canvas {
   flex: 1;
 }
@@ -68,7 +67,7 @@
 }
 
 .background_black {
-    background-color: black;
+  background-color: black;
 }
 
 .top_right {
@@ -109,4 +108,13 @@
 
 .svg_icon {
   height: 34pt;
+}
+
+.cursor_pointer {
+  position: absolute;
+  
+}
+
+.cursor_pointer img {
+  position: relative;
 }

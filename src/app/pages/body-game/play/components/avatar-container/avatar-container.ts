@@ -20,7 +20,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
-import { Point3D } from '@mytypes/BodyTypes';
+import { CursorData, CursorStateData, Point3D } from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';
 
 
@@ -35,7 +35,9 @@ import { P2PService } from '@services/p2p.service';
   templateUrl: './avatar-container.html',
   styleUrls: ['./avatar-container.scss'],
 })
-export class AvatarContainer extends ComponentWithAvatar implements OnInit, AfterViewInit, OnDestroy {
+export class AvatarContainer
+  extends ComponentWithAvatar
+  implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
@@ -128,5 +130,38 @@ export class AvatarContainer extends ComponentWithAvatar implements OnInit, Afte
       name: "VOICE_COMMAND",
       voiceCommand: command.command,
     });
+  }
+
+  leftCursor = {
+    style: {
+      top: "0px",
+      left: "0px",
+    },
+    image: "/assets/icons/eye.svg",
+  };
+
+  override setCursor(data: CursorData): void {
+    if (!this.scene) {
+      return;
+    }
+    const bounds = this.scene.bounds;
+    const x = bounds.width * data.x;
+    const y = bounds.height * data.y;
+    const side = data.type;
+
+    if (side == "L") {
+      this.leftCursor.style.top = y + "px";
+      this.leftCursor.style.left = x + "px";
+    }
+  }
+
+  override setCursorState(data: CursorStateData): void {
+    if (data.type == "L") {
+      if (data.state == "off") {
+        this.leftCursor.image = "/assets/icons/eye_off.svg";
+      } else {
+        this.leftCursor.image = "/assets/icons/eye.svg";
+      }
+    }
   }
 }

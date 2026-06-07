@@ -6,6 +6,9 @@ import {
     AvatarBodyEvent,
     BodyData,
     BodyKeyPointData,
+    CursorData,
+    CursorPositioner,
+    CursorStateData,
     GenericSizeType,
     StateBody,
 } from '@mytypes/BodyTypes';
@@ -33,7 +36,7 @@ import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 import { HandPointerController } from './controllers/HandPointerController';
 import { ArmsPointerController } from './controllers/ArmsPointerController';
 
-export abstract class ComponentWithAvatar extends CommonComponent {
+export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
     useComposer: boolean = false;
     sceneCreated: PromiseEmitter = new PromiseEmitter();
     bounds: DOMRect | null = null;
@@ -82,6 +85,9 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             });
         });
     }
+
+    abstract setCursor(data: CursorData): void;
+    abstract setCursorState(data: CursorStateData): void;
 
     public abstract getParentRef(): ElementRef;
 
@@ -274,9 +280,13 @@ export abstract class ComponentWithAvatar extends CommonComponent {
         } else if (config.id == GameControllerEnum.FingerController) {
             return new FingerController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.HandPointerController) {
-            return new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
+            const controller = new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
+            controller.setCursorDisplay(this);
+            return controller;
         } else if (config.id == GameControllerEnum.ArmsPointerController) {
-            return new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
+            const controller = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
+            controller.setCursorDisplay(this);
+            return controller;
         } else {
             throw new Error("Unknown controller");
         }
