@@ -62,7 +62,7 @@ export class FingerController extends SceneControllerAbstract {
         // 1. Measure 3D distances using world landmarks (metric scale, invariant to hand position)
 
         const thumb = multiHandWorldLandmarks[HandKey.THUMB_TIP];
-        const indexFinger = multiHandWorldLandmarks[HandKey.INDEX_FINGER_TIP];
+        const indexFinger = multiHandWorldLandmarks[HandKey.INDEX_TIP];
         const pinky = multiHandWorldLandmarks[HandKey.PINKY_TIP];
 
         const dist3D = (a: { x: number; y: number; z: number }, b: { x: number; y: number; z: number }) =>

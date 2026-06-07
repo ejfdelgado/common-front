@@ -30,6 +30,7 @@ import { P2PService } from '@services/p2p.service';
 import { FingerController } from './controllers/FingerController';
 import { HandIdType } from 'src/types/BodyParts';
 import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
+import { HandPointerController } from './controllers/HandPointerController';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
     useComposer: boolean = false;
@@ -270,6 +271,8 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             return new WalkController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.FingerController) {
             return new FingerController(this.events, this.controlProxy, this.p2pSrv);
+        } else if (config.id == GameControllerEnum.HandPointerController) {
+            return new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
         } else {
             throw new Error("Unknown controller");
         }

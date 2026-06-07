@@ -53,11 +53,11 @@ export class AvatarService {
                             controllers: [
                                 { id: GameControllerEnum.ComparableController, params: {} },
                                 { id: GameControllerEnum.Stand2dController, params: {} },
-                                { id: GameControllerEnum.CubeController, params: { enabled: false } },
+                                //{ id: GameControllerEnum.CubeController, params: { enabled: false } },
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                                 { id: GameControllerEnum.SharePoseController, params: {} },
-                                { id: GameControllerEnum.FingerController, params: {} },
-                                
+                                //{ id: GameControllerEnum.FingerController, params: {} },
+                                { id: GameControllerEnum.HandPointerController, params: {} },
                             ]
                         },
                         "mode01": {

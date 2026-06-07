@@ -166,8 +166,31 @@ export type HandIdType = 'Right' | 'Left';
 export type FingerPinch = 'Thumb_Finger' | 'Thumb_Pinky';
 
 export enum HandKey {
+    WRIST = 0,
+    // thumb
+    THUMB_CMC = 1,
+    THUMB_MCP = 2,
+    THUMB_IP = 3,
     THUMB_TIP = 4,
-    INDEX_FINGER_TIP = 8,
+    // finger
+    INDEX_MCP = 5,
+    INDEX_PIP = 6,
+    INDEX_DIP = 7,
+    INDEX_TIP = 8,
+    // middle
+    MIDDLE_MCP = 9,
+    MIDDLE_PIP = 10,
+    MIDDLE_DIP = 11,
+    MIDDLE_TIP = 12,
+    // ring
+    RING_MCP = 13,
+    RING_PIP = 14,
+    RING_DIP = 15,
+    RING_TIP = 16,
+    // pinky
+    PINKY_MCP = 17,
+    PINKY_PIP = 18,
+    PINKY_DIP = 19,
     PINKY_TIP = 20,
 }
 
