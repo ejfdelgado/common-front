@@ -42,21 +42,25 @@ export class SoundFeedbackController extends SceneControllerAbstract {
         } else if ([
             "PINCH_Right_Thumb_Finger_ON",
             "PINCH_Left_Thumb_Finger_ON",
+            "Left_HAND_OPEN",
         ].indexOf(event.name) >= 0) {
             ModuloSonido.play('/assets/sounds/marimba_on.mp3', false);
         } else if ([
             "PINCH_Right_Thumb_Finger_OFF",
             "PINCH_Left_Thumb_Finger_OFF",
+            "Left_HAND_CLOSE",
         ].indexOf(event.name) >= 0) {
             ModuloSonido.play('/assets/sounds/marimba_off.mp3', false);
         } else if ([
             "PINCH_Right_Thumb_Pinky_ON",
             "PINCH_Left_Thumb_Pinky_ON",
+            "Right_HAND_OPEN",
         ].indexOf(event.name) >= 0) {
             ModuloSonido.play('/assets/sounds/marimba_on_2.mp3', false);
         } else if ([
             "PINCH_Right_Thumb_Pinky_OFF",
             "PINCH_Left_Thumb_Pinky_OFF",
+            "Right_HAND_CLOSE",
         ].indexOf(event.name) >= 0) {
             ModuloSonido.play('/assets/sounds/marimba_off_2.mp3', false);
         } else if ([

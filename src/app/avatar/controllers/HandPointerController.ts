@@ -129,19 +129,20 @@ export class HandPointerController extends SceneControllerAbstract {
             pinkyClose
         ) / 4;
 
-        if (handId == "Left") {
-            console.log(angleAvg);
-            const lastIsClosed = this.currentState.get(handId);
-            if (lastIsClosed) {
-                if (Math.abs(angleAvg) < this.FINGER_CLOSE_DEG_THRESHOLD_OFF) {
-                    console.log(`${handId} open`);
-                    this.currentState.set(handId, false);
-                }
-            } else {
-                if (Math.abs(angleAvg) > this.FINGER_CLOSE_DEG_THRESHOLD_ON) {
-                    console.log(`${handId} close`);
-                    this.currentState.set(handId, true);
-                }
+        const lastIsClosed = this.currentState.get(handId);
+        if (lastIsClosed) {
+            if (Math.abs(angleAvg) < this.FINGER_CLOSE_DEG_THRESHOLD_OFF) {
+                this.currentState.set(handId, false);
+                this.events.emit({
+                    name: `${handId}_HAND_CLOSE`,
+                });
+            }
+        } else {
+            if (Math.abs(angleAvg) > this.FINGER_CLOSE_DEG_THRESHOLD_ON) {
+                this.currentState.set(handId, true);
+                this.events.emit({
+                    name: `${handId}_HAND_OPEN`,
+                });
             }
         }
     }
