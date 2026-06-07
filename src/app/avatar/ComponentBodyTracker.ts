@@ -179,8 +179,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 const index = handScore.index;
                 this.threeComponent.hands.set(handId, {
                     score: handScore.score,
-                    multiHandLandmarks: multiHandLandmarks[index],
-                    multiHandWorldLandmarks: multiHandWorldLandmarks[index],
+                    multiHandLandmarks: multiHandLandmarks[i],
+                    multiHandWorldLandmarks: multiHandWorldLandmarks[i],
                 });
             }
         });
