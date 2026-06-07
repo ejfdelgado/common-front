@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ElementRef, EventEmitter } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, OnDestroy } from "@angular/core";
 import {
     AVATAR_NAME,
     AVATAR_PELVIS_HEIGHT,
@@ -33,9 +33,10 @@ import { Camera } from "./Camera";
 import { CameraPickerDialogComponent } from "@components/fields/camera-picker/camera-picker-dialog";
 import { CameraDataType } from "@mytypes/CameraTypes";
 import { MatDialog } from "@angular/material/dialog";
-import { FingerPinch, HandIdType, HandKey } from "src/types/BodyParts";
+import { Subscription } from "rxjs";
 
-export abstract class ComponentBodyTracker extends CommonSpeech {
+export abstract class ComponentBodyTracker
+    extends CommonSpeech {
     room: RoomGameType | null = null;
     mirror: boolean = false;
     errorState: string | null = null;
@@ -52,7 +53,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     handsTracker!: Hands;
     poses: BodyData[] = [];
     currentUser: User | null = null;
-    pinchHand: EventEmitter<HandPinchData> = new EventEmitter();
+    eventSubscription: Subscription | null = null;
     videoSize: GenericSizeType = {
         width: 0,
         height: 0,
@@ -120,10 +121,22 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             sanitizer,
             fullScreenSrv,
         );
+    }
 
-        this.pinchHand.subscribe((event) => {
-            console.log(JSON.stringify(event, null, 4));
-        });
+    assureSubscription() {
+        if (this.eventSubscription == null) {
+            this.eventSubscription = this.getAvatarContainer().events.subscribe((event) => {
+                // Adjust behavior, for example of hands segmentation
+                // Only when arms are rised
+            });
+        }
+    }
+
+    unsubscribeEvents() {
+        if (this.eventSubscription) {
+            this.eventSubscription.unsubscribe();
+            this.eventSubscription = null;
+        }
     }
 
     setUser(user: User | null) {
@@ -354,6 +367,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 deviceId: selectedCamera.id,
                 onFrame: async () => {
                     await this.poseTracker.send({ image: videoElement });
+                    // Only do this if arms are pointing to the front
                     await this.handsTracker.send({ image: videoElement });
                 },
                 width: 640,
@@ -361,6 +375,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             });
             this.camera.start();
             this.trackerStarted = true;
+            this.assureSubscription();
         }
     }
 
@@ -407,6 +422,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     stopAll() {
         this.stopTracking();
+        this.unsubscribeEvents();
         this.stopListening();
         exitFullscreen();
         ModuloSonido.play('/assets/sounds/button.mp3');

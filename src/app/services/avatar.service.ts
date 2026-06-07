@@ -58,6 +58,7 @@ export class AvatarService {
                                 { id: GameControllerEnum.SharePoseController, params: {} },
                                 //{ id: GameControllerEnum.FingerController, params: {} },
                                 { id: GameControllerEnum.HandPointerController, params: {} },
+                                { id: GameControllerEnum.ArmsPointerController, params: {} },
                             ]
                         },
                         "mode01": {

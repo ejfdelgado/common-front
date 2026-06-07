@@ -31,6 +31,7 @@ import { FingerController } from './controllers/FingerController';
 import { HandIdType } from 'src/types/BodyParts';
 import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 import { HandPointerController } from './controllers/HandPointerController';
+import { ArmsPointerController } from './controllers/ArmsPointerController';
 
 export abstract class ComponentWithAvatar extends CommonComponent {
     useComposer: boolean = false;
@@ -273,6 +274,8 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             return new FingerController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.HandPointerController) {
             return new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
+        } else if (config.id == GameControllerEnum.ArmsPointerController) {
+            return new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
         } else {
             throw new Error("Unknown controller");
         }
