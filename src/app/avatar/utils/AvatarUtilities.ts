@@ -186,10 +186,10 @@ export function computeComparableFromModel(
         leftLeg,
         rightArm,
         rightLeg,
-        handL,
-        handR,
-        footL,
-        footR,
+        handL, handR,
+        footL, footR,
+        armL, armR,
+        leftHand, rightHand,
     } = comparable;
 
     return {
@@ -197,6 +197,8 @@ export function computeComparableFromModel(
         front, up, left,
         handL, handR,
         footL, footR,
+        armL, armR,
+        leftHand, rightHand,
     };
 }
 
@@ -253,24 +255,29 @@ export function computeComparableBodyInternal(
         z: rightKnee.z - rightHip.z,
     }, front, left, up);
 
-    const angleDegreesBetween = (
-        pA1: Point3D,
-        pA2: Point3D,
-        pA3: Point3D,
-    ) => {
-        const a = new THREE.Vector3(pA1.x - pA2.x, pA1.y - pA2.y, pA1.z - pA2.z);
-        const b = new THREE.Vector3(pA2.x - pA3.x, pA2.y - pA3.y, pA2.z - pA3.z);
-        const angle = a.angleTo(b);
-        return angle * 180 / Math.PI;
-    };
+    // What could be better? leftShoulder or leftElbow??
+    const leftHand = toCanonical({
+        x: leftWrist.x - leftShoulder.x,
+        y: leftWrist.y - leftShoulder.y,
+        z: leftWrist.z - leftShoulder.z,
+    }, front, left, up);
+    const rightHand = toCanonical({
+        x: rightWrist.x - rightShoulder.x,
+        y: rightWrist.y - rightShoulder.y,
+        z: rightWrist.z - rightShoulder.z,
+    }, front, left, up);
 
     return {
         leftArm,
         rightArm,
         leftLeg,
         rightLeg,
+        leftHand,
+        rightHand,
         handL: angleDegreesBetween(leftWrist, leftElbow, leftShoulder),
         handR: angleDegreesBetween(rightWrist, rightElbow, rightShoulder),
+        armL: angleDegreesBetween(leftElbow, leftShoulder, up),
+        armR: angleDegreesBetween(rightElbow, rightShoulder, up),
         footL: angleDegreesBetween(leftHeel, leftKnee, leftHip),
         footR: angleDegreesBetween(rightHeel, rightKnee, rightHip),
     };
@@ -986,11 +993,11 @@ export function getPeerAvatarName(peerId: string) {
 }
 
 function dot(a: Point3D, b: Point3D): number {
-  return a.x * b.x + a.y * b.y + a.z * b.z;
+    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 function length(v: Point3D): number {
-  return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
 /**
@@ -998,24 +1005,35 @@ function length(v: Point3D): number {
  * Range: [0, Math.PI]
  */
 export function angleBetween(a: Point3D, b: Point3D): number {
-  const lenA = length(a);
-  const lenB = length(b);
+    const lenA = length(a);
+    const lenB = length(b);
 
-  if (lenA === 0 || lenB === 0) {
-    throw new Error("Cannot compute angle with a zero-length vector");
-  }
+    if (lenA === 0 || lenB === 0) {
+        throw new Error("Cannot compute angle with a zero-length vector");
+    }
 
-  let cosTheta = dot(a, b) / (lenA * lenB);
+    let cosTheta = dot(a, b) / (lenA * lenB);
 
-  // Clamp to avoid NaN due to floating point errors
-  cosTheta = Math.max(-1, Math.min(1, cosTheta));
+    // Clamp to avoid NaN due to floating point errors
+    cosTheta = Math.max(-1, Math.min(1, cosTheta));
 
-  return Math.acos(cosTheta);
+    return Math.acos(cosTheta);
 }
 
 /**
  * Returns the smallest angle in degrees.
  */
 export function angleBetweenDegrees(a: Point3D, b: Point3D): number {
-  return angleBetween(a, b) * 180 / Math.PI;
+    return angleBetween(a, b) * 180 / Math.PI;
 }
+
+export const angleDegreesBetween = (
+    pA1: Point3D,
+    pA2: Point3D,
+    pA3: Point3D,
+) => {
+    const a = new THREE.Vector3(pA1.x - pA2.x, pA1.y - pA2.y, pA1.z - pA2.z);
+    const b = new THREE.Vector3(pA2.x - pA3.x, pA2.y - pA3.y, pA2.z - pA3.z);
+    const angle = a.angleTo(b);
+    return angle * 180 / Math.PI;
+};

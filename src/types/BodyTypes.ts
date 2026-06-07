@@ -76,8 +76,12 @@ export interface SimpleComparable {
     rightArm: Point3D;
     leftLeg: Point3D;
     rightLeg: Point3D;
+    leftHand: Point3D;
+    rightHand: Point3D;
     handL: number;
     handR: number;
+    armL: number;
+    armR: number;
     footL: number;
     footR: number;
 };

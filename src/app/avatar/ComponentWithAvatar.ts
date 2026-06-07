@@ -62,10 +62,11 @@ export abstract class ComponentWithAvatar extends CommonComponent {
             rightArm: { x: 0, y: 0, z: 0, },
             leftLeg: { x: 0, y: 0, z: 0, },
             rightLeg: { x: 0, y: 0, z: 0, },
-            handL: 0,
-            handR: 0,
-            footL: 0,
-            footR: 0,
+            leftHand: { x: 0, y: 0, z: 0, },
+            rightHand: { x: 0, y: 0, z: 0, },
+            handL: 0, handR: 0,
+            footL: 0, footR: 0,
+            armL: 0, armR: 0,
         }
     };
 

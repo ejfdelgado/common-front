@@ -57,8 +57,8 @@ export class AvatarService {
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                                 { id: GameControllerEnum.SharePoseController, params: {} },
                                 //{ id: GameControllerEnum.FingerController, params: {} },
-                                { id: GameControllerEnum.HandPointerController, params: {} },
                                 { id: GameControllerEnum.ArmsPointerController, params: {} },
+                                { id: GameControllerEnum.HandPointerController, params: {} },
                             ]
                         },
                         "mode01": {
