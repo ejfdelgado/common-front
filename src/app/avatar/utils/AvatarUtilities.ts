@@ -255,7 +255,7 @@ export function computeComparableBodyInternal(
         z: rightKnee.z - rightHip.z,
     }, front, left, up);
 
-    // What could be better? leftShoulder or leftElbow??
+    // What could be better? leftShoulder or leftElbow?? = leftShoulder!
     const leftHand = toCanonical({
         x: leftWrist.x - leftShoulder.x,
         y: leftWrist.y - leftShoulder.y,

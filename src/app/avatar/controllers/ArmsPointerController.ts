@@ -64,6 +64,14 @@ export class ArmsPointerController extends SceneControllerAbstract {
     }
 
     override onEvent(event: AvatarBodyEvent): void {
+        if (event.name == "Left_HAND_CLOSE") {
 
+        } else if (event.name == "Right_HAND_CLOSE") {
+
+        } else if (event.name == "Left_HAND_OPEN") {
+
+        } else if (event.name == "Right_HAND_OPEN") {
+
+        }
     }
 }

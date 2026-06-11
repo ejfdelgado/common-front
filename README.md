@@ -1,7 +1,8 @@
 # CommonFront
 
-Detect close hand ON / OFF
-Detect pointing ON / OFF
+Detect thumb pointing Vertical or horizontal.
+
+Discover intention before drag
 
 Allow to rotate given left hand close drag.
 

@@ -170,7 +170,7 @@ export class AvatarContainer
     if (side == "L") {
       cursorGUI = this.leftCursor;
     }
-    if (data.state == "off") {
+    if (data.state == "on") {
       cursorGUI.image = "/assets/icons/eye_off.svg";
     } else {
       cursorGUI.image = "/assets/icons/eye.svg";
