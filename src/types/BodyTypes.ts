@@ -200,14 +200,16 @@ export interface HandPinchData {
     pinchState: boolean;
 }
 
+export type CursorDataSide = "L" | "R";
+
 export interface CursorData {
     x: number;
     y: number;
-    type: "L" | "R";
+    type: CursorDataSide;
 }
 
 export interface CursorStateData {
-    type: "L" | "R";
+    type: CursorDataSide;
     state: "on" | "off";
 }
 
