@@ -1,10 +1,22 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
-import { AvatarBodyEvent, ControllerUpdateResponse, Point3D } from "@mytypes/BodyTypes";
+import { AvatarBodyEvent, ControllerUpdateResponse, DragDataType, Point2D, Point3D } from "@mytypes/BodyTypes";
 import { EventEmitter } from "@angular/core";
 import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "src/app/services/p2p.service";
 
 export class ArmsPointerController extends SceneControllerAbstract {
+
+    leftDrag: DragDataType = {
+        current: { x: 0, y: 0 },
+        start: null,
+        delta: null,
+    };
+
+    rightDrag: DragDataType = {
+        current: { x: 0, y: 0 },
+        start: null,
+        delta: null,
+    };
 
     constructor(
         public override events: EventEmitter<AvatarBodyEvent>,
@@ -31,6 +43,20 @@ export class ArmsPointerController extends SceneControllerAbstract {
         const leftPointer = this.computeCursor(leftHand);
         const rightPointer = this.computeCursor(rightHand);
 
+        this.leftDrag.current.x = leftPointer.x;
+        this.leftDrag.current.y = leftPointer.y;
+
+        this.rightDrag.current.x = rightPointer.x;
+        this.rightDrag.current.y = rightPointer.y;
+
+        if (this.leftDrag.start && this.leftDrag.delta) {
+            this.leftDrag.delta.x = this.leftDrag.start.x - leftPointer.x;
+        }
+
+        if (this.rightDrag.start && this.rightDrag.delta) {
+            this.rightDrag.delta.x = this.rightDrag.start.x - rightPointer.x;
+        }
+
         if (this.cursorDisplay) {
             this.cursorDisplay.setCursor({
                 type: "L",
@@ -47,7 +73,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
         return {};
     }
 
-    computeCursor(arrow: Point3D) {
+    computeCursor(arrow: Point3D): Point2D {
 
         return {
             x: ((1 - (1 - arrow.y) * 0.5)),
@@ -65,13 +91,23 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "Left_HAND_CLOSE") {
-
+            this.leftDrag.start = {
+                x: this.leftDrag.current.x,
+                y: this.leftDrag.current.y,
+            };
+            this.leftDrag.delta = { x: 0, y: 0 };
         } else if (event.name == "Right_HAND_CLOSE") {
-
+            this.rightDrag.start = {
+                x: this.rightDrag.current.x,
+                y: this.rightDrag.current.y,
+            };
+            this.rightDrag.delta = { x: 0, y: 0 };
         } else if (event.name == "Left_HAND_OPEN") {
-
+            this.leftDrag.start = null;
+            this.leftDrag.delta = null;
         } else if (event.name == "Right_HAND_OPEN") {
-
+            this.rightDrag.start = null;
+            this.rightDrag.delta = null;
         }
     }
 }

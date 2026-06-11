@@ -223,3 +223,9 @@ export interface CursorPointerGUI {
     },
     image: string,
 }
+
+export interface DragDataType {
+    current: Point2D;
+    start: Point2D | null;
+    delta: Point2D | null;
+}
