@@ -10,13 +10,18 @@ export class ArmsPointerController extends SceneControllerAbstract {
         current: { x: 0, y: 0 },
         start: null,
         delta: null,
+        intentionXY: null,
     };
 
     rightDrag: DragDataType = {
         current: { x: 0, y: 0 },
         start: null,
         delta: null,
+        intentionXY: null,
     };
+
+    INTENTION_THRESHOLD: number = 0.075;
+    videoRatio: number = 0;
 
     constructor(
         public override events: EventEmitter<AvatarBodyEvent>,
@@ -31,6 +36,9 @@ export class ArmsPointerController extends SceneControllerAbstract {
     }
 
     override async update(): Promise<ControllerUpdateResponse> {
+        if (this.videoRatio == 0) {
+            this.videoRatio = this.videoSize.width / this.videoSize.height;
+        }
         // Check shoulder angle, or arm angle
         const comparable = this.lastData?.stateBody.comparable;
         if (!comparable) {
@@ -52,6 +60,18 @@ export class ArmsPointerController extends SceneControllerAbstract {
             if (dragData.start && dragData.delta) {
                 dragData.delta.x = dragData.start.x - pointer.x;
                 dragData.delta.y = dragData.start.y - pointer.y;
+                if (dragData.intentionXY == null) {
+                    const normalizedX = Math.abs(dragData.delta.x * this.videoRatio);
+                    const normalizedY = Math.abs(dragData.delta.y);
+                    if (normalizedX > this.INTENTION_THRESHOLD) {
+                        dragData.intentionXY = "X";
+                    } else if (normalizedY > this.INTENTION_THRESHOLD) {
+                        dragData.intentionXY = "Y";
+                    }
+                    if (dragData.intentionXY != null) {
+                        console.log(`dragData.intentionXY = ${dragData.intentionXY}`);
+                    }
+                }
             }
             if (this.cursorDisplay) {
                 this.cursorDisplay.setCursor({
@@ -100,9 +120,11 @@ export class ArmsPointerController extends SceneControllerAbstract {
         } else if (event.name == "Left_HAND_OPEN") {
             this.leftDrag.start = null;
             this.leftDrag.delta = null;
+            this.leftDrag.intentionXY = null;
         } else if (event.name == "Right_HAND_OPEN") {
             this.rightDrag.start = null;
             this.rightDrag.delta = null;
+            this.rightDrag.intentionXY = null;
         }
     }
 }

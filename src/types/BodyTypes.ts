@@ -226,8 +226,11 @@ export interface CursorPointerGUI {
     image: string,
 }
 
+export type OrthogonalXY = "X" | "Y";
+
 export interface DragDataType {
     current: Point2D;
     start: Point2D | null;
     delta: Point2D | null;
+    intentionXY: OrthogonalXY | null;
 }
