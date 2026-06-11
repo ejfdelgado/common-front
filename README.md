@@ -2,7 +2,10 @@
 
 Detect thumb pointing Vertical or horizontal.
 
-Discover intention before drag
+Use events:
+HANDS_ON
+HANDS_OFF
+To track hands or not to improve performance.
 
 Allow to rotate given left hand close drag.
 

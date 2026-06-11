@@ -1,5 +1,12 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
-import { AvatarBodyEvent, ControllerUpdateResponse, CursorData, CursorDataSide, DragDataType, Point2D, Point3D } from "@mytypes/BodyTypes";
+import {
+    AvatarBodyEvent,
+    ControllerUpdateResponse,
+    CursorDataSide,
+    DragDataType,
+    Point2D,
+    Point3D,
+} from "@mytypes/BodyTypes";
 import { EventEmitter } from "@angular/core";
 import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "src/app/services/p2p.service";
@@ -67,6 +74,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
             // pointing downward = 1
             if (normY >= this.USER_ARE_USING_HANDS_THRESHOLD) {
                 // Leave drag and open
+                this.resetHandDrag(type);
                 return false;
             }
 
@@ -101,11 +109,17 @@ export class ArmsPointerController extends SceneControllerAbstract {
         if (useLeft || useRight) {
             if (!this.usingHands) {
                 // Fire event of using hands
+                this.events.emit({
+                    name: "HANDS_ON",
+                });
                 this.usingHands = true;
             }
         } else {
             if (this.usingHands) {
                 // Fire event of DONT using hands
+                this.events.emit({
+                    name: "HANDS_OFF",
+                });
                 this.usingHands = false;
             }
         }
@@ -129,6 +143,18 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
     }
 
+    resetHandDrag(type: CursorDataSide) {
+        let dragData: DragDataType | null = null;
+        if (type == "L") {
+            dragData = this.leftDrag;
+        } else {
+            dragData = this.rightDrag;
+        }
+        dragData.start = null;
+        dragData.delta = null;
+        dragData.intentionXY = null;
+    }
+
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "Left_HAND_CLOSE") {
             this.leftDrag.start = {
@@ -143,13 +169,9 @@ export class ArmsPointerController extends SceneControllerAbstract {
             };
             this.rightDrag.delta = { x: 0, y: 0 };
         } else if (event.name == "Left_HAND_OPEN") {
-            this.leftDrag.start = null;
-            this.leftDrag.delta = null;
-            this.leftDrag.intentionXY = null;
+            this.resetHandDrag("L");
         } else if (event.name == "Right_HAND_OPEN") {
-            this.rightDrag.start = null;
-            this.rightDrag.delta = null;
-            this.rightDrag.intentionXY = null;
+            this.resetHandDrag("R");
         }
     }
 }
