@@ -20,7 +20,9 @@ export class ArmsPointerController extends SceneControllerAbstract {
         intentionXY: null,
     };
 
-    INTENTION_THRESHOLD: number = 0.075;
+    usingHands: boolean = false;
+    USER_ARE_USING_HANDS_THRESHOLD = 0.9;
+    INTENTION_THRESHOLD = 0.075;
     videoRatio: number = 0;
 
     constructor(
@@ -44,7 +46,10 @@ export class ArmsPointerController extends SceneControllerAbstract {
         if (!comparable) {
             return {};
         }
-        const { armL, armR, handL, handR, leftHand, rightHand } = comparable;
+        const {
+            leftHand,
+            rightHand,
+        } = comparable;
         // 180° means arms down
         // 90° means arms pointing to the front
         // Also compute ray traicing
@@ -53,8 +58,18 @@ export class ArmsPointerController extends SceneControllerAbstract {
             type: CursorDataSide,
             point3D: Point3D,
             dragData: DragDataType,
-        ) => {
+        ): boolean => {
             const pointer = this.computeCursor(point3D);
+
+            const normY = (pointer.y * 2) - 1;
+            // pointing upward = -1
+            // at center = 0
+            // pointing downward = 1
+            if (normY >= this.USER_ARE_USING_HANDS_THRESHOLD) {
+                // Leave drag and open
+                return false;
+            }
+
             dragData.current.x = pointer.x;
             dragData.current.y = pointer.y;
             if (dragData.start && dragData.delta) {
@@ -68,9 +83,6 @@ export class ArmsPointerController extends SceneControllerAbstract {
                     } else if (normalizedY > this.INTENTION_THRESHOLD) {
                         dragData.intentionXY = "Y";
                     }
-                    if (dragData.intentionXY != null) {
-                        console.log(`dragData.intentionXY = ${dragData.intentionXY}`);
-                    }
                 }
             }
             if (this.cursorDisplay) {
@@ -80,10 +92,23 @@ export class ArmsPointerController extends SceneControllerAbstract {
                     y: pointer.y,
                 });
             }
+            return true;
         };
 
-        processHand("L", leftHand, this.leftDrag);
-        processHand("R", rightHand, this.rightDrag);
+        const useLeft = processHand("L", leftHand, this.leftDrag);
+        const useRight = processHand("R", rightHand, this.rightDrag);
+
+        if (useLeft || useRight) {
+            if (!this.usingHands) {
+                // Fire event of using hands
+                this.usingHands = true;
+            }
+        } else {
+            if (this.usingHands) {
+                // Fire event of DONT using hands
+                this.usingHands = false;
+            }
+        }
 
         return {};
     }
