@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+/*
+chrome://flags/#enable-experimental
+chrome://flags/#enable-experimental-web-platform-features
+*/
+
 @Component({
   selector: 'app-test',
   imports: [],
@@ -8,9 +13,25 @@ import { Component } from '@angular/core';
 })
 export class TestIoT {
 
-  async connect() {
+  private checkBluetooth(): boolean {
+    if (!window.isSecureContext) {
+      console.error('Web Bluetooth requires a secure context (HTTPS or localhost).');
+      return false;
+    }
     if (!navigator.bluetooth) {
-      console.error('Web Bluetooth API not available. Requires HTTPS and a supported browser.');
+      console.error(
+        'navigator.bluetooth is undefined. ' +
+        'Web Bluetooth is only supported in Chrome/Edge on desktop and Android. ' +
+        'Firefox and Safari do not support it. ' +
+        'On Linux with Chrome, enable it at: chrome://flags/#enable-experimental-web-platform-features'
+      );
+      return false;
+    }
+    return true;
+  }
+
+  async connect() {
+    if (!this.checkBluetooth()) {
       return;
     }
     try {
@@ -38,8 +59,7 @@ export class TestIoT {
   }
 
   async listAvailableDevices(): Promise<BluetoothDevice[]> {
-    if (!navigator.bluetooth) {
-      console.error('Web Bluetooth API not available. Requires HTTPS and a supported browser.');
+    if (!this.checkBluetooth()) {
       return [];
     }
     try {
