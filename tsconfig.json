@@ -51,7 +51,8 @@
       ],
     },
     "types": [
-      "three"
+      "three",
+      "web-bluetooth"
     ]
   },
   "angularCompilerOptions": {

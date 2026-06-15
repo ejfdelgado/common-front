@@ -138,6 +138,10 @@ const routes: Routes = [
         loadComponent: () => import('./pages/english/detail-english/detail-english').then(m => m.DetailEnglish),
     },
     {
+        path: 'iot/test',
+        loadComponent: () => import('./pages/iot/test/test').then(m => m.TestIoT),
+    },
+    {
         path: '**',
         redirectTo: '404',
     },

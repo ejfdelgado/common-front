@@ -6,7 +6,8 @@
     "outDir": "./out-tsc/app",
     "rootDir": "./src",
     "types": [
-      "google.maps"
+      "google.maps",
+      "web-bluetooth"
     ]
   },
   "include": [

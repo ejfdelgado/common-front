@@ -152,7 +152,7 @@ npx ng generate component --standalone --skip-tests components/fields/mic-picker
 ```
 
 ```bash
-npx ng generate component --standalone --skip-tests pages/english/index-english
+npx ng generate component --standalone --skip-tests pages/iot/test
 npx ng generate component --standalone --skip-tests pages/english/detail-english
 ```
 
