@@ -36,4 +36,26 @@ export class TestIoT {
       console.error(err);
     }
   }
+
+  async listAvailableDevices(): Promise<BluetoothDevice[]> {
+    if (!navigator.bluetooth) {
+      console.error('Web Bluetooth API not available. Requires HTTPS and a supported browser.');
+      return [];
+    }
+    try {
+      const devices = await navigator.bluetooth.getDevices();
+      if (devices.length === 0) {
+        console.log('No previously permitted devices found. Call connect() first to pair a device.');
+      } else {
+        devices.forEach(d => console.log(`Device: ${d.name ?? '(unnamed)'} [id: ${d.id}]`));
+      }
+      devices.forEach((device) => {
+        console.log(device);
+      });
+      return devices;
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
 }
