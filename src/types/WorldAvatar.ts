@@ -46,11 +46,23 @@ export interface GameScenario {
     },
     meshes: GameMesh[];
     characters: GameCharacter[];
+    steps?: GameStep[];
 }
 
 export interface GameMesh {
     name: string;
     url: string;
+}
+
+export interface GameStep {
+    label: string;
+    options: GameStepOption[];
+}
+
+export interface GameStepOption {
+    label: string;
+    points: number;
+    answer: string;
 }
 
 export interface GameAnimation {

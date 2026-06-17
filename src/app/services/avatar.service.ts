@@ -199,7 +199,53 @@ export class AvatarService {
                                     useComposer: true,
                                     background: { color: { r: 0.5, g: 1, b: 0.5 } },
                                     characters: [],
-                                    meshes: []
+                                    meshes: [],
+                                    steps: [
+                                        {
+                                            label: "¿Cuántos corazones tiene un pulpo?",
+                                            options: [
+                                                { points: 0, label: "1 corazón", answer: "Los humanos tenemos un solo corazón, pero los pulpos tienen 3. Dos bombean sangre a las branquias y uno a todo el cuerpo." },
+                                                { points: 1, label: "3 corazónes", answer: "¡Sí, tres! Dos bombean sangre a las branquias y uno a todo el cuerpo." },
+                                            ]
+                                        },
+                                        {
+                                            label: "¿De qué color es la lengua de una jirafa?",
+                                            options: [
+                                                { points: 0, label: "Rosada", answer: "Es morada para protegerse del sol mientras come hojas todo el día." },
+                                                { points: 1, label: "Morada/azul", answer: "Es morada para protegerse del sol mientras come hojas todo el día." },
+                                            ]
+                                        },
+                                        {
+                                            label: "¿Qué animal nunca duerme acostado y puede dormir de pie?",
+                                            options: [
+                                                { points: 1, label: "El caballo", answer: "Los caballos pueden dormir parados para escapar rápido del peligro." },
+                                                { points: 0, label: "El conejo", answer: "Los caballos pueden dormir parados para escapar rápido del peligro." },
+                                            ]
+                                        },
+                                        {
+                                            label: "¿Cuál de estos animales puede cambiar de color?",
+                                            options: [
+                                                { points: 1, label: "El camaleón", answer: "El camaleón cambia de color para esconderse y también según cómo se siente." },
+                                                { points: 0, label: "El elefante", answer: "El camaleón cambia de color para esconderse y también según cómo se siente." },
+                                            ]
+                                        },
+                                        {
+                                            label: "¿Qué animal es tan fuerte que puede cargar cosas mucho más pesadas que su propio cuerpo?",
+                                            options: [
+                                                { points: 0, label: "La tortuga", answer: "¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro." },
+                                                { points: 1, label: "La hormiga", answer: "¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro." },
+                                            ]
+                                        },
+                                        /*
+                                        {
+                                            label: "",
+                                            options: [
+                                                { points: 0, label: "", answer: "" },
+                                                { points: 1, label: "", answer: "" },
+                                            ]
+                                        },
+                                        */
+                                    ],
                                 }
                             },
                             controllers: [
