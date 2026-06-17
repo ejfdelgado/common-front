@@ -6,6 +6,7 @@ import { GameStep, GameStepOption } from "src/types/WorldAvatar";
 
 export class QuestionaireController extends SceneControllerAbstract {
 
+    score: number = 0;
     steps: GameStep[] = [];
     currentStep: number = 0;
     optionsMap: { [key: string]: GameStepOption } = {};
@@ -88,6 +89,8 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (op.points == 0) {
             await ModuloSonido.play('/assets/sounds/loose.mp3', false);
         } else {
+            this.score += op.points * 10;
+            this.setHudText("score", `${this.score}`);
             await ModuloSonido.play('/assets/sounds/success.mp3', false);
         }
         await this.setHudText("bottom", op.answer, true);
@@ -100,6 +103,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (event.name == "START_ALL") {
             // Read mode and scenario
             this.currentStep = 0;
+            this.score = 0;
             this.initializeQuestion();
         } else if (event.name == "STOP_ALL") {
             this.clearAll();

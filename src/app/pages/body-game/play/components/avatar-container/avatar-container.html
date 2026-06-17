@@ -10,6 +10,9 @@
         <img [src]="rightCursor.image">
     </div>
     -->
+    <div class="hud_score">
+        <span>Puntos: <strong [innerHTML]="hudData['score']"></strong></span>
+    </div>
     <div class="hud_scenario_labels no_mouse no_select">
         <p class="scenario_step_label white_subtitle" [innerHTML]="hudData['top']"></p>
         <div class="side_labels">
