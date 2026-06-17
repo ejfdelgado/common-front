@@ -34,12 +34,20 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.setCubeVisibility(true);
     }
 
+    async clearAll() {
+        this.setHudText("top", "");
+        this.setHudText("left", "");
+        this.setHudText("right", "");
+        this.setHudText("bottom", "");
+        this.setCubeVisibility(false);
+    }
+
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "START_ALL") {
             // Read mode and scenario
             this.initializeQuestion();
         } else if (event.name == "STOP_ALL") {
-            this.setCubeVisibility(false);
+            this.clearAll();
         } else if (event.name == "CUBE_A_SELECT_ON") {
             // Selected option
         } else if (event.name == "CUBE_B_SELECT_ON") {
