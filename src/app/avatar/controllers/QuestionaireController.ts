@@ -1,5 +1,6 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
+import { ModuloSonido } from "src/app/services/sonido.service";
 import { GameStepOption } from "src/types/WorldAvatar";
 
 export class QuestionaireController extends SceneControllerAbstract {
@@ -69,9 +70,15 @@ export class QuestionaireController extends SceneControllerAbstract {
     }
 
     async evaluateAnswer(choice: string) {
+        this.setCubeVisibility(false);
         const op = this.optionsMap[choice];
-        await this.setHudText("bottom", op.answer, true);
         // Celebrate, increment points!
+        if (op.points == 0) {
+            await ModuloSonido.play('/assets/sounds/loose.mp3', false);
+        } else {
+            await ModuloSonido.play('/assets/sounds/success.mp3', false);
+        }
+        await this.setHudText("bottom", op.answer, true);
         // Go to next question
         this.currentStep += 1;
         this.initializeQuestion();
