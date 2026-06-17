@@ -3,6 +3,8 @@ import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 
 export class QuestionaireController extends SceneControllerAbstract {
 
+    currentStep: number = 0;
+
     override async update(): Promise<ControllerUpdateResponse> {
 
         return {};
@@ -27,10 +29,26 @@ export class QuestionaireController extends SceneControllerAbstract {
     }
 
     async initializeQuestion() {
-        await this.setHudText("top", "Hola", true);
-        await this.setHudText("left", "Opción 1", true);
-        await this.setHudText("right", "Opción 2", true);
-        //this.setHudText("bottom", "Cierre",);
+        if (!this.scenario) {
+            return;
+        }
+        const steps = this.scenario.steps;
+        if (!steps) {
+            return;
+        }
+        if (this.currentStep >= steps.length) {
+            return;
+        }
+        const actualStep = steps[this.currentStep];
+
+        await this.setHudText("top", actualStep.label, true);
+
+        const opL = actualStep.options[0];
+        const opR = actualStep.options[1];
+
+        await this.setHudText("left", opL.label, true);
+        await this.setHudText("right", opR.label, true);
+        this.setHudText("bottom", "");
         this.setCubeVisibility(true);
     }
 
@@ -50,8 +68,10 @@ export class QuestionaireController extends SceneControllerAbstract {
             this.clearAll();
         } else if (event.name == "CUBE_A_SELECT_ON") {
             // Selected option
+            
         } else if (event.name == "CUBE_B_SELECT_ON") {
             // Selected option
+            
         }
     }
 }

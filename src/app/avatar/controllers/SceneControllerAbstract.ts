@@ -10,7 +10,8 @@ import { SceneWithComposer } from "../SceneWithComposer";
 import { ControllerInitDataType } from "@mytypes/BodyTypesExtra";
 import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "@services/p2p.service";
-import { computeAverageByNames, computeDistance } from "@avatar/utils/AvatarUtilities";
+import { computeDistance } from "@avatar/utils/AvatarUtilities";
+import { GameMode, GameScenario } from "src/types/WorldAvatar";
 
 export abstract class SceneControllerAbstract {
     enabled: boolean = true;
@@ -19,6 +20,8 @@ export abstract class SceneControllerAbstract {
     lastData!: ScenePoseAndWalkEventType;
     videoSize!: GenericSizeType;
     cursorDisplay: CursorPositioner | null = null;
+    mode: GameMode | null = null;
+    scenario: GameScenario | null = null;
 
     constructor(
         public events: EventEmitter<AvatarBodyEvent>,
@@ -64,5 +67,13 @@ export abstract class SceneControllerAbstract {
         [key: string]: any;
     }) {
         Object.assign(this, params);
+    }
+
+    setMode(mode: GameMode) {
+        this.mode = mode;
+    }
+
+    setScenario(scenario: GameScenario) {
+        this.scenario = scenario;
     }
 }

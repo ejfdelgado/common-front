@@ -32,7 +32,7 @@ export class CubeController extends SceneControllerAbstract {
                 sphere: null,
                 model: null,
                 material: null,
-                selected: false,
+                selected: true,
             },
             "cube_b": {
                 eventName: "CUBE_B_SELECT_",
@@ -41,7 +41,7 @@ export class CubeController extends SceneControllerAbstract {
                 sphere: null,
                 model: null,
                 material: null,
-                selected: false,
+                selected: true,
             },
             /*
             "cube_c": {

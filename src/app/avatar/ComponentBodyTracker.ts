@@ -18,7 +18,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
-import { GameMode, WorldAvatar } from "@mytypes/WorldAvatar";
+import { GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
 import { Pose } from '@mediapipe/pose';
 import { Hands } from '@mediapipe/hands';
 import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
@@ -58,6 +58,7 @@ export abstract class ComponentBodyTracker
         height: 0,
     };
     mode: GameMode | null = null;
+    scenario: GameScenario | null = null;
     world: WorldAvatar = {
         defaultMode: "mode",
         config: {
@@ -511,11 +512,11 @@ export abstract class ComponentBodyTracker
             controller.setParams(config.params);
         }
         // Add scenario
-        const scenario = this.mode.scenarios[this.mode.defaultSenario];
-        if (scenario.useComposer) {
-            avatarContainer.useComposer = scenario.useComposer;
+        this.scenario = this.mode.scenarios[this.mode.defaultSenario];
+        if (this.scenario.useComposer) {
+            avatarContainer.useComposer = this.scenario.useComposer;
         }
-        await avatarContainer.scene.initializeScenario(scenario);
+        await avatarContainer.scene.initializeScenario(this.scenario);
 
         // Place the avatar
         const position = this.mode.defaultPosition;
@@ -568,6 +569,18 @@ export abstract class ComponentBodyTracker
             }
             await Promise.all(promises);
         }
+
+        // Update controllers
+        this.threeComponent.controllers.forEach((controller) => {
+            if (this.mode) {
+                controller.setMode(this.mode);
+            }
+            if (this.scenario) {
+                controller.setScenario(this.scenario);
+            }
+        });
+
+        this.threeComponent.events.emit({ name: "SCENE_LOADED" });
         //console.log("All loaded");
     }
 }
