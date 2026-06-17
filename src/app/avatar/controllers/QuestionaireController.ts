@@ -1,9 +1,11 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
+import { GameStepOption } from "src/types/WorldAvatar";
 
 export class QuestionaireController extends SceneControllerAbstract {
 
     currentStep: number = 0;
+    optionsMap: { [key: string]: GameStepOption } = {};
 
     override async update(): Promise<ControllerUpdateResponse> {
 
@@ -29,6 +31,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     }
 
     async initializeQuestion() {
+        this.clearAll();
         if (!this.scenario) {
             return;
         }
@@ -46,9 +49,14 @@ export class QuestionaireController extends SceneControllerAbstract {
         const opL = actualStep.options[0];
         const opR = actualStep.options[1];
 
+        this.optionsMap = {
+            "B": opL,
+            "A": opR,
+        };
+
         await this.setHudText("left", opL.label, true);
         await this.setHudText("right", opR.label, true);
-        this.setHudText("bottom", "");
+
         this.setCubeVisibility(true);
     }
 
@@ -60,6 +68,15 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.setCubeVisibility(false);
     }
 
+    async evaluateAnswer(choice: string) {
+        const op = this.optionsMap[choice];
+        await this.setHudText("bottom", op.answer, true);
+        // Celebrate, increment points!
+        // Go to next question
+        this.currentStep += 1;
+        this.initializeQuestion();
+    }
+
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "START_ALL") {
             // Read mode and scenario
@@ -68,10 +85,10 @@ export class QuestionaireController extends SceneControllerAbstract {
             this.clearAll();
         } else if (event.name == "CUBE_A_SELECT_ON") {
             // Selected option
-            
+            this.evaluateAnswer("A");
         } else if (event.name == "CUBE_B_SELECT_ON") {
             // Selected option
-            
+            this.evaluateAnswer("B");
         }
     }
 }
