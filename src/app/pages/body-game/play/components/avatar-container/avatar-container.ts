@@ -22,6 +22,7 @@ import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
 import { CursorData, CursorPointerGUI, CursorStateData, HudDisplayData, Point3D } from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';
+import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service';
 
 
 @Component({
@@ -50,11 +51,12 @@ export class AvatarContainer
     public override fullScreenSrv: FullscreenService,
     public override p2pSrv: P2PService,
     public override cdr: ChangeDetectorRef,
+    public override speechSrv: SpeechSynthesisService,
     //
     private indicatorSrv: IndicatorService,
     private http: HttpClient,
   ) {
-    super(sanitizer, fullScreenSrv, cdr, p2pSrv);
+    super(sanitizer, fullScreenSrv, cdr, p2pSrv, speechSrv);
     this.hasMobile = this.isMobile();
   }
 

@@ -19,6 +19,12 @@ export class SpeechSynthesisService {
         });
     }
 
+    /**
+     * 
+     * @param text 
+     * @param lang es-ES, en-US, en-GB, es-US, fr-FR
+     * @returns 
+     */
     speak(text: string, lang: string = 'en-US'): Promise<boolean> {
         //console.log(`Speaking ${lang}`);
         const utterance = new SpeechSynthesisUtterance(text);

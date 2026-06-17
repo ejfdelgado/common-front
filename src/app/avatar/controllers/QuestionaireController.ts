@@ -22,19 +22,28 @@ export class QuestionaireController extends SceneControllerAbstract {
         }
     }
 
-    setHudText(key: string, val: string) {
-        this.cursorDisplay?.setHudDisplay({ key: key, value: val, });
+    async setHudText(key: string, val: string, speak?: boolean) {
+        await this.cursorDisplay?.setHudDisplay({ key: key, value: val, speak: speak });
+    }
+
+    async initializeQuestion() {
+        await this.setHudText("top", "Hola", true);
+        await this.setHudText("left", "Opción 1", true);
+        await this.setHudText("right", "Opción 2", true);
+        //this.setHudText("bottom", "Cierre",);
+        this.setCubeVisibility(true);
     }
 
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "START_ALL") {
-            this.setCubeVisibility(true);
-            this.setHudText("top", "Hola");
-            this.setHudText("left", "Opción 1");
-            this.setHudText("right", "Opción 2");
-            this.setHudText("bottom", "Cierre");
+            // Read mode and scenario
+            this.initializeQuestion();
         } else if (event.name == "STOP_ALL") {
             this.setCubeVisibility(false);
+        } else if (event.name == "CUBE_A_SELECT_ON") {
+            // Selected option
+        } else if (event.name == "CUBE_B_SELECT_ON") {
+            // Selected option
         }
     }
 }

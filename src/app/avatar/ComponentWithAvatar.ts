@@ -37,8 +37,12 @@ import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 import { HandPointerController } from './controllers/HandPointerController';
 import { ArmsPointerController } from './controllers/ArmsPointerController';
 import { QuestionaireController } from './controllers/QuestionaireController';
+import { SpeechSynthesisService } from '../services/speechsynthesis.service';
+import { html2text } from '../tools/HtmlUtil';
 
-export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
+export abstract class ComponentWithAvatar
+    extends CommonComponent
+    implements CursorPositioner {
     hudData: { [key: string]: any } = {
         "top": "",
         "bottom": "",
@@ -86,6 +90,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
         public override fullScreenSrv: FullscreenService,
         public cdr: ChangeDetectorRef,
         public p2pSrv: P2PService,
+        public speechSrv: SpeechSynthesisService,
     ) {
         super(sanitizer, fullScreenSrv);
         this.events.subscribe((event) => {
@@ -98,8 +103,15 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     abstract setCursor(data: CursorData): void;
     abstract setCursorState(data: CursorStateData): void;
 
-    setHudDisplay(data: HudDisplayData): void {
+    async setHudDisplay(data: HudDisplayData): Promise<void> {
         this.hudData[data.key] = this.sanitizer.bypassSecurityTrustHtml(data.value);
+        if (data.speak === true) {
+            let lang = "es-ES";
+            if (data.lang) {
+                lang = data.lang;
+            }
+            await this.speechSrv.speak(html2text(data.value), lang);
+        }
     }
 
     detectChanges() {
@@ -304,7 +316,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
         } else if (config.id == GameControllerEnum.QuestionaireController) {
             temp = new QuestionaireController(this.events, this.controlProxy, this.p2pSrv);
         }
-        
+
 
         if (temp == null) {
             throw new Error("Unknown controller");

@@ -216,12 +216,14 @@ export interface CursorStateData {
 export interface HudDisplayData {
     key: string;
     value: string;
+    lang?: string;
+    speak?: boolean;
 }
 
 export interface CursorPositioner {
     setCursor(data: CursorData): void;
     setCursorState(data: CursorStateData): void;
-    setHudDisplay(data: HudDisplayData): void;
+    setHudDisplay(data: HudDisplayData): Promise<void>;
     detectChanges(): void;
 }
 
