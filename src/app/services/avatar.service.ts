@@ -16,13 +16,14 @@ export class AvatarService {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const model: WorldAvatar = {
-                    defaultMode: "mode00",
+                    defaultMode: "mode03",
                     config: {
                         useLivePeer: true,
                         useVoice: true,
                     },
                     modes: {
                         "mode00": {
+                            useHands: true,
                             menu: {
                                 name: "Wardrove",
                                 icon: "👖",
@@ -172,7 +173,42 @@ export class AvatarService {
                                     }
                                 }*/
                             ],
-                        }
+                        },
+                        "mode03": {
+                            menu: {
+                                name: "Hands",
+                                icon: "🙉",
+                            },
+                            mirror: true,
+                            defaultPosition: {
+                                positionX: 0,
+                                positionY: 0,
+                                positionZ: 0,
+                                rotationY: 0,
+                            },
+                            defaultCameraState: {
+                                near: 0.1,
+                                far: 1000,
+                                fov: 30,
+                                lookAt: { x: 0, y: 1, z: 0 },
+                                position: { x: 0, y: 1, z: 5 },
+                            },
+                            defaultSenario: "scenario01",
+                            scenarios: {
+                                "scenario01": {
+                                    useComposer: true,
+                                    background: { color: { r: 0.5, g: 1, b: 0.5 } },
+                                    characters: [],
+                                    meshes: []
+                                }
+                            },
+                            controllers: [
+                                { id: GameControllerEnum.ComparableController, params: {} },
+                                { id: GameControllerEnum.Stand2dController, params: {} },
+                                { id: GameControllerEnum.CubeController, params: { enabled: false } },
+                                { id: GameControllerEnum.SoundFeedbackController, params: {} },
+                            ]
+                        },
                     }
                 };
                 resolve(model);

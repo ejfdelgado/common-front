@@ -4,7 +4,6 @@ import {
     AVATAR_PELVIS_HEIGHT,
     BodyData,
     GenericSizeType,
-    HandPinchData,
 } from "@mytypes/BodyTypes";
 import { IndicatorService, Wait } from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
@@ -19,8 +18,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
-import { WorldAvatar } from "@mytypes/WorldAvatar";
-import { LandmarkList, NormalizedLandmarkList, Pose } from '@mediapipe/pose';
+import { GameMode, WorldAvatar } from "@mytypes/WorldAvatar";
+import { Pose } from '@mediapipe/pose';
 import { Hands } from '@mediapipe/hands';
 import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
 
@@ -58,6 +57,7 @@ export abstract class ComponentBodyTracker
         width: 0,
         height: 0,
     };
+    mode: GameMode | null = null;
     world: WorldAvatar = {
         defaultMode: "mode",
         config: {
@@ -368,7 +368,9 @@ export abstract class ComponentBodyTracker
                 onFrame: async () => {
                     await this.poseTracker.send({ image: videoElement });
                     // Only do this if arms are pointing to the front
-                    await this.handsTracker.send({ image: videoElement });
+                    if (this.mode?.useHands === true) {
+                        await this.handsTracker.send({ image: videoElement });
+                    }
                 },
                 width: 640,
                 height: 480,
@@ -472,10 +474,10 @@ export abstract class ComponentBodyTracker
     public abstract broadcastBinaryData(command: GameAction): Promise<void>;
 
     public async applyMode(id: string, notifyPeers?: boolean) {
-        const mode = this.world.modes[id];
+        this.mode = this.world.modes[id];
         const avatarContainer = this.getAvatarContainer();
 
-        if (!mode || !avatarContainer.scene) {
+        if (!this.mode || !avatarContainer.scene) {
             return;
         }
         if (notifyPeers === true) {
@@ -488,12 +490,12 @@ export abstract class ComponentBodyTracker
         }
 
         // Set general config
-        this.mirror = mode.mirror;
+        this.mirror = this.mode.mirror;
         // Place the camera
-        const camera = mode.defaultCameraState;
+        const camera = this.mode.defaultCameraState;
         avatarContainer.scene.forceCameraState(camera);
         // Define controllers
-        const controllers = mode.controllers;
+        const controllers = this.mode.controllers;
         await avatarContainer.removeAllControllers();
         for (let i = 0; i < controllers.length; i++) {
             const config = controllers[i];
@@ -502,14 +504,14 @@ export abstract class ComponentBodyTracker
             controller.setParams(config.params);
         }
         // Add scenario
-        const scenario = mode.scenarios[mode.defaultSenario];
+        const scenario = this.mode.scenarios[this.mode.defaultSenario];
         if (scenario.useComposer) {
             avatarContainer.useComposer = scenario.useComposer;
         }
         await avatarContainer.scene.initializeScenario(scenario);
 
         // Place the avatar
-        const position = mode.defaultPosition;
+        const position = this.mode.defaultPosition;
         // Search the correct height
         let postY = avatarContainer.scene.getFirstHitFromTopToDown(position.positionX, position.positionZ);
         if (!postY) {
@@ -519,7 +521,7 @@ export abstract class ComponentBodyTracker
         // Restore T pose transformation
         avatarContainer.scene.restoreTBoneBackup(AVATAR_NAME);
         // Clean old transformation
-        avatarContainer.scene.forceAvatarState(position, mode.mirror);
+        avatarContainer.scene.forceAvatarState(position, this.mode.mirror);
 
         // Remove all animations
         avatarContainer.scene.clearAnimations();
@@ -527,10 +529,10 @@ export abstract class ComponentBodyTracker
         avatarContainer.scene.removeAllCharacters();
 
         // Add characters
-        if (mode.characters) {
+        if (this.mode.characters) {
             const promises: Promise<any>[] = [];
-            for (let i = 0; i < mode.characters.length; i++) {
-                const spec = mode.characters[i];
+            for (let i = 0; i < this.mode.characters.length; i++) {
+                const spec = this.mode.characters[i];
                 promises.push(new Promise<void>(async (resolve, reject) => {
                     try {
                         if (!avatarContainer.scene) {

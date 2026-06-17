@@ -24,6 +24,7 @@ export interface GameMode {
     controllers: GameController[];
     scenarios: { [key: string]: GameScenario };
     characters?: CharacterSpec[];
+    useHands?: boolean;
 }
 
 export interface CharacterSpec {

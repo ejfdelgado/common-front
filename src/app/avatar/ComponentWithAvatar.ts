@@ -256,40 +256,42 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
         }
     }
 
-    public createController(config: GameController) {
+    public createController(config: GameController): SceneControllerAbstract {
+        let temp: SceneControllerAbstract | null = null;
         if (config.id == GameControllerEnum.ComparableController) {
-            return new ComparableController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new ComparableController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.CubeController) {
-            return new CubeController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new CubeController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.HandsCloseController) {
-            return new HandsCloseController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new HandsCloseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.RecordPoseController) {
-            return new RecordPoseController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new RecordPoseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.SimplePosesDetection) {
-            return new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv);
+            temp = new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.SoundFeedbackController) {
-            return new SoundFeedbackController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new SoundFeedbackController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.Stand2dController) {
-            return new Stand2dController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new Stand2dController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.TerrainElevationController) {
-            return new TerrainElevationController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new TerrainElevationController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.SharePoseController) {
-            return new SharePoseController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new SharePoseController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.WalkController) {
-            return new WalkController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new WalkController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.FingerController) {
-            return new FingerController(this.events, this.controlProxy, this.p2pSrv);
+            temp = new FingerController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.HandPointerController) {
-            const controller = new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
-            controller.setCursorDisplay(this);
-            return controller;
+            temp = new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.ArmsPointerController) {
-            const controller = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
-            controller.setCursorDisplay(this);
-            return controller;
-        } else {
+            temp = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
+        }
+
+        if (temp == null) {
             throw new Error("Unknown controller");
         }
+
+        temp.setCursorDisplay(this);
+        return temp;
 
     }
 }
