@@ -508,6 +508,156 @@
                                     "answer": "¡Correcto! El pulpo no tiene ningún hueso, por eso puede deslizarse por espacios muy pequeños."
                                 }
                             ]
+                        },
+                        {
+                            "label": "¿Qué animal puede girar su cabeza casi 270 grados sin lastimarse?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El búho",
+                                    "answer": "¡Correcto! El búho puede girar su cabeza casi 270 grados porque no puede mover los ojos."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El gato",
+                                    "answer": "Casi. Es el búho el que puede girar su cabeza casi 270 grados."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es el único mamífero que no puede saltar?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "El perro",
+                                    "answer": "Recuerda, los perros sí pueden saltar. Es el elefante el que no puede levantar sus cuatro patas del suelo a la vez."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El elefante",
+                                    "answer": "¡Así es! El elefante no puede saltar porque sus patas no le permiten despegar del suelo."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal no puede caminar hacia atrás?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El canguro",
+                                    "answer": "Exacto! La forma de sus patas y su cola no le permiten al canguro caminar hacia atrás."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El conejo",
+                                    "answer": "No es el conejo. Es el canguro el que no puede caminar hacia atrás."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es el único mamífero que puede volar de verdad, sin solo planear?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "La ardilla voladora",
+                                    "answer": "Estuviste cerca, la ardilla voladora solo planea. El murciélago es el único mamífero que vuela de verdad."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El murciélago",
+                                    "answer": "¡Correcto! El murciélago es el único mamífero que puede volar de verdad."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué ave pone el huevo más grande de todas?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El avestruz",
+                                    "answer": "¡Sí! El huevo de avestruz es el más grande de todas las aves, puede pesar más de un kilo."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El águila",
+                                    "answer": "Casi. Es el avestruz el que pone el huevo más grande de todas las aves."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuánto tiempo puede aguantar la respiración bajo el agua un pingüino emperador?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "Unos 2 minutos",
+                                    "answer": "Te quedaste corto. El pingüino emperador puede aguantar la respiración hasta 20 minutos bajo el agua."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "Unos 20 minutos",
+                                    "answer": "¡Correcto! El pingüino emperador puede aguantar la respiración hasta 20 minutos bajo el agua."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede respirar a través de su piel?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La rana",
+                                    "answer": "¡Exacto! La rana puede respirar a través de su piel, por eso siempre necesita mantenerla húmeda."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "La lagartija",
+                                    "answer": "No es la lagartija. Es la rana la que puede respirar a través de su piel."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal cambia el color de su pelaje de marrón a blanco según la estación?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "El oso pardo",
+                                    "answer": "Casi. Es el zorro ártico el que cambia su pelaje de marrón a blanco para esconderse en la nieve."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El zorro ártico",
+                                    "answer": "¡Correcto! El zorro ártico cambia su pelaje de marrón a blanco según la estación para camuflarse."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es el pez más grande del mundo?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "El tiburón blanco",
+                                    "answer": "Estuviste cerca. El tiburón ballena es el pez más grande del mundo, ¡y solo come cosas pequeñitas!"
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El tiburón ballena",
+                                    "answer": "¡Así es! El tiburón ballena es el pez más grande del mundo."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué insecto puede migrar miles de kilómetros cada año?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La mariposa monarca",
+                                    "answer": "¡Correcto! La mariposa monarca viaja miles de kilómetros entre Norteamérica y México."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "La abeja",
+                                    "answer": "No es la abeja. Es la mariposa monarca la que migra miles de kilómetros cada año."
+                                }
+                            ]
                         }
                     ]
                 }
