@@ -9,6 +9,7 @@ import { getUrlQueryParams } from "@tools/UrlUtil";
 import { CommonComponent } from "@components/common.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
+import { removeEmojis } from "../tools/StringUtils";
 
 export const POSSIBLE_LANGS = ["es-ES", "en-US", "fr-FR"];
 
@@ -76,16 +77,12 @@ export class CommonSpeech extends CommonComponent {
         return this.langs.find(e => e.id == id);
     }
 
-    removeEmojis(text: string) {
-        return text.replace(/\p{Emoji}/gu, '');
-    }
-
     async talk(text: string, useLoading: boolean = false) {
         let promise: any = null;
         if (useLoading) {
             promise = this.indicatorSrv.start();
         }
-        const sanitized = this.removeEmojis(text);
+        const sanitized = removeEmojis(text);
         await this.speechSrv.speak(sanitized, this.currentLang);
         if (promise) {
             promise.done();

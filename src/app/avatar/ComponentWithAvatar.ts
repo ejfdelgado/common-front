@@ -39,6 +39,7 @@ import { ArmsPointerController } from './controllers/ArmsPointerController';
 import { QuestionaireController } from './controllers/QuestionaireController';
 import { SpeechSynthesisService } from '../services/speechsynthesis.service';
 import { html2text } from '../tools/HtmlUtil';
+import { removeEmojis } from '../tools/StringUtils';
 
 export abstract class ComponentWithAvatar
     extends CommonComponent
@@ -111,7 +112,10 @@ export abstract class ComponentWithAvatar
             if (data.lang) {
                 lang = data.lang;
             }
-            await this.speechSrv.speak(html2text(data.value), lang);
+            let text = data.value;
+            text = removeEmojis(text);
+            //text = html2text(text);
+            await this.speechSrv.speak(text, lang);
         }
     }
 

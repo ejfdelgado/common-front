@@ -289,12 +289,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "Un corazón",
+                                    "label": "💛 Un corazón",
                                     "answer": "La próxima vez seguro lo recordarás mejor. Los humanos tenemos un solo corazón, pero los pulpos tienen 3. Dos bombean sangre a las branquias y uno a todo el cuerpo."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "Tres corazónes",
+                                    "label": "❤️❤️❤️ Tres corazónes",
                                     "answer": "¡Sí, tres! Dos bombean sangre a las branquias y uno a todo el cuerpo."
                                 }
                             ]
@@ -304,12 +304,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "Rosada",
+                                    "label": "👅 Rosada",
                                     "answer": "Casi aciertas. Es morada para protegerse del sol mientras come hojas todo el día."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "Morada/azul",
+                                    "label": "💜 Morada/azul",
                                     "answer": "Excelente, Es morada para protegerse del sol mientras come hojas todo el día."
                                 }
                             ]
@@ -319,12 +319,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El caballo",
+                                    "label": "🐴 El caballo",
                                     "answer": "Muy bien, Los caballos pueden dormir parados para escapar rápido del peligro."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El conejo",
+                                    "label": "🐰 El conejo",
                                     "answer": "Estabas cerca, Los caballos pueden dormir parados para escapar rápido del peligro."
                                 }
                             ]
@@ -334,12 +334,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El camaleón",
+                                    "label": "🦎 El camaleón",
                                     "answer": "Acertaste! El camaleón cambia de color para esconderse y también según cómo se siente."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El elefante",
+                                    "label": "🐘 El elefante",
                                     "answer": "Puedes volver a intentarlo más tarde. El camaleón cambia de color para esconderse y también según cómo se siente."
                                 }
                             ]
@@ -349,12 +349,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "La tortuga",
+                                    "label": "🐢 La tortuga",
                                     "answer": "Luego tendrás otra oportunidad, ¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "La hormiga",
+                                    "label": "🐜 La hormiga",
                                     "answer": "Genial! ¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro."
                                 }
                             ]
@@ -364,12 +364,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El delfín",
+                                    "label": "🐬 El delfín",
                                     "answer": "Correcto! Los delfines duermen con un ojo abierto y la mitad del cerebro despierta para seguir vigilando."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El perro",
+                                    "label": "🐶 El perro",
                                     "answer": "Casi. Los delfines son los que duermen con un ojo abierto y la mitad del cerebro despierta."
                                 }
                             ]
@@ -379,12 +379,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "El león",
+                                    "label": "🦁 El león",
                                     "answer": "Estuviste cerca. El guepardo es el más rápido, puede correr a más de 100 km por hora."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El guepardo",
+                                    "label": "🐆 El guepardo",
                                     "answer": "¡Exacto! El guepardo puede correr a más de 100 km por hora."
                                 }
                             ]
@@ -394,12 +394,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "La estrella de mar",
+                                    "label": "⭐ La estrella de mar",
                                     "answer": "Muy bien! La estrella de mar puede regenerar un brazo perdido, e incluso a veces crear un cuerpo nuevo desde el brazo."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El pez",
+                                    "label": "🐟 El pez",
                                     "answer": "Casi. Es la estrella de mar la que puede regenerar un brazo perdido."
                                 }
                             ]
@@ -409,12 +409,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "Unos 20 años",
+                                    "label": "⏳ Unos 20 años",
                                     "answer": "Te quedaste corto. Las tortugas gigantes pueden vivir más de 100 años."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "Más de 100 años",
+                                    "label": "💯 Más de 100 años",
                                     "answer": "¡Así es! Las tortugas gigantes pueden vivir más de 100 años."
                                 }
                             ]
@@ -424,12 +424,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El oso hormiguero",
+                                    "label": "🐾 El oso hormiguero",
                                     "answer": "Correcto! El oso hormiguero usa su larguísima lengua para atrapar hormigas y termitas."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El perro",
+                                    "label": "🐶 El perro",
                                     "answer": "No exactamente. Es el oso hormiguero el que tiene esa lengua tan larga."
                                 }
                             ]
@@ -439,12 +439,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "La mariposa",
+                                    "label": "🦋 La mariposa",
                                     "answer": "Recuerda, la mariposa no es un ave. El colibrí es el único capaz de volar hacia atrás."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El colibrí",
+                                    "label": "🐦 El colibrí",
                                     "answer": "¡Sí! El colibrí es el único ave que puede volar hacia atrás."
                                 }
                             ]
@@ -454,12 +454,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "La ballena azul",
+                                    "label": "🐋 La ballena azul",
                                     "answer": "Exacto! El corazón de la ballena azul es tan grande como un carro pequeño."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El elefante",
+                                    "label": "🐘 El elefante",
                                     "answer": "Casi. Es la ballena azul la que tiene el corazón más grande, del tamaño de un carro."
                                 }
                             ]
@@ -469,12 +469,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "El gato",
+                                    "label": "🐱 El gato",
                                     "answer": "Te acercaste, el gato duerme mucho, pero el koala es el que llega a dormir hasta 22 horas al día."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El koala",
+                                    "label": "🐨 El koala",
                                     "answer": "¡Correcto! El koala puede dormir hasta 22 horas al día."
                                 }
                             ]
@@ -484,12 +484,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El pez payaso",
+                                    "label": "🐠 El pez payaso",
                                     "answer": "¡Así es! El pez payaso puede cambiar de sexo, por ejemplo si la hembra del grupo desaparece."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El delfín",
+                                    "label": "🐬 El delfín",
                                     "answer": "No es el delfín. Es el pez payaso el que puede cambiar de sexo durante su vida."
                                 }
                             ]
@@ -499,12 +499,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "La tortuga",
+                                    "label": "🐢 La tortuga",
                                     "answer": "La tortuga sí tiene huesos y caparazón. Es el pulpo el que no tiene ningún hueso en su cuerpo."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El pulpo",
+                                    "label": "🐙 El pulpo",
                                     "answer": "¡Correcto! El pulpo no tiene ningún hueso, por eso puede deslizarse por espacios muy pequeños."
                                 }
                             ]
@@ -514,12 +514,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El búho",
+                                    "label": "🦉 El búho",
                                     "answer": "¡Correcto! El búho puede girar su cabeza casi 270 grados porque no puede mover los ojos."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El gato",
+                                    "label": "🐱 El gato",
                                     "answer": "Casi. Es el búho el que puede girar su cabeza casi 270 grados."
                                 }
                             ]
@@ -529,12 +529,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "El perro",
+                                    "label": "🐶 El perro",
                                     "answer": "Recuerda, los perros sí pueden saltar. Es el elefante el que no puede levantar sus cuatro patas del suelo a la vez."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El elefante",
+                                    "label": "🐘 El elefante",
                                     "answer": "¡Así es! El elefante no puede saltar porque sus patas no le permiten despegar del suelo."
                                 }
                             ]
@@ -544,12 +544,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El canguro",
+                                    "label": "🦘 El canguro",
                                     "answer": "Exacto! La forma de sus patas y su cola no le permiten al canguro caminar hacia atrás."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El conejo",
+                                    "label": "🐰 El conejo",
                                     "answer": "No es el conejo. Es el canguro el que no puede caminar hacia atrás."
                                 }
                             ]
@@ -559,12 +559,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "La ardilla voladora",
+                                    "label": "🐿️ La ardilla voladora",
                                     "answer": "Estuviste cerca, la ardilla voladora solo planea. El murciélago es el único mamífero que vuela de verdad."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El murciélago",
+                                    "label": "🦇 El murciélago",
                                     "answer": "¡Correcto! El murciélago es el único mamífero que puede volar de verdad."
                                 }
                             ]
@@ -574,12 +574,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "El avestruz",
+                                    "label": "🪶 El avestruz",
                                     "answer": "¡Sí! El huevo de avestruz es el más grande de todas las aves, puede pesar más de un kilo."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "El águila",
+                                    "label": "🦅 El águila",
                                     "answer": "Casi. Es el avestruz el que pone el huevo más grande de todas las aves."
                                 }
                             ]
@@ -589,12 +589,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "Unos 2 minutos",
+                                    "label": "⏱️ Unos 2 minutos",
                                     "answer": "Te quedaste corto. El pingüino emperador puede aguantar la respiración hasta 20 minutos bajo el agua."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "Unos 20 minutos",
+                                    "label": "⏰ Unos 20 minutos",
                                     "answer": "¡Correcto! El pingüino emperador puede aguantar la respiración hasta 20 minutos bajo el agua."
                                 }
                             ]
@@ -604,12 +604,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "La rana",
+                                    "label": "🐸 La rana",
                                     "answer": "¡Exacto! La rana puede respirar a través de su piel, por eso siempre necesita mantenerla húmeda."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "La lagartija",
+                                    "label": "🦎 La lagartija",
                                     "answer": "No es la lagartija. Es la rana la que puede respirar a través de su piel."
                                 }
                             ]
@@ -619,12 +619,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "El oso pardo",
+                                    "label": "🐻 El oso pardo",
                                     "answer": "Casi. Es el zorro ártico el que cambia su pelaje de marrón a blanco para esconderse en la nieve."
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El zorro ártico",
+                                    "label": "🦊 El zorro ártico",
                                     "answer": "¡Correcto! El zorro ártico cambia su pelaje de marrón a blanco según la estación para camuflarse."
                                 }
                             ]
@@ -634,12 +634,12 @@
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "El tiburón blanco",
+                                    "label": "🦈 El tiburón blanco",
                                     "answer": "Estuviste cerca. El tiburón ballena es el pez más grande del mundo, ¡y solo come cosas pequeñitas!"
                                 },
                                 {
                                     "points": 1,
-                                    "label": "El tiburón ballena",
+                                    "label": "🦈 El tiburón ballena",
                                     "answer": "¡Así es! El tiburón ballena es el pez más grande del mundo."
                                 }
                             ]
@@ -649,12 +649,12 @@
                             "options": [
                                 {
                                     "points": 1,
-                                    "label": "La mariposa monarca",
+                                    "label": "🦋 La mariposa monarca",
                                     "answer": "¡Correcto! La mariposa monarca viaja miles de kilómetros entre Norteamérica y México."
                                 },
                                 {
                                     "points": 0,
-                                    "label": "La abeja",
+                                    "label": "🐝 La abeja",
                                     "answer": "No es la abeja. Es la mariposa monarca la que migra miles de kilómetros cada año."
                                 }
                             ]
