@@ -213,9 +213,15 @@ export interface CursorStateData {
     state: "on" | "off";
 }
 
+export interface HudDisplayData {
+    key: string;
+    value: string;
+}
+
 export interface CursorPositioner {
     setCursor(data: CursorData): void;
     setCursorState(data: CursorStateData): void;
+    setHudDisplay(data: HudDisplayData): void;
 }
 
 export interface CursorPointerGUI {

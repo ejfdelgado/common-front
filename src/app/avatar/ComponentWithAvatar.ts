@@ -10,6 +10,7 @@ import {
     CursorPositioner,
     CursorStateData,
     GenericSizeType,
+    HudDisplayData,
     StateBody,
 } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
@@ -37,6 +38,12 @@ import { HandPointerController } from './controllers/HandPointerController';
 import { ArmsPointerController } from './controllers/ArmsPointerController';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
+    hudData: { [key: string]: any } = {
+        "top": "",
+        "bottom": "",
+        "left": "",
+        "right": "",
+    };
     useComposer: boolean = false;
     sceneCreated: PromiseEmitter = new PromiseEmitter();
     bounds: DOMRect | null = null;
@@ -88,6 +95,10 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
 
     abstract setCursor(data: CursorData): void;
     abstract setCursorState(data: CursorStateData): void;
+
+    setHudDisplay(data: HudDisplayData): void {
+        this.hudData[data.key] = this.sanitizer.bypassSecurityTrustHtml(data.value);
+    }
 
     public abstract getParentRef(): ElementRef;
 

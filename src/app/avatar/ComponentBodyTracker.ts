@@ -128,6 +128,11 @@ export abstract class ComponentBodyTracker
             this.eventSubscription = this.getAvatarContainer().events.subscribe((event) => {
                 // Adjust behavior, for example of hands segmentation
                 // Only when arms are rised
+                if (event.name == "CUBE_A_SELECT_ON") {
+
+                } else if (event.name == "CUBE_B_SELECT_ON") {
+                    
+                }
             });
         }
     }

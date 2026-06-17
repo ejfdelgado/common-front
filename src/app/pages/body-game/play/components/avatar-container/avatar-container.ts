@@ -20,7 +20,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
-import { CursorData, CursorPointerGUI, CursorStateData, Point3D } from '@mytypes/BodyTypes';
+import { CursorData, CursorPointerGUI, CursorStateData, HudDisplayData, Point3D } from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';
 
 

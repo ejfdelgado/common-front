@@ -2,10 +2,20 @@
     <canvas #mycanvas width="1" height="1">
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
+    <!--
     <div class="cursor_pointer" [ngStyle]="leftCursor.style">
         <img [src]="leftCursor.image">
     </div>
     <div class="cursor_pointer" [ngStyle]="rightCursor.style">
         <img [src]="rightCursor.image">
+    </div>
+    -->
+    <div class="hud_scenario_labels no_mouse no_select">
+        <p class="scenario_step_label white_subtitle" [innerHTML]="hudData['top']"></p>
+        <div class="side_labels">
+            <p class="scenario_step_left_label white_subtitle" [innerHTML]="hudData['left']"></p>
+            <p class="scenario_step_right_label white_subtitle" [innerHTML]="hudData['right']"></p>
+        </div>
+        <p class="scenario_step_label white_subtitle" [innerHTML]="hudData['bottom']"></p>
     </div>
 </div>

@@ -112,9 +112,44 @@
 
 .cursor_pointer {
   position: absolute;
-  
+
 }
 
 .cursor_pointer img {
   position: relative;
+}
+
+.hud_scenario_labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2vh 5vw;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+.side_labels {
+  display: flex;
+  flex-direction: row;
+  gap: 10vw;
+  flex: 1;
+}
+
+.scenario_step_label {
+  text-align: center;
+}
+
+.scenario_step_left_label {
+  text-align: center;
+  flex: 1;
+}
+
+.scenario_step_right_label {
+  text-align: center;
+  flex: 1;
 }
