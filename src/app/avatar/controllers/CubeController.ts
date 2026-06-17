@@ -3,9 +3,12 @@ import { AvatarBoneEnum } from "@mytypes/BodyParts";
 import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from "@mytypes/BodyTypes";
 import * as THREE from 'three';
 
-const SIDE_SHIFT = 0.8;
 const OPACITY_LOW = 0.5;
 const OPACITY_HIGH = 1;
+
+const SIDE_SHIFT = 0.5;
+const SIDE_FRONT = 0.3;
+const AB_HEIGHT = 0.5;
 
 export interface CubeConfigType {
     local: THREE.Matrix4;
@@ -18,14 +21,14 @@ export interface CubeConfigType {
 };
 
 export class CubeController extends SceneControllerAbstract {
-    
+
     cubes: {
         [key: string]: CubeConfigType,
     } = {
             "cube_a": {
                 eventName: "CUBE_A_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, 0),
-                height: 0.9,
+                local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, SIDE_FRONT),
+                height: AB_HEIGHT,
                 sphere: null,
                 model: null,
                 material: null,
@@ -33,13 +36,14 @@ export class CubeController extends SceneControllerAbstract {
             },
             "cube_b": {
                 eventName: "CUBE_B_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, 0, 0),
-                height: 0.9,
+                local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, 0, SIDE_FRONT),
+                height: AB_HEIGHT,
                 sphere: null,
                 model: null,
                 material: null,
                 selected: false,
             },
+            /*
             "cube_c": {
                 eventName: "CUBE_C_SELECT_",
                 local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, 0),
@@ -58,6 +62,7 @@ export class CubeController extends SceneControllerAbstract {
                 material: null,
                 selected: false,
             },
+            */
         };
 
     override setParams(params: {

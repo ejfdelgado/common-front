@@ -205,7 +205,7 @@ export class AvatarService {
                             controllers: [
                                 { id: GameControllerEnum.ComparableController, params: {} },
                                 { id: GameControllerEnum.Stand2dController, params: {} },
-                                { id: GameControllerEnum.CubeController, params: { enabled: false } },
+                                { id: GameControllerEnum.CubeController, params: { enabled: true } },
                                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                             ]
                         },
