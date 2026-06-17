@@ -2,6 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IndicatorService } from "./indicator.service";
 import { GameControllerEnum, WorldAvatar } from "@mytypes/WorldAvatar";
+import { firstValueFrom } from "rxjs";
+import { sleep } from "../tools/rxjsUtils";
 
 @Injectable({
     providedIn: 'root',
@@ -13,6 +15,15 @@ export class AvatarService {
     ) { }
 
     async loadWorld(url: string): Promise<WorldAvatar> {
+        const read = await firstValueFrom(this.http.get("/assets/scenarios/sample.json", {
+            responseType: "json",
+        }));
+        // TODO Fix race bug when this resolve faster
+        await sleep(500);
+        return read as any;
+    }
+
+    async loadWorldOld(url: string): Promise<WorldAvatar> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const model: WorldAvatar = {
@@ -261,6 +272,7 @@ export class AvatarService {
                         },
                     }
                 };
+
                 resolve(model);
             }, 500);
         });

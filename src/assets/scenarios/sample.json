@@ -1,0 +1,391 @@
+{
+    "defaultMode": "mode03",
+    "config": {
+        "useLivePeer": true,
+        "useVoice": false
+    },
+    "modes": {
+        "mode00": {
+            "useHands": true,
+            "menu": {
+                "name": "Wardrove",
+                "icon": "👖"
+            },
+            "mirror": true,
+            "defaultPosition": {
+                "positionX": 0,
+                "positionY": 0,
+                "positionZ": 0,
+                "rotationY": 0
+            },
+            "defaultCameraState": {
+                "near": 0.1,
+                "far": 1000,
+                "fov": 30,
+                "lookAt": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                "position": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 5
+                }
+            },
+            "defaultSenario": "scenario01",
+            "scenarios": {
+                "scenario01": {
+                    "useComposer": true,
+                    "background": {
+                        "color": {
+                            "r": 0.5,
+                            "g": 1,
+                            "b": 0.5
+                        }
+                    },
+                    "characters": [],
+                    "meshes": []
+                }
+            },
+            "controllers": [
+                {
+                    "id": "ComparableController",
+                    "params": {}
+                },
+                {
+                    "id": "Stand2dController",
+                    "params": {}
+                },
+                {
+                    "id": "SoundFeedbackController",
+                    "params": {}
+                },
+                {
+                    "id": "SharePoseController",
+                    "params": {}
+                },
+                {
+                    "id": "ArmsPointerController",
+                    "params": {}
+                },
+                {
+                    "id": "HandPointerController",
+                    "params": {}
+                }
+            ]
+        },
+        "mode01": {
+            "menu": {
+                "name": "Park I",
+                "icon": "🏞️"
+            },
+            "mirror": false,
+            "defaultPosition": {
+                "positionX": 3,
+                "positionY": 0,
+                "positionZ": 3,
+                "rotationY": 1.5707963267948966
+            },
+            "defaultCameraState": {
+                "near": 0.1,
+                "far": 1000,
+                "fov": 25,
+                "lookAt": {
+                    "x": 3,
+                    "y": 0,
+                    "z": 3
+                },
+                "position": {
+                    "x": -10,
+                    "y": 5,
+                    "z": 10
+                }
+            },
+            "defaultSenario": "scenario01",
+            "scenarios": {
+                "scenario01": {
+                    "useComposer": true,
+                    "background": {
+                        "color": {
+                            "r": 0.5,
+                            "g": 0.5,
+                            "b": 1
+                        }
+                    },
+                    "characters": [],
+                    "meshes": [
+                        {
+                            "name": "scenario_a",
+                            "url": "/assets/models/scenario.glb"
+                        }
+                    ]
+                }
+            },
+            "controllers": [
+                {
+                    "id": "ComparableController",
+                    "params": {}
+                },
+                {
+                    "id": "SimplePosesDetection",
+                    "params": {}
+                },
+                {
+                    "id": "TerrainElevationController",
+                    "params": {}
+                },
+                {
+                    "id": "WalkController",
+                    "params": {}
+                },
+                {
+                    "id": "Stand2dController",
+                    "params": {}
+                },
+                {
+                    "id": "SoundFeedbackController",
+                    "params": {}
+                },
+                {
+                    "id": "SharePoseController",
+                    "params": {}
+                }
+            ],
+            "characters": []
+        },
+        "mode02": {
+            "menu": {
+                "name": "Park II",
+                "icon": "🎄"
+            },
+            "mirror": false,
+            "defaultPosition": {
+                "positionX": 3,
+                "positionY": 0,
+                "positionZ": 3,
+                "rotationY": 1.5707963267948966
+            },
+            "defaultCameraState": {
+                "near": 0.1,
+                "far": 1000,
+                "fov": 25,
+                "lookAt": {
+                    "x": 3,
+                    "y": 0,
+                    "z": 3
+                },
+                "position": {
+                    "x": -10,
+                    "y": 5,
+                    "z": 10
+                }
+            },
+            "defaultSenario": "scenario01",
+            "scenarios": {
+                "scenario01": {
+                    "useComposer": true,
+                    "background": {
+                        "color": {
+                            "r": 0.5,
+                            "g": 0.5,
+                            "b": 1
+                        }
+                    },
+                    "characters": [],
+                    "meshes": [
+                        {
+                            "name": "scenario_a",
+                            "url": "/assets/models/scenario.glb"
+                        }
+                    ]
+                }
+            },
+            "controllers": [
+                {
+                    "id": "ComparableController",
+                    "params": {}
+                },
+                {
+                    "id": "SimplePosesDetection",
+                    "params": {}
+                },
+                {
+                    "id": "HandsCloseController",
+                    "params": {}
+                },
+                {
+                    "id": "TerrainElevationController",
+                    "params": {}
+                },
+                {
+                    "id": "WalkController",
+                    "params": {}
+                },
+                {
+                    "id": "Stand2dController",
+                    "params": {}
+                },
+                {
+                    "id": "SoundFeedbackController",
+                    "params": {}
+                },
+                {
+                    "id": "RecordPoseController",
+                    "params": {}
+                },
+                {
+                    "id": "CubeController",
+                    "params": {
+                        "enabled": false
+                    }
+                }
+            ],
+            "characters": []
+        },
+        "mode03": {
+            "menu": {
+                "name": "Hands",
+                "icon": "🙉"
+            },
+            "mirror": true,
+            "defaultPosition": {
+                "positionX": 0,
+                "positionY": 0,
+                "positionZ": 0,
+                "rotationY": 0
+            },
+            "defaultCameraState": {
+                "near": 0.1,
+                "far": 1000,
+                "fov": 30,
+                "lookAt": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                "position": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 5
+                }
+            },
+            "defaultSenario": "scenario01",
+            "scenarios": {
+                "scenario01": {
+                    "useComposer": true,
+                    "background": {
+                        "color": {
+                            "r": 0.5,
+                            "g": 1,
+                            "b": 0.5
+                        }
+                    },
+                    "characters": [],
+                    "meshes": [],
+                    "steps": [
+                        {
+                            "label": "¿Cuántos corazones tiene un pulpo?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "Un corazón",
+                                    "answer": "La próxima vez seguro lo recordarás mejor. Los humanos tenemos un solo corazón, pero los pulpos tienen 3. Dos bombean sangre a las branquias y uno a todo el cuerpo."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "Tres corazónes",
+                                    "answer": "¡Sí, tres! Dos bombean sangre a las branquias y uno a todo el cuerpo."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿De qué color es la lengua de una jirafa?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "Rosada",
+                                    "answer": "Casi aciertas. Es morada para protegerse del sol mientras come hojas todo el día."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "Morada/azul",
+                                    "answer": "Excelente, Es morada para protegerse del sol mientras come hojas todo el día."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal nunca duerme acostado y puede dormir de pie?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El caballo",
+                                    "answer": "Muy bien, Los caballos pueden dormir parados para escapar rápido del peligro."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El conejo",
+                                    "answer": "Estabas cerca, Los caballos pueden dormir parados para escapar rápido del peligro."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál de estos animales puede cambiar de color?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El camaleón",
+                                    "answer": "Acertaste! El camaleón cambia de color para esconderse y también según cómo se siente."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El elefante",
+                                    "answer": "Puedes volver a intentarlo más tarde. El camaleón cambia de color para esconderse y también según cómo se siente."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal es tan fuerte que puede cargar cosas mucho más pesadas que su propio cuerpo?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "La tortuga",
+                                    "answer": "Luego tendrás otra oportunidad, ¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "La hormiga",
+                                    "answer": "Genial! ¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "controllers": [
+                {
+                    "id": "ComparableController",
+                    "params": {}
+                },
+                {
+                    "id": "Stand2dController",
+                    "params": {}
+                },
+                {
+                    "id": "CubeController",
+                    "params": {
+                        "enabled": false
+                    }
+                },
+                {
+                    "id": "SoundFeedbackController",
+                    "params": {}
+                },
+                {
+                    "id": "QuestionaireController",
+                    "params": {}
+                }
+            ]
+        }
+    }
+}
