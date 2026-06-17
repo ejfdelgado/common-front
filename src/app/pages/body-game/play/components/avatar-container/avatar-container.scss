@@ -129,8 +129,9 @@
   display: flex;
   flex-direction: column;
   gap: 2vh;
-  font-size: 3rem;
-  line-height: 3rem;
+  font-size: 2rem;
+  line-height: 2rem;
+  z-index: 3;
 }
 
 .side_labels {

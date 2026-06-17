@@ -47,16 +47,16 @@ export class QuestionaireController extends SceneControllerAbstract {
 
         await this.setHudText("top", actualStep.label, true);
 
-        const opL = actualStep.options[0];
         const opR = actualStep.options[1];
+        const opL = actualStep.options[0];
 
         this.optionsMap = {
-            "B": opL,
             "A": opR,
+            "B": opL,
         };
 
-        await this.setHudText("left", opL.label, true);
         await this.setHudText("right", opR.label, true);
+        await this.setHudText("left", opL.label, true);
 
         this.setCubeVisibility(true);
     }
@@ -87,9 +87,11 @@ export class QuestionaireController extends SceneControllerAbstract {
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "START_ALL") {
             // Read mode and scenario
+            this.currentStep = 0;
             this.initializeQuestion();
         } else if (event.name == "STOP_ALL") {
             this.clearAll();
+            this.currentStep = 0;
         } else if (event.name == "CUBE_A_SELECT_ON") {
             // Selected option
             this.evaluateAnswer("A");
