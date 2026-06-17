@@ -67,7 +67,7 @@ export class BasicScene extends SceneWithComposer {
       await this.addAvatar(
         ROOT_PATH + "avatar005.glb",
         this.camera, this.renderer, this.orbitals);
-      this.replaceAvatarSkin(ROOT_PATH + "squeleton.jpg");
+      this.replaceAvatarSkin(ROOT_PATH + "squeleton2.jpg");
     } catch (err) {
 
     } finally {
