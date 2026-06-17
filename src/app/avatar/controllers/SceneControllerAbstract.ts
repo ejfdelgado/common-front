@@ -63,6 +63,6 @@ export abstract class SceneControllerAbstract {
     setParams(params: {
         [key: string]: any;
     }) {
-
+        Object.assign(this, params);
     }
 }

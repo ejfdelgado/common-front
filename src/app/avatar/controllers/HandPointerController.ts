@@ -137,12 +137,10 @@ export class HandPointerController extends SceneControllerAbstract {
                 this.events.emit({
                     name: eventName,
                 });
-                if (this.cursorDisplay) {
-                    this.cursorDisplay.setCursorState({
-                        type: handId == "Left" ? "L" : "R",
-                        state: "off"
-                    });
-                }
+                this.cursorDisplay?.setCursorState({
+                    type: handId == "Left" ? "L" : "R",
+                    state: "off"
+                });
             }
         } else {
             if (Math.abs(angleAvg) > this.FINGER_CLOSE_DEG_THRESHOLD_ON) {
@@ -151,12 +149,11 @@ export class HandPointerController extends SceneControllerAbstract {
                 this.events.emit({
                     name: eventName,
                 });
-                if (this.cursorDisplay) {
-                    this.cursorDisplay.setCursorState({
-                        type: handId == "Left" ? "L" : "R",
-                        state: "on"
-                    });
-                }
+
+                this.cursorDisplay?.setCursorState({
+                    type: handId == "Left" ? "L" : "R",
+                    state: "on"
+                });
             }
         }
     }

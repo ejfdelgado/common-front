@@ -131,7 +131,7 @@ export abstract class ComponentBodyTracker
                 if (event.name == "CUBE_A_SELECT_ON") {
 
                 } else if (event.name == "CUBE_B_SELECT_ON") {
-                    
+
                 }
             });
         }
@@ -424,10 +424,12 @@ export abstract class ComponentBodyTracker
                 this.startListening();
             }
         }
+        this.threeComponent.events.emit({ name: "START_ALL" });
         enterFullscreen();
     }
 
     stopAll() {
+        this.threeComponent.events.emit({ name: "STOP_ALL" });
         this.stopTracking();
         this.unsubscribeEvents();
         this.stopListening();

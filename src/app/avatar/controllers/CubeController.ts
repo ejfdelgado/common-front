@@ -69,7 +69,7 @@ export class CubeController extends SceneControllerAbstract {
         [key: string]: any;
     }) {
         // Dangerous but flexible
-        Object.assign(this, params);
+        super.setParams(params);
         if (this.enabled) {
             this.setVisibility(true);
             this.setOpacity(OPACITY_LOW);
@@ -116,7 +116,7 @@ export class CubeController extends SceneControllerAbstract {
     }
 
     override async update(): Promise<ControllerUpdateResponse> {
-        if (!this.enabled) {
+        if (!this.enabled || !this.lastData) {
             return {};
         }
         const rotationMatrix = new THREE.Matrix4()
@@ -225,6 +225,10 @@ export class CubeController extends SceneControllerAbstract {
     }
 
     override onEvent(event: AvatarBodyEvent): void {
-
+        if (event.name == "CUBE_CONTROLL_ON") {
+            this.setParams({ enabled: true });
+        } else if (event.name == "CUBE_CONTROLL_OFF") {
+            this.setParams({ enabled: false });
+        }
     }
 }

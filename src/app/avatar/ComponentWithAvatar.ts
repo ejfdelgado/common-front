@@ -36,6 +36,7 @@ import { HandIdType } from 'src/types/BodyParts';
 import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 import { HandPointerController } from './controllers/HandPointerController';
 import { ArmsPointerController } from './controllers/ArmsPointerController';
+import { QuestionaireController } from './controllers/QuestionaireController';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
     hudData: { [key: string]: any } = {
@@ -300,7 +301,10 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
             temp = new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
         } else if (config.id == GameControllerEnum.ArmsPointerController) {
             temp = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
+        } else if (config.id == GameControllerEnum.QuestionaireController) {
+            temp = new QuestionaireController(this.events, this.controlProxy, this.p2pSrv);
         }
+        
 
         if (temp == null) {
             throw new Error("Unknown controller");
