@@ -49,12 +49,12 @@ export class AvatarContainer
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
     public override p2pSrv: P2PService,
+    public override cdr: ChangeDetectorRef,
     //
     private indicatorSrv: IndicatorService,
-    private cdr: ChangeDetectorRef,
     private http: HttpClient,
   ) {
-    super(sanitizer, fullScreenSrv, p2pSrv);
+    super(sanitizer, fullScreenSrv, cdr, p2pSrv);
     this.hasMobile = this.isMobile();
   }
 

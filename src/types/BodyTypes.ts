@@ -222,6 +222,7 @@ export interface CursorPositioner {
     setCursor(data: CursorData): void;
     setCursorState(data: CursorStateData): void;
     setHudDisplay(data: HudDisplayData): void;
+    detectChanges(): void;
 }
 
 export interface CursorPointerGUI {

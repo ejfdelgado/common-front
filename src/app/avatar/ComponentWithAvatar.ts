@@ -14,7 +14,7 @@ import {
     StateBody,
 } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
-import { ElementRef, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { SceneWithComposer } from './SceneWithComposer';
 import { ControlProxy } from './workers/ControlProxy';
@@ -83,6 +83,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     constructor(
         public override sanitizer: DomSanitizer,
         public override fullScreenSrv: FullscreenService,
+        public cdr: ChangeDetectorRef,
         public p2pSrv: P2PService,
     ) {
         super(sanitizer, fullScreenSrv);
@@ -98,6 +99,10 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
 
     setHudDisplay(data: HudDisplayData): void {
         this.hudData[data.key] = this.sanitizer.bypassSecurityTrustHtml(data.value);
+    }
+
+    detectChanges() {
+        this.cdr.detectChanges();
     }
 
     public abstract getParentRef(): ElementRef;
