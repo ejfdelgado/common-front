@@ -1,10 +1,12 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 import { ModuloSonido } from "src/app/services/sonido.service";
-import { GameStepOption } from "src/types/WorldAvatar";
+import { shuffleInPlace } from "src/app/tools/ArrayUtil";
+import { GameStep, GameStepOption } from "src/types/WorldAvatar";
 
 export class QuestionaireController extends SceneControllerAbstract {
 
+    steps: GameStep[] = [];
     currentStep: number = 0;
     optionsMap: { [key: string]: GameStepOption } = {};
 
@@ -43,7 +45,17 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (this.currentStep >= steps.length) {
             return;
         }
-        const actualStep = steps[this.currentStep];
+
+        if (this.currentStep == 0) {
+            this.steps = JSON.parse(JSON.stringify(steps));
+            //suffle
+            shuffleInPlace(this.steps);
+            this.steps.forEach((step) => {
+                shuffleInPlace(step.options);
+            });
+        }
+
+        const actualStep = this.steps[this.currentStep];
 
         await this.setHudText("top", actualStep.label, true);
 
