@@ -358,6 +358,156 @@
                                     "answer": "Genial! ¡Una hormiga puede levantar hasta 50 veces su peso! Sería como si tú cargaras un carro."
                                 }
                             ]
+                        },
+                        {
+                            "label": "¿Qué animal duerme con un ojo abierto para vigilar el peligro?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El delfín",
+                                    "answer": "Correcto! Los delfines duermen con un ojo abierto y la mitad del cerebro despierta para seguir vigilando."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El perro",
+                                    "answer": "Casi. Los delfines son los que duermen con un ojo abierto y la mitad del cerebro despierta."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es el animal terrestre más rápido del mundo?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "El león",
+                                    "answer": "Estuviste cerca. El guepardo es el más rápido, puede correr a más de 100 km por hora."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El guepardo",
+                                    "answer": "¡Exacto! El guepardo puede correr a más de 100 km por hora."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede regenerar un brazo si lo pierde?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La estrella de mar",
+                                    "answer": "Muy bien! La estrella de mar puede regenerar un brazo perdido, e incluso a veces crear un cuerpo nuevo desde el brazo."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El pez",
+                                    "answer": "Casi. Es la estrella de mar la que puede regenerar un brazo perdido."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuántos años puede vivir una tortuga gigante?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "Unos 20 años",
+                                    "answer": "Te quedaste corto. Las tortugas gigantes pueden vivir más de 100 años."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "Más de 100 años",
+                                    "answer": "¡Así es! Las tortugas gigantes pueden vivir más de 100 años."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal tiene una lengua tan larga que puede medir hasta 60 centímetros?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El oso hormiguero",
+                                    "answer": "Correcto! El oso hormiguero usa su larguísima lengua para atrapar hormigas y termitas."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El perro",
+                                    "answer": "No exactamente. Es el oso hormiguero el que tiene esa lengua tan larga."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es la única ave que puede volar hacia atrás?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "La mariposa",
+                                    "answer": "Recuerda, la mariposa no es un ave. El colibrí es el único capaz de volar hacia atrás."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El colibrí",
+                                    "answer": "¡Sí! El colibrí es el único ave que puede volar hacia atrás."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal tiene el corazón más grande de todos, del tamaño de un carro?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La ballena azul",
+                                    "answer": "Exacto! El corazón de la ballena azul es tan grande como un carro pequeño."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El elefante",
+                                    "answer": "Casi. Es la ballena azul la que tiene el corazón más grande, del tamaño de un carro."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede dormir hasta 22 horas al día?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "El gato",
+                                    "answer": "Te acercaste, el gato duerme mucho, pero el koala es el que llega a dormir hasta 22 horas al día."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El koala",
+                                    "answer": "¡Correcto! El koala puede dormir hasta 22 horas al día."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede cambiar de sexo durante su vida?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El pez payaso",
+                                    "answer": "¡Así es! El pez payaso puede cambiar de sexo, por ejemplo si la hembra del grupo desaparece."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El delfín",
+                                    "answer": "No es el delfín. Es el pez payaso el que puede cambiar de sexo durante su vida."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal no tiene ningún hueso en todo su cuerpo?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "La tortuga",
+                                    "answer": "La tortuga sí tiene huesos y caparazón. Es el pulpo el que no tiene ningún hueso en su cuerpo."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "El pulpo",
+                                    "answer": "¡Correcto! El pulpo no tiene ningún hueso, por eso puede deslizarse por espacios muy pequeños."
+                                }
+                            ]
                         }
                     ]
                 }
