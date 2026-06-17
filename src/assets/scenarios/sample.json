@@ -658,6 +658,306 @@
                                     "answer": "No es la abeja. Es la mariposa monarca la que migra miles de kilómetros cada año."
                                 }
                             ]
+                        },
+                        {
+                            "label": "¿Qué animal tiene rayas únicas, como las huellas digitales de las personas?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦓 La cebra",
+                                    "answer": "¡Correcto! Las rayas de cada cebra son únicas, no hay dos iguales."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐅 El tigre",
+                                    "answer": "Casi. Es la cebra la que tiene rayas únicas como huellas digitales."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede cerrar sus fosas nasales para protegerse de la arena?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐫 El camello",
+                                    "answer": "¡Exacto! El camello puede cerrar sus fosas nasales para que no entre arena durante las tormentas."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐎 El caballo",
+                                    "answer": "No es el caballo. Es el camello el que puede cerrar sus fosas nasales."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué ave golpea los árboles miles de veces al día sin lastimarse la cabeza?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "🦜 El loro",
+                                    "answer": "No es el loro. Es el pájaro carpintero el que golpea los árboles sin lastimarse."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "🐦 El pájaro carpintero",
+                                    "answer": "¡Así es! El pájaro carpintero golpea los árboles miles de veces al día y su cráneo está hecho para protegerlo."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal rocía un líquido de mal olor para defenderse de sus enemigos?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦨 La mofeta",
+                                    "answer": "¡Correcto! La mofeta rocía un líquido de olor muy fuerte para alejar a quien la moleste."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦝 El mapache",
+                                    "answer": "No es el mapache. Es la mofeta la que rocía ese líquido de mal olor."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal es un mamífero pero pone huevos en lugar de tener crías directamente?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦆 El ornitorrinco",
+                                    "answer": "¡Sorprendente pero cierto! El ornitorrinco es un mamífero que pone huevos."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐱 El gato",
+                                    "answer": "No es el gato. Es el ornitorrinco el mamífero que pone huevos."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿En el pavo real, quién tiene las plumas coloridas y vistosas?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦚 El macho",
+                                    "answer": "¡Correcto! En los pavos reales, solo el macho tiene esas plumas coloridas para llamar la atención de las hembras."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦚 La hembra",
+                                    "answer": "Casi. Es el macho del pavo real el que tiene las plumas coloridas."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede dormir bajo el agua?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦭 La foca",
+                                    "answer": "¡Exacto! Las focas pueden dormir bajo el agua subiendo a la superficie de vez en cuando para respirar."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐧 El pingüino",
+                                    "answer": "No es el pingüino. Es la foca la que puede dormir bajo el agua."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué pez puede saltar fuera del agua y planear por el aire?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐟 El pez volador",
+                                    "answer": "¡Así es! El pez volador puede saltar del agua y planear gracias a sus aletas como alas."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦈 El tiburón",
+                                    "answer": "No es el tiburón. Es el pez volador el que puede planear por el aire."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Por qué un tiburón puede tener miles de dientes a lo largo de su vida?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦈 Porque le vuelven a crecer",
+                                    "answer": "¡Correcto! A los tiburones les vuelven a crecer los dientes que se les caen, ¡pueden tener miles en su vida!"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦷 Porque nunca se le caen",
+                                    "answer": "No es así. A los tiburones se les caen los dientes y les vuelven a crecer otros."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede dormir o hibernar hasta 3 años seguidos?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐌 El caracol",
+                                    "answer": "¡Increíble pero cierto! Algunos caracoles pueden hibernar hasta 3 años si el clima es muy seco."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐛 La oruga",
+                                    "answer": "No es la oruga. Es el caracol el que puede hibernar hasta 3 años."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal se enrolla en una bola usando sus púas para protegerse?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦔 El erizo",
+                                    "answer": "¡Correcto! El erizo se enrolla en una bola y usa sus púas para protegerse de los depredadores."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐹 El hámster",
+                                    "answer": "No es el hámster. Es el erizo el que se enrolla en una bola con sus púas."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal se infla como un balón cuando se siente amenazado?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐡 El pez globo",
+                                    "answer": "¡Exacto! El pez globo se infla con agua o aire para parecer más grande y peligroso."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐠 El pez payaso",
+                                    "answer": "No es el pez payaso. Es el pez globo el que se infla cuando se siente amenazado."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal no tiene orejas pero puede sentir las vibraciones del suelo?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐍 La serpiente",
+                                    "answer": "¡Correcto! La serpiente no tiene orejas, pero siente las vibraciones del suelo para detectar peligro o presas."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦎 La lagartija",
+                                    "answer": "No es la lagartija. Es la serpiente la que siente las vibraciones del suelo."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal no puede sacar la lengua fuera de la boca?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐊 El cocodrilo",
+                                    "answer": "¡Así es! El cocodrilo tiene la lengua pegada al fondo de la boca y no puede sacarla."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐸 La rana",
+                                    "answer": "No es la rana. Es el cocodrilo el que no puede sacar la lengua de su boca."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué ave puede aprender a imitar palabras y sonidos?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🦜 El loro gris africano",
+                                    "answer": "¡Correcto! El loro gris africano es muy inteligente y puede aprender a imitar palabras."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦢 El cisne",
+                                    "answer": "No es el cisne. Es el loro gris africano el que puede aprender a imitar palabras."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cómo se comunican las abejas para indicar dónde hay flores con néctar?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐝 Bailando",
+                                    "answer": "¡Correcto! Las abejas hacen un baile especial para indicarle a las demás dónde encontrar flores."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🎵 Cantando",
+                                    "answer": "No es cantando. Las abejas bailan para indicar dónde hay flores con néctar."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal puede girar su cuerpo en el aire para caer siempre de pie?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐱 El gato",
+                                    "answer": "¡Exacto! El gato tiene un reflejo que le permite girar su cuerpo en el aire y caer de pie."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐶 El perro",
+                                    "answer": "No es el perro. Es el gato el que puede girar su cuerpo en el aire y caer de pie."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal tiene un olfato miles de veces más fuerte que el de un humano?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🐶 El perro",
+                                    "answer": "¡Correcto! El perro tiene un olfato hasta 100 mil veces más fuerte que el de una persona."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐱 El gato",
+                                    "answer": "No es el gato. Es el perro el que tiene un olfato tan poderoso."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal es casi ciego pero tiene un sentido del tacto y del olfato increíbles?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "👃 El topo",
+                                    "answer": "¡Correcto! El topo casi no ve, pero su sentido del tacto y del olfato son increíbles para vivir bajo tierra."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🐭 El ratón",
+                                    "answer": "No es el ratón. Es el topo el que es casi ciego pero tiene un tacto y olfato increíbles."
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal no tiene cerebro ni corazón?",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "🪼 La medusa",
+                                    "answer": "¡Sorprendente! La medusa no tiene cerebro ni corazón, pero igual puede moverse y sentir su entorno."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "🦀 El cangrejo",
+                                    "answer": "No es el cangrejo. Es la medusa la que no tiene cerebro ni corazón."
+                                }
+                            ]
                         }
                     ]
                 }
