@@ -21,6 +21,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     subscriptionPeerJoin: Subscription | null = null;
     subscriptionPeerLeave: Subscription | null = null;
     subscriptionPeerEvents: Subscription | null = null;
+    connectedPeerIds: string[] = [];
     constructor(
         public override voiceSrv: VoiceRecognitionService,
         public override speechSrv: SpeechSynthesisService,

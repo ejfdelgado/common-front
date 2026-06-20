@@ -98,8 +98,6 @@ export abstract class ComponentBodyTracker
         }
     };
 
-    connectedPeerIds: string[] = [];
-
     constructor(
         public override voiceSrv: VoiceRecognitionService,
         public override speechSrv: SpeechSynthesisService,
