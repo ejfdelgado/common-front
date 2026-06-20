@@ -19,7 +19,7 @@ export class AvatarService {
             responseType: "json",
         }));
         // TODO Fix race bug when this resolve faster
-        await sleep(500);
+        //await sleep(500);
         return read as any;
     }
 

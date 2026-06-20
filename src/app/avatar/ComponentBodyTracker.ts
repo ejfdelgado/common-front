@@ -539,7 +539,6 @@ export abstract class ComponentBodyTracker
         // Restore T pose transformation
         avatarContainer.scene.restoreTBoneBackup(AVATAR_NAME);
         // Clean old transformation
-        console.log(JSON.stringify(position, null, 4));
         avatarContainer.scene.forceAvatarState(position, this.mode.mirror);
 
         // Remove all animations
