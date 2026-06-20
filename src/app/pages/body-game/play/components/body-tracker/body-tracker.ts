@@ -131,7 +131,6 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     promises.push(this.initializeBodyTracker(
       this.videoRefGlobal,
       this.canvasRefGlobal,
-      this.avatarContainer,
     ));
     promises.push(this.speechSrv.init());
     await Promise.all(promises);

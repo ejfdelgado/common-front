@@ -47,7 +47,6 @@ export abstract class ComponentBodyTracker
     camera: Camera | null = null;
     videoRef!: ElementRef<HTMLVideoElement>;
     canvasRef!: ElementRef<HTMLCanvasElement>;
-    threeComponent!: ComponentWithAvatar;
     poseTracker!: Pose;
     handsTracker!: Hands;
     poses: BodyData[] = [];
@@ -124,6 +123,9 @@ export abstract class ComponentBodyTracker
         );
     }
 
+    public abstract broadcastBinaryData(command: GameAction): Promise<void>;
+    abstract getAvatarContainer(): ComponentWithAvatar;
+
     assureSubscription() {
         if (this.eventSubscription == null) {
             this.eventSubscription = this.getAvatarContainer().events.subscribe((event) => {
@@ -152,11 +154,9 @@ export abstract class ComponentBodyTracker
     async initializeBodyTracker(
         videoR: ElementRef<HTMLVideoElement>,
         canvasR: ElementRef<HTMLCanvasElement>,
-        threeComponent: ComponentWithAvatar,
     ) {
         this.videoRef = videoR;
         this.canvasRef = canvasR;
-        this.threeComponent = threeComponent;
 
         // Body tracker
         this.poseTracker = new Pose({
@@ -196,7 +196,7 @@ export abstract class ComponentBodyTracker
                 const handScore = multiHandedness[i];
                 const handId = handScore.label;
                 const index = handScore.index;
-                this.threeComponent.hands.set(handId, {
+                this.getAvatarContainer().hands.set(handId, {
                     score: handScore.score,
                     multiHandLandmarks: multiHandLandmarks[i],
                     multiHandWorldLandmarks: multiHandWorldLandmarks[i],
@@ -217,7 +217,7 @@ export abstract class ComponentBodyTracker
         if (this.poses.length > 0) {
             // Level 1
             try {
-                const response = await this.threeComponent.computeIKLevel1(
+                const response = await this.getAvatarContainer().computeIKLevel1(
                     this.poses,
                     this.videoSize,
                     this.mirror,
@@ -425,20 +425,18 @@ export abstract class ComponentBodyTracker
                 this.startListening();
             }
         }
-        this.threeComponent.events.emit({ name: "START_ALL" });
+        this.getAvatarContainer().events.emit({ name: "START_ALL" });
         enterFullscreen();
     }
 
     stopAll() {
-        this.threeComponent.events.emit({ name: "STOP_ALL" });
+        this.getAvatarContainer().events.emit({ name: "STOP_ALL" });
         this.stopTracking();
         this.unsubscribeEvents();
         this.stopListening();
         exitFullscreen();
         ModuloSonido.play('/assets/sounds/button.mp3');
     }
-
-    abstract getAvatarContainer(): ComponentWithAvatar;
 
     public onResize() {
         this.getAvatarContainer().onResize();
@@ -478,8 +476,6 @@ export abstract class ComponentBodyTracker
         }
         return this.world;
     }
-
-    public abstract broadcastBinaryData(command: GameAction): Promise<void>;
 
     public async applyMode(id: string, notifyPeers?: boolean) {
         this.mode = this.world.modes[id];
@@ -571,7 +567,7 @@ export abstract class ComponentBodyTracker
         }
 
         // Update controllers
-        this.threeComponent.controllers.forEach((controller) => {
+        this.getAvatarContainer().controllers.forEach((controller) => {
             if (this.mode) {
                 controller.setMode(this.mode);
             }
@@ -580,7 +576,7 @@ export abstract class ComponentBodyTracker
             }
         });
 
-        this.threeComponent.events.emit({ name: "SCENE_LOADED" });
+        this.getAvatarContainer().events.emit({ name: "SCENE_LOADED" });
         //console.log("All loaded");
     }
 }
