@@ -536,6 +536,7 @@ export abstract class ComponentBodyTracker
             postY = 0;
         }
         position.positionY = postY + AVATAR_PELVIS_HEIGHT;
+        await avatarContainer.scene.waitForAvatar();
         // Restore T pose transformation
         avatarContainer.scene.restoreTBoneBackup(AVATAR_NAME);
         // Clean old transformation

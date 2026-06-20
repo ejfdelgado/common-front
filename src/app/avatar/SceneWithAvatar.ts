@@ -33,6 +33,7 @@ import { AvatarBoneEnum, BodyPoseKey, DEFAULT_BOTTOM_VALUES } from '@mytypes/Bod
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
 import { CameraState } from '@mytypes/WorldAvatar';
+import { waitFor } from '../tools/AsyncUtils';
 
 export const ROOT_PATH = "/assets/models/";
 const USE_WORKER = false;
@@ -840,9 +841,17 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         const cube = await this.addCubeControll();
     }
 
+    async waitForAvatar() {
+        // 200 seconds, is like, wait for ever
+        await waitFor(() => {
+            return this.getObjectByName(AVATAR_NAME) != undefined;
+        }, 200000);
+    }
+
     forceAvatarState(state: AvatarLocationState, mirror: boolean) {
         const avatar = this.getObjectByName(AVATAR_NAME);
         if (!avatar) {
+            console.log("forceAvatarState: No avatar!");
             return;
         }
         avatar.matrixAutoUpdate = false;

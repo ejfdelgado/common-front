@@ -18,8 +18,6 @@ export class AvatarService {
         const read = await firstValueFrom(this.http.get("/assets/scenarios/sample.json", {
             responseType: "json",
         }));
-        // TODO Fix race bug when this resolve faster
-        //await sleep(500);
         return read as any;
     }
 

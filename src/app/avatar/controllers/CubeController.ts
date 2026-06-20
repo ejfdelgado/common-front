@@ -132,8 +132,6 @@ export class CubeController extends SceneControllerAbstract {
             const ty = this.lastData.stateBody.height * config.height + this.scene.avatarState.positionY;
             const tz = this.scene.avatarStateSmoot.positionZ;
 
-            //this.scene.avatarState.positionY is different!
-
             const translationMatrix = new THREE.Matrix4().makeTranslation(tx, ty, tz,);
 
             const cubeAMatrix = new THREE.Matrix4().identity();
