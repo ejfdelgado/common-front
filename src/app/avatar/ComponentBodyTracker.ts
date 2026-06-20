@@ -473,7 +473,7 @@ export abstract class ComponentBodyTracker
         }
     }
 
-    public async loadWorld(url: string, defaultMode?: string, notifyPeers?: boolean) {
+    public async loadWorld(url: string, defaultMode?: string, notifyPeers?: boolean): Promise<WorldAvatar> {
         const loading = this.indicatorSrv.start();
         const promise = this.avatarSrv.loadWorld(url);
         try {
@@ -536,6 +536,7 @@ export abstract class ComponentBodyTracker
         // Restore T pose transformation
         avatarContainer.scene.restoreTBoneBackup(AVATAR_NAME);
         // Clean old transformation
+        console.log(JSON.stringify(position, null, 4));
         avatarContainer.scene.forceAvatarState(position, this.mode.mirror);
 
         // Remove all animations
