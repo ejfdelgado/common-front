@@ -1,3 +1,4 @@
+import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 
 export enum AvatarBoneEnum {
     pelvis = "a",
@@ -164,6 +165,12 @@ export const DEFAULT_BOTTOM_VALUES = [
 
 export type HandIdType = 'Right' | 'Left';
 export type FingerPinch = 'Thumb_Finger' | 'Thumb_Pinky';
+
+export interface HandDataSegmented {
+    score: number,
+    multiHandLandmarks: NormalizedLandmarkList,
+    multiHandWorldLandmarks: LandmarkList,
+};
 
 export enum HandKey {
     WRIST = 0,

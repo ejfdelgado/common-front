@@ -32,13 +32,11 @@ import { PromiseEmitter } from '@tools/PromiseEmitter';
 import { SharePoseController } from './controllers/SharePoseController';
 import { P2PService } from '@services/p2p.service';
 import { FingerController } from './controllers/FingerController';
-import { HandIdType } from 'src/types/BodyParts';
-import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
+import { HandDataSegmented, HandIdType } from 'src/types/BodyParts';
 import { HandPointerController } from './controllers/HandPointerController';
 import { ArmsPointerController } from './controllers/ArmsPointerController';
 import { QuestionaireController } from './controllers/QuestionaireController';
 import { SpeechSynthesisService } from '../services/speechsynthesis.service';
-import { html2text } from '../tools/HtmlUtil';
 import { removeEmojis } from '../tools/StringUtils';
 
 export abstract class ComponentWithAvatar
@@ -60,11 +58,7 @@ export abstract class ComponentWithAvatar
     isComputing: boolean = false;
     events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
     restoreInterval: NodeJS.Timeout | null = null;
-    hands: Map<HandIdType, {
-        score: number,
-        multiHandLandmarks: NormalizedLandmarkList,
-        multiHandWorldLandmarks: LandmarkList,
-    }> = new Map();
+    hands: Map<HandIdType, HandDataSegmented> = new Map();
     stateBody: StateBody = {
         height: 1,
         isTPose: false,
