@@ -1,11 +1,17 @@
-import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, OnDestroy } from "@angular/core";
+import {
+    ChangeDetectorRef,
+    ElementRef,
+} from "@angular/core";
 import {
     AVATAR_NAME,
     AVATAR_PELVIS_HEIGHT,
     BodyData,
     GenericSizeType,
 } from "@mytypes/BodyTypes";
-import { IndicatorService, Wait } from "@services/indicator.service";
+import {
+    IndicatorService,
+    Wait,
+} from "@services/indicator.service";
 import { ModuloSonido } from "@services/sonido.service";
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
@@ -18,12 +24,19 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
-import { GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
+import {
+    GameMode,
+    GameScenario,
+    WorldAvatar,
+} from "@mytypes/WorldAvatar";
 import { Pose } from '@mediapipe/pose';
 import { Hands } from '@mediapipe/hands';
 import { convertMediaPipeToCurrent } from "./utils/AvatarUtilities";
 
-import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
+import {
+    GameAction,
+    RoomGameType,
+} from "@mytypes/ActionGameTypes";
 import {
     User,
 } from '@angular/fire/auth';
