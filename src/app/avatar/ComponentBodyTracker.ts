@@ -475,11 +475,14 @@ export abstract class ComponentBodyTracker
 
     public async loadWorld(url: string, defaultMode?: string, notifyPeers?: boolean): Promise<WorldAvatar> {
         const loading = this.indicatorSrv.start();
+        // Eager start loadWorld
         const promise = this.avatarSrv.loadWorld(url);
         try {
             await this.stopSafetly();
+            // Resume loadWorld
             this.world = await promise;
-            await this.applyMode(defaultMode ? defaultMode : this.world.defaultMode, notifyPeers);
+            const mode = defaultMode ? defaultMode : this.world.defaultMode;
+            await this.applyMode(mode, notifyPeers);
         } catch (err) {
             console.log(err);
         } finally {
