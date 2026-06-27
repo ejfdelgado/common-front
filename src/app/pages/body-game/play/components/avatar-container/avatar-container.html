@@ -13,7 +13,7 @@
     <div class="hud_score white_subtitle">
         <app-rating [onImageUrl]="'./assets/icons/heart.svg'" [offImageUrl]="'./assets/icons/heart_off.svg'"
             [ngModel]="hudData['life']" [label]="''"></app-rating>
-        <span class="score">⭐ <strong [innerHTML]="hudData['score']"></strong></span>
+        <span class="score"><img class="points_icon" src="./assets/icons/coffe.svg"> <strong [innerHTML]="hudData['score']"></strong></span>
     </div>
     <div class="hud_scenario_labels no_mouse no_select">
         <p class="scenario_step_label scenario_step_label_top white_subtitle" [innerHTML]="hudData['top']"></p>
