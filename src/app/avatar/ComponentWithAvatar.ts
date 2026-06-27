@@ -47,7 +47,10 @@ export abstract class ComponentWithAvatar
         "bottom": "",
         "left": "",
         "right": "",
+        "left_bottom": "",
+        "right_bottom": "",
         "score": 0,
+        "life": 5,
     };
     useComposer: boolean = false;
     sceneCreated: PromiseEmitter = new PromiseEmitter();

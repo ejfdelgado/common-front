@@ -35,7 +35,7 @@ export type OnOffDataType = number | null;
 })
 export class RatingComponent extends CommonComponent implements ControlValueAccessor {
 
-  @Input() onImageUrl: string = "./assets/icons/star_on.svg";
+  @Input() onImageUrl: string = "./assets/icons/star.svg";
   @Input() offImageUrl: string = "./assets/icons/star_off.svg";
   @Input() label: string = "Añadir a favorito";
   value: OnOffDataType = 0;

@@ -23,6 +23,7 @@ import { HttpClient } from '@angular/common/http';
 import { CursorData, CursorPointerGUI, CursorStateData, HudDisplayData, Point3D } from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';
 import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service';
+import { RatingComponent } from 'src/app/components/fields/rating/rating';
 
 
 @Component({
@@ -32,6 +33,7 @@ import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service
     CommonModule,
     FormsModule,
     MatIconModule,
+    RatingComponent,
   ],
   templateUrl: './avatar-container.html',
   styleUrls: ['./avatar-container.scss'],
