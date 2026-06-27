@@ -23,7 +23,7 @@ export interface CubeConfigType {
 };
 
 export class CubeController extends SceneControllerAbstract {
-
+    canListen: boolean = false;
     cubes: {
         [key: string]: CubeConfigType,
     } = {
@@ -70,9 +70,7 @@ export class CubeController extends SceneControllerAbstract {
     }) {
         // Dangerous but flexible
         super.setParams(params);
-        if (this.enabled) {
-            //
-        } else {
+        if (!this.enabled) {
             this.setVisibility(false);
         }
     }
@@ -208,22 +206,26 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOn(config.model);
                 }
                 if (!config.selected) {
-                    config.material.opacity = OPACITY_HIGH;
-                    config.selected = true;
-                    this.events.emit({
-                        name: config.eventName + "ON",
-                    });
+                    if (this.canListen) {
+                        config.material.opacity = OPACITY_HIGH;
+                        config.selected = true;
+                        this.events.emit({
+                            name: config.eventName + "ON",
+                        });
+                    }
                 }
             } else {
                 if (config.model) {
                     this.scene.highlightOff(config.model);
                 }
                 if (config.selected) {
-                    config.material.opacity = OPACITY_LOW;
-                    config.selected = false;
-                    this.events.emit({
-                        name: config.eventName + "OFF",
-                    });
+                    if (this.canListen) {
+                        config.material.opacity = OPACITY_LOW;
+                        config.selected = false;
+                        this.events.emit({
+                            name: config.eventName + "OFF",
+                        });
+                    }
                 }
             }
         });
@@ -242,6 +244,10 @@ export class CubeController extends SceneControllerAbstract {
             this.setParams({ enabled: true });
         } else if (event.name == "CUBE_CONTROLL_OFF") {
             this.setParams({ enabled: false });
+        } else if (event.name == "CUBE_LISTEN_ON") {
+            this.setParams({ canListen: true });
+        } else if (event.name == "CUBE_LISTEN_OFF") {
+            this.setParams({ canListen: false });
         } else if (event.name == "CUBE_A_ON") {
             this.setVisibility(true, "cube_a");
             this.setOpacity(OPACITY_LOW, "cube_a");

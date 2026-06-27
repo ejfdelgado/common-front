@@ -29,10 +29,10 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     hideAllCubes() {
         this.events.emit({ name: "CUBE_CONTROLL_OFF", });
+        this.events.emit({ name: "CUBE_LISTEN_OFF", });
     }
 
     enableCube(name: ENABLE_CUBE_TYPE) {
-        this.events.emit({ name: "CUBE_CONTROLL_ON", });
         this.events.emit({ name: name, });
     }
 
@@ -76,6 +76,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
         this.optionsMap = {};
 
+        this.events.emit({ name: "CUBE_CONTROLL_ON", });
         for (let i = 0; i < actualStep.options.length; i++) {
             const option = actualStep.options[i];
             const letter = LETTERS[i];
@@ -84,6 +85,7 @@ export class QuestionaireController extends SceneControllerAbstract {
             await this.setHudValue(letter.hud_id, option.label, true);
             if (!this.isPlaying) { return; }
         }
+        this.events.emit({ name: "CUBE_LISTEN_ON", });
     }
 
     resetGame() {
