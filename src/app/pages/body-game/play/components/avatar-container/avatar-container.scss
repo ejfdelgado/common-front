@@ -125,7 +125,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 5vh 15vw;
+  padding: 5vh 5vw;
   display: flex;
   flex-direction: column;
   gap: 2vh;
@@ -139,22 +139,34 @@
   flex-direction: row;
   gap: 10vw;
   flex: 1;
-  font-size: 4rem;
-  line-height: 5rem;
+  font-size: 3rem;
+  line-height: 4rem;
 }
 
 .scenario_step_label {
   text-align: center;
+  margin: 0;
 }
 
 .scenario_step_left_label {
-  text-align: center;
-  flex: 1;
+  text-align: left;
+
 }
 
 .scenario_step_right_label {
-  text-align: center;
+  text-align: right;
+}
+
+.scenario_step_general {
   flex: 1;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.side_labels_bottom .scenario_step_general {
+  justify-content: end;
 }
 
 .hud_score {

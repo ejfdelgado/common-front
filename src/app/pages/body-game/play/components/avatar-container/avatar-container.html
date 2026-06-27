@@ -16,8 +16,12 @@
     <div class="hud_scenario_labels no_mouse no_select">
         <p class="scenario_step_label white_subtitle" [innerHTML]="hudData['top']"></p>
         <div class="side_labels">
-            <p class="scenario_step_left_label white_subtitle" [innerHTML]="hudData['left']"></p>
-            <p class="scenario_step_right_label white_subtitle" [innerHTML]="hudData['right']"></p>
+            <p class="scenario_step_left_label white_subtitle scenario_step_general" [innerHTML]="hudData['left']"></p>
+            <p class="scenario_step_right_label white_subtitle scenario_step_general" [innerHTML]="hudData['right']"></p>
+        </div>
+        <div class="side_labels side_labels_bottom">
+            <p class="scenario_step_left_label white_subtitle scenario_step_general" [innerHTML]="hudData['left_bottom']"></p>
+            <p class="scenario_step_right_label white_subtitle scenario_step_general" [innerHTML]="hudData['right_bottom']"></p>
         </div>
         <p class="scenario_step_label white_subtitle" [innerHTML]="hudData['bottom']"></p>
     </div>
