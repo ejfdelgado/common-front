@@ -3,6 +3,7 @@ import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 import { ModuloSonido } from "src/app/services/sonido.service";
 import { shuffleInPlace } from "src/app/tools/ArrayUtil";
 import { GameStep, GameStepOption } from "src/types/WorldAvatar";
+import { ENABLE_CUBE_TYPE } from "./CubeController";
 
 const MAX_LIFE = 5;
 
@@ -30,7 +31,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.events.emit({ name: "CUBE_CONTROLL_OFF", });
     }
 
-    enableCube(name: "CUBE_A_ON" | "CUBE_B_ON" | "CUBE_C_ON" | "CUBE_D_ON") {
+    enableCube(name: ENABLE_CUBE_TYPE) {
         this.events.emit({ name: "CUBE_CONTROLL_ON", });
         this.events.emit({ name: name, });
     }
@@ -66,24 +67,23 @@ export class QuestionaireController extends SceneControllerAbstract {
         await this.setHudValue("top", actualStep.label, true);
         if (!this.isPlaying) { return; }
 
-        const opR = actualStep.options[1];
-        const opL = actualStep.options[0];
+        const LETTERS = [
+            { id: "A", cube_id: "CUBE_A_ON", hud_id: "right" },
+            { id: "B", cube_id: "CUBE_B_ON", hud_id: "left" },
+            { id: "C", cube_id: "CUBE_C_ON", hud_id: "right_bottom" },
+            { id: "D", cube_id: "CUBE_D_ON", hud_id: "left_bottom" },
+        ];
 
-        this.optionsMap = {
-            "A": opR,
-            "B": opL,
-        };
+        this.optionsMap = {};
 
-        this.enableCube("CUBE_A_ON");
-        await this.setHudValue("right", opR.label, true);
-        if (!this.isPlaying) { return; }
-
-
-        this.enableCube("CUBE_B_ON");
-        await this.setHudValue("left", opL.label, true);
-        if (!this.isPlaying) { return; }
-
-
+        for (let i = 0; i < actualStep.options.length; i++) {
+            const option = actualStep.options[i];
+            const letter = LETTERS[i];
+            this.optionsMap[letter.id] = option;
+            this.enableCube(letter.cube_id as ENABLE_CUBE_TYPE);
+            await this.setHudValue(letter.hud_id, option.label, true);
+            if (!this.isPlaying) { return; }
+        }
     }
 
     resetGame() {
@@ -108,6 +108,10 @@ export class QuestionaireController extends SceneControllerAbstract {
     async evaluateAnswer(choice: string) {
         this.hideAllCubes();
         const op = this.optionsMap[choice];
+        if (!op) {
+            console.log(`No option for choice ${choice}`);
+            return;
+        }
         if (op.points == 0) {
             // Loose lives
             this.life -= 1;
@@ -152,6 +156,12 @@ export class QuestionaireController extends SceneControllerAbstract {
         } else if (event.name == "CUBE_B_SELECT_ON") {
             // Selected option
             this.evaluateAnswer("B");
+        } else if (event.name == "CUBE_C_SELECT_ON") {
+            // Selected option
+            this.evaluateAnswer("C");
+        } else if (event.name == "CUBE_D_SELECT_ON") {
+            // Selected option
+            this.evaluateAnswer("D");
         }
     }
 }

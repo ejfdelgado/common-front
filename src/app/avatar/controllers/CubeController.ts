@@ -10,6 +10,8 @@ const SIDE_SHIFT = 0.5;
 const SIDE_FRONT = 0.3;
 const AB_HEIGHT = 0.5;
 
+export type ENABLE_CUBE_TYPE = "CUBE_A_ON" | "CUBE_B_ON" | "CUBE_C_ON" | "CUBE_D_ON";
+
 export interface CubeConfigType {
     local: THREE.Matrix4;
     height: number,
@@ -50,7 +52,7 @@ export class CubeController extends SceneControllerAbstract {
                 sphere: null,
                 model: null,
                 material: null,
-                selected: false,
+                selected: true,
             },
             "cube_d": {
                 eventName: "CUBE_D_SELECT_",
@@ -59,7 +61,7 @@ export class CubeController extends SceneControllerAbstract {
                 sphere: null,
                 model: null,
                 material: null,
-                selected: false,
+                selected: true,
             },
         };
 
