@@ -103,13 +103,16 @@ export abstract class ComponentWithAvatar
     abstract setCursorState(data: CursorStateData): void;
 
     async setHudDisplay(data: HudDisplayData): Promise<void> {
-        this.hudData[data.key] = this.sanitizer.bypassSecurityTrustHtml(data.value);
+        this.hudData[data.key] = data.value;
+        if (typeof data.value == "string") {
+            this.hudData[data.key] = this.sanitizer.bypassSecurityTrustHtml(data.value);
+        }
         if (data.speak === true) {
             let lang = "es-ES";
             if (data.lang) {
                 lang = data.lang;
             }
-            let text = data.value;
+            let text = `${data.value}`;
             text = removeEmojis(text);
             //text = html2text(text);
             await this.speechSrv.speak(text, lang);

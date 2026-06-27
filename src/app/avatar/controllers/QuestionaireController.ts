@@ -82,6 +82,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     }
 
     resetGame() {
+        this.currentStep = 0;
         this.life = MAX_LIFE;
         this.score = 0;
         this.setHudValue("life", this.life);
@@ -102,10 +103,18 @@ export class QuestionaireController extends SceneControllerAbstract {
     async evaluateAnswer(choice: string) {
         this.setCubeVisibility(false);
         const op = this.optionsMap[choice];
-        // Celebrate, increment points!
         if (op.points == 0) {
+            // Loose lives
+            this.life -= 1;
+            this.setHudValue("life", this.life);
+            if (this.life == 0) {
+                await ModuloSonido.play('/assets/sounds/loose.mp3', false);
+                await this.gameOver();
+                return;
+            }
             await ModuloSonido.play('/assets/sounds/loose.mp3', false);
         } else {
+            // Celebrate, increment points!
             this.score += op.points * 10;
             this.setHudValue("score", this.score);
             await ModuloSonido.play('/assets/sounds/success.mp3', false);
@@ -114,21 +123,24 @@ export class QuestionaireController extends SceneControllerAbstract {
         await this.setHudValue("bottom", op.answer, true);
         // Go to next question
         this.currentStep += 1;
+        if (!this.isPlaying) { return; }
         this.initializeQuestion();
+    }
+
+    async gameOver() {
+        this.clearAll();
+        await this.setHudValue("bottom", "Fin del juego", true);
     }
 
     override onEvent(event: AvatarBodyEvent): void {
         if (event.name == "START_ALL") {
             // Read mode and scenario
             this.isPlaying = true;
-            this.currentStep = 0;
-            this.score = 0;
-            this.life = MAX_LIFE;
+            this.resetGame();
             this.initializeQuestion();
         } else if (event.name == "STOP_ALL") {
             this.isPlaying = false;
             this.resetGame();
-            this.currentStep = 0;
         } else if (event.name == "CUBE_A_SELECT_ON") {
             // Selected option
             this.evaluateAnswer("A");
