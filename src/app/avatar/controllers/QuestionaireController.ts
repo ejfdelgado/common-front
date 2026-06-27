@@ -26,12 +26,13 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     }
 
-    setCubeVisibility(val: boolean) {
-        if (val) {
-            this.events.emit({ name: "CUBE_CONTROLL_ON", });
-        } else {
-            this.events.emit({ name: "CUBE_CONTROLL_OFF", });
-        }
+    hideAllCubes() {
+        this.events.emit({ name: "CUBE_CONTROLL_OFF", });
+    }
+
+    enableCube(name: "CUBE_A_ON" | "CUBE_B_ON" | "CUBE_C_ON" | "CUBE_D_ON") {
+        this.events.emit({ name: "CUBE_CONTROLL_ON", });
+        this.events.emit({ name: name, });
     }
 
     async setHudValue(key: string, val: any, speak?: boolean) {
@@ -73,12 +74,16 @@ export class QuestionaireController extends SceneControllerAbstract {
             "B": opL,
         };
 
+        this.enableCube("CUBE_A_ON");
         await this.setHudValue("right", opR.label, true);
         if (!this.isPlaying) { return; }
+
+
+        this.enableCube("CUBE_B_ON");
         await this.setHudValue("left", opL.label, true);
         if (!this.isPlaying) { return; }
 
-        this.setCubeVisibility(true);
+
     }
 
     resetGame() {
@@ -97,11 +102,11 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.setHudValue("left_bottom", "");
         this.setHudValue("right_bottom", "");
         this.setHudValue("bottom", "");
-        this.setCubeVisibility(false);
+        this.hideAllCubes();
     }
 
     async evaluateAnswer(choice: string) {
-        this.setCubeVisibility(false);
+        this.hideAllCubes();
         const op = this.optionsMap[choice];
         if (op.points == 0) {
             // Loose lives

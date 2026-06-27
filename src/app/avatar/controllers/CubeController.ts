@@ -43,7 +43,6 @@ export class CubeController extends SceneControllerAbstract {
                 material: null,
                 selected: true,
             },
-            /*
             "cube_c": {
                 eventName: "CUBE_C_SELECT_",
                 local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, 0),
@@ -62,7 +61,6 @@ export class CubeController extends SceneControllerAbstract {
                 material: null,
                 selected: false,
             },
-            */
         };
 
     override setParams(params: {
@@ -71,27 +69,40 @@ export class CubeController extends SceneControllerAbstract {
         // Dangerous but flexible
         super.setParams(params);
         if (this.enabled) {
-            this.setVisibility(true);
-            this.setOpacity(OPACITY_LOW);
+            //
         } else {
             this.setVisibility(false);
         }
     }
 
-    setVisibility(val: boolean) {
-        Object.keys(this.cubes).forEach((name: string) => {
+    setVisibility(val: boolean, name?: string) {
+        const fun = (name: string) => {
             const config = this.getCubeConfig(name);
             if (!config || !config.model) { return; }
             config.model.visible = val;
-        });
+        };
+        if (name) {
+            fun(name);
+        } else {
+            Object.keys(this.cubes).forEach((name: string) => {
+                fun(name);
+            });
+        }
     }
 
-    setOpacity(val: number) {
-        Object.keys(this.cubes).forEach((name: string) => {
+    setOpacity(val: number, name?: string) {
+        const fun = (name: string) => {
             const config = this.getCubeConfig(name);
             if (!config) { return; }
             config.material.opacity = val;
-        });
+        }
+        if (name) {
+            fun(name);
+        } else {
+            Object.keys(this.cubes).forEach((name: string) => {
+                fun(name);
+            });
+        }
     }
 
     getCubeConfig(name: string): CubeConfigType | null | undefined {
@@ -229,6 +240,18 @@ export class CubeController extends SceneControllerAbstract {
             this.setParams({ enabled: true });
         } else if (event.name == "CUBE_CONTROLL_OFF") {
             this.setParams({ enabled: false });
+        } else if (event.name == "CUBE_A_ON") {
+            this.setVisibility(true, "cube_a");
+            this.setOpacity(OPACITY_LOW, "cube_a");
+        } else if (event.name == "CUBE_B_ON") {
+            this.setVisibility(true, "cube_b");
+            this.setOpacity(OPACITY_LOW, "cube_b");
+        } else if (event.name == "CUBE_C_ON") {
+            this.setVisibility(true, "cube_c");
+            this.setOpacity(OPACITY_LOW, "cube_c");
+        } else if (event.name == "CUBE_D_ON") {
+            this.setVisibility(true, "cube_d");
+            this.setOpacity(OPACITY_LOW, "cube_d");
         }
     }
 }
