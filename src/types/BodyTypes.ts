@@ -215,7 +215,7 @@ export interface CursorStateData {
 
 export interface HudDisplayData {
     key: string;
-    value: string;
+    value: any;
     lang?: string;
     speak?: boolean;
 }
