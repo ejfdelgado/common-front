@@ -9,6 +9,7 @@ const OPACITY_HIGH = 1;
 const SIDE_SHIFT = 0.5;
 const SIDE_FRONT = 0.3;
 const AB_HEIGHT = 0.5;
+const VERTICAL_SHIFT = -0.8;//-0.5
 
 export type ENABLE_CUBE_TYPE = "CUBE_A_ON" | "CUBE_B_ON" | "CUBE_C_ON" | "CUBE_D_ON";
 
@@ -47,7 +48,7 @@ export class CubeController extends SceneControllerAbstract {
             },
             "cube_c": {
                 eventName: "CUBE_C_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, 0),
+                local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, VERTICAL_SHIFT, 0),
                 height: 0.1,
                 sphere: null,
                 model: null,
@@ -56,7 +57,7 @@ export class CubeController extends SceneControllerAbstract {
             },
             "cube_d": {
                 eventName: "CUBE_D_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, 0, 0),
+                local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, VERTICAL_SHIFT, 0),
                 height: 0.1,
                 sphere: null,
                 model: null,
@@ -206,7 +207,7 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOn(config.model);
                 }
                 if (!config.selected) {
-                    if (this.canListen) {
+                    if (this.canListen && config.model?.visible) {
                         config.material.opacity = OPACITY_HIGH;
                         config.selected = true;
                         this.events.emit({
@@ -219,7 +220,7 @@ export class CubeController extends SceneControllerAbstract {
                     this.scene.highlightOff(config.model);
                 }
                 if (config.selected) {
-                    if (this.canListen) {
+                    if (this.canListen && config.model?.visible) {
                         config.material.opacity = OPACITY_LOW;
                         config.selected = false;
                         this.events.emit({

@@ -68,11 +68,13 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (!this.isPlaying) { return; }
 
         const LETTERS = [
-            { id: "A", cube_id: "CUBE_A_ON", hud_id: "right" },
-            { id: "B", cube_id: "CUBE_B_ON", hud_id: "left" },
+            //{ id: "A", cube_id: "CUBE_A_ON", hud_id: "right" },
+            //{ id: "B", cube_id: "CUBE_B_ON", hud_id: "left" },
             { id: "C", cube_id: "CUBE_C_ON", hud_id: "right_bottom" },
             { id: "D", cube_id: "CUBE_D_ON", hud_id: "left_bottom" },
         ];
+
+        shuffleInPlace(LETTERS);
 
         this.optionsMap = {};
 
