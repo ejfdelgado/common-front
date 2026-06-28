@@ -3,9 +3,13 @@ import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 import { ModuloSonido } from "src/app/services/sonido.service";
 import { shuffleInPlace } from "src/app/tools/ArrayUtil";
 import { GameStep, GameStepOption } from "src/types/WorldAvatar";
-import { ENABLE_CUBE_TYPE } from "./CubeController";
+import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from "./CubeController";
 
 const MAX_LIFE = 5;
+
+const SIDE_SHIFT = 0.5;
+const SIDE_FRONT = 0.3;
+const VERTICAL_SHIFT = -0.8;//-0.5
 
 export class QuestionaireController extends SceneControllerAbstract {
 
@@ -32,8 +36,8 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.events.emit({ name: "CUBE_LISTEN_OFF", });
     }
 
-    enableCube(name: ENABLE_CUBE_TYPE) {
-        this.events.emit({ name: name, });
+    enableCube(name: ENABLE_CUBE_TYPE, data: { minmax?: MinMaxCubeRange }) {
+        this.events.emit({ name: name, data });
     }
 
     async setHudValue(key: string, val: any, speak?: boolean) {
@@ -68,10 +72,28 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (!this.isPlaying) { return; }
 
         const LETTERS = [
-            //{ id: "A", cube_id: "CUBE_A_ON", hud_id: "right" },
-            //{ id: "B", cube_id: "CUBE_B_ON", hud_id: "left" },
-            { id: "C", cube_id: "CUBE_C_ON", hud_id: "right_bottom" },
-            { id: "D", cube_id: "CUBE_D_ON", hud_id: "left_bottom" },
+            {
+                id: "A",
+                cube_id: "CUBE_A_ON",
+                hud_id: "right",
+                minmax: {
+                    x: { min: 0.5, max: 1.5 },
+                    y: { min: 0, max: 0 },
+                    z: { min: SIDE_FRONT, max: SIDE_FRONT },
+                },
+            },
+            {
+                id: "B",
+                cube_id: "CUBE_B_ON",
+                hud_id: "left",
+                minmax: {
+                    x: { min: -1.5, max: -0.5 },
+                    y: { min: 0, max: 0 },
+                    z: { min: SIDE_FRONT, max: SIDE_FRONT },
+                },
+            },
+            //{ id: "C", cube_id: "CUBE_C_ON", hud_id: "right_bottom" },
+            //{ id: "D", cube_id: "CUBE_D_ON", hud_id: "left_bottom" },
         ];
 
         shuffleInPlace(LETTERS);
@@ -83,7 +105,7 @@ export class QuestionaireController extends SceneControllerAbstract {
             const option = actualStep.options[i];
             const letter = LETTERS[i];
             this.optionsMap[letter.id] = option;
-            this.enableCube(letter.cube_id as ENABLE_CUBE_TYPE);
+            this.enableCube(letter.cube_id as ENABLE_CUBE_TYPE, { minmax: letter.minmax });
             await this.setHudValue(letter.hud_id, option.label, true);
             if (!this.isPlaying) { return; }
         }

@@ -13,10 +13,29 @@ const VERTICAL_SHIFT = -0.8;//-0.5
 
 export type ENABLE_CUBE_TYPE = "CUBE_A_ON" | "CUBE_B_ON" | "CUBE_C_ON" | "CUBE_D_ON";
 
+export interface MinMaxCubeRange {
+    x?: {
+        min: number;
+        max: number;
+    },
+    y?: {
+        min: number;
+        max: number;
+    },
+    z?: {
+        min: number;
+        max: number;
+    },
+}
+
 export interface CubeConfigType {
+    local_x: number;
+    local_y: number;
+    local_z: number;
     local: THREE.Matrix4;
     height: number,
     sphere: any;
+    minmax?: MinMaxCubeRange;
     model: THREE.Object3D<THREE.Object3DEventMap> | null | undefined;
     material: any;
     selected: boolean;
@@ -29,6 +48,9 @@ export class CubeController extends SceneControllerAbstract {
         [key: string]: CubeConfigType,
     } = {
             "cube_a": {
+                local_x: SIDE_SHIFT,
+                local_y: 0,
+                local_z: SIDE_FRONT,
                 eventName: "CUBE_A_SELECT_",
                 local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, SIDE_FRONT),
                 height: AB_HEIGHT,
@@ -38,6 +60,9 @@ export class CubeController extends SceneControllerAbstract {
                 selected: true,
             },
             "cube_b": {
+                local_x: -1 * SIDE_SHIFT,
+                local_y: 0,
+                local_z: SIDE_FRONT,
                 eventName: "CUBE_B_SELECT_",
                 local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, 0, SIDE_FRONT),
                 height: AB_HEIGHT,
@@ -47,6 +72,9 @@ export class CubeController extends SceneControllerAbstract {
                 selected: true,
             },
             "cube_c": {
+                local_x: SIDE_SHIFT,
+                local_y: VERTICAL_SHIFT,
+                local_z: 0,
                 eventName: "CUBE_C_SELECT_",
                 local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, VERTICAL_SHIFT, 0),
                 height: 0.1,
@@ -56,6 +84,9 @@ export class CubeController extends SceneControllerAbstract {
                 selected: true,
             },
             "cube_d": {
+                local_x: -1 * SIDE_SHIFT,
+                local_y: VERTICAL_SHIFT,
+                local_z: 0,
                 eventName: "CUBE_D_SELECT_",
                 local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, VERTICAL_SHIFT, 0),
                 height: 0.1,
@@ -106,6 +137,35 @@ export class CubeController extends SceneControllerAbstract {
         }
     }
 
+    randomize(min: number, max: number) {
+        const rand = Math.random();
+        const inverse = 1 - rand;
+        return rand * min + inverse * max;
+    }
+
+    setCubeData(name: string, data?: any) {
+        const config = this.getCubeConfig(name);
+        if (!config) { return; }
+        if (data && data.minmax) {
+            // Redefine min max
+            config.minmax = data.minmax;
+            // Compute new location
+            let x = config.local_x;
+            let y = config.local_y;
+            let z = config.local_z;
+            if (config.minmax?.x) {
+                x = this.randomize(config.minmax.x.min, config.minmax.x.max);
+            }
+            if (config.minmax?.y) {
+                y = this.randomize(config.minmax.y.min, config.minmax.y.max);
+            }
+            if (config.minmax?.z) {
+                z = this.randomize(config.minmax.z.min, config.minmax.z.max);
+            }
+            config.local = new THREE.Matrix4().makeTranslation(x, y, z);
+        }
+    }
+
     getCubeConfig(name: string): CubeConfigType | null | undefined {
         const config = this.cubes[name];
         let cubeObject = config.model;
@@ -127,6 +187,7 @@ export class CubeController extends SceneControllerAbstract {
         return config;
     }
 
+    // It runs every frame...
     override async update(): Promise<ControllerUpdateResponse> {
         if (!this.enabled || !this.lastData) {
             return {};
@@ -252,15 +313,27 @@ export class CubeController extends SceneControllerAbstract {
         } else if (event.name == "CUBE_A_ON") {
             this.setVisibility(true, "cube_a");
             this.setOpacity(OPACITY_LOW, "cube_a");
+            if (event.data) {
+                this.setCubeData("cube_a", event.data);
+            }
         } else if (event.name == "CUBE_B_ON") {
             this.setVisibility(true, "cube_b");
             this.setOpacity(OPACITY_LOW, "cube_b");
+            if (event.data) {
+                this.setCubeData("cube_b", event.data);
+            }
         } else if (event.name == "CUBE_C_ON") {
             this.setVisibility(true, "cube_c");
             this.setOpacity(OPACITY_LOW, "cube_c");
+            if (event.data) {
+                this.setCubeData("cube_c", event.data);
+            }
         } else if (event.name == "CUBE_D_ON") {
             this.setVisibility(true, "cube_d");
             this.setOpacity(OPACITY_LOW, "cube_d");
+            if (event.data) {
+                this.setCubeData("cube_d", event.data);
+            }
         }
     }
 }
