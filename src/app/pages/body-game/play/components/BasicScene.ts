@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { IndicatorService } from '@services/indicator.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import {
+  DEFAULT_AVATAR_MESH,
   ROOT_PATH,
 } from '@mytypes/BodyTypes';
 import { HttpClient } from '@angular/common/http';
@@ -49,8 +50,8 @@ export class BasicScene extends SceneWithComposer {
 
     const light = new THREE.AmbientLight(0xFFFFFF);
     this.add(light);
-    const pointLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    pointLight.position.set(0, 5, 0);
+    const pointLight = new THREE.DirectionalLight(0xffffff, 5);
+    pointLight.position.set(0, 5, 5);
     this.add(pointLight);
 
     //this.setHDRSky(ROOT_PATH + "wasteland_clouds_puresky_1k.hdr");
@@ -65,9 +66,9 @@ export class BasicScene extends SceneWithComposer {
         return;
       }
       await this.addAvatar(
-        ROOT_PATH + "avatar005.glb",
+        ROOT_PATH + DEFAULT_AVATAR_MESH,
         this.camera, this.renderer, this.orbitals);
-      this.replaceAvatarSkin(ROOT_PATH + "squeleton2.jpg");
+      //this.replaceAvatarSkin(ROOT_PATH + "squeleton2.jpg");
     } catch (err) {
 
     } finally {

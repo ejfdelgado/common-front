@@ -37,11 +37,7 @@
                 "scenario01": {
                     "useComposer": true,
                     "background": {
-                        "color": {
-                            "r": 0.5,
-                            "g": 1,
-                            "b": 0.5
-                        }
+                        "image": "./assets/img/default.jpeg"
                     },
                     "characters": [],
                     "meshes": [],
@@ -53,27 +49,527 @@
                     },
                     "steps": [
                         {
-                            "label": "¿En qué región de Colombia vive el Tití Cabeciblanco, un monito que está en peligro de extinción?",
+                            "label": "¿En qué región de Colombia vive el Tití Cabeciblanco, un monito que está en peligro de extinción? 🐒",
                             "options": [
                                 {
                                     "points": 0,
-                                    "label": "El Desierto de la Guajira",
-                                    "answer": "Estuviste cerca. Aunque está en el norte, el Tití necesita bosques tropicales con árboles y no zonas desérticas."
+                                    "label": "El Desierto de la Guajira 🏜️",
+                                    "answer": "Estuviste cerca. Aunque está en el norte, el Tití necesita bosques tropicales con árboles y no zonas desérticas. 🏜️"
                                 },
                                 {
                                     "points": 1,
-                                    "label": "La Costa Caribe",
-                                    "answer": "Sí, muy bien! este pequeño primate es endémico del Caribe colombiano y su hábitat se ha reducido mucho por la deforestación."
+                                    "label": "La Costa Caribe 🏖️",
+                                    "answer": "Sí, muy bien! este pequeño primate es endémico del Caribe colombiano y su hábitat se ha reducido mucho por la deforestación. 🎉"
                                 },
                                 {
                                     "points": 0,
-                                    "label": "Los Nevados andinos",
-                                    "answer": "La próxima vez lo harás mejor. El clima de los nevados es demasiado frío para este monito que prefiere el calor del bosque seco tropical."
+                                    "label": "Los Nevados andinos 🏔️",
+                                    "answer": "La próxima vez lo harás mejor. El clima de los nevados es demasiado frío para este monito que prefiere el calor del bosque seco tropical. 🏔️"
                                 },
                                 {
                                     "points": 0,
-                                    "label": "La Selva amazónica",
-                                    "answer": "Estás un poco lejos. En el Amazonas viven muchos monos, pero el Tití Cabeciblanco solo se encuentra en el noroeste de Colombia, en la Costa Caribe."
+                                    "label": "La Selva amazónica 🌴",
+                                    "answer": "Estás un poco lejos. En el Amazonas viven muchos monos, pero el Tití Cabeciblanco solo se encuentra en el noroeste de Colombia, en la Costa Caribe. 🌴"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es el ave nacional de Colombia que vive en los Andes y está en peligro de extinción? 🦅",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El Cóndor de los Andes 🦅",
+                                    "answer": "¡Exacto! 🦅 El cóndor andino es el ave nacional de Colombia y está en peligro porque cada vez hay menos páramos y montañas tranquilas donde pueda vivir y volar."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El Tucán 🦜",
+                                    "answer": "Casi. El tucán es hermoso y vive en Colombia, pero no es el ave que aparece en nuestro escudo nacional ni la más amenazada de los Andes. 🦜"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El Colibrí esmeralda 🐦",
+                                    "answer": "Buen intento. Los colibríes son pequeñitos y veloces, pero el ave símbolo de Colombia que vive en las alturas andinas es otra. 🐦"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El Águila arpía 🦅",
+                                    "answer": "Estuviste cerca, el águila arpía también está amenazada, pero vive en la selva y no es el ave nacional de Colombia. 🦅"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué animal colombiano es conocido como 'oso de anteojos' y vive en los bosques andinos? 🐻",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El oso andino 🐻",
+                                    "answer": "¡Muy bien! 🐻 El oso andino, también llamado oso de anteojos por las manchas claras alrededor de sus ojos, es el único oso de Sudamérica y está en peligro por la pérdida de su bosque."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El oso panda 🐼",
+                                    "answer": "No es ese. El oso panda vive en China y come bambú, no es un animal colombiano. 🐼"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El oso polar 🐻‍❄️",
+                                    "answer": "Te equivocaste un poco. El oso polar vive en el hielo del Ártico, muy lejos de los bosques andinos de Colombia. 🐻‍❄️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El oso hormiguero 🐾",
+                                    "answer": "Cerca, pero no. El oso hormiguero existe en Colombia, pero no es el que tiene manchas como anteojos. 🐾"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál de estos animales acuáticos colombianos está en peligro por la contaminación de los ríos? 🌊",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "El manatí 🐬",
+                                    "answer": "¡Correcto! 🐬 El manatí vive en los ríos y ciénagas de Colombia, y está en peligro por la contaminación del agua y la pesca descuidada."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El tiburón blanco 🦈",
+                                    "answer": "No exactamente. El tiburón blanco vive en mares fríos y lejanos, no en los ríos colombianos. 🦈"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El pingüino 🐧",
+                                    "answer": "Te equivocaste. Los pingüinos viven en zonas muy frías como la Antártida, no en los ríos de Colombia. 🐧"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "La foca 🦭",
+                                    "answer": "Casi. Las focas viven en mares y costas frías, no son un animal típico de los ríos colombianos. 🦭"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "La rana dorada es uno de los anfibios más amenazados de Colombia. ¿Por qué está en peligro? 🐸",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Por la contaminación y la pérdida de su hábitat 🐸",
+                                    "answer": "¡Así es! 🐸 Estas pequeñas ranas necesitan agua y bosques limpios, y al contaminarse los ríos o talarse los árboles, pierden el lugar donde viven."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque migra a otros países ✈️",
+                                    "answer": "No es así. Las ranas no viajan grandes distancias como las aves, su problema es local: pierden su hogar en Colombia. ✈️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque hiberna mucho tiempo 😴",
+                                    "answer": "No es correcto. La hibernación no es la causa de su peligro de extinción. 😴"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque vive en el desierto 🏜️",
+                                    "answer": "Te equivocaste. La rana dorada necesita ambientes húmedos como bosques y quebradas, no desiertos. 🏜️"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es el árbol nacional de Colombia que crece en el Valle de Cocora? 🌴",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La palma de cera del Quindío 🌴",
+                                    "answer": "¡Excelente! 🌴 Esta palma altísima es el árbol nacional de Colombia y está en peligro porque crece muy lento y antes se talaba para celebraciones."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El pino 🌲",
+                                    "answer": "No es ese. El pino no es originario de Colombia y no es nuestro árbol nacional. 🌲"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El eucalipto 🌿",
+                                    "answer": "Casi, pero no. El eucalipto fue traído de otro continente y tampoco es el árbol símbolo de Colombia. 🌿"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El sauce 🌳",
+                                    "answer": "Te equivocaste. El sauce no es el árbol nacional ni el que crece en el famoso Valle de Cocora. 🌳"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es la flor nacional de Colombia? 🌸",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La orquídea 🌸",
+                                    "answer": "¡Correcto! 🌸 La orquídea, en especial la flor de mayo, es la flor nacional de Colombia y muchas especies están en peligro por la deforestación."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El girasol 🌻",
+                                    "answer": "No es esa. El girasol es hermoso, pero no es la flor que representa a Colombia. 🌻"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "La rosa 🌹",
+                                    "answer": "Casi, pero no. La rosa es muy cultivada en Colombia para exportar, pero no es nuestra flor nacional. 🌹"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El tulipán 🌷",
+                                    "answer": "Te equivocaste. El tulipán es típico de otros países como Holanda, no es la flor nacional de Colombia. 🌷"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "El frailejón es una planta que vive en los páramos y crece muy lento. ¿Cuánto puede crecer en un año aproximadamente? 🌱",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "1 centímetro 📏",
+                                    "answer": "¡Muy bien! 🌱 El frailejón crece apenas un centímetro al año, por eso si se daña tarda muchísimos años en recuperarse."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "1 metro 📏",
+                                    "answer": "No es así, si creciera tan rápido no estaría en peligro por el daño que le hacen las quemas y el pisoteo. 📏"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "10 metros 📏",
+                                    "answer": "Te equivocaste, ningún frailejón crece tan rápido, por eso debemos cuidarlo mucho. 📏"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "50 centímetros 📏",
+                                    "answer": "Casi, pero no. El frailejón es una de las plantas de crecimiento más lento que existen. 📏"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Por qué es importante proteger el roble en los bosques andinos de Colombia? 🌳",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Porque da hogar y alimento a muchos animales 🐿️",
+                                    "answer": "¡Exacto! 🌳 El roble sostiene a aves, insectos y mamíferos que dependen de él para vivir y alimentarse."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque crece en el mar 🌊",
+                                    "answer": "No es así. El roble es un árbol de tierra firme, crece en montañas y bosques, no en el mar. 🌊"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque no sirve para nada 🚫",
+                                    "answer": "Todo lo contrario. El roble es uno de los árboles más importantes para los ecosistemas andinos. 🚫"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque solo crece en otros países 🌍",
+                                    "answer": "Te equivocaste. El roble andino crece justamente en los bosques de Colombia y por eso debemos protegerlo. 🌍"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿De dónde viene gran parte del agua que tomamos en Colombia? 💧",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "De los páramos ⛰️",
+                                    "answer": "¡Correcto! 💧 Los páramos funcionan como esponjas naturales que capturan agua y la entregan a los ríos que abastecen a las ciudades."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Del mar 🌊",
+                                    "answer": "No es así. El agua del mar es salada y no se usa directamente para tomar. 🌊"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Del desierto 🏜️",
+                                    "answer": "Te equivocaste, los desiertos tienen muy poca agua disponible. 🏜️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "De la luna 🌙",
+                                    "answer": "Casi imposible. En la luna no hay agua que podamos usar, el agua viene de nuestros ecosistemas en la Tierra. 🌙"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué pasa si botamos basura a los ríos? 🚯",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Se contamina el agua y se enferman los animales y las personas 🤢",
+                                    "answer": "¡Así es! 🚯 La basura y los químicos dañan el agua, matan peces y ponen en riesgo la salud de quienes la usan."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El agua se vuelve más limpia 💧",
+                                    "answer": "Todo lo contrario, botar basura ensucia y contamina el agua. 💧"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Los peces crecen más rápido 🐟",
+                                    "answer": "No es cierto. La contaminación enferma y mata a los peces, no los ayuda a crecer. 🐟"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "No pasa nada 🤷",
+                                    "answer": "Te equivocaste, botar basura a los ríos siempre tiene consecuencias negativas para el ambiente. 🤷"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál es una buena forma de ahorrar agua en casa? 🚰",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Cerrar la llave mientras nos cepillamos los dientes 🪥",
+                                    "answer": "¡Muy bien! 🚰 Cerrar la llave cuando no la necesitamos es una manera sencilla de no desperdiciar agua."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Dejar la llave abierta todo el día 🚱",
+                                    "answer": "Esa es una de las peores ideas, así se desperdicia muchísima agua sin necesidad. 🚱"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Bañarse con la manguera del jardín por horas 💦",
+                                    "answer": "No es buena idea, eso gasta una enorme cantidad de agua de forma innecesaria. 💦"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Lavar el carro todos los días 🚗",
+                                    "answer": "Te equivocaste, lavar el carro tan seguido desperdicia mucha agua que podríamos ahorrar. 🚗"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Los páramos son ecosistemas únicos de Colombia. ¿Qué función cumplen? ⛰️",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Capturan y regulan el agua que abastece a las ciudades 💧",
+                                    "answer": "¡Correcto! 🏔️ Los páramos almacenan agua de la niebla y la lluvia y la liberan poco a poco hacia los ríos."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Producen petróleo 🛢️",
+                                    "answer": "No es así, el petróleo no se produce en los páramos, esa no es su función ambiental. 🛢️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Son desiertos sin vida 🏜️",
+                                    "answer": "Todo lo contrario, los páramos están llenos de vida como frailejones y aves únicas. 🏜️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Sirven solo para sembrar flores 🌼",
+                                    "answer": "Te equivocaste, su función principal es regular y proveer agua, no la siembra de flores. 🌼"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "En Colombia, ¿de qué color es la caneca donde se debe botar el papel, el cartón y el plástico limpios? ♻️",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Blanca ⚪",
+                                    "answer": "¡Exacto! ♻️ La caneca blanca es para los residuos aprovechables como papel, cartón, plástico, vidrio y metal limpios."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Roja 🔴",
+                                    "answer": "No es esa. La caneca roja se usa para residuos peligrosos, no para reciclables comunes. 🔴"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Azul 🔵",
+                                    "answer": "Te equivocaste, en Colombia el código de colores no usa el azul para los reciclables comunes. 🔵"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Café 🟤",
+                                    "answer": "Casi, pero no. El café no es el color oficial para los residuos aprovechables en Colombia. 🟤"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿En qué caneca se deben botar los residuos de comida como cáscaras de fruta? 🍌",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Verde 🟢",
+                                    "answer": "¡Muy bien! 🍌 La caneca verde es para los residuos orgánicos como restos de comida y cáscaras."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Blanca ⚪",
+                                    "answer": "No es esa. La blanca es para los residuos aprovechables como papel y plástico, no para residuos de comida. ⚪"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Negra ⚫",
+                                    "answer": "Casi, la negra es para la basura que no se puede reciclar ni es orgánica, como papel higiénico sucio. ⚫"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Amarilla 🟡",
+                                    "answer": "Te equivocaste, el amarillo no es el color usado en Colombia para los residuos orgánicos. 🟡"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué significa la 'R' de 'Reducir' en las 3R del reciclaje? 🌍",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Consumir menos y generar menos basura 🛍️",
+                                    "answer": "¡Correcto! 🌍 Reducir significa comprar y usar solo lo necesario para que se produzca menos basura desde el inicio."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Comprar más cosas nuevas 🛒",
+                                    "answer": "Todo lo contrario, reducir significa comprar y consumir menos, no más. 🛒"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Botar todo a la basura 🗑️",
+                                    "answer": "No es así, esa acción no ayuda a reducir, sino que genera más residuos. 🗑️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Quemar los residuos 🔥",
+                                    "answer": "Te equivocaste, quemar basura contamina el aire y no es parte de las 3R. 🔥"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Aproximadamente cuánto tiempo puede tardar una botella de plástico en degradarse en la naturaleza? 🥤",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Más de 100 años ⏳",
+                                    "answer": "¡Así es! 🥤 El plástico tarda muchísimo tiempo en degradarse, por eso es tan importante reciclarlo y reutilizarlo."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "1 día ☀️",
+                                    "answer": "No es así, ojalá fuera tan rápido, pero el plástico tarda mucho más en desaparecer. ☀️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "1 semana 📅",
+                                    "answer": "Te equivocaste, una semana es muy poco tiempo comparado con lo que realmente tarda el plástico. 📅"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "1 mes 🗓️",
+                                    "answer": "Casi, pero no. Un mes sigue siendo muy poco tiempo frente a los años que realmente necesita el plástico. 🗓️"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Por qué es importante plantar árboles en Colombia? 🌳",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Porque producen oxígeno y dan hogar a los animales 🌳",
+                                    "answer": "¡Exacto! 🌳 Los árboles limpian el aire que respiramos y son el hogar de muchísimas especies de animales."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque no sirven para nada 🚫",
+                                    "answer": "Todo lo contrario, los árboles son fundamentales para la vida en el planeta. 🚫"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque contaminan el aire 💨",
+                                    "answer": "Es justo lo opuesto, los árboles limpian el aire absorbiendo dióxido de carbono. 💨"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Porque quitan agua a los ríos 🌊",
+                                    "answer": "Te equivocaste, los árboles ayudan a regular el agua y a evitar que los ríos se sequen. 🌊"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué problema ayuda a evitar la reforestación en las montañas? ⛰️",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "La erosión y los deslizamientos de tierra ⛰️",
+                                    "answer": "¡Correcto! ⛰️ Las raíces de los árboles sostienen la tierra y evitan que se deslice cuando llueve mucho."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El crecimiento de las ciudades 🏙️",
+                                    "answer": "No es así, la reforestación no controla el crecimiento urbano, sino el cuidado del suelo y el agua. 🏙️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "La lluvia 🌧️",
+                                    "answer": "Te equivocaste, la lluvia no se evita con árboles, pero sí se controla mejor sus efectos en el suelo. 🌧️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "El frío ❄️",
+                                    "answer": "Casi, pero no. La reforestación no cambia la temperatura del clima de esa manera. ❄️"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Qué le pasa a los animales cuando se talan muchos árboles de su bosque? 🐒",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Pierden su hogar y su alimento 🏠",
+                                    "answer": "¡Así es! 🐒 Sin árboles, muchos animales no tienen dónde vivir ni qué comer, y algunos pueden desaparecer de la zona."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Se vuelven más fuertes 💪",
+                                    "answer": "Todo lo contrario, perder su hábitat los pone en riesgo, no los fortalece. 💪"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Consiguen más comida 🍽️",
+                                    "answer": "No es así, al talar el bosque desaparecen las plantas y frutos que muchos animales necesitan. 🍽️"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Nada, ellos se adaptan fácilmente 🤷",
+                                    "answer": "Te equivocaste, muchas especies no logran adaptarse a tiempo y terminan en peligro de extinción. 🤷"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "¿Cuál de estas es una acción que ayuda a cuidar el medio ambiente en Colombia? 🌎",
+                            "options": [
+                                {
+                                    "points": 1,
+                                    "label": "Reciclar, ahorrar agua y plantar árboles 🌎",
+                                    "answer": "¡Excelente! 🌎 Estas tres acciones juntas ayudan a proteger los bosques, el agua y los animales de nuestro país."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Botar basura en los ríos 🚯",
+                                    "answer": "Todo lo contrario, esa acción contamina el agua y daña a los animales que viven en ella. 🚯"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Talar bosques sin control 🪓",
+                                    "answer": "No es así, talar sin control destruye el hogar de muchas especies y afecta el clima. 🪓"
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Dejar las luces y el agua encendidas todo el día 💡",
+                                    "answer": "Te equivocaste, eso desperdicia recursos valiosos que debemos cuidar. 💡"
                                 }
                             ]
                         }

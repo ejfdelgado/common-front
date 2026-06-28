@@ -9,7 +9,7 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { AvatarService } from "@services/avatar.service";
 import { P2PService } from "@services/p2p.service";
 import { getPeerAvatarName } from "./utils/AvatarUtilities";
-import { AVATAR_PELVIS_HEIGHT, ROOT_PATH } from "@mytypes/BodyTypes";
+import { AVATAR_PELVIS_HEIGHT, DEFAULT_AVATAR_MESH, ROOT_PATH } from "@mytypes/BodyTypes";
 import { GameAction, RoomGameType } from "@mytypes/ActionGameTypes";
 import { Room } from "@trystero-p2p/firebase";
 import { Subscription } from "rxjs";
@@ -85,7 +85,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                         const autoAdd: boolean = true;
                         const avatar = await avatarContainer.scene.addModel({
                             name: name,
-                            url: ROOT_PATH + "avatar005.glb",
+                            url: ROOT_PATH + DEFAULT_AVATAR_MESH,
                         }, autoAdd);
                         avatarContainer.scene.applyLR(
                             avatar, 0, 0, 0, undefined, AVATAR_PELVIS_HEIGHT

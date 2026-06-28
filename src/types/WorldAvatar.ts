@@ -42,6 +42,7 @@ export interface ColorType {
 export interface GameScenario {
     useComposer?: boolean;
     background?: {
+        image?: string;
         color?: ColorType;
     },
     meshes: GameMesh[];

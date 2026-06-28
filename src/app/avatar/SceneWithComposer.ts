@@ -6,6 +6,7 @@ import { CameraByPassShader } from './shaders/CameraByPass';
 import {
     AnimatedElements,
     AnimationSpecType,
+    DEFAULT_AVATAR_MESH,
     ROOT_PATH,
     StoredAvatarAnimation,
 } from "@mytypes/BodyTypes";
@@ -137,7 +138,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         const autoAdd: boolean = true;
         await this.addModel({
             name: detail.name,
-            url: ROOT_PATH + "avatar005.glb",
+            url: ROOT_PATH + DEFAULT_AVATAR_MESH,
         }, autoAdd);
         this.characterList.push(detail);
         // TODO, preload animations?
@@ -406,6 +407,12 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         const bgColor = scene.background?.color;
         if (bgColor) {
             this.background = new THREE.Color(bgColor.r, bgColor.g, bgColor.b);
+        } else if (scene.background?.image) {
+            if (this.renderer) {
+                //this.renderer.setClearColor(0x000000, 0);
+                this.renderer.setClearAlpha(0);
+            }
+            this.background = null;
         }
     }
 }

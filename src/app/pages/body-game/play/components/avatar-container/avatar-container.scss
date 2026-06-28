@@ -70,6 +70,12 @@
   background-color: black;
 }
 
+.background_image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('/assets/img/default.jpeg');
+}
+
 .top_right {
   position: absolute;
   top: 0px;
