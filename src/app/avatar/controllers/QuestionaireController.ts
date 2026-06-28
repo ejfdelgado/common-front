@@ -7,9 +7,26 @@ import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from "./CubeController";
 
 const MAX_LIFE = 5;
 
-const SIDE_SHIFT = 0.5;
+const FAR_AMOUNT_X = 0;
+const FAR_AMOUNT_Y = 0;
+
+const X_MIN = 0.5;
+const X_MAX = 0.5 + 1 * FAR_AMOUNT_X;
+const Y_MIN = 0.3 * FAR_AMOUNT_Y;
+const Y_MAX = 0.4 * FAR_AMOUNT_Y;
+const Y_MIN_BOTTOM = -0.8;
+const Y_MAX_BOTTOM = -0.8 + 0.3 * FAR_AMOUNT_Y;
+
 const SIDE_FRONT = 0.3;
+
 const VERTICAL_SHIFT = -0.8;//-0.5
+
+export interface LettersConfig {
+    id: string;
+    cube_id: string;
+    hud_id: string;
+    minmax?: MinMaxCubeRange;
+}
 
 export class QuestionaireController extends SceneControllerAbstract {
 
@@ -71,14 +88,14 @@ export class QuestionaireController extends SceneControllerAbstract {
         await this.setHudValue("top", actualStep.label, true);
         if (!this.isPlaying) { return; }
 
-        const LETTERS = [
+        const LETTERS: LettersConfig[] = [
             {
                 id: "A",
                 cube_id: "CUBE_A_ON",
                 hud_id: "right",
                 minmax: {
-                    x: { min: 0.5, max: 1.5 },
-                    y: { min: 0, max: 0 },
+                    x: { min: X_MIN, max: X_MAX },
+                    y: { min: -1 * Y_MIN, max: Y_MAX },
                     z: { min: SIDE_FRONT, max: SIDE_FRONT },
                 },
             },
@@ -87,13 +104,31 @@ export class QuestionaireController extends SceneControllerAbstract {
                 cube_id: "CUBE_B_ON",
                 hud_id: "left",
                 minmax: {
-                    x: { min: -1.5, max: -0.5 },
-                    y: { min: 0, max: 0 },
+                    x: { min: -1 * X_MIN, max: -1 * X_MAX },
+                    y: { min: -1 * Y_MIN, max: Y_MAX },
                     z: { min: SIDE_FRONT, max: SIDE_FRONT },
                 },
             },
-            //{ id: "C", cube_id: "CUBE_C_ON", hud_id: "right_bottom" },
-            //{ id: "D", cube_id: "CUBE_D_ON", hud_id: "left_bottom" },
+            {
+                id: "C",
+                cube_id: "CUBE_C_ON",
+                hud_id: "right_bottom",
+                minmax: {
+                    x: { min: X_MIN, max: X_MAX },
+                    y: { min: Y_MIN_BOTTOM, max: Y_MAX_BOTTOM },
+                    z: { min: 0, max: 0 },
+                },
+            },
+            {
+                id: "D",
+                cube_id: "CUBE_D_ON",
+                hud_id: "left_bottom",
+                minmax: {
+                    x: { min: -1 * X_MIN, max: -1 * X_MAX },
+                    y: { min: Y_MIN_BOTTOM, max: Y_MAX_BOTTOM },
+                    z: { min: 0, max: 0 },
+                },
+            },
         ];
 
         shuffleInPlace(LETTERS);

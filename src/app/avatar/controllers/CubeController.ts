@@ -1,6 +1,7 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { AvatarBoneEnum } from "@mytypes/BodyParts";
 import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from "@mytypes/BodyTypes";
+import { ControllerInitDataType } from "src/types/BodyTypesExtra";
 import * as THREE from 'three';
 
 const OPACITY_LOW = 0.5;
@@ -52,7 +53,7 @@ export class CubeController extends SceneControllerAbstract {
                 local_y: 0,
                 local_z: SIDE_FRONT,
                 eventName: "CUBE_A_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, 0, SIDE_FRONT),
+                local: new THREE.Matrix4().makeTranslation(0, 0, 0),
                 height: AB_HEIGHT,
                 sphere: null,
                 model: null,
@@ -64,7 +65,7 @@ export class CubeController extends SceneControllerAbstract {
                 local_y: 0,
                 local_z: SIDE_FRONT,
                 eventName: "CUBE_B_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, 0, SIDE_FRONT),
+                local: new THREE.Matrix4().makeTranslation(0, 0, 0),
                 height: AB_HEIGHT,
                 sphere: null,
                 model: null,
@@ -76,7 +77,7 @@ export class CubeController extends SceneControllerAbstract {
                 local_y: VERTICAL_SHIFT,
                 local_z: 0,
                 eventName: "CUBE_C_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(SIDE_SHIFT, VERTICAL_SHIFT, 0),
+                local: new THREE.Matrix4().makeTranslation(0, 0, 0),
                 height: 0.1,
                 sphere: null,
                 model: null,
@@ -88,7 +89,7 @@ export class CubeController extends SceneControllerAbstract {
                 local_y: VERTICAL_SHIFT,
                 local_z: 0,
                 eventName: "CUBE_D_SELECT_",
-                local: new THREE.Matrix4().makeTranslation(-1 * SIDE_SHIFT, VERTICAL_SHIFT, 0),
+                local: new THREE.Matrix4().makeTranslation(0, 0, 0),
                 height: 0.1,
                 sphere: null,
                 model: null,
@@ -104,6 +105,18 @@ export class CubeController extends SceneControllerAbstract {
         super.setParams(params);
         if (!this.enabled) {
             this.setVisibility(false);
+        }
+    }
+
+    override async initialize(data: ControllerInitDataType) {
+        super.initialize(data);
+        for (let name in this.cubes) {
+            const cube = this.cubes[name];
+            cube.local = new THREE.Matrix4().makeTranslation(
+                cube.local_x,
+                cube.local_y,
+                cube.local_z,
+            );
         }
     }
 
