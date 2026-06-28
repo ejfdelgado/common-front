@@ -46,6 +46,7 @@ export interface GameScenario {
     },
     meshes: GameMesh[];
     characters: GameCharacter[];
+    stepsConfig?: StepsConfig;
     steps?: GameStep[];
 }
 
@@ -57,6 +58,13 @@ export interface GameMesh {
 export interface GameStep {
     label: string;
     options: GameStepOption[];
+}
+
+export interface StepsConfig {
+    introTitle?: string;
+    looseLabel?: string;
+    winLabel?: string;
+    maxQuestions?: number;
 }
 
 export interface GameStepOption {

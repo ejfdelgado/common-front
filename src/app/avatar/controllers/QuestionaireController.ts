@@ -21,6 +21,8 @@ const SIDE_FRONT = 0.3;
 
 const VERTICAL_SHIFT = -0.8;//-0.5
 
+const MAX_QUESTIONS_DEF = 10;
+
 export interface LettersConfig {
     id: string;
     cube_id: string;
@@ -36,6 +38,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     steps: GameStep[] = [];
     currentStep: number = 0;
     optionsMap: { [key: string]: GameStepOption } = {};
+    maxQuestions: number = MAX_QUESTIONS_DEF;
 
     override async update(): Promise<ControllerUpdateResponse> {
 
@@ -67,14 +70,19 @@ export class QuestionaireController extends SceneControllerAbstract {
             return;
         }
         const steps = this.scenario.steps;
+        const stepsConfig = this.scenario.stepsConfig;
         if (!steps) {
             return;
         }
         if (this.currentStep >= steps.length) {
+            await this.youWin();
             return;
         }
 
         if (this.currentStep == 0) {
+            if (typeof stepsConfig?.maxQuestions == "number") {
+                this.maxQuestions = stepsConfig.maxQuestions;
+            }
             this.steps = JSON.parse(JSON.stringify(steps));
             //suffle
             shuffleInPlace(this.steps);
@@ -82,8 +90,18 @@ export class QuestionaireController extends SceneControllerAbstract {
                 shuffleInPlace(step.options);
             });
             const { promise } = await ModuloSonido.play('/assets/sounds/tropical_fade_out.mp3', false);
-            await this.setHudValue("top", "Juega y aprende de nuestro país", false);
+            let introTitle = "Game Start!";
+            if (stepsConfig?.introTitle) {
+                introTitle = stepsConfig.introTitle;
+            }
+            await this.setHudValue("top", introTitle, false);
             await promise;
+        }
+
+        // Check if won
+        if (this.currentStep >= this.maxQuestions) {
+            await this.youWin();
+            return;
         }
 
         const actualStep = this.steps[this.currentStep];
@@ -202,7 +220,22 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     async gameOver() {
         this.clearAll();
-        await this.setHudValue("bottom", "Fin del juego", true);
+        let label = "Game Over";
+        if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.looseLabel) {
+            label = this.scenario.stepsConfig.looseLabel;
+        }
+        await this.setHudValue("bottom", label, false);
+    }
+
+    async youWin() {
+        this.clearAll();
+        let label = "You Win";
+        if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.winLabel) {
+            label = this.scenario.stepsConfig.winLabel;
+        }
+        const { promise } = await ModuloSonido.play('/assets/sounds/tropical_fade_in.mp3', false);
+        await this.setHudValue("top", label, false);
+        await promise;
     }
 
     override onEvent(event: AvatarBodyEvent): void {

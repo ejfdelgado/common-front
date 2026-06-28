@@ -45,6 +45,12 @@
                     },
                     "characters": [],
                     "meshes": [],
+                    "stepsConfig": {
+                        "maxQuestions": 20,
+                        "introTitle": "<h2>Juega 🕹️ y aprende 🤓</br>de nuestro país 🇨🇴</h2>",
+                        "winLabel": "<h2>¡Has ganado!</br>⭐ Tú sabes el valor de nuestro país 🎉</h2>",
+                        "looseLabel": "<h2>Reintenta más tarde 🥀</h2>"
+                    },
                     "steps": [
                         {
                             "label": "¿En qué región de Colombia vive el Tití Cabeciblanco, un monito que está en peligro de extinción?",
@@ -52,7 +58,7 @@
                                 {
                                     "points": 0,
                                     "label": "El Desierto de la Guajira",
-                                    "answer": "Estuviste cerca. Aunque está en el norte, el Titi necesita bosques tropicales con árboles y no zonas desérticas."
+                                    "answer": "Estuviste cerca. Aunque está en el norte, el Tití necesita bosques tropicales con árboles y no zonas desérticas."
                                 },
                                 {
                                     "points": 1,
