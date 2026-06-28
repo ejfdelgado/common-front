@@ -7,8 +7,8 @@ import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from "./CubeController";
 
 const MAX_LIFE = 5;
 
-const FAR_AMOUNT_X = 0;
-const FAR_AMOUNT_Y = 0;
+const FAR_AMOUNT_X = 1;
+const FAR_AMOUNT_Y = 1;
 
 const X_MIN = 0.5;
 const X_MAX = 0.5 + 1 * FAR_AMOUNT_X;

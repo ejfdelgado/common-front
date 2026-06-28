@@ -1,0 +1,103 @@
+{
+    "defaultMode": "mode03",
+    "config": {
+        "useLivePeer": true,
+        "useVoice": false
+    },
+    "modes": {
+        "mode03": {
+            "menu": {
+                "name": "Colombia",
+                "icon": "🙉"
+            },
+            "mirror": true,
+            "defaultPosition": {
+                "positionX": 0,
+                "positionY": 0,
+                "positionZ": 0,
+                "rotationY": 0
+            },
+            "defaultCameraState": {
+                "near": 0.1,
+                "far": 1000,
+                "fov": 30,
+                "lookAt": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                "position": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 5
+                }
+            },
+            "defaultSenario": "scenario01",
+            "scenarios": {
+                "scenario01": {
+                    "useComposer": true,
+                    "background": {
+                        "color": {
+                            "r": 0.5,
+                            "g": 1,
+                            "b": 0.5
+                        }
+                    },
+                    "characters": [],
+                    "meshes": [],
+                    "steps": [
+                        {
+                            "label": "¿En qué región de Colombia vive el Tití Cabeciblanco, un monito que está en peligro de extinción?",
+                            "options": [
+                                {
+                                    "points": 0,
+                                    "label": "El Desierto de la Guajira",
+                                    "answer": "Estuviste cerca. Aunque está en el norte, el Titi necesita bosques tropicales con árboles y no zonas desérticas."
+                                },
+                                {
+                                    "points": 1,
+                                    "label": "La Costa Caribe",
+                                    "answer": "Sí, muy bien! este pequeño primate es endémico del Caribe colombiano y su hábitat se ha reducido mucho por la deforestación."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "Los Nevados andinos",
+                                    "answer": "La próxima vez lo harás mejor. El clima de los nevados es demasiado frío para este monito que prefiere el calor del bosque seco tropical."
+                                },
+                                {
+                                    "points": 0,
+                                    "label": "La Selva amazónica",
+                                    "answer": "Estás un poco lejos. En el Amazonas viven muchos monos, pero el Tití Cabeciblanco solo se encuentra en el noroeste de Colombia, en la Costa Caribe."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "controllers": [
+                {
+                    "id": "ComparableController",
+                    "params": {}
+                },
+                {
+                    "id": "Stand2dController",
+                    "params": {}
+                },
+                {
+                    "id": "CubeController",
+                    "params": {
+                        "enabled": false
+                    }
+                },
+                {
+                    "id": "SoundFeedbackController",
+                    "params": {}
+                },
+                {
+                    "id": "QuestionaireController",
+                    "params": {}
+                }
+            ]
+        }
+    }
+}
