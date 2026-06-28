@@ -81,6 +81,9 @@ export class QuestionaireController extends SceneControllerAbstract {
             this.steps.forEach((step) => {
                 shuffleInPlace(step.options);
             });
+            const { promise } = await ModuloSonido.play('/assets/sounds/tropical_fade_out.mp3', false);
+            await this.setHudValue("top", "Juega y aprende de nuestro país", false);
+            await promise;
         }
 
         const actualStep = this.steps[this.currentStep];

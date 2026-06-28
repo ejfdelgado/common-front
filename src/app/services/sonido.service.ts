@@ -65,7 +65,15 @@ export class ModuloSonido {
 		ModuloSonido.sincId = id;
 	}
 
-	static async play(llave: string, loop: boolean = false, volume: number = 1, startMillis: number | null = 0): Promise<HTMLAudioElement> {
+	static async play(
+		llave: string,
+		loop: boolean = false,
+		volume: number = 1,
+		startMillis: number | null = 0,
+	): Promise<{
+		ref: HTMLAudioElement,
+		promise: Promise<void>,
+	}> {
 		let ref: HTMLAudioElement | null = null;
 		if (llave in ModuloSonido.sonidos) {
 			ref = ModuloSonido.sonidos[llave];
@@ -108,7 +116,12 @@ export class ModuloSonido {
 				clone.play();
 			}
 		}
-		return ref;
+		const promise = new Promise<void>((resolve) => {
+			ref.addEventListener('ended', () => {
+				resolve();
+			});
+		});
+		return { ref, promise };
 	};
 
 	static stop(llave: string) {

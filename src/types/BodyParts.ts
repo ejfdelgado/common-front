@@ -1,5 +1,10 @@
 import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 
+/**
+ * Body: https://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker
+ * Hands: 
+ */
+
 export enum AvatarBoneEnum {
     pelvis = "a",
     pelvis_l = "b",

@@ -244,12 +244,13 @@ export class Practicesong extends CommonSpeech {
     this.clearLastTimeout();
     const promise = this.indicatorSrv.start();
 
-    this.audioRef = await ModuloSonido.play(
+    const { ref } = await ModuloSonido.play(
       ROOT_PATH + this.config.sound,
       false,
       this.getCurrentVolume(),
       startingPoint
     );
+    this.audioRef = ref;
     promise.done();
     this.isPlaying = true;
     this.cdr.detectChanges();
