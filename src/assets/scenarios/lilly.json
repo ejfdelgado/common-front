@@ -42,7 +42,7 @@
                     "characters": [],
                     "meshes": [],
                     "stepsConfig": {
-                        "maxQuestions": 20,
+                        "maxQuestions": 5,
                         "introTitle": "<h2>Juega 🕹️ y aprende 🤓</br>de nuestro país 🇨🇴</h2>",
                         "winLabel": "<h2>¡Has ganado!</br>⭐ Tú sabes el valor de nuestro país 🎉</h2>",
                         "looseLabel": "<h2>Reintenta más tarde 🥀</h2>"

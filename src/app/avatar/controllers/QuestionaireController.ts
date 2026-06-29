@@ -106,7 +106,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
         const actualStep = this.steps[this.currentStep];
 
-        await this.setHudValue("top", actualStep.label, true);
+        await this.setHudValue("top", `Pregunta ${this.currentStep + 1} de ${this.maxQuestions}.` + actualStep.label, true);
         if (!this.isPlaying) { return; }
 
         const LETTERS: LettersConfig[] = [
@@ -189,6 +189,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     async evaluateAnswer(choice: string) {
         this.hideAllCubes();
+        this.enableCube("CUBE_" + choice + "_ON" as ENABLE_CUBE_TYPE, {});
         const op = this.optionsMap[choice];
         if (!op) {
             console.log(`No option for choice ${choice}`);

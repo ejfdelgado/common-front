@@ -117,9 +117,11 @@ export class ModuloSonido {
 			}
 		}
 		const promise = new Promise<void>((resolve) => {
-			ref.addEventListener('ended', () => {
+			const endFun = () => {
+				ref.removeEventListener('ended', endFun);
 				resolve();
-			});
+			};
+			ref.addEventListener('ended', endFun);
 		});
 		return { ref, promise };
 	};
