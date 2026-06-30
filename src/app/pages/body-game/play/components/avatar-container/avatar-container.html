@@ -18,37 +18,48 @@
     </div>
     <div class="hud_scenario_labels no_mouse no_select">
         @if (hasText(hudData['top'])) {
-        <p class="scenario_step_label scenario_step_label_top black_font black_subtitle" [innerHTML]="hudData['top']"></p>
+        <p class="scenario_step_label scenario_step_label_top black_font black_subtitle" [innerHTML]="hudData['top']">
+        </p>
         }
         <div class="side_labels">
             <div class="scenario_step_general">
                 @if (hasText(hudData['left'])) {
-                <p class="scenario_step_left_label black_font black_subtitle" [innerHTML]="hudData['left']"></p>
+                <div>
+                    <p class="scenario_step_left_label black_font black_subtitle" [innerHTML]="hudData['left']"></p>
+                </div>
                 }
             </div>
             <div class="scenario_step_general">
                 @if (hasText(hudData['right'])) {
-                <p class="scenario_step_right_label black_font black_subtitle" [innerHTML]="hudData['right']">
-                </p>
+                <div>
+                    <p class="scenario_step_right_label black_font black_subtitle" [innerHTML]="hudData['right']">
+                    </p>
+                </div>
                 }
             </div>
         </div>
         <div class="side_labels side_labels_bottom">
             <div class="scenario_step_general">
                 @if (hasText(hudData['left_bottom'])) {
-                <p class="scenario_step_left_label black_font black_subtitle" [innerHTML]="hudData['left_bottom']">
-                </p>
+                <div>
+                    <p class="scenario_step_left_label black_font black_subtitle" [innerHTML]="hudData['left_bottom']">
+                    </p>
+                </div>
                 }
             </div>
             <div class="scenario_step_general">
                 @if (hasText(hudData['right_bottom'])) {
-                <p class="scenario_step_right_label black_font black_subtitle" [innerHTML]="hudData['right_bottom']">
-                </p>
+                <div>
+                    <p class="scenario_step_right_label black_font black_subtitle"
+                        [innerHTML]="hudData['right_bottom']">
+                    </p>
+                </div>
                 }
             </div>
         </div>
         @if (hasText(hudData['bottom'])) {
-        <p class="scenario_step_label scenario_step_label_bottom black_font black_subtitle" [innerHTML]="hudData['bottom']"></p>
+        <p class="scenario_step_label scenario_step_label_bottom black_font black_subtitle"
+            [innerHTML]="hudData['bottom']"></p>
         }
     </div>
 </div>
