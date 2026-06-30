@@ -38,6 +38,7 @@ import { ArmsPointerController } from './controllers/ArmsPointerController';
 import { QuestionaireController } from './controllers/QuestionaireController';
 import { SpeechSynthesisService } from '../services/speechsynthesis.service';
 import { removeEmojis } from '../tools/StringUtils';
+import { html2text } from '../tools/HtmlUtil';
 
 export abstract class ComponentWithAvatar
     extends CommonComponent
@@ -106,6 +107,7 @@ export abstract class ComponentWithAvatar
         this.hudData[data.key] = data.value;
         if (typeof data.value == "string") {
             this.hudData[data.key] = this.sanitizer.bypassSecurityTrustHtml(data.value);
+            this.cdr.detectChanges();
         }
         if (data.speak === true) {
             let lang = "es-ES";
@@ -114,7 +116,7 @@ export abstract class ComponentWithAvatar
             }
             let text = `${data.value}`;
             text = removeEmojis(text);
-            //text = html2text(text);
+            text = html2text(text);
             await this.speechSrv.speak(text, lang);
         }
     }

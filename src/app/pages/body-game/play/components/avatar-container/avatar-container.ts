@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecognizedCommand } from '@services/voicerecognition.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +24,7 @@ import { CursorData, CursorPointerGUI, CursorStateData, HudDisplayData, Point3D 
 import { P2PService } from '@services/p2p.service';
 import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
+import { html2text } from 'src/app/tools/HtmlUtil';
 
 
 @Component({
@@ -179,5 +180,14 @@ export class AvatarContainer
     } else {
       cursorGUI.image = "/assets/icons/eye.svg";
     }
+  }
+
+  hasText(val: any) {
+    const innerText = (val as any)['changingThisBreaksApplicationSecurity'];
+    if (!(typeof innerText == "string")) {
+      return false;
+    }
+    const rawText = html2text(innerText);
+    return (typeof rawText == "string") && rawText.trim().length > 0;
   }
 }

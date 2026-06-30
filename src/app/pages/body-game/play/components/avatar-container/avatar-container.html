@@ -13,21 +13,42 @@
     <div class="hud_score white_subtitle">
         <app-rating [onImageUrl]="'./assets/icons/heart.svg'" [offImageUrl]="'./assets/icons/heart_off.svg'"
             [ngModel]="hudData['life']" [label]="''"></app-rating>
-        <span class="score"><img class="points_icon" src="./assets/icons/coffe.svg"> <strong [innerHTML]="hudData['score']"></strong></span>
+        <span class="score"><img class="points_icon" src="./assets/icons/coffe.svg"> <strong
+                [innerHTML]="hudData['score']"></strong></span>
     </div>
     <div class="hud_scenario_labels no_mouse no_select">
-        <p class="scenario_step_label scenario_step_label_top white_subtitle" [innerHTML]="hudData['top']"></p>
+        @if (hasText(hudData['top'])) {
+        <p class="scenario_step_label scenario_step_label_top black_font black_subtitle" [innerHTML]="hudData['top']"></p>
+        }
         <div class="side_labels">
-            <p class="scenario_step_left_label white_subtitle scenario_step_general" [innerHTML]="hudData['left']"></p>
-            <p class="scenario_step_right_label white_subtitle scenario_step_general" [innerHTML]="hudData['right']">
-            </p>
+            <div class="scenario_step_general">
+                @if (hasText(hudData['left'])) {
+                <p class="scenario_step_left_label black_font black_subtitle" [innerHTML]="hudData['left']"></p>
+                }
+            </div>
+            <div class="scenario_step_general">
+                @if (hasText(hudData['right'])) {
+                <p class="scenario_step_right_label black_font black_subtitle" [innerHTML]="hudData['right']">
+                </p>
+                }
+            </div>
         </div>
         <div class="side_labels side_labels_bottom">
-            <p class="scenario_step_left_label white_subtitle scenario_step_general"
-                [innerHTML]="hudData['left_bottom']"></p>
-            <p class="scenario_step_right_label white_subtitle scenario_step_general"
-                [innerHTML]="hudData['right_bottom']"></p>
+            <div class="scenario_step_general">
+                @if (hasText(hudData['left_bottom'])) {
+                <p class="scenario_step_left_label black_font black_subtitle" [innerHTML]="hudData['left_bottom']">
+                </p>
+                }
+            </div>
+            <div class="scenario_step_general">
+                @if (hasText(hudData['right_bottom'])) {
+                <p class="scenario_step_right_label black_font black_subtitle" [innerHTML]="hudData['right_bottom']">
+                </p>
+                }
+            </div>
         </div>
-        <p class="scenario_step_label scenario_step_label_bottom white_subtitle" [innerHTML]="hudData['bottom']"></p>
+        @if (hasText(hudData['bottom'])) {
+        <p class="scenario_step_label scenario_step_label_bottom black_font black_subtitle" [innerHTML]="hudData['bottom']"></p>
+        }
     </div>
 </div>
