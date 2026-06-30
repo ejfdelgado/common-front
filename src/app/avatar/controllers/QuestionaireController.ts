@@ -106,7 +106,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
         const actualStep = this.steps[this.currentStep];
 
-        await this.setHudValue("top", `Pregunta ${this.currentStep + 1} de ${this.maxQuestions}.` + actualStep.label, true);
+        await this.setHudValue("top", `Pregunta ${this.currentStep + 1} de ${this.maxQuestions}.</br>` + actualStep.label, true);
         if (!this.isPlaying) { return; }
 
         const LETTERS: LettersConfig[] = [
