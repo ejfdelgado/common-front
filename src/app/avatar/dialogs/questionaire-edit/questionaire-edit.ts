@@ -71,18 +71,29 @@ export class QuestionaireEditComponent {
   }
 
   matchesSearch(stepIndex: number): boolean {
-    const query = this.searchControl.value?.trim().toLowerCase();
-    if (!query) {
+    const query = this.searchControl.value;
+    if (!query?.trim()) {
       return true;
     }
     const step = this.steps.at(stepIndex).value;
-    if ((step.label ?? '').toLowerCase().includes(query)) {
+    if (this.textIncludes(step.label, query)) {
       return true;
     }
     return (step.options ?? []).some((option: GameStepOption) =>
-      (option.label ?? '').toLowerCase().includes(query) ||
-      (option.answer ?? '').toLowerCase().includes(query)
+      this.textIncludes(option.label, query) || this.textIncludes(option.answer, query)
     );
+  }
+
+  private textIncludes(haystack?: string | null, needle?: string | null): boolean {
+    return this.normalizeText(haystack).includes(this.normalizeText(needle));
+  }
+
+  private normalizeText(value?: string | null): string {
+    return (value ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
   hasVisibleSteps(): boolean {
