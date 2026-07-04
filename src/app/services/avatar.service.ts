@@ -4,6 +4,7 @@ import { IndicatorService } from "./indicator.service";
 import { GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
 import { firstValueFrom } from "rxjs";
 import { sleep } from "../tools/rxjsUtils";
+import { MatDialog } from "@angular/material/dialog";
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +13,7 @@ export class AvatarService {
     constructor(
         private http: HttpClient,
         private indicatorSrv: IndicatorService,
+        public dialog: MatDialog,
     ) { }
 
     async editMode(mode: GameMode) {
