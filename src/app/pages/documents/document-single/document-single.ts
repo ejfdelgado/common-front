@@ -141,6 +141,7 @@ export class DocumentSingle extends AuthenticatedComponent implements OnInit {
       if (temp) {
         this.collection = temp as BasicDataType;
         const field1 = (this.fields[0] as FieldJSONDataType);
+        // secret is just a boolean
         field1.json.secret = (this.collection as any).secret;
         const field2 = (field1.json.fields[0] as MDDataType);
         const title = this.collection.title + " - " + epochTo(this.collection.updated);

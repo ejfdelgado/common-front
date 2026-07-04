@@ -4,6 +4,7 @@ import { DropDownOptionDataType } from "./ragTypes";
 export interface TemplateDetailDataType {
     template: string;
     secret?: boolean;
+    pass?: string;
 }
 
 export interface FieldDataType {

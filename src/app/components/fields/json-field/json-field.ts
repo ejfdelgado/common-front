@@ -37,6 +37,7 @@ import { ParamsService } from 'src/app/services/params.service';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { JSONDetailDataType } from 'types/fieldsTypes';
 import { UploadResponse } from 'types/file';
+import { ModalService } from 'src/app/services/modal.service';
 
 export type ComponentDataType = string | null;
 
@@ -86,6 +87,7 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
     public confSrv: ParamsService,
+    public modalSrv: ModalService,
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
   ) {
@@ -120,9 +122,10 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
         const encripted = await this.fileSrv.getRaw(getJSONUrl(this.value));
         const decrypted = await decryptSecret(
           pass,
-          encripted, 
+          encripted,
         );
         this.model = JSON.parse(decrypted);
+        this.config.pass = pass;
       } else {
         this.model = await this.fileSrv.getJSON(getJSONUrl(this.value));
       }
@@ -206,6 +209,13 @@ export class JsonField extends CommonComponent implements ControlValueAccessor, 
         let pass: string | undefined = undefined;
         if (isSecret) {
           pass = await this.askPasswordDialog();
+          if (typeof this.config.pass == "string" && this.config.pass.trim().length > 0) {
+            if (this.config.pass != pass) {
+              const errorMessage = "Password does not match";
+              await this.modalSrv.alert({ title: "Error", txt: errorMessage });
+              throw new Error(errorMessage);
+            }
+          }
         }
 
         const jsonString = JSON.stringify(this.model, null, 2);

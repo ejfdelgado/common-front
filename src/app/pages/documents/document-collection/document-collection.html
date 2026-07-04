@@ -8,10 +8,10 @@
                 <div class="container_grid_docs_found_scroll">
                     <div class="grid_docs_found">
                         @for(note of notes; track note.id) {
-                        <app-card-doc [config]="cardConfig" [model]="note"
-                            [user]="user" (createUpdate)="openDocument($event)" (delete)="deleteNote($event)"
-                            (events)="cardEvents($event)" (share)="localShare($event)" [imageType]="'thumbnail'"
-                            [actions]="[]"></app-card-doc>
+                        <app-card-doc [config]="cardConfig" [model]="note" [user]="user"
+                            (openDocument)="openDocument({'model': $event})" (createUpdate)="openDocument($event)"
+                            (delete)="deleteNote($event)" (events)="cardEvents($event)" (share)="localShare($event)"
+                            [imageType]="'thumbnail'" [actions]="[]"></app-card-doc>
                         }
                         <div class="see_more_parent" (click)="pageNotes(false)">
                             <p>Ver más</p>
