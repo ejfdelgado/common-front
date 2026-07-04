@@ -51,7 +51,7 @@ export class AvatarService {
     }
 
     async loadWorld(url: string): Promise<WorldAvatar> {
-        const read = await firstValueFrom(this.http.get("/assets/scenarios/lilly.json", {
+        const read = await firstValueFrom(this.http.get("/assets/scenarios/sangil.json", {
             responseType: "json",
         }));
         return read as any;

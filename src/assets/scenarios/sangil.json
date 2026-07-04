@@ -37,14 +37,16 @@
                 "scenario01": {
                     "useComposer": true,
                     "background": {
-                        "color": {
-                            "r": 0.5,
-                            "g": 1,
-                            "b": 0.5
-                        }
+                        "image": "./assets/img/default.jpeg"
                     },
                     "characters": [],
                     "meshes": [],
+                    "stepsConfig": {
+                        "maxQuestions": 10,
+                        "introTitle": "<h2>Hola, vamos a jugar!</h2>",
+                        "winLabel": "<h2>¡Has ganado! 🎉</h2>",
+                        "looseLabel": "<h2>Reintenta más tarde 🥀</h2>"
+                    },
                     "steps": [
                         {
                             "label": "¿Cuántos corazones tiene un pulpo?",

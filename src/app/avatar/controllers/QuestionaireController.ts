@@ -7,8 +7,8 @@ import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from "./CubeController";
 
 const MAX_LIFE = 5;
 
-const FAR_AMOUNT_X = 1;
-const FAR_AMOUNT_Y = 1;
+const FAR_AMOUNT_X = 0;
+const FAR_AMOUNT_Y = 0;
 
 const X_MIN = 0.5;
 const X_MAX = 0.5 + 1 * FAR_AMOUNT_X;
@@ -109,7 +109,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         await this.setHudValue("top", `Pregunta ${this.currentStep + 1} de ${this.maxQuestions}.</br>` + actualStep.label, true);
         if (!this.isPlaying) { return; }
 
-        const LETTERS: LettersConfig[] = [
+        let LETTERS: LettersConfig[] = [
             {
                 id: "A",
                 cube_id: "CUBE_A_ON",
@@ -151,6 +151,10 @@ export class QuestionaireController extends SceneControllerAbstract {
                 },
             },
         ];
+
+        LETTERS = LETTERS.filter((a) => {
+            return (["A", "B"].indexOf(a.id) >= 0);
+        });
 
         shuffleInPlace(LETTERS);
 
