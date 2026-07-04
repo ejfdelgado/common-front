@@ -5,6 +5,7 @@ import { GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytype
 import { firstValueFrom } from "rxjs";
 import { sleep } from "../tools/rxjsUtils";
 import { MatDialog } from "@angular/material/dialog";
+import { ModeEditComponent } from "../avatar/dialogs/mode-edit/mode-edit";
 
 @Injectable({
     providedIn: 'root',
@@ -17,8 +18,13 @@ export class AvatarService {
     ) { }
 
     async editMode(mode: GameMode) {
-        console.log(JSON.stringify(mode));
         // Open modal
+        const dialogRef = this.dialog.open(ModeEditComponent, {
+            width: '350px',
+            disableClose: true,
+            data: mode,
+        });
+        return firstValueFrom(dialogRef.afterClosed());
     }
 
     async loadWorld(url: string): Promise<WorldAvatar> {
