@@ -33,7 +33,7 @@ export class AvatarService {
     async editScenario(scenario: GameScenario) {
         // Open modal
         const dialogRef = this.dialog.open(QuestionaireEditComponent, {
-            width: '350px',
+            //width: '350px',
             disableClose: true,
             data: scenario,
         });

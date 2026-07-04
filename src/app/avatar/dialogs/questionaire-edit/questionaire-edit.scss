@@ -5,3 +5,58 @@
 .top_gap {
     padding-top: 15px;
 }
+
+.dialog_content {
+    min-width: 500px;
+    max-width: 90vw;
+}
+
+.tab_content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 4px;
+}
+
+.step_card {
+    margin-bottom: 16px;
+}
+
+.step_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .mat-mdc-card-header-text {
+        flex: 1;
+    }
+}
+
+.step_title {
+    flex: 1;
+}
+
+.options_label {
+    font-size: 0.85em;
+    opacity: 0.7;
+    margin: 8px 0 4px;
+}
+
+.option_row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+
+    .option_label {
+        flex: 2;
+    }
+
+    .option_points {
+        flex: 1;
+        min-width: 90px;
+    }
+
+    .option_answer {
+        flex: 2;
+    }
+}
