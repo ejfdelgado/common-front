@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { GameScenario } from 'src/types/WorldAvatar';
+import { AvatarModel } from 'src/types/WorldAvatar';
 
 @Component({
   selector: 'app-avatar-edit',
@@ -25,7 +25,7 @@ export class AvatarEditComponent {
 
   constructor(
     private dialogRef: MatDialogRef<AvatarEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: GameScenario
+    @Inject(MAT_DIALOG_DATA) public data: AvatarModel
   ) {
     console.log(JSON.stringify(data));
   }

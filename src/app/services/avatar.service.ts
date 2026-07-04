@@ -68,6 +68,9 @@ export class AvatarService {
                     },
                     modes: {
                         "mode00": {
+                            avatar: {
+                                meshPath: "",
+                            },
                             useHands: true,
                             menu: {
                                 name: "Wardrove",
