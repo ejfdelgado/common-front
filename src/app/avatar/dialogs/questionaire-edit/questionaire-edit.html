@@ -23,8 +23,17 @@
 
         <mat-tab label="Preguntas">
             <form [formGroup]="stepsForm" class="tab_content">
+
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Buscar pregunta</mat-label>
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input matInput [formControl]="searchControl"
+                        placeholder="Buscar por enunciado, texto de opción o respuesta...">
+                </mat-form-field>
+
                 <div formArrayName="steps">
                     @for (stepGroup of steps.controls; track stepGroup; let stepIndex = $index) {
+                    @if (matchesSearch(stepIndex)) {
                     <mat-card class="step_card" [formGroupName]="stepIndex">
                         <mat-card-header class="step_header">
                             <mat-card-title class="step_title">Pregunta {{ stepIndex + 1 }}</mat-card-title>
@@ -72,6 +81,10 @@
                             </button>
                         </mat-card-content>
                     </mat-card>
+                    }
+                    }
+                    @if (steps.controls.length > 0 && !hasVisibleSteps()) {
+                    <div class="empty_state">No se encontraron preguntas que coincidan con la búsqueda.</div>
                     }
                 </div>
 

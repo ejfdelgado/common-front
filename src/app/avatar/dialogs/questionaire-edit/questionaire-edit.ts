@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,6 +41,7 @@ export class QuestionaireEditComponent {
 
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
+  searchControl = new FormControl('');
 
   constructor(
     private fb: FormBuilder,
@@ -67,6 +68,25 @@ export class QuestionaireEditComponent {
 
   canRemoveOption(stepIndex: number): boolean {
     return this.getOptions(stepIndex).length > this.minOptions;
+  }
+
+  matchesSearch(stepIndex: number): boolean {
+    const query = this.searchControl.value?.trim().toLowerCase();
+    if (!query) {
+      return true;
+    }
+    const step = this.steps.at(stepIndex).value;
+    if ((step.label ?? '').toLowerCase().includes(query)) {
+      return true;
+    }
+    return (step.options ?? []).some((option: GameStepOption) =>
+      (option.label ?? '').toLowerCase().includes(query) ||
+      (option.answer ?? '').toLowerCase().includes(query)
+    );
+  }
+
+  hasVisibleSteps(): boolean {
+    return this.steps.controls.some((_, index) => this.matchesSearch(index));
   }
 
   addStep(): void {
