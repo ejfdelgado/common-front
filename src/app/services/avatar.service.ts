@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IndicatorService } from "./indicator.service";
-import { GameControllerEnum, WorldAvatar } from "@mytypes/WorldAvatar";
+import { GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
 import { firstValueFrom } from "rxjs";
 import { sleep } from "../tools/rxjsUtils";
 
@@ -13,6 +13,11 @@ export class AvatarService {
         private http: HttpClient,
         private indicatorSrv: IndicatorService,
     ) { }
+
+    async editMode(mode: GameMode) {
+        console.log(JSON.stringify(mode));
+        // Open modal
+    }
 
     async loadWorld(url: string): Promise<WorldAvatar> {
         const read = await firstValueFrom(this.http.get("/assets/scenarios/lilly.json", {
