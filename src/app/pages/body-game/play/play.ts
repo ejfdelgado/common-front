@@ -32,6 +32,7 @@ import { ModuloSonido } from '@services/sonido.service';
 import { CameraPickerDialogComponent } from '@components/fields/camera-picker/camera-picker-dialog';
 import { CameraDataType } from '@mytypes/CameraTypes';
 import { ConfigService } from '@services/config.service';
+import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
 
 const MODEL_NAME_PARENT = "room-private";
 
@@ -47,13 +48,12 @@ const MODEL_NAME_PARENT = "room-private";
   templateUrl: './play.html',
   styleUrl: './play.scss',
 })
-export class PlayComponent extends AuthenticatedComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild("tracker_component") trackerComponent!: ComponentP2P;
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };
-  menuOptions: MenuOptionType[] = [];
   room: RoomGameType | null = null;
   status: P2PStatus = { value: "offline" };
   p2pStatusSubscription: Subscription | null = null;
@@ -64,15 +64,17 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     public override authSrv: AuthService,
     public override cdr: ChangeDetectorRef,
     //
+    public override dialog: MatDialog,
+    public override configSrv: ConfigService,
+    //
     private uiNotificationSrv: UINotificationSrv,
-    private dialog: MatDialog,
     private firestoreSrv: FirestoreService,
     public sideMenuSrv: SideMenuService,
     private router: Router,
     public p2pSrv: P2PService,
-    public configSrv: ConfigService,
+
   ) {
-    super(sanitizer, fullScreenSrv, authSrv, cdr);
+    super(sanitizer, fullScreenSrv, authSrv, cdr, dialog, configSrv);
 
     this.p2pStatusSubscription = this.p2pSrv.status.subscribe((ev) => {
       this.status = ev;
@@ -195,33 +197,8 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
     });
   }
 
-  openCameraPicker() {
-    const ref = this.dialog.open(CameraPickerDialogComponent, {
-      data: {
-        currentCamera: this.configSrv.getCamera(),
-      },
-      disableClose: true,
-      width: '480px',
-    });
-
-    ref.afterClosed().subscribe((result: CameraDataType | null) => {
-      if (result) {
-        this.configSrv.setCamera(result);
-      }
-    });
-  }
-
-  emitToc() {
-    ModuloSonido.play("/assets/sounds/message.mp3");
-  }
-
-  useLanguage(name: string) {
-    const lang = this.trackerComponent.getLang(name);
-    if (lang) {
-      this.trackerComponent.defineLanguage(lang);
-      this.emitToc();
-      this.updateCurrentLang();
-    }
+  override getTrackerComponent(): ComponentP2P {
+    return this.trackerComponent;
   }
 
   updateLogedMenuOptions() {
@@ -232,19 +209,6 @@ export class PlayComponent extends AuthenticatedComponent implements OnInit, OnD
       .forEach((e) => {
         e.visible = visible && !!this.room;
       });;
-  }
-
-  updateCurrentLang() {
-    const lang = this.trackerComponent.currentLang;
-    const children = this.menuOptions
-      .find(a => a.name == "langs")?.children;
-    if (!children) {
-      return;
-    }
-    children.filter(a => a.name && ["es-ES", "en-US", "fr-FR"].indexOf(a.name) >= 0)
-      .forEach((a) => {
-        a.inUse = a.name == lang;
-      });
   }
 
   async ngAfterViewInit(): Promise<void> {
