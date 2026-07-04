@@ -7,6 +7,8 @@
         "voice_lang": "Idioma de voz",
         "back_rooms": "Regresar a salón de juegos",
         "end_call": "Colgar llamada",
-        "edit": "Editar"
+        "editWorld": "Editar mundo",
+        "editScenario": "Editar escenario",
+        "editAvatar": "Editar personaje"
     }
 }

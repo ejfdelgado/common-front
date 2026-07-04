@@ -1,21 +1,44 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IndicatorService } from "./indicator.service";
-import { GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
+import { AvatarModel, GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
 import { firstValueFrom } from "rxjs";
 import { sleep } from "../tools/rxjsUtils";
 import { MatDialog } from "@angular/material/dialog";
 import { ModeEditComponent } from "../avatar/dialogs/mode-edit/mode-edit";
+import { QuestionaireEditComponent } from "../avatar/dialogs/questionaire-edit/questionaire-edit";
+import { AvatarEditComponent } from "../avatar/dialogs/avatar-edit/avatar-edit";
 
 @Injectable({
     providedIn: 'root',
 })
 export class AvatarService {
+
     constructor(
         private http: HttpClient,
         private indicatorSrv: IndicatorService,
         public dialog: MatDialog,
     ) { }
+
+    async editAvatar(avatar: AvatarModel) {
+        // Open modal
+        const dialogRef = this.dialog.open(AvatarEditComponent, {
+            width: '350px',
+            disableClose: true,
+            data: avatar,
+        });
+        return firstValueFrom(dialogRef.afterClosed());
+    }
+
+    async editScenario(scenario: GameScenario) {
+        // Open modal
+        const dialogRef = this.dialog.open(QuestionaireEditComponent, {
+            width: '350px',
+            disableClose: true,
+            data: scenario,
+        });
+        return firstValueFrom(dialogRef.afterClosed());
+    }
 
     async editMode(mode: GameMode) {
         // Open modal

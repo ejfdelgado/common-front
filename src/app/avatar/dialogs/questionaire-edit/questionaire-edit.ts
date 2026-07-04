@@ -5,10 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { GameMode } from 'src/types/WorldAvatar';
+import { GameScenario } from 'src/types/WorldAvatar';
 
 @Component({
-  selector: 'app-mode-edit',
+  selector: 'app-questionaire-edit',
   standalone: true,
   imports: [
     FormsModule,
@@ -18,14 +18,14 @@ import { GameMode } from 'src/types/WorldAvatar';
     MatInputModule,
     MatIconModule,
   ],
-  templateUrl: './mode-edit.html',
-  styleUrl: './mode-edit.scss',
+  templateUrl: './questionaire-edit.html',
+  styleUrl: './questionaire-edit.scss',
 })
-export class ModeEditComponent {
+export class QuestionaireEditComponent {
 
   constructor(
-    private dialogRef: MatDialogRef<ModeEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: GameMode
+    private dialogRef: MatDialogRef<QuestionaireEditComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: GameScenario
   ) {
     console.log(JSON.stringify(data));
   }

@@ -25,6 +25,7 @@ export interface GameMode {
     scenarios: { [key: string]: GameScenario };
     characters?: CharacterSpec[];
     useHands?: boolean;
+    avatar?: AvatarModel;
 }
 
 export interface CharacterSpec {
@@ -113,4 +114,9 @@ export interface GameCharacter {
     meshes: GameMesh;
     defaultAnimation: string;
     animations: { [key: string]: GameAnimation };
+}
+
+export interface AvatarModel {
+    meshPath?: string;
+    texturePath?: string;
 }

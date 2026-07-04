@@ -9,10 +9,9 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AuthenticatedComponent } from '@components/authenticated.component';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
-import { MenuOptionType, StatusBarConfigType } from '@mytypes/StatusBar';
+import { StatusBarConfigType } from '@mytypes/StatusBar';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTracker } from './components/body-tracker/body-tracker';
@@ -29,8 +28,6 @@ import { P2PService, P2PStatus } from '@services/p2p.service';
 import { Subscription } from 'rxjs';
 import { ComponentP2P } from '@avatar/ComponentP2P';
 import { ModuloSonido } from '@services/sonido.service';
-import { CameraPickerDialogComponent } from '@components/fields/camera-picker/camera-picker-dialog';
-import { CameraDataType } from '@mytypes/CameraTypes';
 import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
 
@@ -127,15 +124,39 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.edit",
+          label: "menu.editWorld",
           translateFolder: "avatar",
-          name: "edit",
+          name: "editWorld",
           isPlainIcon: true,
           icon: "✏️",
           visible: true,
           children: [],
           callback: () => {
             this.trackerComponent.editMode();
+          },
+        },
+        {
+          label: "menu.editScenario",
+          translateFolder: "avatar",
+          name: "editScenario",
+          isPlainIcon: true,
+          icon: "📑",
+          visible: true,
+          children: [],
+          callback: () => {
+            this.trackerComponent.editScenario();
+          },
+        },
+        {
+          label: "menu.editAvatar",
+          translateFolder: "avatar",
+          name: "editAvatar",
+          isPlainIcon: true,
+          icon: "🎭",
+          visible: true,
+          children: [],
+          callback: () => {
+            this.trackerComponent.editAvatar();
           },
         },
         {
