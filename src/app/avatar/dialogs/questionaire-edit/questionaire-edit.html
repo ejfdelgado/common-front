@@ -29,6 +29,12 @@
                     <mat-icon matPrefix>search</mat-icon>
                     <input matInput [formControl]="searchControl"
                         placeholder="Buscar por enunciado, texto de opción o respuesta...">
+                    @if (searchControl.value) {
+                    <button mat-icon-button matSuffix type="button" matTooltip="Limpiar búsqueda"
+                        (click)="clearSearch()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    }
                 </mat-form-field>
 
                 <div formArrayName="steps">

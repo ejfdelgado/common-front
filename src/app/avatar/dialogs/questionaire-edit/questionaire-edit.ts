@@ -84,6 +84,10 @@ export class QuestionaireEditComponent {
     );
   }
 
+  clearSearch(): void {
+    this.searchControl.setValue('');
+  }
+
   private textIncludes(haystack?: string | null, needle?: string | null): boolean {
     return this.normalizeText(haystack).includes(this.normalizeText(needle));
   }
