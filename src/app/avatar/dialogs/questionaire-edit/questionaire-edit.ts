@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GameScenario, GameStep, GameStepOption, StepsConfig } from 'src/types/WorldAvatar';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
+import { RatingComponent } from 'src/app/components/fields/rating/rating';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -28,6 +29,7 @@ const MAX_OPTIONS = 4;
     MatCardModule,
     MatTooltipModule,
     EditableInput,
+    RatingComponent,
   ],
   templateUrl: './questionaire-edit.html',
   styleUrl: './questionaire-edit.scss',

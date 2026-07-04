@@ -35,10 +35,8 @@
                         </mat-card-header>
 
                         <mat-card-content>
-                            <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Enunciado</mat-label>
-                                <input matInput formControlName="label">
-                            </mat-form-field>
+                            <app-editable-input [discrete]="false" [formControlName]="'label'" [label]="'Enunciado'"
+                                [placeholder]="'...'" [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
                             <div class="options_label">Opciones ({{ getOptions(stepIndex).length }}/{{ maxOptions }})
                             </div>
@@ -47,20 +45,16 @@
                                 @for (optionGroup of getOptions(stepIndex).controls; track optionGroup; let optionIndex
                                 = $index) {
                                 <div class="option_row" [formGroupName]="optionIndex">
-                                    <mat-form-field appearance="outline" class="option_label">
-                                        <mat-label>Texto</mat-label>
-                                        <input matInput formControlName="label">
-                                    </mat-form-field>
 
-                                    <mat-form-field appearance="outline" class="option_points">
-                                        <mat-label>Puntos</mat-label>
-                                        <input matInput type="number" formControlName="points">
-                                    </mat-form-field>
+                                    <app-editable-input class="option_label" [discrete]="false" [formControlName]="'label'" [label]="'Texto'"
+                                        [placeholder]="'...'" [maxHeight]="'6em'"
+                                        [minHeight]="'6em'"></app-editable-input>
 
-                                    <mat-form-field appearance="outline" class="option_answer">
-                                        <mat-label>Respuesta</mat-label>
-                                        <input matInput formControlName="answer">
-                                    </mat-form-field>
+                                    <app-editable-input class="option_answer" [discrete]="false" [formControlName]="'answer'"
+                                        [label]="'Respuesta'" [placeholder]="'...'" [maxHeight]="'6em'"
+                                        [minHeight]="'6em'"></app-editable-input>
+
+                                    <app-rating class="option_points" formControlName="points"></app-rating>
 
                                     <button mat-icon-button color="warn" type="button" matTooltip="Eliminar opción"
                                         [disabled]="!canRemoveOption(stepIndex)"
