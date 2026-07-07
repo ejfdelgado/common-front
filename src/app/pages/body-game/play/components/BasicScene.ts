@@ -65,6 +65,7 @@ export class BasicScene extends SceneWithComposer {
       if (!this.camera || !this.renderer || !this.orbitals) {
         return;
       }
+      // *** This is the main character ***
       await this.addAvatar(
         ROOT_PATH + DEFAULT_AVATAR_MESH,
         this.camera, this.renderer, this.orbitals);

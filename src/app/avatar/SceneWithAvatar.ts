@@ -195,6 +195,10 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                     if (object != null) {
                         if (autoAdd) {
                             //inspectAvatarObject(object);
+                            const old = this.getObjectByName(item.name);
+                            if (old) {
+                                this.remove(old);
+                            }
                             this.add(object);
                         }
                     }

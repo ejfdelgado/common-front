@@ -4,7 +4,8 @@ import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 
 // squeleton2.jpg
 // avatar005.glb
-export const DEFAULT_AVATAR_MESH = "tigresa009_1.glb";
+// tigresa009_1.glb
+export const DEFAULT_AVATAR_MESH = "esqueleto009_1.glb";
 
 export const ROOT_PATH = "/assets/models/";
 

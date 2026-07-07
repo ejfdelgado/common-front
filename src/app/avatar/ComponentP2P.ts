@@ -83,6 +83,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                             return;
                         }
                         const autoAdd: boolean = true;
+                        // *** This is the another peer ***
                         const avatar = await avatarContainer.scene.addModel({
                             name: name,
                             url: ROOT_PATH + DEFAULT_AVATAR_MESH,

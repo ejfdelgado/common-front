@@ -5,6 +5,14 @@ import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
  * Hands: 
  */
 
+/*
+* Blender:
+* Select 1. Mesh, then 2. Skeleton, then Ctrl + P -> Armature Deform -> With Automatic Weights
+* Then to refine:
+* Change Object Mode to Weight Paint, then select the Data (the triangle in the right panel)
+* Select every bone and redefine with a brush
+*/
+
 export enum AvatarBoneEnum {
     pelvis = "a",
     pelvis_l = "b",

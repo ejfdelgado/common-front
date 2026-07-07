@@ -43,6 +43,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     startingAnimationTime: number = Date.now();
     terrainMeshes: THREE.Mesh[] = [];
     private terrainGrid: TerrainGrid | null = null;
+    characterList: CharacterSpec[] = [];
 
     constructor(
         bounds: DOMRect,
@@ -133,9 +134,9 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         }
     }
 
-    characterList: CharacterSpec[] = [];
     async loadCharacter(detail: CharacterSpec) {
         const autoAdd: boolean = true;
+        // *** This is a character ***
         await this.addModel({
             name: detail.name,
             url: ROOT_PATH + DEFAULT_AVATAR_MESH,
