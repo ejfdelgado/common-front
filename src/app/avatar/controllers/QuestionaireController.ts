@@ -94,7 +94,7 @@ export class QuestionaireController extends SceneControllerAbstract {
             if (stepsConfig?.introTitle) {
                 introTitle = stepsConfig.introTitle;
             }
-            await this.setHudValue("top", introTitle, false);
+            await this.setHudValue("top", `<h2>${introTitle}</h2>`, false);
             await promise;
         }
 
@@ -229,7 +229,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.looseLabel) {
             label = this.scenario.stepsConfig.looseLabel;
         }
-        await this.setHudValue("bottom", label, false);
+        await this.setHudValue("bottom", `<h2>${label}</h2>`, false);
     }
 
     async youWin() {
@@ -239,7 +239,7 @@ export class QuestionaireController extends SceneControllerAbstract {
             label = this.scenario.stepsConfig.winLabel;
         }
         const { promise } = await ModuloSonido.play('/assets/sounds/tropical_fade_in.mp3', false);
-        await this.setHudValue("top", label, false);
+        await this.setHudValue("top", `<h2>${label}</h2>`, false);
         await promise;
     }
 

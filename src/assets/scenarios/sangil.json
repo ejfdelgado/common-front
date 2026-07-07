@@ -43,9 +43,9 @@
                     "meshes": [],
                     "stepsConfig": {
                         "maxQuestions": 10,
-                        "introTitle": "<h2>Hola, vamos a jugar!</h2>",
-                        "winLabel": "<h2>¡Has ganado! 🎉</h2>",
-                        "looseLabel": "<h2>Reintenta más tarde 🥀</h2>"
+                        "introTitle": "Hola, vamos a jugar!",
+                        "winLabel": "¡Has ganado! 🎉",
+                        "looseLabel": "Reintenta más tarde 🥀"
                     },
                     "steps": [
                         {
