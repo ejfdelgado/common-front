@@ -15,13 +15,11 @@ import { StatusBarConfigType } from '@mytypes/StatusBar';
 import { AuthService } from '@services/auth.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { BodyTracker } from './components/body-tracker/body-tracker';
-import { RoomGameType } from '@mytypes/ActionGameTypes';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { FirestoreService } from '@services/firestore.service';
-import { AssistantDataType } from '@mytypes/ragTypes';
 import { SideMenuService } from '@services/side-menu.service';
 import { Router } from '@angular/router';
 import { P2PService, P2PStatus } from '@services/p2p.service';
@@ -30,8 +28,9 @@ import { ComponentP2P } from '@avatar/ComponentP2P';
 import { ModuloSonido } from '@services/sonido.service';
 import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
+import { AvatarStoredDataType, WorldAvatar } from 'src/types/WorldAvatar';
 
-const MODEL_NAME_PARENT = "room-private";
+const MODEL_NAME_PARENT = "room-public";
 
 @Component({
   selector: 'app-play',
@@ -51,7 +50,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };
-  room: RoomGameType | null = null;
+  room: AvatarStoredDataType | null = null;
   status: P2PStatus = { value: "offline" };
   p2pStatusSubscription: Subscription | null = null;
 
@@ -266,36 +265,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         this.trackerComponent.setUser(null);
       }
     });
-    const world = await this.trackerComponent.loadWorld("");
-    if (world) {
-      const scenariosMenu = this.menuOptions
-        .find(a => a.name && ['scenarios'].indexOf(a.name) >= 0);
-      if (scenariosMenu) {
-        scenariosMenu.children = [];
-        const modeKeys = Object.keys(world.modes);
-        scenariosMenu.children = modeKeys.sort((a, b) => b.localeCompare(a)).map(name => {
-          const reference = world.modes[name];
-          return {
-            label: reference.menu.name,
-            isPlainIcon: true,
-            icon: reference.menu.icon,
-            name: name,
-            children: [],
-            callback: async () => {
-              await this.trackerComponent.applyMode(name, true);
-              this.emitToc();;
-              scenariosMenu.children?.forEach(m => {
-                m.inUse = m.name === name;
-              });
-            },
-          }
-        });
-        scenariosMenu.children?.forEach(m => {
-          m.inUse = m.name === world.defaultMode;
-        });
-        this.cdr.detectChanges();
-      }
-    }
+
   }
 
   async openPermissions() {
@@ -328,13 +298,28 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     if (col && id) {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
-        this.room = temp as AssistantDataType;
+        this.room = temp as AvatarStoredDataType;
         document.title = this.room.title;
+        this.localLoadWorld(this.room);
       } else {
         this.room = null;
       }
       this.trackerComponent.setRoomData(this.room);
       this.cdr.detectChanges();
+    }
+  }
+
+  public async writeStoredModel(data: WorldAvatar): Promise<boolean> {
+    try {
+      // Write into bucket
+
+      // Then update model on firestore
+      await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT, this.room, {
+        jsonModel: "",
+      } as any);
+      return true;
+    } catch (err) {
+      return false;
     }
   }
 

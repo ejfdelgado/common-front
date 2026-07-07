@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IndicatorService } from "./indicator.service";
-import { AvatarModel, GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
+import { AvatarModel, AvatarStoredDataType, GameControllerEnum, GameMode, GameScenario, WorldAvatar } from "@mytypes/WorldAvatar";
 import { firstValueFrom } from "rxjs";
 import { sleep } from "../tools/rxjsUtils";
 import { MatDialog } from "@angular/material/dialog";
@@ -50,7 +50,7 @@ export class AvatarService {
         return firstValueFrom(dialogRef.afterClosed());
     }
 
-    async loadWorld(url: string): Promise<WorldAvatar> {
+    async loadWorld(firestoreEntity: AvatarStoredDataType): Promise<WorldAvatar> {
         const read = await firstValueFrom(this.http.get("/assets/scenarios/sangil.json", {
             responseType: "json",
         }));

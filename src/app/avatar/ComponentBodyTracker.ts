@@ -25,6 +25,7 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import {
+    AvatarStoredDataType,
     GameMode,
     GameScenario,
     WorldAvatar,
@@ -476,10 +477,10 @@ export abstract class ComponentBodyTracker
         }
     }
 
-    public async loadWorld(url: string, defaultMode?: string, notifyPeers?: boolean): Promise<WorldAvatar> {
+    public async loadWorld(firestoreEntity: AvatarStoredDataType, defaultMode?: string, notifyPeers?: boolean): Promise<WorldAvatar> {
         const loading = this.indicatorSrv.start();
         // Eager start loadWorld
-        const promise = this.avatarSrv.loadWorld(url);
+        const promise = this.avatarSrv.loadWorld(firestoreEntity);
         try {
             await this.stopSafetly();
             // Resume loadWorld

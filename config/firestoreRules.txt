@@ -83,6 +83,9 @@ service cloud.firestore {
         allow read: if
         request.auth != null && request.auth.uid in resource.data.owners;
     }
+    match /pro-room-public/{document=**} {
+        allow read: if true;
+    }
     match /pro-pug/{document=**} {
         allow read: if true;
     }

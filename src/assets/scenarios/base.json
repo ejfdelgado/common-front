@@ -1,0 +1,82 @@
+{
+    "defaultMode": "mode03",
+    "config": {
+        "useLivePeer": true,
+        "useVoice": false
+    },
+    "modes": {
+        "mode03": {
+            "avatar": {
+                "meshPath": ""
+            },
+            "menu": {
+                "name": "Default",
+                "icon": "🙉"
+            },
+            "mirror": true,
+            "defaultPosition": {
+                "positionX": 0,
+                "positionY": 0,
+                "positionZ": 0,
+                "rotationY": 0
+            },
+            "defaultCameraState": {
+                "near": 0.1,
+                "far": 1000,
+                "fov": 30,
+                "lookAt": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                "position": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 5
+                }
+            },
+            "defaultSenario": "scenario01",
+            "scenarios": {
+                "scenario01": {
+                    "useComposer": true,
+                    "background": {
+                        "image": "./assets/img/default.jpeg"
+                    },
+                    "characters": [],
+                    "meshes": [],
+                    "stepsConfig": {
+                        "maxQuestions": 10,
+                        "introTitle": "Hola, vamos a jugar!",
+                        "winLabel": "¡Has ganado! 🎉",
+                        "looseLabel": "Reintenta más tarde 🥀"
+                    },
+                    "steps": []
+                }
+            },
+            "controllers": [
+                {
+                    "id": "ComparableController",
+                    "params": {}
+                },
+                {
+                    "id": "Stand2dController",
+                    "params": {}
+                },
+                {
+                    "id": "CubeController",
+                    "params": {
+                        "enabled": false
+                    }
+                },
+                {
+                    "id": "SoundFeedbackController",
+                    "params": {}
+                },
+                {
+                    "id": "QuestionaireController",
+                    "params": {}
+                }
+            ]
+        }
+    }
+}

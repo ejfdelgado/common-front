@@ -1,4 +1,5 @@
 import { AnimationSpecType, AvatarLocationState, Point3D } from "./BodyTypes";
+import { AssistantDataType } from "./ragTypes";
 
 // The intentatio is to persist this data
 export interface WorldAvatar {
@@ -119,4 +120,8 @@ export interface GameCharacter {
 export interface AvatarModel {
     meshPath?: string;
     texturePath?: string;
+}
+
+export interface AvatarStoredDataType extends AssistantDataType {
+    jsonModel?: string;
 }

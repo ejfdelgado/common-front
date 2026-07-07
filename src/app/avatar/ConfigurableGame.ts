@@ -10,14 +10,14 @@ import { CameraDataType } from "src/types/CameraTypes";
 import { ModuloSonido } from "../services/sonido.service";
 import { ComponentP2P } from "./ComponentP2P";
 import { MenuOptionType } from "src/types/StatusBar";
-import { AvatarModel, GameMode, GameScenario } from "src/types/WorldAvatar";
+import { AvatarModel, AvatarStoredDataType, GameMode, GameScenario, WorldAvatar } from "src/types/WorldAvatar";
 
 
 
 export abstract class ConfigurableGame extends AuthenticatedComponent {
 
     menuOptions: MenuOptionType[] = [];
-    
+
     constructor(
         public override sanitizer: DomSanitizer,
         public override fullScreenSrv: FullscreenService,
@@ -75,15 +75,54 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         }
     }
 
+    async localLoadWorld(firestoreEntity: AvatarStoredDataType) {
+        const world = await this.getTrackerComponent().loadWorld(firestoreEntity);
+        if (world) {
+            const scenariosMenu = this.menuOptions
+                .find(a => a.name && ['scenarios'].indexOf(a.name) >= 0);
+            if (scenariosMenu) {
+                scenariosMenu.children = [];
+                const modeKeys = Object.keys(world.modes);
+                scenariosMenu.children = modeKeys.sort((a, b) => b.localeCompare(a)).map(name => {
+                    const reference = world.modes[name];
+                    return {
+                        label: reference.menu.name,
+                        isPlainIcon: true,
+                        icon: reference.menu.icon,
+                        name: name,
+                        children: [],
+                        callback: async () => {
+                            await this.getTrackerComponent().applyMode(name, true);
+                            this.emitToc();;
+                            scenariosMenu.children?.forEach(m => {
+                                m.inUse = m.name === name;
+                            });
+                        },
+                    }
+                });
+                scenariosMenu.children?.forEach(m => {
+                    m.inUse = m.name === world.defaultMode;
+                });
+                this.cdr.detectChanges();
+            }
+        }
+    }
+
+    public async getStoredModel(parentModel: AvatarStoredDataType): Promise<WorldAvatar | null> {
+        return null;
+    }
+
+    public abstract writeStoredModel(data: WorldAvatar): Promise<boolean>;
+
     async saveAndApplyScenario(data: GameScenario) {
-        
+
     }
 
     async saveAndApplyMode(data: GameMode) {
-        
+
     }
 
     async saveAndApplyAvatar(data: AvatarModel) {
-        
+
     }
 }

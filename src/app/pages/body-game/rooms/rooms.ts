@@ -18,7 +18,7 @@ import { IndicatorService } from '@services/indicator.service';
 import { ShareSrv } from '@services/share.service';
 import { Subscription } from 'rxjs';
 
-const MODEL_NAME = "room-private";
+const MODEL_NAME = "room-public";
 
 @Component({
   selector: 'app-rooms',
