@@ -183,7 +183,7 @@ export class QuestionaireEditComponent {
       })),
     }));
 
-    this.dialogRef.close(true);
+    this.dialogRef.close(this.data);
   }
 
   cancel(): void {

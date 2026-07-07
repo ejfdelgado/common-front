@@ -10,6 +10,7 @@ import { CameraDataType } from "src/types/CameraTypes";
 import { ModuloSonido } from "../services/sonido.service";
 import { ComponentP2P } from "./ComponentP2P";
 import { MenuOptionType } from "src/types/StatusBar";
+import { AvatarModel, GameMode, GameScenario } from "src/types/WorldAvatar";
 
 
 
@@ -72,5 +73,17 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
             this.emitToc();
             this.updateCurrentLang();
         }
+    }
+
+    async saveAndApplyScenario(data: GameScenario) {
+        
+    }
+
+    async saveAndApplyMode(data: GameMode) {
+        
+    }
+
+    async saveAndApplyAvatar(data: AvatarModel) {
+        
     }
 }

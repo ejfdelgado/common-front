@@ -20,32 +20,32 @@ export class AvatarService {
         public dialog: MatDialog,
     ) { }
 
-    async editAvatar(avatar: AvatarModel) {
+    async editAvatar(avatar: AvatarModel): Promise<AvatarModel | null> {
         // Open modal
         const dialogRef = this.dialog.open(AvatarEditComponent, {
             width: '350px',
             disableClose: true,
-            data: avatar,
+            data: JSON.parse(JSON.stringify(avatar)),
         });
         return firstValueFrom(dialogRef.afterClosed());
     }
 
-    async editScenario(scenario: GameScenario) {
+    async editScenario(scenario: GameScenario): Promise<GameScenario | null> {
         // Open modal
         const dialogRef = this.dialog.open(QuestionaireEditComponent, {
             //width: '350px',
             disableClose: true,
-            data: scenario,
+            data: JSON.parse(JSON.stringify(scenario)),
         });
         return firstValueFrom(dialogRef.afterClosed());
     }
 
-    async editMode(mode: GameMode) {
+    async editMode(mode: GameMode): Promise<GameMode | null> {
         // Open modal
         const dialogRef = this.dialog.open(ModeEditComponent, {
             width: '350px',
             disableClose: true,
-            data: mode,
+            data: JSON.parse(JSON.stringify(mode)),
         });
         return firstValueFrom(dialogRef.afterClosed());
     }

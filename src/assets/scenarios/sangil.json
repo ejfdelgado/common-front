@@ -6,6 +6,9 @@
     },
     "modes": {
         "mode03": {
+            "avatar": {
+                "meshPath": ""
+            },
             "menu": {
                 "name": "Hands",
                 "icon": "🙉"

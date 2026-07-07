@@ -169,8 +169,9 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
 
     public async editMode() {
         if (this.mode) {
-            this.avatarSrv.editMode(this.mode);
+            return this.avatarSrv.editMode(this.mode);
         }
+        return null;
     }
 
     public async editScenario() {
@@ -179,14 +180,16 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
             const defaultScenario = mode.defaultSenario;
             const scenario = mode.scenarios[defaultScenario];
             if (scenario) {
-                this.avatarSrv.editScenario(scenario);
+                return this.avatarSrv.editScenario(scenario);
             }
         }
+        return null;
     }
 
     public async editAvatar() {
         if (this.mode && this.mode.avatar) {
-            this.avatarSrv.editAvatar(this.mode.avatar);
+            return this.avatarSrv.editAvatar(this.mode.avatar);
         }
+        return null;
     }
 }

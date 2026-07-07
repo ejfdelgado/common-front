@@ -31,7 +31,7 @@ export class AvatarEditComponent {
   }
 
   save(): void {
-    this.dialogRef.close(true);
+    this.dialogRef.close(this.data);
   }
 
   cancel(): void {
