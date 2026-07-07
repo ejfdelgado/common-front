@@ -33,6 +33,8 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
 
     abstract getTrackerComponent(): ComponentP2P;
 
+    public abstract writeStoredModel(data: WorldAvatar): Promise<boolean>;
+
     openCameraPicker() {
         const ref = this.dialog.open(CameraPickerDialogComponent, {
             data: {
@@ -108,21 +110,21 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         }
     }
 
-    public async getStoredModel(parentModel: AvatarStoredDataType): Promise<WorldAvatar | null> {
-        return null;
-    }
-
-    public abstract writeStoredModel(data: WorldAvatar): Promise<boolean>;
-
     async saveAndApplyScenario(data: GameScenario) {
-
+        const tracker = this.getTrackerComponent();
+        await tracker.applyScenarioBeforeSave(data);
+        await this.writeStoredModel(tracker.world);
     }
 
     async saveAndApplyMode(data: GameMode) {
-
+        const tracker = this.getTrackerComponent();
+        await tracker.applyModeBeforeSave(data);
+        await this.writeStoredModel(tracker.world);
     }
 
     async saveAndApplyAvatar(data: AvatarModel) {
-
+        const tracker = this.getTrackerComponent();
+        await tracker.applyAvatarBeforeSave(data);
+        await this.writeStoredModel(tracker.world);
     }
 }

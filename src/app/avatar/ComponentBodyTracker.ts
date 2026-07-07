@@ -25,6 +25,7 @@ import { FullscreenService } from "@services/fullscreen.service";
 import { ComponentWithAvatar } from "./ComponentWithAvatar";
 import { AvatarService } from "@services/avatar.service";
 import {
+    AvatarModel,
     AvatarStoredDataType,
     GameMode,
     GameScenario,
@@ -597,5 +598,17 @@ export abstract class ComponentBodyTracker
 
         this.getAvatarContainer().events.emit({ name: "SCENE_LOADED" });
         //console.log("All loaded");
+    }
+
+    async applyScenarioBeforeSave(data: GameScenario) {
+        //
+    }
+
+    async applyModeBeforeSave(data: GameMode) {
+        //
+    }
+
+    async applyAvatarBeforeSave(data: AvatarModel) {
+        //
     }
 }

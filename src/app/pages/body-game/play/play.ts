@@ -29,6 +29,8 @@ import { ModuloSonido } from '@services/sonido.service';
 import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
 import { AvatarStoredDataType, WorldAvatar } from 'src/types/WorldAvatar';
+import { getBucketPath } from 'src/app/tools/BucketPaths';
+import { FileService } from 'src/app/services/file.srv';
 
 const MODEL_NAME_PARENT = "room-public";
 
@@ -68,7 +70,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     public sideMenuSrv: SideMenuService,
     private router: Router,
     public p2pSrv: P2PService,
-
+    private fileSrv: FileService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr, dialog, configSrv);
 
@@ -257,7 +259,6 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     this.updateCurrentLang();
     this.authSrv.authState$.subscribe(async (user) => {
       try {
-        await this.loadCollection();
         this.updateLogedMenuOptions();
       } catch (err: any) {
         this.uiNotificationSrv.show(err.message);
@@ -265,7 +266,8 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         this.trackerComponent.setUser(null);
       }
     });
-
+    await this.loadCollection();
+    this.updateLogedMenuOptions();
   }
 
   async openPermissions() {
@@ -311,12 +313,22 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
 
   public async writeStoredModel(data: WorldAvatar): Promise<boolean> {
     try {
+      if (!this.room) {
+        return false;
+      }
       // Write into bucket
-
+      const template = "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json";
+      const nextPath = getBucketPath(template, this.room.jsonModel ? this.room?.jsonModel : "", {
+        user: AuthService.userStatic,
+      });
+      const promesas = [];
+      const jsonString = JSON.stringify(data, null, 2);
+      const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+      promesas.push(this.fileSrv.upload(nextPath, jsonBlob, "bucket"));
+      await Promise.all(promesas);
       // Then update model on firestore
-      await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT, this.room, {
-        jsonModel: "",
-      } as any);
+      this.room.jsonModel = nextPath;
+      await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT, this.room, {});
       return true;
     } catch (err) {
       return false;

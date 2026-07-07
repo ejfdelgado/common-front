@@ -8,6 +8,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { ModeEditComponent } from "../avatar/dialogs/mode-edit/mode-edit";
 import { QuestionaireEditComponent } from "../avatar/dialogs/questionaire-edit/questionaire-edit";
 import { AvatarEditComponent } from "../avatar/dialogs/avatar-edit/avatar-edit";
+import { getJSONUrl } from "../tools/BucketPaths";
+import { FileService } from "./file.srv";
 
 @Injectable({
     providedIn: 'root',
@@ -18,6 +20,7 @@ export class AvatarService {
         private http: HttpClient,
         private indicatorSrv: IndicatorService,
         public dialog: MatDialog,
+        private fileSrv: FileService,
     ) { }
 
     async editAvatar(avatar: AvatarModel): Promise<AvatarModel | null> {
@@ -59,9 +62,7 @@ export class AvatarService {
             return read as any;
         } else {
             // fetch from bucket
-            const read = await firstValueFrom(this.http.get(firestoreEntity.jsonModel, {
-                responseType: "json",
-            }));
+            const read = await this.fileSrv.getJSON(getJSONUrl(firestoreEntity.jsonModel));
             return read as any;
         }
 
