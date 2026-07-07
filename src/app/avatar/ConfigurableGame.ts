@@ -11,6 +11,9 @@ import { ModuloSonido } from "../services/sonido.service";
 import { ComponentP2P } from "./ComponentP2P";
 import { MenuOptionType } from "src/types/StatusBar";
 import { AvatarModel, AvatarStoredDataType, GameMode, GameScenario, WorldAvatar } from "src/types/WorldAvatar";
+import { getBucketPath } from "../tools/BucketPaths";
+import { FileService } from "../services/file.srv";
+import { FirestoreService } from "../services/firestore.service";
 
 
 
@@ -26,6 +29,8 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         // Local imports
         public dialog: MatDialog,
         public configSrv: ConfigService,
+        public fileSrv: FileService,
+        public firestoreSrv: FirestoreService,
     ) {
         super(sanitizer, fullScreenSrv, authSrv, cdr);
 
@@ -33,7 +38,9 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
 
     abstract getTrackerComponent(): ComponentP2P;
 
-    public abstract writeStoredModel(data: WorldAvatar): Promise<boolean>;
+    abstract getRoom(): Promise<AvatarStoredDataType | null>;
+
+    abstract getFirestoremodelName(): string;
 
     openCameraPicker() {
         const ref = this.dialog.open(CameraPickerDialogComponent, {
@@ -107,6 +114,32 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
                 });
                 this.cdr.detectChanges();
             }
+        }
+    }
+
+    public async writeStoredModel(data: WorldAvatar): Promise<boolean> {
+        try {
+            const room = await this.getRoom();
+            const modelName = this.getFirestoremodelName();
+            if (!room) {
+                return false;
+            }
+            // Write into bucket
+            const template = "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json";
+            const nextPath = getBucketPath(template, room.jsonModel ? room?.jsonModel : "", {
+                user: AuthService.userStatic,
+            });
+            const promesas = [];
+            const jsonString = JSON.stringify(data, null, 2);
+            const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+            promesas.push(this.fileSrv.upload(nextPath, jsonBlob, "bucket"));
+            await Promise.all(promesas);
+            // Then update model on firestore
+            room.jsonModel = nextPath;
+            await this.firestoreSrv.createUpdate(modelName, room, {});
+            return true;
+        } catch (err) {
+            return false;
         }
     }
 

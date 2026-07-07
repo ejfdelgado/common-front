@@ -64,15 +64,16 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     //
     public override dialog: MatDialog,
     public override configSrv: ConfigService,
+    public override fileSrv: FileService,
+    public override firestoreSrv: FirestoreService,
     //
     private uiNotificationSrv: UINotificationSrv,
-    private firestoreSrv: FirestoreService,
     public sideMenuSrv: SideMenuService,
     private router: Router,
     public p2pSrv: P2PService,
-    private fileSrv: FileService,
+
   ) {
-    super(sanitizer, fullScreenSrv, authSrv, cdr, dialog, configSrv);
+    super(sanitizer, fullScreenSrv, authSrv, cdr, dialog, configSrv, fileSrv, firestoreSrv);
 
     this.p2pStatusSubscription = this.p2pSrv.status.subscribe((ev) => {
       this.status = ev;
@@ -240,6 +241,10 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     });
   }
 
+  getFirestoremodelName(): string {
+    return MODEL_NAME_PARENT;
+  }
+
   override getTrackerComponent(): ComponentP2P {
     return this.trackerComponent;
   }
@@ -311,33 +316,13 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     }
   }
 
-  public async writeStoredModel(data: WorldAvatar): Promise<boolean> {
-    try {
-      if (!this.room) {
-        return false;
-      }
-      // Write into bucket
-      const template = "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.json";
-      const nextPath = getBucketPath(template, this.room.jsonModel ? this.room?.jsonModel : "", {
-        user: AuthService.userStatic,
-      });
-      const promesas = [];
-      const jsonString = JSON.stringify(data, null, 2);
-      const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-      promesas.push(this.fileSrv.upload(nextPath, jsonBlob, "bucket"));
-      await Promise.all(promesas);
-      // Then update model on firestore
-      this.room.jsonModel = nextPath;
-      await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT, this.room, {});
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
-
   ngOnDestroy(): void {
     if (this.p2pStatusSubscription) {
       this.p2pStatusSubscription.unsubscribe();
     }
+  }
+
+  async getRoom(): Promise<AvatarStoredDataType | null> {
+    return this.room;
   }
 }
