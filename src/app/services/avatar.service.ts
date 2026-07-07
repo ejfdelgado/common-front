@@ -51,10 +51,20 @@ export class AvatarService {
     }
 
     async loadWorld(firestoreEntity: AvatarStoredDataType): Promise<WorldAvatar> {
-        const read = await firstValueFrom(this.http.get("/assets/scenarios/sangil.json", {
-            responseType: "json",
-        }));
-        return read as any;
+        if (!firestoreEntity.jsonModel) {
+            // Fetch from default
+            const read = await firstValueFrom(this.http.get("/assets/scenarios/base.json", {
+                responseType: "json",
+            }));
+            return read as any;
+        } else {
+            // fetch from bucket
+            const read = await firstValueFrom(this.http.get(firestoreEntity.jsonModel, {
+                responseType: "json",
+            }));
+            return read as any;
+        }
+
     }
 
     async loadWorldOld(url: string): Promise<WorldAvatar> {
