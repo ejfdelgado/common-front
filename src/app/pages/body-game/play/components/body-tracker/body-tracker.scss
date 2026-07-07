@@ -102,6 +102,10 @@
     line-height: 3rem;
 }
 
+.transparent {
+    opacity: 0.65;
+}
+
 @media (max-width: 500px) {
     #video {
         max-height: 100px;

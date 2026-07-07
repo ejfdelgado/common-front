@@ -1,6 +1,6 @@
 <div class="full_screen container_vertical">
     <app-avatar-container #three_component (headUpLog)="headUpLog($event)"></app-avatar-container>
-    
+
     @if (initialized && !started) {
     <div class="start_container no_mouse">
         <button class="start_button" (click)="startAll()">
@@ -28,7 +28,7 @@
 </div>
 <div class="full_screen no_mouse container_vertical">
     <div class="video_grand_parent">
-        <div class="video_parent">
+        <div class="video_parent" [ngClass]="{'transparent': errorState === null}">
             <video #video class="video_preview" width="640" height="480">
                 <source src="">
             </video>

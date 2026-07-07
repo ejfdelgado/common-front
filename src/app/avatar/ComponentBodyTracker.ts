@@ -245,13 +245,16 @@ export abstract class ComponentBodyTracker
                     }
                 }
             } catch (err: any) {
-                if (err.message == "-1") {
-                    // Means person is detected, but must fit all in the camera
-                    if (this.errorState != err.message) {
-                        this.errorState = err.message;
-                        this.cdr.detectChanges();
-                    }
+                // Means person is detected, but must fit all in the camera
+                if (this.errorState == null) {
+                    this.errorState = "-1";
+                    this.cdr.detectChanges();
                 }
+            }
+        } else {
+            if (this.errorState == null) {
+                this.errorState = "-1";
+                this.cdr.detectChanges();
             }
         }
     }
