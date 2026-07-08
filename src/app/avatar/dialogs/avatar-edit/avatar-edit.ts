@@ -6,6 +6,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { AvatarModel } from 'src/types/WorldAvatar';
+import { SelectOptionString } from 'src/types/fieldsTypes';
+
+const MESH_OPTIONS: SelectOptionString[] = [
+  { label: 'Tigresa', value: "tigresa009_1.glb" },
+  { label: 'Coco', value: "cocodrilo009_1.glb" },
+  { label: 'Huesos', value: "esqueleto009_1.glb" },
+];
 
 @Component({
   selector: 'app-avatar-edit',

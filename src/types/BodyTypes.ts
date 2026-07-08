@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { FingerPinch, HandIdType } from './BodyParts';
 import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 
-// squeleton2.jpg
+// esqueleto009_1.glb
 // avatar005.glb
 // tigresa009_1.glb
 // cocodrilo009_1.glb

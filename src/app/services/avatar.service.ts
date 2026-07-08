@@ -26,7 +26,7 @@ export class AvatarService {
     async editAvatar(avatar: AvatarModel): Promise<AvatarModel | null> {
         // Open modal
         const dialogRef = this.dialog.open(AvatarEditComponent, {
-            width: '350px',
+            //width: '350px',
             disableClose: true,
             data: JSON.parse(JSON.stringify(avatar)),
         });

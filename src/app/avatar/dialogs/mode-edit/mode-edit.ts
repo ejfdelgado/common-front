@@ -8,13 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { GameMode } from 'src/types/WorldAvatar';
+import { SelectOptionBoolean } from 'src/types/fieldsTypes';
 
-interface MirrorOption {
-  label: string;
-  value: boolean;
-}
-
-const MIRROR_OPTIONS: MirrorOption[] = [
+const MIRROR_OPTIONS: SelectOptionBoolean[] = [
   { label: 'Espejo', value: true },
   { label: 'Normal', value: false },
 ];
@@ -37,7 +33,7 @@ const MIRROR_OPTIONS: MirrorOption[] = [
 })
 export class ModeEditComponent {
 
-  readonly mirrorOptions = MIRROR_OPTIONS;
+  readonly SelectOptionBooleans = MIRROR_OPTIONS;
 
   generalForm: FormGroup;
 

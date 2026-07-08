@@ -172,3 +172,13 @@ export interface SliderDetailDataType {
 export interface SliderDataType extends FieldDataType {
     slider: SliderDetailDataType;
 }
+
+export interface SelectOptionBoolean {
+    label: string;
+    value: boolean;
+}
+
+export interface SelectOptionString {
+    label: string;
+    value: string;
+}
