@@ -72,7 +72,7 @@ export abstract class ComponentBodyTracker
         width: 0,
         height: 0,
     };
-    public seletedItems: GameSelection = {
+    public selectedItems: GameSelection = {
         mode: null,
         scenario: null,
     };
@@ -502,6 +502,15 @@ export abstract class ComponentBodyTracker
         return this.world;
     }
 
+    public async reloadModeAndScenario(notifyPeers?: boolean) {
+        const { mode, scenario } = this.selectedItems;
+        await this.applyMode(
+            mode ? mode : this.world.defaultMode,
+            scenario ? scenario : undefined,
+            notifyPeers,
+        );
+    }
+
     public async applyMode(modeId: string, scenarioId?: string, notifyPeers?: boolean) {
         this.mode = this.world.modes[modeId];
         const avatarContainer = this.getAvatarContainer();
@@ -509,7 +518,7 @@ export abstract class ComponentBodyTracker
         if (!this.mode || !avatarContainer.scene) {
             return;
         }
-        this.seletedItems.mode = modeId;
+        this.selectedItems.mode = modeId;
 
         // Set general config
         this.mirror = this.mode.mirror;
@@ -607,7 +616,7 @@ export abstract class ComponentBodyTracker
     }
 
     public async applyScenario(scenarioId: string) {
-        this.seletedItems.scenario = null;
+        this.selectedItems.scenario = null;
         const avatarContainer = this.getAvatarContainer();
         if (!this.mode || !avatarContainer) {
             return;
@@ -616,7 +625,7 @@ export abstract class ComponentBodyTracker
         if (!this.scenario) {
             return;
         }
-        this.seletedItems.scenario = scenarioId;
+        this.selectedItems.scenario = scenarioId;
         if (this.scenario.useComposer) {
             avatarContainer.useComposer = this.scenario.useComposer;
         }
@@ -624,11 +633,19 @@ export abstract class ComponentBodyTracker
     }
 
     async applyModeBeforeSave(data: GameMode) {
-        //
+        if (!this.mode) {
+            return;
+        }
+        // Mirror
+        this.mode.mirror = data.mirror;
     }
 
     async applyScenarioBeforeSave(data: GameScenario) {
-        //
+        if (!this.scenario) {
+            return;
+        }
+        // Background
+        this.scenario.background = data.background;
     }
 
     async applyAvatarBeforeSave(data: AvatarModel) {
