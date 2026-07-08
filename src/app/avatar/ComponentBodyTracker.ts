@@ -648,6 +648,9 @@ export abstract class ComponentBodyTracker
         }
         // Background
         this.scenario.background = data.background;
+        // Steps
+        this.scenario.steps = data.steps;
+        this.scenario.stepsConfig = data.stepsConfig;
     }
 
     async applyAvatarBeforeSave(data: AvatarModel) {

@@ -33,7 +33,7 @@ const MIRROR_OPTIONS: SelectOptionBoolean[] = [
 })
 export class ModeEditComponent {
 
-  readonly SelectOptionBooleans = MIRROR_OPTIONS;
+  readonly mirrorOptions = MIRROR_OPTIONS;
 
   generalForm: FormGroup;
 
