@@ -411,15 +411,30 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         }
         this.indexTerrain();
         // Update background if needed
-        const bgColor = scene.background?.color;
-        if (bgColor) {
-            this.background = new THREE.Color(bgColor.r, bgColor.g, bgColor.b);
-        } else if (scene.background?.image) {
+        if (scene.background) {
+            const bgColor = scene.background.color;
+            if (scene.background.type == "color") {
+                if (bgColor) {
+                    this.background = new THREE.Color(
+                        bgColor.r / 255,
+                        bgColor.g / 255,
+                        bgColor.b / 255);
+                }
+            } else if (scene.background.type == "image") {
+                if (scene.background?.image) {
+                    if (this.renderer) {
+                        //this.renderer.setClearColor(0x000000, 0);
+                        this.renderer.setClearAlpha(0);
+                    }
+                    this.background = null;
+                }
+            }
+        } else {
             if (this.renderer) {
-                //this.renderer.setClearColor(0x000000, 0);
                 this.renderer.setClearAlpha(0);
             }
-            this.background = null;
         }
+
+
     }
 }
