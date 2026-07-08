@@ -125,3 +125,8 @@ export interface AvatarModel {
 export interface AvatarStoredDataType extends AssistantDataType {
     jsonModel?: string;
 }
+
+export interface GameSelection {
+    scenario: string | null;
+    mode: string | null;
+}

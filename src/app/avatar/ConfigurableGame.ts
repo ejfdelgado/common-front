@@ -101,7 +101,8 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
                         name: name,
                         children: [],
                         callback: async () => {
-                            await this.getTrackerComponent().applyMode(name, true);
+                            const scenarioId = undefined;
+                            await this.getTrackerComponent().applyMode(name, scenarioId, true);
                             this.emitToc();;
                             scenariosMenu.children?.forEach(m => {
                                 m.inUse = m.name === name;

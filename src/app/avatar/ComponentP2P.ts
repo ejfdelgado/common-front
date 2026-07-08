@@ -123,7 +123,9 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
                                 avatarContainer.scene.applyAvatarState(avatar, event.data);
                             }
                         } else if (event.type == "mode") {
-                            this.applyMode(event.data);
+                            const { modeId, scenarioId } = event.data;
+                            const notifyPeers = false;
+                            this.applyMode(modeId, scenarioId, notifyPeers);
                         }
                     });
                 }

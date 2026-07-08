@@ -29,6 +29,7 @@ import {
     AvatarStoredDataType,
     GameMode,
     GameScenario,
+    GameSelection,
     WorldAvatar,
 } from "@mytypes/WorldAvatar";
 import { Pose } from '@mediapipe/pose';
@@ -70,6 +71,10 @@ export abstract class ComponentBodyTracker
     videoSize: GenericSizeType = {
         width: 0,
         height: 0,
+    };
+    seletedItems: GameSelection = {
+        mode: null,
+        scenario: null,
     };
     mode: GameMode | null = null;
     scenario: GameScenario | null = null;
@@ -486,8 +491,9 @@ export abstract class ComponentBodyTracker
             await this.stopSafetly();
             // Resume loadWorld
             this.world = await promise;
-            const mode = defaultMode ? defaultMode : this.world.defaultMode;
-            await this.applyMode(mode, notifyPeers);
+            const modeId = defaultMode ? defaultMode : this.world.defaultMode;
+            const scenarioId = undefined;
+            await this.applyMode(modeId, scenarioId, notifyPeers);
         } catch (err) {
             console.log(err);
         } finally {
@@ -496,21 +502,14 @@ export abstract class ComponentBodyTracker
         return this.world;
     }
 
-    public async applyMode(id: string, notifyPeers?: boolean) {
-        this.mode = this.world.modes[id];
+    public async applyMode(modeId: string, scenarioId?: string, notifyPeers?: boolean) {
+        this.mode = this.world.modes[modeId];
         const avatarContainer = this.getAvatarContainer();
 
         if (!this.mode || !avatarContainer.scene) {
             return;
         }
-        if (notifyPeers === true) {
-            // Sends others the change intention
-            const command: GameAction = {
-                type: "mode",
-                data: id,
-            }
-            this.broadcastBinaryData(command);
-        }
+        this.seletedItems.mode = modeId;
 
         // Set general config
         this.mirror = this.mode.mirror;
@@ -527,11 +526,18 @@ export abstract class ComponentBodyTracker
             controller.setParams(config.params);
         }
         // Add scenario
-        this.scenario = this.mode.scenarios[this.mode.defaultSenario];
-        if (this.scenario.useComposer) {
-            avatarContainer.useComposer = this.scenario.useComposer;
+        await this.applyScenario(scenarioId ? scenarioId : this.mode.defaultSenario);
+        if (notifyPeers === true) {
+            // Sends others the change intention
+            const command: GameAction = {
+                type: "mode",
+                data: {
+                    modeId: modeId,
+                    scenarioId: scenarioId,
+                },
+            }
+            this.broadcastBinaryData(command);
         }
-        await avatarContainer.scene.initializeScenario(this.scenario);
 
         // Place the avatar
         const position = this.mode.defaultPosition;
@@ -587,7 +593,7 @@ export abstract class ComponentBodyTracker
         }
 
         // Update controllers
-        this.getAvatarContainer().controllers.forEach((controller) => {
+        avatarContainer.controllers.forEach((controller) => {
             if (this.mode) {
                 controller.setMode(this.mode);
             }
@@ -596,15 +602,32 @@ export abstract class ComponentBodyTracker
             }
         });
 
-        this.getAvatarContainer().events.emit({ name: "SCENE_LOADED" });
+        avatarContainer.events.emit({ name: "SCENE_LOADED" });
         //console.log("All loaded");
     }
 
-    async applyScenarioBeforeSave(data: GameScenario) {
-        //
+    public async applyScenario(scenarioId: string) {
+        this.seletedItems.scenario = null;
+        const avatarContainer = this.getAvatarContainer();
+        if (!this.mode || !avatarContainer) {
+            return;
+        }
+        this.scenario = this.mode.scenarios[scenarioId];
+        if (!this.scenario) {
+            return;
+        }
+        this.seletedItems.scenario = scenarioId;
+        if (this.scenario.useComposer) {
+            avatarContainer.useComposer = this.scenario.useComposer;
+        }
+        await avatarContainer.scene?.initializeScenario(this.scenario);
     }
 
     async applyModeBeforeSave(data: GameMode) {
+        //
+    }
+
+    async applyScenarioBeforeSave(data: GameScenario) {
         //
     }
 
