@@ -32,7 +32,7 @@ import {
 import { AvatarBoneEnum, BodyPoseKey, DEFAULT_BOTTOM_VALUES } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
-import { CameraState } from '@mytypes/WorldAvatar';
+import { CameraState, GameMode } from '@mytypes/WorldAvatar';
 import { waitFor } from '../tools/AsyncUtils';
 
 export const ROOT_PATH = "/assets/models/";
@@ -844,7 +844,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         });
     }
 
-    async initializeControlls() {
+    async initializeControlls(mode: GameMode) {
         const cube = await this.addCubeControll();
     }
 

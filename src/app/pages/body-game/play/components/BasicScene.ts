@@ -8,6 +8,7 @@ import {
 } from '@mytypes/BodyTypes';
 import { HttpClient } from '@angular/common/http';
 import { SceneWithComposer } from '@avatar/SceneWithComposer';
+import { GameMode } from 'src/types/WorldAvatar';
 
 export class BasicScene extends SceneWithComposer {
 
@@ -45,8 +46,6 @@ export class BasicScene extends SceneWithComposer {
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
 
     this.setupEffects(window.innerWidth, window.innerHeight);
-    this.initializeAvatar();
-    this.initializeControlls();
 
     const light = new THREE.AmbientLight(0xFFFFFF);
     this.add(light);
@@ -59,7 +58,12 @@ export class BasicScene extends SceneWithComposer {
     //this.loadCharacters();
   }
 
-  async initializeAvatar() {
+  async applyMode(mode: GameMode) {
+    this.initializeAvatar(mode);
+    this.initializeControlls(mode);
+  }
+
+  async initializeAvatar(mode: GameMode) {
     const loading = this.indicatorSrv.start();
     try {
       if (!this.camera || !this.renderer || !this.orbitals) {

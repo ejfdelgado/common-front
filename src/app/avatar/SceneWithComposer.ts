@@ -16,7 +16,7 @@ import * as THREE from 'three';
 import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
-import { CharacterSpec, GameScenario } from "@mytypes/WorldAvatar";
+import { CharacterSpec, GameMode, GameScenario } from "@mytypes/WorldAvatar";
 
 interface TerrainTriangle {
     a: THREE.Vector3;

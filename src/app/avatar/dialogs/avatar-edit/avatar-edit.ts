@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AvatarModel } from 'src/types/WorldAvatar';
 import { SelectOptionString } from 'src/types/fieldsTypes';
 
+// https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/
 const MESH_OPTIONS: SelectOptionString[] = [
   { label: 'Tigresa', value: "tigresa009_1.glb" },
   { label: 'Coco', value: "cocodrilo009_1.glb" },
