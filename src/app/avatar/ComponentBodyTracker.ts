@@ -638,6 +638,8 @@ export abstract class ComponentBodyTracker
         }
         // Mirror
         this.mode.mirror = data.mirror;
+        // Use hands
+        this.mode.useHands = data.useHands;
     }
 
     async applyScenarioBeforeSave(data: GameScenario) {
@@ -649,6 +651,16 @@ export abstract class ComponentBodyTracker
     }
 
     async applyAvatarBeforeSave(data: AvatarModel) {
-        //
+        if (!this.mode) {
+            return;
+        }
+        // Avatar
+        if (!this.mode.avatar) {
+            this.mode.avatar = {};
+        }
+        // Mesh
+        this.mode.avatar.meshPath = data.meshPath;
+        // Texture
+        this.mode.avatar.texturePath = data.texturePath;
     }
 }

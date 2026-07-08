@@ -44,6 +44,7 @@ export interface ColorType {
 export interface GameScenario {
     useComposer?: boolean;
     background?: {
+        type?: "image" | "color";
         image?: string;
         color?: ColorType;
     },
