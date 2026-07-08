@@ -46,7 +46,7 @@ export class AvatarService {
     async editMode(mode: GameMode): Promise<GameMode | null> {
         // Open modal
         const dialogRef = this.dialog.open(ModeEditComponent, {
-            width: '350px',
+            //width: '350px',
             disableClose: true,
             data: JSON.parse(JSON.stringify(mode)),
         });
