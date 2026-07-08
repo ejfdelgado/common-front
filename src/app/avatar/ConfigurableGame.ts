@@ -144,16 +144,16 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         }
     }
 
-    async saveAndApplyScenario(data: GameScenario) {
+    async saveAndApplyMode(data: GameMode) {
         const tracker = this.getTrackerComponent();
-        await tracker.applyScenarioBeforeSave(data);
+        await tracker.applyModeBeforeSave(data);
         await this.writeStoredModel(tracker.world);
         await tracker.reloadModeAndScenario();
     }
 
-    async saveAndApplyMode(data: GameMode) {
+    async saveAndApplyScenario(data: GameScenario) {
         const tracker = this.getTrackerComponent();
-        await tracker.applyModeBeforeSave(data);
+        await tracker.applyScenarioBeforeSave(data);
         await this.writeStoredModel(tracker.world);
         await tracker.reloadModeAndScenario();
     }
