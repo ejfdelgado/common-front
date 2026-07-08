@@ -411,6 +411,10 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         }
         this.indexTerrain();
         // Update background if needed
+        this.applyBackground(scene);
+    }
+
+    applyBackground(scene: GameScenario) {
         if (scene.background) {
             const bgColor = scene.background.color;
             if (scene.background.type == "color") {
@@ -434,7 +438,5 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                 this.renderer.setClearAlpha(0);
             }
         }
-
-
     }
 }
