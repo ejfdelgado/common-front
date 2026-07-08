@@ -34,7 +34,9 @@ import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
 import { CameraState, GameMode } from '@mytypes/WorldAvatar';
 import { waitFor } from '../tools/AsyncUtils';
+import { Wait } from '../services/indicator.service';
 
+export const BUCKET_PATH = "https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/";
 export const ROOT_PATH = "/assets/models/";
 const USE_WORKER = false;
 
@@ -72,6 +74,8 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         super();
         this.bounds = bounds;
     }
+
+    abstract startActivityIndicator(): Wait;
 
     makeBoneBackup(model: THREE.Object3D<THREE.Object3DEventMap>) {
         this.makeBoneBackupInternal(model, this.bonesBackup);
@@ -818,7 +822,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 const addCube = (name: string, imageUrl: string) => {
                     const aCube = obj.clone(true);
                     aCube.name = name;
-                    
+
                     aCube.traverse((child: any) => {
                         if (child.isMesh && child.material) {
                             child.material = child.material.clone();
@@ -827,9 +831,9 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                             child.material.side = THREE.FrontSide;
                         }
                     });
-                    
+
                     replaceAvatarSkin(aCube, ROOT_PATH + imageUrl, 0);
-                    
+
                     this.add(aCube);
                 };
                 addCube("cube_a", "a_ball.jpg");
@@ -904,5 +908,27 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         camera.lookAt(cameraLookAt);
         orbitals.target.set(cameraLookAt.x, cameraLookAt.y, cameraLookAt.z);
         orbitals.enabled = true;
+    }
+
+    async initializeAvatar(mode: GameMode) {
+        const loading = this.startActivityIndicator();
+        try {
+            if (!this.camera || !this.renderer || !this.orbitals) {
+                return;
+            }
+            // *** This is the main character ***
+            let mesh = "esqueleto009_1.glb";
+            if (mode.avatar?.meshPath) {
+                mesh = mode.avatar.meshPath;
+            }
+            await this.addAvatar(
+                BUCKET_PATH + mesh,
+                this.camera, this.renderer, this.orbitals);
+            //this.replaceAvatarSkin(ROOT_PATH + "squeleton2.jpg");
+        } catch (err) {
+            console.log(err);
+        } finally {
+            loading.done();
+        }
     }
 }

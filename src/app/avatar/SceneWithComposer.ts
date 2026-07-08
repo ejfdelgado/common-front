@@ -17,6 +17,7 @@ import { firstValueFrom } from "rxjs";
 import { decode } from "@msgpack/msgpack";
 import { HttpClient } from "@angular/common/http";
 import { CharacterSpec, GameMode, GameScenario } from "@mytypes/WorldAvatar";
+import { Wait } from "../services/indicator.service";
 
 interface TerrainTriangle {
     a: THREE.Vector3;
@@ -53,6 +54,11 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     }
 
     abstract initialize(): void;
+
+    async applyMode(mode: GameMode) {
+        await this.initializeAvatar(mode);
+        await this.initializeControlls(mode);
+    }
 
     animate() {
         this.animationHeartBeat();

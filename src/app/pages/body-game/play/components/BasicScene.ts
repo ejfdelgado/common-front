@@ -1,14 +1,9 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
-import { IndicatorService } from '@services/indicator.service';
+import { IndicatorService, Wait } from '@services/indicator.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
-import {
-  DEFAULT_AVATAR_MESH,
-  ROOT_PATH,
-} from '@mytypes/BodyTypes';
 import { HttpClient } from '@angular/common/http';
 import { SceneWithComposer } from '@avatar/SceneWithComposer';
-import { GameMode } from 'src/types/WorldAvatar';
 
 export class BasicScene extends SceneWithComposer {
 
@@ -58,26 +53,7 @@ export class BasicScene extends SceneWithComposer {
     //this.loadCharacters();
   }
 
-  async applyMode(mode: GameMode) {
-    this.initializeAvatar(mode);
-    this.initializeControlls(mode);
-  }
-
-  async initializeAvatar(mode: GameMode) {
-    const loading = this.indicatorSrv.start();
-    try {
-      if (!this.camera || !this.renderer || !this.orbitals) {
-        return;
-      }
-      // *** This is the main character ***
-      await this.addAvatar(
-        ROOT_PATH + DEFAULT_AVATAR_MESH,
-        this.camera, this.renderer, this.orbitals);
-      //this.replaceAvatarSkin(ROOT_PATH + "squeleton2.jpg");
-    } catch (err) {
-
-    } finally {
-      loading.done();
-    }
+  override startActivityIndicator(): Wait {
+    return this.indicatorSrv.start();
   }
 }

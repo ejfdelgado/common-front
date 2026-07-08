@@ -520,6 +520,9 @@ export abstract class ComponentBodyTracker
         }
         this.selectedItems.mode = modeId;
 
+        // Apply the mode into the threejs scenario
+        await avatarContainer.scene.applyMode(this.mode);
+
         // Set general config
         this.mirror = this.mode.mirror;
         // Place the camera
