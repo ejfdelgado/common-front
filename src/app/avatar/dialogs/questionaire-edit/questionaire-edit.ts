@@ -9,13 +9,16 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
-import { GameScenario, GameStep, GameStepOption, StepsConfig } from 'src/types/WorldAvatar';
+import { ColorType, GameScenario, GameStep, GameStepOption, StepsConfig } from 'src/types/WorldAvatar';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
+import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
 import { SelectOptionString } from 'src/types/fieldsTypes';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
+
+const DEFAULT_BACKGROUND_COLOR: ColorType = { r: 255, g: 255, b: 255 };
 
 const BACKGROUND_OPTIONS: SelectOptionString[] = [
   { label: 'Imagen', value: "image" },
@@ -38,6 +41,7 @@ const BACKGROUND_OPTIONS: SelectOptionString[] = [
     MatSelectModule,
     EditableInput,
     RatingComponent,
+    ColorPickerComponent,
   ],
   templateUrl: './questionaire-edit.html',
   styleUrl: './questionaire-edit.scss',
@@ -64,6 +68,7 @@ export class QuestionaireEditComponent {
     });
     this.backgroundForm = this.fb.group({
       type: [data.background?.type ?? null],
+      color: [data.background?.color ?? { ...DEFAULT_BACKGROUND_COLOR }],
     });
   }
 
@@ -180,9 +185,11 @@ export class QuestionaireEditComponent {
       return;
     }
 
+    const backgroundValue = this.backgroundForm.value;
     this.data.background = {
       ...this.data.background,
-      type: this.backgroundForm.value.type ?? undefined,
+      type: backgroundValue.type ?? undefined,
+      color: backgroundValue.type === 'color' ? backgroundValue.color : this.data.background?.color,
     };
 
     const configValue = this.stepsConfigForm.value;

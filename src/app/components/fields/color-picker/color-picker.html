@@ -1,0 +1,34 @@
+<div class="field_container noselect" [ngClass]="{'disabled': disabled}">
+    <span class="color_picker_label">{{ label }}</span>
+
+    <div class="square_wrapper">
+        <canvas #squareCanvas class="square_canvas" [attr.width]="squareWidth" [attr.height]="squareHeight"
+            (pointerdown)="onSquarePointerDown($event)" (pointermove)="onSquarePointerMove($event)"
+            (pointerup)="onSquarePointerUp($event)" (pointercancel)="onSquarePointerUp($event)"></canvas>
+        <div class="square_marker" [style.left.%]="markerLeft" [style.top.%]="markerTop"
+            [style.background]="rgbCss"></div>
+    </div>
+
+    <input class="hue_slider" type="range" min="0" max="360" [value]="hue" [disabled]="disabled"
+        [style.background]="hueBackground" (input)="onHueInput($event)" />
+
+    <div class="channels_row">
+        <label class="channel_field">
+            <span>R</span>
+            <input type="number" min="0" max="255" [value]="value.r" [disabled]="disabled"
+                (input)="onChannelInput('r', $event)" />
+        </label>
+        <label class="channel_field">
+            <span>G</span>
+            <input type="number" min="0" max="255" [value]="value.g" [disabled]="disabled"
+                (input)="onChannelInput('g', $event)" />
+        </label>
+        <label class="channel_field">
+            <span>B</span>
+            <input type="number" min="0" max="255" [value]="value.b" [disabled]="disabled"
+                (input)="onChannelInput('b', $event)" />
+        </label>
+    </div>
+
+    <div class="color_preview" [style.background]="rgbCss"></div>
+</div>
