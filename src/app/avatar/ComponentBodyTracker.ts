@@ -72,7 +72,7 @@ export abstract class ComponentBodyTracker
         width: 0,
         height: 0,
     };
-    seletedItems: GameSelection = {
+    public seletedItems: GameSelection = {
         mode: null,
         scenario: null,
     };

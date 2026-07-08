@@ -177,13 +177,8 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     }
 
     public async editScenario() {
-        if (this.mode) {
-            const mode = this.mode;
-            const defaultScenario = mode.defaultSenario;
-            const scenario = mode.scenarios[defaultScenario];
-            if (scenario) {
-                return this.avatarSrv.editScenario(scenario);
-            }
+        if (this.mode && this.scenario) {
+            return this.avatarSrv.editScenario(this.scenario);
         }
         return null;
     }
