@@ -134,6 +134,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           visible: true,
           children: [],
           callback: async () => {
+            this.emitToc();
             const response = await this.trackerComponent.editMode();
             if (response) {
               await this.saveAndApplyMode(response);
@@ -149,6 +150,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           visible: true,
           children: [],
           callback: async () => {
+            this.emitToc();
             const response = await this.trackerComponent.editScenario();
             if (response) {
               await this.saveAndApplyScenario(response);
@@ -164,6 +166,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           visible: true,
           children: [],
           callback: async () => {
+            this.emitToc();
             const response = await this.trackerComponent.editAvatar();
             if (response) {
               await this.saveAndApplyAvatar(response);
