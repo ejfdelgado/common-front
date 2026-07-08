@@ -493,6 +493,7 @@ export abstract class ComponentBodyTracker
             this.world = await promise;
             const modeId = defaultMode ? defaultMode : this.world.defaultMode;
             const scenarioId = undefined;
+            // ok
             await this.applyMode(modeId, scenarioId, notifyPeers);
         } catch (err) {
             console.log(err);

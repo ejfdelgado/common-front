@@ -260,7 +260,6 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this.trackerComponent.applyMode("mode");
     this.updateCurrentLang();
     this.authSrv.authState$.subscribe(async (user) => {
       try {

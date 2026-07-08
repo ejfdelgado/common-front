@@ -62,7 +62,7 @@ export class AvatarService {
             return read as any;
         } else {
             // fetch from bucket
-            console.log(`Reading from ${firestoreEntity.jsonModel}`);
+            //console.log(`Reading from ${firestoreEntity.jsonModel}`);
             const read = await this.fileSrv.getJSON(getJSONUrl(firestoreEntity.jsonModel));
             return read as any;
         }
