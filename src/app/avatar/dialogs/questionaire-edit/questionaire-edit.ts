@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 import { GameScenario, GameStep, GameStepOption, StepsConfig } from 'src/types/WorldAvatar';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
@@ -34,6 +35,7 @@ const BACKGROUND_OPTIONS: SelectOptionString[] = [
     MatTabsModule,
     MatCardModule,
     MatTooltipModule,
+    MatSelectModule,
     EditableInput,
     RatingComponent,
   ],
@@ -44,9 +46,11 @@ export class QuestionaireEditComponent {
 
   readonly minOptions = MIN_OPTIONS;
   readonly maxOptions = MAX_OPTIONS;
+  readonly backgroundOptions = BACKGROUND_OPTIONS;
 
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
+  backgroundForm: FormGroup;
   searchControl = new FormControl('');
 
   constructor(
@@ -57,6 +61,9 @@ export class QuestionaireEditComponent {
     this.stepsConfigForm = this.buildStepsConfigForm(data.stepsConfig);
     this.stepsForm = this.fb.group({
       steps: this.fb.array((data.steps ?? []).map((step) => this.buildStepGroup(step))),
+    });
+    this.backgroundForm = this.fb.group({
+      type: [data.background?.type ?? null],
     });
   }
 
@@ -166,11 +173,17 @@ export class QuestionaireEditComponent {
   }
 
   save(): void {
-    if (this.stepsConfigForm.invalid || this.stepsForm.invalid) {
+    if (this.stepsConfigForm.invalid || this.stepsForm.invalid || this.backgroundForm.invalid) {
       this.stepsConfigForm.markAllAsTouched();
       this.stepsForm.markAllAsTouched();
+      this.backgroundForm.markAllAsTouched();
       return;
     }
+
+    this.data.background = {
+      ...this.data.background,
+      type: this.backgroundForm.value.type ?? undefined,
+    };
 
     const configValue = this.stepsConfigForm.value;
     this.data.stepsConfig = {

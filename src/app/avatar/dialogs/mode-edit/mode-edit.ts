@@ -11,8 +11,8 @@ import { GameMode } from 'src/types/WorldAvatar';
 import { SelectOptionBoolean } from 'src/types/fieldsTypes';
 
 const MIRROR_OPTIONS: SelectOptionBoolean[] = [
-  { label: 'Espejo', value: true },
-  { label: 'Normal', value: false },
+  { label: 'Frente', value: true },
+  { label: 'Espalda', value: false },
 ];
 
 @Component({

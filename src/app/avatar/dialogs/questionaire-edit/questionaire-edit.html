@@ -21,6 +21,19 @@
             </form>
         </mat-tab>
 
+        <mat-tab label="Fondo">
+            <form [formGroup]="backgroundForm" class="tab_content">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Tipo de fondo</mat-label>
+                    <mat-select formControlName="type">
+                        @for (option of backgroundOptions; track option.value) {
+                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </mat-tab>
+
         <mat-tab label="Preguntas">
             <form [formGroup]="stepsForm" class="tab_content">
 
