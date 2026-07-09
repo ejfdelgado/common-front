@@ -190,42 +190,6 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     });
 
     this.menuOptions.push({
-      label: "menu.voice_lang",
-      translateFolder: "avatar",
-      name: "langs",
-      icon: "remove",
-      children: [
-        {
-          label: "Español",
-          name: "es-ES",
-          icon: "🇪🇸",
-          isPlainIcon: true,
-          callback: () => {
-            this.useLanguage("es-ES");
-          },
-        },
-        {
-          label: "English",
-          name: "en-US",
-          icon: "🇬🇧",
-          isPlainIcon: true,
-          callback: () => {
-            this.useLanguage("en-US");
-          },
-        },
-        {
-          label: "Français",
-          name: "fr-FR",
-          icon: "🇫🇷",
-          isPlainIcon: true,
-          callback: () => {
-            this.useLanguage("fr-FR");
-          },
-        }
-      ],
-    });
-
-    this.menuOptions.push({
       label: "menu.back_rooms",
       translateFolder: "avatar",
       icon: "arrow_back",

@@ -631,6 +631,13 @@ export abstract class ComponentBodyTracker
         if (!this.scenario) {
             return;
         }
+        console.log(`this.scenario.language = ${this.scenario.language}`);
+        if (this.scenario.language) {
+            const lang = this.getLang(this.scenario.language);
+            if (lang) {
+                this.defineLanguage(lang, false);
+            }
+        }
         this.selectedItems.scenario = scenarioId;
         if (this.scenario.useComposer) {
             avatarContainer.useComposer = this.scenario.useComposer;
@@ -666,6 +673,8 @@ export abstract class ComponentBodyTracker
         // Steps
         this.scenario.steps = data.steps;
         this.scenario.stepsConfig = data.stepsConfig;
+        // Language
+        this.scenario.language = data.language;
     }
 
     async applyAvatarBeforeSave(data: AvatarModel) {

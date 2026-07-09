@@ -110,7 +110,7 @@ export abstract class ComponentWithAvatar
             this.cdr.detectChanges();
         }
         if (data.speak === true) {
-            let lang = "es-ES";
+            let lang: string | undefined = undefined;
             if (data.lang) {
                 lang = data.lang;
             }

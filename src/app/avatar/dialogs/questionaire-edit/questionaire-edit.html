@@ -5,6 +5,16 @@
 
         <mat-tab label="Configuración">
             <form [formGroup]="stepsConfigForm" class="tab_content">
+
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Idioma</mat-label>
+                    <mat-select formControlName="language">
+                        @for (option of languageOptions; track option.value) {
+                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
                 <mat-form-field class="full-width" appearance="outline">
                     <mat-label>Máximo de preguntas</mat-label>
                     <input matInput type="number" formControlName="maxQuestions">
@@ -103,6 +113,7 @@
 
         <mat-tab label="Fondo del juego">
             <form [formGroup]="backgroundForm" class="tab_content">
+
                 <mat-form-field class="full-width" appearance="outline">
                     <mat-label>Tipo de fondo</mat-label>
                     <mat-select formControlName="type">

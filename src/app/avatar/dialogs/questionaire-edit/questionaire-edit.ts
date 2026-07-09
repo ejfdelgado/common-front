@@ -28,6 +28,12 @@ const BACKGROUND_OPTIONS: SelectOptionString[] = [
   { label: 'Color', value: "color" },
 ];
 
+const LANGUAGE_OPTIONS: SelectOptionString[] = [
+  { label: 'Español', value: "es-ES" },
+  { label: 'English', value: "en-US" },
+  { label: 'Français', value: "fr-FR" },
+];
+
 @Component({
   selector: 'app-questionaire-edit',
   standalone: true,
@@ -55,6 +61,7 @@ export class QuestionaireEditComponent {
   readonly minOptions = MIN_OPTIONS;
   readonly maxOptions = MAX_OPTIONS;
   readonly backgroundOptions = BACKGROUND_OPTIONS;
+  readonly languageOptions = LANGUAGE_OPTIONS;
 
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
@@ -73,7 +80,14 @@ export class QuestionaireEditComponent {
     private dialogRef: MatDialogRef<QuestionaireEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GameScenario
   ) {
-    this.stepsConfigForm = this.buildStepsConfigForm(data.stepsConfig);
+
+    this.stepsConfigForm = this.fb.group({
+      language: [data.language ?? "es-ES"],
+      introTitle: [data.stepsConfig?.introTitle ?? ''],
+      looseLabel: [data.stepsConfig?.looseLabel ?? ''],
+      winLabel: [data.stepsConfig?.winLabel ?? ''],
+      maxQuestions: [data.stepsConfig?.maxQuestions ?? null],
+    });
     this.stepsForm = this.fb.group({
       steps: this.fb.array((data.steps ?? []).map((step) => this.buildStepGroup(step))),
     });
@@ -156,15 +170,6 @@ export class QuestionaireEditComponent {
     this.getOptions(stepIndex).removeAt(optionIndex);
   }
 
-  private buildStepsConfigForm(config?: StepsConfig): FormGroup {
-    return this.fb.group({
-      introTitle: [config?.introTitle ?? ''],
-      looseLabel: [config?.looseLabel ?? ''],
-      winLabel: [config?.winLabel ?? ''],
-      maxQuestions: [config?.maxQuestions ?? null],
-    });
-  }
-
   private buildStepGroup(step?: GameStep): FormGroup {
     const options = step?.options?.length ? step.options : [undefined];
     return this.fb.group({
@@ -222,6 +227,7 @@ export class QuestionaireEditComponent {
       winLabel: configValue.winLabel || undefined,
       maxQuestions: this.toNumber(configValue.maxQuestions),
     };
+    this.data.language = configValue.language ?? "es-ES";
 
     this.data.steps = this.steps.value.map((step: GameStep) => ({
       label: step.label,

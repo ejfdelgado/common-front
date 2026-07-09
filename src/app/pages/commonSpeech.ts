@@ -89,12 +89,14 @@ export class CommonSpeech extends CommonComponent {
         }
     }
 
-    defineLanguage(val: SelectOptionType | string) {
+    defineLanguage(val: SelectOptionType | string, talk: boolean = true) {
         if (typeof val == "string") {
             this.currentLang = val;
         } else {
             this.currentLang = val.id;
-            this.talk(val.label);
+            if (talk) {
+                this.talk(val.label);
+            }
         }
     }
 
