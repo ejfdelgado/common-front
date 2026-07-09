@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
 import { ImageGalleryConfigDataType, SelectOptionString } from 'src/types/fieldsTypes';
 import { ImageFileComponent } from 'src/app/components/fields/image-field/image-field';
+import { ComponentBucketField } from 'src/types/ComponentBucketField';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -59,6 +60,7 @@ export class QuestionaireEditComponent {
   stepsForm: FormGroup;
   backgroundForm: FormGroup;
   searchControl = new FormControl('');
+  @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
   imageConfig: ImageGalleryConfigDataType = {
     template: "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/backgrounds/${random}.jpg",
     thumbnailMaxSizePixels: 512,
@@ -187,7 +189,17 @@ export class QuestionaireEditComponent {
     return isNaN(parsed) ? undefined : parsed;
   }
 
-  save(): void {
+  async syncIfNeeded() {
+    const temp: ComponentBucketField[] = [];
+    this.images.forEach((el) => {
+      temp.push(el);
+    });
+    for (let i = 0; i < temp.length; i++) {
+      await temp[i].syncIfNeeded();
+    }
+  }
+
+  async save(): Promise<void> {
     if (this.stepsConfigForm.invalid || this.stepsForm.invalid || this.backgroundForm.invalid) {
       this.stepsConfigForm.markAllAsTouched();
       this.stepsForm.markAllAsTouched();
@@ -219,6 +231,8 @@ export class QuestionaireEditComponent {
         points: this.toNumber(option.points) ?? 0,
       })),
     }));
+
+    await this.syncIfNeeded();
 
     this.dialogRef.close(this.data);
   }
