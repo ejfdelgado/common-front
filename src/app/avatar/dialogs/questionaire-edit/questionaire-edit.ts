@@ -200,6 +200,7 @@ export class QuestionaireEditComponent {
       ...this.data.background,
       type: backgroundValue.type ?? undefined,
       color: backgroundValue.type === 'color' ? backgroundValue.color : this.data.background?.color,
+      image: backgroundValue.type === 'image' ? backgroundValue.image : this.data.background?.image,
     };
 
     const configValue = this.stepsConfigForm.value;

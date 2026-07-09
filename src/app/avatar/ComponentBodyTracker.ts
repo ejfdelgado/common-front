@@ -49,6 +49,7 @@ import { CameraPickerDialogComponent } from "@components/fields/camera-picker/ca
 import { CameraDataType } from "@mytypes/CameraTypes";
 import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
+import { getBucketFilePath } from "../tools/BucketPaths";
 
 export abstract class ComponentBodyTracker
     extends CommonSpeech {
@@ -640,7 +641,7 @@ export abstract class ComponentBodyTracker
             if (this.scenario.background.type == "image") {
                 if (this.scenario.background.image) {
                     // Maybe here add the bucket prefix
-                    this.backgroundUrl = this.scenario.background.image;
+                    this.backgroundUrl = getBucketFilePath(this.scenario.background.image);
                 }
             }
         }
