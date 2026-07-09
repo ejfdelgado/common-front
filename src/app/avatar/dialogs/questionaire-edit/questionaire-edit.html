@@ -61,13 +61,13 @@
                                 = $index) {
                                 <div class="option_row" [formGroupName]="optionIndex">
 
-                                    <app-editable-input class="option_label" [discrete]="false" [formControlName]="'label'" [label]="'Texto'"
-                                        [placeholder]="'...'" [maxHeight]="'6em'"
-                                        [minHeight]="'6em'"></app-editable-input>
+                                    <app-editable-input class="option_label" [discrete]="false"
+                                        [formControlName]="'label'" [label]="'Texto'" [placeholder]="'...'"
+                                        [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
-                                    <app-editable-input class="option_answer" [discrete]="false" [formControlName]="'answer'"
-                                        [label]="'Respuesta'" [placeholder]="'...'" [maxHeight]="'6em'"
-                                        [minHeight]="'6em'"></app-editable-input>
+                                    <app-editable-input class="option_answer" [discrete]="false"
+                                        [formControlName]="'answer'" [label]="'Respuesta'" [placeholder]="'...'"
+                                        [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
                                     <app-rating class="option_points" formControlName="points"></app-rating>
 
@@ -114,6 +114,9 @@
 
                 @if (backgroundForm.value.type === 'color') {
                 <app-color-picker [label]="'Color de fondo'" formControlName="color"></app-color-picker>
+                }
+                @if (backgroundForm.value.type === 'image') {
+                <app-image-field formControlName="image" [config]="imageConfig"></app-image-field>
                 }
             </form>
         </mat-tab>

@@ -13,12 +13,14 @@ import { ColorType, GameScenario, GameStep, GameStepOption, StepsConfig } from '
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
-import { SelectOptionString } from 'src/types/fieldsTypes';
+import { ImageGalleryConfigDataType, SelectOptionString } from 'src/types/fieldsTypes';
+import { ImageFileComponent } from 'src/app/components/fields/image-field/image-field';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
 
 const DEFAULT_BACKGROUND_COLOR: ColorType = { r: 255, g: 255, b: 255 };
+const DEFAULT_BACKGROUND_IMAGE: string = "/avatar_assets/backgrounds/default.jpeg";
 
 const BACKGROUND_OPTIONS: SelectOptionString[] = [
   { label: 'Imagen', value: "image" },
@@ -42,6 +44,7 @@ const BACKGROUND_OPTIONS: SelectOptionString[] = [
     EditableInput,
     RatingComponent,
     ColorPickerComponent,
+    ImageFileComponent,
   ],
   templateUrl: './questionaire-edit.html',
   styleUrl: './questionaire-edit.scss',
@@ -56,6 +59,12 @@ export class QuestionaireEditComponent {
   stepsForm: FormGroup;
   backgroundForm: FormGroup;
   searchControl = new FormControl('');
+  imageConfig: ImageGalleryConfigDataType = {
+    template: "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/backgrounds/${random}.jpg",
+    thumbnailMaxSizePixels: 512,
+    maxSizePixels: 2048,
+    withThumbnail: true,
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -69,6 +78,7 @@ export class QuestionaireEditComponent {
     this.backgroundForm = this.fb.group({
       type: [data.background?.type ?? null],
       color: [data.background?.color ?? { ...DEFAULT_BACKGROUND_COLOR }],
+      image: [data.background?.image ?? DEFAULT_BACKGROUND_IMAGE],
     });
   }
 
