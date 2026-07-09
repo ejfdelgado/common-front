@@ -36,7 +36,7 @@ import { CameraState, GameMode } from '@mytypes/WorldAvatar';
 import { waitFor } from '../tools/AsyncUtils';
 import { Wait } from '../services/indicator.service';
 
-export const BUCKET_PATH = "https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/";
+export const BUCKET_PATH = "https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/";
 export const ROOT_PATH = "/assets/models/";
 const USE_WORKER = false;
 
@@ -818,7 +818,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
 
     addCubeControll() {
         return new Promise((resolve, reject) => {
-            this.addModel({ name: "", url: ROOT_PATH + "ball.glb" }, false).then((obj) => {
+            this.addModel({ name: "", url: BUCKET_PATH + "accessories/ball_web.glb" }, false).then((obj) => {
                 const addCube = (name: string, imageUrl: string) => {
                     const aCube = obj.clone(true);
                     aCube.name = name;
@@ -917,12 +917,12 @@ export abstract class SceneWithAvatar extends THREE.Scene {
                 return;
             }
             // *** This is the main character ***
-            let mesh = "esqueleto009_1.glb";
+            let mesh = "esqueleto009_1_web.glb";
             if (mode.avatar?.meshPath) {
                 mesh = mode.avatar.meshPath;
             }
             await this.addAvatar(
-                BUCKET_PATH + mesh,
+                BUCKET_PATH + "avatar_meshes/" + mesh,
                 this.camera, this.renderer, this.orbitals);
             //this.replaceAvatarSkin(ROOT_PATH + "squeleton2.jpg");
         } catch (err) {

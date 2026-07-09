@@ -425,7 +425,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
                         bgColor.b / 255);
                 }
             } else if (scene.background.type == "image") {
-                if (scene.background?.image) {
+                if (scene.background.image) {
                     if (this.renderer) {
                         //this.renderer.setClearColor(0x000000, 0);
                         this.renderer.setClearAlpha(0);

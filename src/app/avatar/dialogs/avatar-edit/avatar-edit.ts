@@ -12,9 +12,9 @@ import { SelectOptionString } from 'src/types/fieldsTypes';
 
 // https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/
 const MESH_OPTIONS: SelectOptionString[] = [
-  { label: 'Tigresa', value: "tigresa009_1.glb" },
-  { label: 'Coco', value: "cocodrilo009_1.glb" },
-  { label: 'Huesos', value: "esqueleto009_1.glb" },
+  { label: 'Tigresa', value: "tigresa009_1_web.glb" },
+  { label: 'Coco', value: "cocodrilo009_1_web.glb" },
+  { label: 'Huesos', value: "esqueleto009_1_web.glb" },
 ];
 
 @Component({

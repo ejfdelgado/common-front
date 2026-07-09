@@ -1,4 +1,5 @@
-<div class="full_screen container_vertical">
+<div class="full_screen background_image container_vertical" [style.background-image]="backgroundUrl ? 'url(' + backgroundUrl + ')' : null"
+>
     <app-avatar-container #three_component (headUpLog)="headUpLog($event)"></app-avatar-container>
 
     @if (initialized && !started) {

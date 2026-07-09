@@ -68,6 +68,7 @@ export abstract class ComponentBodyTracker
     poses: BodyData[] = [];
     currentUser: User | null = null;
     eventSubscription: Subscription | null = null;
+    backgroundUrl: string | null = null;
     videoSize: GenericSizeType = {
         width: 0,
         height: 0,
@@ -634,6 +635,15 @@ export abstract class ComponentBodyTracker
             avatarContainer.useComposer = this.scenario.useComposer;
         }
         await avatarContainer.scene?.initializeScenario(this.scenario);
+        this.backgroundUrl = null;
+        if (this.scenario.background) {
+            if (this.scenario.background.type == "image") {
+                if (this.scenario.background.image) {
+                    // Maybe here add the bucket prefix
+                    this.backgroundUrl = this.scenario.background.image;
+                }
+            }
+        }
     }
 
     async applyModeBeforeSave(data: GameMode) {

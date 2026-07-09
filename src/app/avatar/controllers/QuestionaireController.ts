@@ -152,9 +152,11 @@ export class QuestionaireController extends SceneControllerAbstract {
             },
         ];
 
+        /*
         LETTERS = LETTERS.filter((a) => {
             return (["A", "B"].indexOf(a.id) >= 0);
         });
+        */
 
         shuffleInPlace(LETTERS);
 
