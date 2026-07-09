@@ -30,6 +30,21 @@ export interface LettersConfig {
     minmax?: MinMaxCubeRange;
 }
 
+const TRANSLATION: any = {
+    "es-ES": {
+        "question": "Pregunta",
+        "of": "de",
+    },
+    "en-US": {
+        "question": "Question",
+        "of": "of",
+    },
+    "fr-FR": {
+        "question": "Question",
+        "of": "sur",
+    }
+};
+
 export class QuestionaireController extends SceneControllerAbstract {
 
     isPlaying: boolean = false;
@@ -51,6 +66,14 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     }
 
+    getDictionary() {
+        let pred = "es-ES";
+        if (this.scenario?.language) {
+            pred = this.scenario?.language;
+        }
+        return TRANSLATION[pred];
+    }
+
     hideAllCubes() {
         this.events.emit({ name: "CUBE_CONTROLL_OFF", });
         this.events.emit({ name: "CUBE_LISTEN_OFF", });
@@ -65,6 +88,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     }
 
     async initializeQuestion() {
+        const dict = this.getDictionary();
         this.clearAll();
         if (!this.scenario) {
             return;
@@ -106,7 +130,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
         const actualStep = this.steps[this.currentStep];
 
-        await this.setHudValue("top", `Pregunta ${this.currentStep + 1} de ${this.maxQuestions}.</br>` + actualStep.label, true);
+        await this.setHudValue("top", `${dict['question']} ${this.currentStep + 1} ${dict['of']} ${this.maxQuestions}.</br>` + actualStep.label, true);
         if (!this.isPlaying) { return; }
 
         let LETTERS: LettersConfig[] = [
