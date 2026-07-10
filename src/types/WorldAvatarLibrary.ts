@@ -18,7 +18,7 @@ export const ABCDSet: FeatureObjectAssetSet = {
                 {
                     name: "cube_b",
                     meshUrl: BUCKET_ROOT + "accessories/cube001.glb",
-                    diffuseUrl: BUCKET_ROOT + "accessories/textures/b_cube.jpg"
+                    diffuseUrl: BUCKET_ROOT + "accessories/textures/b_cube3.jpg"
                 },
                 {
                     name: "cube_c",

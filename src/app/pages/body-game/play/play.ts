@@ -126,18 +126,18 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.editWorld",
+          label: "menu.editAvatar",
           translateFolder: "avatar",
-          name: "editWorld",
+          name: "editAvatar",
           isPlainIcon: true,
-          icon: "✏️",
+          icon: "🎭",
           visible: true,
           children: [],
           callback: async () => {
             this.emitToc();
-            const response = await this.trackerComponent.editMode();
+            const response = await this.trackerComponent.editAvatar();
             if (response) {
-              await this.saveAndApplyMode(response);
+              await this.saveAndApplyAvatar(response);
             }
           },
         },
@@ -158,18 +158,18 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.editAvatar",
+          label: "menu.editWorld",
           translateFolder: "avatar",
-          name: "editAvatar",
+          name: "editWorld",
           isPlainIcon: true,
-          icon: "🎭",
+          icon: "🔧",
           visible: true,
           children: [],
           callback: async () => {
             this.emitToc();
-            const response = await this.trackerComponent.editAvatar();
+            const response = await this.trackerComponent.editMode();
             if (response) {
-              await this.saveAndApplyAvatar(response);
+              await this.saveAndApplyMode(response);
             }
           },
         },
