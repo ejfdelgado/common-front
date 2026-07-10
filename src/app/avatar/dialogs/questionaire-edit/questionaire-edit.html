@@ -16,6 +16,15 @@
                 </mat-form-field>
 
                 <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Objetos de selección</mat-label>
+                    <mat-select formControlName="selectionObjects">
+                        @for (option of objectsOptions; track option.value) {
+                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
                     <mat-label>Máximo de preguntas</mat-label>
                     <input matInput type="number" formControlName="maxQuestions">
                 </mat-form-field>

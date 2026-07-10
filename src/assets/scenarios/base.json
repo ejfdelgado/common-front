@@ -45,6 +45,7 @@
                     "characters": [],
                     "meshes": [],
                     "stepsConfig": {
+                        "abcdType": "cube",
                         "maxQuestions": 10,
                         "introTitle": "Hola, vamos a jugar!",
                         "winLabel": "¡Has ganado! 🎉",

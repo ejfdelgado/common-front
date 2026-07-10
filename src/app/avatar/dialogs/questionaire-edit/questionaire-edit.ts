@@ -34,6 +34,12 @@ const LANGUAGE_OPTIONS: SelectOptionString[] = [
   { label: 'Français', value: "fr-FR" },
 ];
 
+const OBJECTS_OPTIONS: SelectOptionString[] = [
+  { label: 'Cubo', value: "cube" },
+  { label: 'Balón', value: "futbol" },
+  { label: 'Frutas', value: "fruits" },
+];
+
 @Component({
   selector: 'app-questionaire-edit',
   standalone: true,
@@ -62,6 +68,7 @@ export class QuestionaireEditComponent {
   readonly maxOptions = MAX_OPTIONS;
   readonly backgroundOptions = BACKGROUND_OPTIONS;
   readonly languageOptions = LANGUAGE_OPTIONS;
+  readonly objectsOptions = OBJECTS_OPTIONS;
 
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
@@ -83,6 +90,7 @@ export class QuestionaireEditComponent {
 
     this.stepsConfigForm = this.fb.group({
       language: [data.language ?? "es-ES"],
+      selectionObjects: [data.stepsConfig?.abcdType ?? "cube"],
       introTitle: [data.stepsConfig?.introTitle ?? ''],
       looseLabel: [data.stepsConfig?.looseLabel ?? ''],
       winLabel: [data.stepsConfig?.winLabel ?? ''],
@@ -226,6 +234,7 @@ export class QuestionaireEditComponent {
       looseLabel: configValue.looseLabel || undefined,
       winLabel: configValue.winLabel || undefined,
       maxQuestions: this.toNumber(configValue.maxQuestions),
+      abcdType: configValue.selectionObjects || undefined,
     };
     this.data.language = configValue.language ?? "es-ES";
 

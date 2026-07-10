@@ -4,10 +4,6 @@ const BUCKET_ROOT = "https://storage.googleapis.com/pro-ejflab-assets/avatar_ass
 
 export type ABCDType = "cube" | "futbol" | "fruits";
 
-export const ABCDOptions = [
-    // TODO
-];
-
 export const ABCDSet: FeatureObjectAssetSet = {
     name: "abcd",
     set: [
