@@ -531,6 +531,8 @@ export abstract class ComponentBodyTracker
         // Place the camera
         const camera = this.mode.defaultCameraState;
         avatarContainer.scene.forceCameraState(camera);
+        // Add scenario
+        await this.applyScenario(scenarioId ? scenarioId : this.mode.defaultSenario);
         // Define controllers
         const controllers = this.mode.controllers;
         await avatarContainer.removeAllControllers();
@@ -540,8 +542,6 @@ export abstract class ComponentBodyTracker
             await avatarContainer.addController(controller);
             controller.setParams(config.params);
         }
-        // Add scenario
-        await this.applyScenario(scenarioId ? scenarioId : this.mode.defaultSenario);
         if (notifyPeers === true) {
             // Sends others the change intention
             const command: GameAction = {
