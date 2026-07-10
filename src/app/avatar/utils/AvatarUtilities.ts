@@ -623,15 +623,18 @@ export function getHigherAvatarScoredPose(
     return sortedPoses[0];
 }
 
-export function replaceAvatarSkin(
+export async function replaceAvatarSkin(
     model: THREE.Object3D<THREE.Object3DEventMap>,
     url: string,
     useNormalScale: number = 1,
 ) {
-    const newTexture = textureLoader.load(url);
+    const temp1 = textureLoader.loadAsync(url);
+    const newTexture = await temp1;
     newTexture.colorSpace = THREE.SRGBColorSpace;
     newTexture.flipY = false;
-    model.traverse((child: any) => {
+
+    const promises: Promise<any>[] = [];
+    model.traverse(async (child: any) => {
         if (child.isMesh && child.material) {
             child.material.map = newTexture;
             child.material.metalness = 0.0;
@@ -639,11 +642,14 @@ export function replaceAvatarSkin(
             child.material.needsUpdate = true;
             //child.material.roughnessMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_Roughness.jpg');
             if (useNormalScale !== 0) {
-                child.material.normalMap = textureLoader.load('/assets/models/PBR/Fabric061_1K-JPG_NormalGL.jpg');
+                const temp2 = textureLoader.loadAsync('/assets/models/PBR/Fabric061_1K-JPG_NormalGL.jpg');
+                promises.push(temp2);
+                child.material.normalMap = await temp2;
                 child.material.normalScale.set(useNormalScale, useNormalScale);
             }
         }
     });
+    await Promise.all(promises);
 }
 
 export function setRotationBoneLocation(

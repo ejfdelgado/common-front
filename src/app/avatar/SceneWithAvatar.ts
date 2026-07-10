@@ -32,9 +32,10 @@ import {
 import { AvatarBoneEnum, BodyPoseKey, DEFAULT_BOTTOM_VALUES } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
-import { CameraState, GameMode } from '@mytypes/WorldAvatar';
+import { CameraState, GameMode, GameScenario, ObjectAsset } from '@mytypes/WorldAvatar';
 import { waitFor } from '../tools/AsyncUtils';
 import { Wait } from '../services/indicator.service';
+import { ABCDSet } from 'src/types/WorldAvatarLibrary';
 
 export const BUCKET_PATH = "https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/";
 export const ROOT_PATH = "/assets/models/";
@@ -816,31 +817,33 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         return 0;
     }
 
-    addCubeControll() {
+    addObjectAsset(objectAsset: ObjectAsset) {
         return new Promise((resolve, reject) => {
-            this.addModel({ name: "", url: BUCKET_PATH + "accessories/ball_web.glb" }, false).then((obj) => {
-                const addCube = (name: string, imageUrl: string) => {
-                    const aCube = obj.clone(true);
-                    aCube.name = name;
+            const autoAdd = false;
+            this.addModel({
+                name: objectAsset.name,
+                url: objectAsset.meshUrl
+            }, autoAdd).then(async (obj) => {
+                const aCube = obj.clone(true);
+                aCube.name = objectAsset.name;
 
-                    aCube.traverse((child: any) => {
-                        if (child.isMesh && child.material) {
-                            child.material = child.material.clone();
-                            //child.material.transparent = true;
-                            //child.material.opacity = 0;//0 invisible, 1 visible
-                            child.material.side = THREE.FrontSide;
-                        }
-                    });
+                aCube.traverse((child: any) => {
+                    if (child.isMesh && child.material) {
+                        child.material = child.material.clone();
+                        //child.material.transparent = true;
+                        //child.material.opacity = 0;//0 invisible, 1 visible
+                        child.material.side = THREE.FrontSide;
+                    }
+                });
 
-                    replaceAvatarSkin(aCube, ROOT_PATH + imageUrl, 0);
-
-                    this.add(aCube);
-                };
-                addCube("cube_a", "a_ball.jpg");
-                addCube("cube_b", "b_ball.jpg");
-                addCube("cube_c", "c_ball.jpg");
-                addCube("cube_d", "d_ball.jpg");
-
+                if (objectAsset.diffuseUrl) {
+                    await replaceAvatarSkin(aCube, objectAsset.diffuseUrl, 0);
+                }
+                const old = this.getObjectByName(objectAsset.name);
+                if (old) {
+                    this.remove(old);
+                }
+                this.add(aCube);
                 resolve(obj);
             }).catch((err) => {
                 reject(err);
@@ -848,9 +851,20 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         });
     }
 
-    async initializeControlls(mode: GameMode) {
-        const cube = await this.addCubeControll();
+    async initializeControlls(mode: GameMode, scenario: GameScenario) {
+        if (scenario.stepsConfig?.abcdType) {
+            const type = scenario.stepsConfig.abcdType;
+            const setFound = ABCDSet.set.find((set) => { return set.name == type });
+            if (setFound) {
+                const objects = setFound.objects;
+                for (let i = 0; i < objects.length; i++) {
+                    const obj = objects[i];
+                    await this.addObjectAsset(obj);
+                }
+            }
+        }
     }
+
 
     async waitForAvatar() {
         // 200 seconds, is like, wait for ever

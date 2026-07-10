@@ -57,7 +57,10 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
 
     async applyMode(mode: GameMode) {
         await this.initializeAvatar(mode);
-        await this.initializeControlls(mode);
+    }
+
+    async applyScenario(mode: GameMode, scenario: GameScenario) {
+        await this.initializeControlls(mode, scenario);
     }
 
     animate() {

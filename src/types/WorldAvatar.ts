@@ -1,5 +1,6 @@
 import { AnimationSpecType, AvatarLocationState, Point3D } from "./BodyTypes";
 import { AssistantDataType } from "./ragTypes";
+import { ABCDType } from "./WorldAvatarLibrary";
 
 // The intentatio is to persist this data
 export interface WorldAvatar {
@@ -70,6 +71,7 @@ export interface StepsConfig {
     looseLabel?: string;
     winLabel?: string;
     maxQuestions?: number;
+    abcdType?: ABCDType;
 }
 
 export interface GameStepOption {
@@ -131,4 +133,20 @@ export interface AvatarStoredDataType extends AssistantDataType {
 export interface GameSelection {
     scenario: string | null;
     mode: string | null;
+}
+
+export interface ObjectAsset {
+    name: string;
+    meshUrl: string;
+    diffuseUrl?: string;
+}
+
+export interface ObjectAssetSet {
+    name: string;
+    objects: ObjectAsset[];
+}
+
+export interface FeatureObjectAssetSet {
+    name: string;
+    set: ObjectAssetSet[];
 }

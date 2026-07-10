@@ -631,7 +631,9 @@ export abstract class ComponentBodyTracker
         if (!this.scenario) {
             return;
         }
-        console.log(`this.scenario.language = ${this.scenario.language}`);
+        await avatarContainer.scene?.applyScenario(this.mode, this.scenario);
+
+        //console.log(`this.scenario.language = ${this.scenario.language}`);
         if (this.scenario.language) {
             const lang = this.getLang(this.scenario.language);
             if (lang) {
