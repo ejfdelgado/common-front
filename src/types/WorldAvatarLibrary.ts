@@ -66,7 +66,7 @@ export const ABCDSet: FeatureObjectAssetSet = {
                 },
                 {
                     name: "cube_b",
-                    meshUrl: BUCKET_ROOT + "accessories/banana_web.glb"
+                    meshUrl: BUCKET_ROOT + "accessories/banana_web2.glb"
                 },
                 {
                     name: "cube_c",
