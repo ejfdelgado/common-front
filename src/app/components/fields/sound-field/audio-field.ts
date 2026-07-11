@@ -20,6 +20,7 @@ import { FileService } from '@services/file.srv';
 import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
 import { environment } from 'environments/environment';
+import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AudioDetailDataType } from 'types/fieldsTypes';
 import { UploadResponse } from 'types/file';
@@ -55,11 +56,13 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
 
 
   constructor(
+    public override sanitizer: DomSanitizer,
+    public override fullScreenSrv: FullscreenService,
+    // Own services
     private fileSrv: FileService,
     public cdr: ChangeDetectorRef,
     public authSrv: AuthService,
-    public override sanitizer: DomSanitizer,
-    public override fullScreenSrv: FullscreenService,
+    public confirmSrv: ConfirmDialogService,
   ) {
     super(sanitizer, fullScreenSrv);
   }
@@ -115,6 +118,24 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
     this.destroyBlobUrl();
     this.lastBlob = blob;
     this.temporalUrl = URL.createObjectURL(blob);
+  }
+
+  async eraseBlob() {
+    const confirm = await this.confirmSrv.confirm({
+      title: "Está seguro?",
+      message: "Al borrar no se podrá deshacer",
+    });
+    if (!confirm) {
+      return;
+    }
+    this.destroyBlobUrl();
+    this.lastBlob = null;
+    this.temporalUrl = null;
+
+    this.value = null;
+    this.onChange(this.value);
+    this.onTouched();
+    this.cdr.detectChanges();
   }
 
   destroyBlobUrl() {

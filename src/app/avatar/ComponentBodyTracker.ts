@@ -677,6 +677,8 @@ export abstract class ComponentBodyTracker
         this.scenario.stepsConfig = data.stepsConfig;
         // Language
         this.scenario.language = data.language;
+        // 
+        this.scenario.audio = data.audio;
     }
 
     async applyAvatarBeforeSave(data: AvatarModel) {

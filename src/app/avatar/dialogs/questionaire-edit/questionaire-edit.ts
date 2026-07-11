@@ -78,6 +78,7 @@ export class QuestionaireEditComponent {
   audioFXForm: FormGroup;
   searchControl = new FormControl('');
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
+  @ViewChildren(AudioFileComponent) audios!: QueryList<AudioFileComponent>;
   imageConfig: ImageGalleryConfigDataType = {
     template: "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/backgrounds/${random}.jpg",
     thumbnailMaxSizePixels: 512,
@@ -219,6 +220,9 @@ export class QuestionaireEditComponent {
     this.images.forEach((el) => {
       temp.push(el);
     });
+    this.audios.forEach((el) => {
+      temp.push(el);
+    });
     for (let i = 0; i < temp.length; i++) {
       await temp[i].syncIfNeeded();
     }
@@ -231,6 +235,8 @@ export class QuestionaireEditComponent {
       this.backgroundForm.markAllAsTouched();
       return;
     }
+
+    await this.syncIfNeeded();
 
     const backgroundValue = this.backgroundForm.value;
     this.data.background = {
@@ -259,7 +265,12 @@ export class QuestionaireEditComponent {
       })),
     }));
 
-    await this.syncIfNeeded();
+    const soundsFXValue = this.audioFXForm.value;
+    this.data.audio = {
+      intro: soundsFXValue.audioIntro || undefined,
+      loop: soundsFXValue.audioLoop || undefined,
+      finish: soundsFXValue.audioFinish || undefined,
+    };
 
     this.dialogRef.close(this.data);
   }

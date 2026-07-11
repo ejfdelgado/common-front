@@ -1,13 +1,14 @@
 <div class="vertical_parent full_width">
     <div class="horizontal_panel">
+        <mat-icon (click)="askForEdit()" class="edit_icon">search</mat-icon>
         <span class="fill_width">{{ label }}</span>
-        <div class="horizontal_panel">
-            <mat-icon (click)="askForEdit()" class="edit_icon">search</mat-icon>
-        </div>
+        @if (getAudioUrl() != null) {
+        <mat-icon (click)="eraseBlob()" class="edit_icon">cancel</mat-icon>
+        }
     </div>
     @if (getAudioUrl() != null) {
-    <div class="full_width">
-        <audio class="fill_width" [src]="getAudioUrl()"></audio>
+    <div class="horizontal_panel full_width">
+        <audio controls class="fill_width" [src]="getAudioUrl()"></audio>
     </div>
     }
 </div>
