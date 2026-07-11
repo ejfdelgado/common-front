@@ -50,6 +50,11 @@ export interface GameScenario {
         image?: string;
         color?: ColorType;
     },
+    audio?: {
+        intro?: string;
+        finish?: string;
+        loop?: string;
+    },
     meshes: GameMesh[];
     characters: GameCharacter[];
     stepsConfig?: StepsConfig;

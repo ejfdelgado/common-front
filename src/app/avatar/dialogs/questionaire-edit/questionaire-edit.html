@@ -141,6 +141,16 @@
             </form>
         </mat-tab>
 
+        <mat-tab label="Efectos de sonido">
+            <form [formGroup]="audioFXForm" class="tab_content">
+                <app-audio-field [label]="'Inicio'" formControlName="audioIntro"
+                    [config]="audioConfig"></app-audio-field>
+                <app-audio-field [label]="'Fondo'" formControlName="audioLoop" [config]="audioConfig"></app-audio-field>
+                <app-audio-field [label]="'Final'" formControlName="audioFinish"
+                    [config]="audioConfig"></app-audio-field>
+            </form>
+        </mat-tab>
+
     </mat-tab-group>
 </mat-dialog-content>
 

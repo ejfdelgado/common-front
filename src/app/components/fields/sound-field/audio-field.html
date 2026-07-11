@@ -1,10 +1,13 @@
-<div class="audio_parent">
-    @if (getAudioUrl() != null) {
-    <audio class="fill_width" [src]="getAudioUrl()"></audio>
-    } @else {
-        <div class="fill_width"></div>
-    }
-    <div class="controls">
-        <mat-icon (click)="askForEdit()" class="edit_icon">search</mat-icon>
+<div class="vertical_parent full_width">
+    <div class="horizontal_panel">
+        <span class="fill_width">{{ label }}</span>
+        <div class="horizontal_panel">
+            <mat-icon (click)="askForEdit()" class="edit_icon">search</mat-icon>
+        </div>
     </div>
+    @if (getAudioUrl() != null) {
+    <div class="full_width">
+        <audio class="fill_width" [src]="getAudioUrl()"></audio>
+    </div>
+    }
 </div>

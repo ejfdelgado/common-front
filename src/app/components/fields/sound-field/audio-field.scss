@@ -1,16 +1,21 @@
-.audio_parent {
-    width: 100%;
+.vertical_parent {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.audio_parent .fill_width {
+.horizontal_panel {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.fill_width {
     flex: 1;
 }
 
-.controls {
-    display: flex;
-    flex-direction: row;
+.full_width {
+    width: 100%;
 }
 
 .edit_icon {
@@ -18,5 +23,5 @@
 }
 
 .edit_icon:hover {
-    color: rgb(141, 202, 255);
+    color: rgb(0, 39, 72);
 }

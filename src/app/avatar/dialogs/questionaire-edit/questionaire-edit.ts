@@ -13,9 +13,10 @@ import { ColorType, GameScenario, GameStep, GameStepOption, StepsConfig } from '
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
-import { ImageGalleryConfigDataType, SelectOptionString } from 'src/types/fieldsTypes';
+import { AudioDetailDataType, ImageGalleryConfigDataType, SelectOptionString } from 'src/types/fieldsTypes';
 import { ImageFileComponent } from 'src/app/components/fields/image-field/image-field';
 import { ComponentBucketField } from 'src/types/ComponentBucketField';
+import { AudioFileComponent } from 'src/app/components/fields/sound-field/audio-field';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -58,6 +59,7 @@ const OBJECTS_OPTIONS: SelectOptionString[] = [
     RatingComponent,
     ColorPickerComponent,
     ImageFileComponent,
+    AudioFileComponent,
   ],
   templateUrl: './questionaire-edit.html',
   styleUrl: './questionaire-edit.scss',
@@ -73,6 +75,7 @@ export class QuestionaireEditComponent {
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
   backgroundForm: FormGroup;
+  audioFXForm: FormGroup;
   searchControl = new FormControl('');
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
   imageConfig: ImageGalleryConfigDataType = {
@@ -81,6 +84,10 @@ export class QuestionaireEditComponent {
     maxSizePixels: 2048,
     withThumbnail: true,
   };
+  audioConfig: AudioDetailDataType = {
+    template: "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/sounds/${random}.jpg",
+    maxMb: 5,
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -103,6 +110,11 @@ export class QuestionaireEditComponent {
       type: [data.background?.type ?? null],
       color: [data.background?.color ?? { ...DEFAULT_BACKGROUND_COLOR }],
       image: [data.background?.image ?? DEFAULT_BACKGROUND_IMAGE],
+    });
+    this.audioFXForm = this.fb.group({
+      audioIntro: [data.audio?.intro ?? null],
+      audioFinish: [data.audio?.finish ?? null],
+      audioLoop: [data.audio?.loop ?? null],
     });
   }
 
