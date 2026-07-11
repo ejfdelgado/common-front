@@ -32,6 +32,23 @@ export class FileService {
         return this.cameraPicker?.openCamera();
     }
 
+    pickAudioFile(): Promise<Blob> {
+        return this.pickFile(
+            [
+                'audio/mpeg',
+                'audio/wav',
+                'audio/aac',
+                'audio/ogg',
+                'audio/webm',
+                'audio/midi',
+                'audio/mp4',
+                'audio/ogg',
+                'audio/opus',
+                'audio/mp3',
+            ]
+        );
+    }
+
     pickImageFile(): Promise<Blob> {
         return this.pickFile(
             [

@@ -1,0 +1,22 @@
+.audio_parent {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.audio_parent .fill_width {
+    flex: 1;
+}
+
+.controls {
+    display: flex;
+    flex-direction: row;
+}
+
+.edit_icon {
+    cursor: pointer;
+}
+
+.edit_icon:hover {
+    color: rgb(141, 202, 255);
+}

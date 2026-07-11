@@ -45,6 +45,10 @@ export interface ImageDetailDataType extends TemplateDetailDataType {
     squareMaxSizePixels?: number;
 }
 
+export interface AudioDetailDataType extends TemplateDetailDataType {
+    maxMb: number;
+}
+
 // Chip
 
 export interface ChipDataType extends FieldDataType {

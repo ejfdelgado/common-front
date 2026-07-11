@@ -1,0 +1,10 @@
+<div class="audio_parent">
+    @if (getAudioUrl() != null) {
+    <audio class="fill_width" [src]="getAudioUrl()"></audio>
+    } @else {
+        <div class="fill_width"></div>
+    }
+    <div class="controls">
+        <mat-icon (click)="askForEdit()" class="edit_icon">search</mat-icon>
+    </div>
+</div>
