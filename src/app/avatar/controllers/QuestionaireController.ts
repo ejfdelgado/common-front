@@ -2,7 +2,7 @@ import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbst
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 import { ModuloSonido } from "src/app/services/sonido.service";
 import { shuffleInPlace } from "src/app/tools/ArrayUtil";
-import { GameStep, GameStepOption } from "src/types/WorldAvatar";
+import { BUCKET_ROOT, GameScenario, GameStep, GameStepOption } from "src/types/WorldAvatar";
 import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from "./CubeController";
 
 const MAX_LIFE = 5;
@@ -66,6 +66,11 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     }
 
+    override setScenario(scenario: GameScenario) {
+        super.setScenario(scenario);
+        this.preloadAudios();
+    }
+
     getDictionary() {
         let pred = "es-ES";
         if (this.scenario?.language) {
@@ -85,6 +90,33 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     async setHudValue(key: string, val: any, speak?: boolean) {
         await this.cursorDisplay?.setHudDisplay({ key: key, value: val, speak: speak });
+    }
+
+    async preloadAudios() {
+        const audios: string[] = [];
+        if (this.scenario?.audio) {
+            const audioKeys = ["intro", "loop", "finish", "loose", "success"];
+            for (let i = 0; i < audioKeys.length; i++) {
+                const audioKey = audioKeys[i];
+                const val = (this.scenario.audio as any)[audioKey];
+                if (val) {
+                    audios.push(BUCKET_ROOT + val);
+                }
+            }
+        }
+        await ModuloSonido.preload(audios);
+    }
+
+    async playAudio(type: "intro" | "loop" | "finish" | "loose" | "success") {
+        if (!this.scenario?.audio) {
+            return { promise: Promise.resolve() };
+        }
+        const val = (this.scenario?.audio as any)[type];
+        if (!val) {
+            return { promise: Promise.resolve() };
+        }
+        ModuloSonido.stopAll();
+        return await ModuloSonido.play(BUCKET_ROOT + val, type == "loop");
     }
 
     async initializeQuestion() {
@@ -113,7 +145,7 @@ export class QuestionaireController extends SceneControllerAbstract {
             this.steps.forEach((step) => {
                 shuffleInPlace(step.options);
             });
-            const { promise } = await ModuloSonido.play('/assets/sounds/tropical_fade_out.mp3', false);
+            const { promise } = await this.playAudio('intro');
             let introTitle = "Game Start!";
             if (stepsConfig?.introTitle) {
                 introTitle = stepsConfig.introTitle;
@@ -230,16 +262,18 @@ export class QuestionaireController extends SceneControllerAbstract {
             this.life -= 1;
             this.setHudValue("life", this.life);
             if (this.life == 0) {
-                await ModuloSonido.play('/assets/sounds/loose.mp3', false);
+                const { promise } = await this.playAudio('loose');
                 await this.gameOver();
                 return;
             }
-            await ModuloSonido.play('/assets/sounds/loose.mp3', false);
+            const { promise } = await this.playAudio('loose');
+            await promise;
         } else {
             // Celebrate, increment points!
             this.score += op.points * 10;
             this.setHudValue("score", this.score);
-            await ModuloSonido.play('/assets/sounds/success.mp3', false);
+            const { promise } = await this.playAudio('success');
+            await promise;
         }
         if (!this.isPlaying) { return; }
         await this.setHudValue("bottom", op.answer, true);
@@ -264,7 +298,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.winLabel) {
             label = this.scenario.stepsConfig.winLabel;
         }
-        const { promise } = await ModuloSonido.play('/assets/sounds/tropical_fade_in.mp3', false);
+        const { promise } = await this.playAudio('finish');
         await this.setHudValue("top", `<h2>${label}</h2>`, false);
         await promise;
     }

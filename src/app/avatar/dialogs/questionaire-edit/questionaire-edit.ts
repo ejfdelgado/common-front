@@ -86,7 +86,7 @@ export class QuestionaireEditComponent {
     withThumbnail: true,
   };
   audioConfig: AudioDetailDataType = {
-    template: "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/sounds/${random}.jpg",
+    template: "avatar/${user.uid}/${date.year}-${date.month}-${date.day}/sounds/${random}",
     maxMb: 5,
   }
 
@@ -116,6 +116,8 @@ export class QuestionaireEditComponent {
       audioIntro: [data.audio?.intro ?? null],
       audioFinish: [data.audio?.finish ?? null],
       audioLoop: [data.audio?.loop ?? null],
+      audioSuccess: [data.audio?.success ?? null],
+      audioLoose: [data.audio?.loose ?? null],
     });
   }
 
@@ -270,6 +272,8 @@ export class QuestionaireEditComponent {
       intro: soundsFXValue.audioIntro || undefined,
       loop: soundsFXValue.audioLoop || undefined,
       finish: soundsFXValue.audioFinish || undefined,
+      success: soundsFXValue.audioSuccess || undefined,
+      loose: soundsFXValue.audioLoose || undefined,
     };
 
     this.dialogRef.close(this.data);

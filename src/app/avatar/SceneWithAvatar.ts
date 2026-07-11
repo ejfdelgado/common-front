@@ -32,12 +32,12 @@ import {
 import { AvatarBoneEnum, BodyPoseKey, DEFAULT_BOTTOM_VALUES } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
 import { ControlProxy } from './workers/ControlProxy';
-import { CameraState, GameMode, GameScenario, ObjectAsset } from '@mytypes/WorldAvatar';
+import { BUCKET_ROOT, CameraState, GameMode, GameScenario, ObjectAsset } from '@mytypes/WorldAvatar';
 import { waitFor } from '../tools/AsyncUtils';
 import { Wait } from '../services/indicator.service';
 import { ABCDSet } from 'src/types/WorldAvatarLibrary';
 
-export const BUCKET_PATH = "https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/";
+export const BUCKET_PATH = BUCKET_ROOT + "avatar_assets/";
 export const ROOT_PATH = "/assets/models/";
 const USE_WORKER = false;
 

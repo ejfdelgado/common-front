@@ -45,14 +45,14 @@ export class ModuloSonido {
 		});
 	}
 
-	static async preload(lista: any[] = []) {
-		const promesas: Promise<any>[] = [];
+	static async preload(lista: string[] = []) {
+		const promesas: Promise<HTMLAudioElement>[] = [];
 		lista.forEach((llave) => {
 			if (llave in ModuloSonido.sonidos) {
 				promesas.push(Promise.resolve(ModuloSonido.sonidos[llave]));
 			} else {
 				const promesa = ModuloSonido.createAudio({ source: llave });
-				promesa.then((audio: any) => {
+				promesa.then((audio: HTMLAudioElement) => {
 					ModuloSonido.sonidos[llave] = audio;
 				});
 				promesas.push(promesa);

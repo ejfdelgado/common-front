@@ -143,10 +143,15 @@
 
         <mat-tab label="Efectos de sonido">
             <form [formGroup]="audioFXForm" class="tab_content">
-                <app-audio-field [label]="'Inicio'" formControlName="audioIntro"
+                <app-audio-field [label]="'Introducción'" formControlName="audioIntro"
                     [config]="audioConfig"></app-audio-field>
-                <app-audio-field [label]="'Fondo'" formControlName="audioLoop" [config]="audioConfig"></app-audio-field>
-                <app-audio-field [label]="'Final'" formControlName="audioFinish"
+                <app-audio-field [label]="'Sonido de fondo'" formControlName="audioLoop"
+                    [config]="audioConfig"></app-audio-field>
+                <app-audio-field [label]="'Correcto'" formControlName="audioSuccess"
+                    [config]="audioConfig"></app-audio-field>
+                <app-audio-field [label]="'Incorrecto'" formControlName="audioLoose"
+                    [config]="audioConfig"></app-audio-field>
+                <app-audio-field [label]="'Ganar'" formControlName="audioFinish"
                     [config]="audioConfig"></app-audio-field>
             </form>
         </mat-tab>

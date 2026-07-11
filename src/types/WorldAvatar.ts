@@ -2,6 +2,8 @@ import { AnimationSpecType, AvatarLocationState, Point3D } from "./BodyTypes";
 import { AssistantDataType } from "./ragTypes";
 import { ABCDType } from "./WorldAvatarLibrary";
 
+export const BUCKET_ROOT = "https://storage.googleapis.com/pro-ejflab-assets/";
+
 // The intentatio is to persist this data
 export interface WorldAvatar {
     defaultMode: string;
@@ -54,6 +56,8 @@ export interface GameScenario {
         intro?: string;
         finish?: string;
         loop?: string;
+        success?: string;
+        loose?: string;
     },
     meshes: GameMesh[];
     characters: GameCharacter[];
