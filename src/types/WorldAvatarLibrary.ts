@@ -8,12 +8,12 @@ export const MESH_OPTIONS: SelectOptionString[] = [
     { label: 'Tigresa', value: "tigresa009_1_web.glb" },
     { label: 'Coco', value: "cocodrilo009_1_web.glb" },
     { label: 'Huesos', value: "esqueleto009_1_web.glb" },
-    { label: 'Bender', value: "bender_decimate2_web.glb" },
+    { label: 'Bender', value: "bender2_web.glb" },
     { label: 'Steve', value: "steve_raw_web.glb" },
     { label: 'Star Wars', value: "starwars_decimate_web.glb" },
 ];
 
-export type ABCDType = "cube" | "futbol" | "fruits";
+export type ABCDType = "cube" | "futbol" | "fruits" | "minecraft";
 
 export const ABCDSet: FeatureObjectAssetSet = {
     name: "abcd",
@@ -94,19 +94,19 @@ export const ABCDSet: FeatureObjectAssetSet = {
             objects: [
                 {
                     name: "cube_a",
-                    meshUrl: BUCKET_ROOT + "accessories/mine01.glb"
+                    meshUrl: BUCKET_ROOT + "accessories/mine01_1.glb"
                 },
                 {
                     name: "cube_b",
-                    meshUrl: BUCKET_ROOT + "accessories/mine02.glb"
+                    meshUrl: BUCKET_ROOT + "accessories/mine02_1.glb"
                 },
                 {
                     name: "cube_c",
-                    meshUrl: BUCKET_ROOT + "accessories/mine03.glb"
+                    meshUrl: BUCKET_ROOT + "accessories/mine03_1.glb"
                 },
                 {
                     name: "cube_d",
-                    meshUrl: BUCKET_ROOT + "accessories/mine04.glb"
+                    meshUrl: BUCKET_ROOT + "accessories/mine04_1.glb"
                 }
             ],
         }
