@@ -1,6 +1,17 @@
+import { SelectOptionString } from "./fieldsTypes";
 import { FeatureObjectAssetSet } from "./WorldAvatar";
 
 const BUCKET_ROOT = "https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/";
+
+// https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/
+export const MESH_OPTIONS: SelectOptionString[] = [
+    { label: 'Tigresa', value: "tigresa009_1_web.glb" },
+    { label: 'Coco', value: "cocodrilo009_1_web.glb" },
+    { label: 'Huesos', value: "esqueleto009_1_web.glb" },
+    { label: 'Bender', value: "bender_decimate2_web.glb" },
+    { label: 'Steve', value: "steve_raw_web.glb" },
+    { label: 'Star Wars', value: "starwars_decimate_web.glb" },
+];
 
 export type ABCDType = "cube" | "futbol" | "fruits";
 
@@ -75,6 +86,27 @@ export const ABCDSet: FeatureObjectAssetSet = {
                 {
                     name: "cube_d",
                     meshUrl: BUCKET_ROOT + "accessories/pinia_web.glb"
+                }
+            ],
+        },
+        {
+            name: "minecraft",
+            objects: [
+                {
+                    name: "cube_a",
+                    meshUrl: BUCKET_ROOT + "accessories/mine01.glb"
+                },
+                {
+                    name: "cube_b",
+                    meshUrl: BUCKET_ROOT + "accessories/mine02.glb"
+                },
+                {
+                    name: "cube_c",
+                    meshUrl: BUCKET_ROOT + "accessories/mine03.glb"
+                },
+                {
+                    name: "cube_d",
+                    meshUrl: BUCKET_ROOT + "accessories/mine04.glb"
                 }
             ],
         }

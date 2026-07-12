@@ -8,14 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { AvatarModel } from 'src/types/WorldAvatar';
-import { SelectOptionString } from 'src/types/fieldsTypes';
-
-// https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/
-const MESH_OPTIONS: SelectOptionString[] = [
-  { label: 'Tigresa', value: "tigresa009_1_web.glb" },
-  { label: 'Coco', value: "cocodrilo009_1_web.glb" },
-  { label: 'Huesos', value: "esqueleto009_1_web.glb" },
-];
+import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 
 @Component({
   selector: 'app-avatar-edit',
