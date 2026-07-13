@@ -238,7 +238,7 @@ export class QuestionaireController extends SceneControllerAbstract {
                 letter.cube_id as ENABLE_CUBE_TYPE,
                 {
                     minmax: letter.minmax,
-                    rotationPeriod: direction * this.randomize(2000, 5000),
+                    //rotationPeriod: direction * this.randomize(2000, 5000),
                 });
             await this.setHudValue(letter.hud_id, option.label, true);
             if (!this.isPlaying) { return; }

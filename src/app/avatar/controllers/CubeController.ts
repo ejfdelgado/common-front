@@ -213,8 +213,8 @@ export class CubeController extends SceneControllerAbstract {
         mesh.geometry.computeBoundingBox();
         const box = mesh.geometry.boundingBox.clone();
         const worldMatrix = mesh.matrixWorld.clone();
-        //const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
-        //worldMatrix.multiply(scaleMatrix);
+        const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
+        worldMatrix.multiply(scaleMatrix);
         box.applyMatrix4(worldMatrix);
         return box;
     }
