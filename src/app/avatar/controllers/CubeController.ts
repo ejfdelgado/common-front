@@ -42,6 +42,7 @@ export interface CubeConfigType {
     material: any;
     selected: boolean;
     eventName: string;
+    rotationPeriod: number;
 };
 
 export class CubeController extends SceneControllerAbstract {
@@ -60,6 +61,7 @@ export class CubeController extends SceneControllerAbstract {
                 model: null,
                 material: null,
                 selected: true,
+                rotationPeriod: 0,
             },
             "cube_b": {
                 local_x: -1 * SIDE_SHIFT,
@@ -72,6 +74,7 @@ export class CubeController extends SceneControllerAbstract {
                 model: null,
                 material: null,
                 selected: true,
+                rotationPeriod: 0,
             },
             "cube_c": {
                 local_x: SIDE_SHIFT,
@@ -84,6 +87,7 @@ export class CubeController extends SceneControllerAbstract {
                 model: null,
                 material: null,
                 selected: true,
+                rotationPeriod: 0,
             },
             "cube_d": {
                 local_x: -1 * SIDE_SHIFT,
@@ -96,6 +100,7 @@ export class CubeController extends SceneControllerAbstract {
                 model: null,
                 material: null,
                 selected: true,
+                rotationPeriod: 0,
             },
         };
 
@@ -178,6 +183,11 @@ export class CubeController extends SceneControllerAbstract {
             }
             config.local = new THREE.Matrix4().makeTranslation(x, y, z);
         }
+        if (typeof data.rotationPeriod == "number") {
+            config.rotationPeriod = data.rotationPeriod;
+        } else {
+            config.rotationPeriod = 0;
+        }
     }
 
     getCubeConfig(name: string): CubeConfigType | null | undefined {
@@ -190,18 +200,23 @@ export class CubeController extends SceneControllerAbstract {
         if (!cubeObject) { return; }
         cubeObject.traverse((mesh: any) => {
             if (mesh.isMesh) {
-                mesh.geometry.computeBoundingBox();
-                const box = mesh.geometry.boundingBox.clone();
-                const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
-                const worldMatrix = mesh.matrixWorld.clone().multiply(scaleMatrix);
-                box.applyMatrix4(worldMatrix);
-                config.sphere = box;
+                config.sphere = this.computeBoundings(mesh);
                 if (mesh.material) {
                     config.material = mesh.material;
                 }
             }
         });
         return config;
+    }
+
+    computeBoundings(mesh: any) {
+        mesh.geometry.computeBoundingBox();
+        const box = mesh.geometry.boundingBox.clone();
+        const worldMatrix = mesh.matrixWorld.clone();
+        //const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
+        //worldMatrix.multiply(scaleMatrix);
+        box.applyMatrix4(worldMatrix);
+        return box;
     }
 
     // It runs every frame...
@@ -211,7 +226,7 @@ export class CubeController extends SceneControllerAbstract {
         }
         const rotationMatrix = new THREE.Matrix4()
             .makeRotationY(this.scene.avatarStateSmoot.rotationY);
-
+        const now = Date.now();
         Object.keys(this.cubes).forEach((name: string) => {
             const config = this.getCubeConfig(name);
             if (!config) { return; }
@@ -228,17 +243,20 @@ export class CubeController extends SceneControllerAbstract {
             cubeAMatrix.multiply(translationMatrix);
             cubeAMatrix.multiply(rotationMatrix);
             cubeAMatrix.multiply(config.local);
+            // Make a rotation with period 
+            const rotationPeriod = config.rotationPeriod;
+            if (rotationPeriod != 0) {
+                // Here multiply
+                const spinAmount = (now % Math.abs(rotationPeriod)) / rotationPeriod;
+                const spinMatrix = new THREE.Matrix4().makeRotationY(2 * Math.PI * spinAmount);
+                cubeAMatrix.multiply(spinMatrix);
+            }
             cubeObject.matrixAutoUpdate = false;
             cubeObject.matrix.copy(cubeAMatrix);
 
             cubeObject.traverse((mesh: any) => {
                 if (mesh.isMesh) {
-                    mesh.geometry.computeBoundingBox();
-                    const box = mesh.geometry.boundingBox.clone();
-                    const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
-                    const worldMatrix = mesh.matrixWorld.clone().multiply(scaleMatrix);
-                    box.applyMatrix4(worldMatrix);
-                    config.sphere = box;
+                    config.sphere = this.computeBoundings(mesh);
                     if (mesh.material) {
                         config.material = mesh.material;
                     }

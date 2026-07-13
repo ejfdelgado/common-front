@@ -10,8 +10,8 @@ const MAX_LIFE = 5;
 const FAR_AMOUNT_X = 0;
 const FAR_AMOUNT_Y = 0;
 
-const X_MIN = 0.5;
-const X_MAX = 0.5 + 1 * FAR_AMOUNT_X;
+const X_MIN = 0.6;
+const X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 const Y_MIN = 0.3 * FAR_AMOUNT_Y;
 const Y_MAX = 0.4 * FAR_AMOUNT_Y;
 const Y_MIN_BOTTOM = -0.8;
@@ -71,6 +71,12 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.preloadAudios();
     }
 
+    randomize(min: number, max: number) {
+        const rand = Math.random();
+        const inverse = 1 - rand;
+        return rand * min + inverse * max;
+    }
+
     getDictionary() {
         let pred = "es-ES";
         if (this.scenario?.language) {
@@ -84,8 +90,12 @@ export class QuestionaireController extends SceneControllerAbstract {
         this.events.emit({ name: "CUBE_LISTEN_OFF", });
     }
 
-    enableCube(name: ENABLE_CUBE_TYPE, data: { minmax?: MinMaxCubeRange }) {
-        this.events.emit({ name: name, data });
+    enableCube(name: ENABLE_CUBE_TYPE, data: {
+        minmax?: MinMaxCubeRange,
+        rotationPeriod?: number,
+    }) {
+        const payload = { name: name, data };
+        this.events.emit(payload);
     }
 
     async setHudValue(key: string, val: any, speak?: boolean) {
@@ -223,7 +233,13 @@ export class QuestionaireController extends SceneControllerAbstract {
             const option = actualStep.options[i];
             const letter = LETTERS[i];
             this.optionsMap[letter.id] = option;
-            this.enableCube(letter.cube_id as ENABLE_CUBE_TYPE, { minmax: letter.minmax });
+            const direction = this.randomize(0, 10) > 5 ? 1 : -1;
+            this.enableCube(
+                letter.cube_id as ENABLE_CUBE_TYPE,
+                {
+                    minmax: letter.minmax,
+                    rotationPeriod: direction * this.randomize(2000, 5000),
+                });
             await this.setHudValue(letter.hud_id, option.label, true);
             if (!this.isPlaying) { return; }
         }
