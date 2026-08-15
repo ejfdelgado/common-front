@@ -36,7 +36,7 @@ export interface CubeConfigType {
   local_z: number;
   local: THREE.Matrix4;
   height: number;
-  sphere: any;
+  collisionBounds: any;
   minmax?: MinMaxCubeRange;
   model: THREE.Object3D<THREE.Object3DEventMap> | null | undefined;
   material: any;
@@ -56,7 +56,7 @@ export class CubeController extends SceneControllerAbstract {
       eventName: 'CUBE_A_SELECT_',
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: AB_HEIGHT,
-      sphere: null,
+      collisionBounds: null,
       model: null,
       material: null,
       selected: true,
@@ -68,7 +68,7 @@ export class CubeController extends SceneControllerAbstract {
       eventName: 'CUBE_B_SELECT_',
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: AB_HEIGHT,
-      sphere: null,
+      collisionBounds: null,
       model: null,
       material: null,
       selected: true,
@@ -80,7 +80,7 @@ export class CubeController extends SceneControllerAbstract {
       eventName: 'CUBE_C_SELECT_',
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: 0.1,
-      sphere: null,
+      collisionBounds: null,
       model: null,
       material: null,
       selected: true,
@@ -92,7 +92,7 @@ export class CubeController extends SceneControllerAbstract {
       eventName: 'CUBE_D_SELECT_',
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: 0.1,
-      sphere: null,
+      collisionBounds: null,
       model: null,
       material: null,
       selected: true,
@@ -188,7 +188,7 @@ export class CubeController extends SceneControllerAbstract {
         const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
         const worldMatrix = mesh.matrixWorld.clone().multiply(scaleMatrix);
         box.applyMatrix4(worldMatrix);
-        config.sphere = box;
+        config.collisionBounds = box;
         if (mesh.material) {
           config.material = mesh.material;
         }
@@ -271,19 +271,19 @@ export class CubeController extends SceneControllerAbstract {
     footR.getWorldPosition(rightFootPoint);
     Object.keys(this.cubes).forEach((name: string) => {
       const config = this.cubes[name];
-      const { sphere } = config;
-      if (!sphere) {
+      const { collisionBounds } = config;
+      if (!collisionBounds) {
         return;
       }
-      let isInSphere = sphere.containsPoint(leftHandPoint);
+      let isInSphere = collisionBounds.containsPoint(leftHandPoint);
       if (!isInSphere) {
-        isInSphere = sphere.containsPoint(rightHandPoint);
+        isInSphere = collisionBounds.containsPoint(rightHandPoint);
       }
       if (!isInSphere) {
-        isInSphere = sphere.containsPoint(leftFootPoint);
+        isInSphere = collisionBounds.containsPoint(leftFootPoint);
       }
       if (!isInSphere) {
-        isInSphere = sphere.containsPoint(rightFootPoint);
+        isInSphere = collisionBounds.containsPoint(rightFootPoint);
       }
 
       if (isInSphere) {
