@@ -1,3 +1,35 @@
+# TODO
+
+Slider de Aleatoriedad de los objetos, qué tan cerca o lejos están.
+Poder atrapar los objetos independientemente de que giren.
+Rotar en sentido y velocidad aleatoria.
+Ajustar el tamaño de los objetos a atrapar.
+
+Permitir aditar la imágen para redes del juego.
+Corregir el idioma de lectura. Hacer multilenguaje real.
+
+Celebrar el fin del escenario. Coger todos los objetos que caen! (QuestionaireController)
+
+Ver árbol de escenarios
+Permitir agregar/quitar un escenario
+Redefinir el nombre del escenario
+Redefinir el nombre del modo
+Definir cuál es el escenario siguiente
+
+Permitir configurar:
+Configurar timeout para las preguntas.
+
+-------------------------------------------------------------
+
+gltf-transform resize steve_raw2.glb steve_raw2_downsample.glb --width 1024 --height 1024
+gltf-transform webp steve_raw2_downsample.glb steve_raw2_web.glb
+
+docs
+Agregar un botón para permitir ver el password.
+Agregar un checkbox al password dialog para saber si se quiere redefinir la clave.
+En cuyo caso toca agregar un campo para clave anterior y clave nueva.
+
+
 # CommonFront
 
 Detect thumb pointing Vertical or horizontal.
