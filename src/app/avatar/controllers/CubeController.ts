@@ -1,6 +1,7 @@
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import { AvatarBoneEnum } from '@mytypes/BodyParts';
 import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from '@mytypes/BodyTypes';
+import { randomize } from 'src/app/tools/NumberUtils';
 import { ControllerInitDataType } from 'src/types/BodyTypesExtra';
 import * as THREE from 'three';
 
@@ -154,12 +155,6 @@ export class CubeController extends SceneControllerAbstract {
     }
   }
 
-  randomize(min: number, max: number) {
-    const rand = Math.random();
-    const inverse = 1 - rand;
-    return rand * min + inverse * max;
-  }
-
   setCubeData(name: string, data?: any) {
     const config = this.getCubeConfig(name);
     if (!config) {
@@ -173,13 +168,13 @@ export class CubeController extends SceneControllerAbstract {
       let y = config.local_y;
       let z = config.local_z;
       if (config.minmax?.x) {
-        x = this.randomize(config.minmax.x.min, config.minmax.x.max);
+        x = randomize(config.minmax.x.min, config.minmax.x.max);
       }
       if (config.minmax?.y) {
-        y = this.randomize(config.minmax.y.min, config.minmax.y.max);
+        y = randomize(config.minmax.y.min, config.minmax.y.max);
       }
       if (config.minmax?.z) {
-        z = this.randomize(config.minmax.z.min, config.minmax.z.max);
+        z = randomize(config.minmax.z.min, config.minmax.z.max);
       }
       config.local = new THREE.Matrix4().makeTranslation(x, y, z);
     }

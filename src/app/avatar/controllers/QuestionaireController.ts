@@ -9,7 +9,10 @@ import { randomize } from 'src/app/tools/NumberUtils';
 const MAX_LIFE = 5;
 
 const FAR_AMOUNT_X = 0;
-const FAR_AMOUNT_Y = 0;
+const FAR_AMOUNT_Y = 0.5;
+const CUBE_ROTATE = false;
+const ROTATION_MIN = 2000;
+const ROTATION_MAX = 5000;
 
 const X_MIN = 0.8;
 const X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
@@ -20,8 +23,6 @@ const Y_MAX_BOTTOM = -0.8 + 0.3 * FAR_AMOUNT_Y;
 
 const SIDE_FRONT = 0.3;
 
-const VERTICAL_SHIFT = -0.8; //-0.5
-
 const MAX_QUESTIONS_DEF = 10;
 
 export interface LettersConfig {
@@ -29,6 +30,7 @@ export interface LettersConfig {
   cube_id: string;
   hud_id: string;
   minmax?: MinMaxCubeRange;
+  rotate?: boolean;
 }
 
 const TRANSLATION: any = {
@@ -83,7 +85,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     name: ENABLE_CUBE_TYPE,
     data: {
       minmax?: MinMaxCubeRange;
-      rotationPeriod?: number;
+      rotationPeriod: number;
     },
   ) {
     const payload = { name: name, data };
@@ -188,6 +190,7 @@ export class QuestionaireController extends SceneControllerAbstract {
           y: { min: -1 * Y_MIN, max: Y_MAX },
           z: { min: SIDE_FRONT, max: SIDE_FRONT },
         },
+        rotate: CUBE_ROTATE,
       },
       {
         id: 'B',
@@ -198,6 +201,7 @@ export class QuestionaireController extends SceneControllerAbstract {
           y: { min: -1 * Y_MIN, max: Y_MAX },
           z: { min: SIDE_FRONT, max: SIDE_FRONT },
         },
+        rotate: CUBE_ROTATE,
       },
       {
         id: 'C',
@@ -208,6 +212,7 @@ export class QuestionaireController extends SceneControllerAbstract {
           y: { min: Y_MIN_BOTTOM, max: Y_MAX_BOTTOM },
           z: { min: 0, max: 0 },
         },
+        rotate: CUBE_ROTATE,
       },
       {
         id: 'D',
@@ -218,6 +223,7 @@ export class QuestionaireController extends SceneControllerAbstract {
           y: { min: Y_MIN_BOTTOM, max: Y_MAX_BOTTOM },
           z: { min: 0, max: 0 },
         },
+        rotate: CUBE_ROTATE,
       },
     ];
 
@@ -239,7 +245,7 @@ export class QuestionaireController extends SceneControllerAbstract {
       const direction = randomize(0, 10) > 5 ? 1 : -1;
       this.enableCube(letter.cube_id as ENABLE_CUBE_TYPE, {
         minmax: letter.minmax,
-        rotationPeriod: direction * randomize(2000, 5000),
+        rotationPeriod: letter.rotate ? direction * randomize(ROTATION_MIN, ROTATION_MAX) : 0,
       });
       await this.setHudValue(letter.hud_id, option.label, true);
       if (!this.isPlaying) {
@@ -270,7 +276,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
   async evaluateAnswer(choice: string) {
     this.hideAllCubes();
-    this.enableCube(('CUBE_' + choice + '_ON') as ENABLE_CUBE_TYPE, {});
+    this.enableCube(('CUBE_' + choice + '_ON') as ENABLE_CUBE_TYPE, { rotationPeriod: 0 });
     const op = this.optionsMap[choice];
     if (!op) {
       console.log(`No option for choice ${choice}`);
