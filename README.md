@@ -32,7 +32,12 @@ En cuyo caso toca agregar un campo para clave anterior y clave nueva.
 
 # CommonFront
 
-Detect thumb pointing Vertical or horizontal.
+Enable config:
+- Random amount
+- Rotation
+
+¿bounding box con escalado?
+¿Hacer todos los objetos de un mismo tamaño?
 
 Use events:
 HANDS_ON

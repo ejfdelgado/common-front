@@ -1,8 +1,12 @@
-import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
-import { AvatarBoneEnum } from '@mytypes/BodyParts';
-import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from '@mytypes/BodyTypes';
-import { ControllerInitDataType } from 'src/types/BodyTypesExtra';
-import * as THREE from 'three';
+import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
+import { AvatarBoneEnum } from "@mytypes/BodyParts";
+import {
+  ControllerUpdateResponse,
+  AvatarBodyEvent,
+  AVATAR_NAME,
+} from "@mytypes/BodyTypes";
+import { ControllerInitDataType } from "src/types/BodyTypesExtra";
+import * as THREE from "three";
 
 const OPACITY_LOW = 0.5;
 const OPACITY_HIGH = 1;
@@ -13,7 +17,11 @@ const AB_HEIGHT = 0.5;
 const VERTICAL_SHIFT = -0.8; //-0.5
 const CUBE_BOX_Z_SCALE = 3; // stretches the collision box 3x along local z
 
-export type ENABLE_CUBE_TYPE = 'CUBE_A_ON' | 'CUBE_B_ON' | 'CUBE_C_ON' | 'CUBE_D_ON';
+export type ENABLE_CUBE_TYPE =
+  | "CUBE_A_ON"
+  | "CUBE_B_ON"
+  | "CUBE_C_ON"
+  | "CUBE_D_ON";
 
 export interface MinMaxCubeRange {
   x?: {
@@ -42,6 +50,7 @@ export interface CubeConfigType {
   material: any;
   selected: boolean;
   eventName: string;
+  rotationPeriod: number;
 }
 
 export class CubeController extends SceneControllerAbstract {
@@ -53,49 +62,53 @@ export class CubeController extends SceneControllerAbstract {
       local_x: SIDE_SHIFT,
       local_y: 0,
       local_z: SIDE_FRONT,
-      eventName: 'CUBE_A_SELECT_',
+      eventName: "CUBE_A_SELECT_",
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: AB_HEIGHT,
       collisionBounds: null,
       model: null,
       material: null,
       selected: true,
+      rotationPeriod: 0,
     },
     cube_b: {
       local_x: -1 * SIDE_SHIFT,
       local_y: 0,
       local_z: SIDE_FRONT,
-      eventName: 'CUBE_B_SELECT_',
+      eventName: "CUBE_B_SELECT_",
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: AB_HEIGHT,
       collisionBounds: null,
       model: null,
       material: null,
       selected: true,
+      rotationPeriod: 0,
     },
     cube_c: {
       local_x: SIDE_SHIFT,
       local_y: VERTICAL_SHIFT,
       local_z: 0,
-      eventName: 'CUBE_C_SELECT_',
+      eventName: "CUBE_C_SELECT_",
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: 0.1,
       collisionBounds: null,
       model: null,
       material: null,
       selected: true,
+      rotationPeriod: 0,
     },
     cube_d: {
       local_x: -1 * SIDE_SHIFT,
       local_y: VERTICAL_SHIFT,
       local_z: 0,
-      eventName: 'CUBE_D_SELECT_',
+      eventName: "CUBE_D_SELECT_",
       local: new THREE.Matrix4().makeTranslation(0, 0, 0),
       height: 0.1,
       collisionBounds: null,
       model: null,
       material: null,
       selected: true,
+      rotationPeriod: 0,
     },
   };
 
@@ -111,7 +124,11 @@ export class CubeController extends SceneControllerAbstract {
     super.initialize(data);
     for (let name in this.cubes) {
       const cube = this.cubes[name];
-      cube.local = new THREE.Matrix4().makeTranslation(cube.local_x, cube.local_y, cube.local_z);
+      cube.local = new THREE.Matrix4().makeTranslation(
+        cube.local_x,
+        cube.local_y,
+        cube.local_z,
+      );
     }
   }
 
@@ -178,14 +195,26 @@ export class CubeController extends SceneControllerAbstract {
       }
       config.local = new THREE.Matrix4().makeTranslation(x, y, z);
     }
+    if (typeof data.rotationPeriod == "number") {
+      config.rotationPeriod = data.rotationPeriod;
+    } else {
+      config.rotationPeriod = 0;
+    }
   }
 
-  computeBoundingBox(cubeObject: THREE.Object3D<THREE.Object3DEventMap>, config: CubeConfigType) {
+  computeBoundingBox(
+    cubeObject: THREE.Object3D<THREE.Object3DEventMap>,
+    config: CubeConfigType,
+  ) {
     cubeObject.traverse((mesh: any) => {
       if (mesh.isMesh) {
         mesh.geometry.computeBoundingBox();
         const box = mesh.geometry.boundingBox.clone();
-        const scaleMatrix = new THREE.Matrix4().makeScale(1, 1, CUBE_BOX_Z_SCALE);
+        const scaleMatrix = new THREE.Matrix4().makeScale(
+          1,
+          1,
+          CUBE_BOX_Z_SCALE,
+        );
         const worldMatrix = mesh.matrixWorld.clone().multiply(scaleMatrix);
         box.applyMatrix4(worldMatrix);
         config.collisionBounds = box;
@@ -215,8 +244,10 @@ export class CubeController extends SceneControllerAbstract {
     if (!this.enabled || !this.lastData) {
       return {};
     }
-    const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarStateSmoot.rotationY);
-
+    const rotationMatrix = new THREE.Matrix4().makeRotationY(
+      this.scene.avatarStateSmoot.rotationY,
+    );
+    const now = Date.now();
     Object.keys(this.cubes).forEach((name: string) => {
       const config = this.getCubeConfig(name);
       if (!config) {
@@ -228,7 +259,9 @@ export class CubeController extends SceneControllerAbstract {
       }
 
       const tx = this.scene.avatarStateSmoot.positionX;
-      const ty = this.lastData.stateBody.height * config.height + this.scene.avatarState.positionY;
+      const ty =
+        this.lastData.stateBody.height * config.height +
+        this.scene.avatarState.positionY;
       const tz = this.scene.avatarStateSmoot.positionZ;
 
       const translationMatrix = new THREE.Matrix4().makeTranslation(tx, ty, tz);
@@ -237,6 +270,16 @@ export class CubeController extends SceneControllerAbstract {
       cubeAMatrix.multiply(translationMatrix);
       cubeAMatrix.multiply(rotationMatrix);
       cubeAMatrix.multiply(config.local);
+      // Make a rotation with period
+      const rotationPeriod = config.rotationPeriod;
+      if (rotationPeriod != 0) {
+        // Here multiply
+        const spinAmount = (now % Math.abs(rotationPeriod)) / rotationPeriod;
+        const spinMatrix = new THREE.Matrix4().makeRotationY(
+          2 * Math.PI * spinAmount,
+        );
+        cubeAMatrix.multiply(spinMatrix);
+      }
       cubeObject.matrixAutoUpdate = false;
       cubeObject.matrix.copy(cubeAMatrix);
 
@@ -295,7 +338,7 @@ export class CubeController extends SceneControllerAbstract {
             config.material.opacity = OPACITY_HIGH;
             config.selected = true;
             this.events.emit({
-              name: config.eventName + 'ON',
+              name: config.eventName + "ON",
             });
           }
         }
@@ -308,7 +351,7 @@ export class CubeController extends SceneControllerAbstract {
             config.material.opacity = OPACITY_LOW;
             config.selected = false;
             this.events.emit({
-              name: config.eventName + 'OFF',
+              name: config.eventName + "OFF",
             });
           }
         }
@@ -321,38 +364,39 @@ export class CubeController extends SceneControllerAbstract {
   override async destroy(): Promise<void> {}
 
   override onEvent(event: AvatarBodyEvent): void {
-    if (event.name == 'CUBE_CONTROLL_ON') {
+    if (event.name == "CUBE_CONTROLL_ON") {
       this.setParams({ enabled: true });
-    } else if (event.name == 'CUBE_CONTROLL_OFF') {
+    } else if (event.name == "CUBE_CONTROLL_OFF") {
       this.setParams({ enabled: false });
-    } else if (event.name == 'CUBE_LISTEN_ON') {
+    } else if (event.name == "CUBE_LISTEN_ON") {
       this.setParams({ canListen: true });
-    } else if (event.name == 'CUBE_LISTEN_OFF') {
+    } else if (event.name == "CUBE_LISTEN_OFF") {
       this.setParams({ canListen: false });
-    } else if (event.name == 'CUBE_A_ON') {
-      this.setVisibility(true, 'cube_a');
-      this.setOpacity(OPACITY_LOW, 'cube_a');
+    } else if (event.name == "CUBE_A_ON") {
+      this.setVisibility(true, "cube_a");
+      this.setOpacity(OPACITY_LOW, "cube_a");
       if (event.data) {
-        this.setCubeData('cube_a', event.data);
+        this.setCubeData("cube_a", event.data);
       }
-    } else if (event.name == 'CUBE_B_ON') {
-      this.setVisibility(true, 'cube_b');
-      this.setOpacity(OPACITY_LOW, 'cube_b');
+    } else if (event.name == "CUBE_B_ON") {
+      this.setVisibility(true, "cube_b");
+      this.setOpacity(OPACITY_LOW, "cube_b");
       if (event.data) {
-        this.setCubeData('cube_b', event.data);
+        this.setCubeData("cube_b", event.data);
       }
-    } else if (event.name == 'CUBE_C_ON') {
-      this.setVisibility(true, 'cube_c');
-      this.setOpacity(OPACITY_LOW, 'cube_c');
+    } else if (event.name == "CUBE_C_ON") {
+      this.setVisibility(true, "cube_c");
+      this.setOpacity(OPACITY_LOW, "cube_c");
       if (event.data) {
-        this.setCubeData('cube_c', event.data);
+        this.setCubeData("cube_c", event.data);
       }
-    } else if (event.name == 'CUBE_D_ON') {
-      this.setVisibility(true, 'cube_d');
-      this.setOpacity(OPACITY_LOW, 'cube_d');
+    } else if (event.name == "CUBE_D_ON") {
+      this.setVisibility(true, "cube_d");
+      this.setOpacity(OPACITY_LOW, "cube_d");
       if (event.data) {
-        this.setCubeData('cube_d', event.data);
+        this.setCubeData("cube_d", event.data);
       }
     }
   }
 }
+
