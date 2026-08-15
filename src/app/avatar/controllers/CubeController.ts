@@ -140,7 +140,7 @@ export class CubeController extends SceneControllerAbstract {
   setOpacity(val: number, name?: string) {
     const fun = (name: string) => {
       const config = this.getCubeConfig(name);
-      if (!config) {
+      if (!config || !config.material) {
         return;
       }
       config.material.opacity = val;
@@ -190,6 +190,19 @@ export class CubeController extends SceneControllerAbstract {
     }
   }
 
+  copyMaterialReference(
+    cubeObject: THREE.Object3D<THREE.Object3DEventMap>,
+    config: CubeConfigType,
+  ) {
+    cubeObject.traverse((mesh: any) => {
+      if (mesh.isMesh) {
+        if (mesh.material) {
+          config.material = mesh.material;
+        }
+      }
+    });
+  }
+
   computeBoundingBox(cubeObject: THREE.Object3D<THREE.Object3DEventMap>, config: CubeConfigType) {
     cubeObject.traverse((mesh: any) => {
       if (mesh.isMesh) {
@@ -199,9 +212,6 @@ export class CubeController extends SceneControllerAbstract {
         const worldMatrix = mesh.matrixWorld.clone().multiply(scaleMatrix);
         box.applyMatrix4(worldMatrix);
         config.collisionBounds = box;
-        if (mesh.material) {
-          config.material = mesh.material;
-        }
       }
     });
   }
@@ -216,7 +226,6 @@ export class CubeController extends SceneControllerAbstract {
     if (!cubeObject) {
       return;
     }
-    this.computeBoundingBox(cubeObject, config);
     return config;
   }
 
@@ -236,6 +245,7 @@ export class CubeController extends SceneControllerAbstract {
       if (!cubeObject) {
         return;
       }
+      this.copyMaterialReference(cubeObject, config);
 
       const tx = this.scene.avatarStateSmoot.positionX;
       const ty = this.lastData.stateBody.height * config.height + this.scene.avatarState.positionY;
@@ -243,7 +253,19 @@ export class CubeController extends SceneControllerAbstract {
 
       const translationMatrix = new THREE.Matrix4().makeTranslation(tx, ty, tz);
 
-      const cubeAMatrix = new THREE.Matrix4().identity();
+      // Compute location and rotation relative to avatar
+      let cubeAMatrix = new THREE.Matrix4().identity();
+      cubeAMatrix.multiply(translationMatrix);
+      cubeAMatrix.multiply(rotationMatrix);
+      cubeAMatrix.multiply(config.local);
+      cubeObject.matrixAutoUpdate = false;
+      cubeObject.matrix.copy(cubeAMatrix);
+
+      // Compute collision bounding
+      this.computeBoundingBox(cubeObject, config);
+
+      // Compute again, but include own cube spin rotation
+      cubeAMatrix = new THREE.Matrix4().identity();
       cubeAMatrix.multiply(translationMatrix);
       cubeAMatrix.multiply(rotationMatrix);
       cubeAMatrix.multiply(config.local);
@@ -257,8 +279,6 @@ export class CubeController extends SceneControllerAbstract {
       }
       cubeObject.matrixAutoUpdate = false;
       cubeObject.matrix.copy(cubeAMatrix);
-
-      this.computeBoundingBox(cubeObject, config);
     });
 
     return {};

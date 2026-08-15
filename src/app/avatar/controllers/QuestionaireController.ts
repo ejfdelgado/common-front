@@ -4,13 +4,14 @@ import { ModuloSonido } from 'src/app/services/sonido.service';
 import { shuffleInPlace } from 'src/app/tools/ArrayUtil';
 import { BUCKET_ROOT, GameScenario, GameStep, GameStepOption } from 'src/types/WorldAvatar';
 import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from './CubeController';
+import { randomize } from 'src/app/tools/NumberUtils';
 
 const MAX_LIFE = 5;
 
 const FAR_AMOUNT_X = 0;
 const FAR_AMOUNT_Y = 0;
 
-const X_MIN = 0.6;
+const X_MIN = 0.8;
 const X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 const Y_MIN = 0.3 * FAR_AMOUNT_Y;
 const Y_MAX = 0.4 * FAR_AMOUNT_Y;
@@ -63,12 +64,6 @@ export class QuestionaireController extends SceneControllerAbstract {
   override setScenario(scenario: GameScenario) {
     super.setScenario(scenario);
     this.preloadAudios();
-  }
-
-  randomize(min: number, max: number) {
-    const rand = Math.random();
-    const inverse = 1 - rand;
-    return rand * min + inverse * max;
   }
 
   getDictionary() {
@@ -241,10 +236,10 @@ export class QuestionaireController extends SceneControllerAbstract {
       const option = actualStep.options[i];
       const letter = LETTERS[i];
       this.optionsMap[letter.id] = option;
-      const direction = this.randomize(0, 10) > 5 ? 1 : -1;
+      const direction = randomize(0, 10) > 5 ? 1 : -1;
       this.enableCube(letter.cube_id as ENABLE_CUBE_TYPE, {
         minmax: letter.minmax,
-        //rotationPeriod: direction * this.randomize(2000, 5000),
+        rotationPeriod: direction * randomize(2000, 5000),
       });
       await this.setHudValue(letter.hud_id, option.label, true);
       if (!this.isPlaying) {
