@@ -1,14 +1,9 @@
-import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
-import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
-import { ModuloSonido } from "src/app/services/sonido.service";
-import { shuffleInPlace } from "src/app/tools/ArrayUtil";
-import {
-  BUCKET_ROOT,
-  GameScenario,
-  GameStep,
-  GameStepOption,
-} from "src/types/WorldAvatar";
-import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from "./CubeController";
+import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
+import { AvatarBodyEvent, ControllerUpdateResponse } from '@mytypes/BodyTypes';
+import { ModuloSonido } from 'src/app/services/sonido.service';
+import { shuffleInPlace } from 'src/app/tools/ArrayUtil';
+import { BUCKET_ROOT, GameScenario, GameStep, GameStepOption } from 'src/types/WorldAvatar';
+import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from './CubeController';
 
 const MAX_LIFE = 5;
 
@@ -36,17 +31,17 @@ export interface LettersConfig {
 }
 
 const TRANSLATION: any = {
-  "es-ES": {
-    question: "Pregunta",
-    of: "de",
+  'es-ES': {
+    question: 'Pregunta',
+    of: 'de',
   },
-  "en-US": {
-    question: "Question",
-    of: "of",
+  'en-US': {
+    question: 'Question',
+    of: 'of',
   },
-  "fr-FR": {
-    question: "Question",
-    of: "sur",
+  'fr-FR': {
+    question: 'Question',
+    of: 'sur',
   },
 };
 
@@ -77,7 +72,7 @@ export class QuestionaireController extends SceneControllerAbstract {
   }
 
   getDictionary() {
-    let pred = "es-ES";
+    let pred = 'es-ES';
     if (this.scenario?.language) {
       pred = this.scenario?.language;
     }
@@ -85,8 +80,8 @@ export class QuestionaireController extends SceneControllerAbstract {
   }
 
   hideAllCubes() {
-    this.events.emit({ name: "CUBE_CONTROLL_OFF" });
-    this.events.emit({ name: "CUBE_LISTEN_OFF" });
+    this.events.emit({ name: 'CUBE_CONTROLL_OFF' });
+    this.events.emit({ name: 'CUBE_LISTEN_OFF' });
   }
 
   enableCube(
@@ -111,7 +106,7 @@ export class QuestionaireController extends SceneControllerAbstract {
   async preloadAudios() {
     const audios: string[] = [];
     if (this.scenario?.audio) {
-      const audioKeys = ["intro", "loop", "finish", "loose", "success"];
+      const audioKeys = ['intro', 'loop', 'finish', 'loose', 'success'];
       for (let i = 0; i < audioKeys.length; i++) {
         const audioKey = audioKeys[i];
         const val = (this.scenario.audio as any)[audioKey];
@@ -123,7 +118,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     await ModuloSonido.preload(audios);
   }
 
-  async playAudio(type: "intro" | "loop" | "finish" | "loose" | "success") {
+  async playAudio(type: 'intro' | 'loop' | 'finish' | 'loose' | 'success') {
     if (!this.scenario?.audio) {
       return { promise: Promise.resolve() };
     }
@@ -132,7 +127,7 @@ export class QuestionaireController extends SceneControllerAbstract {
       return { promise: Promise.resolve() };
     }
     ModuloSonido.stopAll();
-    return await ModuloSonido.play(BUCKET_ROOT + val, type == "loop");
+    return await ModuloSonido.play(BUCKET_ROOT + val, type == 'loop');
   }
 
   async initializeQuestion() {
@@ -152,7 +147,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     }
 
     if (this.currentStep == 0) {
-      if (typeof stepsConfig?.maxQuestions == "number") {
+      if (typeof stepsConfig?.maxQuestions == 'number') {
         this.maxQuestions = stepsConfig.maxQuestions;
       }
       this.steps = JSON.parse(JSON.stringify(steps));
@@ -161,12 +156,12 @@ export class QuestionaireController extends SceneControllerAbstract {
       this.steps.forEach((step) => {
         shuffleInPlace(step.options);
       });
-      const { promise } = await this.playAudio("intro");
-      let introTitle = "Game Start!";
+      const { promise } = await this.playAudio('intro');
+      let introTitle = 'Game Start!';
       if (stepsConfig?.introTitle) {
         introTitle = stepsConfig.introTitle;
       }
-      await this.setHudValue("top", `<h2>${introTitle}</h2>`, false);
+      await this.setHudValue('top', `<h2>${introTitle}</h2>`, false);
       await promise;
     }
 
@@ -179,8 +174,8 @@ export class QuestionaireController extends SceneControllerAbstract {
     const actualStep = this.steps[this.currentStep];
 
     await this.setHudValue(
-      "top",
-      `${dict["question"]} ${this.currentStep + 1} ${dict["of"]} ${this.maxQuestions}.</br>` +
+      'top',
+      `${dict['question']} ${this.currentStep + 1} ${dict['of']} ${this.maxQuestions}.</br>` +
         actualStep.label,
       true,
     );
@@ -190,9 +185,9 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     let LETTERS: LettersConfig[] = [
       {
-        id: "A",
-        cube_id: "CUBE_A_ON",
-        hud_id: "right",
+        id: 'A',
+        cube_id: 'CUBE_A_ON',
+        hud_id: 'right',
         minmax: {
           x: { min: X_MIN, max: X_MAX },
           y: { min: -1 * Y_MIN, max: Y_MAX },
@@ -200,9 +195,9 @@ export class QuestionaireController extends SceneControllerAbstract {
         },
       },
       {
-        id: "B",
-        cube_id: "CUBE_B_ON",
-        hud_id: "left",
+        id: 'B',
+        cube_id: 'CUBE_B_ON',
+        hud_id: 'left',
         minmax: {
           x: { min: -1 * X_MIN, max: -1 * X_MAX },
           y: { min: -1 * Y_MIN, max: Y_MAX },
@@ -210,9 +205,9 @@ export class QuestionaireController extends SceneControllerAbstract {
         },
       },
       {
-        id: "C",
-        cube_id: "CUBE_C_ON",
-        hud_id: "right_bottom",
+        id: 'C',
+        cube_id: 'CUBE_C_ON',
+        hud_id: 'right_bottom',
         minmax: {
           x: { min: X_MIN, max: X_MAX },
           y: { min: Y_MIN_BOTTOM, max: Y_MAX_BOTTOM },
@@ -220,9 +215,9 @@ export class QuestionaireController extends SceneControllerAbstract {
         },
       },
       {
-        id: "D",
-        cube_id: "CUBE_D_ON",
-        hud_id: "left_bottom",
+        id: 'D',
+        cube_id: 'CUBE_D_ON',
+        hud_id: 'left_bottom',
         minmax: {
           x: { min: -1 * X_MIN, max: -1 * X_MAX },
           y: { min: Y_MIN_BOTTOM, max: Y_MAX_BOTTOM },
@@ -241,7 +236,7 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     this.optionsMap = {};
 
-    this.events.emit({ name: "CUBE_CONTROLL_ON" });
+    this.events.emit({ name: 'CUBE_CONTROLL_ON' });
     for (let i = 0; i < actualStep.options.length; i++) {
       const option = actualStep.options[i];
       const letter = LETTERS[i];
@@ -256,31 +251,31 @@ export class QuestionaireController extends SceneControllerAbstract {
         return;
       }
     }
-    this.events.emit({ name: "CUBE_LISTEN_ON" });
+    this.events.emit({ name: 'CUBE_LISTEN_ON' });
   }
 
   resetGame() {
     this.currentStep = 0;
     this.life = MAX_LIFE;
     this.score = 0;
-    this.setHudValue("life", this.life);
-    this.setHudValue("score", this.score);
+    this.setHudValue('life', this.life);
+    this.setHudValue('score', this.score);
     this.clearAll();
   }
 
   clearAll() {
-    this.setHudValue("top", "");
-    this.setHudValue("left", "");
-    this.setHudValue("right", "");
-    this.setHudValue("left_bottom", "");
-    this.setHudValue("right_bottom", "");
-    this.setHudValue("bottom", "");
+    this.setHudValue('top', '');
+    this.setHudValue('left', '');
+    this.setHudValue('right', '');
+    this.setHudValue('left_bottom', '');
+    this.setHudValue('right_bottom', '');
+    this.setHudValue('bottom', '');
     this.hideAllCubes();
   }
 
   async evaluateAnswer(choice: string) {
     this.hideAllCubes();
-    this.enableCube(("CUBE_" + choice + "_ON") as ENABLE_CUBE_TYPE, {});
+    this.enableCube(('CUBE_' + choice + '_ON') as ENABLE_CUBE_TYPE, {});
     const op = this.optionsMap[choice];
     if (!op) {
       console.log(`No option for choice ${choice}`);
@@ -289,25 +284,25 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (op.points == 0) {
       // Loose lives
       this.life -= 1;
-      this.setHudValue("life", this.life);
+      this.setHudValue('life', this.life);
       if (this.life == 0) {
-        const { promise } = await this.playAudio("loose");
+        const { promise } = await this.playAudio('loose');
         await this.gameOver();
         return;
       }
-      const { promise } = await this.playAudio("loose");
+      const { promise } = await this.playAudio('loose');
       await promise;
     } else {
       // Celebrate, increment points!
       this.score += op.points * 10;
-      this.setHudValue("score", this.score);
-      const { promise } = await this.playAudio("success");
+      this.setHudValue('score', this.score);
+      const { promise } = await this.playAudio('success');
       await promise;
     }
     if (!this.isPlaying) {
       return;
     }
-    await this.setHudValue("bottom", op.answer, true);
+    await this.setHudValue('bottom', op.answer, true);
     // Go to next question
     this.currentStep += 1;
     if (!this.isPlaying) {
@@ -318,54 +313,45 @@ export class QuestionaireController extends SceneControllerAbstract {
 
   async gameOver() {
     this.clearAll();
-    let label = "Game Over";
-    if (
-      this.scenario &&
-      this.scenario.stepsConfig &&
-      this.scenario.stepsConfig.looseLabel
-    ) {
+    let label = 'Game Over';
+    if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.looseLabel) {
       label = this.scenario.stepsConfig.looseLabel;
     }
-    await this.setHudValue("bottom", `<h2>${label}</h2>`, false);
+    await this.setHudValue('bottom', `<h2>${label}</h2>`, false);
   }
 
   async youWin() {
     this.clearAll();
-    let label = "You Win";
-    if (
-      this.scenario &&
-      this.scenario.stepsConfig &&
-      this.scenario.stepsConfig.winLabel
-    ) {
+    let label = 'You Win';
+    if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.winLabel) {
       label = this.scenario.stepsConfig.winLabel;
     }
-    const { promise } = await this.playAudio("finish");
-    await this.setHudValue("top", `<h2>${label}</h2>`, false);
+    const { promise } = await this.playAudio('finish');
+    await this.setHudValue('top', `<h2>${label}</h2>`, false);
     await promise;
   }
 
   override onEvent(event: AvatarBodyEvent): void {
-    if (event.name == "START_ALL") {
+    if (event.name == 'START_ALL') {
       // Read mode and scenario
       this.isPlaying = true;
       this.resetGame();
       this.initializeQuestion();
-    } else if (event.name == "STOP_ALL") {
+    } else if (event.name == 'STOP_ALL') {
       this.isPlaying = false;
       this.resetGame();
-    } else if (event.name == "CUBE_A_SELECT_ON") {
+    } else if (event.name == 'CUBE_A_SELECT_ON') {
       // Selected option
-      this.evaluateAnswer("A");
-    } else if (event.name == "CUBE_B_SELECT_ON") {
+      this.evaluateAnswer('A');
+    } else if (event.name == 'CUBE_B_SELECT_ON') {
       // Selected option
-      this.evaluateAnswer("B");
-    } else if (event.name == "CUBE_C_SELECT_ON") {
+      this.evaluateAnswer('B');
+    } else if (event.name == 'CUBE_C_SELECT_ON') {
       // Selected option
-      this.evaluateAnswer("C");
-    } else if (event.name == "CUBE_D_SELECT_ON") {
+      this.evaluateAnswer('C');
+    } else if (event.name == 'CUBE_D_SELECT_ON') {
       // Selected option
-      this.evaluateAnswer("D");
+      this.evaluateAnswer('D');
     }
   }
 }
-
