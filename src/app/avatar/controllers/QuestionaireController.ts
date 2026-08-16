@@ -31,13 +31,13 @@ const SIDE_FRONT = 0.3;
 const MAX_QUESTIONS_DEF = 10;
 
 function computeConstants(config: SelectionObjectConfig) {
-  FAR_AMOUNT_X = (0.7 * config.shiftX) / 100;
+  FAR_AMOUNT_X = (0.8 * config.shiftX) / 100;
   FAR_AMOUNT_Y = (0.7 * config.shiftY) / 100;
   CUBE_ROTATE = config.rotate;
   ROTATION_MIN = (2000 * config.rotateMinSpeed) / 100;
   ROTATION_MAX = ROTATION_MIN + (3000 * config.rotateAditionalSpeed) / 100;
 
-  X_MIN = 0.6;
+  X_MIN = 0.5;
   X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 
   Y_MIN = 0 - 0.5 * FAR_AMOUNT_Y;

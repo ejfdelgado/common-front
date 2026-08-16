@@ -1,13 +1,8 @@
 # TODO
 
 Agregar controles para:
-Slider de Aleatoriedad, qué tan lejos están. X y Y.
-Check box para decidir si giran o no.
-Slider para el minimo de rotación.
-Slider para el máximo de rotación.
-
+Comenzar a llenar en orden, A, B, C, D? o en desorden?
 Que siempre sean primero los de arriba y luego los de abajo...
-Pero permitir que las respuestas caigan en diferentes objetos.
 
 Recargar el juego después de cambiar, por ejemplo, los objetos.
 
