@@ -52,6 +52,7 @@
     --text-base--line-height: 1.5;
     --text-xs: 0.75rem;
     --text-xs--line-height: calc(1/0.75);
+    --mat-sys-headline-small-font: "Comfortaa", "Helvetica Neue", sans-serif;
 }
 
 * {
@@ -364,6 +365,14 @@ button .mdc-button__label {
 
 button .mdc-button__label img {
     height: 1em;
+}
+
+.text_size_x2,
+.text_size_x2 .mat-mdc-select,
+.text_size_x2 .mat-mdc-dialog-container .mat-mdc-dialog-content,
+.text_size_x2 .mdc-text-field--outlined .mdc-floating-label,
+.text_size_x2 .mat-mdc-form-field {
+    font-size: 1.2rem !important;
 }
 
 app-md-input code {

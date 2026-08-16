@@ -1,6 +1,6 @@
-<h2 mat-dialog-title>Editar cuestionario</h2>
+<h2 mat-dialog-title>Personalizar</h2>
 
-<mat-dialog-content class="dialog_content">
+<mat-dialog-content class="dialog_content text_size_x2">
     <mat-tab-group class="full-width">
 
         <mat-tab label="Configuración">
@@ -29,19 +29,19 @@
                     <input matInput type="number" formControlName="maxQuestions">
                 </mat-form-field>
 
-                <app-editable-input [discrete]="false" [formControlName]="'introTitle'" [label]="'Título introductorio'"
+                <app-editable-input [discrete]="false" [formControlName]="'introTitle'" [label]="'Introducción'"
                     [placeholder]="'...'" [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
-                <app-editable-input [discrete]="false" [formControlName]="'looseLabel'" [label]="'Etiqueta de derrota'"
+                <app-editable-input [discrete]="false" [formControlName]="'looseLabel'" [label]="'Lema de derrota'"
                     [placeholder]="'...'" [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
-                <app-editable-input [discrete]="false" [formControlName]="'winLabel'" [label]="'Etiqueta de victoria'"
+                <app-editable-input [discrete]="false" [formControlName]="'winLabel'" [label]="'Lema de victoria'"
                     [placeholder]="'...'" [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
             </form>
         </mat-tab>
 
         <mat-tab label="Preguntas">
-            <form [formGroup]="stepsForm" class="tab_content">
+            <form [formGroup]="stepsForm" class="tab_content tab_questions">
 
                 <mat-form-field class="full-width" appearance="outline">
                     <mat-label>Buscar pregunta</mat-label>
@@ -61,7 +61,8 @@
                     @if (matchesSearch(stepIndex)) {
                     <mat-card class="step_card" [formGroupName]="stepIndex">
                         <mat-card-header class="step_header">
-                            <mat-card-title class="step_title">Pregunta {{ stepIndex + 1 }}</mat-card-title>
+                            <mat-card-title class="step_title highligted_text">Pregunta {{ stepIndex + 1
+                                }}</mat-card-title>
                             <button mat-icon-button color="warn" type="button" matTooltip="Eliminar pregunta"
                                 (click)="removeStep(stepIndex)">
                                 <mat-icon>delete</mat-icon>
@@ -81,7 +82,7 @@
                                 <div class="option_row" [formGroupName]="optionIndex">
 
                                     <app-editable-input class="option_label" [discrete]="false"
-                                        [formControlName]="'label'" [label]="'Texto'" [placeholder]="'...'"
+                                        [formControlName]="'label'" [label]="'Opción'" [placeholder]="'...'"
                                         [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
                                     <app-editable-input class="option_answer" [discrete]="false"
@@ -120,7 +121,7 @@
             </form>
         </mat-tab>
 
-        <mat-tab label="Fondo del juego">
+        <mat-tab label="Fondo">
             <form [formGroup]="backgroundForm" class="tab_content">
 
                 <mat-form-field class="full-width" appearance="outline">
@@ -141,8 +142,8 @@
             </form>
         </mat-tab>
 
-        <mat-tab label="Efectos de sonido">
-            <form [formGroup]="audioFXForm" class="tab_content">
+        <mat-tab label="Sonidos">
+            <form [formGroup]="audioFXForm" class="tab_content vertical_gap">
                 <app-audio-field [label]="'Introducción'" formControlName="audioIntro"
                     [config]="audioConfig"></app-audio-field>
                 <app-audio-field [label]="'Sonido de fondo'" formControlName="audioLoop"
@@ -157,7 +158,7 @@
         </mat-tab>
 
         <mat-tab label="Objetos de selección">
-            <form [formGroup]="selectionObjectsForm" class="tab_content">
+            <form [formGroup]="selectionObjectsForm" class="tab_content vertical_gap">
                 <app-slider [label]="'Desplazamiento horizontal'" formControlName="shiftX"
                     [config]="sliderConfig"></app-slider>
                 <app-slider [label]="'Desplazamiento vertical'" formControlName="shiftY"
@@ -168,6 +169,8 @@
                     [config]="sliderConfig"></app-slider>
                 <app-slider [label]="'Rotación adicional'" formControlName="rotateAditionalSpeed"
                     [config]="sliderConfig"></app-slider>
+                <app-on-off-toggle [label]="'Orden aleatorio?'" [iconName]="'checkbox'"
+                    formControlName="randomOrder"></app-on-off-toggle>
             </form>
         </mat-tab>
 

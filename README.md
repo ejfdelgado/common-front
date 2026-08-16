@@ -1,8 +1,6 @@
 # TODO
 
-Agregar controles para:
-Comenzar a llenar en orden, A, B, C, D? o en desorden?
-Que siempre sean primero los de arriba y luego los de abajo...
+Usar el tamaño de letra grande en los demás forms.
 
 Recargar el juego después de cambiar, por ejemplo, los objetos.
 

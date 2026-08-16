@@ -1,7 +1,7 @@
 .vertical_parent {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 3px;
 }
 
 .horizontal_panel {
@@ -12,6 +12,17 @@
 
 .fill_width {
     flex: 1;
+}
+
+.fix_min_width {
+    min-width: 0;
+}
+
+.fix_audio {
+    display: block;
+    flex: 1 1 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .full_width {

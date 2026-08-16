@@ -18,6 +18,20 @@
     padding: 16px 4px;
 }
 
+.vertical_gap {
+    gap: 25px;
+}
+
+.highligted_text {
+    font-weight: bolder;
+    text-decoration: underline;
+    padding-bottom: 15px;
+}
+
+.tab_questions {
+    min-width: 80vw;
+}
+
 .step_card {
     margin-bottom: 16px;
 }

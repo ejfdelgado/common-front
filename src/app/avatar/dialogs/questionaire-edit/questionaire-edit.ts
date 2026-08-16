@@ -16,13 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
-import {
-  ColorType,
-  GameScenario,
-  GameStep,
-  GameStepOption,
-  StepsConfig,
-} from 'src/types/WorldAvatar';
+import { ColorType, GameScenario, GameStep, GameStepOption } from 'src/types/WorldAvatar';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
@@ -148,9 +142,10 @@ export class QuestionaireEditComponent {
     this.selectionObjectsForm = this.fb.group({
       shiftX: [data.stepsConfig?.selectionObjects?.shiftX ?? 0],
       shiftY: [data.stepsConfig?.selectionObjects?.shiftY ?? 0],
-      rotate: [data.stepsConfig?.selectionObjects?.rotate ?? 0],
+      rotate: [data.stepsConfig?.selectionObjects?.rotate ?? false],
       rotateMinSpeed: [data.stepsConfig?.selectionObjects?.rotateMinSpeed ?? 0],
       rotateAditionalSpeed: [data.stepsConfig?.selectionObjects?.rotateAditionalSpeed ?? 0],
+      randomOrder: [data.stepsConfig?.selectionObjects?.randomOrder ?? false],
     });
   }
 
@@ -319,6 +314,7 @@ export class QuestionaireEditComponent {
       rotate: selectionObjectsValue.rotate,
       rotateMinSpeed: selectionObjectsValue.rotateMinSpeed,
       rotateAditionalSpeed: selectionObjectsValue.rotateAditionalSpeed,
+      randomOrder: selectionObjectsValue.randomOrder,
     };
 
     this.dialogRef.close(this.data);

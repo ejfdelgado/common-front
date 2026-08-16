@@ -81,6 +81,7 @@ export interface SelectionObjectConfig {
   rotate: boolean;
   rotateMinSpeed: number;
   rotateAditionalSpeed: number;
+  randomOrder: boolean;
 }
 
 export interface StepsConfig {

@@ -53,6 +53,7 @@ computeConstants({
   rotateMinSpeed: 0,
   shiftX: 0,
   shiftY: 0,
+  randomOrder: false,
 });
 
 export interface LettersConfig {
@@ -260,13 +261,11 @@ export class QuestionaireController extends SceneControllerAbstract {
       },
     ];
 
-    /*
-        LETTERS = LETTERS.filter((a) => {
-            return (["A", "B"].indexOf(a.id) >= 0);
-        });
-        */
-
-    shuffleInPlace(LETTERS);
+    if (stepsConfig?.selectionObjects) {
+      if (stepsConfig.selectionObjects.randomOrder) {
+        shuffleInPlace(LETTERS);
+      }
+    }
 
     this.optionsMap = {};
 
