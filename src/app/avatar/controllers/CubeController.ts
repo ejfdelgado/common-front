@@ -259,21 +259,21 @@ export class CubeController extends SceneControllerAbstract {
       // Compute collision bounding
       this.computeBoundingBox(cubeObject, config);
 
-      // Compute again, but include own cube spin rotation
-      cubeAMatrix = new THREE.Matrix4().identity();
-      cubeAMatrix.multiply(translationMatrix);
-      cubeAMatrix.multiply(rotationMatrix);
-      cubeAMatrix.multiply(config.local);
       // Make a rotation with period
       const rotationPeriod = config.rotationPeriod;
       if (rotationPeriod != 0) {
-        // Here multiply
+        // Compute again, but include own cube spin rotation
+        cubeAMatrix = new THREE.Matrix4().identity();
+        cubeAMatrix.multiply(translationMatrix);
+        cubeAMatrix.multiply(rotationMatrix);
+        cubeAMatrix.multiply(config.local);
+        // Here multiply with the own rotation
         const spinAmount = (now % Math.abs(rotationPeriod)) / rotationPeriod;
         const spinMatrix = new THREE.Matrix4().makeRotationY(2 * Math.PI * spinAmount);
         cubeAMatrix.multiply(spinMatrix);
+        cubeObject.matrixAutoUpdate = false;
+        cubeObject.matrix.copy(cubeAMatrix);
       }
-      cubeObject.matrixAutoUpdate = false;
-      cubeObject.matrix.copy(cubeAMatrix);
     });
 
     return {};

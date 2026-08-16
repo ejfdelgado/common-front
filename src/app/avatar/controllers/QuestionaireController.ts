@@ -10,11 +10,11 @@ const MAX_LIFE = 5;
 
 const FAR_AMOUNT_X = 0;
 const FAR_AMOUNT_Y = 0.5;
-const CUBE_ROTATE = false;
+const CUBE_ROTATE = true;
 const ROTATION_MIN = 2000;
 const ROTATION_MAX = 5000;
 
-const X_MIN = 0.8;
+const X_MIN = 0.6;
 const X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 const Y_MIN = 0.3 * FAR_AMOUNT_Y;
 const Y_MAX = 0.4 * FAR_AMOUNT_Y;
