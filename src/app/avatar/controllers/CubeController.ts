@@ -255,6 +255,7 @@ export class CubeController extends SceneControllerAbstract {
       cubeAMatrix.multiply(config.local);
       cubeObject.matrixAutoUpdate = false;
       cubeObject.matrix.copy(cubeAMatrix);
+      cubeObject.updateMatrixWorld(true);
 
       // Compute collision bounding
       this.computeBoundingBox(cubeObject, config);
