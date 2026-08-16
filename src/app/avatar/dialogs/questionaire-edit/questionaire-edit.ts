@@ -30,10 +30,13 @@ import {
   AudioDetailDataType,
   ImageGalleryConfigDataType,
   SelectOptionString,
+  SliderDetailDataType,
 } from 'src/types/fieldsTypes';
 import { ImageFileComponent } from 'src/app/components/fields/image-field/image-field';
 import { ComponentBucketField } from 'src/types/ComponentBucketField';
 import { AudioFileComponent } from 'src/app/components/fields/sound-field/audio-field';
+import { SliderComponent } from 'src/app/components/fields/slider/slider';
+import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -78,6 +81,8 @@ const OBJECTS_OPTIONS: SelectOptionString[] = [
     ColorPickerComponent,
     ImageFileComponent,
     AudioFileComponent,
+    SliderComponent,
+    OnOffToggleComponent,
   ],
   templateUrl: './questionaire-edit.html',
   styleUrl: './questionaire-edit.scss',
@@ -106,6 +111,10 @@ export class QuestionaireEditComponent {
   audioConfig: AudioDetailDataType = {
     template: 'avatar/${user.uid}/${date.year}-${date.month}-${date.day}/sounds/${random}',
     maxMb: 5,
+  };
+  sliderConfig: SliderDetailDataType = {
+    min: 0,
+    max: 100,
   };
 
   constructor(
@@ -141,7 +150,7 @@ export class QuestionaireEditComponent {
       shiftY: [data.stepsConfig?.selectionObjects?.shiftY ?? 0],
       rotate: [data.stepsConfig?.selectionObjects?.rotate ?? 0],
       rotateMinSpeed: [data.stepsConfig?.selectionObjects?.rotateMinSpeed ?? 0],
-      rotateMaxSpeed: [data.stepsConfig?.selectionObjects?.rotateMaxSpeed ?? 0],
+      rotateAditionalSpeed: [data.stepsConfig?.selectionObjects?.rotateAditionalSpeed ?? 0],
     });
   }
 
@@ -260,6 +269,8 @@ export class QuestionaireEditComponent {
       this.stepsConfigForm.markAllAsTouched();
       this.stepsForm.markAllAsTouched();
       this.backgroundForm.markAllAsTouched();
+      this.audioFXForm.markAllAsTouched();
+      this.selectionObjectsForm.markAllAsTouched();
       return;
     }
 
@@ -299,6 +310,15 @@ export class QuestionaireEditComponent {
       finish: soundsFXValue.audioFinish || undefined,
       success: soundsFXValue.audioSuccess || undefined,
       loose: soundsFXValue.audioLoose || undefined,
+    };
+
+    const selectionObjectsValue = this.selectionObjectsForm.value;
+    this.data.stepsConfig.selectionObjects = {
+      shiftX: selectionObjectsValue.shiftX,
+      shiftY: selectionObjectsValue.shiftY,
+      rotate: selectionObjectsValue.rotate,
+      rotateMinSpeed: selectionObjectsValue.rotateMinSpeed,
+      rotateAditionalSpeed: selectionObjectsValue.rotateAditionalSpeed,
     };
 
     this.dialogRef.close(this.data);

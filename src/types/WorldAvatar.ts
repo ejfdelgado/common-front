@@ -80,7 +80,7 @@ export interface SelectionObjectConfig {
   shiftY: number;
   rotate: boolean;
   rotateMinSpeed: number;
-  rotateMaxSpeed: number;
+  rotateAditionalSpeed: number;
 }
 
 export interface StepsConfig {

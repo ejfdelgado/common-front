@@ -157,8 +157,17 @@
         </mat-tab>
 
         <mat-tab label="Objetos de selección">
-            <form [formGroup]="audioFXForm" class="tab_content">
-                
+            <form [formGroup]="selectionObjectsForm" class="tab_content">
+                <app-slider [label]="'Desplazamiento horizontal'" formControlName="shiftX"
+                    [config]="sliderConfig"></app-slider>
+                <app-slider [label]="'Desplazamiento vertical'" formControlName="shiftY"
+                    [config]="sliderConfig"></app-slider>
+                <app-on-off-toggle [label]="'Rotar?'" [iconName]="'checkbox'"
+                    formControlName="rotate"></app-on-off-toggle>
+                <app-slider [label]="'Rotación mínima'" formControlName="rotateMinSpeed"
+                    [config]="sliderConfig"></app-slider>
+                <app-slider [label]="'Rotación adicional'" formControlName="rotateAditionalSpeed"
+                    [config]="sliderConfig"></app-slider>
             </form>
         </mat-tab>
 
