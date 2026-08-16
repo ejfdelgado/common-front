@@ -2,28 +2,56 @@ import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbst
 import { AvatarBodyEvent, ControllerUpdateResponse } from '@mytypes/BodyTypes';
 import { ModuloSonido } from 'src/app/services/sonido.service';
 import { shuffleInPlace } from 'src/app/tools/ArrayUtil';
-import { BUCKET_ROOT, GameScenario, GameStep, GameStepOption } from 'src/types/WorldAvatar';
+import {
+  BUCKET_ROOT,
+  GameScenario,
+  GameStep,
+  GameStepOption,
+  SelectionObjectConfig,
+} from 'src/types/WorldAvatar';
 import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from './CubeController';
 import { randomize } from 'src/app/tools/NumberUtils';
 
 const MAX_LIFE = 5;
 
-const FAR_AMOUNT_X = 0;
-const FAR_AMOUNT_Y = 0.5;
-const CUBE_ROTATE = true;
-const ROTATION_MIN = 2000;
-const ROTATION_MAX = 5000;
+let FAR_AMOUNT_X = 0;
+let FAR_AMOUNT_Y = 0;
+let CUBE_ROTATE = false;
+let ROTATION_MIN = 0;
+let ROTATION_MAX = 0;
 
-const X_MIN = 0.6;
-const X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
-const Y_MIN = 0.3 * FAR_AMOUNT_Y;
-const Y_MAX = 0.4 * FAR_AMOUNT_Y;
-const Y_MIN_BOTTOM = -0.8;
-const Y_MAX_BOTTOM = -0.8 + 0.3 * FAR_AMOUNT_Y;
+let X_MIN = 0;
+let X_MAX = 0;
+let Y_MIN = 0;
+let Y_MAX = 0;
+let Y_MIN_BOTTOM = 0;
+let Y_MAX_BOTTOM = 0;
 
 const SIDE_FRONT = 0.3;
-
 const MAX_QUESTIONS_DEF = 10;
+
+function computeConstants(config: SelectionObjectConfig) {
+  FAR_AMOUNT_X = (0.5 * config.shiftX) / 100;
+  FAR_AMOUNT_Y = (0.5 * config.shiftY) / 100;
+  CUBE_ROTATE = config.rotate;
+  ROTATION_MIN = (2000 * config.rotateMinSpeed) / 100;
+  ROTATION_MAX = ROTATION_MIN + (3000 * config.rotateAditionalSpeed) / 100;
+
+  X_MIN = 0.6;
+  X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
+  Y_MIN = 0.3 * FAR_AMOUNT_Y;
+  Y_MAX = 0.4 * FAR_AMOUNT_Y;
+  Y_MIN_BOTTOM = -0.8;
+  Y_MAX_BOTTOM = -0.8 + 0.3 * FAR_AMOUNT_Y;
+}
+
+computeConstants({
+  rotate: false,
+  rotateAditionalSpeed: 0,
+  rotateMinSpeed: 0,
+  shiftX: 0,
+  shiftY: 0,
+});
 
 export interface LettersConfig {
   id: string;
@@ -137,6 +165,9 @@ export class QuestionaireController extends SceneControllerAbstract {
     const stepsConfig = this.scenario.stepsConfig;
     if (!steps) {
       return;
+    }
+    if (stepsConfig?.selectionObjects) {
+      computeConstants(stepsConfig?.selectionObjects);
     }
     if (this.currentStep >= steps.length) {
       await this.youWin();
