@@ -1,161 +1,170 @@
-import { AnimationSpecType, AvatarLocationState, Point3D } from "./BodyTypes";
-import { AssistantDataType } from "./ragTypes";
-import { ABCDType } from "./WorldAvatarLibrary";
+import { AnimationSpecType, AvatarLocationState, Point3D } from './BodyTypes';
+import { AssistantDataType } from './ragTypes';
+import { ABCDType } from './WorldAvatarLibrary';
 
-export const BUCKET_ROOT = "https://storage.googleapis.com/pro-ejflab-assets/";
+export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
 
 // The intentatio is to persist this data
 export interface WorldAvatar {
-    defaultMode: string;
-    config: WorldConfig,
-    modes: { [key: string]: GameMode };
+  defaultMode: string;
+  config: WorldConfig;
+  modes: { [key: string]: GameMode };
 }
 
 export interface WorldConfig {
-    useLivePeer: boolean;
-    useVoice: boolean;
+  useLivePeer: boolean;
+  useVoice: boolean;
 }
 
 export interface GameMode {
-    menu: {
-        name: string;
-        icon: string;
-    },
-    mirror: boolean;
-    defaultPosition: AvatarLocationState;
-    defaultCameraState: CameraState;
-    defaultSenario: string;
-    controllers: GameController[];
-    scenarios: { [key: string]: GameScenario };
-    characters?: CharacterSpec[];
-    useHands?: boolean;
-    avatar?: AvatarModel;
+  menu: {
+    name: string;
+    icon: string;
+  };
+  mirror: boolean;
+  defaultPosition: AvatarLocationState;
+  defaultCameraState: CameraState;
+  defaultSenario: string;
+  controllers: GameController[];
+  scenarios: { [key: string]: GameScenario };
+  characters?: CharacterSpec[];
+  useHands?: boolean;
+  avatar?: AvatarModel;
 }
 
 export interface CharacterSpec {
-    name: string;
-    defaultAnimation?: string;
-    animations: { [key: string]: AnimationSpecType },
+  name: string;
+  defaultAnimation?: string;
+  animations: { [key: string]: AnimationSpecType };
 }
 
 export interface ColorType {
-    r: number;
-    g: number;
-    b: number;
+  r: number;
+  g: number;
+  b: number;
 }
 
 export interface GameScenario {
-    useComposer?: boolean;
-    language?: string;
-    background?: {
-        type?: "image" | "color";
-        image?: string;
-        color?: ColorType;
-    },
-    audio?: {
-        intro?: string;
-        finish?: string;
-        loop?: string;
-        success?: string;
-        loose?: string;
-    },
-    meshes: GameMesh[];
-    characters: GameCharacter[];
-    stepsConfig?: StepsConfig;
-    steps?: GameStep[];
+  useComposer?: boolean;
+  language?: string;
+  background?: {
+    type?: 'image' | 'color';
+    image?: string;
+    color?: ColorType;
+  };
+  audio?: {
+    intro?: string;
+    finish?: string;
+    loop?: string;
+    success?: string;
+    loose?: string;
+  };
+  meshes: GameMesh[];
+  characters: GameCharacter[];
+  stepsConfig?: StepsConfig;
+  steps?: GameStep[];
 }
 
 export interface GameMesh {
-    name: string;
-    url: string;
+  name: string;
+  url: string;
 }
 
 export interface GameStep {
-    label: string;
-    options: GameStepOption[];
+  label: string;
+  options: GameStepOption[];
+}
+
+export interface SelectionObjectConfig {
+  shiftX: number;
+  shiftY: number;
+  rotate: boolean;
+  rotateMinSpeed: number;
+  rotateMaxSpeed: number;
 }
 
 export interface StepsConfig {
-    introTitle?: string;
-    looseLabel?: string;
-    winLabel?: string;
-    maxQuestions?: number;
-    abcdType?: ABCDType;
+  introTitle?: string;
+  looseLabel?: string;
+  winLabel?: string;
+  maxQuestions?: number;
+  abcdType?: ABCDType;
+  selectionObjects?: SelectionObjectConfig;
 }
 
 export interface GameStepOption {
-    label: string;
-    points: number;
-    answer: string;
+  label: string;
+  points: number;
+  answer: string;
 }
 
 export interface GameAnimation {
-    name: string;
-    url: string;
+  name: string;
+  url: string;
 }
 
 export interface CameraState {
-    position: Point3D;
-    lookAt: Point3D;
-    fov: number;
-    near: number;
-    far: number;
+  position: Point3D;
+  lookAt: Point3D;
+  fov: number;
+  near: number;
+  far: number;
 }
 
 export enum GameControllerEnum {
-    ComparableController = "ComparableController",
-    CubeController = "CubeController",
-    HandsCloseController = "HandsCloseController",
-    RecordPoseController = "RecordPoseController",
-    SimplePosesDetection = "SimplePosesDetection",
-    SoundFeedbackController = "SoundFeedbackController",
-    Stand2dController = "Stand2dController",
-    TerrainElevationController = "TerrainElevationController",
-    SharePoseController = "SharePoseController",
-    WalkController = "WalkController",
-    FingerController = "FingerController",
-    HandPointerController = "HandPointerController",
-    ArmsPointerController = "ArmsPointerController",
-    QuestionaireController = "QuestionaireController",
+  ComparableController = 'ComparableController',
+  CubeController = 'CubeController',
+  HandsCloseController = 'HandsCloseController',
+  RecordPoseController = 'RecordPoseController',
+  SimplePosesDetection = 'SimplePosesDetection',
+  SoundFeedbackController = 'SoundFeedbackController',
+  Stand2dController = 'Stand2dController',
+  TerrainElevationController = 'TerrainElevationController',
+  SharePoseController = 'SharePoseController',
+  WalkController = 'WalkController',
+  FingerController = 'FingerController',
+  HandPointerController = 'HandPointerController',
+  ArmsPointerController = 'ArmsPointerController',
+  QuestionaireController = 'QuestionaireController',
 }
 
 export interface GameController {
-    id: GameControllerEnum;
-    params: { [key: string]: any };
+  id: GameControllerEnum;
+  params: { [key: string]: any };
 }
 
 export interface GameCharacter {
-    meshes: GameMesh;
-    defaultAnimation: string;
-    animations: { [key: string]: GameAnimation };
+  meshes: GameMesh;
+  defaultAnimation: string;
+  animations: { [key: string]: GameAnimation };
 }
 
 export interface AvatarModel {
-    meshPath?: string;
-    texturePath?: string;
+  meshPath?: string;
+  texturePath?: string;
 }
 
 export interface AvatarStoredDataType extends AssistantDataType {
-    jsonModel?: string;
+  jsonModel?: string;
 }
 
 export interface GameSelection {
-    scenario: string | null;
-    mode: string | null;
+  scenario: string | null;
+  mode: string | null;
 }
 
 export interface ObjectAsset {
-    name: string;
-    meshUrl: string;
-    diffuseUrl?: string;
+  name: string;
+  meshUrl: string;
+  diffuseUrl?: string;
 }
 
 export interface ObjectAssetSet {
-    name: string;
-    objects: ObjectAsset[];
+  name: string;
+  objects: ObjectAsset[];
 }
 
 export interface FeatureObjectAssetSet {
-    name: string;
-    set: ObjectAssetSet[];
+  name: string;
+  set: ObjectAssetSet[];
 }

@@ -1,8 +1,16 @@
 # TODO
 
-Slider de Aleatoriedad de los objetos, qué tan cerca o lejos están.
-Poder atrapar los objetos independientemente de que giren.
-Rotar en sentido y velocidad aleatoria.
+Agregar controles para:
+Slider de Aleatoriedad, qué tan lejos están. X y Y.
+Check box para decidir si giran o no.
+Slider para el minimo de rotación.
+Slider para el máximo de rotación.
+
+Que siempre sean primero los de arriba y luego los de abajo...
+Pero permitir que las respuestas caigan en diferentes objetos.
+
+Recargar el juego después de cambiar, por ejemplo, los objetos.
+
 Ajustar el tamaño de los objetos a atrapar.
 
 Permitir aditar la imágen para redes del juego.
