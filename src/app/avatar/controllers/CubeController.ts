@@ -12,7 +12,7 @@ const SIDE_SHIFT = 0.5;
 const SIDE_FRONT = 0.3;
 const AB_HEIGHT = 0.5;
 const VERTICAL_SHIFT = -0.8; //-0.5
-const CUBE_BOX_Z_SCALE = 3; // stretches the collision box 3x along local z
+const CUBE_BOX_Z_SCALE = 5; // stretches the collision box  along local z
 
 export type ENABLE_CUBE_TYPE = 'CUBE_A_ON' | 'CUBE_B_ON' | 'CUBE_C_ON' | 'CUBE_D_ON';
 

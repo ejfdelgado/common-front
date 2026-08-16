@@ -40,10 +40,10 @@ function computeConstants(config: SelectionObjectConfig) {
   X_MIN = 0.6;
   X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 
-  Y_MIN = 0 - 0.4 * FAR_AMOUNT_Y;
+  Y_MIN = 0 - 0.5 * FAR_AMOUNT_Y;
   Y_MAX = 0 + 0.4 * FAR_AMOUNT_Y;
 
-  Y_MIN_BOTTOM = -0.8;
+  Y_MIN_BOTTOM = -0.9;
   Y_MAX_BOTTOM = Y_MIN_BOTTOM + 0.3 * FAR_AMOUNT_Y;
 }
 
@@ -220,7 +220,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         hud_id: 'right',
         minmax: {
           x: { min: X_MIN, max: X_MAX },
-          y: { min: -1 * Y_MIN, max: Y_MAX },
+          y: { min: Y_MIN, max: Y_MAX },
           z: { min: SIDE_FRONT, max: SIDE_FRONT },
         },
         rotate: CUBE_ROTATE,
@@ -231,7 +231,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         hud_id: 'left',
         minmax: {
           x: { min: -1 * X_MIN, max: -1 * X_MAX },
-          y: { min: -1 * Y_MIN, max: Y_MAX },
+          y: { min: Y_MIN, max: Y_MAX },
           z: { min: SIDE_FRONT, max: SIDE_FRONT },
         },
         rotate: CUBE_ROTATE,
