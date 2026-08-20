@@ -9,6 +9,7 @@
         "end_call": "Colgar llamada",
         "editWorld": "Editar mundo",
         "editScenario": "Editar escenario",
-        "editAvatar": "Editar personaje"
+        "editAvatar": "Editar personaje",
+        "editModes": "Editar niveles"
     }
 }

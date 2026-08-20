@@ -10,13 +10,13 @@ import {
   WorldAvatar,
 } from '@mytypes/WorldAvatar';
 import { firstValueFrom } from 'rxjs';
-import { sleep } from '../tools/rxjsUtils';
 import { MatDialog } from '@angular/material/dialog';
 import { ModeEditComponent } from '../avatar/dialogs/mode-edit/mode-edit';
 import { QuestionaireEditComponent } from '../avatar/dialogs/questionaire-edit/questionaire-edit';
 import { AvatarEditComponent } from '../avatar/dialogs/avatar-edit/avatar-edit';
 import { getJSONUrl } from '../tools/BucketPaths';
 import { FileService } from './file.srv';
+import { ModeCrudComponent } from '../avatar/dialogs/mode-crud/mode-crud';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +55,16 @@ export class AvatarService {
       //width: '350px',
       disableClose: true,
       data: JSON.parse(JSON.stringify(mode)),
+    });
+    return firstValueFrom(dialogRef.afterClosed());
+  }
+
+  async editModes(world: WorldAvatar): Promise<GameMode | null> {
+    // Open modal
+    const dialogRef = this.dialog.open(ModeCrudComponent, {
+      //width: '350px',
+      disableClose: true,
+      data: JSON.parse(JSON.stringify(world)),
     });
     return firstValueFrom(dialogRef.afterClosed());
   }

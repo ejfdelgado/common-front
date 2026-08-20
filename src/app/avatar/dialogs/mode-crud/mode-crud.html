@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Editar Niveles</h2>
+
+<mat-dialog-content class="dialog_content text_size_x2">
+    <mat-tab-group class="full-width">
+
+        <mat-tab label="General">
+            <form [formGroup]="generalForm" class="tab_content">
+                
+            </form>
+        </mat-tab>
+
+    </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+    </button>
+
+    <button mat-flat-button color="primary" (click)="save()">
+        <mat-icon>check</mat-icon>
+        Guardar
+    </button>
+</mat-dialog-actions>

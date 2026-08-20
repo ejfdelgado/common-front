@@ -158,6 +158,22 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
+          label: "menu.editModes",
+          translateFolder: "avatar",
+          name: "editModes",
+          isPlainIcon: true,
+          icon: "👾",
+          visible: true,
+          children: [],
+          callback: async () => {
+            this.emitToc();
+            const response = await this.trackerComponent.editModes();
+            if (response) {
+              // TODO
+            }
+          },
+        },
+        {
           label: "menu.editWorld",
           translateFolder: "avatar",
           name: "editWorld",

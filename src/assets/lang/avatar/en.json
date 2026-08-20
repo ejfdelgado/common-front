@@ -9,6 +9,7 @@
         "end_call": "End call",
         "editWorld": "Edit world",
         "editScenario": "Edit scenario",
-        "editAvatar": "Edit character"
+        "editAvatar": "Edit character",
+        "editModes": "Edit levels"
     }
 }
