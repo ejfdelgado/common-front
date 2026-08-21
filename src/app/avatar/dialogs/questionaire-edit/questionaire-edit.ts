@@ -52,10 +52,10 @@ const LANGUAGE_OPTIONS: SelectOptionString[] = [
 ];
 
 const OBJECTS_OPTIONS: SelectOptionString[] = [
-  { label: 'Cubo', value: 'cube' },
+  //{ label: 'Cubo', value: 'cube' },
   { label: 'Balón', value: 'futbol' },
   { label: 'Frutas', value: 'fruits' },
-  { label: 'Minecraft', value: 'minecraft' },
+  //{ label: 'Minecraft', value: 'minecraft' },
 ];
 
 @Component({
