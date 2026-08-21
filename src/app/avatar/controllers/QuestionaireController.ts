@@ -193,8 +193,10 @@ export class QuestionaireController extends SceneControllerAbstract {
       if (stepsConfig?.introTitle) {
         introTitle = stepsConfig.introTitle;
       }
-      await this.setHudValue('top', `<h2>${introTitle}</h2>`, false);
+      const introEnhanced = `<h2>${introTitle}</h2>`;
+      this.setHudValue('top', introEnhanced, false);
       await promise;
+      await this.setHudValue('top', introEnhanced, true);
     }
 
     // Check if won
