@@ -1,4 +1,4 @@
-import { Component, Inject, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, QueryList, ViewChildren } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -119,6 +119,7 @@ export class QuestionaireEditComponent {
     private dialogRef: MatDialogRef<QuestionaireEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GameScenario,
     public modalSrv: ModalService,
+    public cdr: ChangeDetectorRef,
   ) {
     this.stepsConfigForm = this.fb.group({
       language: [data.language ?? 'es-ES'],
@@ -358,6 +359,11 @@ export class QuestionaireEditComponent {
         steps: this.fb.array((steps ?? []).map((step) => this.buildStepGroup(step))),
       });
       this.data.steps = steps;
+      this.cdr.detectChanges();
+      this.modalSrv.alert({
+        title: 'Ok',
+        txt: 'Listo!',
+      });
     } catch (err: any) {
       this.modalSrv.alert({
         title: 'Ups',

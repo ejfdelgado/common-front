@@ -128,6 +128,7 @@ export class QuestionaireController extends SceneControllerAbstract {
       key: key,
       value: val,
       speak: speak,
+      lang: this.scenario?.language,
     });
   }
 
