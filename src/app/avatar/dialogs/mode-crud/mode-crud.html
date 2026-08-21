@@ -5,7 +5,24 @@
 
         <mat-tab label="General">
             <form [formGroup]="generalForm" class="tab_content">
-                
+                <div formArrayName="modes">
+                    @for (modeGroup of modes.controls; track modeGroup; let modeIndex = $index) {
+                    <mat-card class="step_card" [formGroupName]="modeIndex">
+                        <mat-card-header class="step_header">
+                            <mat-card-title class="step_title highligted_text">Nivel {{ modeIndex + 1
+                                }}</mat-card-title>
+                            <button mat-icon-button color="warn" type="button" matTooltip="Eliminar nivel"
+                                (click)="removeMode(modeIndex)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <app-editable-input [discrete]="false" [formControlName]="'label'" [label]="'Nombre'"
+                                [placeholder]="'...'" [maxHeight]="'1em'" [minHeight]="'1em'"></app-editable-input>
+                        </mat-card-content>
+                    </mat-card>
+                    }
+                </div>
             </form>
         </mat-tab>
 

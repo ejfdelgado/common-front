@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Personalizar</h2>
 
 <mat-dialog-content class="dialog_content text_size_x2">
-    <mat-tab-group class="full-width">
+    <mat-tab-group class="full-width" (selectedTabChange)="onTabChange($event)">
 
         <mat-tab label="Configuración">
             <form [formGroup]="stepsConfigForm" class="tab_content">
@@ -187,4 +187,16 @@
         <mat-icon>check</mat-icon>
         Guardar
     </button>
+
+    @if (selectedTabLabel === 'Preguntas') {
+    <button mat-flat-button color="primary" (click)="exportQuestions()">
+        <mat-icon>arrow_downward</mat-icon>
+        Exportar
+    </button>
+
+    <button mat-flat-button color="primary" (click)="importQuestions()">
+        <mat-icon>upload</mat-icon>
+        Importar
+    </button>
+    }
 </mat-dialog-actions>

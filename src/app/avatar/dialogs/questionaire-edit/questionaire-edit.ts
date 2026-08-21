@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
@@ -94,6 +94,7 @@ export class QuestionaireEditComponent {
   audioFXForm: FormGroup;
   selectionObjectsForm: FormGroup;
   searchControl = new FormControl('');
+  selectedTabLabel = 'Configuración';
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
   @ViewChildren(AudioFileComponent) audios!: QueryList<AudioFileComponent>;
   imageConfig: ImageGalleryConfigDataType = {
@@ -182,6 +183,10 @@ export class QuestionaireEditComponent {
 
   clearSearch(): void {
     this.searchControl.setValue('');
+  }
+
+  onTabChange(event: MatTabChangeEvent): void {
+    this.selectedTabLabel = event.tab.textLabel;
   }
 
   private textIncludes(haystack?: string | null, needle?: string | null): boolean {
@@ -322,5 +327,13 @@ export class QuestionaireEditComponent {
 
   cancel(): void {
     this.dialogRef.close(null);
+  }
+
+  async exportQuestions() {
+    //
+  }
+
+  async importQuestions() {
+    //
   }
 }
