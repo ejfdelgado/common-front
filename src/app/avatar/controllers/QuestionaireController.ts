@@ -147,7 +147,10 @@ export class QuestionaireController extends SceneControllerAbstract {
     await ModuloSonido.preload(audios);
   }
 
-  async playAudio(type: 'intro' | 'loop' | 'finish' | 'loose' | 'success') {
+  async playAudio(
+    type: 'intro' | 'loop' | 'finish' | 'loose' | 'success',
+    removeLoop: boolean = false,
+  ) {
     if (!this.scenario?.audio) {
       return { promise: Promise.resolve() };
     }
@@ -155,7 +158,14 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (!val) {
       return { promise: Promise.resolve() };
     }
-    ModuloSonido.stopAll();
+    const whiteList: string[] = [];
+    if (!removeLoop) {
+      const loop = this.scenario?.audio.loop;
+      if (loop) {
+        whiteList.push(BUCKET_ROOT + loop);
+      }
+    }
+    ModuloSonido.stopAll(whiteList);
     return await ModuloSonido.play(BUCKET_ROOT + val, type == 'loop');
   }
 
@@ -188,7 +198,7 @@ export class QuestionaireController extends SceneControllerAbstract {
       this.steps.forEach((step) => {
         shuffleInPlace(step.options);
       });
-      const { promise } = await this.playAudio('intro');
+      const { promise } = await this.playAudio('intro', true);
       let introTitle = 'Game Start!';
       if (stepsConfig?.introTitle) {
         introTitle = stepsConfig.introTitle;
@@ -196,6 +206,7 @@ export class QuestionaireController extends SceneControllerAbstract {
       const introEnhanced = `<h2>${introTitle}</h2>`;
       this.setHudValue('top', introEnhanced, false);
       await promise;
+      this.playAudio('loop');
       await this.setHudValue('top', introEnhanced, true);
     }
 
@@ -353,7 +364,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.looseLabel) {
       label = this.scenario.stepsConfig.looseLabel;
     }
-    await this.setHudValue('bottom', `<h2>${label}</h2>`, false);
+    await this.setHudValue('bottom', `<h2>${label}</h2>`, true);
   }
 
   async youWin() {
@@ -362,8 +373,8 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (this.scenario && this.scenario.stepsConfig && this.scenario.stepsConfig.winLabel) {
       label = this.scenario.stepsConfig.winLabel;
     }
-    const { promise } = await this.playAudio('finish');
-    await this.setHudValue('top', `<h2>${label}</h2>`, false);
+    await this.setHudValue('top', `<h2>${label}</h2>`, true);
+    const { promise } = await this.playAudio('finish', true);
     await promise;
   }
 
