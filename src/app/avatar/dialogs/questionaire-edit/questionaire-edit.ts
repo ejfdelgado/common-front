@@ -31,6 +31,8 @@ import { ComponentBucketField } from 'src/types/ComponentBucketField';
 import { AudioFileComponent } from 'src/app/components/fields/sound-field/audio-field';
 import { SliderComponent } from 'src/app/components/fields/slider/slider';
 import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
+import { ClipboardUtil } from 'src/app/tools/Clipboard';
+import { ModalService } from 'src/app/services/modal.service';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -116,6 +118,7 @@ export class QuestionaireEditComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<QuestionaireEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GameScenario,
+    public modalSrv: ModalService,
   ) {
     this.stepsConfigForm = this.fb.group({
       language: [data.language ?? 'es-ES'],
@@ -330,7 +333,12 @@ export class QuestionaireEditComponent {
   }
 
   async exportQuestions() {
-    //
+    const steps = this.data.steps;
+    ClipboardUtil.writeText(JSON.stringify(steps, null, 4));
+    this.modalSrv.alert({
+      title: 'Ok',
+      txt: 'Preguntas copiadas en el portapapeles!',
+    });
   }
 
   async importQuestions() {
