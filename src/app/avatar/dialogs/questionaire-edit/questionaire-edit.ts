@@ -343,5 +343,26 @@ export class QuestionaireEditComponent {
 
   async importQuestions() {
     //
+    try {
+      const text = await ClipboardUtil.readText();
+      if (!text) {
+        throw new Error('No hay nada en el portapapeles');
+      }
+      let steps: GameStep[] = [];
+      try {
+        steps = JSON.parse(text);
+      } catch (err1) {
+        throw new Error('La información del portapapeles no tiene el formato esperado');
+      }
+      this.stepsForm = this.fb.group({
+        steps: this.fb.array((steps ?? []).map((step) => this.buildStepGroup(step))),
+      });
+      this.data.steps = steps;
+    } catch (err: any) {
+      this.modalSrv.alert({
+        title: 'Ups',
+        txt: err.message,
+      });
+    }
   }
 }
