@@ -37,7 +37,7 @@ function computeConstants(config: SelectionObjectConfig) {
   ROTATION_MIN = (2000 * config.rotateMinSpeed) / 100;
   ROTATION_MAX = ROTATION_MIN + (3000 * config.rotateAditionalSpeed) / 100;
 
-  X_MIN = 0.5;
+  X_MIN = 0.7;
   X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 
   Y_MIN = 0 - 0.5 * FAR_AMOUNT_Y;
