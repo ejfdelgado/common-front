@@ -44,3 +44,5 @@ Thumbs.db
 /credentials
 
 /appengine/public
+
+package-lock.json
