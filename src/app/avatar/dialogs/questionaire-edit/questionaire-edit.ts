@@ -33,6 +33,7 @@ import { SliderComponent } from 'src/app/components/fields/slider/slider';
 import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
 import { ClipboardUtil } from 'src/app/tools/Clipboard';
 import { ModalService } from 'src/app/services/modal.service';
+import { Subscription } from 'rxjs';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -89,7 +90,7 @@ export class QuestionaireEditComponent {
   readonly backgroundOptions = BACKGROUND_OPTIONS;
   readonly languageOptions = LANGUAGE_OPTIONS;
   readonly objectsOptions = OBJECTS_OPTIONS;
-
+  private keydownSub: Subscription;
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
   backgroundForm: FormGroup;
@@ -151,6 +152,12 @@ export class QuestionaireEditComponent {
       rotateMinSpeed: [data.stepsConfig?.selectionObjects?.rotateMinSpeed ?? 0],
       rotateAditionalSpeed: [data.stepsConfig?.selectionObjects?.rotateAditionalSpeed ?? 0],
       randomOrder: [data.stepsConfig?.selectionObjects?.randomOrder ?? false],
+    });
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.cancel();
+      }
     });
   }
 
@@ -370,5 +377,9 @@ export class QuestionaireEditComponent {
         txt: err.message,
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.keydownSub.unsubscribe();
   }
 }

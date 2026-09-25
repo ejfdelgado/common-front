@@ -83,12 +83,14 @@ export class AvatarService {
       data: JSON.parse(JSON.stringify(performance)),
     });
     const data = await firstValueFrom<MediaPipePerformanceType>(dialogRef.afterClosed());
-    const actual = sortify(data);
-    if (old != actual) {
-      //save
-      this.writePerformance(data);
-      // refresh
-      location.reload();
+    if (data) {
+      const actual = sortify(data);
+      if (old != actual) {
+        //save
+        this.writePerformance(data);
+        // refresh
+        location.reload();
+      }
     }
     return data;
   }

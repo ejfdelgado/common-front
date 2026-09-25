@@ -1,6 +1,11 @@
 import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { UsersService } from '@services/users.service';
 import { User } from '@angular/fire/auth';
@@ -13,27 +18,22 @@ import { UserCard } from '../user-card/user-card';
 import { TranslatePipe } from '@pipes/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { ModalService } from '@services/modal.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shared-with',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIcon,
-    UserCard,
-    TranslatePipe,
-  ],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIcon, UserCard, TranslatePipe],
   templateUrl: './shared-with.html',
   styleUrl: './shared-with.scss',
 })
 export class SharedWith extends CommonComponent {
+  private keydownSub: Subscription;
   users: User[] = [];
-  collection: string = "";
-  id: string = "";
+  collection: string = '';
+  id: string = '';
   changesCount: number = 0;
-  mode: string = "";
+  mode: string = '';
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -50,10 +50,23 @@ export class SharedWith extends CommonComponent {
     this.collection = config.collection;
     this.id = config.id;
     this.mode = config.mode;
-    this.userSrv.getSharedUsers(this.collection, this.id).then((users) => {
-      this.users = users;
-      this.cdr.detectChanges();
-    }).catch((err) => { });
+    this.userSrv
+      .getSharedUsers(this.collection, this.id)
+      .then((users) => {
+        this.users = users;
+        this.cdr.detectChanges();
+      })
+      .catch((err) => {});
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.close();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.keydownSub.unsubscribe();
   }
 
   close(): void {
@@ -61,20 +74,18 @@ export class SharedWith extends CommonComponent {
   }
 
   async save() {
-    const uidArray = this.users.map(u => u.uid);
+    const uidArray = this.users.map((u) => u.uid);
     try {
       await this.userSrv.writeSharedUsers(this.collection, this.id, uidArray);
       this.dialogRef.close();
-    } catch (err) {
-
-    }
+    } catch (err) {}
   }
 
   async removeUser(user: User) {
     const confirm = await this.modalSrv.confirm({
-      title: "confirm_remove.title",
-      txt: "confirm_remove.txt",
-      translateFolder: "admin",
+      title: 'confirm_remove.title',
+      txt: 'confirm_remove.txt',
+      translateFolder: 'admin',
       model: { user },
     });
     if (!confirm) {
@@ -93,12 +104,11 @@ export class SharedWith extends CommonComponent {
       width: '800px',
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
-      data: {
-      },
+      data: {},
     });
     dialogRef.afterClosed().subscribe(async (result: User | undefined) => {
       if (result) {
-        const exists = this.users.find(u => u.uid == result.uid)
+        const exists = this.users.find((u) => u.uid == result.uid);
         if (!exists) {
           this.users.push(result);
           this.changesCount++;
@@ -109,7 +119,7 @@ export class SharedWith extends CommonComponent {
   }
 
   async pickThis(user: User) {
-    if (this.mode == "pick_one") {
+    if (this.mode == 'pick_one') {
       this.dialogRef.close(user);
     }
   }

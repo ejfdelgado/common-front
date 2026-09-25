@@ -7,8 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
-import { MediaPipeHandsOptions, MediaPipePerformanceType, MediaPipePoseOptions } from 'src/types/BodyTypes';
+import {
+  MediaPipeHandsOptions,
+  MediaPipePerformanceType,
+  MediaPipePoseOptions,
+} from 'src/types/BodyTypes';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-performance-edit',
@@ -29,7 +33,7 @@ import { MediaPipeHandsOptions, MediaPipePerformanceType, MediaPipePoseOptions }
 export class PerformanceEditComponent {
   readonly poseOptions = MediaPipePoseOptions;
   readonly handsOptions = MediaPipeHandsOptions;
-
+  private keydownSub: Subscription;
   generalForm: FormGroup;
 
   constructor(
@@ -38,8 +42,14 @@ export class PerformanceEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: MediaPipePerformanceType,
   ) {
     this.generalForm = this.fb.group({
-      pose: [data.pose ?? 0],
-      hands: [data.hands ?? 0],
+      pose: [data?.pose ?? 0],
+      hands: [data?.hands ?? 0],
+    });
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.cancel();
+      }
     });
   }
 
@@ -53,6 +63,10 @@ export class PerformanceEditComponent {
     this.data.hands = this.generalForm.value.hands;
 
     this.dialogRef.close(this.data);
+  }
+
+  ngOnDestroy() {
+    this.keydownSub.unsubscribe();
   }
 
   cancel(): void {

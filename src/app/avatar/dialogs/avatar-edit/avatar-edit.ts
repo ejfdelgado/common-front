@@ -9,6 +9,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { AvatarModel } from 'src/types/WorldAvatar';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-avatar-edit',
@@ -27,18 +28,23 @@ import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
   styleUrl: './avatar-edit.scss',
 })
 export class AvatarEditComponent {
-
+  private keydownSub: Subscription;
   readonly meshOptions = MESH_OPTIONS;
-
   generalForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AvatarEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AvatarModel
+    @Inject(MAT_DIALOG_DATA) public data: AvatarModel,
   ) {
     this.generalForm = this.fb.group({
       meshPath: [data.meshPath ?? null],
+    });
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.cancel();
+      }
     });
   }
 
@@ -51,6 +57,10 @@ export class AvatarEditComponent {
     this.data.meshPath = this.generalForm.value.meshPath;
 
     this.dialogRef.close(this.data);
+  }
+
+  ngOnDestroy() {
+    this.keydownSub.unsubscribe();
   }
 
   cancel(): void {

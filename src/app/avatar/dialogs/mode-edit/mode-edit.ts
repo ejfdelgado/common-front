@@ -9,6 +9,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { GameMode } from 'src/types/WorldAvatar';
 import { SelectOptionBoolean } from 'src/types/fieldsTypes';
+import { Subscription } from 'rxjs';
 
 const MIRROR_OPTIONS: SelectOptionBoolean[] = [
   { label: 'Frente', value: true },
@@ -32,18 +33,23 @@ const MIRROR_OPTIONS: SelectOptionBoolean[] = [
   styleUrl: './mode-edit.scss',
 })
 export class ModeEditComponent {
-
   readonly mirrorOptions = MIRROR_OPTIONS;
-
+  private keydownSub: Subscription;
   generalForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ModeEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: GameMode
+    @Inject(MAT_DIALOG_DATA) public data: GameMode,
   ) {
     this.generalForm = this.fb.group({
       mirror: [!!data.mirror],
+    });
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.cancel();
+      }
     });
   }
 
@@ -56,6 +62,10 @@ export class ModeEditComponent {
     this.data.mirror = this.generalForm.value.mirror;
 
     this.dialogRef.close(this.data);
+  }
+
+  ngOnDestroy() {
+    this.keydownSub.unsubscribe();
   }
 
   cancel(): void {

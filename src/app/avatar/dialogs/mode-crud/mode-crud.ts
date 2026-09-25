@@ -12,6 +12,7 @@ import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mode-crud',
@@ -33,7 +34,7 @@ import { EditableInput } from 'src/app/components/fields/editable-input/editable
 })
 export class ModeCrudComponent {
   readonly meshOptions = MESH_OPTIONS;
-
+  private keydownSub: Subscription;
   generalForm: FormGroup;
 
   constructor(
@@ -45,6 +46,12 @@ export class ModeCrudComponent {
     // Here, adjust data
     this.generalForm = this.fb.group({
       modes: this.fb.array((modes ?? []).map((step) => this.buildModeGroup(step))),
+    });
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.cancel();
+      }
     });
   }
 
@@ -71,6 +78,10 @@ export class ModeCrudComponent {
     // TODO here copy
 
     this.dialogRef.close(this.data);
+  }
+
+  ngOnDestroy() {
+    this.keydownSub.unsubscribe();
   }
 
   cancel(): void {
