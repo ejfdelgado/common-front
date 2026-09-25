@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, HostListener } from '@angular/core';
 import {
   AVATAR_NAME,
   AVATAR_PELVIS_HEIGHT,
@@ -48,6 +48,7 @@ const MEDIA_PIPE_ROOT = [
   'https://cdn.jsdelivr.net/npm',
 ][0];
 
+@Directive()
 export abstract class ComponentBodyTracker extends CommonSpeech {
   performance: MediaPipePerformanceType = {
     pose: 0,
@@ -501,8 +502,25 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     this.stopTracking();
     this.unsubscribeEvents();
     this.stopListening();
-    exitFullscreen();
+    if (document.fullscreenElement) {
+      exitFullscreen();
+    }
     ModuloSonido.play('/assets/sounds/button.mp3');
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey() {
+    if (this.trackerStarted) {
+      this.stopAll();
+    }
+  }
+
+  // While in fullscreen the browser consumes Esc to exit it without firing keydown
+  @HostListener('document:fullscreenchange')
+  onFullscreenChange() {
+    if (!document.fullscreenElement && this.trackerStarted) {
+      this.stopAll();
+    }
   }
 
   public onResize() {
