@@ -16,6 +16,7 @@ import { AvatarService } from '@services/avatar.service';
 import {
   AvatarModel,
   AvatarStoredDataType,
+  GameControllerEnum,
   GameMode,
   GameScenario,
   GameSelection,
@@ -159,10 +160,33 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     this.canvasRef = canvasR;
   }
 
-  async initializeBodyTracker(scenario: GameScenario) {
+  async initializeBodyTracker(mode: GameMode) {
     const modelIncluded = [];
 
-    const { includePoseDetection, includeHandsDetection } = scenario;
+    let includePoseDetection = false;
+    let includeHandsDetection = false;
+
+    const POSE_CONTROLLERS: GameControllerEnum[] = [
+      GameControllerEnum.QuestionaireController,
+      GameControllerEnum.ArmsPointerController,
+      GameControllerEnum.ComparableController,
+      GameControllerEnum.CubeController,
+      GameControllerEnum.RecordPoseController,
+      GameControllerEnum.SimplePosesDetection,
+      GameControllerEnum.Stand2dController,
+      GameControllerEnum.WalkController,
+    ];
+    const HANDS_CONTROLLERS: GameControllerEnum[] = [
+      GameControllerEnum.FingerController,
+      GameControllerEnum.HandPointerController,
+      GameControllerEnum.HandsCloseController,
+    ];
+    includePoseDetection = mode.controllers.some((controller) =>
+      POSE_CONTROLLERS.includes(controller.id),
+    );
+    includeHandsDetection = mode.controllers.some((controller) =>
+      HANDS_CONTROLLERS.includes(controller.id),
+    );
 
     if (includePoseDetection && !this.mediaPipePoseLoaded) {
       // Body tracker
@@ -552,6 +576,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     // Apply the mode into the threejs scenario
     await avatarContainer.scene.applyMode(this.mode);
+    this.initializeBodyTracker(this.mode);
 
     // Set general config
     this.mirror = this.mode.mirror;
@@ -659,7 +684,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     if (!this.scenario) {
       return;
     }
-    this.initializeBodyTracker(this.scenario);
     await avatarContainer.scene?.applyScenario(this.mode, this.scenario);
 
     //console.log(`this.scenario.language = ${this.scenario.language}`);

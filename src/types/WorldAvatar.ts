@@ -63,8 +63,6 @@ export interface GameScenario {
   characters: GameCharacter[];
   stepsConfig?: StepsConfig;
   steps?: GameStep[];
-  includePoseDetection?: boolean;
-  includeHandsDetection?: boolean;
 }
 
 export interface GameMesh {

@@ -1,6 +1,6 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
 import { LandmarkList, NormalizedLandmarkList } from "@mediapipe/pose";
-import { BodyPoseKey, FingerPinch, HandIdType, HandKey } from "@mytypes/BodyParts";
+import { FingerPinch, HandIdType, HandKey } from "@mytypes/BodyParts";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 
 export class FingerController extends SceneControllerAbstract {
