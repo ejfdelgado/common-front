@@ -196,4 +196,8 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     }
     return null;
   }
+
+  public async editPerformance() {
+    return this.avatarSrv.editPerformance(this.performance);
+  }
 }

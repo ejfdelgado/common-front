@@ -250,7 +250,20 @@ export interface DragDataType {
   intentionXY: OrthogonalXY | null;
 }
 
-export const MediaPipePoseOptions = [
+export enum MediaPipePoseEnum {
+  lite = 0,
+  full = 1,
+  heavy = 2,
+}
+
+export interface MediaPipeOptionType {
+  id: number;
+  name: string;
+  sizeMB: number;
+  model: string;
+}
+
+export const MediaPipePoseOptions: MediaPipeOptionType[] = [
   {
     id: 0,
     name: 'Lite',
@@ -271,7 +284,12 @@ export const MediaPipePoseOptions = [
   },
 ];
 
-export const MediaPipeHandsOptions = [
+export enum MediaPipeHandsEnum {
+  lite = 0,
+  full = 1,
+}
+
+export const MediaPipeHandsOptions: MediaPipeOptionType[] = [
   {
     id: 0,
     name: 'Lite',
@@ -285,3 +303,8 @@ export const MediaPipeHandsOptions = [
     model: 'hand_landmark_full.tflite',
   },
 ];
+
+export interface MediaPipePerformanceType {
+  pose: MediaPipePoseEnum;
+  hands: MediaPipeHandsEnum;
+}

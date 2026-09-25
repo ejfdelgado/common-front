@@ -1,5 +1,11 @@
 import { ChangeDetectorRef, ElementRef } from '@angular/core';
-import { AVATAR_NAME, AVATAR_PELVIS_HEIGHT, BodyData, GenericSizeType } from '@mytypes/BodyTypes';
+import {
+  AVATAR_NAME,
+  AVATAR_PELVIS_HEIGHT,
+  BodyData,
+  GenericSizeType,
+  MediaPipePerformanceType,
+} from '@mytypes/BodyTypes';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { ModuloSonido } from '@services/sonido.service';
 import * as THREE from 'three';
@@ -16,7 +22,6 @@ import { AvatarService } from '@services/avatar.service';
 import {
   AvatarModel,
   AvatarStoredDataType,
-  GameControllerEnum,
   GameMode,
   GameScenario,
   GameSelection,
@@ -44,6 +49,10 @@ const MEDIA_PIPE_ROOT = [
 ][0];
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
+  performance: MediaPipePerformanceType = {
+    pose: 0,
+    hands: 0,
+  };
   mediaPipePoseLoaded: boolean = false;
   mediaPipeHandsLoaded: boolean = false;
   room: RoomGameType | null = null;
@@ -181,7 +190,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/pose/${file}`,
       });
       this.poseTracker.setOptions({
-        modelComplexity: 0, // 0 (fast) | 1 | 2 (accurate)
+        modelComplexity: this.performance.pose, // 0 (fast) | 1 | 2 (accurate)
         smoothLandmarks: true,
         smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
         minDetectionConfidence: 0.5,
@@ -213,7 +222,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       });
       this.handsTracker.setOptions({
         maxNumHands: 2,
-        modelComplexity: 1,
+        modelComplexity: this.performance.hands,
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5,
       });

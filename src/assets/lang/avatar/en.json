@@ -10,6 +10,7 @@
         "editWorld": "Edit world",
         "editScenario": "Edit scenario",
         "editAvatar": "Edit character",
+        "editPerformance": "Configure performance",
         "editModes": "Edit levels"
     }
 }

@@ -5,7 +5,7 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -32,28 +32,21 @@ import { AvatarStoredDataType, WorldAvatar } from 'src/types/WorldAvatar';
 import { getBucketPath } from 'src/app/tools/BucketPaths';
 import { FileService } from 'src/app/services/file.srv';
 
-const MODEL_NAME_PARENT = "room-public";
+const MODEL_NAME_PARENT = 'room-public';
 
 @Component({
   selector: 'app-play',
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    Statusbar,
-    SideMenu,
-    BodyTracker,
-  ],
+  imports: [CommonModule, MatButtonModule, Statusbar, SideMenu, BodyTracker],
   templateUrl: './play.html',
   styleUrl: './play.scss',
 })
 export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy, AfterViewInit {
-
-  @ViewChild("tracker_component") trackerComponent!: ComponentP2P;
+  @ViewChild('tracker_component') trackerComponent!: ComponentP2P;
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };
   room: AvatarStoredDataType | null = null;
-  status: P2PStatus = { value: "offline" };
+  status: P2PStatus = { value: 'offline' };
   p2pStatusSubscription: Subscription | null = null;
 
   constructor(
@@ -71,53 +64,52 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     public sideMenuSrv: SideMenuService,
     private router: Router,
     public p2pSrv: P2PService,
-
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr, dialog, configSrv, fileSrv, firestoreSrv);
 
     this.p2pStatusSubscription = this.p2pSrv.status.subscribe((ev) => {
       this.status = ev;
-      const found = this.menuOptions.find(a => a.name == "end_call");
+      const found = this.menuOptions.find((a) => a.name == 'end_call');
       if (found) {
-        found.visible = ev.value == "online";
+        found.visible = ev.value == 'online';
       }
       this.cdr.detectChanges();
     });
 
     this.menuOptions.push({
-      label: "menu.end_call",
-      translateFolder: "avatar",
-      name: "end_call",
+      label: 'menu.end_call',
+      translateFolder: 'avatar',
+      name: 'end_call',
       isPlainIcon: true,
-      icon: "🚪",
+      icon: '🚪',
       visible: false,
       children: [],
       callback: () => {
         this.p2pSrv.disconnectFromRoom();
-        ModuloSonido.play("/assets/sounds/hangdown.mp3");
+        ModuloSonido.play('/assets/sounds/hangdown.mp3');
       },
     });
 
     this.menuOptions.push({
-      label: "menu.scenarios",
-      translateFolder: "avatar",
-      name: "scenarios",
-      icon: "remove",
+      label: 'menu.scenarios',
+      translateFolder: 'avatar',
+      name: 'scenarios',
+      icon: 'remove',
       children: [],
     });
 
     this.menuOptions.push({
-      label: "menu.config",
-      translateFolder: "avatar",
-      name: "config",
-      icon: "remove",
+      label: 'menu.config',
+      translateFolder: 'avatar',
+      name: 'config',
+      icon: 'remove',
       children: [
         {
-          label: "menu.camera",
-          translateFolder: "avatar",
-          name: "camera",
+          label: 'menu.camera',
+          translateFolder: 'avatar',
+          name: 'camera',
           isPlainIcon: true,
-          icon: "🎥",
+          icon: '🎥',
           visible: true,
           children: [],
           callback: () => {
@@ -126,11 +118,24 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.editAvatar",
-          translateFolder: "avatar",
-          name: "editAvatar",
+          label: 'menu.editPerformance',
+          translateFolder: 'avatar',
+          name: 'editPerformance',
           isPlainIcon: true,
-          icon: "🎭",
+          icon: '⚙️',
+          visible: true,
+          children: [],
+          callback: async () => {
+            this.emitToc();
+            await this.trackerComponent.editPerformance();
+          },
+        },
+        {
+          label: 'menu.editAvatar',
+          translateFolder: 'avatar',
+          name: 'editAvatar',
+          isPlainIcon: true,
+          icon: '🎭',
           visible: true,
           children: [],
           callback: async () => {
@@ -142,11 +147,11 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.editScenario",
-          translateFolder: "avatar",
-          name: "editScenario",
+          label: 'menu.editScenario',
+          translateFolder: 'avatar',
+          name: 'editScenario',
           isPlainIcon: true,
-          icon: "📑",
+          icon: '📑',
           visible: true,
           children: [],
           callback: async () => {
@@ -158,11 +163,11 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.editModes",
-          translateFolder: "avatar",
-          name: "editModes",
+          label: 'menu.editModes',
+          translateFolder: 'avatar',
+          name: 'editModes',
           isPlainIcon: true,
-          icon: "👾",
+          icon: '👾',
           visible: true,
           children: [],
           callback: async () => {
@@ -174,11 +179,11 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.editWorld",
-          translateFolder: "avatar",
-          name: "editWorld",
+          label: 'menu.editWorld',
+          translateFolder: 'avatar',
+          name: 'editWorld',
           isPlainIcon: true,
-          icon: "🔧",
+          icon: '🔧',
           visible: true,
           children: [],
           callback: async () => {
@@ -190,11 +195,11 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
-          label: "menu.friends",
-          translateFolder: "avatar",
-          name: "loged_permissions",
+          label: 'menu.friends',
+          translateFolder: 'avatar',
+          name: 'loged_permissions',
           isPlainIcon: true,
-          icon: "👫",
+          icon: '👫',
           visible: false,
           children: [],
           callback: () => {
@@ -202,17 +207,17 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
             this.openPermissions();
           },
         },
-      ]
+      ],
     });
 
     this.menuOptions.push({
-      label: "menu.back_rooms",
-      translateFolder: "avatar",
-      icon: "arrow_back",
+      label: 'menu.back_rooms',
+      translateFolder: 'avatar',
+      icon: 'arrow_back',
       children: [],
       callback: () => {
         this.router.navigate([`action/rooms`], {
-          queryParams: {}
+          queryParams: {},
         });
       },
     });
@@ -235,11 +240,11 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
   updateLogedMenuOptions() {
     const visible = !!this.user;
     this.menuOptions
-      .find(a => a.name && ['config']
-        .indexOf(a.name) >= 0)?.children?.filter(a => a.name && a.name.startsWith("loged_"))
+      .find((a) => a.name && ['config'].indexOf(a.name) >= 0)
+      ?.children?.filter((a) => a.name && a.name.startsWith('loged_'))
       .forEach((e) => {
         e.visible = visible && !!this.room;
-      });;
+      });
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -268,7 +273,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
       data: {
         id: this.room.id,
         collection: MODEL_NAME_PARENT,
-        mode: "normal",
+        mode: 'normal',
       },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -276,14 +281,12 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     });
   }
 
-  async ngOnInit(): Promise<void> {
-
-  }
+  async ngOnInit(): Promise<void> {}
 
   async loadCollection() {
     const params = getUrlQueryParams();
-    const col = params.get("col");
-    const id = params.get("id");
+    const col = params.get('col');
+    const id = params.get('id');
     if (col && id) {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {

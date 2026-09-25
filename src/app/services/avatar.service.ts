@@ -17,6 +17,7 @@ import { AvatarEditComponent } from '../avatar/dialogs/avatar-edit/avatar-edit';
 import { getJSONUrl } from '../tools/BucketPaths';
 import { FileService } from './file.srv';
 import { ModeCrudComponent } from '../avatar/dialogs/mode-crud/mode-crud';
+import { MediaPipePerformanceType } from 'src/types/BodyTypes';
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +68,21 @@ export class AvatarService {
       data: JSON.parse(JSON.stringify(world)),
     });
     return firstValueFrom(dialogRef.afterClosed());
+  }
+
+  async editPerformance(
+    performance: MediaPipePerformanceType,
+  ): Promise<MediaPipePerformanceType | null> {
+    // Open modal
+    /*
+    const dialogRef = this.dialog.open(AvatarEditComponent, {
+      //width: '350px',
+      disableClose: true,
+      data: JSON.parse(JSON.stringify(avatar)),
+    });
+    return firstValueFrom(dialogRef.afterClosed());
+    */
+    return performance;
   }
 
   async loadWorld(firestoreEntity: AvatarStoredDataType): Promise<WorldAvatar> {
