@@ -5,6 +5,7 @@ import {
   BodyData,
   GenericSizeType,
   MediaPipePerformanceType,
+  MediaPipePoseEnum,
 } from '@mytypes/BodyTypes';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { ModuloSonido } from '@services/sonido.service';
@@ -29,7 +30,7 @@ import {
   POSE_CONTROLLERS,
   WorldAvatar,
 } from '@mytypes/WorldAvatar';
-import { Pose } from '@mediapipe/pose';
+import { FilesetResolver, PoseLandmarker } from '@mediapipe/tasks-vision';
 import { Hands } from '@mediapipe/hands';
 import { convertMediaPipeToCurrent } from './utils/AvatarUtilities';
 
@@ -46,12 +47,16 @@ import { getBucketFilePath } from '../tools/BucketPaths';
 const MEDIA_PIPE_ROOT = [
   'https://storage.googleapis.com/pro-ejflab-assets',
   'https://cdn.jsdelivr.net/npm',
-][0];
+][1];
+// Must match the installed @mediapipe/tasks-vision version (JS and wasm must agree)
+const TASKS_VISION_VERSION = '1.0.1';
+const POSE_MODELS_ROOT = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker';
+// Indexed by performance.pose: 0 (fast) | 1 | 2 (accurate)
 
 @Directive()
 export abstract class ComponentBodyTracker extends CommonSpeech {
   performance: MediaPipePerformanceType = {
-    pose: 0,
+    pose: MediaPipePoseEnum.lite,
     hands: 0,
   };
   mediaPipePoseLoaded: boolean = false;
@@ -66,7 +71,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   camera: Camera | null = null;
   videoRef!: ElementRef<HTMLVideoElement>;
   canvasRef!: ElementRef<HTMLCanvasElement>;
-  poseTracker!: Pose;
+  poseTracker!: PoseLandmarker;
+  lastPoseTimestamp: number = -1;
   handsTracker!: Hands;
   poses: BodyData[] = [];
   currentUser: User | null = null;
@@ -188,33 +194,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     if (includePoseDetection && !this.mediaPipePoseLoaded) {
       // Body tracker
-      this.poseTracker = new Pose({
-        locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/pose/${file}`,
-      });
-      this.poseTracker.setOptions({
-        modelComplexity: this.performance.pose, // 0 (fast) | 1 | 2 (accurate)
-        smoothLandmarks: true,
-        smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      } as any);
-
-      let poseFirstTime = true;
-      const poseTrackerLoaded = new Promise<void>((resolve) => {
-        this.poseTracker.onResults((results) => {
-          if (poseFirstTime) {
-            this.mediaPipePoseLoaded = true;
-            poseFirstTime = false;
-            resolve();
-          }
-          const converted = convertMediaPipeToCurrent(results, this.videoSize);
-          if (converted) {
-            this.updatePose([converted]);
-          }
-        });
-      });
-      this.warmUpTracker(this.poseTracker, 'pose');
-      modelIncluded.push(poseTrackerLoaded);
+      modelIncluded.push(this.loadPoseTracker());
     }
 
     if (includeHandsDetection && !this.mediaPipeHandsLoaded) {
@@ -260,9 +240,47 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
   }
 
-  private async warmUpTracker(tracker: Pose | Hands, name: string): Promise<void> {
+  private async loadPoseTracker(): Promise<void> {
     const start = performance.now();
-    await tracker.initialize();
+    const vision = await FilesetResolver.forVisionTasks(
+      `${MEDIA_PIPE_ROOT}/@mediapipe/tasks-vision@${TASKS_VISION_VERSION}/wasm`,
+    );
+    const model = `${this.performance.pose}`;
+    console.log(`Pose model ${model}`);
+    this.poseTracker = await PoseLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: `${POSE_MODELS_ROOT}/${model}/float16/latest/${model}.task`,
+        delegate: 'GPU',
+      },
+      runningMode: 'VIDEO',
+      numPoses: 1,
+      minPoseDetectionConfidence: 0.5,
+      minPosePresenceConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+    this.detectPose(this.createWarmUpCanvas());
+    this.mediaPipePoseLoaded = true;
+    console.log(`MediaPipe pose loaded in ${Math.round(performance.now() - start)}ms`);
+  }
+
+  private detectPose(image: HTMLVideoElement | HTMLCanvasElement): void {
+    // VIDEO mode requires strictly increasing timestamps
+    const timestamp = Math.max(performance.now(), this.lastPoseTimestamp + 1);
+    this.lastPoseTimestamp = timestamp;
+    const result = this.poseTracker.detectForVideo(image, timestamp);
+    const converted = convertMediaPipeToCurrent(
+      {
+        poseLandmarks: result.landmarks[0],
+        poseWorldLandmarks: result.worldLandmarks[0],
+      },
+      this.videoSize,
+    );
+    if (converted) {
+      this.updatePose([converted]);
+    }
+  }
+
+  private createWarmUpCanvas(): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     canvas.width = 640;
     canvas.height = 480;
@@ -271,7 +289,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    await tracker.send({ image: canvas });
+    return canvas;
+  }
+
+  private async warmUpTracker(tracker: Hands, name: string): Promise<void> {
+    const start = performance.now();
+    await tracker.initialize();
+    await tracker.send({ image: this.createWarmUpCanvas() });
     console.log(`MediaPipe ${name} loaded in ${Math.round(performance.now() - start)}ms`);
   }
 
@@ -440,7 +464,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       this.camera = new Camera(videoElement, {
         deviceId: selectedCamera.id,
         onFrame: async () => {
-          await this.poseTracker.send({ image: videoElement });
+          this.detectPose(videoElement);
           // Only do this if arms are pointing to the front
           if (this.mode?.useHands === true) {
             await this.handsTracker.send({ image: videoElement });

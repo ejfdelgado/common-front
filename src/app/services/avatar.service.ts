@@ -17,7 +17,7 @@ import { AvatarEditComponent } from '../avatar/dialogs/avatar-edit/avatar-edit';
 import { getJSONUrl } from '../tools/BucketPaths';
 import { FileService } from './file.srv';
 import { ModeCrudComponent } from '../avatar/dialogs/mode-crud/mode-crud';
-import { MediaPipePerformanceType } from 'src/types/BodyTypes';
+import { MediaPipePerformanceType, MediaPipePoseEnum } from 'src/types/BodyTypes';
 import { PerformanceEditComponent } from '../avatar/dialogs/performance-edit/performance-edit';
 import { sortify } from 'ejfdelgado-common-ts';
 
@@ -425,7 +425,7 @@ export class AvatarService {
   readPerformance(): MediaPipePerformanceType {
     const defaultValue: MediaPipePerformanceType = {
       hands: 0,
-      pose: 0,
+      pose: MediaPipePoseEnum.lite,
     };
     const old = localStorage.getItem('PERSONAL_PERFORMANCE');
     if (!old) {

@@ -910,7 +910,10 @@ export function computeHeight(points: { [key: string]: BodyKeyPointData }) {
     return distance1 + distance2;
 }
 
-export function convertMediaPipeToCurrent(orig: Results, videoSize: GenericSizeType) {
+export function convertMediaPipeToCurrent(
+    orig: Partial<Pick<Results, 'poseLandmarks' | 'poseWorldLandmarks'>>,
+    videoSize: GenericSizeType,
+) {
     if (!orig.poseLandmarks || !orig.poseWorldLandmarks) {
         return null;
     }

@@ -251,13 +251,13 @@ export interface DragDataType {
 }
 
 export enum MediaPipePoseEnum {
-  lite = 0,
-  full = 1,
-  heavy = 2,
+  lite = 'pose_landmarker_lite',
+  full = 'pose_landmarker_full',
+  heavy = 'pose_landmarker_heavy',
 }
 
 export interface MediaPipeOptionType {
-  id: number;
+  id: any;
   name: string;
   sizeMB: number;
   model: string;
@@ -265,19 +265,19 @@ export interface MediaPipeOptionType {
 
 export const MediaPipePoseOptions: MediaPipeOptionType[] = [
   {
-    id: 0,
+    id: MediaPipePoseEnum.lite,
     name: 'Lite',
     sizeMB: 3,
     model: 'pose_landmark_lite.tflite',
   },
   {
-    id: 1,
+    id: MediaPipePoseEnum.full,
     name: 'Full',
     sizeMB: 6,
     model: 'pose_landmark_full.tflite',
   },
   {
-    id: 2,
+    id: MediaPipePoseEnum.heavy,
     name: 'Heavy',
     sizeMB: 26,
     model: 'pose_landmark_heavy.tflite',
