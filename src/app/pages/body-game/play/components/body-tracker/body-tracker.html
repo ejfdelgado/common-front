@@ -2,7 +2,7 @@
 >
     <app-avatar-container #three_component (headUpLog)="headUpLog($event)"></app-avatar-container>
 
-    @if (initialized && !started) {
+    @if (!started) {
     <div class="start_container no_mouse">
         <button class="start_button" (click)="startAll()">
             <mat-icon>play_arrow</mat-icon>

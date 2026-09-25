@@ -13,10 +13,10 @@ import {
   CommandConfigType,
   RecognizedWordId,
   VoiceRecognitionService,
-} from "@services/voicerecognition.service";
-import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { IndicatorService } from "@services/indicator.service";
-import { BooleanStateService } from "@services/boolean-state.service";
+} from '@services/voicerecognition.service';
+import { SpeechSynthesisService } from '@services/speechsynthesis.service';
+import { IndicatorService } from '@services/indicator.service';
+import { BooleanStateService } from '@services/boolean-state.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { AvatarContainer } from '../avatar-container/avatar-container';
@@ -29,22 +29,13 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-body-tracker',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatIconModule,
-    AvatarContainer,
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule, AvatarContainer],
   templateUrl: './body-tracker.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    './body-tracker.scss',
-    '../../../../../../threejs_styles.scss',
-  ],
+  styleUrls: ['./body-tracker.scss', '../../../../../../threejs_styles.scss'],
 })
 export class BodyTracker extends ComponentP2P implements AfterViewInit {
-
-  @ViewChild("three_component") avatarContainer!: AvatarContainer;
+  @ViewChild('three_component') avatarContainer!: AvatarContainer;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvasRefGlobal!: ElementRef<HTMLCanvasElement>;
   headUpLogData: any = {};
@@ -83,17 +74,17 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
       maxDiffMillis: 600,
 
       commands: {
-        "es-ES": {
-          "guardar": "save",
-          "iniciar": "start",
-          "detener": "stop",
+        'es-ES': {
+          guardar: 'save',
+          iniciar: 'start',
+          detener: 'stop',
         },
-        "en-US": {
-          "save": "save",
-          "start": "start",
-          "stop": "stop",
+        'en-US': {
+          save: 'save',
+          start: 'start',
+          stop: 'stop',
         },
-        "fr-FR": {}
+        'fr-FR': {},
       },
     };
     const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
@@ -118,7 +109,7 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
       this.avatarContainer.executeCommand(command);
-      if (command.command == "save") {
+      if (command.command == 'save') {
         this.downloadTextPlain();
       }
     });
@@ -126,12 +117,9 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
+    this.registerVideoAndCanvas(this.videoRefGlobal, this.canvasRefGlobal);
     const promise = this.indicatorSrv.start();
     const promises = [];
-    promises.push(this.initializeBodyTracker(
-      this.videoRefGlobal,
-      this.canvasRefGlobal,
-    ));
     promises.push(this.speechSrv.init());
     await Promise.all(promises);
     promise.done();

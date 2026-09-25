@@ -41,10 +41,11 @@ const MEDIA_PIPE_ROOT = [
 ][0];
 
 export abstract class ComponentBodyTracker extends CommonSpeech {
+  mediaPipePoseLoaded: boolean = false;
+  mediaPipeHandsLoaded: boolean = false;
   room: RoomGameType | null = null;
   mirror: boolean = false;
   errorState: string | null = null;
-  initialized: boolean = false;
   started: boolean = false;
   trackerStarted: boolean = false;
   calledLastTime: boolean = false;
@@ -150,24 +151,26 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     this.currentUser = user;
   }
 
-  async initializeBodyTracker(
+  registerVideoAndCanvas(
     videoR: ElementRef<HTMLVideoElement>,
     canvasR: ElementRef<HTMLCanvasElement>,
   ) {
     this.videoRef = videoR;
     this.canvasRef = canvasR;
+  }
 
+  async initializeBodyTracker(scenario: GameScenario) {
     const modelIncluded = [];
-    const includePose = true;
-    const includeHands = false;
 
-    if (includePose) {
+    const { includePoseDetection, includeHandsDetection } = scenario;
+
+    if (includePoseDetection && !this.mediaPipePoseLoaded) {
       // Body tracker
       this.poseTracker = new Pose({
         locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/pose/${file}`,
       });
       this.poseTracker.setOptions({
-        modelComplexity: 2, // 0 (fast) | 1 | 2 (accurate)
+        modelComplexity: 0, // 0 (fast) | 1 | 2 (accurate)
         smoothLandmarks: true,
         smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
         minDetectionConfidence: 0.5,
@@ -176,11 +179,12 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
       let poseFirstTime = true;
       const poseTrackerLoaded = new Promise<void>((resolve) => {
-        if (poseFirstTime) {
-          poseFirstTime = false;
-          resolve();
-        }
         this.poseTracker.onResults((results) => {
+          if (poseFirstTime) {
+            this.mediaPipePoseLoaded = true;
+            poseFirstTime = false;
+            resolve();
+          }
           const converted = convertMediaPipeToCurrent(results, this.videoSize);
           if (converted) {
             this.updatePose([converted]);
@@ -191,7 +195,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       modelIncluded.push(poseTrackerLoaded);
     }
 
-    if (includeHands) {
+    if (includeHandsDetection && !this.mediaPipeHandsLoaded) {
       // Hands tracking
       this.handsTracker = new Hands({
         locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/hands/${file}`,
@@ -204,16 +208,17 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       });
       let handsFirstTime = true;
       const handsTrackerLoaded = new Promise<void>((resolve) => {
-        if (handsFirstTime) {
-          handsFirstTime = false;
-          resolve();
-        }
         this.handsTracker.onResults((results) => {
+          if (handsFirstTime) {
+            this.mediaPipeHandsLoaded = true;
+            handsFirstTime = false;
+            resolve();
+          }
           const { multiHandLandmarks, multiHandWorldLandmarks, multiHandedness } = results;
           for (let i = 0; i < multiHandedness.length; i++) {
             const handScore = multiHandedness[i];
             const handId = handScore.label;
-            const index = handScore.index;
+            //const index = handScore.index;
             this.getAvatarContainer().hands.set(handId, {
               score: handScore.score,
               multiHandLandmarks: multiHandLandmarks[i],
@@ -225,15 +230,12 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       this.warmUpTracker(this.handsTracker, 'hands');
       modelIncluded.push(handsTrackerLoaded);
     }
-
-    /*
-    const localIndicator = this.indicatorSrv.start();
-    Promise.all(modelIncluded).finally(() => {
-      localIndicator.done();
-    });
-    */
-
-    this.initialized = true;
+    if (modelIncluded.length > 0) {
+      const localActivity = this.indicatorSrv.start();
+      await Promise.all(modelIncluded).finally(() => {
+        localActivity.done();
+      });
+    }
   }
 
   private async warmUpTracker(tracker: Pose | Hands, name: string): Promise<void> {
@@ -657,6 +659,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     if (!this.scenario) {
       return;
     }
+    this.initializeBodyTracker(this.scenario);
     await avatarContainer.scene?.applyScenario(this.mode, this.scenario);
 
     //console.log(`this.scenario.language = ${this.scenario.language}`);
