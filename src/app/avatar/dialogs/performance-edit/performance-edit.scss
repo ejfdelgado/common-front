@@ -1,0 +1,19 @@
+.full-width {
+    width: 100%;
+}
+
+.top_gap {
+    padding-top: 15px;
+}
+
+.dialog_content {
+    min-width: 500px;
+    max-width: 90vw;
+}
+
+.tab_content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 4px;
+}

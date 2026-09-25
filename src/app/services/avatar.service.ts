@@ -18,6 +18,8 @@ import { getJSONUrl } from '../tools/BucketPaths';
 import { FileService } from './file.srv';
 import { ModeCrudComponent } from '../avatar/dialogs/mode-crud/mode-crud';
 import { MediaPipePerformanceType } from 'src/types/BodyTypes';
+import { PerformanceEditComponent } from '../avatar/dialogs/performance-edit/performance-edit';
+import { sortify } from 'ejfdelgado-common-ts';
 
 @Injectable({
   providedIn: 'root',
@@ -73,16 +75,22 @@ export class AvatarService {
   async editPerformance(
     performance: MediaPipePerformanceType,
   ): Promise<MediaPipePerformanceType | null> {
+    const old = sortify(performance);
     // Open modal
-    /*
-    const dialogRef = this.dialog.open(AvatarEditComponent, {
+    const dialogRef = this.dialog.open(PerformanceEditComponent, {
       //width: '350px',
       disableClose: true,
-      data: JSON.parse(JSON.stringify(avatar)),
+      data: JSON.parse(JSON.stringify(performance)),
     });
-    return firstValueFrom(dialogRef.afterClosed());
-    */
-    return performance;
+    const data = await firstValueFrom<MediaPipePerformanceType>(dialogRef.afterClosed());
+    const actual = sortify(data);
+    if (old != actual) {
+      //save
+      this.writePerformance(data);
+      // refresh
+      location.reload();
+    }
+    return data;
   }
 
   async loadWorld(firestoreEntity: AvatarStoredDataType): Promise<WorldAvatar> {

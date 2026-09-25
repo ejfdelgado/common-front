@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Edit performance</h2>
+
+<mat-dialog-content class="dialog_content text_size_x2">
+    <mat-tab-group class="full-width">
+
+        <mat-tab label="General">
+            <form [formGroup]="generalForm" class="tab_content">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Pose detection</mat-label>
+                    <mat-select formControlName="pose">
+                        @for (option of poseOptions; track option.id) {
+                        <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Hands detection</mat-label>
+                    <mat-select formControlName="hands">
+                        @for (option of handsOptions; track option.id) {
+                        <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </mat-tab>
+
+    </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+    </button>
+
+    <button mat-flat-button color="primary" (click)="save()">
+        <mat-icon>check</mat-icon>
+        Guardar
+    </button>
+</mat-dialog-actions>
