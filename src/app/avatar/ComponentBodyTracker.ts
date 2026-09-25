@@ -183,7 +183,7 @@ export abstract class ComponentBodyTracker
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
         });
         this.poseTracker.setOptions({
-            modelComplexity: 1,        // 0 (fast) | 1 | 2 (accurate)
+            modelComplexity: 2,        // 0 (fast) | 1 | 2 (accurate)
             smoothLandmarks: true,
             smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
             minDetectionConfidence: 0.5,
