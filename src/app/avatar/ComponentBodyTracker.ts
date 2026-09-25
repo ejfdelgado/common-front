@@ -35,6 +35,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { getBucketFilePath } from '../tools/BucketPaths';
 
+const MEDIA_PIPE_ROOT = [
+  'https://storage.googleapis.com/pro-ejflab-assets',
+  'https://cdn.jsdelivr.net/npm',
+][0];
+
 export abstract class ComponentBodyTracker extends CommonSpeech {
   room: RoomGameType | null = null;
   mirror: boolean = false;
@@ -159,10 +164,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     if (includePose) {
       // Body tracker
       this.poseTracker = new Pose({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
+        locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/pose/${file}`,
       });
       this.poseTracker.setOptions({
-        modelComplexity: 0, // 0 (fast) | 1 | 2 (accurate)
+        modelComplexity: 2, // 0 (fast) | 1 | 2 (accurate)
         smoothLandmarks: true,
         smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
         minDetectionConfidence: 0.5,
@@ -172,8 +177,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       let poseFirstTime = true;
       const poseTrackerLoaded = new Promise<void>((resolve) => {
         if (poseFirstTime) {
-            poseFirstTime = false;
-            resolve();
+          poseFirstTime = false;
+          resolve();
         }
         this.poseTracker.onResults((results) => {
           const converted = convertMediaPipeToCurrent(results, this.videoSize);
@@ -183,14 +188,13 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         });
       });
       this.warmUpTracker(this.poseTracker, 'pose');
-
       modelIncluded.push(poseTrackerLoaded);
     }
 
     if (includeHands) {
       // Hands tracking
       this.handsTracker = new Hands({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+        locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/hands/${file}`,
       });
       this.handsTracker.setOptions({
         maxNumHands: 2,
@@ -198,22 +202,27 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5,
       });
-      this.handsTracker.onResults((results) => {
-        const { multiHandLandmarks, multiHandWorldLandmarks, multiHandedness } = results;
-        for (let i = 0; i < multiHandedness.length; i++) {
-          const handScore = multiHandedness[i];
-          const handId = handScore.label;
-          const index = handScore.index;
-          this.getAvatarContainer().hands.set(handId, {
-            score: handScore.score,
-            multiHandLandmarks: multiHandLandmarks[i],
-            multiHandWorldLandmarks: multiHandWorldLandmarks[i],
-          });
+      let handsFirstTime = true;
+      const handsTrackerLoaded = new Promise<void>((resolve) => {
+        if (handsFirstTime) {
+          handsFirstTime = false;
+          resolve();
         }
+        this.handsTracker.onResults((results) => {
+          const { multiHandLandmarks, multiHandWorldLandmarks, multiHandedness } = results;
+          for (let i = 0; i < multiHandedness.length; i++) {
+            const handScore = multiHandedness[i];
+            const handId = handScore.label;
+            const index = handScore.index;
+            this.getAvatarContainer().hands.set(handId, {
+              score: handScore.score,
+              multiHandLandmarks: multiHandLandmarks[i],
+              multiHandWorldLandmarks: multiHandWorldLandmarks[i],
+            });
+          }
+        });
       });
-      const handsTrackerLoaded = new Promise((resolve, reject) => {
-        // what to put here?
-      });
+      this.warmUpTracker(this.handsTracker, 'hands');
       modelIncluded.push(handsTrackerLoaded);
     }
 
