@@ -8,6 +8,18 @@ import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
 // cocodrilo009_1.glb
 export const DEFAULT_AVATAR_MESH = 'cocodrilo009_1.glb';
 
+export const MEDIA_PIPE_ROOT = [
+  'https://storage.googleapis.com/pro-ejflab-assets',
+  'https://cdn.jsdelivr.net/npm',
+][1];
+// Must match the installed @mediapipe/tasks-vision version (JS and wasm must agree)
+export const TASKS_VISION_VERSION = '1.0.1';
+export const POSE_MODELS_ROOT = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker';
+// tasks-vision ships a single hand model (no lite/full variants)
+export const HANDS_MODEL_PATH =
+  'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task';
+// Indexed by performance.pose: 0 (fast) | 1 | 2 (accurate)
+
 export const ROOT_PATH = '/assets/models/';
 
 export interface Point2D {

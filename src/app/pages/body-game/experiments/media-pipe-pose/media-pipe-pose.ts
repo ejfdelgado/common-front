@@ -1,11 +1,19 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { Pose, Results } from '@mediapipe/pose';
-import { Camera } from '@mediapipe/camera_utils';
-import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
-import { POSE_CONNECTIONS } from '@mediapipe/pose';
+import {
+  DrawingUtils,
+  FilesetResolver,
+  Landmark,
+  NormalizedLandmark,
+  PoseLandmarker,
+} from '@mediapipe/tasks-vision';
+import { Camera } from '@avatar/Camera';
 import { convertMediaPipeToCurrent } from '@avatar/utils/AvatarUtilities';
-import { GenericSizeType } from '@mytypes/BodyTypes';
+import { GenericSizeType, MEDIA_PIPE_ROOT, MediaPipePoseEnum, POSE_MODELS_ROOT, TASKS_VISION_VERSION } from '@mytypes/BodyTypes';
 
+interface PoseFrameResult {
+  poseLandmarks?: NormalizedLandmark[];
+  poseWorldLandmarks?: Landmark[];
+}
 
 @Component({
   selector: 'app-media-pipe-pose',
@@ -15,8 +23,10 @@ import { GenericSizeType } from '@mytypes/BodyTypes';
 })
 export class MediaPipePose implements AfterViewInit {
   camera: Camera | null = null;
-  lastResults: Results | null = null;
-  ngAfterViewInit(): void {
+  lastResults: PoseFrameResult | null = null;
+  lastTimestamp: number = -1;
+
+  async ngAfterViewInit(): Promise<void> {
     const video: HTMLVideoElement = document.getElementById('video') as HTMLVideoElement;
     const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement;
     if (!canvas || !video) {
@@ -26,36 +36,49 @@ export class MediaPipePose implements AfterViewInit {
     if (!ctx) {
       return
     }
+    const drawingUtils = new DrawingUtils(ctx);
 
     // 1. Create the Pose detector
-    const pose = new Pose({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+    const vision = await FilesetResolver.forVisionTasks(
+      `${MEDIA_PIPE_ROOT}/@mediapipe/tasks-vision@${TASKS_VISION_VERSION}/wasm`,
+    );
+    const model = MediaPipePoseEnum.full; // lite (fast) | full | heavy (accurate)
+    const pose = await PoseLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: `${POSE_MODELS_ROOT}/${model}/float16/latest/${model}.task`,
+        delegate: 'GPU',
+      },
+      runningMode: 'VIDEO',
+      numPoses: 1,
+      minPoseDetectionConfidence: 0.5,
+      minPosePresenceConfidence: 0.5,
+      minTrackingConfidence: 0.5,
     });
 
-    pose.setOptions({
-      modelComplexity: 1,        // 0 (fast) | 1 | 2 (accurate)
-      smoothLandmarks: true,
-      smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
-    } as any);
-
-    // 2. Handle results — draw skeleton on canvas
-    pose.onResults((results) => {
+    // 2. Detect and draw skeleton on canvas
+    const onFrame = async () => {
+      // VIDEO mode requires strictly increasing timestamps
+      const timestamp = Math.max(performance.now(), this.lastTimestamp + 1);
+      this.lastTimestamp = timestamp;
+      const result = pose.detectForVideo(video, timestamp);
+      const results: PoseFrameResult = {
+        poseLandmarks: result.landmarks[0],
+        poseWorldLandmarks: result.worldLandmarks[0],
+      };
       this.lastResults = results;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Mirror the camera feed
       ctx.save();
       ctx.scale(1, 1);
-      ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       ctx.restore();
 
       // Draw 2D skeleton overlay using normalized image landmarks
       if (results.poseLandmarks) {
-        drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS,
+        drawingUtils.drawConnectors(results.poseLandmarks, PoseLandmarker.POSE_CONNECTIONS,
           { color: '#00FF00', lineWidth: 2 });
-        drawLandmarks(ctx, results.poseLandmarks,
+        drawingUtils.drawLandmarks(results.poseLandmarks,
           { color: '#FF0000', lineWidth: 1, radius: 4 });
       }
 
@@ -64,18 +87,14 @@ export class MediaPipePose implements AfterViewInit {
       if (results.poseWorldLandmarks) {
         //console.log('3D world landmarks:', results.poseWorldLandmarks);
       }
-    });
+    };
 
     // 3. Start the camera loop
     this.camera = new Camera(video, {
-      onFrame: async () => {
-        await pose.send({ image: video });
-      },
+      onFrame,
       width: 640,
       height: 480
     });
-
-
   }
 
   start() {

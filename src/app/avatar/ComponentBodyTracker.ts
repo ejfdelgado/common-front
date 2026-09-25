@@ -4,8 +4,12 @@ import {
   AVATAR_PELVIS_HEIGHT,
   BodyData,
   GenericSizeType,
+  HANDS_MODEL_PATH,
+  MEDIA_PIPE_ROOT,
   MediaPipePerformanceType,
   MediaPipePoseEnum,
+  POSE_MODELS_ROOT,
+  TASKS_VISION_VERSION,
 } from '@mytypes/BodyTypes';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { ModuloSonido } from '@services/sonido.service';
@@ -44,17 +48,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { getBucketFilePath } from '../tools/BucketPaths';
 
-const MEDIA_PIPE_ROOT = [
-  'https://storage.googleapis.com/pro-ejflab-assets',
-  'https://cdn.jsdelivr.net/npm',
-][1];
-// Must match the installed @mediapipe/tasks-vision version (JS and wasm must agree)
-const TASKS_VISION_VERSION = '1.0.1';
-const POSE_MODELS_ROOT = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker';
-// tasks-vision ships a single hand model (no lite/full variants)
-const HANDS_MODEL_PATH =
-  'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task';
-// Indexed by performance.pose: 0 (fast) | 1 | 2 (accurate)
+
 
 @Directive()
 export abstract class ComponentBodyTracker extends CommonSpeech {
