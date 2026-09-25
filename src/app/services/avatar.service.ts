@@ -425,6 +425,7 @@ export class AvatarService {
   readPerformance(): MediaPipePerformanceType {
     const defaultValue: MediaPipePerformanceType = {
       pose: MediaPipePoseEnum.lite,
+      filterBackPeople: false,
     };
     const old = localStorage.getItem('PERSONAL_PERFORMANCE');
     if (!old) {

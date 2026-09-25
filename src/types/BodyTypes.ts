@@ -298,4 +298,5 @@ export const MediaPipePoseOptions: MediaPipeOptionType[] = [
 
 export interface MediaPipePerformanceType {
   pose: MediaPipePoseEnum;
+  filterBackPeople: boolean;
 }

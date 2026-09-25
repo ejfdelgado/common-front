@@ -60,6 +60,7 @@ import { getBucketFilePath } from '../tools/BucketPaths';
 export abstract class ComponentBodyTracker extends CommonSpeech {
   performance: MediaPipePerformanceType = {
     pose: MediaPipePoseEnum.lite,
+    filterBackPeople: false,
   };
   mediaPipePoseLoaded: boolean = false;
   mediaPipeHandsLoaded: boolean = false;
@@ -234,7 +235,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         delegate: 'GPU',
       },
       runningMode: 'VIDEO',
-      numPoses: 2,
+      numPoses: this.performance.filterBackPeople ? 5 : 1,
       minPoseDetectionConfidence: 0.5,
       minPosePresenceConfidence: 0.5,
       minTrackingConfidence: 0.5,
@@ -254,17 +255,17 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     let landmarksComputed = biggerBody.landmarks;
     let worldLandmarksComputed = biggerBody.worldLandmarks;
 
-    
-    const { landmarks, worldLandmarks } = this.poseSmoother.apply(
-      landmarksComputed,
-      worldLandmarksComputed,
-      timestamp,
-    );
-    if (landmarks && worldLandmarks) {
-      landmarksComputed = landmarks;
-      worldLandmarksComputed = worldLandmarks;
+    if (this.performance.filterBackPeople) {
+      const { landmarks, worldLandmarks } = this.poseSmoother.apply(
+        landmarksComputed,
+        worldLandmarksComputed,
+        timestamp,
+      );
+      if (landmarks && worldLandmarks) {
+        landmarksComputed = landmarks;
+        worldLandmarksComputed = worldLandmarks;
+      }
     }
-    
 
     const converted = convertMediaPipeToCurrent(
       {

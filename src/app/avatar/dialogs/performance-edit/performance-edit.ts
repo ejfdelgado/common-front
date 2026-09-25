@@ -9,6 +9,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MediaPipePerformanceType, MediaPipePoseOptions } from 'src/types/BodyTypes';
 import { Subscription } from 'rxjs';
+import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
 
 @Component({
   selector: 'app-performance-edit',
@@ -22,6 +23,7 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
+    OnOffToggleComponent,
   ],
   templateUrl: './performance-edit.html',
   styleUrl: './performance-edit.scss',
@@ -38,6 +40,7 @@ export class PerformanceEditComponent {
   ) {
     this.generalForm = this.fb.group({
       pose: [data?.pose ?? 0],
+      filterBackPeople: [data?.filterBackPeople ?? false],
     });
     this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
       if (event.key === 'Escape') {
@@ -54,6 +57,7 @@ export class PerformanceEditComponent {
     }
 
     this.data.pose = this.generalForm.value.pose;
+    this.data.filterBackPeople = this.generalForm.value.filterBackPeople;
 
     this.dialogRef.close(this.data);
   }
