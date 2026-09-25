@@ -18,7 +18,7 @@ import {
 import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { Pose, Results } from '@mediapipe/pose';
+import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
 
 const textureLoader = new TextureLoader();
 
@@ -911,7 +911,7 @@ export function computeHeight(points: { [key: string]: BodyKeyPointData }) {
 }
 
 export function convertMediaPipeToCurrent(
-    orig: Partial<Pick<Results, 'poseLandmarks' | 'poseWorldLandmarks'>>,
+    orig: { poseLandmarks?: NormalizedLandmark[]; poseWorldLandmarks?: Landmark[] },
     videoSize: GenericSizeType,
 ) {
     if (!orig.poseLandmarks || !orig.poseWorldLandmarks) {

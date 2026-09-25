@@ -1,4 +1,14 @@
-import { CameraInterface, CameraOptions } from "@mediapipe/camera_utils";
+export interface CameraOptions {
+    onFrame: () => Promise<void> | null;
+    facingMode?: 'user' | 'environment';
+    width?: number;
+    height?: number;
+}
+
+export interface CameraInterface {
+    start(): Promise<void>;
+    stop(): Promise<void>;
+}
 
 export interface CameraOptionsExt extends CameraOptions {
     deviceId?: string;

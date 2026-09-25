@@ -1,4 +1,4 @@
-import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
+import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
 
 /**
  * Body: https://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker
@@ -181,8 +181,8 @@ export type FingerPinch = 'Thumb_Finger' | 'Thumb_Pinky';
 
 export interface HandDataSegmented {
     score: number,
-    multiHandLandmarks: NormalizedLandmarkList,
-    multiHandWorldLandmarks: LandmarkList,
+    multiHandLandmarks: NormalizedLandmark[],
+    multiHandWorldLandmarks: Landmark[],
 };
 
 export enum HandKey {

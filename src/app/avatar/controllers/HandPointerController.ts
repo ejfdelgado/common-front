@@ -1,5 +1,5 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
-import { LandmarkList, NormalizedLandmarkList } from "@mediapipe/pose";
+import { Landmark, NormalizedLandmark } from "@mediapipe/tasks-vision";
 import { HandIdType, HandKey } from "@mytypes/BodyParts";
 import { AvatarBodyEvent, ControllerUpdateResponse, Point3D } from "@mytypes/BodyTypes";
 import { angleBetweenDegrees } from "../utils/AvatarUtilities";
@@ -65,7 +65,7 @@ export class HandPointerController extends SceneControllerAbstract {
 
     }
 
-    getVectorBetween(head: HandKey, tail: HandKey, list: LandmarkList): Point3D {
+    getVectorBetween(head: HandKey, tail: HandKey, list: Landmark[]): Point3D {
         const pHead = list[head];
         const pTail = list[tail];
         return {
@@ -79,7 +79,7 @@ export class HandPointerController extends SceneControllerAbstract {
         f1: HandKey,
         f2: HandKey,
         f3: HandKey,
-        list: LandmarkList
+        list: Landmark[]
     ) {
         const angle = angleBetweenDegrees(
             this.getVectorBetween(f2, f3, list),
@@ -90,8 +90,8 @@ export class HandPointerController extends SceneControllerAbstract {
 
     processHand(
         handId: HandIdType,
-        multiHandLandmarks: NormalizedLandmarkList,
-        multiHandWorldLandmarks?: LandmarkList,
+        multiHandLandmarks: NormalizedLandmark[],
+        multiHandWorldLandmarks?: Landmark[],
     ) {
         if (!multiHandWorldLandmarks) {
             return;

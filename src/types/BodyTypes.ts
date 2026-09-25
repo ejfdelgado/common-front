@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { FingerPinch, HandIdType } from './BodyParts';
-import { LandmarkList, NormalizedLandmarkList } from '@mediapipe/pose';
+import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
 
 // esqueleto009_1.glb
 // avatar005.glb
@@ -124,8 +124,8 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
     HandIdType,
     {
       score: number;
-      multiHandLandmarks: NormalizedLandmarkList;
-      multiHandWorldLandmarks: LandmarkList;
+      multiHandLandmarks: NormalizedLandmark[];
+      multiHandWorldLandmarks: Landmark[];
     }
   >;
 }

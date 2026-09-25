@@ -1,5 +1,5 @@
 import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
-import { LandmarkList, NormalizedLandmarkList } from "@mediapipe/pose";
+import { Landmark, NormalizedLandmark } from "@mediapipe/tasks-vision";
 import { FingerPinch, HandIdType, HandKey } from "@mytypes/BodyParts";
 import { AvatarBodyEvent, ControllerUpdateResponse } from "@mytypes/BodyTypes";
 
@@ -39,8 +39,8 @@ export class FingerController extends SceneControllerAbstract {
 
     processHand(
         handId: HandIdType,
-        multiHandLandmarks: NormalizedLandmarkList,
-        multiHandWorldLandmarks: LandmarkList,
+        multiHandLandmarks: NormalizedLandmark[],
+        multiHandWorldLandmarks: Landmark[],
     ) {
         // Hysteresis: ON requires closer contact than OFF to suppress noisy toggling
         const PINCH_ON_THRESHOLD: number = 0.03;   // ~4 cm in world coords
