@@ -34,7 +34,14 @@ import {
   POSE_CONTROLLERS,
   WorldAvatar,
 } from '@mytypes/WorldAvatar';
-import { FilesetResolver, HandLandmarker, PoseLandmarker } from '@mediapipe/tasks-vision';
+import {
+  FilesetResolver,
+  HandLandmarker,
+  Landmark,
+  NormalizedLandmark,
+  PoseLandmarker,
+  PoseLandmarkerResult,
+} from '@mediapipe/tasks-vision';
 import { HandIdType } from '@mytypes/BodyParts';
 import { convertMediaPipeToCurrent } from './utils/AvatarUtilities';
 
@@ -47,8 +54,6 @@ import { CameraDataType } from '@mytypes/CameraTypes';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { getBucketFilePath } from '../tools/BucketPaths';
-
-
 
 @Directive()
 export abstract class ComponentBodyTracker extends CommonSpeech {
@@ -242,16 +247,27 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     const timestamp = Math.max(performance.now(), this.lastPoseTimestamp + 1);
     this.lastPoseTimestamp = timestamp;
     const result = this.poseTracker.detectForVideo(image, timestamp);
+    const { landmarks, worldLandmarks } = this.getBiggerBodyDetected(result);
     const converted = convertMediaPipeToCurrent(
       {
-        poseLandmarks: result.landmarks[0],
-        poseWorldLandmarks: result.worldLandmarks[0],
+        poseLandmarks: landmarks,
+        poseWorldLandmarks: worldLandmarks,
       },
       this.videoSize,
     );
     if (converted) {
       this.updatePose([converted]);
     }
+  }
+
+  private getBiggerBodyDetected(result: PoseLandmarkerResult): {
+    landmarks: NormalizedLandmark[];
+    worldLandmarks: Landmark[];
+  } {
+    return {
+      landmarks: result.landmarks[0],
+      worldLandmarks: result.worldLandmarks[0],
+    };
   }
 
   private createWarmUpCanvas(): HTMLCanvasElement {
