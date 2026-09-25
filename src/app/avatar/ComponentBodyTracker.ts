@@ -44,6 +44,7 @@ import {
 } from '@mediapipe/tasks-vision';
 import { HandIdType } from '@mytypes/BodyParts';
 import { convertMediaPipeToCurrent } from './utils/AvatarUtilities';
+import { PoseLandmarkSmoother } from './utils/LandmarkSmoother';
 
 import { GameAction, RoomGameType } from '@mytypes/ActionGameTypes';
 import { User } from '@angular/fire/auth';
@@ -74,6 +75,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   canvasRef!: ElementRef<HTMLCanvasElement>;
   poseTracker!: PoseLandmarker;
   lastPoseTimestamp: number = -1;
+  poseSmoother: PoseLandmarkSmoother = new PoseLandmarkSmoother();
   handsTracker!: HandLandmarker;
   lastHandsTimestamp: number = -1;
   visionFileset: ReturnType<typeof FilesetResolver.forVisionTasks> | null = null;
@@ -232,7 +234,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         delegate: 'GPU',
       },
       runningMode: 'VIDEO',
-      numPoses: 1,
+      numPoses: 2,
       minPoseDetectionConfidence: 0.5,
       minPosePresenceConfidence: 0.5,
       minTrackingConfidence: 0.5,
@@ -247,11 +249,27 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     const timestamp = Math.max(performance.now(), this.lastPoseTimestamp + 1);
     this.lastPoseTimestamp = timestamp;
     const result = this.poseTracker.detectForVideo(image, timestamp);
-    const { landmarks, worldLandmarks } = this.getBiggerBodyDetected(result);
+    const biggerBody = this.getBiggerBodyDetected(result);
+    // MediaPipe only smooths internally when numPoses == 1, so smooth here
+    let landmarksComputed = biggerBody.landmarks;
+    let worldLandmarksComputed = biggerBody.worldLandmarks;
+
+    
+    const { landmarks, worldLandmarks } = this.poseSmoother.apply(
+      landmarksComputed,
+      worldLandmarksComputed,
+      timestamp,
+    );
+    if (landmarks && worldLandmarks) {
+      landmarksComputed = landmarks;
+      worldLandmarksComputed = worldLandmarks;
+    }
+    
+
     const converted = convertMediaPipeToCurrent(
       {
-        poseLandmarks: landmarks,
-        poseWorldLandmarks: worldLandmarks,
+        poseLandmarks: landmarksComputed,
+        poseWorldLandmarks: worldLandmarksComputed,
       },
       this.videoSize,
     );
