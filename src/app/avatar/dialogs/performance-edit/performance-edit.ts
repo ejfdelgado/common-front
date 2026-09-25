@@ -7,11 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import {
-  MediaPipeHandsOptions,
-  MediaPipePerformanceType,
-  MediaPipePoseOptions,
-} from 'src/types/BodyTypes';
+import { MediaPipePerformanceType, MediaPipePoseOptions } from 'src/types/BodyTypes';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -32,7 +28,6 @@ import { Subscription } from 'rxjs';
 })
 export class PerformanceEditComponent {
   readonly poseOptions = MediaPipePoseOptions;
-  readonly handsOptions = MediaPipeHandsOptions;
   private keydownSub: Subscription;
   generalForm: FormGroup;
 
@@ -43,7 +38,6 @@ export class PerformanceEditComponent {
   ) {
     this.generalForm = this.fb.group({
       pose: [data?.pose ?? 0],
-      hands: [data?.hands ?? 0],
     });
     this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
       if (event.key === 'Escape') {
@@ -60,7 +54,6 @@ export class PerformanceEditComponent {
     }
 
     this.data.pose = this.generalForm.value.pose;
-    this.data.hands = this.generalForm.value.hands;
 
     this.dialogRef.close(this.data);
   }

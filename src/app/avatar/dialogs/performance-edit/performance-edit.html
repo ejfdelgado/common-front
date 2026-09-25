@@ -13,14 +13,6 @@
                         }
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="full-width" appearance="outline">
-                    <mat-label>Hands detection</mat-label>
-                    <mat-select formControlName="hands">
-                        @for (option of handsOptions; track option.id) {
-                        <mat-option [value]="option.id">{{ option.name }}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
             </form>
         </mat-tab>
 

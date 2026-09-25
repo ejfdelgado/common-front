@@ -284,27 +284,6 @@ export const MediaPipePoseOptions: MediaPipeOptionType[] = [
   },
 ];
 
-export enum MediaPipeHandsEnum {
-  lite = 0,
-  full = 1,
-}
-
-export const MediaPipeHandsOptions: MediaPipeOptionType[] = [
-  {
-    id: 0,
-    name: 'Lite',
-    sizeMB: 2,
-    model: 'hand_landmark_lite.tflite',
-  },
-  {
-    id: 1,
-    name: 'Full',
-    sizeMB: 5.5,
-    model: 'hand_landmark_full.tflite',
-  },
-];
-
 export interface MediaPipePerformanceType {
   pose: MediaPipePoseEnum;
-  hands: MediaPipeHandsEnum;
 }

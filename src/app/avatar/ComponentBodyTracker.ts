@@ -30,8 +30,8 @@ import {
   POSE_CONTROLLERS,
   WorldAvatar,
 } from '@mytypes/WorldAvatar';
-import { FilesetResolver, PoseLandmarker } from '@mediapipe/tasks-vision';
-import { Hands } from '@mediapipe/hands';
+import { FilesetResolver, HandLandmarker, PoseLandmarker } from '@mediapipe/tasks-vision';
+import { HandIdType } from '@mytypes/BodyParts';
 import { convertMediaPipeToCurrent } from './utils/AvatarUtilities';
 
 import { GameAction, RoomGameType } from '@mytypes/ActionGameTypes';
@@ -51,13 +51,15 @@ const MEDIA_PIPE_ROOT = [
 // Must match the installed @mediapipe/tasks-vision version (JS and wasm must agree)
 const TASKS_VISION_VERSION = '1.0.1';
 const POSE_MODELS_ROOT = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker';
+// tasks-vision ships a single hand model (no lite/full variants)
+const HANDS_MODEL_PATH =
+  'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task';
 // Indexed by performance.pose: 0 (fast) | 1 | 2 (accurate)
 
 @Directive()
 export abstract class ComponentBodyTracker extends CommonSpeech {
   performance: MediaPipePerformanceType = {
     pose: MediaPipePoseEnum.lite,
-    hands: 0,
   };
   mediaPipePoseLoaded: boolean = false;
   mediaPipeHandsLoaded: boolean = false;
@@ -73,7 +75,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   canvasRef!: ElementRef<HTMLCanvasElement>;
   poseTracker!: PoseLandmarker;
   lastPoseTimestamp: number = -1;
-  handsTracker!: Hands;
+  handsTracker!: HandLandmarker;
+  lastHandsTimestamp: number = -1;
+  visionFileset: ReturnType<typeof FilesetResolver.forVisionTasks> | null = null;
   poses: BodyData[] = [];
   currentUser: User | null = null;
   eventSubscription: Subscription | null = null;
@@ -199,38 +203,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     if (includeHandsDetection && !this.mediaPipeHandsLoaded) {
       // Hands tracking
-      this.handsTracker = new Hands({
-        locateFile: (file) => `${MEDIA_PIPE_ROOT}/@mediapipe/hands/${file}`,
-      });
-      this.handsTracker.setOptions({
-        maxNumHands: 2,
-        modelComplexity: this.performance.hands,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
-      let handsFirstTime = true;
-      const handsTrackerLoaded = new Promise<void>((resolve) => {
-        this.handsTracker.onResults((results) => {
-          if (handsFirstTime) {
-            this.mediaPipeHandsLoaded = true;
-            handsFirstTime = false;
-            resolve();
-          }
-          const { multiHandLandmarks, multiHandWorldLandmarks, multiHandedness } = results;
-          for (let i = 0; i < multiHandedness.length; i++) {
-            const handScore = multiHandedness[i];
-            const handId = handScore.label;
-            //const index = handScore.index;
-            this.getAvatarContainer().hands.set(handId, {
-              score: handScore.score,
-              multiHandLandmarks: multiHandLandmarks[i],
-              multiHandWorldLandmarks: multiHandWorldLandmarks[i],
-            });
-          }
-        });
-      });
-      this.warmUpTracker(this.handsTracker, 'hands');
-      modelIncluded.push(handsTrackerLoaded);
+      modelIncluded.push(this.loadHandsTracker());
     }
     if (modelIncluded.length > 0) {
       const localActivity = this.indicatorSrv.start();
@@ -240,13 +213,20 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
   }
 
+  private getVisionFileset() {
+    // Shared by pose and hands, so the wasm fileset is resolved only once
+    if (!this.visionFileset) {
+      this.visionFileset = FilesetResolver.forVisionTasks(
+        `${MEDIA_PIPE_ROOT}/@mediapipe/tasks-vision@${TASKS_VISION_VERSION}/wasm`,
+      );
+    }
+    return this.visionFileset;
+  }
+
   private async loadPoseTracker(): Promise<void> {
     const start = performance.now();
-    const vision = await FilesetResolver.forVisionTasks(
-      `${MEDIA_PIPE_ROOT}/@mediapipe/tasks-vision@${TASKS_VISION_VERSION}/wasm`,
-    );
+    const vision = await this.getVisionFileset();
     const model = `${this.performance.pose}`;
-    console.log(`Pose model ${model}`);
     this.poseTracker = await PoseLandmarker.createFromOptions(vision, {
       baseOptions: {
         modelAssetPath: `${POSE_MODELS_ROOT}/${model}/float16/latest/${model}.task`,
@@ -292,11 +272,42 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     return canvas;
   }
 
-  private async warmUpTracker(tracker: Hands, name: string): Promise<void> {
+  private async loadHandsTracker(): Promise<void> {
     const start = performance.now();
-    await tracker.initialize();
-    await tracker.send({ image: this.createWarmUpCanvas() });
-    console.log(`MediaPipe ${name} loaded in ${Math.round(performance.now() - start)}ms`);
+    const vision = await this.getVisionFileset();
+    this.handsTracker = await HandLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: HANDS_MODEL_PATH,
+        delegate: 'GPU',
+      },
+      runningMode: 'VIDEO',
+      numHands: 2,
+      minHandDetectionConfidence: 0.5,
+      minHandPresenceConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+    this.detectHands(this.createWarmUpCanvas());
+    this.mediaPipeHandsLoaded = true;
+    console.log(`MediaPipe hands loaded in ${Math.round(performance.now() - start)}ms`);
+  }
+
+  private detectHands(image: HTMLVideoElement | HTMLCanvasElement): void {
+    // VIDEO mode requires strictly increasing timestamps
+    const timestamp = Math.max(performance.now(), this.lastHandsTimestamp + 1);
+    this.lastHandsTimestamp = timestamp;
+    const { landmarks, worldLandmarks, handedness } = this.handsTracker.detectForVideo(
+      image,
+      timestamp,
+    );
+    for (let i = 0; i < handedness.length; i++) {
+      const handScore = handedness[i][0];
+      const handId = handScore.categoryName as HandIdType;
+      this.getAvatarContainer().hands.set(handId, {
+        score: handScore.score,
+        multiHandLandmarks: landmarks[i],
+        multiHandWorldLandmarks: worldLandmarks[i],
+      });
+    }
   }
 
   async updatePose(poses: any) {
@@ -467,7 +478,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
           this.detectPose(videoElement);
           // Only do this if arms are pointing to the front
           if (this.mode?.useHands === true) {
-            await this.handsTracker.send({ image: videoElement });
+            this.detectHands(videoElement);
           }
         },
         width: 640,
