@@ -16,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CameraDataType } from '@mytypes/CameraTypes';
+import { Subscription } from 'rxjs';
 
 export interface CameraPickerDialogData {
   currentCamera: CameraDataType | null;
@@ -34,10 +35,7 @@ export interface CameraPickerDialogData {
     MatSelectModule,
   ],
   templateUrl: './camera-picker-dialog.html',
-  styleUrls: [
-    './camera-picker-dialog.scss',
-    '../../../../assets/css/popups.css',
-  ],
+  styleUrls: ['./camera-picker-dialog.scss', '../../../../assets/css/popups.css'],
 })
 export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
@@ -46,21 +44,7 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
   selectedCameraId: string = '';
   private stream: MediaStream | null = null;
   private onDeviceChange = () => this.handleDeviceChange();
-
-  private async handleDeviceChange() {
-    const previousId = this.selectedCameraId;
-    await this.loadCameras();
-
-    const stillExists = this.cameras.some(c => c.id === previousId);
-    if (!stillExists) {
-      this.stopStream();
-      this.selectedCameraId = this.cameras.length > 0 ? this.cameras[0].id : '';
-      if (this.selectedCameraId) {
-        await this.startCamera(this.selectedCameraId);
-      }
-    }
-    this.cdr.detectChanges();
-  }
+  private keydownSub: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<CameraPickerDialogComponent>,
@@ -70,10 +54,29 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
     if (data.currentCamera) {
       this.selectedCameraId = data.currentCamera.id;
     }
+    this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.cancel();
+      }
+    });
   }
 
-  async ngOnInit() {
+  async ngOnInit() {}
 
+  private async handleDeviceChange() {
+    const previousId = this.selectedCameraId;
+    await this.loadCameras();
+
+    const stillExists = this.cameras.some((c) => c.id === previousId);
+    if (!stillExists) {
+      this.stopStream();
+      this.selectedCameraId = this.cameras.length > 0 ? this.cameras[0].id : '';
+      if (this.selectedCameraId) {
+        await this.startCamera(this.selectedCameraId);
+      }
+    }
+    this.cdr.detectChanges();
   }
 
   async ngAfterViewInit() {
@@ -93,17 +96,18 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnDestroy() {
     navigator.mediaDevices.removeEventListener('devicechange', this.onDeviceChange);
+    this.keydownSub.unsubscribe();
     this.stopStream();
   }
 
   async loadCameras() {
     try {
       const tempStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      tempStream.getTracks().forEach(t => t.stop());
+      tempStream.getTracks().forEach((t) => t.stop());
 
       const devices = await navigator.mediaDevices.enumerateDevices();
       this.cameras = devices
-        .filter(d => d.kind === 'videoinput')
+        .filter((d) => d.kind === 'videoinput')
         .map((d, i) => ({
           id: d.deviceId,
           name: d.label || `Camera ${i + 1}`,
@@ -126,7 +130,7 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
       if (this.videoElement?.nativeElement) {
         this.videoElement.nativeElement.srcObject = this.stream;
       } else {
-        console.log("No native element yet!");
+        console.log('No native element yet!');
       }
     } catch (err) {
       console.error('Error starting camera:', err);
@@ -135,7 +139,7 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
 
   stopStream() {
     if (this.stream) {
-      this.stream.getTracks().forEach(t => t.stop());
+      this.stream.getTracks().forEach((t) => t.stop());
       this.stream = null;
     }
   }
@@ -145,7 +149,7 @@ export class CameraPickerDialogComponent implements OnInit, AfterViewInit, OnDes
   }
 
   accept() {
-    const camera = this.cameras.find(c => c.id === this.selectedCameraId) ?? null;
+    const camera = this.cameras.find((c) => c.id === this.selectedCameraId) ?? null;
     this.dialogRef.close(camera);
   }
 }
