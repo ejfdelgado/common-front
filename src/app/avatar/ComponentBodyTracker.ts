@@ -264,9 +264,27 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     landmarks: NormalizedLandmark[];
     worldLandmarks: Landmark[];
   } {
+    // Pick the body with the largest vertical extent in normalized image space
+    let tallestIndex = 0;
+    let tallestHeight = -Infinity;
+    if (result.landmarks.length > 1) {
+      result.landmarks.forEach((bodyLandmarks, index) => {
+        let minY = Infinity;
+        let maxY = -Infinity;
+        for (const { y } of bodyLandmarks) {
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
+        const height = maxY - minY;
+        if (height > tallestHeight) {
+          tallestHeight = height;
+          tallestIndex = index;
+        }
+      });
+    }
     return {
-      landmarks: result.landmarks[0],
-      worldLandmarks: result.worldLandmarks[0],
+      landmarks: result.landmarks[tallestIndex],
+      worldLandmarks: result.worldLandmarks[tallestIndex],
     };
   }
 
