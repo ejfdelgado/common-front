@@ -129,6 +129,23 @@ export enum GameControllerEnum {
   QuestionaireController = 'QuestionaireController',
 }
 
+export const POSE_CONTROLLERS: GameControllerEnum[] = [
+  GameControllerEnum.QuestionaireController,
+  GameControllerEnum.ArmsPointerController,
+  GameControllerEnum.ComparableController,
+  GameControllerEnum.CubeController,
+  GameControllerEnum.RecordPoseController,
+  GameControllerEnum.SimplePosesDetection,
+  GameControllerEnum.Stand2dController,
+  GameControllerEnum.WalkController,
+];
+
+export const HANDS_CONTROLLERS: GameControllerEnum[] = [
+  GameControllerEnum.FingerController,
+  GameControllerEnum.HandPointerController,
+  GameControllerEnum.HandsCloseController,
+];
+
 export interface GameController {
   id: GameControllerEnum;
   params: { [key: string]: any };

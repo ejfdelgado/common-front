@@ -20,6 +20,8 @@ import {
   GameMode,
   GameScenario,
   GameSelection,
+  HANDS_CONTROLLERS,
+  POSE_CONTROLLERS,
   WorldAvatar,
 } from '@mytypes/WorldAvatar';
 import { Pose } from '@mediapipe/pose';
@@ -166,21 +168,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     let includePoseDetection = false;
     let includeHandsDetection = false;
 
-    const POSE_CONTROLLERS: GameControllerEnum[] = [
-      GameControllerEnum.QuestionaireController,
-      GameControllerEnum.ArmsPointerController,
-      GameControllerEnum.ComparableController,
-      GameControllerEnum.CubeController,
-      GameControllerEnum.RecordPoseController,
-      GameControllerEnum.SimplePosesDetection,
-      GameControllerEnum.Stand2dController,
-      GameControllerEnum.WalkController,
-    ];
-    const HANDS_CONTROLLERS: GameControllerEnum[] = [
-      GameControllerEnum.FingerController,
-      GameControllerEnum.HandPointerController,
-      GameControllerEnum.HandsCloseController,
-    ];
     includePoseDetection = mode.controllers.some((controller) =>
       POSE_CONTROLLERS.includes(controller.id),
     );
