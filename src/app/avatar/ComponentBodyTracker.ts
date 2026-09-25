@@ -154,7 +154,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     const modelIncluded = [];
     const includePose = true;
-    const includeHands = true;
+    const includeHands = false;
 
     if (includePose) {
       // Body tracker
@@ -162,23 +162,27 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
       });
       this.poseTracker.setOptions({
-        modelComplexity: 2, // 0 (fast) | 1 | 2 (accurate)
+        modelComplexity: 0, // 0 (fast) | 1 | 2 (accurate)
         smoothLandmarks: true,
         smoothWorldLandmarks: true, // valid runtime option, missing from @mediapipe/pose typings
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5,
       } as any);
 
-      this.poseTracker.onResults((results) => {
-        const converted = convertMediaPipeToCurrent(results, this.videoSize);
-        if (converted) {
-          this.updatePose([converted]);
+      let poseFirstTime = true;
+      const poseTrackerLoaded = new Promise<void>((resolve) => {
+        if (poseFirstTime) {
+            poseFirstTime = false;
+            resolve();
         }
+        this.poseTracker.onResults((results) => {
+          const converted = convertMediaPipeToCurrent(results, this.videoSize);
+          if (converted) {
+            this.updatePose([converted]);
+          }
+        });
       });
-
-      const poseTrackerLoaded = new Promise((resolve, reject) => {
-        // what to put here?
-      });
+      this.warmUpTracker(this.poseTracker, 'pose');
 
       modelIncluded.push(poseTrackerLoaded);
     }
@@ -221,6 +225,21 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     */
 
     this.initialized = true;
+  }
+
+  private async warmUpTracker(tracker: Pose | Hands, name: string): Promise<void> {
+    const start = performance.now();
+    await tracker.initialize();
+    const canvas = document.createElement('canvas');
+    canvas.width = 640;
+    canvas.height = 480;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    await tracker.send({ image: canvas });
+    console.log(`MediaPipe ${name} loaded in ${Math.round(performance.now() - start)}ms`);
   }
 
   async updatePose(poses: any) {
