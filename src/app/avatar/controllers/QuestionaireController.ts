@@ -386,6 +386,7 @@ export class QuestionaireController extends SceneControllerAbstract {
       this.initializeQuestion();
     } else if (event.name == 'STOP_ALL') {
       this.isPlaying = false;
+      ModuloSonido.stopAll();
       this.resetGame();
     } else if (event.name == 'CUBE_A_SELECT_ON') {
       // Selected option
