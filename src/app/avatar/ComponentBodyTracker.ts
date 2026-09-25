@@ -135,6 +135,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     public dialog: MatDialog,
   ) {
     super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv);
+    this.performance = avatarSrv.readPerformance();
   }
 
   public abstract broadcastBinaryData(command: GameAction): Promise<void>;
@@ -172,6 +173,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   }
 
   async initializeBodyTracker(mode: GameMode) {
+    console.log(`Using ${JSON.stringify(this.performance)}`);
     const modelIncluded = [];
 
     let includePoseDetection = false;

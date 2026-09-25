@@ -407,4 +407,24 @@ export class AvatarService {
       }, 500);
     });
   }
+
+  writePerformance(performance: MediaPipePerformanceType) {
+    localStorage.setItem('PERSONAL_PERFORMANCE', JSON.stringify(performance));
+  }
+
+  readPerformance(): MediaPipePerformanceType {
+    const defaultValue: MediaPipePerformanceType = {
+      hands: 0,
+      pose: 0,
+    };
+    const old = localStorage.getItem('PERSONAL_PERFORMANCE');
+    if (!old) {
+      return defaultValue;
+    }
+    try {
+      return JSON.parse(old);
+    } catch (e) {
+      return defaultValue;
+    }
+  }
 }
