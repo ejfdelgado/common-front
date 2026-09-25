@@ -173,7 +173,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   }
 
   async initializeBodyTracker(mode: GameMode) {
-    console.log(`Using ${JSON.stringify(this.performance)}`);
     const modelIncluded = [];
 
     let includePoseDetection = false;
