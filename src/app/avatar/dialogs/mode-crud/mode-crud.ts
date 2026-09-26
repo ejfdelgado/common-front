@@ -8,12 +8,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { GameMode, WorldAvatar } from 'src/types/WorldAvatar';
-import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
 import { EmojiInputComponent } from 'src/app/components/fields/emoji-input/emoji-input';
+import { SelectOptionString } from 'src/types/fieldsTypes';
+
+export const TYPE_OPTIONS: SelectOptionString[] = [
+    { label: 'Preguntas', value: "preguntas" },
+    { label: 'Manos', value: "manos" },
+];
 
 @Component({
   selector: 'app-mode-crud',
@@ -35,7 +40,7 @@ import { EmojiInputComponent } from 'src/app/components/fields/emoji-input/emoji
 })
 export class ModeCrudComponent {
   originalModes: { key: string; value: GameMode }[] = [];
-  readonly meshOptions = MESH_OPTIONS;
+  readonly typeOptions = TYPE_OPTIONS;
   private keydownSub: Subscription;
   generalForm: FormGroup;
 
@@ -68,6 +73,7 @@ export class ModeCrudComponent {
       id: [mode.key],
       name: [mode.value.menu.name ?? '', Validators.required],
       icon: [mode.value.menu.icon ?? '😀', Validators.required],
+      type: [mode.value.type ?? '', Validators.required],
     });
   }
 
@@ -135,6 +141,10 @@ export class ModeCrudComponent {
         const icon = modeGroup.get('icon')?.value;
         if (icon) {
           originalMode.menu.icon = icon;
+        }
+        const type = modeGroup.get('type')?.value;
+        if (type) {
+          originalMode.type = type;
         }
 
         modesModified[id] = originalMode;

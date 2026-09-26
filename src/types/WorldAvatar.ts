@@ -24,6 +24,8 @@ export interface GameMode {
     name: string;
     icon: string;
   };
+  // the type predefined the controllers
+  type?: string | null;
   order: number;
   mirror: boolean;
   defaultPosition: AvatarLocationState;
