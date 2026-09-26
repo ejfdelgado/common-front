@@ -389,6 +389,11 @@ app-md-input code {
     padding: 15px;
 }
 
+.mat_car_header_title_centered .mat-mdc-card-header-text {
+    display: flex;
+    align-items: center;
+}
+
 @media (max-width: 800px) {
     .nogalespopup {
         max-width: 90vw;
