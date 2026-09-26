@@ -121,4 +121,8 @@ export class ModeCrudComponent {
   cancel(): void {
     this.dialogRef.close(null);
   }
+
+  addMode() {
+    
+  }
 }

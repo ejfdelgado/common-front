@@ -7,14 +7,16 @@
             <form [formGroup]="generalForm" class="tab_content">
                 <div formArrayName="modes">
                     @for (modeGroup of modes.controls; track modeGroup; let modeIndex = $index) {
-                    <mat-card class="step_card" [formGroupName]="modeIndex">
+                    <mat-card class="step_card gap_20" [formGroupName]="modeIndex">
                         <mat-card-header class="step_header">
                             <mat-card-title class="step_title highligted_text">Nivel {{ modeIndex + 1
                                 }}</mat-card-title>
+                            @if (modes.controls.length > 1) {
                             <button mat-icon-button color="warn" type="button" matTooltip="Eliminar nivel"
                                 (click)="removeMode(modeIndex)">
                                 <mat-icon>delete</mat-icon>
                             </button>
+                            }
                         </mat-card-header>
                         <mat-card-content>
                             <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
@@ -26,6 +28,10 @@
                     }
                 </div>
             </form>
+            <button mat-flat-button color="primary" (click)="addMode()">
+                <mat-icon>check</mat-icon>
+                Agregar
+            </button>
         </mat-tab>
 
     </mat-tab-group>
