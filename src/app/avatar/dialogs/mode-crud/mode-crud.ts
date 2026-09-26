@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,6 +44,7 @@ export class ModeCrudComponent {
     private dialogRef: MatDialogRef<ModeCrudComponent>,
     @Inject(MAT_DIALOG_DATA) public data: WorldAvatar,
     public confirmSrv: ConfirmDialogService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.originalModes = JSON.parse(JSON.stringify(map2KeyValueArray<GameMode>(data.modes)));
     // Here, adjust data
@@ -75,9 +76,11 @@ export class ModeCrudComponent {
       title: 'Está seguro?',
       message: 'Al borrar no se podrá deshacer',
     });
-    if (!confirm) {
+    if (!confirm || this.modes.length <= 1) {
       return;
     }
+    this.modes.removeAt(index);
+    this.cdr.detectChanges();
   }
 
   async modeModeUp() {}
@@ -91,8 +94,12 @@ export class ModeCrudComponent {
     let defaultMode = this.data.defaultMode;
     const modesModified: { [key: string]: GameMode } = {};
 
-    this.modes.controls.forEach((modeGroup) => {
+    this.modes.controls.forEach((modeGroup, index) => {
       const id = modeGroup.get('id')?.value;
+      if (index == 0) {
+        // The default mode will be the first
+        defaultMode = id;
+      }
 
       const originalModePair = this.originalModes.find((el) => el.key == id);
       if (originalModePair && id) {
