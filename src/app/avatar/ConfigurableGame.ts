@@ -88,40 +88,46 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     }
   }
 
+  recomputeModeMenu(world: WorldAvatar) {
+    const scenariosMenu = this.menuOptions.find(
+      (a) => a.name && ['scenarios'].indexOf(a.name) >= 0,
+    );
+    if (scenariosMenu) {
+      scenariosMenu.children = [];
+      const modeKeys = Object.keys(world.modes);
+      scenariosMenu.children = modeKeys
+        .sort((a, b) => {
+          return world.modes[a].order - world.modes[b].order;
+        })
+        .map((name) => {
+          const reference = world.modes[name];
+          return {
+            label: reference.menu.name,
+            isPlainIcon: true,
+            icon: reference.menu.icon,
+            name: name,
+            children: [],
+            callback: async () => {
+              const scenarioId = undefined;
+              await this.getTrackerComponent().applyMode(name, scenarioId, true);
+              this.emitToc();
+              scenariosMenu.children?.forEach((m) => {
+                m.inUse = m.name === name;
+              });
+            },
+          };
+        });
+      scenariosMenu.children?.forEach((m) => {
+        m.inUse = m.name === world.defaultMode;
+      });
+      this.cdr.detectChanges();
+    }
+  }
+
   async localLoadWorld(firestoreEntity: AvatarStoredDataType) {
     const world = await this.getTrackerComponent().loadWorld(firestoreEntity);
     if (world) {
-      const scenariosMenu = this.menuOptions.find(
-        (a) => a.name && ['scenarios'].indexOf(a.name) >= 0,
-      );
-      if (scenariosMenu) {
-        scenariosMenu.children = [];
-        const modeKeys = Object.keys(world.modes);
-        scenariosMenu.children = modeKeys
-          .sort((a, b) => b.localeCompare(a))
-          .map((name) => {
-            const reference = world.modes[name];
-            return {
-              label: reference.menu.name,
-              isPlainIcon: true,
-              icon: reference.menu.icon,
-              name: name,
-              children: [],
-              callback: async () => {
-                const scenarioId = undefined;
-                await this.getTrackerComponent().applyMode(name, scenarioId, true);
-                this.emitToc();
-                scenariosMenu.children?.forEach((m) => {
-                  m.inUse = m.name === name;
-                });
-              },
-            };
-          });
-        scenariosMenu.children?.forEach((m) => {
-          m.inUse = m.name === world.defaultMode;
-        });
-        this.cdr.detectChanges();
-      }
+      this.recomputeModeMenu(world);
     }
   }
 
@@ -159,6 +165,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     ) {
       tracker.world.defaultMode = data.defaultMode;
       tracker.world.modes = data.modes;
+      this.recomputeModeMenu(tracker.world);
       const defaultMode = tracker.world.modes[tracker.world.defaultMode];
       await tracker.applyModeBeforeSave(defaultMode);
       await this.writeStoredModel(tracker.world);

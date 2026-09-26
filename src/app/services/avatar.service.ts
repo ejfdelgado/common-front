@@ -124,6 +124,7 @@ export class AvatarService {
           },
           modes: {
             mode00: {
+              order: 0,
               avatar: {
                 meshPath: '',
               },
@@ -167,6 +168,7 @@ export class AvatarService {
               ],
             },
             mode01: {
+              order: 1,
               menu: {
                 name: 'Park I',
                 icon: '🏞️',
@@ -222,6 +224,7 @@ export class AvatarService {
               ],
             },
             mode02: {
+              order: 2,
               menu: {
                 name: 'Park II',
                 icon: '🎄',
@@ -279,6 +282,7 @@ export class AvatarService {
               ],
             },
             mode03: {
+              order: 3,
               menu: {
                 name: 'Hands',
                 icon: '🙉',

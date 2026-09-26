@@ -47,6 +47,10 @@ export class ModeCrudComponent {
     private cdr: ChangeDetectorRef,
   ) {
     this.originalModes = JSON.parse(JSON.stringify(map2KeyValueArray<GameMode>(data.modes)));
+    // sort
+    this.originalModes.sort((a, b) => {
+      return a.value.order - b.value.order;
+    });
     // Here, adjust data
     this.generalForm = this.fb.group({
       modes: this.fb.array((this.originalModes ?? []).map((step) => this.buildModeGroup(step))),
@@ -84,11 +88,21 @@ export class ModeCrudComponent {
   }
 
   modeModeDown(index: number) {
-    console.log("Move down");
+    this.moveMode(index, index + 1);
   }
 
   modeModeUp(index: number) {
-    console.log("Move up");
+    this.moveMode(index, index - 1);
+  }
+
+  private moveMode(from: number, to: number) {
+    if (to < 0 || to >= this.modes.length) {
+      return;
+    }
+    const control = this.modes.at(from);
+    this.modes.removeAt(from);
+    this.modes.insert(to, control);
+    this.cdr.detectChanges();
   }
 
   save(): void {
@@ -110,6 +124,7 @@ export class ModeCrudComponent {
       const originalModePair = this.originalModes.find((el) => el.key == id);
       if (originalModePair && id) {
         const originalMode = originalModePair.value;
+        originalMode.order = index;
 
         // Assign values
         const name = modeGroup.get('name')?.value;
@@ -136,7 +151,7 @@ export class ModeCrudComponent {
   }
 
   addMode() {
-    const newMode = { key: this.nextModeId(), value: this.buildEmptyMode() };
+    const newMode = { key: this.nextModeId(), value: this.buildEmptyMode(this.modes.length) };
     this.originalModes.push(newMode);
     this.modes.push(this.buildModeGroup(newMode));
   }
@@ -145,8 +160,9 @@ export class ModeCrudComponent {
     return crypto.randomUUID();
   }
 
-  private buildEmptyMode(): GameMode {
+  private buildEmptyMode(order: number): GameMode {
     return {
+      order,
       menu: {
         name: `Nivel ${this.modes.length + 1}`,
         icon: '',

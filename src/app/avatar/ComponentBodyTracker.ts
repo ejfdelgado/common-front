@@ -102,6 +102,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     },
     modes: {
       mode: {
+        order: 0,
         menu: {
           name: '',
           icon: '',

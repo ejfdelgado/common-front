@@ -24,6 +24,7 @@ export interface GameMode {
     name: string;
     icon: string;
   };
+  order: number;
   mirror: boolean;
   defaultPosition: AvatarLocationState;
   defaultCameraState: CameraState;
