@@ -123,6 +123,45 @@ export class ModeCrudComponent {
   }
 
   addMode() {
-    
+    const newMode = { key: this.nextModeId(), value: this.buildEmptyMode() };
+    this.originalModes.push(newMode);
+    this.modes.push(this.buildModeGroup(newMode));
+  }
+
+  private nextModeId(): string {
+    return crypto.randomUUID();
+  }
+
+  private buildEmptyMode(): GameMode {
+    return {
+      menu: {
+        name: `Nivel ${this.modes.length + 1}`,
+        icon: '',
+      },
+      mirror: false,
+      defaultPosition: {
+        positionX: 0,
+        positionY: 0,
+        positionZ: 0,
+        rotationY: 0,
+      },
+      defaultCameraState: {
+        near: 0.1,
+        far: 1000,
+        fov: 25,
+        lookAt: { x: 0, y: 0, z: 0 },
+        position: { x: 0, y: 1, z: -10 },
+      },
+      defaultSenario: 'scenario',
+      scenarios: {
+        scenario: {
+          useComposer: true,
+          background: { color: { r: 1, g: 1, b: 1 } },
+          characters: [],
+          meshes: [],
+        },
+      },
+      controllers: [],
+    };
   }
 }
