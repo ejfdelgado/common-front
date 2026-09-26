@@ -4,11 +4,14 @@ import { ABCDType } from './WorldAvatarLibrary';
 
 export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
 
-// The intentatio is to persist this data
-export interface WorldAvatar {
+export interface WorldAvatarEdit {
   defaultMode: string;
-  config: WorldConfig;
   modes: { [key: string]: GameMode };
+}
+
+// The intentatio is to persist this data
+export interface WorldAvatar extends WorldAvatarEdit {
+  config: WorldConfig;
 }
 
 export interface WorldConfig {

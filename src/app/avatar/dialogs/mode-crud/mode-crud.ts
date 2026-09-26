@@ -13,6 +13,7 @@ import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { Subscription } from 'rxjs';
+import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-mode-crud',
@@ -27,12 +28,13 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
-    EditableInput,
+    //EditableInput,
   ],
   templateUrl: './mode-crud.html',
   styleUrl: './mode-crud.scss',
 })
 export class ModeCrudComponent {
+  originalModes: { key: string; value: GameMode }[] = [];
   readonly meshOptions = MESH_OPTIONS;
   private keydownSub: Subscription;
   generalForm: FormGroup;
@@ -41,11 +43,12 @@ export class ModeCrudComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ModeCrudComponent>,
     @Inject(MAT_DIALOG_DATA) public data: WorldAvatar,
+    public confirmSrv: ConfirmDialogService,
   ) {
-    const modes = map2KeyValueArray<GameMode>(data.modes);
+    this.originalModes = JSON.parse(JSON.stringify(map2KeyValueArray<GameMode>(data.modes)));
     // Here, adjust data
     this.generalForm = this.fb.group({
-      modes: this.fb.array((modes ?? []).map((step) => this.buildModeGroup(step))),
+      modes: this.fb.array((this.originalModes ?? []).map((step) => this.buildModeGroup(step))),
     });
     this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
       if (event.key === 'Escape') {
@@ -57,7 +60,8 @@ export class ModeCrudComponent {
 
   private buildModeGroup(mode: { key: string; value: GameMode }): FormGroup {
     return this.fb.group({
-      label: [mode.value.menu.name ?? '', Validators.required],
+      id: [mode.key],
+      name: [mode.value.menu.name ?? '', Validators.required],
     });
   }
 
@@ -66,8 +70,17 @@ export class ModeCrudComponent {
   }
 
   async removeMode(index: number): Promise<any> {
-    //
+    // ask confirm
+    const confirm = await this.confirmSrv.confirm({
+      title: 'Está seguro?',
+      message: 'Al borrar no se podrá deshacer',
+    });
+    if (!confirm) {
+      return;
+    }
   }
+
+  async modeModeUp() {}
 
   save(): void {
     if (this.generalForm.invalid) {
@@ -75,9 +88,30 @@ export class ModeCrudComponent {
       return;
     }
 
-    // TODO here copy
+    let defaultMode = this.data.defaultMode;
+    const modesModified: { [key: string]: GameMode } = {};
 
-    this.dialogRef.close(this.data);
+    this.modes.controls.forEach((modeGroup) => {
+      const id = modeGroup.get('id')?.value;
+
+      const originalModePair = this.originalModes.find((el) => el.key == id);
+      if (originalModePair && id) {
+        const originalMode = originalModePair.value;
+
+        // Assign values
+        const name = modeGroup.get('name')?.value;
+        if (name) {
+          originalMode.menu.name = name;
+        }
+
+        modesModified[id] = originalMode;
+      }
+    });
+
+    this.dialogRef.close({
+      defaultMode,
+      modes: modesModified,
+    });
   }
 
   ngOnDestroy() {

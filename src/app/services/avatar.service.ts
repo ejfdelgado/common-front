@@ -8,6 +8,7 @@ import {
   GameMode,
   GameScenario,
   WorldAvatar,
+  WorldAvatarEdit,
 } from '@mytypes/WorldAvatar';
 import { firstValueFrom } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -62,7 +63,7 @@ export class AvatarService {
     return firstValueFrom(dialogRef.afterClosed());
   }
 
-  async editModes(world: WorldAvatar): Promise<GameMode | null> {
+  async editModes(world: WorldAvatar): Promise<WorldAvatarEdit | null> {
     // Open modal
     const dialogRef = this.dialog.open(ModeCrudComponent, {
       //width: '350px',

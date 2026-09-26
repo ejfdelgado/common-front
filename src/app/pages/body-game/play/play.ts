@@ -174,7 +174,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
             this.emitToc();
             const response = await this.trackerComponent.editModes();
             if (response) {
-              // TODO
+              this.saveAndApplyWorld(response);
             }
           },
         },

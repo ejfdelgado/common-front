@@ -15,6 +15,7 @@ import { Room } from '@trystero-p2p/firebase';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { MatDialog } from '@angular/material/dialog';
+import { WorldAvatarEdit } from 'src/types/WorldAvatar';
 
 export abstract class ComponentP2P extends ComponentBodyTracker {
   roomLive: Room | null = null;
@@ -176,7 +177,7 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     return null;
   }
 
-  public async editModes() {
+  public async editModes(): Promise<WorldAvatarEdit | null> {
     if (this.mode) {
       return this.avatarSrv.editModes(this.world);
     }
