@@ -83,7 +83,13 @@ export class ModeCrudComponent {
     this.cdr.detectChanges();
   }
 
-  async modeModeUp() {}
+  modeModeDown(index: number) {
+    console.log("Move down");
+  }
+
+  modeModeUp(index: number) {
+    console.log("Move up");
+  }
 
   save(): void {
     if (this.generalForm.invalid) {

@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Editar Niveles</h2>
 
 <mat-dialog-content class="dialog_content text_size_x2">
-    <mat-tab-group class="full-width">
+    <mat-tab-group class="full-width no_tab_scroll">
 
         <mat-tab label="General">
             <form [formGroup]="generalForm" class="tab_content">
@@ -17,6 +17,18 @@
                                 <mat-icon>delete</mat-icon>
                             </button>
                             }
+                            @if (modeIndex > 0) {
+                            <button mat-icon-button color="warn" type="button" matTooltip="Mover abajo"
+                                (click)="modeModeDown(modeIndex)">
+                                <mat-icon>keyboard_double_arrow_down</mat-icon>
+                            </button>
+                            }
+                            @if (modeIndex != (modes.controls.length - 1)) {
+                            <button mat-icon-button color="warn" type="button" matTooltip="Mover arriba"
+                                (click)="modeModeUp(modeIndex)">
+                                <mat-icon>keyboard_double_arrow_up</mat-icon>
+                            </button>
+                            }
                         </mat-card-header>
                         <mat-card-content>
                             <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
@@ -28,16 +40,17 @@
                     }
                 </div>
             </form>
-            <button mat-flat-button color="primary" type="button" (click)="addMode()">
-                <mat-icon>add</mat-icon>
-                Agregar
-            </button>
         </mat-tab>
 
     </mat-tab-group>
 </mat-dialog-content>
 
 <mat-dialog-actions>
+    <button mat-flat-button color="primary" type="button" (click)="addMode()">
+        <mat-icon>add</mat-icon>
+        Agregar
+    </button>
+
     <button mat-button (click)="cancel()">
         <mat-icon>close</mat-icon>
         Cancelar

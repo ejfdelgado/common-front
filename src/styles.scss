@@ -350,6 +350,12 @@ mat-tab-group.with_flex_column .mat-mdc-tab-body-wrapper {
     flex: 1;
 }
 
+// Let the parent (e.g. mat-dialog-content) handle scrolling instead of the tab body
+mat-tab-group.no_tab_scroll > div > mat-tab-body,
+mat-tab-group.no_tab_scroll > div > mat-tab-body > .mat-mdc-tab-body-content {
+    overflow-y: hidden;
+}
+
 mat-icon.xs {
     font-size: 17px;
     width: 17px;
