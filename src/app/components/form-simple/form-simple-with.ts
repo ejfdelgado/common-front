@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,6 +35,7 @@ import { JsonEditorComponent } from '@components/json-editor/json-editor.compone
 import { CameraPicker } from '@components/fields/camera-picker/camera-picker';
 import { MicPicker } from '@components/fields/mic-picker/mic-picker';
 import { SliderComponent } from '@components/fields/slider/slider';
+import { EmojiInputComponent } from '../fields/emoji-input/emoji-input';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -50,20 +61,20 @@ import { SliderComponent } from '@components/fields/slider/slider';
     CameraPicker,
     MicPicker,
     SliderComponent,
+    EmojiInputComponent,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',
 })
 export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
-
   @Input() fields!: AllFieldsDataType[];
   @Input()
   get model(): FlatJsonDataType {
     return this._model;
-  };
+  }
   changedSubscription!: Subscription;
   @Output() innerModelChanged: EventEmitter<any> = new EventEmitter();
-  @Output() jsonDataChange: EventEmitter<{ key: string, val: any }> = new EventEmitter();
+  @Output() jsonDataChange: EventEmitter<{ key: string; val: any }> = new EventEmitter();
 
   set model(val: FlatJsonDataType) {
     this._model = val;
@@ -95,9 +106,15 @@ export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
 
   async saveAllChangedData() {
     const temp: ComponentBucketField[] = [];
-    this.images.forEach((el) => { temp.push(el); });
-    this.imageGallery.forEach((el) => { temp.push(el); });
-    this.jsons.forEach((el) => { temp.push(el); });
+    this.images.forEach((el) => {
+      temp.push(el);
+    });
+    this.imageGallery.forEach((el) => {
+      temp.push(el);
+    });
+    this.jsons.forEach((el) => {
+      temp.push(el);
+    });
     for (let i = 0; i < temp.length; i++) {
       await temp[i].syncIfNeeded();
     }

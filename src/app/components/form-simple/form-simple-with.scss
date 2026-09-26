@@ -10,3 +10,7 @@ form {
     max-height: none !important;
     padding-top: 10px !important;
 }
+
+.no_horizontal_scroll {
+    overflow-x: hidden;
+}

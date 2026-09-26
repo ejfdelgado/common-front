@@ -1,4 +1,4 @@
-<form [formGroup]="form" mat-dialog-content class="flex flex-col gap-4">
+<form [formGroup]="form" mat-dialog-content class="flex flex-col gap-4 no_horizontal_scroll">
     <div formArrayName="dynamicFields" class="fields_parent">
         @for (field of fields; track field.key) {
         @if (field.type=='text') {
@@ -33,6 +33,9 @@
         } @else if (field.type=='toggle') {
         <app-on-off-toggle [label]="field.label" [iconName]="getToggle(field).iconName"
             [formControl]="formControlMap[field.key]"></app-on-off-toggle>
+        } @else if (field.type=='emoji') {
+        <app-emoji-input [formControl]="formControlMap[field.key]" [label]="field.label"
+            [isRequired]="field.required"></app-emoji-input>
         } @else if (field.type=='rating') {
         <app-rating [formControl]="formControlMap[field.key]"></app-rating>
         } @else if (field.type=='image') {
@@ -52,7 +55,8 @@
         } @else if (field.type=='mic-picker') {
         <app-mic-picker [formControl]="formControlMap[field.key]"></app-mic-picker>
         } @else if (field.type=='slider') {
-        <app-slider [label]="field.label" [formControl]="formControlMap[field.key]" [config]="castSliderType(field).slider"></app-slider>
+        <app-slider [label]="field.label" [formControl]="formControlMap[field.key]"
+            [config]="castSliderType(field).slider"></app-slider>
         } @else if (field.type=='md') {
         <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label"
             [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight" [label]="field.label"

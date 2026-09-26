@@ -25,7 +25,8 @@ export interface FieldDataType {
     "image-gallery" |
     "camera-picker" |
     "mic-picker" |
-    "slider"
+    "slider" | 
+    "emoji"
     ;
     label: string;
     key: string;

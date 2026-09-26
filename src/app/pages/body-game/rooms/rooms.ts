@@ -18,23 +18,16 @@ import { IndicatorService } from '@services/indicator.service';
 import { ShareSrv } from '@services/share.service';
 import { Subscription } from 'rxjs';
 
-const MODEL_NAME = "room-public";
+const MODEL_NAME = 'room-public';
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    Statusbar,
-    CardDoc,
-    SideMenu
-  ],
+  imports: [CommonModule, MatButtonModule, Statusbar, CardDoc, SideMenu],
   templateUrl: './rooms.html',
   styleUrl: './rooms.scss',
 })
 export class RoomsComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
-
   menuOptions: MenuOptionType[] = [];
   rooms: RoomGameType[] = [];
   authSubscription: Subscription | null = null;
@@ -60,8 +53,8 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Add room",
-      icon: "add",
+      label: 'Add room',
+      icon: 'add',
       children: [],
       callback: this.openDialog.bind(this),
     });
@@ -71,7 +64,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
         this.rooms = [];
         try {
           this.cdr.detectChanges();
-        } catch (err) { }
+        } catch (err) {}
       } else {
         this.pageRooms(true);
       }
@@ -84,25 +77,29 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       model = payload.model;
     }
     const formConfig: FormDataType = {
-      title: model ? "Update" : "Create",
+      title: model ? 'Update' : 'Create',
       autoAuthor: true,
       modelName: MODEL_NAME,
-      searchFields: ["title", "description"],
+      searchFields: ['title', 'description'],
       fields: [
-        { label: "Title", type: "text", key: "title", required: true },
+        { label: 'Title', type: 'text', key: 'title', required: true },
         {
-          label: "Description", type: "contenteditable", key: "description",
-          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+          label: 'Description',
+          type: 'contenteditable',
+          key: 'description',
+          contenteditable: { minHeight: '10em', maxHeight: '20em' },
         },
         {
-          label: "QR Emoji", type: "contenteditable", key: "emoji",
-          contenteditable: { minHeight: "20px", maxHeight: "20px" }
+          label: 'QR Emoji',
+          type: 'emoji',
+          key: 'emoji',
+          required: true,
         },
       ],
       model: {
         title: '',
         description: '',
-      }
+      },
     };
     if (model) {
       formConfig.model = model;
@@ -138,8 +135,8 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       }
       const pagingOptions: PageDataType = {
         collectionName: MODEL_NAME,
-        orderColumn: "updated",
-        orderDirection: "desc",
+        orderColumn: 'updated',
+        orderDirection: 'desc',
         owner: this.user?.uid,
         top: 20,
       };
@@ -148,32 +145,32 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
           pagingOptions.lastDoc = this.rooms[this.rooms.length - 1];
         }
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
+      const page = await this.firestoreSrv.paging(pagingOptions);
       this.rooms.push(...(page as RoomGameType[]));
       this.cdr.detectChanges();
     } catch (err) {
-
     } finally {
       indicator.done();
     }
   }
 
-  async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
+  async localShare({ model, type }: { model: any; type: 'link' | 'qr' }) {
     const { id, title, description, updated, emoji } = model;
-    this.shareSrv.share({
-      collection: MODEL_NAME,
-      path: "/action/play",
-      id,
-      title,
-      description,
-      updated,
-      emoji,
-    }, type);
+    this.shareSrv.share(
+      {
+        collection: MODEL_NAME,
+        path: '/action/play',
+        id,
+        title,
+        description,
+        updated,
+        emoji,
+      },
+      type,
+    );
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     if (this.authSubscription) {
@@ -183,8 +180,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
 
   async openRoom(model: any) {
     this.router.navigate([`action/play`], {
-      queryParams: { col: MODEL_NAME, id: model.id }
+      queryParams: { col: MODEL_NAME, id: model.id },
     });
   }
-
 }
