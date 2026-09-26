@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { GameMode, WorldAvatar } from 'src/types/WorldAvatar';
+import { GameController, GameControllerEnum, GameMode, WorldAvatar } from 'src/types/WorldAvatar';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs';
@@ -16,9 +16,52 @@ import { EmojiInputComponent } from 'src/app/components/fields/emoji-input/emoji
 import { SelectOptionString } from 'src/types/fieldsTypes';
 
 export const TYPE_OPTIONS: SelectOptionString[] = [
-    { label: 'Preguntas', value: "preguntas" },
-    { label: 'Manos', value: "manos" },
+  { label: 'Preguntas', value: 'preguntas' },
+  { label: 'Test 01', value: 'test_01' },
+  { label: 'Test 02', value: 'test_02' },
+  { label: 'Test 03', value: 'test_03' },
 ];
+
+export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
+  preguntas: [
+    // Caveat: also modify ./src/assets/scenarios/base.json
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
+    { id: GameControllerEnum.SoundFeedbackController, params: {} },
+    { id: GameControllerEnum.QuestionaireController, params: {} },
+  ],
+  test_01: [
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
+    //{ id: GameControllerEnum.CubeController, params: { enabled: false } },
+    { id: GameControllerEnum.SoundFeedbackController, params: {} },
+    { id: GameControllerEnum.SharePoseController, params: {} },
+    //{ id: GameControllerEnum.FingerController, params: {} },
+    { id: GameControllerEnum.ArmsPointerController, params: {} },
+    { id: GameControllerEnum.HandPointerController, params: {} },
+  ],
+  test_02: [
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.SimplePosesDetection, params: {} },
+    { id: GameControllerEnum.TerrainElevationController, params: {} },
+    { id: GameControllerEnum.WalkController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.SoundFeedbackController, params: {} },
+    { id: GameControllerEnum.SharePoseController, params: {} },
+  ],
+  test_03: [
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.SimplePosesDetection, params: {} },
+    { id: GameControllerEnum.HandsCloseController, params: {} },
+    { id: GameControllerEnum.TerrainElevationController, params: {} },
+    { id: GameControllerEnum.WalkController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.SoundFeedbackController, params: {} },
+    { id: GameControllerEnum.RecordPoseController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
+  ],
+};
 
 @Component({
   selector: 'app-mode-crud',
@@ -145,6 +188,10 @@ export class ModeCrudComponent {
         const type = modeGroup.get('type')?.value;
         if (type) {
           originalMode.type = type;
+          const controllers = CONTROLLERS_MAP[type];
+          if (controllers) {
+            originalMode.controllers = controllers;
+          }
         }
 
         modesModified[id] = originalMode;
