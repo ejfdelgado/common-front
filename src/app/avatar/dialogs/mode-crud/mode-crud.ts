@@ -229,7 +229,7 @@ export class ModeCrudComponent {
         name: `Nivel ${this.modes.length + 1}`,
         icon: '',
       },
-      mirror: false,
+      mirror: true,
       defaultPosition: {
         positionX: 0,
         positionY: 0,
@@ -239,9 +239,17 @@ export class ModeCrudComponent {
       defaultCameraState: {
         near: 0.1,
         far: 1000,
-        fov: 25,
-        lookAt: { x: 0, y: 0, z: 0 },
-        position: { x: 0, y: 1, z: -10 },
+        fov: 30,
+        lookAt: {
+          x: 0,
+          y: 1,
+          z: 0,
+        },
+        position: {
+          x: 0,
+          y: 1,
+          z: 5,
+        },
       },
       defaultSenario: 'scenario',
       scenarios: {
@@ -250,6 +258,14 @@ export class ModeCrudComponent {
           background: { color: { r: 1, g: 1, b: 1 } },
           characters: [],
           meshes: [],
+          stepsConfig: {
+            abcdType: 'cube',
+            maxQuestions: 10,
+            introTitle: 'Hola, Hello, Salut!',
+            winLabel: '🎉',
+            looseLabel: '🥀',
+          },
+          steps: [],
         },
       },
       controllers: [],
