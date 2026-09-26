@@ -11,9 +11,9 @@ import { GameMode, WorldAvatar } from 'src/types/WorldAvatar';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
-import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
+import { EmojiInputComponent } from 'src/app/components/fields/emoji-input/emoji-input';
 
 @Component({
   selector: 'app-mode-crud',
@@ -28,7 +28,7 @@ import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
-    //EditableInput,
+    EmojiInputComponent,
   ],
   templateUrl: './mode-crud.html',
   styleUrl: './mode-crud.scss',
@@ -67,6 +67,7 @@ export class ModeCrudComponent {
     return this.fb.group({
       id: [mode.key],
       name: [mode.value.menu.name ?? '', Validators.required],
+      icon: [mode.value.menu.icon ?? '😀', Validators.required],
     });
   }
 
@@ -130,6 +131,10 @@ export class ModeCrudComponent {
         const name = modeGroup.get('name')?.value;
         if (name) {
           originalMode.menu.name = name;
+        }
+        const icon = modeGroup.get('icon')?.value;
+        if (icon) {
+          originalMode.menu.icon = icon;
         }
 
         modesModified[id] = originalMode;

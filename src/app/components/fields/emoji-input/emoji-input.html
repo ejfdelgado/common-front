@@ -1,0 +1,16 @@
+<mat-form-field appearance="outline" class="emoji-field" (click)="openPicker()">
+    <mat-label>{{ label }}</mat-label>
+    <input matInput class="emoji-value" readonly [disabled]="disabled" [value]="emoji" placeholder="Pick an emoji" />
+    @if (emoji && !disabled) {
+    <button mat-icon-button matSuffix type="button" aria-label="Clear" (click)="clear($event)">
+        <mat-icon>close</mat-icon>
+    </button>
+    } @else {
+    <mat-icon matSuffix>mood</mat-icon>
+    }
+</mat-form-field>
+@if (touched && hasError('required')) {
+<mat-error>
+    Emoji is required
+</mat-error>
+}

@@ -35,8 +35,9 @@
                         <mat-card-content>
                             <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
                                 <mat-label>Nombre</mat-label>
-                                <input matInput [formControlName]="'name'" />
+                                <input matInput formControlName="name" />
                             </mat-form-field>
+                            <app-emoji-input formControlName="icon" label="Icon" [isRequired]="true"></app-emoji-input>
                         </mat-card-content>
                     </mat-card>
                     }
