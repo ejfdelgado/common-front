@@ -111,8 +111,16 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
     if (scenarioMenu) {
       const children = scenarioMenu.children;
-      if (!this.isUserOwner) {
+      console.log(JSON.stringify(children, null, 4));
+      if (children && !this.isUserOwner) {
         // Discovery logic
+        children.forEach((e, i) => {
+          if (i == 0) {
+            e.visible = true;
+          } else {
+            e.visible = false;
+          }
+        });
       }
     }
   }
