@@ -45,7 +45,6 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
   statusBarConfig: StatusBarConfigType = {
     hamburgerHighlight: true,
   };
-  room: AvatarStoredDataType | null = null;
   status: P2PStatus = { value: 'offline' };
   p2pStatusSubscription: Subscription | null = null;
 
@@ -107,7 +106,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         {
           label: 'menu.camera',
           translateFolder: 'avatar',
-          name: 'camera',
+          name: 'edit_camera',
           isPlainIcon: true,
           icon: '🎥',
           visible: true,
@@ -120,7 +119,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         {
           label: 'menu.editPerformance',
           translateFolder: 'avatar',
-          name: 'editPerformance',
+          name: 'edit_performance',
           isPlainIcon: true,
           icon: '⚙️',
           visible: true,
@@ -133,7 +132,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         {
           label: 'menu.editAvatar',
           translateFolder: 'avatar',
-          name: 'editAvatar',
+          name: 'loged_edit_avatar',
           isPlainIcon: true,
           icon: '🎭',
           visible: true,
@@ -149,7 +148,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         {
           label: 'menu.editScenario',
           translateFolder: 'avatar',
-          name: 'editScenario',
+          name: 'loged_edit_scenario',
           isPlainIcon: true,
           icon: '📑',
           visible: true,
@@ -165,7 +164,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         {
           label: 'menu.editModes',
           translateFolder: 'avatar',
-          name: 'editModes',
+          name: 'loged_edit_modes',
           isPlainIcon: true,
           icon: '👾',
           visible: true,
@@ -181,7 +180,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
         {
           label: 'menu.editWorld',
           translateFolder: 'avatar',
-          name: 'editWorld',
+          name: 'loged_edit_world',
           isPlainIcon: true,
           icon: '🔧',
           visible: true,
@@ -237,16 +236,6 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     return this.trackerComponent;
   }
 
-  updateLogedMenuOptions() {
-    const visible = !!this.user;
-    this.menuOptions
-      .find((a) => a.name && ['config'].indexOf(a.name) >= 0)
-      ?.children?.filter((a) => a.name && a.name.startsWith('loged_'))
-      .forEach((e) => {
-        e.visible = visible && !!this.room;
-      });
-  }
-
   async ngAfterViewInit(): Promise<void> {
     this.updateCurrentLang();
     this.authSrv.authState$.subscribe(async (user) => {
@@ -283,31 +272,9 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
 
   async ngOnInit(): Promise<void> {}
 
-  async loadCollection() {
-    const params = getUrlQueryParams();
-    const col = params.get('col');
-    const id = params.get('id');
-    if (col && id) {
-      const temp = await this.firestoreSrv.readById(col, id);
-      if (temp) {
-        this.room = temp as AvatarStoredDataType;
-        document.title = this.room.title;
-        this.localLoadWorld(this.room);
-      } else {
-        this.room = null;
-      }
-      this.trackerComponent.setRoomData(this.room);
-      this.cdr.detectChanges();
-    }
-  }
-
   ngOnDestroy(): void {
     if (this.p2pStatusSubscription) {
       this.p2pStatusSubscription.unsubscribe();
     }
-  }
-
-  async getRoom(): Promise<AvatarStoredDataType | null> {
-    return this.room;
   }
 }

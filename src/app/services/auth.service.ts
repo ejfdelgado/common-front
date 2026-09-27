@@ -1,18 +1,18 @@
 import { Injectable, computed, signal } from '@angular/core';
 import {
-    Auth,
-    GoogleAuthProvider,
-    User,
-    authState,
-    signInWithPopup,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-    UserCredential,
-    sendPasswordResetEmail,
-    signInWithPhoneNumber,
-    RecaptchaVerifier,
-    ConfirmationResult
+  Auth,
+  GoogleAuthProvider,
+  User,
+  authState,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  UserCredential,
+  sendPasswordResetEmail,
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  ConfirmationResult,
 } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 import { BehaviorSubject, firstValueFrom, from, Observable, Subscription } from 'rxjs';
@@ -26,184 +26,206 @@ import { IndicatorService } from './indicator.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    private readonly _user = signal<User | null>(null);
-    private readonly _token = signal<string | null>(null);
-    private readonly _roles = signal<string[]>([]);
-    readonly isLoggedIn = computed(() => !!this._user());
+  private readonly _user = signal<User | null>(null);
+  private readonly _token = signal<string | null>(null);
+  private readonly _roles = signal<string[]>([]);
+  readonly isLoggedIn = computed(() => !!this._user());
 
-    private authSub?: Subscription;
+  private authSub?: Subscription;
 
-    static userStatic: User | null = null;
-    private authStateSubject = new BehaviorSubject<User | null>(null);
+  static userStatic: User | null = null;
+  private authStateSubject = new BehaviorSubject<User | null>(null);
 
-    readonly authState$: Observable<User | null> =
-        this.authStateSubject.asObservable();
+  readonly authState$: Observable<User | null> = this.authStateSubject.asObservable();
 
-    confirmationResult: ConfirmationResult | null = null;
-    recaptchaWidget: RecaptchaVerifier | null = null;
+  confirmationResult: ConfirmationResult | null = null;
+  recaptchaWidget: RecaptchaVerifier | null = null;
 
-    constructor(
-        private auth: Auth,
-        private notifSrv: UINotificationSrv,
-        private http: HttpClient,
-        private dialog: MatDialog,
-        private indicatorSrv: IndicatorService,
-    ) {
-        this.authSub = authState(this.auth).subscribe(async user => {
-            getAuth();//Without this line, firestore frontend operations did not include token
-            this._user.set(user);
+  constructor(
+    private auth: Auth,
+    private notifSrv: UINotificationSrv,
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private indicatorSrv: IndicatorService,
+  ) {
+    this.authSub = authState(this.auth).subscribe(async (user) => {
+      getAuth(); //Without this line, firestore frontend operations did not include token
+      this._user.set(user);
 
-            this.authStateSubject.next(user);
-            AuthService.userStatic = user;
+      this.authStateSubject.next(user);
+      AuthService.userStatic = user;
 
-            if (user) {
-                // Force a refresh to get the latest custom claims from the server
-                const forceRefresh = true;
-                const token = await user.getIdToken(forceRefresh);
-                this._token.set(token);
-                // Get roles
-                const rolesResPromise = firstValueFrom(this.http.get<ApiResponse>(environment.apiUrl + "admin/user/myroles"));
-                rolesResPromise.then((data: ApiResponse) => {
-                    if (data.success) {
-                        const roles = data.data;
-                        this._roles.set(Object.keys(roles));
-                    }
-                }).catch(err => {
-
-                });
-            } else {
-                this._token.set(null);
-                this._roles.set([]);
+      if (user) {
+        // Force a refresh to get the latest custom claims from the server
+        const forceRefresh = true;
+        const token = await user.getIdToken(forceRefresh);
+        this._token.set(token);
+        // Get roles
+        const rolesResPromise = firstValueFrom(
+          this.http.get<ApiResponse>(environment.apiUrl + 'admin/user/myroles'),
+        );
+        rolesResPromise
+          .then((data: ApiResponse) => {
+            if (data.success) {
+              const roles = data.data;
+              this._roles.set(Object.keys(roles));
             }
-        });
-    }
+          })
+          .catch((err) => {});
+      } else {
+        this._token.set(null);
+        this._roles.set([]);
+      }
+    });
+  }
 
-    /** 🔐 Public signals */
-    readonly user = computed(() => this._user());
-    readonly token = computed(() => this._token());
-    readonly roles = computed(() => this._roles());
-    readonly isAuthenticated = computed(() => !!this._user());
+  /** 🔐 Public signals */
+  readonly user = computed(() => this._user());
+  readonly token = computed(() => this._token());
+  readonly roles = computed(() => this._roles());
+  readonly isAuthenticated = computed(() => !!this._user());
 
-    hasARole(r: string[]) {
-        const roles = this._roles();
-        return roles.find(el => r.indexOf(el) >= 0) != undefined;
-    }
+  hasARole(r: string[]) {
+    const roles = this._roles();
+    return roles.find((el) => r.indexOf(el) >= 0) != undefined;
+  }
 
-    async waitForToken() {
-        return new Promise<boolean>((resolve) => {
-            let resolved = false;
-            const interval = setInterval(() => {
-                if (this.token()) {
-                    resolved = true;
-                    clearInterval(interval);
-                    clearTimeout(timeout);
-                    resolve(true);
-                }
-            }, 500);
-            const timeout = setTimeout(() => {
-                if (!resolved) {
-                    resolve(false);
-                }
-                clearInterval(interval);
-                clearTimeout(timeout);
-            }, 5000);
-        });
-    }
-
-    async login() {
-        const data: LoginOptionsData = {};
-        this.dialog
-            .open(LoginOptions, {
-                width: '400px',
-                disableClose: true,
-                data,
-                panelClass: 'custom-emoji-picker',
-            });
-    }
-
-    /** 🔑 Google login */
-    loginWithGoogle(): Promise<void> {
-        const provider = new GoogleAuthProvider();
-        return signInWithPopup(this.auth, provider).then(() => { });
-    }
-
-    /** 📧 Email login */
-    loginWithEmail(email: string, password: string): Promise<UserCredential> {
-        const promise = this.indicatorSrv.start();
-        try {
-            return signInWithEmailAndPassword(this.auth, email, password);
-        } finally {
-            promise.done();
+  async waitForToken() {
+    return new Promise<boolean>((resolve) => {
+      let resolved = false;
+      const interval = setInterval(() => {
+        if (this.token()) {
+          resolved = true;
+          clearInterval(interval);
+          clearTimeout(timeout);
+          resolve(true);
         }
-    }
-
-    /** ✍️ Email signup */
-    registerWithEmail(email: string, password: string): Promise<UserCredential> {
-        const promise = this.indicatorSrv.start();
-        try {
-            return createUserWithEmailAndPassword(this.auth, email, password);
-        } finally {
-            promise.done();
+      }, 500);
+      const timeout = setTimeout(() => {
+        if (!resolved) {
+          resolve(false);
         }
-    }
+        clearInterval(interval);
+        clearTimeout(timeout);
+      }, 5000);
+    });
+  }
 
-    async resetPassword(email: string) {
-        return sendPasswordResetEmail(this.auth, email);
-    }
+  async login() {
+    const data: LoginOptionsData = {};
+    this.dialog.open(LoginOptions, {
+      width: '400px',
+      disableClose: true,
+      data,
+      panelClass: 'custom-emoji-picker',
+    });
+  }
 
-    async createRecaptcha(): Promise<RecaptchaVerifier> {
-        if (this.recaptchaWidget) {
-            try {
-                this.recaptchaWidget.clear();
-            } catch (err) { }
-        }
-        const promise2 = this.indicatorSrv.start();
-        const promise = new Promise<RecaptchaVerifier>(async (resolve, reject) => {
-            this.recaptchaWidget = new RecaptchaVerifier(this.auth, 'recaptcha-container', {
-                size: 'normal',//invisible normal
-                callback: (response: any) => {
-                    if (this.recaptchaWidget) {
-                        resolve(this.recaptchaWidget);
-                    }
-                },
-            });
-            await this.recaptchaWidget.render();
-            promise2.done();
-            setTimeout(() => {
-                reject(new Error('reCAPTCHA timeout'));
-            }, 2*60000);
-        });
+  /** 🔑 Google login */
+  loginWithGoogle(): Promise<void> {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(this.auth, provider).then(() => {});
+  }
 
-        return promise;
+  /** 📧 Email login */
+  loginWithEmail(email: string, password: string): Promise<UserCredential> {
+    const promise = this.indicatorSrv.start();
+    try {
+      return signInWithEmailAndPassword(this.auth, email, password);
+    } finally {
+      promise.done();
     }
+  }
 
-    async signInWithPhoneNumber(phoneNumber: string, appVerifier: RecaptchaVerifier) {
-        this.confirmationResult = await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier);
+  /** ✍️ Email signup */
+  registerWithEmail(email: string, password: string): Promise<UserCredential> {
+    const promise = this.indicatorSrv.start();
+    try {
+      return createUserWithEmailAndPassword(this.auth, email, password);
+    } finally {
+      promise.done();
     }
+  }
 
-    async verifyCode(code: string) {
-        if (!this.confirmationResult) {
-            throw new Error('No pending SMS verification. Please request a code first.');
-        }
-        return this.confirmationResult.confirm(code);
-    }
+  async resetPassword(email: string) {
+    return sendPasswordResetEmail(this.auth, email);
+  }
 
-    /** 🚪 Logout */
-    logout(): Promise<void> {
-        return signOut(this.auth);
+  async createRecaptcha(): Promise<RecaptchaVerifier> {
+    if (this.recaptchaWidget) {
+      try {
+        this.recaptchaWidget.clear();
+      } catch (err) {}
     }
+    const promise2 = this.indicatorSrv.start();
+    const promise = new Promise<RecaptchaVerifier>(async (resolve, reject) => {
+      this.recaptchaWidget = new RecaptchaVerifier(this.auth, 'recaptcha-container', {
+        size: 'normal', //invisible normal
+        callback: (response: any) => {
+          if (this.recaptchaWidget) {
+            resolve(this.recaptchaWidget);
+          }
+        },
+      });
+      await this.recaptchaWidget.render();
+      promise2.done();
+      setTimeout(() => {
+        reject(new Error('reCAPTCHA timeout'));
+      }, 2 * 60000);
+    });
 
-    ngOnDestroy() {
-        this.authSub?.unsubscribe();
-    }
+    return promise;
+  }
 
-    async askForOfflineGrantScope(scopes: string[]) {
-        const currentUrl = window.location.href;
-        const body = {
-            currentUrl,
-            scopes,
-        };
-        const res = await firstValueFrom(this.http.post<ApiResponse>(environment.apiUrl + "admin/user/calendar/allow", body));
-        window.location.href = res.data.url;
+  async signInWithPhoneNumber(phoneNumber: string, appVerifier: RecaptchaVerifier) {
+    this.confirmationResult = await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier);
+  }
+
+  async verifyCode(code: string) {
+    if (!this.confirmationResult) {
+      throw new Error('No pending SMS verification. Please request a code first.');
     }
+    return this.confirmationResult.confirm(code);
+  }
+
+  /** 🚪 Logout */
+  logout(): Promise<void> {
+    return signOut(this.auth);
+  }
+
+  ngOnDestroy() {
+    this.authSub?.unsubscribe();
+  }
+
+  async askForOfflineGrantScope(scopes: string[]) {
+    const currentUrl = window.location.href;
+    const body = {
+      currentUrl,
+      scopes,
+    };
+    const res = await firstValueFrom(
+      this.http.post<ApiResponse>(environment.apiUrl + 'admin/user/calendar/allow', body),
+    );
+    window.location.href = res.data.url;
+  }
+
+  async isUserOwner(): Promise<boolean> {
+    const queryParams = {
+      collection: '',
+      id: '',
+    };
+    const currentQueryParams = new URLSearchParams(location.hash.split('#')[1]);
+    queryParams.collection = currentQueryParams.get('col') ?? 'room-public';
+    queryParams.id = currentQueryParams.get('id') ?? '';
+    if (queryParams.id == '') {
+      return false;
+    }
+    const queryString = new URLSearchParams(queryParams).toString();
+    const read = await firstValueFrom(
+      this.http.get(environment.apiUrl + `admin/user/shared_with_me?${queryString}`, {
+        responseType: 'json',
+      }),
+    );
+    return true;
+  }
 }

@@ -22,9 +22,13 @@ import { getBucketPath } from '../tools/BucketPaths';
 import { FileService } from '../services/file.srv';
 import { FirestoreService } from '../services/firestore.service';
 import { sortify } from 'ejfdelgado-common-ts';
+import { sleep } from '../tools/rxjsUtils';
+import { getUrlQueryParams } from '../tools/UrlUtil';
 
 export abstract class ConfigurableGame extends AuthenticatedComponent {
+  room: AvatarStoredDataType | null = null;
   menuOptions: MenuOptionType[] = [];
+  isUserOwner: boolean = false;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -38,11 +42,18 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     public firestoreSrv: FirestoreService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
+    this.authSrv.authState$.subscribe(async (user) => {
+      if (user) {
+        do {
+          await sleep(100);
+        } while (!this.authSrv.token());
+        this.isUserOwner = await this.authSrv.isUserOwner();
+        this.updateLogedMenuOptions();
+      }
+    });
   }
 
   abstract getTrackerComponent(): ComponentP2P;
-
-  abstract getRoom(): Promise<AvatarStoredDataType | null>;
 
   abstract getFirestoremodelName(): string;
 
@@ -88,6 +99,24 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     }
   }
 
+  updateLogedMenuOptions() {
+    const visible = !!this.user;
+    this.menuOptions
+      .find((a) => a.name && ['config'].indexOf(a.name) >= 0)
+      ?.children?.filter((a) => a.name && a.name.startsWith('loged_'))
+      .forEach((e) => {
+        e.visible = visible && !!this.room;
+      });
+    // Check the levels
+    const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
+    if (scenarioMenu) {
+      const children = scenarioMenu.children;
+      if (!this.isUserOwner) {
+        // Discovery logic
+      }
+    }
+  }
+
   recomputeModeMenu(world: WorldAvatar) {
     const scenariosMenu = this.menuOptions.find(
       (a) => a.name && ['scenarios'].indexOf(a.name) >= 0,
@@ -120,6 +149,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
       scenariosMenu.children?.forEach((m) => {
         m.inUse = m.name === world.defaultMode;
       });
+      this.updateLogedMenuOptions();
       this.cdr.detectChanges();
     }
   }
@@ -155,6 +185,29 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     } catch (err) {
       return false;
     }
+  }
+
+  async loadCollection() {
+    const params = getUrlQueryParams();
+    const col = params.get('col');
+    const id = params.get('id');
+    if (col && id) {
+      const temp = await this.firestoreSrv.readById(col, id);
+      if (temp) {
+        this.room = temp as AvatarStoredDataType;
+        document.title = this.room.title;
+        this.localLoadWorld(this.room);
+      } else {
+        this.room = null;
+      }
+      const trackerComponent = await this.getTrackerComponent();
+      trackerComponent.setRoomData(this.room);
+      this.cdr.detectChanges();
+    }
+  }
+
+  async getRoom(): Promise<AvatarStoredDataType | null> {
+    return this.room;
   }
 
   async saveAndApplyWorld(data: WorldAvatarEdit) {
