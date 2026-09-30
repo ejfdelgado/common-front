@@ -4,6 +4,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
+  Output,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -39,6 +41,8 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
   @ViewChild('three_component') avatarContainer!: AvatarContainer;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvasRefGlobal!: ElementRef<HTMLCanvasElement>;
+
+  @Output() events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
   headUpLogData: any = {};
 
   constructor(
@@ -136,7 +140,7 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     return this.avatarContainer;
   }
 
-  notifications(event: AvatarBodyEvent): void {
-    console.log(JSON.stringify(event, null, 4));
+  notifyEvent(event: AvatarBodyEvent): void {
+    this.events.emit(event);
   }
 }

@@ -25,6 +25,7 @@ import { sortify } from 'ejfdelgado-common-ts';
 import { sleep } from '../tools/rxjsUtils';
 import { getUrlQueryParams } from '../tools/UrlUtil';
 import { ModeDiscovery, ModeEntryType } from './ModeDiscovery';
+import { AvatarBodyEvent } from 'src/types/BodyTypes';
 
 export abstract class ConfigurableGame extends AuthenticatedComponent {
   room: AvatarStoredDataType | null = null;
@@ -262,5 +263,11 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     await tracker.applyAvatarBeforeSave(data);
     await this.writeStoredModel(tracker.world);
     await tracker.reloadModeAndScenario();
+  }
+
+  async notifications(event: AvatarBodyEvent): Promise<void> {
+    if (event.name == 'WON_MODE') {
+      this.updateLogedMenuOptions();
+    }
   }
 }

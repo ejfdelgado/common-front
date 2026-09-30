@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Directive, ElementRef, HostListener } from '@angular
 import {
   AVATAR_NAME,
   AVATAR_PELVIS_HEIGHT,
+  AvatarBodyEvent,
   BodyData,
   GenericSizeType,
   HANDS_MODEL_PATH,
@@ -55,6 +56,7 @@ import { CameraDataType } from '@mytypes/CameraTypes';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { getBucketFilePath } from '../tools/BucketPaths';
+import { ModeDiscovery } from './ModeDiscovery';
 
 @Directive()
 export abstract class ComponentBodyTracker extends CommonSpeech {
@@ -154,6 +156,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
   public abstract broadcastBinaryData(command: GameAction): Promise<void>;
   abstract getAvatarContainer(): ComponentWithAvatar;
+  abstract notifyEvent(event: AvatarBodyEvent): void;
 
   assureSubscription() {
     if (this.eventSubscription == null) {
@@ -844,5 +847,35 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     this.mode.avatar.meshPath = data.meshPath;
     // Texture
     this.mode.avatar.texturePath = data.texturePath;
+  }
+
+  async notifications(event: AvatarBodyEvent): Promise<void> {
+    if (event.name == 'WON_MODE') {
+      if (this.selectedItems.mode) {
+        const modeKeys = Object.keys(this.world.modes);
+        const orderedIds = modeKeys
+          .map((modeId) => {
+            return { key: modeId, value: this.world.modes[modeId] };
+          })
+          .sort((a, b) => {
+            return a.value.order - b.value.order;
+          })
+          .map((element) => {
+            return element.key;
+          });
+        const actualIndex = orderedIds.indexOf(this.selectedItems.mode);
+        if (actualIndex < orderedIds.length - 1) {
+          const nextModeId = orderedIds[actualIndex + 1];
+          if (actualIndex == 0) {
+            await ModeDiscovery.checkWonMode(this.selectedItems.mode);
+          }
+          await ModeDiscovery.checkWonMode(nextModeId);
+          // Propagate the event UP
+          this.notifyEvent(event);
+          await this.applyMode(nextModeId);
+          this.startAll();
+        }
+      }
+    }
   }
 }
