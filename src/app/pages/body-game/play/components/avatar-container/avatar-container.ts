@@ -20,34 +20,36 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
 import { HttpClient } from '@angular/common/http';
-import { CursorData, CursorPointerGUI, CursorStateData, HudDisplayData, Point3D } from '@mytypes/BodyTypes';
+import {
+  AvatarBodyEvent,
+  CursorData,
+  CursorPointerGUI,
+  CursorStateData,
+  HudDisplayData,
+  Point3D,
+} from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';
 import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { html2text } from 'src/app/tools/HtmlUtil';
 
-
 @Component({
   standalone: true,
   selector: 'app-avatar-container',
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatIconModule,
-    RatingComponent,
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule, RatingComponent],
   templateUrl: './avatar-container.html',
   styleUrls: ['./avatar-container.scss'],
 })
 export class AvatarContainer
   extends ComponentWithAvatar
-  implements OnInit, AfterViewInit, OnDestroy {
-
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild('myparent') parentRef!: ElementRef;
   @ViewChild('mycanvas') canvasRef!: ElementRef;
 
   hasMobile: boolean;
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
+  @Output() notifications: EventEmitter<AvatarBodyEvent> = new EventEmitter();
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -100,7 +102,7 @@ export class AvatarContainer
         y: point.y.toFixed(2),
         z: point.z.toFixed(2),
       };
-    }
+    };
     const temp = {
       //front: toFixed(this.stateBody.front), // se evidencia en x
       //up: toFixed(this.stateBody.up), // se evidencia en x
@@ -115,7 +117,7 @@ export class AvatarContainer
       //footR: this.stateBody.comparable.footR.toFixed(0),
       //isMobile: this.isMobile(),
       //isTPose: this.stateBody.isTPose,
-    }
+    };
     this.headUpLog.emit(temp);
   }
 
@@ -132,24 +134,24 @@ export class AvatarContainer
     }
     this.scene.executeCommand(command);
     this.events.emit({
-      name: "VOICE_COMMAND",
+      name: 'VOICE_COMMAND',
       voiceCommand: command.command,
     });
   }
 
   leftCursor: CursorPointerGUI = {
     style: {
-      top: "0px",
-      left: "0px",
+      top: '0px',
+      left: '0px',
     },
-    image: "/assets/icons/eye.svg",
+    image: '/assets/icons/eye.svg',
   };
   rightCursor: CursorPointerGUI = {
     style: {
-      top: "0px",
-      left: "0px",
+      top: '0px',
+      left: '0px',
     },
-    image: "/assets/icons/eye.svg",
+    image: '/assets/icons/eye.svg',
   };
 
   override setCursor(data: CursorData): void {
@@ -162,32 +164,36 @@ export class AvatarContainer
     const side = data.type;
 
     let cursorGUI: CursorPointerGUI = this.rightCursor;
-    if (side == "L") {
+    if (side == 'L') {
       cursorGUI = this.leftCursor;
     }
-    cursorGUI.style.top = y + "px";
-    cursorGUI.style.left = x + "px";
+    cursorGUI.style.top = y + 'px';
+    cursorGUI.style.left = x + 'px';
   }
 
   override setCursorState(data: CursorStateData): void {
     const side = data.type;
     let cursorGUI: CursorPointerGUI = this.rightCursor;
-    if (side == "L") {
+    if (side == 'L') {
       cursorGUI = this.leftCursor;
     }
-    if (data.state == "on") {
-      cursorGUI.image = "/assets/icons/eye_off.svg";
+    if (data.state == 'on') {
+      cursorGUI.image = '/assets/icons/eye_off.svg';
     } else {
-      cursorGUI.image = "/assets/icons/eye.svg";
+      cursorGUI.image = '/assets/icons/eye.svg';
     }
   }
 
   hasText(val: any) {
     const innerText = (val as any)['changingThisBreaksApplicationSecurity'];
-    if (!(typeof innerText == "string")) {
+    if (!(typeof innerText == 'string')) {
       return false;
     }
     const rawText = html2text(innerText);
-    return (typeof rawText == "string") && rawText.trim().length > 0;
+    return typeof rawText == 'string' && rawText.trim().length > 0;
+  }
+
+  notifyEvent(event: AvatarBodyEvent): void {
+    this.notifications.emit(event);
   }
 }

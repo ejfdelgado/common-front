@@ -1,22 +1,19 @@
-
 export interface MenuOptionType {
-    label: string;
-    translateFolder?: string;
-    icon?: string;
-    isPlainIcon?: boolean;
-    callback?: Function,
-    children?: MenuOptionType[];
-    opened?: boolean;
-    visible?: boolean;
-    name?: string;
-    inUse?: boolean;
+  label: string;
+  translateFolder?: string;
+  icon?: string;
+  isPlainIcon?: boolean;
+  callback?: Function;
+  children?: MenuOptionType[];
+  opened?: boolean;
+  visible?: boolean;
+  name?: string;
+  inUse?: boolean;
+  metaId?: string;
 }
 
 export interface StatusBarConfigType {
-    hamburgerHighlight?: boolean;
+  hamburgerHighlight?: boolean;
 }
 
-
-export interface MenuConfigType {
-
-}
+export interface MenuConfigType {}

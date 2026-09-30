@@ -376,6 +376,10 @@ export class QuestionaireController extends SceneControllerAbstract {
     await this.setHudValue('top', `<h2>${label}</h2>`, true);
     const { promise } = await this.playAudio('finish', true);
     await promise;
+    // Emmit won event
+    this.events.emit({
+      name: 'WON_MODE',
+    });
   }
 
   override onEvent(event: AvatarBodyEvent): void {

@@ -25,6 +25,7 @@ import { P2PService } from '@services/p2p.service';
 import { ComponentP2P } from '@avatar/ComponentP2P';
 import { ConfigService } from '@services/config.service';
 import { MatDialog } from '@angular/material/dialog';
+import { AvatarBodyEvent } from 'src/types/BodyTypes';
 
 @Component({
   selector: 'app-body-tracker',
@@ -133,5 +134,9 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
 
   override getAvatarContainer(): AvatarContainer {
     return this.avatarContainer;
+  }
+
+  notifications(event: AvatarBodyEvent): void {
+    console.log(JSON.stringify(event, null, 4));
   }
 }

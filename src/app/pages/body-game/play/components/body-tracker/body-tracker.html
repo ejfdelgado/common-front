@@ -1,6 +1,7 @@
-<div class="full_screen background_image container_vertical" [style.background-image]="backgroundUrl ? 'url(' + backgroundUrl + ')' : null"
->
-    <app-avatar-container #three_component (headUpLog)="headUpLog($event)"></app-avatar-container>
+<div class="full_screen background_image container_vertical"
+    [style.background-image]="backgroundUrl ? 'url(' + backgroundUrl + ')' : null">
+    <app-avatar-container #three_component (headUpLog)="headUpLog($event)"
+        (notifications)="notifications($event)"></app-avatar-container>
 
     @if (!started) {
     <div class="start_container no_mouse">

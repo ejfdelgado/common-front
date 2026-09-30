@@ -24,6 +24,7 @@ import { FirestoreService } from '../services/firestore.service';
 import { sortify } from 'ejfdelgado-common-ts';
 import { sleep } from '../tools/rxjsUtils';
 import { getUrlQueryParams } from '../tools/UrlUtil';
+import { ModeDiscovery, ModeEntryType } from './ModeDiscovery';
 
 export abstract class ConfigurableGame extends AuthenticatedComponent {
   room: AvatarStoredDataType | null = null;
@@ -99,7 +100,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     }
   }
 
-  updateLogedMenuOptions() {
+  async updateLogedMenuOptions() {
     const visible = !!this.user;
     this.menuOptions
       .find((a) => a.name && ['config'].indexOf(a.name) >= 0)
@@ -111,11 +112,18 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
     if (scenarioMenu) {
       const children = scenarioMenu.children;
-      console.log(JSON.stringify(children, null, 4));
-      if (children && !this.isUserOwner) {
+      //if (children && !this.isUserOwner) {
+      if (children) {
         // Discovery logic
+        const { won } = await ModeDiscovery.readFromDatabase();
         children.forEach((e, i) => {
-          if (i == 0) {
+          if (
+            i == 0 ||
+            (typeof e.metaId == 'string' &&
+              won.find((mode: ModeEntryType) => {
+                return mode.id == e.metaId;
+              }) != undefined)
+          ) {
             e.visible = true;
           } else {
             e.visible = false;
@@ -136,17 +144,18 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         .sort((a, b) => {
           return world.modes[a].order - world.modes[b].order;
         })
-        .map((name) => {
-          const reference = world.modes[name];
+        .map((modeId) => {
+          const reference = world.modes[modeId];
           return {
             label: reference.menu.name,
             isPlainIcon: true,
             icon: reference.menu.icon,
-            name: name,
+            name: modeId,
             children: [],
+            metaId: modeId,
             callback: async () => {
               const scenarioId = undefined;
-              await this.getTrackerComponent().applyMode(name, scenarioId, true);
+              await this.getTrackerComponent().applyMode(modeId, scenarioId, true);
               this.emitToc();
               scenariosMenu.children?.forEach((m) => {
                 m.inUse = m.name === name;
