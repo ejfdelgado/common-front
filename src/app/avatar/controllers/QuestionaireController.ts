@@ -7,12 +7,16 @@ import {
   GameScenario,
   GameStep,
   GameStepOption,
+  MAX_LIFE,
   SelectionObjectConfig,
+  StartGameOptions,
 } from 'src/types/WorldAvatar';
 import { ENABLE_CUBE_TYPE, MinMaxCubeRange } from './CubeController';
 import { randomize } from 'src/app/tools/NumberUtils';
-
-const MAX_LIFE = 5;
+import { EventEmitter } from '@angular/core';
+import { ControlProxy } from '../workers/ControlProxy';
+import { P2PService } from 'src/app/services/p2p.service';
+import { GameRegistryData, ModeDiscovery } from '../ModeDiscovery';
 
 let FAR_AMOUNT_X = 0;
 let FAR_AMOUNT_Y = 0;
@@ -87,6 +91,21 @@ export class QuestionaireController extends SceneControllerAbstract {
   currentStep: number = 0;
   optionsMap: { [key: string]: GameStepOption } = {};
   maxQuestions: number = MAX_QUESTIONS_DEF;
+
+  constructor(
+    public override events: EventEmitter<AvatarBodyEvent>,
+    public override controlProxy: ControlProxy,
+    public override p2pSrv: P2PService,
+  ) {
+    super(events, controlProxy, p2pSrv);
+    ModeDiscovery.readFromDatabase().then((data: GameRegistryData) => {
+      const { user } = data;
+      this.life = user.life;
+      this.score = user.score;
+      this.setHudValue('life', this.life);
+      this.setHudValue('score', this.score);
+    });
+  }
 
   override async update(): Promise<ControllerUpdateResponse> {
     return {};
@@ -301,10 +320,15 @@ export class QuestionaireController extends SceneControllerAbstract {
     this.events.emit({ name: 'CUBE_LISTEN_ON' });
   }
 
-  resetGame() {
+  resetGame(options?: StartGameOptions) {
+    console.log('resetGame', JSON.stringify(options));
     this.currentStep = 0;
-    this.life = MAX_LIFE;
-    this.score = 0;
+    if (!options || !options.keepLife) {
+      this.life = MAX_LIFE;
+    }
+    if (!options || !options.keepPoints) {
+      this.score = 0;
+    }
     this.setHudValue('life', this.life);
     this.setHudValue('score', this.score);
     this.clearAll();
@@ -346,6 +370,9 @@ export class QuestionaireController extends SceneControllerAbstract {
       const { promise } = await this.playAudio('success');
       await promise;
     }
+    //Persist life/score
+    await ModeDiscovery.setLifeScore(this.life, this.score);
+
     if (!this.isPlaying) {
       return;
     }
@@ -386,12 +413,15 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (event.name == 'START_ALL') {
       // Read mode and scenario
       this.isPlaying = true;
-      this.resetGame();
+      this.resetGame(event.data);
       this.initializeQuestion();
     } else if (event.name == 'STOP_ALL') {
       this.isPlaying = false;
       ModuloSonido.stopAll();
-      this.resetGame();
+      this.resetGame({
+        keepLife: true,
+        keepPoints: true,
+      });
     } else if (event.name == 'CUBE_A_SELECT_ON') {
       // Selected option
       this.evaluateAnswer('A');

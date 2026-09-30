@@ -268,6 +268,22 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
   async notifications(event: AvatarBodyEvent): Promise<void> {
     if (event.name == 'WON_MODE') {
       this.updateLogedMenuOptions();
+      // Get the current mode
+      const tracker = this.getTrackerComponent();
+      const modeId = tracker.getCurrentMode();
+      if (modeId) {
+        // Update the flag inUse
+        const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
+        if (scenarioMenu) {
+          const children = scenarioMenu.children;
+          if (children) {
+            children.forEach((menu) => {
+              menu.inUse = modeId == menu.metaId;
+            });
+          }
+        }
+      }
+      this.cdr.detectChanges();
     }
   }
 }

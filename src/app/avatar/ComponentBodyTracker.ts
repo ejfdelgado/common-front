@@ -33,6 +33,7 @@ import {
   GameSelection,
   HANDS_CONTROLLERS,
   POSE_CONTROLLERS,
+  StartGameOptions,
   WorldAvatar,
 } from '@mytypes/WorldAvatar';
 import {
@@ -569,7 +570,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
   }
 
-  async startAll() {
+  async startAll(options?: StartGameOptions) {
     this.errorState = '-1';
     await this.checkCameraSeleceted();
     ModuloSonido.play('/assets/sounds/button.mp3');
@@ -579,7 +580,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         this.startListening();
       }
     }
-    this.getAvatarContainer().events.emit({ name: 'START_ALL' });
+    this.getAvatarContainer().events.emit({ name: 'START_ALL', data: options });
     enterFullscreen();
   }
 
@@ -867,15 +868,22 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         if (actualIndex < orderedIds.length - 1) {
           const nextModeId = orderedIds[actualIndex + 1];
           if (actualIndex == 0) {
-            await ModeDiscovery.checkWonMode(this.selectedItems.mode);
+            await ModeDiscovery.checkDiscoveredMode(this.selectedItems.mode);
           }
-          await ModeDiscovery.checkWonMode(nextModeId);
+          await ModeDiscovery.checkDiscoveredMode(nextModeId);
           // Propagate the event UP
           this.notifyEvent(event);
           await this.applyMode(nextModeId);
-          this.startAll();
+          this.startAll({
+            keepLife: true,
+            keepPoints: true,
+          });
         }
       }
     }
+  }
+
+  getCurrentMode(): string | null {
+    return this.selectedItems.mode;
   }
 }

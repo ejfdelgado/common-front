@@ -4,6 +4,13 @@ import { ABCDType } from './WorldAvatarLibrary';
 
 export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
 
+export const MAX_LIFE = 5;
+
+export interface StartGameOptions {
+  keepPoints: boolean;
+  keepLife: boolean;
+}
+
 export interface WorldAvatarEdit {
   defaultMode: string;
   modes: { [key: string]: GameMode };
