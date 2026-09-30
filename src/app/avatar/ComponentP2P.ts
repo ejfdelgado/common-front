@@ -15,7 +15,7 @@ import { Room } from '@trystero-p2p/firebase';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { MatDialog } from '@angular/material/dialog';
-import { WorldAvatarEdit } from 'src/types/WorldAvatar';
+import { StartGameOptions, WorldAvatarEdit } from 'src/types/WorldAvatar';
 
 export abstract class ComponentP2P extends ComponentBodyTracker {
   roomLive: Room | null = null;
@@ -135,9 +135,9 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     });
   }
 
-  override async startAll() {
+  override async startAll(options?: StartGameOptions) {
     try {
-      await super.startAll();
+      await super.startAll(options);
       this.activity = this.indicatorSrv.start();
       if (this.world.config.useLivePeer) {
         if (this.room) {

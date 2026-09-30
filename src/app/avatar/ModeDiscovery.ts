@@ -55,6 +55,7 @@ export class ModeDiscovery {
   }
 
   static async checkDiscoveredMode(modeId: string) {
+    await ModeDiscovery.readFromDatabase();
     if (
       modesRegistry.won.find((mode: ModeEntryType) => {
         return mode.id == modeId;
@@ -69,21 +70,21 @@ export class ModeDiscovery {
   }
 
   static async setLife(life: number) {
-    const old = await ModeDiscovery.readFromDatabase();
-    old.user.life = life;
+    await ModeDiscovery.readFromDatabase();
+    modesRegistry.user.life = life;
     await ModeDiscovery.write();
   }
 
   static async setScore(score: number) {
-    const old = await ModeDiscovery.readFromDatabase();
-    old.user.score = score;
+    await ModeDiscovery.readFromDatabase();
+    modesRegistry.user.score = score;
     await ModeDiscovery.write();
   }
 
   static async setLifeScore(life: number, score: number) {
-    const old = await ModeDiscovery.readFromDatabase();
-    old.user.life = life;
-    old.user.score = score;
+    await ModeDiscovery.readFromDatabase();
+    modesRegistry.user.life = life;
+    modesRegistry.user.score = score;
     await ModeDiscovery.write();
   }
 }

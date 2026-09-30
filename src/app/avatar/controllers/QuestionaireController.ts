@@ -321,7 +321,6 @@ export class QuestionaireController extends SceneControllerAbstract {
   }
 
   resetGame(options?: StartGameOptions) {
-    console.log('resetGame', JSON.stringify(options));
     this.currentStep = 0;
     if (!options || !options.keepLife) {
       this.life = MAX_LIFE;
