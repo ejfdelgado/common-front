@@ -113,8 +113,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
     if (scenarioMenu) {
       const children = scenarioMenu.children;
-      //if (children && !this.isUserOwner) {
-      if (children) {
+      if (children && !this.isUserOwner) {
         // Discovery logic
         const { won } = await ModeDiscovery.readFromDatabase();
         children.forEach((e, i) => {
@@ -271,6 +270,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
       // Get the current mode
       const tracker = this.getTrackerComponent();
       const modeId = tracker.getCurrentMode();
+      console.log(`modeId = ${modeId}`);
       if (modeId) {
         // Update the flag inUse
         const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
@@ -280,7 +280,10 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
             children.forEach((menu) => {
               menu.inUse = modeId == menu.metaId;
             });
+            console.log(JSON.stringify(children, null, 4));
           }
+        } else {
+          console.log('No scenario!');
         }
       }
       this.cdr.detectChanges();

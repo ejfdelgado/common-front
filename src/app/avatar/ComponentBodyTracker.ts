@@ -871,9 +871,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
             await ModeDiscovery.checkDiscoveredMode(this.selectedItems.mode);
           }
           await ModeDiscovery.checkDiscoveredMode(nextModeId);
+          await this.applyMode(nextModeId);
           // Propagate the event UP
           this.notifyEvent(event);
-          await this.applyMode(nextModeId);
           this.startAll({
             keepLife: true,
             keepPoints: true,
