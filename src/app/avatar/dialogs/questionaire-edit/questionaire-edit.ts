@@ -49,7 +49,7 @@ const BACKGROUND_OPTIONS: SelectOptionString[] = [
 const LANGUAGE_OPTIONS: SelectOptionString[] = [
   { label: 'Español', value: 'es-ES' },
   { label: 'English', value: 'en-US' },
-  { label: 'Français', value: 'fr-FR' },
+  //{ label: 'Français', value: 'fr-FR' },
 ];
 
 const OBJECTS_OPTIONS: SelectOptionString[] = [

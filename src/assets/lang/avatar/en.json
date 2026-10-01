@@ -1,16 +1,19 @@
 {
-    "menu": {
-        "friends": "Friends",
-        "config": "Configuration",
-        "camera": "Camera",
-        "scenarios": "Scenarios",
-        "voice_lang": "Voice language",
-        "back_rooms": "Back to game rooms",
-        "end_call": "End call",
-        "editWorld": "Edit world",
-        "editScenario": "Edit scenario",
-        "editAvatar": "Edit character",
-        "editPerformance": "Configure performance",
-        "editModes": "Edit levels"
-    }
+  "menu": {
+    "friends": "Friends",
+    "config": "Configuration",
+    "camera": "Camera",
+    "scenarios": "Scenarios",
+    "voice_lang": "Voice language",
+    "back_rooms": "Back to game rooms",
+    "end_call": "End call",
+    "editWorld": "Edit world",
+    "editScenario": "Edit scenario",
+    "editAvatar": "Edit character",
+    "editPerformance": "Configure performance",
+    "editModes": "Edit levels"
+  },
+  "actions": {
+    "start": "Start"
+  }
 }

@@ -51,6 +51,7 @@ export class SideMenu implements OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.configSubs.unsubscribe();
   }
 
   close() {

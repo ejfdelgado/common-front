@@ -1,16 +1,19 @@
 {
-    "menu": {
-        "friends": "Amigos",
-        "config": "Configuración",
-        "camera": "Cámara",
-        "scenarios": "Escenarios",
-        "voice_lang": "Idioma de voz",
-        "back_rooms": "Regresar a salón de juegos",
-        "end_call": "Colgar llamada",
-        "editWorld": "Editar mundo",
-        "editScenario": "Editar escenario",
-        "editAvatar": "Editar personaje",
-        "editPerformance": "Configurar calidad",
-        "editModes": "Editar niveles"
-    }
+  "menu": {
+    "friends": "Amigos",
+    "config": "Configuración",
+    "camera": "Cámara",
+    "scenarios": "Escenarios",
+    "voice_lang": "Idioma de voz",
+    "back_rooms": "Regresar a salón de juegos",
+    "end_call": "Colgar llamada",
+    "editWorld": "Editar mundo",
+    "editScenario": "Editar escenario",
+    "editAvatar": "Editar personaje",
+    "editPerformance": "Configurar calidad",
+    "editModes": "Editar niveles"
+  },
+  "actions": {
+    "start": "Iniciar"
+  }
 }

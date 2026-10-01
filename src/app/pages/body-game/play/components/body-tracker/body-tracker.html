@@ -7,7 +7,7 @@
     <div class="start_container no_mouse">
         <button class="start_button" (click)="startAll()">
             <mat-icon>play_arrow</mat-icon>
-            <span>Start</span>
+            <span>{{ "actions.start" | translate : "avatar" : {"t": this.translateCounter} | async }}</span>
         </button>
     </div>
     }

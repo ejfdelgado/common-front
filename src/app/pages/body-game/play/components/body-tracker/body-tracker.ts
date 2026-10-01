@@ -28,11 +28,13 @@ import { ComponentP2P } from '@avatar/ComponentP2P';
 import { ConfigService } from '@services/config.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AvatarBodyEvent } from 'src/types/BodyTypes';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-body-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, AvatarContainer],
+  imports: [CommonModule, FormsModule, MatIconModule, AvatarContainer, TranslatePipe],
   templateUrl: './body-tracker.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./body-tracker.scss', '../../../../../../threejs_styles.scss'],
@@ -44,6 +46,8 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
 
   @Output() events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
   headUpLogData: any = {};
+  configSubs!: Subscription;
+  translateCounter: number = 0;
 
   constructor(
     public override cdr: ChangeDetectorRef,
@@ -119,6 +123,9 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
       }
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
+    this.configSubs = this.configSrv.events.subscribe(() => {
+      this.translateCounter++;
+    });
   }
 
   async ngAfterViewInit() {
@@ -129,6 +136,10 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     await Promise.all(promises);
     promise.done();
     this.cdr.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.configSubs.unsubscribe();
   }
 
   headUpLog(event: any) {
