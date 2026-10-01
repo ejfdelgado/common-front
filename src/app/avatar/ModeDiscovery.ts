@@ -30,12 +30,18 @@ export class ModeDiscovery {
     return JSON.parse(JSON.stringify(modesRegistry));
   }
 
+  static getPersistenceKey(): string {
+    const params = new URLSearchParams(location.hash.split('?')[1]);
+    const worldId = params.get('id');
+    return `MODES_RECORD_${worldId}`;
+  }
+
   static async readFromDatabase(): Promise<GameRegistryData> {
     if (updated) {
       return ModeDiscovery.getCopy();
     }
     try {
-      const base64 = localStorage.getItem('MODES_RECORD');
+      const base64 = localStorage.getItem(ModeDiscovery.getPersistenceKey());
       if (!base64) {
         throw 'Not found';
       }
@@ -51,7 +57,7 @@ export class ModeDiscovery {
   static async write() {
     const text = JSON.stringify(modesRegistry);
     const base64 = Base64.encode(text);
-    localStorage.setItem('MODES_RECORD', base64);
+    localStorage.setItem(ModeDiscovery.getPersistenceKey(), base64);
   }
 
   static async checkDiscoveredMode(modeId: string) {
