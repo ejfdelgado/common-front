@@ -227,7 +227,16 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     return this.room;
   }
 
-  async saveAndApplyWorld(data: WorldAvatarEdit) {
+  async saveAndApplyWorld(data: WorldAvatar) {
+    const tracker = this.getTrackerComponent();
+    if (sortify(tracker.world.config) != sortify(data.config)) {
+      tracker.world.config = data.config;
+      await this.writeStoredModel(tracker.world);
+      await tracker.reloadModeAndScenario();
+    }
+  }
+
+  async saveAndApplyWorldModes(data: WorldAvatarEdit) {
     const tracker = this.getTrackerComponent();
     if (
       sortify(tracker.world.modes) != sortify(data.modes) ||

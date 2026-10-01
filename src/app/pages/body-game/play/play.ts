@@ -173,7 +173,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
             this.emitToc();
             const response = await this.trackerComponent.editModes();
             if (response) {
-              this.saveAndApplyWorld(response);
+              this.saveAndApplyWorldModes(response);
             }
           },
         },
@@ -182,14 +182,14 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           translateFolder: 'avatar',
           name: 'loged_edit_world',
           isPlainIcon: true,
-          icon: '🔧',
+          icon: '🌍',
           visible: true,
           children: [],
           callback: async () => {
             this.emitToc();
-            const response = await this.trackerComponent.editMode();
+            const response = await this.trackerComponent.editWorld();
             if (response) {
-              await this.saveAndApplyMode(response);
+              await this.saveAndApplyWorld(response);
             }
           },
         },

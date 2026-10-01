@@ -5,14 +5,10 @@
 
         <mat-tab label="General">
             <form [formGroup]="generalForm" class="tab_content">
-                <mat-form-field class="full-width" appearance="outline">
-                    <mat-label>Espejo</mat-label>
-                    <mat-select formControlName="mirror">
-                        @for (option of mirrorOptions; track option.value) {
-                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+                <app-on-off-toggle [label]="'Peer to peer?'" [iconName]="'checkbox'"
+                    formControlName="useLivePeer"></app-on-off-toggle>
+                <app-on-off-toggle [label]="'Use voice?'" [iconName]="'checkbox'"
+                    formControlName="useVoice"></app-on-off-toggle>
             </form>
         </mat-tab>
 

@@ -7,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { GameMode, MIRROR_OPTIONS } from 'src/types/WorldAvatar';
+import { WorldAvatar } from 'src/types/WorldAvatar';
 import { Subscription } from 'rxjs';
+import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
 
 @Component({
-  selector: 'app-mode-edit',
+  selector: 'app-world-edit',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -22,22 +23,23 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
+    OnOffToggleComponent,
   ],
-  templateUrl: './mode-edit.html',
-  styleUrl: './mode-edit.scss',
+  templateUrl: './world-edit.html',
+  styleUrl: './world-edit.scss',
 })
-export class ModeEditComponent {
-  readonly mirrorOptions = MIRROR_OPTIONS;
+export class WorldEditComponent {
   private keydownSub: Subscription;
   generalForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<ModeEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: GameMode,
+    private dialogRef: MatDialogRef<WorldEditComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: WorldAvatar,
   ) {
     this.generalForm = this.fb.group({
-      mirror: [!!data.mirror],
+      useLivePeer: [!!data.config.useLivePeer],
+      useVoice: [!!data.config.useVoice],
     });
     this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
       if (event.key === 'Escape') {
@@ -53,7 +55,8 @@ export class ModeEditComponent {
       return;
     }
 
-    this.data.mirror = this.generalForm.value.mirror;
+    this.data.config.useLivePeer = this.generalForm.value.useLivePeer;
+    this.data.config.useVoice = this.generalForm.value.useVoice;
 
     this.dialogRef.close(this.data);
   }

@@ -12,7 +12,7 @@ import {
 } from '@mytypes/WorldAvatar';
 import { firstValueFrom } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { ModeEditComponent } from '../avatar/dialogs/mode-edit/mode-edit';
+import { WorldEditComponent } from '../avatar/dialogs/world-edit/world-edit';
 import { QuestionaireEditComponent } from '../avatar/dialogs/questionaire-edit/questionaire-edit';
 import { AvatarEditComponent } from '../avatar/dialogs/avatar-edit/avatar-edit';
 import { getJSONUrl } from '../tools/BucketPaths';
@@ -53,9 +53,9 @@ export class AvatarService {
     return firstValueFrom(dialogRef.afterClosed());
   }
 
-  async editMode(mode: GameMode): Promise<GameMode | null> {
+  async editWorld(mode: WorldAvatar): Promise<WorldAvatar | null> {
     // Open modal
-    const dialogRef = this.dialog.open(ModeEditComponent, {
+    const dialogRef = this.dialog.open(WorldEditComponent, {
       //width: '350px',
       disableClose: true,
       data: JSON.parse(JSON.stringify(mode)),

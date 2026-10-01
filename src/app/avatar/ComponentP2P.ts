@@ -170,9 +170,9 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     return this.p2pSrv.broadcastBinaryData(command);
   }
 
-  public async editMode() {
-    if (this.mode) {
-      return this.avatarSrv.editMode(this.mode);
+  public async editWorld() {
+    if (this.world) {
+      return this.avatarSrv.editWorld(this.world);
     }
     return null;
   }
