@@ -1,0 +1,10 @@
+{
+    "buttons": {
+        "cancel": "Cancel",
+        "accept": "Acept"
+    },
+    "cameraPicker": {
+        "title": "Select Camera",
+        "camera": "Camera"
+    }
+}

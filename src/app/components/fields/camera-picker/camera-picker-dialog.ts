@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CameraDataType } from '@mytypes/CameraTypes';
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 export interface CameraPickerDialogData {
   currentCamera: CameraDataType | null;
@@ -33,6 +34,7 @@ export interface CameraPickerDialogData {
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
+    TranslatePipe,
   ],
   templateUrl: './camera-picker-dialog.html',
   styleUrls: ['./camera-picker-dialog.scss', '../../../../assets/css/popups.css'],
