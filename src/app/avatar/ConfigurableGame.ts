@@ -103,9 +103,15 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
 
   async updateLogedMenuOptions() {
     const visible = !!this.user;
-    this.menuOptions
-      .find((a) => a.name && ['config'].indexOf(a.name) >= 0)
-      ?.children?.filter((a) => a.name && a.name.startsWith('loged_'))
+
+    const menusToAdjust = [];
+    menusToAdjust.push(...this.menuOptions);
+    const temp = this.menuOptions.find((a) => a.name && ['config'].indexOf(a.name) >= 0)?.children;
+    if (temp) {
+      menusToAdjust.push(...temp);
+    }
+    menusToAdjust
+      .filter((a) => a.name && a.name.startsWith('loged_'))
       .forEach((e) => {
         e.visible = visible && !!this.room;
       });

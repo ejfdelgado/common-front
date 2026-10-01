@@ -213,6 +213,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
       label: 'menu.back_rooms',
       translateFolder: 'avatar',
       icon: 'arrow_back',
+      name: 'loged_go_back',
       children: [],
       callback: () => {
         this.router.navigate([`action/rooms`], {
