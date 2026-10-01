@@ -7,14 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { GameMode } from 'src/types/WorldAvatar';
-import { SelectOptionBoolean } from 'src/types/fieldsTypes';
+import { GameMode, MIRROR_OPTIONS } from 'src/types/WorldAvatar';
 import { Subscription } from 'rxjs';
-
-const MIRROR_OPTIONS: SelectOptionBoolean[] = [
-  { label: 'Frente', value: true },
-  { label: 'Espalda', value: false },
-];
 
 @Component({
   selector: 'app-mode-edit',

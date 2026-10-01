@@ -106,6 +106,19 @@
     opacity: 0.65;
 }
 
+.fade-out {
+  animation: fadeOut 10s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .background_image {
     background-size: cover;
     background-repeat: no-repeat;

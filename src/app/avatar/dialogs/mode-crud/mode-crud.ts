@@ -7,7 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { GameController, GameControllerEnum, GameMode, WorldAvatar } from 'src/types/WorldAvatar';
+import {
+  GameController,
+  GameControllerEnum,
+  GameMode,
+  MIRROR_OPTIONS,
+  WorldAvatar,
+} from 'src/types/WorldAvatar';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs';
@@ -86,6 +92,7 @@ export class ModeCrudComponent {
   readonly typeOptions = TYPE_OPTIONS;
   private keydownSub: Subscription;
   generalForm: FormGroup;
+  readonly mirrorOptions = MIRROR_OPTIONS;
 
   constructor(
     private fb: FormBuilder,
@@ -117,6 +124,7 @@ export class ModeCrudComponent {
       name: [mode.value.menu.name ?? '', Validators.required],
       icon: [mode.value.menu.icon ?? '😀', Validators.required],
       type: [mode.value.type ?? '', Validators.required],
+      mirror: [!!mode.value.mirror, Validators.required],
     });
   }
 
@@ -184,6 +192,10 @@ export class ModeCrudComponent {
         const icon = modeGroup.get('icon')?.value;
         if (icon) {
           originalMode.menu.icon = icon;
+        }
+        const mirror = modeGroup.get('mirror')?.value;
+        if (typeof mirror == 'boolean') {
+          originalMode.mirror = mirror;
         }
         const type = modeGroup.get('type')?.value;
         if (type) {

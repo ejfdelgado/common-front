@@ -1,10 +1,16 @@
 import { AnimationSpecType, AvatarLocationState, Point3D } from './BodyTypes';
+import { SelectOptionBoolean } from './fieldsTypes';
 import { AssistantDataType } from './ragTypes';
 import { ABCDType } from './WorldAvatarLibrary';
 
 export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
 
 export const MAX_LIFE = 5;
+
+export const MIRROR_OPTIONS: SelectOptionBoolean[] = [
+  { label: 'Frente', value: true },
+  { label: 'Espalda', value: false },
+];
 
 export interface StartGameOptions {
   keepPoints: boolean;
