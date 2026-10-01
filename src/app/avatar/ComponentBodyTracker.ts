@@ -793,6 +793,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       const lang = this.getLang(this.scenario.language);
       if (lang) {
         this.defineLanguage(lang, false);
+        this.configSrv.setLanguage(lang.id.split('-')[0], false);
+        this.cdr.detectChanges();
       }
     }
     this.selectedItems.scenario = scenarioId;

@@ -1,115 +1,113 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { IndicatorService } from './indicator.service';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { CameraDataType, MicDataType } from '@mytypes/CameraTypes';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class ConfigService {
+  COOKIE_NAME = 'noglang';
+  COOKIE_NAME_LOG = 'loglevel';
+  COOKIE_NAME_CAMERA = 'local_camera';
+  COOKIE_NAME_MIC = 'local_mic';
+  keyPromises: any = {};
+  renderer: any;
+  public events: EventEmitter<string> = new EventEmitter();
 
-    COOKIE_NAME = 'noglang';
-    COOKIE_NAME_LOG = 'loglevel';
-    COOKIE_NAME_CAMERA = 'local_camera';
-    COOKIE_NAME_MIC = 'local_mic';
-    keyPromises: any = {};
-    renderer: any;
+  constructor(private activity: IndicatorService) {}
 
-    constructor(
-        private activity: IndicatorService,
-    ) {
+  setCamera(val: CameraDataType) {
+    this.setCookie(this.COOKIE_NAME_CAMERA, JSON.stringify(val), 1000);
+  }
 
+  getCamera(): CameraDataType | null {
+    try {
+      const old = this.getCookie(this.COOKIE_NAME_CAMERA) || 'null';
+      const parsed = JSON.parse(old);
+      return parsed;
+    } catch (err) {
+      return null;
     }
+  }
 
-    setCamera(val: CameraDataType) {
-        this.setCookie(this.COOKIE_NAME_CAMERA, JSON.stringify(val), 1000);
-    }
+  setMic(val: MicDataType) {
+    this.setCookie(this.COOKIE_NAME_MIC, JSON.stringify(val), 1000);
+  }
 
-    getCamera(): CameraDataType | null {
-        try {
-            const old = this.getCookie(this.COOKIE_NAME_CAMERA) || 'null';
-            const parsed = JSON.parse(old);
-            return parsed;
-        } catch (err) {
-            return null;
-        }
+  getMic(): MicDataType | null {
+    try {
+      const old = this.getCookie(this.COOKIE_NAME_MIC) || 'null';
+      const parsed = JSON.parse(old);
+      return parsed;
+    } catch (err) {
+      return null;
     }
+  }
 
-    setMic(val: MicDataType) {
-        this.setCookie(this.COOKIE_NAME_MIC, JSON.stringify(val), 1000);
-    }
+  setLogLevel(val: string) {
+    this.setCookie(this.COOKIE_NAME_LOG, val, 1000);
+    this.activity.start();
+    window.location.reload();
+  }
 
-    getMic(): MicDataType | null {
-        try {
-            const old = this.getCookie(this.COOKIE_NAME_MIC) || 'null';
-            const parsed = JSON.parse(old);
-            return parsed;
-        } catch (err) {
-            return null;
-        }
+  getLogLevel() {
+    //error warning info
+    let currentLogLevel = 'error';
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParamLanguage = urlParams.get('loglevel');
+    if (queryParamLanguage) {
+      currentLogLevel = queryParamLanguage;
+      this.setCookie(this.COOKIE_NAME_LOG, currentLogLevel, 1000);
+    } else {
+      currentLogLevel = this.getCookie(this.COOKIE_NAME_LOG) || 'error';
     }
+    return currentLogLevel;
+  }
 
-    setLogLevel(val: string) {
-        this.setCookie(this.COOKIE_NAME_LOG, val, 1000);
-        this.activity.start();
-        window.location.reload();
+  setLanguage(lang: string, reload: boolean = true) {
+    this.setCookie(this.COOKIE_NAME, lang, 1000);
+    if (reload) {
+      this.activity.start();
+      window.location.reload();
     }
+    // Notify via event
+    this.events.emit('changed');
+  }
 
-    getLogLevel() {
-        //error warning info
-        let currentLogLevel = 'error';
-        const urlParams = new URLSearchParams(window.location.search);
-        const queryParamLanguage = urlParams.get('loglevel');
-        if (queryParamLanguage) {
-            currentLogLevel = queryParamLanguage;
-            this.setCookie(this.COOKIE_NAME_LOG, currentLogLevel, 1000);
-        } else {
-            currentLogLevel = this.getCookie(this.COOKIE_NAME_LOG) || 'error';
-        }
-        return currentLogLevel;
-    }
+  setCookie(cname: string, cvalue: string, exdays: number = 365) {
+    const d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    let expires = 'expires=' + d.toUTCString();
+    document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+  }
 
-    setLanguage(lang: string, reload: boolean = true) {
-        this.setCookie(this.COOKIE_NAME, lang, 1000);
-        if (reload) {
-            this.activity.start();
-            window.location.reload();
-        }
+  getCookie(cname: string) {
+    let name = cname + '=';
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
     }
+    return '';
+  }
 
-    setCookie(cname: string, cvalue: string, exdays: number = 365) {
-        const d = new Date();
-        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-        let expires = 'expires=' + d.toUTCString();
-        document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+  getCurrentLanguage() {
+    let currentLang = 'en';
+    const urlParams = getUrlQueryParams();
+    const queryParamLanguage = urlParams.get('l');
+    if (queryParamLanguage) {
+      currentLang = queryParamLanguage;
+      this.setCookie(this.COOKIE_NAME, currentLang, 1000);
+    } else {
+      currentLang = this.getCookie(this.COOKIE_NAME) || 'en';
     }
-
-    getCookie(cname: string) {
-        let name = cname + '=';
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return '';
-    }
-
-    getCurrentLanguage() {
-        let currentLang = 'en';
-        const urlParams = getUrlQueryParams();
-        const queryParamLanguage = urlParams.get('l');
-        if (queryParamLanguage) {
-            currentLang = queryParamLanguage;
-            this.setCookie(this.COOKIE_NAME, currentLang, 1000);
-        } else {
-            currentLang = this.getCookie(this.COOKIE_NAME) || 'en';
-        }
-        return currentLang;
-    }
+    return currentLang;
+  }
 }

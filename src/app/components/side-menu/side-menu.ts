@@ -4,34 +4,41 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@pipes/translate.pipe';
 import { SideMenuService } from '@services/side-menu.service';
 import { Subscription } from 'rxjs';
+import { ConfigService } from 'src/app/services/config.service';
 import { MenuConfigType, MenuOptionType } from 'types/StatusBar';
 
 @Component({
   selector: 'app-side-menu',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    TranslatePipe,
-  ],
+  imports: [CommonModule, MatIconModule, TranslatePipe],
   templateUrl: './side-menu.html',
   styleUrl: './side-menu.scss',
 })
 export class SideMenu implements OnDestroy, AfterViewInit {
-
-  @Input() logoImage: string = "./assets/img/logo.png";
+  @Input() logoImage: string = './assets/img/logo.png';
   @Input() options: MenuOptionType[] = [];
   @Input() config: MenuConfigType = {};
-  @Input() fontSize: string = "small";
+  @Input() fontSize: string = 'small';
 
   opened: boolean = true;
   subscription!: Subscription;
+  configSubs!: Subscription;
 
   constructor(
     public sideMenuSrv: SideMenuService,
     public cdr: ChangeDetectorRef,
+    public configSrv: ConfigService,
   ) {
     this.opened = sideMenuSrv.isOpened();
+    this.configSubs = configSrv.events.subscribe(() => {
+      const temp = this.options;
+      this.options = [];
+      this.cdr.detectChanges();
+      requestAnimationFrame(() => {
+        this.options = temp;
+        this.cdr.detectChanges();
+      });
+    });
     this.subscription = sideMenuSrv.getState().subscribe((val) => {
       this.opened = val;
       cdr.detectChanges();

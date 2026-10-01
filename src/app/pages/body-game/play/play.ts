@@ -18,7 +18,6 @@ import { BodyTracker } from './components/body-tracker/body-tracker';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SharedWith } from 'app/pages/admin/users/shared-with/shared-with';
-import { getUrlQueryParams } from '@tools/UrlUtil';
 import { FirestoreService } from '@services/firestore.service';
 import { SideMenuService } from '@services/side-menu.service';
 import { Router } from '@angular/router';
@@ -28,8 +27,6 @@ import { ComponentP2P } from '@avatar/ComponentP2P';
 import { ModuloSonido } from '@services/sonido.service';
 import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
-import { AvatarStoredDataType, WorldAvatar } from 'src/types/WorldAvatar';
-import { getBucketPath } from 'src/app/tools/BucketPaths';
 import { FileService } from 'src/app/services/file.srv';
 
 const MODEL_NAME_PARENT = 'room-public';
