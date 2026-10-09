@@ -184,6 +184,20 @@
           }
         }
       }
+    },
+    "world": {
+      "title": "Editar mundo",
+      "tabs": {
+        "general": {
+          "title": "General",
+          "peer2peer": {
+            "label": "Multijugador?"
+          },
+          "use_voice": {
+            "label": "Detectar voz?"
+          }
+        }
+      }
     }
   }
 }

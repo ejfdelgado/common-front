@@ -10,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { WorldAvatar } from 'src/types/WorldAvatar';
 import { Subscription } from 'rxjs';
 import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-world-edit',
@@ -24,6 +26,8 @@ import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on
     MatTabsModule,
     MatSelectModule,
     OnOffToggleComponent,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './world-edit.html',
   styleUrl: './world-edit.scss',
