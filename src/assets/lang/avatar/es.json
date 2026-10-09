@@ -46,6 +46,7 @@
       "title": "Editar escenario",
       "tabs": {
         "config": {
+          "title": "Configuración",
           "lang": {
             "label": "Idioma"
           },
@@ -62,20 +63,96 @@
             "label": "Mensaje de reintento"
           },
           "win": {
-            "label": "Mensaje de felicitación"
+            "label": "Mensaje de éxito"
           }
         },
         "questions": {
-          "title": "Preguntas"
+          "title": "Preguntas",
+          "search": {
+            "label": "Buscar pregunta",
+            "placeholder": "Buscar por enunciado, opción o respuesta...",
+            "clear": "Borrar consulta",
+            "empty": "No se encontraron preguntas con la consulta."
+          },
+          "question": {
+            "prefix": "Pregunta",
+            "prefix_ch": "Opciónes",
+            "buttons": {
+              "delete": {
+                "tooltip": "Borrar pregunta"
+              },
+              "add": {
+                "tooltip": "Agregar pregunta"
+              },
+              "delete_ch": {
+                "tooltip": "Borrar opción"
+              },
+              "add_ch": {
+                "tooltip": "Agregar opción"
+              }
+            },
+            "statement": {
+              "label": "Enunciado"
+            },
+            "choice": {
+              "label": "Opción"
+            },
+            "answer": {
+              "label": "Respuesta"
+            }
+          }
         },
         "background": {
-          "title": "Fondo"
+          "title": "Fondo",
+          "type": {
+            "label": "Tipo de fondo",
+            "ch_image": "Imagen",
+            "ch_color": "Color"
+          },
+          "color": {
+            "label": "Color de fondo"
+          }
         },
         "sounds": {
-          "title": "Efectos de sonido"
+          "title": "Efectos de sonido",
+          "intro": {
+            "label": "Sonido de introducción"
+          },
+          "background": {
+            "label": "Sonido de fondo repetible"
+          },
+          "hit": {
+            "label": "Sonido de acierto"
+          },
+          "miss": {
+            "label": "Sonido de desacierto"
+          },
+          "success": {
+            "label": "Sonido de éxito"
+          }
         },
         "objects": {
-          "title": "Objetos de selección"
+          "title": "Objetos de selección",
+          "ch_balls": "Balones",
+          "ch_fruits": "Frutas",
+          "x_shift": {
+            "label": "Desplazamiento horizontal"
+          },
+          "y_shift": {
+            "label": "Desplazamiento vertical"
+          },
+          "spin": {
+            "label": "Rotar?"
+          },
+          "min_spin": {
+            "label": "Mínima rotación"
+          },
+          "extra_spin": {
+            "label": "Rotación adicional"
+          },
+          "shuffle": {
+            "label": "Orden aleatorio?"
+          }
         }
       }
     }
