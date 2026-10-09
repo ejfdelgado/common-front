@@ -30,6 +30,17 @@
           }
         }
       }
+    },
+    "avatar": {
+      "title": "Edit character",
+      "tabs": {
+        "general": {
+          "title": "General",
+          "character": {
+            "label": "Character"
+          }
+        }
+      }
     }
   }
 }

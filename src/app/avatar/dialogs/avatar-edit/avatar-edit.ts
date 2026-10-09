@@ -10,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { AvatarModel } from 'src/types/WorldAvatar';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-avatar-edit',
@@ -23,6 +25,8 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './avatar-edit.html',
   styleUrl: './avatar-edit.scss',

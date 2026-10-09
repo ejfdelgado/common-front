@@ -44,7 +44,7 @@ export class TranslateService {
    * @param args Can be a string, referencing the folder name in assets/lang/FOLDER/en.json or a JSON object {es: {}, en: {}}
    * @returns 
    */
-  async translate(key: string, args: unknown[]) {
+  async translate(key: string, args: unknown[]): Promise<string> {
     const def: any = key;
     if (args.length > 0) {
       let valor: any = {};

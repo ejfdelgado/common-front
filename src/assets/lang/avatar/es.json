@@ -30,6 +30,17 @@
           }
         }
       }
+    },
+    "avatar": {
+      "title": "Editar personaje",
+      "tabs": {
+        "general": {
+          "title": "General",
+          "character": {
+            "label": "Personaje"
+          }
+        }
+      }
     }
   }
 }
