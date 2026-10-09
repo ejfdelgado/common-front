@@ -78,12 +78,13 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       model = payload.model;
     }
     const formConfig: FormDataType = {
-      title: model ? 'Update' : 'Create',
+      title: model ? 'form.room_upsert.update' : 'form.room_upsert.create',
       autoAuthor: true,
+      languageFolder: "avatar",
       modelName: MODEL_NAME,
       searchFields: ['title', 'description'],
       fields: [
-        { label: 'Title', type: 'text', key: 'title', required: true },
+        { label: 'form.room_upsert.title.label', type: 'text', key: 'title', required: true },
         {
           label: 'Imagen',
           type: 'image',
@@ -95,13 +96,13 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
           },
         },
         {
-          label: 'Description',
+          label: 'form.room_upsert.description.label',
           type: 'contenteditable',
           key: 'description',
           contenteditable: { minHeight: '10em', maxHeight: '20em' },
         },
         {
-          label: 'QR Emoji',
+          label: 'form.room_upsert.emoji_qr.label',
           type: 'emoji',
           key: 'emoji',
           required: true,

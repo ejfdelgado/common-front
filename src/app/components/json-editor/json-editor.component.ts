@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common';
 })
 export class JsonEditorComponent implements ControlValueAccessor {
 
-    @Input() placeholder = '';
+    @Input() placeholder: string | null = '';
     @Input() model: any = {};
 
     value: any = {};

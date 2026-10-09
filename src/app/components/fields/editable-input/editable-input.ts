@@ -39,7 +39,7 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   @ViewChild('editable', { static: true }) editable!: ElementRef<HTMLDivElement>;
   scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
-  @Input() placeholder = '';
+  @Input() placeholder: string | null = '';
   @Input() ariaLabel = 'Texto';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;

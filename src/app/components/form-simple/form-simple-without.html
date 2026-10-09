@@ -3,17 +3,30 @@
         @for (field of fields; track field.key) {
         @if (field.type=='text') {
         <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            @if (languageFolder) {
+            <mat-label>{{ field.label | translate : languageFolder | async }} ({{ charCount(formControlMap[field.key])
+                }})</mat-label>
+            } @else {
             <mat-label>{{ field.label }} ({{ charCount(formControlMap[field.key]) }})</mat-label>
+            }
             <input matInput [formControl]="formControlMap[field.key]" />
         </mat-form-field>
         } @else if (field.type=='number') {
         <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+            @if (languageFolder) {
+            <mat-label>{{ field.label | translate : languageFolder | async }}</mat-label>
+            } @else {
             <mat-label>{{ field.label }}</mat-label>
+            }
             <input matInput type="number" [formControl]="formControlMap[field.key]" />
         </mat-form-field>
         } @else if (field.type=='select') {
         <mat-form-field appearance="outline">
+            @if (languageFolder) {
+            <mat-label>{{ field.label | translate : languageFolder | async }}</mat-label>
+            } @else {
             <mat-label>{{ field.label }}</mat-label>
+            }
             <mat-select [formControl]="formControlMap[field.key]">
                 <mat-option *ngFor="let option of getSelect(field).options" [value]="option.val">
                     {{ option.txt }}
@@ -22,16 +35,21 @@
         </mat-form-field>
         } @else if (field.type=='textarea') {
         <mat-form-field appearance="outline" class="w-full">
+            @if (languageFolder) {
+            <mat-label>{{ field.label | translate : languageFolder | async }} ({{ charCount(formControlMap[field.key])
+                }})</mat-label>
+            } @else {
             <mat-label>{{ field.label }} ({{ charCount(formControlMap[field.key]) }})</mat-label>
+            }
             <textarea matInput rows="4" [formControl]="formControlMap[field.key]"></textarea>
         </mat-form-field>
         } @else if (field.type=='contenteditable') {
-        <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]" [placeholder]="field.label"
-            [maxHeight]="getContentEditable(field).maxHeight" [label]="field.label"
+        <app-editable-input [discrete]="false" [formControl]="formControlMap[field.key]"[placeholder]="field.label | translate : languageFolder | async"
+            [maxHeight]="getContentEditable(field).maxHeight" [label]="field.label | translate : languageFolder | async"
             [configs]="getContentEditable(field).configs"
             [minHeight]="getContentEditable(field).minHeight"></app-editable-input>
         } @else if (field.type=='toggle') {
-        <app-on-off-toggle [label]="field.label" [iconName]="getToggle(field).iconName"
+        <app-on-off-toggle [label]="field.label | translate : languageFolder | async" [iconName]="getToggle(field).iconName"
             [formControl]="formControlMap[field.key]"></app-on-off-toggle>
         } @else if (field.type=='emoji') {
         <app-emoji-input [formControl]="formControlMap[field.key]" [label]="field.label"
@@ -42,10 +60,10 @@
         <app-image-field [formControl]="formControlMap[field.key]"
             [config]="castImageType(field).image"></app-image-field>
         } @else if (field.type=='phone') {
-        <app-phone-input [formControl]="formControlMap[field.key]" [label]="field.label"
+        <app-phone-input [formControl]="formControlMap[field.key]" [label]="field.label | translate : languageFolder | async"
             [isRequired]="field.required"></app-phone-input>
         } @else if (field.type=='chip') {
-        <app-chip-select [formControl]="formControlMap[field.key]" [label]="field.label"
+        <app-chip-select [formControl]="formControlMap[field.key]" [label]="field.label | translate : languageFolder | async"
             [config]="castChipType(field).chip"></app-chip-select>
         } @else if (field.type=='image-gallery') {
         <app-image-gallery [formControl]="formControlMap[field.key]"
@@ -55,14 +73,14 @@
         } @else if (field.type=='mic-picker') {
         <app-mic-picker [formControl]="formControlMap[field.key]"></app-mic-picker>
         } @else if (field.type=='slider') {
-        <app-slider [label]="field.label" [formControl]="formControlMap[field.key]"
+        <app-slider [label]="field.label | translate : languageFolder | async" [formControl]="formControlMap[field.key]"
             [config]="castSliderType(field).slider"></app-slider>
         } @else if (field.type=='md') {
-        <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label"
-            [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight" [label]="field.label"
+        <app-md-input [formControl]="formControlMap[field.key]" [placeholder]="field.label | translate : languageFolder | async"
+            [maxHeight]="getMD(field).maxHeight" [minHeight]="getMD(field).minHeight" [label]="field.label | translate : languageFolder | async"
             [saveName]="getMD(field).saveName"></app-md-input>
         } @else if (field.type=='json_raw') {
-        <json-editor [formControl]="formControlMap[field.key]" [placeholder]="field.label"></json-editor>
+        <json-editor [formControl]="formControlMap[field.key]" [placeholder]="field.label | translate : languageFolder | async"></json-editor>
         }
         }
     </div>

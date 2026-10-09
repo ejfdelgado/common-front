@@ -214,5 +214,20 @@
       "title": "Ok",
       "txt": "Listo!"
     }
+  },
+  "form": {
+    "room_upsert": {
+      "update": "Actualizar juego",
+      "create": "Crear juego",
+      "title": {
+        "label": "Título"
+      },
+      "description": {
+        "label": "Descripción"
+      },
+      "emoji_qr": {
+        "label": "Emoji QR"
+      }
+    }
   }
 }

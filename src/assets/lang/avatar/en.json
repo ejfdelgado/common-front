@@ -214,5 +214,20 @@
       "title": "Ok",
       "txt": "Done!"
     }
+  },
+  "form": {
+    "room_upsert": {
+      "update": "Update room",
+      "create": "Create room",
+      "title": {
+        "label": "Title"
+      },
+      "description": {
+        "label": "Description"
+      },
+      "emoji_qr": {
+        "label": "QR Emoji"
+      }
+    }
   }
 }

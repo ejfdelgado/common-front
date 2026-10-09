@@ -35,7 +35,7 @@ export type ChipSelectDataType = string[];
   styleUrls: ['./chip-select.component.scss']
 })
 export class ChipSelectComponent extends CommonComponent implements ControlValueAccessor {
-  @Input() label = 'Select Items';
+  @Input() label: string | null = 'Select Items';
   @Input() config!: ChipDetailDataType;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];

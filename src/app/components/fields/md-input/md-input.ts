@@ -23,12 +23,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { debounceTime, Subject, Subscription, tap } from 'rxjs';
 import { FullscreenService } from '@services/fullscreen.service';
 
-export type EditModeType = "edit" | "preview" | "both";
+export type EditModeType = 'edit' | 'preview' | 'both';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
     return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
-    return "";
+    return '';
   },
   code({ text, lang }: any) {
     const body = text.replace(/\n/g, '<br>');
@@ -40,7 +40,7 @@ const renderer: any = {
   },
   paragraph({ text }: any) {
     return `<p>${text.replace(/\n/g, '<br>')}</p>\n`;
-  }
+  },
 };
 
 marked.use({ renderer });
@@ -55,10 +55,7 @@ marked.use({ renderer });
       multi: true,
     },
   ],
-  imports: [
-    CommonModule,
-    MatIconModule,
-  ],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './md-input.html',
   styleUrl: './md-input.scss',
 })
@@ -68,15 +65,15 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
 
   scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer');
 
-  @Input() placeholder = '';
+  @Input() placeholder: string | null = '';
   @Input() ariaLabel = 'Texto';
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
   @Input() minHeight?: string | null = null;
   @Input() maxHeight?: string | null = null;
-  @Input() editMode: EditModeType = "preview";
-  @Input() saveName?: string | null = "download.pdf";
-  @Input() label?: string;
+  @Input() editMode: EditModeType = 'preview';
+  @Input() saveName?: string | null = 'download.pdf';
+  @Input() label?: string | null;
 
   @Output() enter = new EventEmitter<string>();
 
@@ -86,7 +83,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
   focused = false;
   private composing = false;
   savedScroll: number = 0;
-  preview: string = "";
+  preview: string = '';
   previewSubject: Subject<void> = new Subject();
   previewSubscription!: Subscription;
 
@@ -99,9 +96,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
   ) {
     super(sanitizer, fullScreenSrv);
 
-    this.previewSubscription = this.previewSubject.pipe(
-      debounceTime(300),
-    ).subscribe(() => {
+    this.previewSubscription = this.previewSubject.pipe(debounceTime(300)).subscribe(() => {
       this.computePreviewRaw();
     });
   }
@@ -234,9 +229,9 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
     this.editable.nativeElement.focus();
 
     if (command == 'bold') {
-      this.wrapSelectionWith("**");
+      this.wrapSelectionWith('**');
     } else if (command == 'italic') {
-      this.wrapSelectionWith("*");
+      this.wrapSelectionWith('*');
     }
     this.onInput();
   }
@@ -278,10 +273,10 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
     const dialogRef = this.dialog.open(EmojiPickerComponent, {
       width: '350px',
       autoFocus: false,
-      panelClass: 'custom-emoji-picker'
+      panelClass: 'custom-emoji-picker',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.editable.nativeElement.focus();
 
@@ -333,8 +328,8 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
     //const element = this.printedVersion.nativeElement;
     const element = document.createElement('div');
     element.innerHTML = html;
-    element.className = "preview_scroll_content printed";
-    await this.pdfSrv.exportHtmlToPdf(element, this.saveName ? this.saveName : "download.pdf");
+    element.className = 'preview_scroll_content printed';
+    await this.pdfSrv.exportHtmlToPdf(element, this.saveName ? this.saveName : 'download.pdf');
   }
 
   charCount(): number {

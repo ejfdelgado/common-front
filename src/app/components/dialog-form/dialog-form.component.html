@@ -1,10 +1,16 @@
+@if (!config.languageFolder) {
 <h2 mat-dialog-title>{{ config.title }}</h2>
+} @else {
+<h2 mat-dialog-title>{{ config.title | translate : config.languageFolder | async }}</h2>
+}
 <mat-dialog-content>
-    <app-form-simple-with #inner_form [fields]="config.fields" [model]="config.model"></app-form-simple-with>
+    <app-form-simple-with #inner_form [languageFolder]="config.languageFolder" [fields]="config.fields"
+        [model]="config.model"></app-form-simple-with>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="close()"><mat-icon>close</mat-icon>Cancelar</button>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>{{ "buttons.cancel" | translate : "general" | async
+        }}</button>
     <button mat-flat-button color="primary" (click)="save()" [disabled]="isInvalid()">
-        <mat-icon>check</mat-icon>Guardar
+        <mat-icon>check</mat-icon>{{ "buttons.save" | translate : "general" | async }}
     </button>
 </mat-dialog-actions>

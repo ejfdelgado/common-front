@@ -30,12 +30,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MDInput } from '@components/fields/md-input/md-input';
 import { Subscription } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { JsonEditorComponent } from '@components/json-editor/json-editor.component';
 import { CameraPicker } from '@components/fields/camera-picker/camera-picker';
 import { MicPicker } from '@components/fields/mic-picker/mic-picker';
 import { SliderComponent } from '@components/fields/slider/slider';
 import { EmojiInputComponent } from '../fields/emoji-input/emoji-input';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 @Component({
   selector: 'app-form-simple-with',
@@ -62,12 +63,15 @@ import { EmojiInputComponent } from '../fields/emoji-input/emoji-input';
     MicPicker,
     SliderComponent,
     EmojiInputComponent,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './form-simple-with.html',
   styleUrl: './form-simple-with.scss',
 })
 export class FormSimpleWith extends FormSimple implements OnInit, OnDestroy {
   @Input() fields!: AllFieldsDataType[];
+  @Input() languageFolder?: string;
   @Input()
   get model(): FlatJsonDataType {
     return this._model;
