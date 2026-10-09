@@ -1,189 +1,184 @@
-import { DropDownOptionDataType } from "./ragTypes";
-
+import { DropDownOptionDataType } from './ragTypes';
 
 export interface TemplateDetailDataType {
-    template: string;
-    secret?: boolean;
-    pass?: string;
+  template: string;
+  secret?: boolean;
+  pass?: string;
 }
 
 export interface FieldDataType {
-    type:
-    "chip" |
-    "text" |
-    "number" |
-    "select" |
-    "textarea" |
-    "contenteditable" |
-    "md" |
-    "toggle" |
-    "rating" |
-    "image" |
-    "json" |
-    "json_raw" |
-    "phone" |
-    "image-gallery" |
-    "camera-picker" |
-    "mic-picker" |
-    "slider" | 
-    "emoji"
-    ;
-    label: string;
-    key: string;
-    required?: boolean;
-};
+  type:
+    | 'chip'
+    | 'text'
+    | 'number'
+    | 'select'
+    | 'textarea'
+    | 'contenteditable'
+    | 'md'
+    | 'toggle'
+    | 'rating'
+    | 'image'
+    | 'json'
+    | 'json_raw'
+    | 'phone'
+    | 'image-gallery'
+    | 'camera-picker'
+    | 'mic-picker'
+    | 'slider'
+    | 'emoji';
+  label: string;
+  key: string;
+  required?: boolean;
+}
 
 // Image
 
 export interface FieldImageDataType extends FieldDataType {
-    image: ImageDetailDataType;
+  image: ImageDetailDataType;
 }
 
 export interface ImageDetailDataType extends TemplateDetailDataType {
-    withThumbnail?: boolean;
-    maxSizePixels?: number;
-    thumbnailMaxSizePixels?: number;
-    squareMaxSizePixels?: number;
+  withThumbnail?: boolean;
+  maxSizePixels?: number;
+  thumbnailMaxSizePixels?: number;
+  squareMaxSizePixels?: number;
 }
 
 export interface AudioDetailDataType extends TemplateDetailDataType {
-    maxMb: number;
+  maxMb: number;
 }
 
 // Chip
 
 export interface ChipDataType extends FieldDataType {
-    chip: ChipDetailDataType;
+  chip: ChipDetailDataType;
 }
 
 export interface ChipDetailDataType {
-    stringOptions: string[];
+  stringOptions: string[];
 }
 
 // Content editable
 
 export interface ContenteditableDataType extends FieldDataType {
-    contenteditable: ContentEditableDetailDataType;
+  contenteditable: ContentEditableDetailDataType;
 }
 
 export interface ContentEditableDetailConfigDataType {
-    useBold: boolean;
-    useItalic: boolean;
-    useUnderline: boolean;
-    useEmoji: boolean;
+  useBold: boolean;
+  useItalic: boolean;
+  useUnderline: boolean;
+  useEmoji: boolean;
 }
 
 export interface ContentEditableDetailDataType {
-    maxHeight?: string;
-    minHeight?: string;
-    configs?: ContentEditableDetailConfigDataType;
+  maxHeight?: string;
+  minHeight?: string;
+  configs?: ContentEditableDetailConfigDataType;
 }
 
 // MD
 
 export interface MDDataType extends FieldDataType {
-    md: MDDetailDataType;
+  md: MDDetailDataType;
 }
 
 export interface MDDetailDataType {
-    maxHeight?: string;
-    minHeight?: string;
-    saveName?: string;
+  maxHeight?: string;
+  minHeight?: string;
+  saveName?: string;
 }
 
 // Image Gallery
 
 export interface ImageGalleryDataType extends FieldDataType {
-    gallery: ImageGalleryConfigDataType;
+  gallery: ImageGalleryConfigDataType;
 }
 
-export interface ImageGalleryConfigDataType extends ImageDetailDataType {
-
-}
+export interface ImageGalleryConfigDataType extends ImageDetailDataType {}
 
 export type ImageGalleryType = {
-    id: string,
-    image: string,
-    description: string,
+  id: string;
+  image: string;
+  description: string;
 };
 
 // JSON
 
 export interface FieldJSONDataType extends FieldDataType {
-    json: JSONDetailDataType;
+  json: JSONDetailDataType;
 }
 
-export interface FieldJSONRawDataType extends FieldDataType {
-
-}
+export interface FieldJSONRawDataType extends FieldDataType {}
 
 // Toggle
 
 export interface FieldToggleDataType extends FieldDataType {
-    toggle: FieldToggleDetailDataType;
+  toggle: FieldToggleDetailDataType;
 }
 
 export interface FieldToggleDetailDataType {
-    iconName: string;
+  iconName: string;
 }
 
 // Select
 
 export interface FieldSelectDataType extends FieldDataType {
-    select: FieldSelectDetailDataType;
+  select: FieldSelectDetailDataType;
 }
 
 export interface FieldSelectDetailDataType {
-    options: DropDownOptionDataType[]
+  options: DropDownOptionDataType[];
 }
 
 // Finish
 
 export type AllFieldsDataType =
-    FieldDataType |
-    FieldImageDataType |
-    FieldJSONDataType |
-    FieldJSONRawDataType |
-    ChipDataType |
-    ContenteditableDataType |
-    MDDataType |
-    ImageGalleryDataType |
-    FieldToggleDataType |
-    FieldSelectDataType |
-    SliderDataType
-    ;
+  | FieldDataType
+  | FieldImageDataType
+  | FieldJSONDataType
+  | FieldJSONRawDataType
+  | ChipDataType
+  | ContenteditableDataType
+  | MDDataType
+  | ImageGalleryDataType
+  | FieldToggleDataType
+  | FieldSelectDataType
+  | SliderDataType;
 
 export interface JSONDetailDataType extends TemplateDetailDataType {
-    fields: (
-        FieldDataType |
-        FieldImageDataType |
-        FieldJSONDataType |
-        FieldJSONRawDataType |
-        ChipDataType |
-        ContenteditableDataType |
-        MDDataType |
-        ImageGalleryDataType |
-        FieldToggleDataType |
-        FieldSelectDataType |
-        SliderDataType
-    )[],
+  fields: (
+    | FieldDataType
+    | FieldImageDataType
+    | FieldJSONDataType
+    | FieldJSONRawDataType
+    | ChipDataType
+    | ContenteditableDataType
+    | MDDataType
+    | ImageGalleryDataType
+    | FieldToggleDataType
+    | FieldSelectDataType
+    | SliderDataType
+  )[];
 }
 
 export interface SliderDetailDataType {
-    min: number;
-    max: number;
+  min: number;
+  max: number;
 }
 
 export interface SliderDataType extends FieldDataType {
-    slider: SliderDetailDataType;
+  slider: SliderDetailDataType;
 }
 
 export interface SelectOptionBoolean {
-    label: string;
-    value: boolean;
+  label: string;
+  value: boolean;
 }
 
 export interface SelectOptionString {
-    label: string;
-    value: string;
+  label: string;
+  // Used for translation
+  label_key?: string;
+  value: string;
 }

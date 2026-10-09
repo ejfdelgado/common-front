@@ -117,7 +117,9 @@
           "title": "Sound effects"
         },
         "objects": {
-          "title": "Selection objects"
+          "title": "Selection objects",
+          "ch_balls": "Balls",
+          "ch_fruits": "Fruits"
         }
       }
     }

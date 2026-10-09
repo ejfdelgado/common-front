@@ -150,8 +150,7 @@
                         }}</mat-label>
                     <mat-select formControlName="type">
                         @for (option of backgroundOptions; track option.value) {
-                        <mat-option [value]="option.value">{{ ("popup.questionaire.tabs.background.type." +
-                            option.label) | translate : "avatar" | async }}</mat-option>
+                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>

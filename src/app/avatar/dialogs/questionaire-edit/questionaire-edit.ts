@@ -36,6 +36,8 @@ import { ModalService } from 'src/app/services/modal.service';
 import { Subscription } from 'rxjs';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AsyncPipe } from '@angular/common';
+import { TranslateService } from 'src/app/services/translate.service';
+import { translateSelectOptions } from 'src/app/tools/SelectOptionUtils';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -44,8 +46,8 @@ const DEFAULT_BACKGROUND_COLOR: ColorType = { r: 255, g: 255, b: 255 };
 const DEFAULT_BACKGROUND_IMAGE: string = '/avatar_assets/backgrounds/default.jpeg';
 
 const BACKGROUND_OPTIONS: SelectOptionString[] = [
-  { label: 'ch_image', value: 'image' },
-  { label: 'ch_color', value: 'color' },
+  { label_key: 'ch_image', label: '', value: 'image' },
+  { label_key: 'ch_color', label: '', value: 'color' },
 ];
 
 const LANGUAGE_OPTIONS: SelectOptionString[] = [
@@ -56,8 +58,8 @@ const LANGUAGE_OPTIONS: SelectOptionString[] = [
 
 const OBJECTS_OPTIONS: SelectOptionString[] = [
   //{ label: 'Cubo', value: 'cube' },
-  { label: 'Balón', value: 'futbol' },
-  { label: 'Frutas', value: 'fruits' },
+  { label_key: 'ch_balls', label:"", value: 'futbol' },
+  { label_key: 'ch_fruits', label:"", value: 'fruits' },
   //{ label: 'Minecraft', value: 'minecraft' },
 ];
 
@@ -125,6 +127,7 @@ export class QuestionaireEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: GameScenario,
     public modalSrv: ModalService,
     public cdr: ChangeDetectorRef,
+    public translateSrv: TranslateService,
   ) {
     this.stepsConfigForm = this.fb.group({
       language: [data.language ?? 'es-ES'],
@@ -163,6 +166,20 @@ export class QuestionaireEditComponent {
         this.cancel();
       }
     });
+    translateSelectOptions(
+      'avatar',
+      this.backgroundOptions,
+      this.cdr,
+      this.translateSrv,
+      'popup.questionaire.tabs.background.type.',
+    );
+    translateSelectOptions(
+      'avatar',
+      this.objectsOptions,
+      this.cdr,
+      this.translateSrv,
+      'popup.questionaire.tabs.objects.',
+    );
   }
 
   get steps(): FormArray {
