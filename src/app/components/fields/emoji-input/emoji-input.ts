@@ -53,7 +53,7 @@ import { PhoneInputComponent } from '../phone-input/phone-input';
 export class EmojiInputComponent extends PhoneInputComponent
   implements ControlValueAccessor, Validator {
 
-  @Input() override label = 'Emoji';
+  @Input() override label: string | null = 'Emoji';
 
   emoji: string = '';
 

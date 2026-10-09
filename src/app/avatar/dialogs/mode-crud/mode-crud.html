@@ -38,12 +38,16 @@
                         </mat-card-header>
                         <mat-card-content>
                             <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
-                                <mat-label>Nombre</mat-label>
+                                <mat-label>{{ "popup.modes.tabs.general.name.label" | translate : "avatar" | async
+                                    }}</mat-label>
                                 <input matInput formControlName="name" />
                             </mat-form-field>
-                            <app-emoji-input formControlName="icon" label="Icon" [isRequired]="true"></app-emoji-input>
+                            <app-emoji-input formControlName="icon"
+                                [label]="'popup.modes.tabs.general.icon.label' | translate : 'avatar' | async"
+                                [isRequired]="true"></app-emoji-input>
                             <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Tipo</mat-label>
+                                <mat-label>{{ "popup.modes.tabs.general.types.label" | translate : "avatar" | async
+                                    }}</mat-label>
                                 <mat-select formControlName="type">
                                     @for (option of typeOptions; track option.value) {
                                     <mat-option [value]="option.value">{{ option.label }}</mat-option>
@@ -51,7 +55,8 @@
                                 </mat-select>
                             </mat-form-field>
                             <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Espejo</mat-label>
+                                <mat-label>{{ "popup.modes.tabs.general.avatar_side.label" | translate : "avatar" | async
+                                    }}</mat-label>
                                 <mat-select formControlName="mirror">
                                     @for (option of mirrorOptions; track option.value) {
                                     <mat-option [value]="option.value">{{ option.label }}</mat-option>

@@ -54,7 +54,7 @@ export interface PhoneValue {
 export class PhoneInputComponent extends CommonComponent
   implements ControlValueAccessor, Validator {
 
-  @Input() label = 'Phone number';
+  @Input() label: string | null = 'Phone number';
   @Input() isRequired: boolean | undefined = false;
   @Input() prefixes: string[] = ['+1', '+57'];
 

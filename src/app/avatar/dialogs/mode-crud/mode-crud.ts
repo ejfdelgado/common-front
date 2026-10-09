@@ -24,6 +24,7 @@ import { TranslateService } from 'src/app/services/translate.service';
 import { translateSelectOptions } from 'src/app/tools/SelectOptionUtils';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AsyncPipe } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
   preguntas: [
@@ -82,6 +83,7 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     EmojiInputComponent,
     TranslatePipe,
     AsyncPipe,
+    MatTooltipModule,
   ],
   templateUrl: './mode-crud.html',
   styleUrl: './mode-crud.scss',

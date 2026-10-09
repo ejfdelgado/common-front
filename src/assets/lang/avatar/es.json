@@ -155,6 +155,35 @@
           }
         }
       }
+    },
+    "modes": {
+      "title": "Editar niveles",
+      "level_prefix": "Nivel",
+      "tooltip": {
+        "move_down": "Bajar",
+        "mode_up": "Subir",
+        "delete": "Borrar nivel"
+      },
+      "tabs": {
+        "general": {
+          "title": "General",
+          "name": {
+            "label": "Nombre"
+          },
+          "icon": {
+            "label": "Ícono"
+          },
+          "types": {
+            "label": "Tipo",
+            "ch_question": "Preguntas"
+          },
+          "avatar_side": {
+            "label": "Espejo",
+            "ch_front": "Frente",
+            "ch_back": "Espalda"
+          }
+        }
+      }
     }
   }
 }
