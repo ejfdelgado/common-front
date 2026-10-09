@@ -3,7 +3,7 @@
 <mat-dialog-content class="dialog_content text_size_x2">
     <mat-tab-group class="full-width">
 
-        <mat-tab label="General">
+        <mat-tab [label]="('popup.performance.tabs.general.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="generalForm" class="tab_content">
                 <mat-form-field class="full-width" appearance="outline">
                     <mat-label>{{ "popup.performance.tabs.general.model.label" | translate : "avatar" | async

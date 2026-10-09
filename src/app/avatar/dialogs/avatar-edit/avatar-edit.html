@@ -3,10 +3,10 @@
 <mat-dialog-content class="dialog_content text_size_x2">
     <mat-tab-group class="full-width">
 
-        <mat-tab [label]="'popup.performance.tabs.general.title' | translate : 'avatar' | async">
+        <mat-tab [label]="('popup.avatar.tabs.general.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="generalForm" class="tab_content">
                 <mat-form-field class="full-width" appearance="outline">
-                    <mat-label>Malla</mat-label>
+                    <mat-label>{{ "popup.avatar.tabs.general.character.label" | translate : "avatar" | async }}</mat-label>
                     <mat-select formControlName="meshPath">
                         @for (option of meshOptions; track option.value) {
                         <mat-option [value]="option.value">{{ option.label }}</mat-option>
