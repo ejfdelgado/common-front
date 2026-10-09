@@ -44,8 +44,8 @@ const DEFAULT_BACKGROUND_COLOR: ColorType = { r: 255, g: 255, b: 255 };
 const DEFAULT_BACKGROUND_IMAGE: string = '/avatar_assets/backgrounds/default.jpeg';
 
 const BACKGROUND_OPTIONS: SelectOptionString[] = [
-  { label: 'Imagen', value: 'image' },
-  { label: 'Color', value: 'color' },
+  { label: 'ch_image', value: 'image' },
+  { label: 'ch_color', value: 'color' },
 ];
 
 const LANGUAGE_OPTIONS: SelectOptionString[] = [

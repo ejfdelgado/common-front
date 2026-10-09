@@ -146,16 +146,20 @@
             <form [formGroup]="backgroundForm" class="tab_content">
 
                 <mat-form-field class="full-width" appearance="outline">
-                    <mat-label>Tipo de fondo</mat-label>
+                    <mat-label>{{ "popup.questionaire.tabs.background.type.label" | translate : "avatar" | async
+                        }}</mat-label>
                     <mat-select formControlName="type">
                         @for (option of backgroundOptions; track option.value) {
-                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                        <mat-option [value]="option.value">{{ ("popup.questionaire.tabs.background.type." +
+                            option.label) | translate : "avatar" | async }}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
 
                 @if (backgroundForm.value.type === 'color') {
-                <app-color-picker [label]="'Color de fondo'" formControlName="color"></app-color-picker>
+                <app-color-picker
+                    [label]="('popup.questionaire.tabs.background.color.label' | translate : 'avatar' | async) ?? ''"
+                    formControlName="color"></app-color-picker>
                 }
                 @if (backgroundForm.value.type === 'image') {
                 <app-image-field formControlName="image" [config]="imageConfig"></app-image-field>

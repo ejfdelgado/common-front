@@ -103,7 +103,15 @@
           }
         },
         "background": {
-          "title": "Background"
+          "title": "Background",
+          "type": {
+            "label": "Background type",
+            "ch_image": "Image",
+            "ch_color": "Color"
+          },
+          "color": {
+            "label": "Background color"
+          }
         },
         "sounds": {
           "title": "Sound effects"
