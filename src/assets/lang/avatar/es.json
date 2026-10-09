@@ -199,5 +199,11 @@
         }
       }
     }
+  },
+  "alerts": {
+    "clipboard_copy": {
+      "title": "Ok",
+      "txt": "Las preguntas se copiaron en el portapapeles"
+    }
   }
 }

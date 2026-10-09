@@ -1,27 +1,27 @@
 {
-    "buttons": {
-        "cancel": "Cancel",
-        "accept": "Acept",
-        "save": "Save",
-        "export": "Export",
-        "import": "Import",
-        "add": "Add"
-    },
-    "labels": {
-        "search": "Search...",
-        "logout": "Logout"
-    },
-    "cameraPicker": {
-        "title": "Select Camera",
-        "camera": "Camera"
-    },
-    "emoji_input": {
-        "errors": {
-            "required": "Emoji is required"
-        }
-    },
-    "confirm": {
-        "sure": "Are you sure?",
-        "erase_cant_undo": "Once deleted, it cannot be undone."
+  "buttons": {
+    "cancel": "Cancel",
+    "accept": "Acept",
+    "save": "Save",
+    "export": "Export",
+    "import": "Import",
+    "add": "Add"
+  },
+  "labels": {
+    "search": "Search...",
+    "logout": "Logout"
+  },
+  "cameraPicker": {
+    "title": "Select Camera",
+    "camera": "Camera"
+  },
+  "emoji_input": {
+    "errors": {
+      "required": "Emoji is required"
     }
+  },
+  "confirm": {
+    "sure": "Are you sure?",
+    "erase_cant_undo": "Once deleted, it cannot be undone."
+  }
 }

@@ -3,7 +3,7 @@
 <mat-dialog-content class="dialog_content text_size_x2">
     <mat-tab-group class="full-width" (selectedTabChange)="onTabChange($event)">
 
-        <mat-tab [label]="('popup.questionaire.tabs.config.title' | translate : 'avatar' | async) ?? ''">
+        <mat-tab id="config" [label]="('popup.questionaire.tabs.config.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="stepsConfigForm" class="tab_content">
 
                 <mat-form-field class="full-width" appearance="outline">
@@ -46,7 +46,7 @@
             </form>
         </mat-tab>
 
-        <mat-tab [label]="('popup.questionaire.tabs.questions.title' | translate : 'avatar' | async) ?? ''">
+        <mat-tab id="questions" [label]="('popup.questionaire.tabs.questions.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="stepsForm" class="tab_content tab_questions">
 
                 <mat-form-field class="full-width" appearance="outline">
@@ -142,7 +142,7 @@
             </form>
         </mat-tab>
 
-        <mat-tab [label]="('popup.questionaire.tabs.background.title' | translate : 'avatar' | async) ?? ''">
+        <mat-tab id="background" [label]="('popup.questionaire.tabs.background.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="backgroundForm" class="tab_content">
 
                 <mat-form-field class="full-width" appearance="outline">
@@ -166,7 +166,7 @@
             </form>
         </mat-tab>
 
-        <mat-tab [label]="('popup.questionaire.tabs.sounds.title' | translate : 'avatar' | async) ?? ''">
+        <mat-tab id="sounds" [label]="('popup.questionaire.tabs.sounds.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="audioFXForm" class="tab_content vertical_gap">
                 <app-audio-field [label]="'popup.questionaire.tabs.sounds.intro.label' | translate : 'avatar' | async"
                     formControlName="audioIntro" [config]="audioConfig"></app-audio-field>
@@ -182,7 +182,7 @@
             </form>
         </mat-tab>
 
-        <mat-tab [label]="('popup.questionaire.tabs.objects.title' | translate : 'avatar' | async) ?? ''">
+        <mat-tab id="objects" [label]="('popup.questionaire.tabs.objects.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="selectionObjectsForm" class="tab_content vertical_gap">
                 <app-slider [label]="'popup.questionaire.tabs.objects.x_shift.label' | translate : 'avatar' | async"
                     formControlName="shiftX" [config]="sliderConfig"></app-slider>
@@ -214,7 +214,7 @@
         {{ "buttons.save" | translate : "general" | async }}
     </button>
 
-    @if (selectedTabLabel === 'Preguntas') {
+    @if (selectedTabLabel === 'questions') {
     <button mat-flat-button color="primary" (click)="exportQuestions()">
         <mat-icon>arrow_downward</mat-icon>
         {{ "buttons.export" | translate : "general" | async }}

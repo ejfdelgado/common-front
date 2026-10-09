@@ -1,23 +1,27 @@
 {
-    "buttons": {
-        "cancel": "Cancelar",
-        "accept": "Aceptar",
-        "save": "Guardar",
-        "export": "Exportar",
-        "import": "Importar",
-        "add": "Agregar"
-    },
-    "labels": {
-        "search": "Buscar...",
-        "logout": "Salir"
-    },
-    "cameraPicker": {
-        "title": "Selección de cámara",
-        "camera": "Cámara"
-    },
-    "emoji_input": {
-        "errors": {
-            "required": "Se requiere un emoji"
-        }
+  "buttons": {
+    "cancel": "Cancelar",
+    "accept": "Aceptar",
+    "save": "Guardar",
+    "export": "Exportar",
+    "import": "Importar",
+    "add": "Agregar"
+  },
+  "labels": {
+    "search": "Buscar...",
+    "logout": "Salir"
+  },
+  "cameraPicker": {
+    "title": "Selección de cámara",
+    "camera": "Cámara"
+  },
+  "emoji_input": {
+    "errors": {
+      "required": "Se requiere un emoji"
     }
+  },
+  "confirm": {
+    "sure": "Está seguro?",
+    "erase_cant_undo": "Una vez borrado no se podrá deshacer."
+  }
 }

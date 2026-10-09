@@ -58,8 +58,8 @@ const LANGUAGE_OPTIONS: SelectOptionString[] = [
 
 const OBJECTS_OPTIONS: SelectOptionString[] = [
   //{ label: 'Cubo', value: 'cube' },
-  { label_key: 'ch_balls', label:"", value: 'futbol' },
-  { label_key: 'ch_fruits', label:"", value: 'fruits' },
+  { label_key: 'ch_balls', label: '', value: 'futbol' },
+  { label_key: 'ch_fruits', label: '', value: 'fruits' },
   //{ label: 'Minecraft', value: 'minecraft' },
 ];
 
@@ -103,7 +103,7 @@ export class QuestionaireEditComponent {
   audioFXForm: FormGroup;
   selectionObjectsForm: FormGroup;
   searchControl = new FormControl('');
-  selectedTabLabel = 'Configuración';
+  selectedTabLabel: string | null = 'Configuración';
   @ViewChildren(ImageFileComponent) images!: QueryList<ImageFileComponent>;
   @ViewChildren(AudioFileComponent) audios!: QueryList<AudioFileComponent>;
   imageConfig: ImageGalleryConfigDataType = {
@@ -218,7 +218,7 @@ export class QuestionaireEditComponent {
   }
 
   onTabChange(event: MatTabChangeEvent): void {
-    this.selectedTabLabel = event.tab.textLabel;
+    this.selectedTabLabel = event.tab.id;
   }
 
   private textIncludes(haystack?: string | null, needle?: string | null): boolean {
@@ -365,8 +365,9 @@ export class QuestionaireEditComponent {
     const steps = this.data.steps;
     ClipboardUtil.writeText(JSON.stringify(steps, null, 4));
     this.modalSrv.alert({
-      title: 'Ok',
-      txt: 'Preguntas copiadas en el portapapeles!',
+      title: 'alerts.clipboard_copy.title',
+      txt: 'alerts.clipboard_copy.txt',
+      translateFolder: 'avatar',
     });
   }
 
