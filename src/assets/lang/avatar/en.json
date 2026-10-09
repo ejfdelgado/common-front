@@ -15,5 +15,21 @@
   },
   "actions": {
     "start": "Start"
+  },
+  "popup": {
+    "performance": {
+      "title": "Edit performance features",
+      "tabs": {
+        "general": {
+          "title": "General",
+          "model": {
+            "label": "Pose detection model"
+          },
+          "check_people_behind": {
+            "label": "Ignore people behind?"
+          }
+        }
+      }
+    }
   }
 }

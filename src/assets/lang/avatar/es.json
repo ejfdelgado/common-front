@@ -15,5 +15,21 @@
   },
   "actions": {
     "start": "Iniciar"
+  },
+  "popup": {
+    "performance": {
+      "title": "Editar caracteristicas de rendimiento",
+      "tabs": {
+        "general": {
+          "title": "General",
+          "model": {
+            "label": "Modelo de detección"
+          },
+          "check_people_behind": {
+            "label": "Ignorar personas al fondo?"
+          }
+        }
+      }
+    }
   }
 }

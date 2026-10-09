@@ -10,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MediaPipePerformanceType, MediaPipePoseOptions } from 'src/types/BodyTypes';
 import { Subscription } from 'rxjs';
 import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on-off-toggle';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-performance-edit',
@@ -24,6 +26,8 @@ import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on
     MatTabsModule,
     MatSelectModule,
     OnOffToggleComponent,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './performance-edit.html',
   styleUrl: './performance-edit.scss',

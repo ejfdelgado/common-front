@@ -1,7 +1,8 @@
 {
     "buttons": {
         "cancel": "Cancelar",
-        "accept": "Aceptar"
+        "accept": "Aceptar",
+        "save": "Guardar"
     },
     "cameraPicker": {
         "title": "Selección de cámara",
