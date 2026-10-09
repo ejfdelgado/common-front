@@ -1,10 +1,10 @@
 import { ChangeDetectorRef } from '@angular/core';
-import { SelectOptionString } from 'src/types/fieldsTypes';
+import { SelectOptionAny } from 'src/types/fieldsTypes';
 import { TranslateService } from '../services/translate.service';
 
 export async function translateSelectOptions(
   translateFolder: string,
-  options: SelectOptionString[],
+  options: SelectOptionAny[],
   cdr: ChangeDetectorRef,
   translateSrv: TranslateService,
   prefix: string = '',

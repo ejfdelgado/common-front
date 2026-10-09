@@ -12,6 +12,7 @@ import {
   GameControllerEnum,
   GameMode,
   MIRROR_OPTIONS,
+  TYPE_OPTIONS,
   WorldAvatar,
 } from 'src/types/WorldAvatar';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
@@ -19,14 +20,10 @@ import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
 import { EmojiInputComponent } from 'src/app/components/fields/emoji-input/emoji-input';
-import { SelectOptionString } from 'src/types/fieldsTypes';
-
-export const TYPE_OPTIONS: SelectOptionString[] = [
-  { label: 'Preguntas', value: 'preguntas' },
-  { label: 'Test 01', value: 'test_01' },
-  { label: 'Test 02', value: 'test_02' },
-  { label: 'Test 03', value: 'test_03' },
-];
+import { TranslateService } from 'src/app/services/translate.service';
+import { translateSelectOptions } from 'src/app/tools/SelectOptionUtils';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { AsyncPipe } from '@angular/common';
 
 export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
   preguntas: [
@@ -83,6 +80,8 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     MatTabsModule,
     MatSelectModule,
     EmojiInputComponent,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './mode-crud.html',
   styleUrl: './mode-crud.scss',
@@ -90,9 +89,9 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
 export class ModeCrudComponent {
   originalModes: { key: string; value: GameMode }[] = [];
   readonly typeOptions = TYPE_OPTIONS;
+  readonly mirrorOptions = MIRROR_OPTIONS;
   private keydownSub: Subscription;
   generalForm: FormGroup;
-  readonly mirrorOptions = MIRROR_OPTIONS;
 
   constructor(
     private fb: FormBuilder,
@@ -100,6 +99,7 @@ export class ModeCrudComponent {
     @Inject(MAT_DIALOG_DATA) public data: WorldAvatar,
     public confirmSrv: ConfirmDialogService,
     private cdr: ChangeDetectorRef,
+    public translateSrv: TranslateService,
   ) {
     this.originalModes = JSON.parse(JSON.stringify(map2KeyValueArray<GameMode>(data.modes)));
     // sort
@@ -116,6 +116,20 @@ export class ModeCrudComponent {
         this.cancel();
       }
     });
+    translateSelectOptions(
+      'avatar',
+      this.typeOptions,
+      this.cdr,
+      this.translateSrv,
+      'popup.modes.tabs.general.types.',
+    );
+    translateSelectOptions(
+      'avatar',
+      this.mirrorOptions,
+      this.cdr,
+      this.translateSrv,
+      'popup.modes.tabs.general.avatar_side.',
+    );
   }
 
   private buildModeGroup(mode: { key: string; value: GameMode }): FormGroup {

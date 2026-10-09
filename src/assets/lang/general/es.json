@@ -4,7 +4,8 @@
         "accept": "Aceptar",
         "save": "Guardar",
         "export": "Exportar",
-        "import": "Importar"
+        "import": "Importar",
+        "add": "Agregar"
     },
     "cameraPicker": {
         "title": "Selección de cámara",

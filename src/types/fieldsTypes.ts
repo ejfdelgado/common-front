@@ -171,14 +171,16 @@ export interface SliderDataType extends FieldDataType {
   slider: SliderDetailDataType;
 }
 
-export interface SelectOptionBoolean {
-  label: string;
-  value: boolean;
-}
-
-export interface SelectOptionString {
+export interface SelectOptionAny {
   label: string;
   // Used for translation
   label_key?: string;
+}
+
+export interface SelectOptionBoolean extends SelectOptionAny {
+  value: boolean;
+}
+
+export interface SelectOptionString extends SelectOptionAny {
   value: string;
 }

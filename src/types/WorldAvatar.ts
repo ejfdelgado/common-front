@@ -1,5 +1,5 @@
 import { AnimationSpecType, AvatarLocationState, Point3D } from './BodyTypes';
-import { SelectOptionBoolean } from './fieldsTypes';
+import { SelectOptionBoolean, SelectOptionString } from './fieldsTypes';
 import { AssistantDataType } from './ragTypes';
 import { ABCDType } from './WorldAvatarLibrary';
 
@@ -8,8 +8,15 @@ export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
 export const MAX_LIFE = 5;
 
 export const MIRROR_OPTIONS: SelectOptionBoolean[] = [
-  { label: 'Frente', value: true },
-  { label: 'Espalda', value: false },
+  { label_key: 'ch_front', label: 'Frente', value: true },
+  { label_key: 'ch_back', label: 'Espalda', value: false },
+];
+
+export const TYPE_OPTIONS: SelectOptionString[] = [
+  { label_key: 'ch_question', label: 'preguntas', value: 'preguntas' },
+  //{ label: 'Test 01', value: 'test_01' },
+  //{ label: 'Test 02', value: 'test_02' },
+  //{ label: 'Test 03', value: 'test_03' },
 ];
 
 export interface StartGameOptions {
