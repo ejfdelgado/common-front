@@ -17,7 +17,6 @@ import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.comp
 import { CommonComponent } from '@components/common.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
-import { escapeHtml } from '@tools/HtmlUtil';
 import { ContentEditableDetailConfigDataType } from '@mytypes/fieldsTypes';
 
 @Component({
@@ -45,7 +44,7 @@ export class EditableInput extends CommonComponent implements ControlValueAccess
   @Input() disabled = false;
   @Input() allowEnter: boolean = true;
   @Input() discrete: boolean = true;
-  @Input() label?: string;
+  @Input() label?: string | null;
   @Input() minHeight?: string | null = null;
   @Input() maxHeight?: string | null = null;
   @Input() configs?: ContentEditableDetailConfigDataType | null;
