@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Share!</h2>
+<h2 mat-dialog-title>{{ "buttons.share" | translate : "general" | async }}</h2>
 <mat-dialog-content>
     <canvas #qrcanvas class="print_canvas" width="1" height="1">
         Tu navegador no admite el elemento &lt;canvas&gt;.
@@ -8,14 +8,14 @@
 <mat-dialog-actions>
     <button mat-button color="primary" (click)="accept()">
         <mat-icon>close</mat-icon>
-        Close
+        {{ "buttons.close" | translate : "general" | async }}
     </button>
     <button mat-flat-button color="secondary" (click)="open()">
         <mat-icon>arrow_outward</mat-icon>
-        Open
+        {{ "buttons.open" | translate : "general" | async }}
     </button>
     <button mat-flat-button color="primary" (click)="download()">
         <mat-icon>download</mat-icon>
-        Save
+        {{ "buttons.save" | translate : "general" | async }}
     </button>
 </mat-dialog-actions>

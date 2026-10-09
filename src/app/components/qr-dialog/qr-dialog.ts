@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { toCanvas } from 'qrcode';
 import { drawCenteredText } from '@tools/CanvasUtils';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { AsyncPipe } from '@angular/common';
 
 export interface QrDialogData {
   url: string;
@@ -15,29 +17,22 @@ export interface QrDialogData {
   selector: 'app-qr-dialog',
   styleUrl: './qr-dialog.scss',
   standalone: true,
-  imports: [
-    MatDialogModule,
-    MatButtonModule,
-    MatIcon,
-  ],
+  imports: [MatDialogModule, MatButtonModule, MatIcon, TranslatePipe, AsyncPipe],
   templateUrl: './qr-dialog.html',
 })
 export class QrDialogComponent implements AfterViewInit {
-
   @ViewChild('qrcanvas') canvasQRRef!: ElementRef;
 
   constructor(
     private dialogRef: MatDialogRef<QrDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: QrDialogData
-  ) { }
-
-
+    @Inject(MAT_DIALOG_DATA) public data: QrDialogData,
+  ) {}
 
   async ngAfterViewInit(): Promise<void> {
     const qrCodeSide = 300;
     const canvasQR = this.canvasQRRef.nativeElement;
-    await toCanvas(canvasQR, this.data.url, { width: qrCodeSide, });
-    if (typeof this.data.emoji == "string" && this.data.emoji.trim().length > 0) {
+    await toCanvas(canvasQR, this.data.url, { width: qrCodeSide });
+    if (typeof this.data.emoji == 'string' && this.data.emoji.trim().length > 0) {
       drawCenteredText(canvasQR, this.data.emoji, 34, qrCodeSide);
     }
   }
@@ -47,22 +42,20 @@ export class QrDialogComponent implements AfterViewInit {
   }
 
   open() {
-    window.open(this.data.url, "_blank");
+    window.open(this.data.url, '_blank');
   }
 
   async download() {
     const canvas = this.canvasQRRef.nativeElement;
-    const fileName = "qrcode.png";
+    const fileName = 'qrcode.png';
     // Ensure filename ends with .png
-    const finalName = fileName.toLowerCase().endsWith(".png")
-      ? fileName
-      : `${fileName}.png`;
+    const finalName = fileName.toLowerCase().endsWith('.png') ? fileName : `${fileName}.png`;
 
     // Convert canvas to PNG data URL
-    const dataUrl = canvas.toDataURL("image/png");
+    const dataUrl = canvas.toDataURL('image/png');
 
     // Create temporary download link
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = dataUrl;
     link.download = finalName;
 

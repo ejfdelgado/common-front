@@ -1,15 +1,22 @@
 {
   "buttons": {
     "cancel": "Cancelar",
+    "close": "Cerrar",
     "accept": "Aceptar",
     "save": "Guardar",
     "export": "Exportar",
     "import": "Importar",
-    "add": "Agregar"
+    "add": "Agregar",
+    "share": "Compartir",
+    "open": "Abrir"
   },
   "labels": {
     "search": "Buscar...",
+    "more": "Más...",
     "logout": "Salir"
+  },
+  "messages": {
+    "link_clipboard_copied": "Enlace copiado!"
   },
   "cameraPicker": {
     "title": "Selección de cámara",

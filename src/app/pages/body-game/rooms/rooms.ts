@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,13 +17,14 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { ShareSrv } from '@services/share.service';
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 const MODEL_NAME = 'room-public';
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, Statusbar, CardDoc, SideMenu],
+  imports: [CommonModule, MatButtonModule, Statusbar, CardDoc, SideMenu, TranslatePipe, AsyncPipe],
   templateUrl: './rooms.html',
   styleUrl: './rooms.scss',
 })
@@ -80,7 +81,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     const formConfig: FormDataType = {
       title: model ? 'form.room_upsert.update' : 'form.room_upsert.create',
       autoAuthor: true,
-      languageFolder: "avatar",
+      languageFolder: 'avatar',
       modelName: MODEL_NAME,
       searchFields: ['title', 'description'],
       fields: [
