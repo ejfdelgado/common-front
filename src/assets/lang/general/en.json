@@ -8,7 +8,8 @@
         "add": "Add"
     },
     "labels": {
-        "search": "Search..."
+        "search": "Search...",
+        "logout": "Logout"
     },
     "cameraPicker": {
         "title": "Select Camera",
@@ -18,5 +19,9 @@
         "errors": {
             "required": "Emoji is required"
         }
+    },
+    "confirm": {
+        "sure": "Are you sure?",
+        "erase_cant_undo": "Once deleted, it cannot be undone."
     }
 }

@@ -4,21 +4,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { IndicatorService } from '@services/indicator.service';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '@services/auth.service';
 import { SideMenuService } from '@services/side-menu.service';
 import { MenuOptionType, StatusBarConfigType } from 'types/StatusBar';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 @Component({
   selector: 'app-statusbar',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    CommonModule,
-  ],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, CommonModule, TranslatePipe, AsyncPipe],
   templateUrl: './statusbar.html',
   styleUrl: './statusbar.scss',
 })
@@ -26,7 +22,7 @@ export class Statusbar {
   @Input() iconSmall: boolean = true;
   @Input() config: StatusBarConfigType = {};
   @Input() options: MenuOptionType[] = [];
-  @Input() title: string = "";
+  @Input() title: string = '';
   user: User | null = null;
 
   constructor(
@@ -36,11 +32,11 @@ export class Statusbar {
     public cdr: ChangeDetectorRef,
     public sideMenuSrv: SideMenuService,
   ) {
-    this.authSrv.authState$.subscribe(user => {
+    this.authSrv.authState$.subscribe((user) => {
       this.user = user;
       try {
         this.cdr.detectChanges();
-      } catch (err) { }
+      } catch (err) {}
     });
   }
 

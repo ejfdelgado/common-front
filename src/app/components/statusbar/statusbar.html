@@ -57,7 +57,7 @@
             <hr class="local_hr">
             <button mat-menu-item (click)="authSrv.logout()">
                 <mat-icon>logout</mat-icon>
-                <span>Salir</span>
+                <span>{{ "labels.logout" | translate : "general" | async }}</span>
             </button>
             }
         </mat-menu>

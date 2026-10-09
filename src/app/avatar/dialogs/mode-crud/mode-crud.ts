@@ -151,8 +151,9 @@ export class ModeCrudComponent {
   async removeMode(index: number): Promise<any> {
     // ask confirm
     const confirm = await this.confirmSrv.confirm({
-      title: 'Está seguro?',
-      message: 'Al borrar no se podrá deshacer',
+      title: 'confirm.sure',
+      message: 'confirm.erase_cant_undo',
+      langFolder: 'general',
     });
     if (!confirm || this.modes.length <= 1) {
       return;

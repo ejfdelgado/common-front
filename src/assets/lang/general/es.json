@@ -8,7 +8,8 @@
         "add": "Agregar"
     },
     "labels": {
-        "search": "Buscar..."
+        "search": "Buscar...",
+        "logout": "Salir"
     },
     "cameraPicker": {
         "title": "Selección de cámara",
