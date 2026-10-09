@@ -1,4 +1,9 @@
 {
+  "menu_rooms": {
+    "add_room": {
+      "label": "Add room"
+    }
+  },
   "menu": {
     "friends": "Friends",
     "config": "Configuration",
@@ -204,6 +209,10 @@
     "clipboard_copy": {
       "title": "Ok",
       "txt": "The questions were copied to the clipboard"
+    },
+    "done": {
+      "title": "Ok",
+      "txt": "Done!"
     }
   }
 }

@@ -1,4 +1,9 @@
 {
+  "menu_rooms": {
+    "add_room": {
+      "label": "Crear juego"
+    }
+  },
   "menu": {
     "friends": "Amigos",
     "config": "Configuración",
@@ -204,6 +209,10 @@
     "clipboard_copy": {
       "title": "Ok",
       "txt": "Las preguntas se copiaron en el portapapeles"
+    },
+    "done": {
+      "title": "Ok",
+      "txt": "Listo!"
     }
   }
 }

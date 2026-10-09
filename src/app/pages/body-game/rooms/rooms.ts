@@ -53,7 +53,8 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: 'Add room',
+      label: 'menu_rooms.add_room.label',
+      translateFolder: 'avatar',
       icon: 'add',
       children: [],
       callback: this.openDialog.bind(this),
@@ -84,11 +85,14 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       fields: [
         { label: 'Title', type: 'text', key: 'title', required: true },
         {
-          label: "Imagen", type: "image", key: "image", image: {
+          label: 'Imagen',
+          type: 'image',
+          key: 'image',
+          image: {
             thumbnailMaxSizePixels: 200,
-            squareMaxSizePixels: 800,//For social
-            template: "body_game/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
-          }
+            squareMaxSizePixels: 800, //For social
+            template: 'body_game/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg',
+          },
         },
         {
           label: 'Description',

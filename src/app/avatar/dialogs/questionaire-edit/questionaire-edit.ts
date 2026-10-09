@@ -390,8 +390,9 @@ export class QuestionaireEditComponent {
       this.data.steps = steps;
       this.cdr.detectChanges();
       this.modalSrv.alert({
-        title: 'Ok',
-        txt: 'Listo!',
+        title: 'alerts.done.title',
+        txt: 'alerts.done.txt',
+        translateFolder: "avatar"
       });
     } catch (err: any) {
       this.modalSrv.alert({
