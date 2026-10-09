@@ -1,9 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  Input,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, forwardRef, Input } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -13,7 +8,7 @@ import {
   ValidationErrors,
   FormsModule,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,6 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.component';
 import { PhoneInputComponent } from '../phone-input/phone-input';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 @Component({
   selector: 'app-emoji-input',
@@ -34,6 +30,8 @@ import { PhoneInputComponent } from '../phone-input/phone-input';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './emoji-input.html',
   styleUrls: ['./emoji-input.scss'],
@@ -41,18 +39,19 @@ import { PhoneInputComponent } from '../phone-input/phone-input';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => EmojiInputComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => EmojiInputComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class EmojiInputComponent extends PhoneInputComponent
-  implements ControlValueAccessor, Validator {
-
+export class EmojiInputComponent
+  extends PhoneInputComponent
+  implements ControlValueAccessor, Validator
+{
   @Input() override label: string | null = 'Emoji';
 
   emoji: string = '';
@@ -66,14 +65,14 @@ export class EmojiInputComponent extends PhoneInputComponent
     super(cdr, sanitizer, fullScreenSrv);
   }
 
-  private onEmojiValidatorChange: () => void = () => { };
+  private onEmojiValidatorChange: () => void = () => {};
 
   // Typed as any because the base class expects a PhoneValue
   override writeValue(value: any): void {
     this.emoji = typeof value === 'string' ? value : '';
     try {
       this.cdr.detectChanges();
-    } catch (err) { }
+    } catch (err) {}
   }
 
   override registerOnValidatorChange(fn: () => void): void {
@@ -87,7 +86,7 @@ export class EmojiInputComponent extends PhoneInputComponent
     const dialogRef = this.dialog.open(EmojiPickerComponent, {
       width: '350px',
       autoFocus: false,
-      panelClass: 'custom-emoji-picker'
+      panelClass: 'custom-emoji-picker',
     });
 
     dialogRef.afterClosed().subscribe((result: string | undefined) => {
@@ -114,7 +113,7 @@ export class EmojiInputComponent extends PhoneInputComponent
     this.onEmojiValidatorChange();
     try {
       this.cdr.detectChanges();
-    } catch (err) { }
+    } catch (err) {}
   }
 
   override validate(_: AbstractControl): ValidationErrors | null {

@@ -3,18 +3,21 @@
     <div class="users_container_scrolled">
         <div class="users_container">
             @for (user of users; track user.uid) {
-            <app-user-card [user]="user" [icon]="mode == 'normal' ? 'delete' : ''"
-                (action)="removeUser(user)" (pickThis)="pickThis(user)"></app-user-card>
+            <app-user-card [user]="user" [icon]="mode == 'normal' ? 'delete' : ''" (action)="removeUser(user)"
+                (pickThis)="pickThis(user)"></app-user-card>
             }
         </div>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button (click)="close()"><mat-icon>close</mat-icon>{{ 'shared_with.buttons.cancel' | translate : 'admin' | async }}</button>
+    <button mat-button (click)="close()"><mat-icon>close</mat-icon>{{ 'shared_with.buttons.cancel' | translate : 'admin'
+        | async }}</button>
     @if (mode == "normal") {
-    <button mat-flat-button color="primary" (click)="openSearchUser()"><mat-icon>add</mat-icon>{{ 'shared_with.buttons.add' | translate : 'admin' | async }}</button>
+    <button mat-flat-button color="primary" (click)="openSearchUser()"><mat-icon>add</mat-icon>{{
+        'shared_with.buttons.add' | translate : 'admin' | async }}</button>
     @if (changesCount > 0) {
-    <button mat-flat-button color="primary" (click)="save()"><mat-icon>save</mat-icon>{{ 'shared_with.buttons.save' | translate : 'admin' | async }}</button>
+    <button mat-flat-button color="primary" (click)="save()"><mat-icon>save</mat-icon>{{ 'shared_with.buttons.save' |
+        translate : 'admin' | async }}</button>
     }
     }
 </mat-dialog-actions>

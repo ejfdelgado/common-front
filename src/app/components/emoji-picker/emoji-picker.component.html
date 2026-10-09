@@ -1,7 +1,7 @@
 <div class="picker-container">
     <div class="header">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Buscar...</mat-label>
+            <mat-label>{{ "labels.search" | translate : "general" | async }}</mat-label>
             <input [appAutofocus]="!isMobile()" matInput [(ngModel)]="searchText" autocomplete="off">
         </mat-form-field>
     </div>

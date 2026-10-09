@@ -7,8 +7,16 @@
         "import": "Importar",
         "add": "Agregar"
     },
+    "labels": {
+        "search": "Buscar..."
+    },
     "cameraPicker": {
         "title": "Selección de cámara",
         "camera": "Cámara"
+    },
+    "emoji_input": {
+        "errors": {
+            "required": "Se requiere un emoji"
+        }
     }
 }

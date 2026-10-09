@@ -10,7 +10,5 @@
     }
 </mat-form-field>
 @if (touched && hasError('required')) {
-<mat-error>
-    Emoji is required
-</mat-error>
+<mat-error>{{ "emoji_input.errors.required" | translate : "general" | async }}</mat-error>
 }
