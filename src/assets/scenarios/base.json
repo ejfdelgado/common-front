@@ -84,11 +84,11 @@
           ],
           "language": "es-ES",
           "audio": {
-            "intro": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza1oz5a?v=1",
-            "loop": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza3o76a?v=1",
-            "finish": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza8e0ma?v=1",
-            "success": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza5fd3a?v=1",
-            "loose": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza718fa?v=1"
+            "intro": "/assets/sounds/body_game/intro.mp3",
+            "loop": "/assets/sounds/body_game/loop.mp3",
+            "finish": "/assets/sounds/body_game/ganar.mp3",
+            "success": "/assets/sounds/body_game/correcto.mp3",
+            "loose": "/assets/sounds/body_game/incorrecto.mp3"
           }
         }
       },

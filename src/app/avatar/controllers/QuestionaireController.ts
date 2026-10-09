@@ -33,6 +33,7 @@ let Y_MAX_BOTTOM = 0;
 
 const SIDE_FRONT = 0.3;
 const MAX_QUESTIONS_DEF = 10;
+const LOCAL_AUDIO_PREFIX = "/";
 
 function computeConstants(config: SelectionObjectConfig) {
   FAR_AMOUNT_X = (0.8 * config.shiftX) / 100;
@@ -159,7 +160,11 @@ export class QuestionaireController extends SceneControllerAbstract {
         const audioKey = audioKeys[i];
         const val = (this.scenario.audio as any)[audioKey];
         if (val) {
-          audios.push(BUCKET_ROOT + val);
+          if (val.startsWith(LOCAL_AUDIO_PREFIX)) {
+            audios.push(val);
+          } else {
+            audios.push(BUCKET_ROOT + val);
+          }
         }
       }
     }
@@ -181,11 +186,19 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (!removeLoop) {
       const loop = this.scenario?.audio.loop;
       if (loop) {
-        whiteList.push(BUCKET_ROOT + loop);
+        if (loop.startsWith(LOCAL_AUDIO_PREFIX)) {
+          whiteList.push(loop);
+        } else {
+          whiteList.push(BUCKET_ROOT + loop);
+        }
       }
     }
     ModuloSonido.stopAll(whiteList);
-    return await ModuloSonido.play(BUCKET_ROOT + val, type == 'loop');
+    if (val.startsWith(LOCAL_AUDIO_PREFIX)) {
+      return await ModuloSonido.play(val, type == 'loop');
+    } else {
+      return await ModuloSonido.play(BUCKET_ROOT + val, type == 'loop');
+    }
   }
 
   async initializeQuestion() {
