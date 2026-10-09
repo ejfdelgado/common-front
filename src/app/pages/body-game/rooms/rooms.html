@@ -10,6 +10,7 @@
                         <app-card-doc [config]="cardConfig" [model]="room" [user]="user"
                             (openDocument)="openRoom($event)" (createUpdate)="openDialog($event)"
                             (delete)="deleteRoom($event)" [imageType]="'thumbnail'"
+                            [canEdit]="this.authSrv.hasARole(['body_game_editor'])"
                             (share)="localShare($event)"></app-card-doc>
                         }
                         <div class="see_more_parent" (click)="pageRooms(false)">

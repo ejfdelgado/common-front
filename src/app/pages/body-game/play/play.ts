@@ -3,8 +3,10 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  effect,
   OnDestroy,
   OnInit,
+  untracked,
   ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -130,6 +132,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editAvatar',
           translateFolder: 'avatar',
           name: 'loged_edit_avatar',
+          roles: ["body_game_editor"],
           isPlainIcon: true,
           icon: '🎭',
           visible: true,
@@ -146,6 +149,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editScenario',
           translateFolder: 'avatar',
           name: 'loged_edit_scenario',
+          roles: ["body_game_editor"],
           isPlainIcon: true,
           icon: '📑',
           visible: true,
@@ -162,6 +166,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editModes',
           translateFolder: 'avatar',
           name: 'loged_edit_modes',
+          roles: ["body_game_editor"],
           isPlainIcon: true,
           icon: '👾',
           visible: true,
@@ -178,6 +183,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editWorld',
           translateFolder: 'avatar',
           name: 'loged_edit_world',
+          roles: ["body_game_editor"],
           isPlainIcon: true,
           icon: '🌍',
           visible: true,
@@ -223,6 +229,11 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
       setTimeout(() => {
         this.trackerComponent.onResize();
       }, 500);
+    });
+
+    effect(() => {
+      this.authSrv.roles();
+      untracked(() => this.updateLogedMenuOptions());
     });
   }
 

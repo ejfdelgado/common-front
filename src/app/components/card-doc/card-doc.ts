@@ -16,28 +16,22 @@ export interface CardDocDataType {
   shareLink?: boolean;
   shareQR?: boolean;
   showAuthorImg?: boolean;
-  hasImage?: boolean,
+  hasImage?: boolean;
 }
 
 @Component({
   selector: 'app-card-doc',
-  imports: [
-    MatCardModule,
-    CommonModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatIcon,
-  ],
+  imports: [MatCardModule, CommonModule, MatButtonModule, ReactiveFormsModule, MatIcon],
   templateUrl: './card-doc.html',
   styleUrl: './card-doc.scss',
 })
 export class CardDoc extends CommonComponent {
-
   @Input() model: any;
+  @Input() canEdit: boolean = true;
   @Input() actions: string[] = [];
   @Input() user: User | null = null;
-  @Input() imageType: ImageTypeData = "big";
-  @Input() dateType: DateOptionType = "v1"
+  @Input() imageType: ImageTypeData = 'big';
+  @Input() dateType: DateOptionType = 'v1';
   @Output() createUpdate: EventEmitter<any> = new EventEmitter();
   @Output() share: EventEmitter<any> = new EventEmitter();
   @Output() delete: EventEmitter<any> = new EventEmitter();
@@ -48,7 +42,7 @@ export class CardDoc extends CommonComponent {
     shareQR: true,
     showAuthorImg: true,
     hasImage: true,
-  }
+  };
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -65,19 +59,19 @@ export class CardDoc extends CommonComponent {
   async askDelete() {
     // ask confirm
     const confirm = await this.confirmSrv.confirm({
-      title: "Está seguro?",
-      message: "Al borrar no se podrá deshacer",
+      title: 'Está seguro?',
+      message: 'Al borrar no se podrá deshacer',
     });
     if (!confirm) {
       return;
     }
     await this.delete.emit({ model: this.model });
-
   }
 
-  async localShare(type: "link" | "qr") {
+  async localShare(type: 'link' | 'qr') {
     await this.share.emit({
-      model: this.model, type
+      model: this.model,
+      type,
     });
   }
 }

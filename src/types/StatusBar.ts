@@ -7,6 +7,7 @@ export interface MenuOptionType {
   children?: MenuOptionType[];
   opened?: boolean;
   visible?: boolean;
+  roles?: string[];
   name?: string;
   inUse?: boolean;
   metaId?: string;

@@ -113,7 +113,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     menusToAdjust
       .filter((a) => a.name && a.name.startsWith('loged_'))
       .forEach((e) => {
-        e.visible = visible && !!this.room;
+        e.visible = (e.roles ? this.authSrv.hasARole(e.roles) : true) && visible && !!this.room;
       });
     // Check the levels
     const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');

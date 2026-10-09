@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, OnDestroy, OnInit, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -57,8 +57,15 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       label: 'menu_rooms.add_room.label',
       translateFolder: 'avatar',
       icon: 'add',
+      visible: false,
       children: [],
+      metaId: 'create',
       callback: this.openDialog.bind(this),
+    });
+
+    effect(() => {
+      this.authSrv.roles();
+      untracked(() => this.adjustPrivileges());
     });
 
     this.authSubscription = this.authSrv.authState$.subscribe((user) => {
@@ -73,13 +80,28 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     });
   }
 
-  async openDialog(payload: any) {
+  async adjustPrivileges() {
+    const createOption = this.menuOptions.find((el) => el.metaId == 'create');
+    if (createOption) {
+      createOption.visible = this.authSrv.hasARole(['body_game_creator']);
+    }
+    this.cdr.detectChanges();
+  }
+
+  async openDialog(payload: { model: RoomGameType }) {
     let model: any = null;
+    let create = true;
     if (payload) {
       model = payload.model;
+      create = false;
+    }
+    if (create) {
+      if (!this.authSrv.hasARole(['body_game_creator'])) {
+        return;
+      }
     }
     const formConfig: FormDataType = {
-      title: model ? 'form.room_upsert.update' : 'form.room_upsert.create',
+      title: create ? 'form.room_upsert.create' : 'form.room_upsert.update',
       autoAuthor: true,
       languageFolder: 'avatar',
       modelName: MODEL_NAME,
@@ -124,9 +146,13 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       data: formConfig,
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result: RoomGameType) => {
       if (result) {
-        this.pageRooms(true);
+        if (create) {
+          this.openRoom(result);
+        } else {
+          this.pageRooms(true);
+        }
       }
     });
   }

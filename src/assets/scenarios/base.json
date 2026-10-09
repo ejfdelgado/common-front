@@ -46,7 +46,7 @@
           "characters": [],
           "meshes": [],
           "stepsConfig": {
-            "abcdType": "cube",
+            "abcdType": "futbol",
             "maxQuestions": 10,
             "introTitle": "Hola, vamos a jugar!",
             "winLabel": "🎉",
