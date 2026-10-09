@@ -47,7 +47,7 @@ export type ComponentDataType = string | null;
   ]
 })
 export class AudioFileComponent extends CommonComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
-  @Input() label: string = "";
+  @Input() label: string | null = "";
   @Input() config!: AudioDetailDataType;
   value: ComponentDataType = null;
   disabled = false;

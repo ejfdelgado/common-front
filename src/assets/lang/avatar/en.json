@@ -114,12 +114,45 @@
           }
         },
         "sounds": {
-          "title": "Sound effects"
+          "title": "Sound effects",
+          "intro": {
+            "label": "Intro sound"
+          },
+          "background": {
+            "label": "Background loop sound"
+          },
+          "hit": {
+            "label": "Hit sound"
+          },
+          "miss": {
+            "label": "Miss sound"
+          },
+          "success": {
+            "label": "Success sound"
+          }
         },
         "objects": {
           "title": "Selection objects",
           "ch_balls": "Balls",
-          "ch_fruits": "Fruits"
+          "ch_fruits": "Fruits",
+          "x_shift": {
+            "label": "Horizontal shift"
+          },
+          "y_shift": {
+            "label": "Vertical shift"
+          },
+          "spin": {
+            "label": "Spin?"
+          },
+          "min_spin": {
+            "label": "Min Spin"
+          },
+          "extra_spin": {
+            "label": "Extra Spin"
+          },
+          "shuffle": {
+            "label": "Shuffle?"
+          }
         }
       }
     }

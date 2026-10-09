@@ -34,7 +34,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 })
 export class SliderComponent extends CommonComponent implements ControlValueAccessor {
 
-  @Input() label: string = "Value";
+  @Input() label: string | null = "Value";
   @Input() config!: SliderDetailDataType;
   value: number | null = 0;
   disabled = false;
