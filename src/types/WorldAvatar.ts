@@ -4,7 +4,7 @@ import { AssistantDataType } from './ragTypes';
 import { ABCDType } from './WorldAvatarLibrary';
 
 export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
-
+export const LOCAL_AUDIO_PREFIX = "/assets/";
 export const MAX_LIFE = 5;
 
 export const MIRROR_OPTIONS: SelectOptionBoolean[] = [

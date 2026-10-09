@@ -5,12 +5,9 @@ import {
   ChangeDetectionStrategy,
   Input,
   ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -21,6 +18,7 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { getBucketPath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
 import { environment } from 'environments/environment';
 import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
+import { LOCAL_AUDIO_PREFIX } from 'src/types/WorldAvatar';
 import { ComponentBucketField } from 'types/ComponentBucketField';
 import { AudioDetailDataType } from 'types/fieldsTypes';
 import { UploadResponse } from 'types/file';
@@ -30,11 +28,7 @@ export type ComponentDataType = string | null;
 @Component({
   selector: 'app-audio-field',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIcon,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIcon],
   templateUrl: './audio-field.html',
   styleUrls: ['./audio-field.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,18 +36,20 @@ export type ComponentDataType = string | null;
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => AudioFileComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class AudioFileComponent extends CommonComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
-  @Input() label: string | null = "";
+export class AudioFileComponent
+  extends CommonComponent
+  implements ControlValueAccessor, OnDestroy, ComponentBucketField
+{
+  @Input() label: string | null = '';
   @Input() config!: AudioDetailDataType;
   value: ComponentDataType = null;
   disabled = false;
   temporalUrl: string | null = null;
   lastBlob: Blob | null = null;
-
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -68,7 +64,6 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
   }
 
   /* ========= ControlValueAccessor API ========= */
-
 
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
@@ -86,7 +81,11 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
       if (this.temporalUrl) {
         return this.temporalUrl;
       }
-      return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${this.value}`;
+      if (this.value.startsWith(LOCAL_AUDIO_PREFIX)) {
+        return this.value;
+      } else {
+        return `https://storage.googleapis.com/${environment.DEFAULT_BUCKET}/${this.value}`;
+      }
     }
   }
 
@@ -103,7 +102,7 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
       return;
     }
 
-    const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
+    const nextPath = getBucketPath(this.config.template, this.value ? this.value : '', {
       user: AuthService.userStatic,
     });
 
@@ -122,8 +121,8 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
 
   async eraseBlob() {
     const confirm = await this.confirmSrv.confirm({
-      title: "Está seguro?",
-      message: "Al borrar no se podrá deshacer",
+      title: 'Está seguro?',
+      message: 'Al borrar no se podrá deshacer',
     });
     if (!confirm) {
       return;
@@ -153,10 +152,10 @@ export class AudioFileComponent extends CommonComponent implements ControlValueA
 
   async syncIfNeeded() {
     if (this.lastBlob && this.value) {
-      const rawFileName = this.value.split("?")[0];
+      const rawFileName = this.value.split('?')[0];
       const promesas: Promise<UploadResponse>[] = [];
 
-      promesas.push(this.fileSrv.upload(rawFileName, this.lastBlob, "bucket"));
+      promesas.push(this.fileSrv.upload(rawFileName, this.lastBlob, 'bucket'));
       await Promise.all(promesas);
       this.destroyBlobUrl();
     }

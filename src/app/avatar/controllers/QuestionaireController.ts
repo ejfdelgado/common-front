@@ -7,6 +7,7 @@ import {
   GameScenario,
   GameStep,
   GameStepOption,
+  LOCAL_AUDIO_PREFIX,
   MAX_LIFE,
   SelectionObjectConfig,
   StartGameOptions,
@@ -33,7 +34,6 @@ let Y_MAX_BOTTOM = 0;
 
 const SIDE_FRONT = 0.3;
 const MAX_QUESTIONS_DEF = 10;
-const LOCAL_AUDIO_PREFIX = "/";
 
 function computeConstants(config: SelectionObjectConfig) {
   FAR_AMOUNT_X = (0.8 * config.shiftX) / 100;
