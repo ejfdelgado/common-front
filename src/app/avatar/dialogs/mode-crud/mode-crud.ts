@@ -17,7 +17,7 @@ import {
 } from 'src/types/WorldAvatar';
 import { map2KeyValueArray } from 'src/app/tools/ArrayUtil';
 import { MatCardModule } from '@angular/material/card';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
 import { EmojiInputComponent } from 'src/app/components/fields/emoji-input/emoji-input';
 import { TranslateService } from 'src/app/services/translate.service';
@@ -25,6 +25,7 @@ import { translateSelectOptions } from 'src/app/tools/SelectOptionUtils';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AsyncPipe } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HttpClient } from '@angular/common/http';
 
 export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
   preguntas: [
@@ -102,6 +103,7 @@ export class ModeCrudComponent {
     public confirmSrv: ConfirmDialogService,
     private cdr: ChangeDetectorRef,
     public translateSrv: TranslateService,
+    private http: HttpClient,
   ) {
     this.originalModes = JSON.parse(JSON.stringify(map2KeyValueArray<GameMode>(data.modes)));
     // sort
@@ -241,71 +243,30 @@ export class ModeCrudComponent {
     this.dialogRef.close(null);
   }
 
-  addMode() {
-    const newMode = { key: this.nextModeId(), value: this.buildEmptyMode(this.modes.length) };
+  async addMode() {
+    const newMode = {
+      key: this.nextModeId(),
+      value: await this.buildEmptyMode(this.modes.length),
+    };
     this.originalModes.push(newMode);
     this.modes.push(this.buildModeGroup(newMode));
+    this.cdr.detectChanges();
   }
 
   private nextModeId(): string {
     return crypto.randomUUID();
   }
 
-  private buildEmptyMode(order: number): GameMode {
-    return {
-      order,
-      menu: {
-        name: `Nivel ${this.modes.length + 1}`,
-        icon: '',
-      },
-      mirror: true,
-      defaultPosition: {
-        positionX: 0,
-        positionY: 0,
-        positionZ: 0,
-        rotationY: 0,
-      },
-      defaultCameraState: {
-        near: 0.1,
-        far: 1000,
-        fov: 30,
-        lookAt: {
-          x: 0,
-          y: 1,
-          z: 0,
-        },
-        position: {
-          x: 0,
-          y: 1,
-          z: 5,
-        },
-      },
-      defaultSenario: 'scenario',
-      scenarios: {
-        scenario: {
-          useComposer: true,
-          background: { color: { r: 1, g: 1, b: 1 } },
-          characters: [],
-          meshes: [],
-          stepsConfig: {
-            abcdType: 'cube',
-            maxQuestions: 10,
-            introTitle: 'Hola, Hello, Salut!',
-            winLabel: '🎉',
-            looseLabel: '🥀',
-            selectionObjects: {
-              randomOrder: true,
-              rotate: true,
-              shiftX: 50,
-              shiftY: 50,
-              rotateAditionalSpeed: 100,
-              rotateMinSpeed: 100,
-            },
-          },
-          steps: [],
-        },
-      },
-      controllers: [],
-    };
+  private async buildEmptyMode(order: number): Promise<GameMode> {
+    // Fetch from default
+    const read: any = await firstValueFrom(
+      this.http.get('/assets/scenarios/base.json', {
+        responseType: 'json',
+      }),
+    );
+    const mode: GameMode = read.modes.mode03;
+    mode.order = order;
+    mode.menu.name = `Nivel ${this.modes.length + 1}`;
+    return mode;
   }
 }

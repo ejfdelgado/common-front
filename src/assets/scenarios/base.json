@@ -1,11 +1,12 @@
 {
   "defaultMode": "mode03",
   "config": {
-    "useLivePeer": true,
+    "useLivePeer": false,
     "useVoice": false
   },
   "modes": {
     "mode03": {
+      "type": "preguntas",
       "avatar": {
         "meshPath": ""
       },
@@ -59,7 +60,36 @@
               "rotateMinSpeed": 100
             }
           },
-          "steps": []
+          "steps": [
+            {
+              "label": "¿Quieres jugar?",
+              "options": [
+                {
+                  "label": "Sí",
+                  "answer": "Excelente.",
+                  "points": 1
+                },
+                {
+                  "label": "No",
+                  "answer": "Está bien.",
+                  "points": 1
+                },
+                {
+                  "label": "Tal vez",
+                  "answer": "Listo.",
+                  "points": 1
+                }
+              ]
+            }
+          ],
+          "language": "es-ES",
+          "audio": {
+            "intro": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza1oz5a?v=1",
+            "loop": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza3o76a?v=1",
+            "finish": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza8e0ma?v=1",
+            "success": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza5fd3a?v=1",
+            "loose": "avatar/ssrUGdrrj2Z5FtI8tt30faY8WWn2/2026-8-22/sounds/00hlkza718fa?v=1"
+          }
         }
       },
       "controllers": [
