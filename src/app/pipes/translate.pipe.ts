@@ -6,9 +6,9 @@ import { TranslateService } from '../services/translate.service';
 })
 export class TranslatePipe implements PipeTransform {
   constructor(private translateSrv: TranslateService) { }
-  transform(value: string, ...args: unknown[]): Promise<unknown> {
+  transform(value: string, ...args: unknown[]): Promise<string> {
     if (args[1]) {
-      return new Promise(async (resolve, reject) => {
+      return new Promise<string>(async (resolve, reject) => {
         try {
           let rendered = await this.translateSrv.translate(value, args);
           resolve(rendered);
