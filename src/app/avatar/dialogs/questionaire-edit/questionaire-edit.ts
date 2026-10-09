@@ -34,6 +34,8 @@ import { OnOffToggleComponent } from 'src/app/components/fields/on-off-toggle/on
 import { ClipboardUtil } from 'src/app/tools/Clipboard';
 import { ModalService } from 'src/app/services/modal.service';
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { AsyncPipe } from '@angular/common';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -80,6 +82,8 @@ const OBJECTS_OPTIONS: SelectOptionString[] = [
     AudioFileComponent,
     SliderComponent,
     OnOffToggleComponent,
+    TranslatePipe,
+    AsyncPipe,
   ],
   templateUrl: './questionaire-edit.html',
   styleUrl: './questionaire-edit.scss',

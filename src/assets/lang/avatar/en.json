@@ -41,6 +41,44 @@
           }
         }
       }
+    },
+    "questionaire": {
+      "title": "Edit scenario",
+      "tabs": {
+        "config": {
+          "title": "Configuration",
+          "lang": {
+            "label": "Language"
+          },
+          "objects": {
+            "label": "Selection objects"
+          },
+          "max_questions": {
+            "label": "Max number of questions"
+          },
+          "intro": {
+            "label": "Greating"
+          },
+          "loose": {
+            "label": "Retry message"
+          },
+          "win": {
+            "label": "Congratulation message"
+          }
+        },
+        "questions": {
+          "title": "Questions"
+        },
+        "background": {
+          "title": "Background"
+        },
+        "sounds": {
+          "title": "Sound effects"
+        },
+        "objects": {
+          "title": "Selection objects"
+        }
+      }
     }
   }
 }

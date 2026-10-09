@@ -41,6 +41,43 @@
           }
         }
       }
+    },
+    "questionaire": {
+      "title": "Editar escenario",
+      "tabs": {
+        "config": {
+          "lang": {
+            "label": "Idioma"
+          },
+          "objects": {
+            "label": "Objetos de selección"
+          },
+          "max_questions": {
+            "label": "Máximo número de preguntas"
+          },
+          "intro": {
+            "label": "Saludo"
+          },
+          "loose": {
+            "label": "Mensaje de reintento"
+          },
+          "win": {
+            "label": "Mensaje de felicitación"
+          }
+        },
+        "questions": {
+          "title": "Preguntas"
+        },
+        "background": {
+          "title": "Fondo"
+        },
+        "sounds": {
+          "title": "Efectos de sonido"
+        },
+        "objects": {
+          "title": "Objetos de selección"
+        }
+      }
     }
   }
 }

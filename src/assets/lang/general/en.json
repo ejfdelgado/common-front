@@ -2,7 +2,9 @@
     "buttons": {
         "cancel": "Cancel",
         "accept": "Acept",
-        "save": "Save"
+        "save": "Save",
+        "export": "Export",
+        "import": "Import"
     },
     "cameraPicker": {
         "title": "Select Camera",
