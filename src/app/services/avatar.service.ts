@@ -437,7 +437,8 @@ export class AvatarService {
       return defaultValue;
     }
     try {
-      return JSON.parse(old);
+      const parsed = JSON.parse(old);
+      return Object.assign({}, defaultValue, parsed);
     } catch (e) {
       return defaultValue;
     }
