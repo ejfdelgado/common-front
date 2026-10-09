@@ -67,7 +67,40 @@
           }
         },
         "questions": {
-          "title": "Questions"
+          "title": "Questions",
+          "search": {
+            "label": "Search question",
+            "placeholder": "Search by sentence, option or answer...",
+            "clear": "Clear search",
+            "empty": "No questions matching the search were found."
+          },
+          "question": {
+            "prefix": "Question",
+            "prefix_ch": "Choices",
+            "buttons": {
+              "delete": {
+                "tooltip": "Delete question"
+              },
+              "add": {
+                "tooltip": "Add question"
+              },
+              "delete_ch": {
+                "tooltip": "Delete choice"
+              },
+              "add_ch": {
+                "tooltip": "Add choice"
+              }
+            },
+            "statement": {
+              "label": "Statement"
+            },
+            "choice": {
+              "label": "Choice"
+            },
+            "answer": {
+              "label": "Answer"
+            }
+          }
         },
         "background": {
           "title": "Background"

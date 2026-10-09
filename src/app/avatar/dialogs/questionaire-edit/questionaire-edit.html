@@ -50,12 +50,14 @@
             <form [formGroup]="stepsForm" class="tab_content tab_questions">
 
                 <mat-form-field class="full-width" appearance="outline">
-                    <mat-label>Buscar pregunta</mat-label>
+                    <mat-label>{{ "popup.questionaire.tabs.questions.search.label" | translate : "avatar" | async
+                        }}</mat-label>
                     <mat-icon matPrefix>search</mat-icon>
                     <input matInput [formControl]="searchControl"
-                        placeholder="Buscar por enunciado, texto de opción o respuesta...">
+                        [placeholder]="('popup.questionaire.tabs.questions.search.placeholder' | translate : 'avatar' | async) ?? ''">
                     @if (searchControl.value) {
-                    <button mat-icon-button matSuffix type="button" matTooltip="Limpiar búsqueda"
+                    <button mat-icon-button matSuffix type="button"
+                        [matTooltip]="('popup.questionaire.tabs.questions.search.clear' | translate : 'avatar' | async) ?? ''"
                         (click)="clearSearch()">
                         <mat-icon>close</mat-icon>
                     </button>
@@ -67,19 +69,24 @@
                     @if (matchesSearch(stepIndex)) {
                     <mat-card class="step_card" [formGroupName]="stepIndex">
                         <mat-card-header class="step_header">
-                            <mat-card-title class="step_title highligted_text">Pregunta {{ stepIndex + 1
+                            <mat-card-title class="step_title highligted_text">{{
+                                "popup.questionaire.tabs.questions.question.prefix" | translate : "avatar" | async }} {{
+                                stepIndex + 1
                                 }}</mat-card-title>
-                            <button mat-icon-button color="warn" type="button" matTooltip="Eliminar pregunta"
+                            <button mat-icon-button color="warn" type="button"
+                                [matTooltip]="('popup.questionaire.tabs.questions.question.buttons.delete.tooltip' | translate : 'avatar' | async) ?? ''"
                                 (click)="removeStep(stepIndex)">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </mat-card-header>
 
                         <mat-card-content>
-                            <app-editable-input [discrete]="false" [formControlName]="'label'" [label]="'Enunciado'"
+                            <app-editable-input [discrete]="false" [formControlName]="'label'"
+                                [label]="'popup.questionaire.tabs.questions.question.statement.label' | translate : 'avatar' | async"
                                 [placeholder]="'...'" [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
 
-                            <div class="options_label">Opciones ({{ getOptions(stepIndex).length }}/{{ maxOptions }})
+                            <div class="options_label">{{ "popup.questionaire.tabs.questions.question.prefix_ch" |
+                                translate : "avatar" | async }} ({{ getOptions(stepIndex).length }}/{{ maxOptions }})
                             </div>
 
                             <div formArrayName="options">
@@ -88,16 +95,21 @@
                                 <div class="option_row" [formGroupName]="optionIndex">
 
                                     <app-editable-input class="option_label" [discrete]="false"
-                                        [formControlName]="'label'" [label]="'Opción'" [placeholder]="'...'"
-                                        [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
+                                        [formControlName]="'label'"
+                                        [label]="'popup.questionaire.tabs.questions.question.choice.label' | translate : 'avatar' | async"
+                                        [placeholder]="'...'" [maxHeight]="'6em'"
+                                        [minHeight]="'6em'"></app-editable-input>
 
                                     <app-editable-input class="option_answer" [discrete]="false"
-                                        [formControlName]="'answer'" [label]="'Respuesta'" [placeholder]="'...'"
-                                        [maxHeight]="'6em'" [minHeight]="'6em'"></app-editable-input>
+                                        [formControlName]="'answer'"
+                                        [label]="'popup.questionaire.tabs.questions.question.answer.label' | translate : 'avatar' | async"
+                                        [placeholder]="'...'" [maxHeight]="'6em'"
+                                        [minHeight]="'6em'"></app-editable-input>
 
                                     <app-rating class="option_points" formControlName="points"></app-rating>
 
-                                    <button mat-icon-button color="warn" type="button" matTooltip="Eliminar opción"
+                                    <button mat-icon-button color="warn" type="button"
+                                        [matTooltip]="('popup.questionaire.tabs.questions.question.buttons.delete_ch.tooltip' | translate : 'avatar' | async) ?? ''"
                                         [disabled]="!canRemoveOption(stepIndex)"
                                         (click)="removeOption(stepIndex, optionIndex)">
                                         <mat-icon>close</mat-icon>
@@ -109,20 +121,23 @@
                             <button mat-stroked-button type="button" [disabled]="!canAddOption(stepIndex)"
                                 (click)="addOption(stepIndex)">
                                 <mat-icon>add</mat-icon>
-                                Agregar opción
+                                {{ 'popup.questionaire.tabs.questions.question.buttons.add_ch.tooltip' | translate :
+                                'avatar' | async }}
                             </button>
                         </mat-card-content>
                     </mat-card>
                     }
                     }
                     @if (steps.controls.length > 0 && !hasVisibleSteps()) {
-                    <div class="empty_state">No se encontraron preguntas que coincidan con la búsqueda.</div>
+                    <div class="empty_state">{{ 'popup.questionaire.tabs.questions.search.empty' |
+                        translate : 'avatar' | async }}</div>
                     }
                 </div>
 
                 <button mat-stroked-button type="button" class="" (click)="addStep()">
                     <mat-icon>add</mat-icon>
-                    Agregar pregunta
+                    {{ 'popup.questionaire.tabs.questions.question.buttons.add.tooltip' | translate :
+                    'avatar' | async }}
                 </button>
             </form>
         </mat-tab>
