@@ -149,7 +149,7 @@
                         y qué juegos te gustaría ver?</label>
                     <textarea id="reason" name="reason" placeholder="Me interesa porque..." required minlength="10"
                         [(ngModel)]="reason"></textarea>
-                    <button class="btn" [disabled]="!hasReason()" (click)="onBoard()">Solicitar acceso beta →</button>
+                    <button class="btn" [ngClass]="{'hidden': emailSent}" [disabled]="!hasReason()" (click)="onBoard()">Solicitar acceso beta →</button>
                     <div class="form-message" [ngClass]="{'show': emailSent}" role="status">¡Gracias por tu interés!
                         Revisa tu correo para ingresar.
                     </div>

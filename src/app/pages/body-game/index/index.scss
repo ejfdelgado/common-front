@@ -24,6 +24,10 @@ button[disabled] {
   cursor: not-allowed;
 }
 
+button.hidden {
+  display: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
