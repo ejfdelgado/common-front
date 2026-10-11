@@ -16,8 +16,8 @@
                 <div class="actions"><a class="btn" href="#niveles">Explorar los juegos ↓</a><a class="btn secondary"
                         href="#beta">Quiero probar la beta</a></div>
             </div>
-            <div class="hero-art"><img
-                    src="/assets/body_game/img/mars_intro.png" alt="Paisaje de Marte de estilo cartoon 3D">
+            <div class="hero-art"><img src="/assets/body_game/img/mars_intro.png"
+                    alt="Paisaje de Marte de estilo cartoon 3D">
                 <div class="art-label">Misión: aprender en movimiento<small>Experiencias interactivas para mentes
                         curiosas</small></div>
             </div>
@@ -34,41 +34,45 @@
                 </div>
                 <div class="levels">
                     <article class="level">
-                        <div class="level-image"><img
-                                src="/assets/body_game/img/mars_thumb.png" alt="Planeta Marte y una misión espacial"><span class="level-number">NIVEL 01</span>
+                        <div class="level-image"><img src="/assets/body_game/img/mars_thumb.png"
+                                alt="Planeta Marte y una misión espacial"><span class="level-number">NIVEL 01</span>
                         </div>
                         <div class="level-body">
                             <h3>🚀 Misión a Marte</h3>
-                            <p>Explora el espacio y demuestra cuánto sabes del Sistema Solar.</p><a class="btn play"
-                                data-level="Misión a Marte" href="#beta">Jugar este nivel ↗</a>
+                            <p>Explora el espacio y demuestra cuánto sabes del Sistema Solar.</p>
+                            <a class="btn play" (click)="openWorld('mars')" data-level="Misión a Marte">Jugar este nivel
+                                ↗</a>
                         </div>
                     </article>
                     <article class="level">
-                        <div class="level-image"><img
-                                src="/assets/body_game/img/dyno_thumb.png" alt="Volcán y dinosaurio en un paisaje prehistórico"><span class="level-number">NIVEL
+                        <div class="level-image"><img src="/assets/body_game/img/dyno_thumb.png"
+                                alt="Volcán y dinosaurio en un paisaje prehistórico"><span class="level-number">NIVEL
                                 02</span></div>
                         <div class="level-body">
                             <h3>🦖 Sobrevive al Jurásico</h3>
-                            <p>Resuelve desafíos en un mundo de dinosaurios y volcanes.</p><a class="btn play"
-                                data-level="Sobrevive al Jurásico" href="#beta">Jugar este nivel ↗</a>
+                            <p>Resuelve desafíos en un mundo de dinosaurios y volcanes.</p>
+                            <a class="btn play" (click)="openWorld('dynos')" data-level="Sobrevive al Jurásico">Jugar
+                                este nivel ↗</a>
                         </div>
                     </article>
                     <article class="level">
-                        <div class="level-image"><img
-                                src="/assets/body_game/img/future_thumb.png" alt="Ciudad futurista colorida"><span class="level-number">NIVEL 03</span></div>
+                        <div class="level-image"><img src="/assets/body_game/img/future_thumb.png"
+                                alt="Ciudad futurista colorida"><span class="level-number">NIVEL 03</span></div>
                         <div class="level-body">
                             <h3>🌆 Ciudad futurista</h3>
-                            <p>Recorre una ciudad extraordinaria y supera sus preguntas.</p><a class="btn play"
-                                data-level="Ciudad futurista" href="#beta">Jugar este nivel ↗</a>
+                            <p>Recorre una ciudad extraordinaria y supera sus preguntas.</p>
+                            <a class="btn play" (click)="openWorld('future')" data-level="Ciudad futurista">Jugar este
+                                nivel ↗</a>
                         </div>
                     </article>
                     <article class="level">
-                        <div class="level-image"><img
-                                src="/assets/body_game/img/ocean_thumb.png" alt="Paisaje submarino con vida marina"><span class="level-number">NIVEL 04</span></div>
+                        <div class="level-image"><img src="/assets/body_game/img/ocean_thumb.png"
+                                alt="Paisaje submarino con vida marina"><span class="level-number">NIVEL 04</span></div>
                         <div class="level-body">
                             <h3>🌊 Exploración submarina</h3>
-                            <p>Sumérgete en el océano y descubre sus secretos.</p><a class="btn play"
-                                data-level="Exploración submarina" href="#beta">Jugar este nivel ↗</a>
+                            <p>Sumérgete en el océano y descubre sus secretos.</p>
+                            <a class="btn play" (click)="openWorld('ocean')" data-level="Exploración submarina">Jugar
+                                este nivel ↗</a>
                         </div>
                     </article>
                 </div>
@@ -139,7 +143,7 @@
                         para nuevos mundos, materias y desafíos.</p>
                     <p>Cuéntanos qué te interesa y qué te gustaría que los niños pudieran aprender jugando.</p>
                 </div>
-                <form id="betaForm"><label for="email">Tu correo electrónico</label><input id="email" name="email"
+                <form><label for="email">Tu correo electrónico</label><input id="email" name="email"
                         type="email" placeholder="tu@correo.com" required><label for="reason">¿Por qué te interesa
                         probarlo
                         y qué juegos te gustaría ver?</label><textarea id="reason" name="reason"
