@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { User } from 'firebase/auth';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -7,12 +9,14 @@ import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-index',
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './index.html',
   styleUrl: './index.scss',
 })
 export class Index {
   sendEmailPending: boolean = false;
+  reason: string = '';
+  emailSent: boolean = false;
   user: User | null = null;
   WORLDS: { [key: string]: { url: string } } = {
     mars: {
@@ -52,18 +56,28 @@ export class Index {
   }
 
   async sendEmail(email: string) {
-    let interest = "";
-    const response = await firstValueFrom(
+    const response: any = await firstValueFrom(
       this.http.post(environment.apiUrl + 'srv/email/body_game_welcome', {
         email,
-        interest,
+        interest: this.reason,
       }),
     );
-    console.log(JSON.stringify(response, null, 4));
+    if (response.success) {
+      this.emailSent = true;
+      this.cdr.detectChanges();
+    } else {
+      console.log(JSON.stringify(response));
+    }
+  }
+
+  hasReason(): boolean {
+    return this.reason.trim().length >= 10;
   }
 
   async onBoard() {
-    
+    if (!this.hasReason()) {
+      return;
+    }
     if (!this.user) {
       await this.autSrv.login();
       this.sendEmailPending = true;
