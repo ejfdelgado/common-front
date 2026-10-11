@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { User } from 'firebase/auth';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-index',
@@ -29,6 +32,7 @@ export class Index {
   constructor(
     private autSrv: AuthService,
     private cdr: ChangeDetectorRef,
+    private http: HttpClient,
   ) {
     this.autSrv.authState$.subscribe((user) => {
       this.user = user;
@@ -48,10 +52,18 @@ export class Index {
   }
 
   async sendEmail(email: string) {
-    console.log(`Send email to ${email}`);
+    let interest = "";
+    const response = await firstValueFrom(
+      this.http.post(environment.apiUrl + 'srv/email/body_game_welcome', {
+        email,
+        interest,
+      }),
+    );
+    console.log(JSON.stringify(response, null, 4));
   }
 
-  async onBoard(message: string) {
+  async onBoard() {
+    
     if (!this.user) {
       await this.autSrv.login();
       this.sendEmailPending = true;
