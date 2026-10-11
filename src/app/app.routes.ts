@@ -151,12 +151,10 @@ const routes: Routes = [
 // 1. https://login.domaindiscount24.com/
 // 2. https://console.cloud.google.com/appengine/settings/domains?serviceId=default&project=proyeccion-colombia1
 // 3. En la infra ENV vars: CORS_MAIN_ALLOWED_ORIGIN
-if (["localhost"].indexOf(location.hostname) >= 0) {
+if (["localhost", "move-and-learn.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
         path: '',
-        //loadComponent: () => import('./pages/index/index').then(m => m.Index),
-        //loadComponent: () => import('./pages/alterego/index/index').then(m => m.AlteregoIndex),
-        loadComponent: () => import('./pages/alterego/land/alterego-land').then(m => m.AlteregoLandComponent),
+        loadComponent: () => import('./pages/body-game/index').then(m => m.Index),
     });
 } else if (["pais.tv", "chat.pais.tv"].indexOf(location.hostname) >= 0) {
     routes.unshift({
