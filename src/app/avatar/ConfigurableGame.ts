@@ -122,7 +122,6 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         roles.push('owner');
       }
       roles.push(...this.authSrv.roles());
-      console.log(JSON.stringify(roles));
       let missed = 0;
       r.forEach((rol) => {
         const found = roles.indexOf(rol) >= 0;

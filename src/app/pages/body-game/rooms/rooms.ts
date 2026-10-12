@@ -18,6 +18,7 @@ import { IndicatorService } from '@services/indicator.service';
 import { ShareSrv } from '@services/share.service';
 import { Subscription } from 'rxjs';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { getAssistanteIframeSrc } from '../../alterego/common';
 
 const MODEL_NAME = 'room-public';
 
@@ -26,9 +27,10 @@ const MODEL_NAME = 'room-public';
   standalone: true,
   imports: [CommonModule, MatButtonModule, Statusbar, CardDoc, SideMenu, TranslatePipe, AsyncPipe],
   templateUrl: './rooms.html',
-  styleUrl: './rooms.scss',
+  styleUrls: ['./rooms.scss', '../../../../assets/css/chat.scss'],
 })
 export class RoomsComponent extends AuthenticatedComponent implements OnInit, OnDestroy {
+  isAssistantOpened: boolean = false;
   menuOptions: MenuOptionType[] = [];
   rooms: RoomGameType[] = [];
   authSubscription: Subscription | null = null;
@@ -209,7 +211,23 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    window.addEventListener('message', (event) => {
+      if (event.origin !== location.origin) return;
+      if (event.data.type === 'close') {
+        this.isAssistantOpened = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  openAssistant() {
+    this.isAssistantOpened = true;
+  }
+
+  getIframeSrc() {
+    return getAssistanteIframeSrc('76MQ3z0RHhNgqdEBHUD5', this.sanitizer);
+  }
 
   ngOnDestroy(): void {
     if (this.authSubscription) {

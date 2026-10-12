@@ -8,7 +8,7 @@ import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { environment } from 'src/environments/environment';
-import { getClientRef } from '../../alterego/common';
+import { getAssistanteIframeSrc, getClientRef } from '../../alterego/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -72,16 +72,20 @@ export class Index {
 
   ngOnInit(): void {
     window.addEventListener('message', (event) => {
-      // Always validate origin for security
       if (event.origin !== location.origin) return;
-
       if (event.data.type === 'close') {
         this.isAssistantOpened = false;
         this.cdr.detectChanges();
-      } else if (event.data.type === 'echo_response') {
-        console.log(JSON.stringify(event.data));
       }
     });
+  }
+
+  openAssistant() {
+    this.isAssistantOpened = true;
+  }
+
+  getIframeSrc() {
+    return getAssistanteIframeSrc('76MQ3z0RHhNgqdEBHUD5', this.sanitizer);
   }
 
   openWorld(id: string) {
@@ -144,22 +148,6 @@ export class Index {
       url = TOS[lang];
     }
     window.open(url, '_blank', 'noopener');
-  }
-
-  openAssistant() {
-    this.isAssistantOpened = true;
-  }
-
-  getIframeSrc() {
-    const ref = getClientRef();
-    let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
-    let base = `${host}&id=76MQ3z0RHhNgqdEBHUD5&origin=${encodeURIComponent(location.origin)}`;
-    if (ref) {
-      base = `${base}&mode=embedded&ref=${ref.ref}`;
-    } else {
-      base = `${base}&mode=embedded`;
-    }
-    return this.sanitizer.bypassSecurityTrustResourceUrl(base);
   }
 
   createYourOwnGame() {
