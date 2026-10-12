@@ -4,8 +4,12 @@ import { AssistantDataType } from './ragTypes';
 import { ABCDType } from './WorldAvatarLibrary';
 
 export const ANALYTICS_ID = 'G-0DQTJJ7Q13';
+export const ASISTANT_ID: { [key: string]: string } = {
+  es: '76MQ3z0RHhNgqdEBHUD5',
+  en: '7yOa2i3DzTQqxBSDV6Wp',
+};
 export const BUCKET_ROOT = 'https://storage.googleapis.com/pro-ejflab-assets/';
-export const LOCAL_AUDIO_PREFIX = "/assets/";
+export const LOCAL_AUDIO_PREFIX = '/assets/';
 export const MAX_LIFE = 5;
 
 export const MIRROR_OPTIONS: SelectOptionBoolean[] = [

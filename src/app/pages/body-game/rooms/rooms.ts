@@ -20,7 +20,8 @@ import { Subscription } from 'rxjs';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { getAssistanteIframeSrc } from '../../alterego/common';
 import { AnalyticsService } from 'src/app/services/analytics.service';
-import { ANALYTICS_ID } from 'src/types/WorldAvatar';
+import { ANALYTICS_ID, ASISTANT_ID } from 'src/types/WorldAvatar';
+import { ConfigService } from 'src/app/services/config.service';
 
 const MODEL_NAME = 'room-public';
 
@@ -55,6 +56,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     public shareSrv: ShareSrv,
     private router: Router,
     private analyticsSrv: AnalyticsService,
+    public configSrv: ConfigService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
     this.analyticsSrv.gtagConfig(ANALYTICS_ID);
@@ -229,7 +231,8 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
   }
 
   getIframeSrc() {
-    return getAssistanteIframeSrc('76MQ3z0RHhNgqdEBHUD5', this.sanitizer);
+    const lang = this.configSrv.getCurrentLanguage();
+    return getAssistanteIframeSrc(ASISTANT_ID[lang], this.sanitizer);
   }
 
   ngOnDestroy(): void {

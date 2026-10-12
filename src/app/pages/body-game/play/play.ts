@@ -30,8 +30,8 @@ import { ModuloSonido } from '@services/sonido.service';
 import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
 import { FileService } from 'src/app/services/file.srv';
-import { getClientRef } from '../../alterego/common';
-import { ANALYTICS_ID } from 'src/types/WorldAvatar';
+import { getAssistanteIframeSrc, getClientRef } from '../../alterego/common';
+import { ANALYTICS_ID, ASISTANT_ID } from 'src/types/WorldAvatar';
 import { AnalyticsService } from 'src/app/services/analytics.service';
 
 const MODEL_NAME_PARENT = 'room-public';
@@ -316,14 +316,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
   }
 
   getIframeSrc() {
-    const ref = getClientRef();
-    let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
-    let base = `${host}&id=76MQ3z0RHhNgqdEBHUD5&origin=${encodeURIComponent(location.origin)}`;
-    if (ref) {
-      base = `${base}&mode=embedded&ref=${ref.ref}`;
-    } else {
-      base = `${base}&mode=embedded`;
-    }
-    return this.sanitizer.bypassSecurityTrustResourceUrl(base);
+    const lang = this.configSrv.getCurrentLanguage();
+    return getAssistanteIframeSrc(ASISTANT_ID[lang], this.sanitizer);
   }
 }

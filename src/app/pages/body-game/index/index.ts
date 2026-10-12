@@ -12,7 +12,7 @@ import { getAssistanteIframeSrc, getClientRef } from '../../alterego/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AnalyticsService } from 'src/app/services/analytics.service';
-import { ANALYTICS_ID } from 'src/types/WorldAvatar';
+import { ANALYTICS_ID, ASISTANT_ID } from 'src/types/WorldAvatar';
 
 @Component({
   selector: 'app-index',
@@ -89,7 +89,8 @@ export class Index {
   }
 
   getIframeSrc() {
-    return getAssistanteIframeSrc('76MQ3z0RHhNgqdEBHUD5', this.sanitizer);
+    const lang = this.configSrv.getCurrentLanguage();
+    return getAssistanteIframeSrc(ASISTANT_ID[lang], this.sanitizer);
   }
 
   openWorld(id: string) {
@@ -113,8 +114,7 @@ export class Index {
     if (response.success) {
       this.emailSent = true;
       this.cdr.detectChanges();
-    } else {
-      console.log(JSON.stringify(response));
+      this.createYourOwnGame();
     }
   }
 
