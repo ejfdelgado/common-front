@@ -6,4 +6,8 @@
         </div>
         <app-statusbar [config]="statusBarConfig" [title]="''"></app-statusbar>
     </div>
+    <div class="chat_button_parent" [ngClass]="{'invisible': isAssistantOpened}">
+        <div class="chat_button" (click)="openAssistant()">💬</div>
+    </div>
+    <iframe class="iframe_chat" [ngClass]="{'invisible': !isAssistantOpened}" [src]="getIframeSrc()"></iframe>
 </div>

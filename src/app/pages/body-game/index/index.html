@@ -171,4 +171,8 @@
         <div class="wrap footer-inner"><span>© 2026 Move & Learn · {{ "footer_prototype" | translate : "avatar/landing"
                 | async}}</span><span>{{ "footer_tagline" | translate : "avatar/landing" | async}}</span></div>
     </footer>
+    <div class="chat_button_parent" [ngClass]="{'invisible': isAssistantOpened}">
+        <div class="chat_button" (click)="openAssistant()">💬</div>
+    </div>
+    <iframe class="iframe_chat" [ngClass]="{'invisible': !isAssistantOpened}" [src]="getIframeSrc()"></iframe>
 </div>

@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthenticatedComponent } from '@components/authenticated.component';
-import { EditableInput } from '@components/fields/editable-input/editable-input';
 import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { ApiResponse } from '@mytypes/file';
@@ -59,6 +58,7 @@ export interface ClientDataType {
   templateUrl: './alterego-land.html',
   styleUrls: [
     './alterego-land.scss',
+    "../../../../assets/css/chat.scss",
   ],
 })
 export class AlteregoLandComponent extends AuthenticatedComponent implements OnInit {

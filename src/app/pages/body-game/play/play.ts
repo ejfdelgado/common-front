@@ -30,6 +30,7 @@ import { ModuloSonido } from '@services/sonido.service';
 import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
 import { FileService } from 'src/app/services/file.srv';
+import { getClientRef } from '../../alterego/common';
 
 const MODEL_NAME_PARENT = 'room-public';
 
@@ -37,7 +38,7 @@ const MODEL_NAME_PARENT = 'room-public';
   selector: 'app-play',
   imports: [CommonModule, MatButtonModule, Statusbar, SideMenu, BodyTracker],
   templateUrl: './play.html',
-  styleUrl: './play.scss',
+  styleUrls: ['./play.scss', '../../../../assets/css/chat.scss'],
 })
 export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('tracker_component') trackerComponent!: ComponentP2P;
@@ -46,6 +47,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
   };
   status: P2PStatus = { value: 'offline' };
   p2pStatusSubscription: Subscription | null = null;
+  isAssistantOpened: boolean = false;
 
   constructor(
     public override sanitizer: DomSanitizer,
@@ -132,7 +134,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editAvatar',
           translateFolder: 'avatar',
           name: 'loged_edit_avatar',
-          roles: ["body_game_editor"],
+          roles: ['body_game_editor'],
           isPlainIcon: true,
           icon: '🎭',
           visible: true,
@@ -149,7 +151,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editScenario',
           translateFolder: 'avatar',
           name: 'loged_edit_scenario',
-          roles: ["body_game_editor"],
+          roles: ['body_game_editor'],
           isPlainIcon: true,
           icon: '📑',
           visible: true,
@@ -166,7 +168,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editModes',
           translateFolder: 'avatar',
           name: 'loged_edit_modes',
-          roles: ["body_game_editor"],
+          roles: ['body_game_editor'],
           isPlainIcon: true,
           icon: '👾',
           visible: true,
@@ -183,7 +185,7 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           label: 'menu.editWorld',
           translateFolder: 'avatar',
           name: 'loged_edit_world',
-          roles: ["body_game_editor"],
+          roles: ['body_game_editor'],
           isPlainIcon: true,
           icon: '🌍',
           visible: true,
@@ -279,11 +281,39 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     });
   }
 
-  async ngOnInit(): Promise<void> {}
+  async ngOnInit(): Promise<void> {
+    window.addEventListener('message', (event) => {
+      // Always validate origin for security
+      if (event.origin !== location.origin) return;
+
+      if (event.data.type === 'close') {
+        this.isAssistantOpened = false;
+        this.cdr.detectChanges();
+      } else if (event.data.type === 'echo_response') {
+        console.log(JSON.stringify(event.data));
+      }
+    });
+  }
 
   ngOnDestroy(): void {
     if (this.p2pStatusSubscription) {
       this.p2pStatusSubscription.unsubscribe();
     }
+  }
+
+  openAssistant() {
+    this.isAssistantOpened = true;
+  }
+
+  getIframeSrc() {
+    const ref = getClientRef();
+    let host = `${location.origin}/#/alterego/use?col=pubknowledge`;
+    let base = `${host}&id=76MQ3z0RHhNgqdEBHUD5&origin=${encodeURIComponent(location.origin)}`;
+    if (ref) {
+      base = `${base}&mode=embedded&ref=${ref.ref}`;
+    } else {
+      base = `${base}&mode=embedded`;
+    }
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base);
   }
 }
