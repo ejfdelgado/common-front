@@ -6,6 +6,7 @@ import { User } from 'firebase/auth';
 import { firstValueFrom } from 'rxjs';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AuthService } from 'src/app/services/auth.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -38,6 +39,7 @@ export class Index {
     private autSrv: AuthService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
+    private configSrv: ConfigService,
   ) {
     this.autSrv.authState$.subscribe((user) => {
       this.user = user;
@@ -87,5 +89,9 @@ export class Index {
         this.sendEmail(this.user.email);
       }
     }
+  }
+
+  async setLang(lang: string) {
+    this.configSrv.setLanguage(lang);
   }
 }

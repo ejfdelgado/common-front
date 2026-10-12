@@ -1,9 +1,12 @@
 <div class="body">
     <header class="wrap">
         <nav><a class="brand" href="#">MOVE<span>&</span>LEARN</a>
-            <div class="navlinks"><a href="#niveles">Explora los juegos</a><a href="#beneficios">Por qué moverse?</a><a
+            <div class="navlinks"><a href="#niveles">{{ "explore_games" | translate : "avatar/landing" | async}}</a><a href="#beneficios">Por qué moverse?</a><a
                     href="#beta">Beta testers</a></div><a class="btn secondary" href="#beta">Crea tu propio juego</a>
         </nav>
+        <div class="langs">
+            <span (click)="setLang('es')">Español</span><span (click)="setLang('en')">English</span>
+        </div>
     </header>
     <main>
         <div class="wrap hero">

@@ -19,6 +19,19 @@
   line-height: 1.55;
 }
 
+.langs {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 30px;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.langs span:hover {
+  color: white;
+}
+
 button[disabled] {
   background-color: #919191;
   cursor: not-allowed;
