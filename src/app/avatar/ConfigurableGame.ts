@@ -102,7 +102,8 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
   }
 
   async updateLogedMenuOptions() {
-    const visible = !!this.user;
+    const userLoged = !!this.user;
+    const roomExists = !!this.room;
 
     const menusToAdjust = [];
     menusToAdjust.push(...this.menuOptions);
@@ -110,10 +111,35 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
     if (temp) {
       menusToAdjust.push(...temp);
     }
+
+    const hasAllRoles = (r: string[]) => {
+      const roles: string[] = [];
+      if (userLoged) {
+        roles.push('logged');
+      }
+      if (this.isUserOwner) {
+        // virtual role
+        roles.push('owner');
+      }
+      roles.push(...this.authSrv.roles());
+      console.log(JSON.stringify(roles));
+      let missed = 0;
+      r.forEach((rol) => {
+        const found = roles.indexOf(rol) >= 0;
+        if (!found) {
+          missed++;
+        }
+      });
+      return missed == 0;
+    };
+
     menusToAdjust
-      .filter((a) => a.name && a.name.startsWith('loged_'))
+      .filter((m) => m.autovisible)
       .forEach((e) => {
-        e.visible = (e.roles ? this.authSrv.hasARole(e.roles) : true) && visible && !!this.room;
+        e.visible =
+          roomExists &&
+          userLoged &&
+          (e.roles instanceof Array && e.roles.length > 0 ? hasAllRoles(e.roles) : true);
       });
     // Check the levels
     const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');

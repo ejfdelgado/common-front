@@ -221,11 +221,14 @@ export class AuthService {
       return false;
     }
     const queryString = new URLSearchParams(queryParams).toString();
-    const read = await firstValueFrom(
+    const read: any = await firstValueFrom(
       this.http.get(environment.apiUrl + `admin/user/shared_with_me?${queryString}`, {
         responseType: 'json',
       }),
     );
-    return true;
+    if (read.success && read.data) {
+      return true;
+    }
+    return false;
   }
 }

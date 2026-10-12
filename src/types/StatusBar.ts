@@ -11,6 +11,7 @@ export interface MenuOptionType {
   name?: string;
   inUse?: boolean;
   metaId?: string;
+  autovisible?: boolean;
 }
 
 export interface StatusBarConfigType {
