@@ -34,6 +34,18 @@ export class Index {
     ocean_es: {
       url: '/#/action/play?col=room-public&id=HmiwGLJcSVHl8cDBviL0',
     },
+    mars_en: {
+      url: '/#/action/play?col=room-public&id=Mg7FEr01b1SUr77WXYTE',
+    },
+    dynos_en: {
+      url: '/#/action/play?col=room-public&id=pDzPweuGTK7hJumH9Tej',
+    },
+    future_en: {
+      url: '/#/action/play?col=room-public&id=OUUeFagbzxxkoSn2jDXU',
+    },
+    ocean_en: {
+      url: '/#/action/play?col=room-public&id=tncg7IYoxTJegrFPlBTl',
+    },    
   };
 
   constructor(
