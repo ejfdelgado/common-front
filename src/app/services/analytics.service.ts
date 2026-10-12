@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 declare global {
   interface Window {
@@ -15,8 +16,14 @@ export class AnalyticsService {
   private configuredIds = new Set<string>();
   private readonly disabled = window.location.hostname === 'localhost';
 
-  constructor() {
-
+  constructor(public authSrv: AuthService) {
+    this.authSrv.authState$.subscribe(async (user) => {
+      if (user && user.email) {
+        this.setUserId(user.email);
+      } else {
+        this.setUserId('anonymus');
+      }
+    });
   }
 
   gtagConfig(id: string, config: Record<string, any> = {}): Promise<void> {

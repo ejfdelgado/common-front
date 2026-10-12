@@ -30,6 +30,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AvatarBodyEvent } from 'src/types/BodyTypes';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { Subscription } from 'rxjs';
+import { StartGameOptions } from 'src/types/WorldAvatar';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 
 @Component({
   selector: 'app-body-tracker',
@@ -61,6 +63,7 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     public override configSrv: ConfigService,
     public override p2pSrv: P2PService,
     public override dialog: MatDialog,
+    private analyticsSrv: AnalyticsService,
   ) {
     super(
       voiceSrv,
@@ -153,5 +156,12 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
 
   notifyEvent(event: AvatarBodyEvent): void {
     this.events.emit(event);
+  }
+
+  override async startAll(options?: StartGameOptions) {
+    super.startAll(options);
+    if (this.room) {
+      this.analyticsSrv.event('play', { roomId: this.room.id });
+    }
   }
 }

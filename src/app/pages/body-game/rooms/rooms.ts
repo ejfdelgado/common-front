@@ -19,6 +19,8 @@ import { ShareSrv } from '@services/share.service';
 import { Subscription } from 'rxjs';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { getAssistanteIframeSrc } from '../../alterego/common';
+import { AnalyticsService } from 'src/app/services/analytics.service';
+import { ANALYTICS_ID } from 'src/types/WorldAvatar';
 
 const MODEL_NAME = 'room-public';
 
@@ -52,9 +54,10 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     private indicatorSrv: IndicatorService,
     public shareSrv: ShareSrv,
     private router: Router,
+    private analyticsSrv: AnalyticsService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
-
+    this.analyticsSrv.gtagConfig(ANALYTICS_ID);
     this.menuOptions.push({
       label: 'menu_rooms.add_room.label',
       translateFolder: 'avatar',

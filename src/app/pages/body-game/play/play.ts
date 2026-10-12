@@ -31,6 +31,8 @@ import { ConfigService } from '@services/config.service';
 import { ConfigurableGame } from 'src/app/avatar/ConfigurableGame';
 import { FileService } from 'src/app/services/file.srv';
 import { getClientRef } from '../../alterego/common';
+import { ANALYTICS_ID } from 'src/types/WorldAvatar';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 
 const MODEL_NAME_PARENT = 'room-public';
 
@@ -64,9 +66,10 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     public sideMenuSrv: SideMenuService,
     private router: Router,
     public p2pSrv: P2PService,
+    private analyticsSrv: AnalyticsService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr, dialog, configSrv, fileSrv, firestoreSrv);
-
+    this.analyticsSrv.gtagConfig(ANALYTICS_ID);
     this.p2pStatusSubscription = this.p2pSrv.status.subscribe((ev) => {
       this.status = ev;
       const found = this.menuOptions.find((a) => a.name == 'end_call');

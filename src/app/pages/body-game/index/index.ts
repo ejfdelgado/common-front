@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment';
 import { getAssistanteIframeSrc, getClientRef } from '../../alterego/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { AnalyticsService } from 'src/app/services/analytics.service';
+import { ANALYTICS_ID } from 'src/types/WorldAvatar';
 
 @Component({
   selector: 'app-index',
@@ -59,7 +61,9 @@ export class Index {
     private configSrv: ConfigService,
     public sanitizer: DomSanitizer,
     private router: Router,
+    private analyticsSrv: AnalyticsService,
   ) {
+    this.analyticsSrv.gtagConfig(ANALYTICS_ID);
     this.autSrv.authState$.subscribe((user) => {
       this.user = user;
       this.cdr.detectChanges();
