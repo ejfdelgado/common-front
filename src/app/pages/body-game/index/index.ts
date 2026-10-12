@@ -74,10 +74,12 @@ export class Index {
   }
 
   async sendEmail(email: string) {
+    const lang = this.configSrv.getCurrentLanguage();
     const response: any = await firstValueFrom(
       this.http.post(environment.apiUrl + 'srv/email/body_game_welcome', {
         email,
         interest: this.reason,
+        lang,
       }),
     );
     if (response.success) {
