@@ -49,8 +49,14 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+a:hover {
+  color: white;
+}
+
 a.tos {
   text-decoration: underline;
+  cursor: pointer;
 }
 .wrap {
   width: min(1160px, calc(100% - 40px));
