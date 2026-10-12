@@ -16,21 +16,22 @@ import { environment } from 'src/environments/environment';
   styleUrl: './index.scss',
 })
 export class Index {
+  currentLang: string = '';
   sendEmailPending: boolean = false;
   reason: string = '';
   emailSent: boolean = false;
   user: User | null = null;
   WORLDS: { [key: string]: { url: string } } = {
-    mars: {
+    mars_es: {
       url: '/#/action/play?col=room-public&id=KTxO0ViGYUsDJvGGUbvw',
     },
-    dynos: {
+    dynos_es: {
       url: '/#/action/play?col=room-public&id=hMi5auHc6KIORgvhiikr',
     },
-    future: {
+    future_es: {
       url: '/#/action/play?col=room-public&id=efVxakYjL0oxDSoeVhC0',
     },
-    ocean: {
+    ocean_es: {
       url: '/#/action/play?col=room-public&id=HmiwGLJcSVHl8cDBviL0',
     },
   };
@@ -48,10 +49,12 @@ export class Index {
         this.sendEmail(user.email);
       }
     });
+    this.currentLang = this.configSrv.getCurrentLanguage();
   }
 
   openWorld(id: string) {
-    const world = this.WORLDS[id];
+    const lang = this.configSrv.getCurrentLanguage();
+    const world = this.WORLDS[id + '_' + lang];
     if (world) {
       const url = `${location.origin}${world.url}`;
       window.open(url, '_blank', 'noopener');
@@ -93,5 +96,19 @@ export class Index {
 
   async setLang(lang: string) {
     this.configSrv.setLanguage(lang);
+    this.currentLang = lang;
+  }
+
+  async openTos() {
+    const TOS: any = {
+      es: '/assets/tos/move_and_learn_es.html',
+      en: '/assets/tos/move_and_learn_en.html',
+    };
+    const lang = this.configSrv.getCurrentLanguage();
+    let url = TOS['en'];
+    if (lang in TOS) {
+      url = TOS[lang];
+    }
+    window.open(url, '_blank', 'noopener');
   }
 }

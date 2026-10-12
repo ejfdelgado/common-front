@@ -1,11 +1,13 @@
 <div class="body">
     <header class="wrap">
         <nav><a class="brand" href="#">MOVE<span>&</span>LEARN</a>
-            <div class="navlinks"><a href="#niveles">{{ "explore_games" | translate : "avatar/landing" | async}}</a><a href="#beneficios">Por qué moverse?</a><a
-                    href="#beta">Beta testers</a></div><a class="btn secondary" href="#beta">Crea tu propio juego</a>
+            <div class="navlinks"><a href="#niveles">{{ "explore_games" | translate : "avatar/landing" | async}}</a><a
+                    href="#beneficios">Por qué moverse?</a><a href="#beta">Beta testers</a></div><a
+                class="btn secondary" href="#beta">Crea tu propio juego</a>
         </nav>
         <div class="langs">
-            <span (click)="setLang('es')">Español</span><span (click)="setLang('en')">English</span>
+            <span (click)="setLang('es')" [ngClass]="{'used': currentLang == 'es'}">Español</span>
+            <span (click)="setLang('en')" [ngClass]="{'used': currentLang == 'en'}">English</span>
         </div>
     </header>
     <main>
@@ -151,13 +153,15 @@
                         y qué juegos te gustaría ver?</label>
                     <textarea id="reason" name="reason" placeholder="Me interesa porque..." required minlength="10"
                         [(ngModel)]="reason"></textarea>
-                    <button class="btn" [ngClass]="{'hidden': emailSent}" [disabled]="!hasReason()" (click)="onBoard()">Solicitar acceso beta →</button>
+                    <button class="btn" [ngClass]="{'hidden': emailSent}" [disabled]="!hasReason()"
+                        (click)="onBoard()">Solicitar acceso beta →</button>
                     <div class="form-message" [ngClass]="{'show': emailSent}" role="status">¡Gracias por tu interés!
                         Revisa tu correo para ingresar.
                     </div>
                     <p class="fineprint">Al enviar, aceptas que usemos estos datos únicamente para gestionar tu
                         solicitud de
-                        acceso beta. Ver <a class="tos" href="/assets/tos/move_and_learn_es.html" target="_blank">términos y condiciones</a></p>
+                        acceso beta. Ver <a class="tos" (click)="openTos()" target="_blank">términos y condiciones</a>
+                    </p>
                 </form>
             </div>
         </section>

@@ -28,6 +28,10 @@
   color: var(--muted);
 }
 
+.langs .used {
+  text-decoration: underline;
+}
+
 .langs span:hover {
   color: white;
 }
