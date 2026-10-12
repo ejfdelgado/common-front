@@ -2,8 +2,9 @@
     <header class="wrap">
         <nav><a class="brand" href="#">MOVE<span>&</span>LEARN</a>
             <div class="navlinks"><a href="#niveles">{{ "explore_games" | translate : "avatar/landing" | async}}</a><a
-                    href="#beneficios">Por qué moverse?</a><a href="#beta">Beta testers</a></div><a
-                class="btn secondary" href="#beta">Crea tu propio juego</a>
+                    href="#beneficios">{{ "nav_why_move" | translate : "avatar/landing" | async}}</a><a href="#beta">{{
+                    "nav_beta_testers" | translate : "avatar/landing" | async}}</a></div><a class="btn secondary"
+                href="#beta">{{ "nav_create_game" | translate : "avatar/landing" | async}}</a>
         </nav>
         <div class="langs">
             <span (click)="setLang('es')" [ngClass]="{'used': currentLang == 'es'}">Español</span>
@@ -13,70 +14,84 @@
     <main>
         <div class="wrap hero">
             <div>
-                <div class="eyebrow">Juega · Muévete · Aprende</div>
-                <h1>Tu cuerpo también puede ser un <em>control.</em></h1>
-                <p>Una nueva forma de explorar el conocimiento: juega con tu movimiento, responde desafíos y descubre
-                    escenarios diseñados para aprender de forma activa.</p>
-                <div class="actions"><a class="btn" href="#niveles">Explorar los juegos ↓</a><a class="btn secondary"
-                        href="#beta">Quiero crear mis propios juegos</a></div>
+                <div class="eyebrow">{{ "hero_eyebrow" | translate : "avatar/landing" | async}}</div>
+                <h1>{{ "hero_title" | translate : "avatar/landing" | async}} <em>{{ "hero_title_em" | translate :
+                        "avatar/landing" | async}}</em></h1>
+                <p>{{ "hero_text" | translate : "avatar/landing" | async}}</p>
+                <div class="actions"><a class="btn" href="#niveles">{{ "hero_explore_button" | translate :
+                        "avatar/landing" | async}} ↓</a><a class="btn secondary" href="#beta">{{ "hero_create_button" |
+                        translate : "avatar/landing" | async}}</a></div>
             </div>
             <div class="hero-art"><img src="/assets/body_game/img/mars_intro.jpg"
-                    alt="Paisaje de Marte de estilo cartoon 3D">
-                <div class="art-label">Misión: aprender en movimiento<small>Experiencias interactivas para mentes
-                        curiosas</small></div>
+                    [alt]="'hero_image_alt' | translate : 'avatar/landing' | async">
+                <div class="art-label">{{ "hero_art_label" | translate : "avatar/landing" | async}}<small>{{
+                        "hero_art_label_small" | translate : "avatar/landing" | async}}</small></div>
             </div>
         </div>
         <section id="niveles">
             <div class="wrap">
                 <div class="section-head">
                     <div>
-                        <div class="eyebrow">Elige tu aventura</div>
-                        <h2>¿A qué mundo quieres entrar?</h2>
+                        <div class="eyebrow">{{ "levels_eyebrow" | translate : "avatar/landing" | async}}</div>
+                        <h2>{{ "levels_title" | translate : "avatar/landing" | async}}</h2>
                     </div>
-                    <p>Cuatro escenarios para convertir cada pregunta en un reto interactivo. Selecciona un nivel para
-                        empezar.</p>
+                    <p>{{ "levels_text" | translate : "avatar/landing" | async}}</p>
                 </div>
                 <div class="levels">
                     <article class="level">
                         <div class="level-image"><img src="/assets/body_game/img/mars_thumb.jpg"
-                                alt="Planeta Marte y una misión espacial"><span class="level-number">NIVEL 01</span>
+                                [alt]="'level_mars_alt' | translate : 'avatar/landing' | async"><span
+                                class="level-number">{{ "level_label" | translate : "avatar/landing" | async}} 01</span>
                         </div>
                         <div class="level-body">
-                            <h3>🚀 Misión a Marte</h3>
-                            <p>Demuestra cuánto sabes del Sistema Solar.</p>
-                            <a class="btn play" (click)="openWorld('mars')" data-level="Misión a Marte">Jugar este nivel
+                            <h3>🚀 {{ "level_mars_title" | translate : "avatar/landing" | async}}</h3>
+                            <p>{{ "level_mars_text" | translate : "avatar/landing" | async}}</p>
+                            <a class="btn play" (click)="openWorld('mars')"
+                                [attr.data-level]="'level_mars_title' | translate : 'avatar/landing' | async">{{
+                                "play_level" | translate : "avatar/landing" | async}}
                                 ↗</a>
                         </div>
                     </article>
                     <article class="level">
                         <div class="level-image"><img src="/assets/body_game/img/dyno_thumb.jpg"
-                                alt="Volcán y dinosaurio en un paisaje prehistórico"><span class="level-number">NIVEL
+                                [alt]="'level_dynos_alt' | translate : 'avatar/landing' | async"><span
+                                class="level-number">{{ "level_label" | translate : "avatar/landing" | async}}
                                 02</span></div>
                         <div class="level-body">
-                            <h3>🦖 Sobrevive al Jurásico</h3>
-                            <p>Resuelve preguntas del mundo de los dinosaurios.</p>
-                            <a class="btn play" (click)="openWorld('dynos')" data-level="Sobrevive al Jurásico">Jugar
-                                este nivel ↗</a>
+                            <h3>🦖 {{ "level_dynos_title" | translate : "avatar/landing" | async}}</h3>
+                            <p>{{ "level_dynos_text" | translate : "avatar/landing" | async}}</p>
+                            <a class="btn play" (click)="openWorld('dynos')"
+                                [attr.data-level]="'level_dynos_title' | translate : 'avatar/landing' | async">{{
+                                "play_level" | translate : "avatar/landing" | async}}
+                                ↗</a>
                         </div>
                     </article>
                     <article class="level">
                         <div class="level-image"><img src="/assets/body_game/img/future_thumb.jpg"
-                                alt="Ciudad futurista colorida"><span class="level-number">NIVEL 03</span></div>
+                                [alt]="'level_future_alt' | translate : 'avatar/landing' | async"><span
+                                class="level-number">{{ "level_label" | translate : "avatar/landing" | async}} 03</span>
+                        </div>
                         <div class="level-body">
-                            <h3>🌆 Ciudad futurista</h3>
-                            <p>Te sientes preparado para las preguntas del futuro?.</p>
-                            <a class="btn play" (click)="openWorld('future')" data-level="Ciudad futurista">Jugar este
-                                nivel ↗</a>
+                            <h3>🌆 {{ "level_future_title" | translate : "avatar/landing" | async}}</h3>
+                            <p>{{ "level_future_text" | translate : "avatar/landing" | async}}</p>
+                            <a class="btn play" (click)="openWorld('future')"
+                                [attr.data-level]="'level_future_title' | translate : 'avatar/landing' | async">{{
+                                "play_level" | translate : "avatar/landing" | async}}
+                                ↗</a>
                         </div>
                     </article>
                     <article class="level">
                         <div class="level-image"><img src="/assets/body_game/img/ocean_thumb.jpg"
-                                alt="Paisaje submarino con vida marina"><span class="level-number">NIVEL 04</span></div>
+                                [alt]="'level_ocean_alt' | translate : 'avatar/landing' | async"><span
+                                class="level-number">{{ "level_label" | translate : "avatar/landing" | async}} 04</span>
+                        </div>
                         <div class="level-body">
-                            <h3>🌊 Exploración submarina</h3>
-                            <p>Conoces los secretos de las profundidades del mar.</p>
-                            <a class="btn play" (click)="openWorld('ocean')" data-level="Exploración submarina">Jugar
-                                este nivel ↗</a>
+                            <h3>🌊 {{ "level_ocean_title" | translate : "avatar/landing" | async}}</h3>
+                            <p>{{ "level_ocean_text" | translate : "avatar/landing" | async}}</p>
+                            <a class="btn play" (click)="openWorld('ocean')"
+                                [attr.data-level]="'level_ocean_title' | translate : 'avatar/landing' | async">{{
+                                "play_level" | translate : "avatar/landing" | async}}
+                                ↗</a>
                         </div>
                     </article>
                 </div>
@@ -86,88 +101,74 @@
             <div class="wrap">
                 <div class="section-head">
                     <div>
-                        <div class="eyebrow">Aprender con todo el cuerpo</div>
-                        <h2>Más que tiempo frente a una pantalla.</h2>
+                        <div class="eyebrow">{{ "benefits_eyebrow" | translate : "avatar/landing" | async}}</div>
+                        <h2>{{ "benefits_title" | translate : "avatar/landing" | async}}</h2>
                     </div>
-                    <p>El movimiento puede complementar el aprendizaje y convertir la práctica en una experiencia más
-                        activa.</p>
+                    <p>{{ "benefits_text" | translate : "avatar/landing" | async}}</p>
                 </div>
                 <div class="benefit-grid">
                     <div class="benefit">
                         <div class="icon">🎯</div>
-                        <h3>Activa la atención</h3>
-                        <p>Las pausas y actividades físicas pueden ayudar a que los niños vuelvan a la tarea con mayor
-                            disposición.</p>
+                        <h3>{{ "benefit_attention_title" | translate : "avatar/landing" | async}}</h3>
+                        <p>{{ "benefit_attention_text" | translate : "avatar/landing" | async}}</p>
                     </div>
                     <div class="benefit">
                         <div class="icon">🧠</div>
-                        <h3>Practica recordar</h3>
-                        <p>Preguntas, retroalimentación y repetición ofrecen oportunidades para recuperar y reforzar lo
-                            aprendido.</p>
+                        <h3>{{ "benefit_recall_title" | translate : "avatar/landing" | async}}</h3>
+                        <p>{{ "benefit_recall_text" | translate : "avatar/landing" | async}}</p>
                     </div>
                     <div class="benefit">
                         <div class="icon">🏃</div>
-                        <h3>Integra movimiento</h3>
-                        <p>El cuerpo participa en la experiencia en lugar de limitarse a tocar botones o mirar la
-                            pantalla.
-                        </p>
+                        <h3>{{ "benefit_movement_title" | translate : "avatar/landing" | async}}</h3>
+                        <p>{{ "benefit_movement_text" | translate : "avatar/landing" | async}}</p>
                     </div>
                     <div class="benefit">
                         <div class="icon">✨</div>
-                        <h3>Aprende jugando</h3>
-                        <p>Misiones, escenarios y objetivos claros pueden hacer que practicar se sienta como una
-                            aventura.
-                        </p>
+                        <h3>{{ "benefit_play_title" | translate : "avatar/landing" | async}}</h3>
+                        <p>{{ "benefit_play_text" | translate : "avatar/landing" | async}}</p>
                     </div>
                     <div class="benefit">
                         <div class="icon">🔁</div>
-                        <h3>Recibe feedback rápido</h3>
-                        <p>El niño puede comprobar sus respuestas y continuar con un nuevo reto de inmediato.</p>
+                        <h3>{{ "benefit_feedback_title" | translate : "avatar/landing" | async}}</h3>
+                        <p>{{ "benefit_feedback_text" | translate : "avatar/landing" | async}}</p>
                     </div>
                     <div class="benefit">
                         <div class="icon">👨‍👩‍👧</div>
-                        <h3>Ideal para explorar juntos</h3>
-                        <p>Familias y educadores pueden probar actividades y compartir qué funciona mejor para cada
-                            niño.
-                        </p>
+                        <h3>{{ "benefit_together_title" | translate : "avatar/landing" | async}}</h3>
+                        <p>{{ "benefit_together_text" | translate : "avatar/landing" | async}}</p>
                     </div>
                 </div>
-                <p class="note">La actividad física se asocia con beneficios cognitivos en niños, pero los resultados
-                    dependen de la actividad y del contexto. Esta versión es un prototipo en evaluación, no una
-                    intervención
-                    educativa clínicamente validada.</p>
+                <p class="note">{{ "benefits_note" | translate : "avatar/landing" | async}}</p>
             </div>
         </section>
         <section id="beta">
             <div class="wrap beta">
                 <div>
-                    <div class="eyebrow">Únete a la primera comunidad</div>
-                    <h2>Ayúdanos a crear la próxima aventura.</h2>
-                    <p>Buscamos familias, docentes y personas curiosas que quieran probar el prototipo y compartir ideas
-                        para nuevos mundos, materias y desafíos.</p>
-                    <p>Cuéntanos qué te interesa y qué te gustaría que los niños pudieran aprender jugando.</p>
+                    <div class="eyebrow">{{ "beta_eyebrow" | translate : "avatar/landing" | async}}</div>
+                    <h2>{{ "beta_title" | translate : "avatar/landing" | async}}</h2>
+                    <p>{{ "beta_text_1" | translate : "avatar/landing" | async}}</p>
+                    <p>{{ "beta_text_2" | translate : "avatar/landing" | async}}</p>
                 </div>
                 <form>
-                    <label for="reason">¿Por qué te interesa
-                        probarlo
-                        y qué juegos te gustaría ver?</label>
-                    <textarea id="reason" name="reason" placeholder="Me interesa porque..." required minlength="10"
-                        [(ngModel)]="reason"></textarea>
+                    <label for="reason">{{ "beta_reason_label" | translate : "avatar/landing" | async}}</label>
+                    <textarea id="reason" name="reason"
+                        [placeholder]="'beta_reason_placeholder' | translate : 'avatar/landing' | async" required
+                        minlength="10" [(ngModel)]="reason"></textarea>
                     <button class="btn" [ngClass]="{'hidden': emailSent}" [disabled]="!hasReason()"
-                        (click)="onBoard()">Solicitar acceso beta →</button>
-                    <div class="form-message" [ngClass]="{'show': emailSent}" role="status">¡Gracias por tu interés!
-                        Revisa tu correo para ingresar.
+                        (click)="onBoard()">{{ "beta_submit" | translate : "avatar/landing" | async}} →</button>
+                    <div class="form-message" [ngClass]="{'show': emailSent}" role="status">{{ "beta_thanks" | translate
+                        : "avatar/landing" | async}}
                     </div>
-                    <p class="fineprint">Al enviar, aceptas que usemos estos datos únicamente para gestionar tu
-                        solicitud de
-                        acceso beta. Ver <a class="tos" (click)="openTos()" target="_blank">términos y condiciones</a>
+                    <p class="fineprint">{{ "beta_fineprint" | translate : "avatar/landing" | async}} <a class="tos highligth"
+                            (click)="openTos()" target="_blank">{{ "beta_tos" | translate : "avatar/landing" |
+                            async}}</a>
                     </p>
                 </form>
             </div>
         </section>
     </main>
     <footer>
-        <div class="wrap footer-inner"><span>© 2026 Move & Learn · Prototipo educativo</span><span>Hecho para aprender
-                moviéndose.</span></div>
+        <div class="wrap footer-inner"><span>© 2026 Move & Learn · {{ "footer_prototype" | translate : "avatar/landing"
+                | async}}</span><span>{{ "footer_tagline" | translate : "avatar/landing" | async}}</span></div>
     </footer>
 </div>
