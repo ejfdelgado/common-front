@@ -10,15 +10,13 @@ import { ConfigService } from 'src/app/services/config.service';
 import { environment } from 'src/environments/environment';
 import { getClientRef } from '../../alterego/common';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-index',
   imports: [FormsModule, CommonModule, TranslatePipe, AsyncPipe],
   templateUrl: './index.html',
-  styleUrls: [
-    './index.scss',
-    "../../../../assets/css/chat.scss",
-  ],
+  styleUrls: ['./index.scss', '../../../../assets/css/chat.scss'],
 })
 export class Index {
   isAssistantOpened: boolean = false;
@@ -51,7 +49,7 @@ export class Index {
     },
     ocean_en: {
       url: '/#/action/play?col=room-public&id=tncg7IYoxTJegrFPlBTl',
-    },    
+    },
   };
 
   constructor(
@@ -60,6 +58,7 @@ export class Index {
     private http: HttpClient,
     private configSrv: ConfigService,
     public sanitizer: DomSanitizer,
+    private router: Router,
   ) {
     this.autSrv.authState$.subscribe((user) => {
       this.user = user;
@@ -161,5 +160,15 @@ export class Index {
       base = `${base}&mode=embedded`;
     }
     return this.sanitizer.bypassSecurityTrustResourceUrl(base);
+  }
+
+  createYourOwnGame() {
+    if (this.user) {
+      this.router.navigate([`action/rooms`], {
+        queryParams: {},
+      });
+    } else {
+      location.href = '#beta';
+    }
   }
 }

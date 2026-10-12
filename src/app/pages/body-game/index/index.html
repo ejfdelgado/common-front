@@ -2,9 +2,10 @@
     <header class="wrap">
         <nav><a class="brand" href="#">MOVE<span>&</span>LEARN</a>
             <div class="navlinks"><a href="#niveles">{{ "explore_games" | translate : "avatar/landing" | async}}</a><a
-                    href="#beneficios">{{ "nav_why_move" | translate : "avatar/landing" | async}}</a><a href="#beta">{{
+                    href="#beneficios">{{ "nav_why_move" | translate : "avatar/landing" | async}}</a><a
+                    (click)="createYourOwnGame()">{{
                     "nav_beta_testers" | translate : "avatar/landing" | async}}</a></div><a class="btn secondary"
-                href="#beta">{{ "nav_create_game" | translate : "avatar/landing" | async}}</a>
+                (click)="createYourOwnGame()">{{ "nav_create_game" | translate : "avatar/landing" | async}}</a>
         </nav>
         <div class="langs">
             <span (click)="setLang('es')" [ngClass]="{'used': currentLang == 'es'}">Español</span>
@@ -19,7 +20,8 @@
                         "avatar/landing" | async}}</em></h1>
                 <p>{{ "hero_text" | translate : "avatar/landing" | async}}</p>
                 <div class="actions"><a class="btn" href="#niveles">{{ "hero_explore_button" | translate :
-                        "avatar/landing" | async}} ↓</a><a class="btn secondary" href="#beta">{{ "hero_create_button" |
+                        "avatar/landing" | async}} ↓</a><a class="btn secondary" (click)="createYourOwnGame()">{{
+                        "hero_create_button" |
                         translate : "avatar/landing" | async}}</a></div>
             </div>
             <div class="hero-art"><img src="/assets/body_game/img/mars_intro.jpg"
@@ -159,8 +161,9 @@
                     <div class="form-message" [ngClass]="{'show': emailSent}" role="status">{{ "beta_thanks" | translate
                         : "avatar/landing" | async}}
                     </div>
-                    <p class="fineprint">{{ "beta_fineprint" | translate : "avatar/landing" | async}} <a class="tos highligth"
-                            (click)="openTos()" target="_blank">{{ "beta_tos" | translate : "avatar/landing" |
+                    <p class="fineprint">{{ "beta_fineprint" | translate : "avatar/landing" | async}} <a
+                            class="tos highligth" (click)="openTos()" target="_blank">{{ "beta_tos" | translate :
+                            "avatar/landing" |
                             async}}</a>
                     </p>
                 </form>
