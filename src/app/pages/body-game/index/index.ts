@@ -1,15 +1,16 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User } from 'firebase/auth';
 import { firstValueFrom } from 'rxjs';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-index',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TranslatePipe, AsyncPipe],
   templateUrl: './index.html',
   styleUrl: './index.scss',
 })
