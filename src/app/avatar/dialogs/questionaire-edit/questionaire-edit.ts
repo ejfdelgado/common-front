@@ -38,6 +38,7 @@ import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AsyncPipe } from '@angular/common';
 import { TranslateService } from 'src/app/services/translate.service';
 import { translateSelectOptions } from 'src/app/tools/SelectOptionUtils';
+import { ConfirmDialogService } from 'src/app/services/confirm-dialog.service';
 
 const MIN_OPTIONS = 1;
 const MAX_OPTIONS = 4;
@@ -128,6 +129,7 @@ export class QuestionaireEditComponent {
     public modalSrv: ModalService,
     public cdr: ChangeDetectorRef,
     public translateSrv: TranslateService,
+    public confirmSrv: ConfirmDialogService,
   ) {
     this.stepsConfigForm = this.fb.group({
       language: [data.language ?? 'es-ES'],
@@ -246,8 +248,18 @@ export class QuestionaireEditComponent {
     this.steps.push(this.buildStepGroup());
   }
 
-  removeStep(stepIndex: number): void {
+  async removeStep(stepIndex: number): Promise<void> {
+    // ask confirm
+    const confirm = await this.confirmSrv.confirm({
+      title: 'confirm.sure',
+      message: 'confirm.erase_cant_undo',
+      langFolder: 'general',
+    });
+    if (!confirm) {
+      return;
+    }
     this.steps.removeAt(stepIndex);
+    this.cdr.detectChanges();
   }
 
   addOption(stepIndex: number): void {
@@ -257,7 +269,16 @@ export class QuestionaireEditComponent {
     this.getOptions(stepIndex).push(this.buildOptionGroup());
   }
 
-  removeOption(stepIndex: number, optionIndex: number): void {
+  async removeOption(stepIndex: number, optionIndex: number): Promise<void> {
+    // ask confirm
+    const confirm = await this.confirmSrv.confirm({
+      title: 'confirm.sure',
+      message: 'confirm.erase_cant_undo',
+      langFolder: 'general',
+    });
+    if (!confirm) {
+      return;
+    }
     if (!this.canRemoveOption(stepIndex)) {
       return;
     }

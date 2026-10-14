@@ -66,8 +66,12 @@ export class RatingComponent extends CommonComponent implements ControlValueAcce
 
   clickRate(value: OnOffDataType): void {
     if (this.disabled) return;
-
-    this.value = value;
+    // Toggle effect
+    if (this.value == value) {
+      this.value = 0;
+    } else {
+      this.value = value;
+    }
     this.onChange(this.value);
     this.onTouched();
   }
