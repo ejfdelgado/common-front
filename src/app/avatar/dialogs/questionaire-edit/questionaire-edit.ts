@@ -60,7 +60,7 @@ const OBJECTS_OPTIONS: SelectOptionString[] = [
   //{ label: 'Cubo', value: 'cube' },
   { label_key: 'ch_balls', label: '', value: 'futbol' },
   { label_key: 'ch_fruits', label: '', value: 'fruits' },
-  //{ label: 'Minecraft', value: 'minecraft' },
+  { label_key: 'ch_mine', label: '', value: 'minecraft' },
 ];
 
 @Component({

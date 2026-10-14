@@ -140,6 +140,7 @@
           "title": "Selection objects",
           "ch_balls": "Balls",
           "ch_fruits": "Fruits",
+          "ch_mine": "Minecraft",
           "x_shift": {
             "label": "Horizontal shift"
           },

@@ -16,7 +16,7 @@
         <span class="score"><img class="points_icon" src="./assets/icons/star.svg"> <strong
                 [innerHTML]="hudData['score']"></strong></span>
     </div>
-    <div class="hud_scenario_labels no_mouse no_select">
+    <div class="hud_scenario_labels bigger no_mouse no_select">
         @if (hasText(hudData['top'])) {
         <p class="scenario_step_label scenario_step_label_top black_font" [innerHTML]="hudData['top']">
         </p>
@@ -25,14 +25,14 @@
             <div class="scenario_step_general">
                 @if (hasText(hudData['left'])) {
                 <div>
-                    <p class="scenario_step_left_label black_font" [innerHTML]="hudData['left']"></p>
+                    <p class="scenario_step_left_label black_font less_opacity" [innerHTML]="hudData['left']"></p>
                 </div>
                 }
             </div>
             <div class="scenario_step_general">
                 @if (hasText(hudData['right'])) {
                 <div class="text_right">
-                    <p class="scenario_step_right_label black_font" [innerHTML]="hudData['right']">
+                    <p class="scenario_step_right_label black_font less_opacity" [innerHTML]="hudData['right']">
                     </p>
                 </div>
                 }
@@ -42,7 +42,7 @@
             <div class="scenario_step_general">
                 @if (hasText(hudData['left_bottom'])) {
                 <div>
-                    <p class="scenario_step_left_label black_font" [innerHTML]="hudData['left_bottom']">
+                    <p class="scenario_step_left_label black_font less_opacity" [innerHTML]="hudData['left_bottom']">
                     </p>
                 </div>
                 }
@@ -50,7 +50,7 @@
             <div class="scenario_step_general">
                 @if (hasText(hudData['right_bottom'])) {
                 <div class="text_right">
-                    <p class="scenario_step_right_label black_font"
+                    <p class="scenario_step_right_label black_font less_opacity"
                         [innerHTML]="hudData['right_bottom']">
                     </p>
                 </div>

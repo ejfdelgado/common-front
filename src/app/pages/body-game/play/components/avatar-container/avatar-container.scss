@@ -139,6 +139,11 @@
   font-weight: bold;
 }
 
+.hud_scenario_labels.bigger {
+  font-size: 2.8rem;
+  line-height: 3rem;
+}
+
 .side_labels {
   display: flex;
   flex-direction: row;
@@ -209,4 +214,8 @@
   border-radius: 20px;
   display: inline;
   font-weight: bold;
+}
+
+.black_font.less_opacity {
+  background-color: #ffffffa3;
 }
