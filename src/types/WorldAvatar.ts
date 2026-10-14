@@ -119,6 +119,7 @@ export interface StepsConfig {
   introTitle?: string;
   looseLabel?: string;
   winLabel?: string;
+  includeProgress?: boolean;
   maxQuestions?: number;
   abcdType?: ABCDType;
   selectionObjects?: SelectionObjectConfig;

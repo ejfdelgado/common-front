@@ -250,12 +250,13 @@ export class QuestionaireController extends SceneControllerAbstract {
 
     const actualStep = this.steps[this.currentStep];
 
-    await this.setHudValue(
-      'top',
-      `${dict['question']} ${this.currentStep + 1} ${dict['of']} ${this.maxQuestions}.</br>` +
-        actualStep.label,
-      true,
-    );
+    let questionSpeech = '';
+    if (typeof stepsConfig?.includeProgress !== 'boolean' || stepsConfig.includeProgress == true) {
+      questionSpeech += `${dict['question']} ${this.currentStep + 1} ${dict['of']} ${this.maxQuestions}.</br>`;
+    }
+    questionSpeech += actualStep.label;
+
+    await this.setHudValue('top', questionSpeech, true);
     if (!this.isPlaying) {
       return;
     }

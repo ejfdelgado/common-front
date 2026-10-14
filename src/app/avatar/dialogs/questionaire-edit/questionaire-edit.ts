@@ -135,6 +135,11 @@ export class QuestionaireEditComponent {
       introTitle: [data.stepsConfig?.introTitle ?? ''],
       looseLabel: [data.stepsConfig?.looseLabel ?? ''],
       winLabel: [data.stepsConfig?.winLabel ?? ''],
+      includeProgress: [
+        typeof data.stepsConfig?.includeProgress == 'boolean'
+          ? data.stepsConfig.includeProgress
+          : false,
+      ],
       maxQuestions: [data.stepsConfig?.maxQuestions ?? null],
     });
     this.stepsForm = this.fb.group({
@@ -321,6 +326,8 @@ export class QuestionaireEditComponent {
       introTitle: configValue.introTitle || undefined,
       looseLabel: configValue.looseLabel || undefined,
       winLabel: configValue.winLabel || undefined,
+      includeProgress:
+        typeof configValue.includeProgress == 'boolean' ? configValue.includeProgress : false,
       maxQuestions: this.toNumber(configValue.maxQuestions),
       abcdType: configValue.selectionObjects || undefined,
     };
@@ -392,7 +399,7 @@ export class QuestionaireEditComponent {
       this.modalSrv.alert({
         title: 'alerts.done.title',
         txt: 'alerts.done.txt',
-        translateFolder: "avatar"
+        translateFolder: 'avatar',
       });
     } catch (err: any) {
       this.modalSrv.alert({
