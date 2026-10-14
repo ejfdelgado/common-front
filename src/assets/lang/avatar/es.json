@@ -161,7 +161,15 @@
           },
           "shuffle": {
             "label": "Orden aleatorio?"
+          },
+          "interaction": {
+            "label": "Tipo de interacción"
           }
+        },
+        "interaction": {
+          "ch_stand": "De pie",
+          "ch_sit": "Sentado",
+          "ch_custom": "Personalizado"
         }
       }
     },

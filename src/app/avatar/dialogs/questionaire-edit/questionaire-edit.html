@@ -187,6 +187,15 @@
 
         <mat-tab id="objects" [label]="('popup.questionaire.tabs.objects.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="selectionObjectsForm" class="tab_content vertical_gap">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>{{ "popup.questionaire.tabs.objects.interaction.label" | translate : "avatar" | async
+                        }}</mat-label>
+                    <mat-select formControlName="interaction">
+                        @for (option of interactionOptions; track option.value) {
+                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
                 <app-slider [label]="'popup.questionaire.tabs.objects.x_shift.label' | translate : 'avatar' | async"
                     formControlName="shiftX" [config]="sliderConfig"></app-slider>
                 <app-slider [label]="'popup.questionaire.tabs.objects.y_shift.label' | translate : 'avatar' | async"

@@ -16,7 +16,7 @@ import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
-import { ColorType, GameScenario, GameStep, GameStepOption } from 'src/types/WorldAvatar';
+import { BACKGROUND_OPTIONS, ColorType, GameScenario, GameStep, GameStepOption, INTERACTION_OPTIONS, OBJECTS_OPTIONS } from 'src/types/WorldAvatar';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
@@ -46,22 +46,10 @@ const MAX_OPTIONS = 4;
 const DEFAULT_BACKGROUND_COLOR: ColorType = { r: 255, g: 255, b: 255 };
 const DEFAULT_BACKGROUND_IMAGE: string = '/avatar_assets/backgrounds/default.jpeg';
 
-const BACKGROUND_OPTIONS: SelectOptionString[] = [
-  { label_key: 'ch_image', label: '', value: 'image' },
-  { label_key: 'ch_color', label: '', value: 'color' },
-];
-
 const LANGUAGE_OPTIONS: SelectOptionString[] = [
   { label: 'Español', value: 'es-ES' },
   { label: 'English', value: 'en-US' },
   //{ label: 'Français', value: 'fr-FR' },
-];
-
-const OBJECTS_OPTIONS: SelectOptionString[] = [
-  //{ label: 'Cubo', value: 'cube' },
-  { label_key: 'ch_balls', label: '', value: 'futbol' },
-  { label_key: 'ch_fruits', label: '', value: 'fruits' },
-  { label_key: 'ch_mine', label: '', value: 'minecraft' },
 ];
 
 @Component({
@@ -97,6 +85,7 @@ export class QuestionaireEditComponent {
   readonly backgroundOptions = BACKGROUND_OPTIONS;
   readonly languageOptions = LANGUAGE_OPTIONS;
   readonly objectsOptions = OBJECTS_OPTIONS;
+  readonly interactionOptions = INTERACTION_OPTIONS;
   private keydownSub: Subscription;
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
@@ -166,6 +155,7 @@ export class QuestionaireEditComponent {
       rotateMinSpeed: [data.stepsConfig?.selectionObjects?.rotateMinSpeed ?? 0],
       rotateAditionalSpeed: [data.stepsConfig?.selectionObjects?.rotateAditionalSpeed ?? 0],
       randomOrder: [data.stepsConfig?.selectionObjects?.randomOrder ?? false],
+      interaction: [data.stepsConfig?.interaction ?? "custom"],
     });
     this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
       if (event.key === 'Escape') {
@@ -186,6 +176,13 @@ export class QuestionaireEditComponent {
       this.cdr,
       this.translateSrv,
       'popup.questionaire.tabs.objects.',
+    );
+    translateSelectOptions(
+      'avatar',
+      this.interactionOptions,
+      this.cdr,
+      this.translateSrv,
+      'popup.questionaire.tabs.interaction.',
     );
   }
 
@@ -381,6 +378,8 @@ export class QuestionaireEditComponent {
       rotateAditionalSpeed: selectionObjectsValue.rotateAditionalSpeed,
       randomOrder: selectionObjectsValue.randomOrder,
     };
+
+    this.data.stepsConfig.interaction = selectionObjectsValue.interaction;
 
     this.dialogRef.close(this.data);
   }

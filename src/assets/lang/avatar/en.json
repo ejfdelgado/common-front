@@ -161,7 +161,15 @@
           },
           "shuffle": {
             "label": "Shuffle?"
+          },
+          "interaction": {
+            "label": "Interaction type"
           }
+        },
+        "interaction": {
+          "ch_stand": "Stand",
+          "ch_sit": "Sitted",
+          "ch_custom": "Custom"
         }
       }
     },

@@ -24,6 +24,24 @@ export const TYPE_OPTIONS: SelectOptionString[] = [
   //{ label: 'Test 03', value: 'test_03' },
 ];
 
+export const OBJECTS_OPTIONS: SelectOptionString[] = [
+  //{ label: 'Cubo', value: 'cube' },
+  { label_key: 'ch_balls', label: '', value: 'futbol' },
+  { label_key: 'ch_fruits', label: '', value: 'fruits' },
+  { label_key: 'ch_mine', label: '', value: 'minecraft' },
+];
+
+export const BACKGROUND_OPTIONS: SelectOptionString[] = [
+  { label_key: 'ch_image', label: '', value: 'image' },
+  { label_key: 'ch_color', label: '', value: 'color' },
+];
+
+export const INTERACTION_OPTIONS: SelectOptionString[] = [
+  { label_key: 'ch_stand', label: '', value: 'stand' },
+  { label_key: 'ch_sit', label: '', value: 'sit' },
+  { label_key: 'ch_custom', label: '', value: 'custom' },
+];
+
 export interface StartGameOptions {
   keepPoints: boolean;
   keepLife: boolean;
@@ -122,6 +140,7 @@ export interface StepsConfig {
   includeProgress?: boolean;
   maxQuestions?: number;
   abcdType?: ABCDType;
+  interaction?: string;
   selectionObjects?: SelectionObjectConfig;
 }
 
