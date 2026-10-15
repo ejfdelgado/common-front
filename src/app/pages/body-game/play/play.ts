@@ -228,10 +228,26 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
       translateFolder: 'avatar',
       icon: 'arrow_back',
       autovisible: true,
+      roles: ['logged'],
       name: 'loged_go_back',
       children: [],
       callback: () => {
         this.router.navigate([`action/rooms`], {
+          queryParams: {},
+        });
+      },
+    });
+
+    this.menuOptions.push({
+      label: 'menu.back_home',
+      translateFolder: 'avatar',
+      icon: '🏠',
+      autovisible: true,
+      roles: ['not_logged'],
+      name: 'go_home',
+      children: [],
+      callback: () => {
+        this.router.navigate([''], {
           queryParams: {},
         });
       },

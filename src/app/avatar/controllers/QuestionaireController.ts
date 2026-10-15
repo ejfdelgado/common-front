@@ -42,13 +42,13 @@ function computeConstants(config: SelectionObjectConfig) {
   ROTATION_MIN = (2000 * config.rotateMinSpeed) / 100;
   ROTATION_MAX = ROTATION_MIN + (3000 * config.rotateAditionalSpeed) / 100;
 
-  X_MIN = (typeof config.offsetX == "number" ? config.offsetX : 70) / 100;
+  X_MIN = (typeof config.offsetX == 'number' ? config.offsetX : 70) / 100;
   X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 
-  Y_MIN = 0 - (typeof config.offsetYUp == "number" ? config.offsetYUp : 40) * FAR_AMOUNT_Y / 100;//down
-  Y_MAX = 0 + (typeof config.offsetYUp == "number" ? config.offsetYUp : 40) * FAR_AMOUNT_Y / 100;//up
+  Y_MIN = 0 - ((typeof config.offsetYUp == 'number' ? config.offsetYUp : 40) * FAR_AMOUNT_Y) / 100; //down
+  Y_MAX = 0 + ((typeof config.offsetYUp == 'number' ? config.offsetYUp : 40) * FAR_AMOUNT_Y) / 100; //up
 
-  Y_MIN_BOTTOM = -1*(typeof config.offsetYDown == "number" ? config.offsetYDown : 90) / 100;
+  Y_MIN_BOTTOM = (-1 * (typeof config.offsetYDown == 'number' ? config.offsetYDown : 90)) / 100;
   Y_MAX_BOTTOM = Y_MIN_BOTTOM + 0.3 * FAR_AMOUNT_Y;
 }
 
@@ -88,6 +88,7 @@ const TRANSLATION: any = {
 };
 
 export class QuestionaireController extends SceneControllerAbstract {
+  startDate: number = 0;
   isPlaying: boolean = false;
   score: number = 0;
   life: number = MAX_LIFE;
@@ -205,6 +206,10 @@ export class QuestionaireController extends SceneControllerAbstract {
   }
 
   async initializeQuestion() {
+    const startDate = this.startDate;
+    const isSameGame = () => {
+      return !this.isPlaying || startDate != this.startDate;
+    };
     const dict = this.getDictionary();
     this.clearAll();
     if (!this.scenario) {
@@ -234,6 +239,9 @@ export class QuestionaireController extends SceneControllerAbstract {
         shuffleInPlace(step.options);
       });
       const { promise } = await this.playAudio('intro', true);
+      if (!isSameGame()) {
+        return;
+      }
       let introTitle = 'Game Start!';
       if (stepsConfig?.introTitle) {
         introTitle = stepsConfig.introTitle;
@@ -241,8 +249,14 @@ export class QuestionaireController extends SceneControllerAbstract {
       const introEnhanced = `<h2>${introTitle}</h2>`;
       this.setHudValue('top', introEnhanced, false);
       await promise;
+      if (!isSameGame()) {
+        return;
+      }
       this.playAudio('loop');
       await this.setHudValue('top', introEnhanced, true);
+      if (!isSameGame()) {
+        return;
+      }
     }
 
     // Check if won
@@ -260,11 +274,11 @@ export class QuestionaireController extends SceneControllerAbstract {
     questionSpeech += actualStep.label;
 
     await this.setHudValue('top', questionSpeech, true);
-    if (!this.isPlaying) {
+    if (!isSameGame()) {
       return;
     }
 
-    let LETTERS: LettersConfig[] = [
+    const LETTERS: LettersConfig[] = [
       {
         id: 'A',
         cube_id: 'CUBE_A_ON',
@@ -330,7 +344,7 @@ export class QuestionaireController extends SceneControllerAbstract {
         rotationPeriod: letter.rotate ? direction * randomize(ROTATION_MIN, ROTATION_MAX) : 0,
       });
       await this.setHudValue(letter.hud_id, option.label, true);
-      if (!this.isPlaying) {
+      if (!isSameGame()) {
         return;
       }
     }
@@ -361,6 +375,10 @@ export class QuestionaireController extends SceneControllerAbstract {
   }
 
   async evaluateAnswer(choice: string) {
+    const startDate = this.startDate;
+    const isSameGame = () => {
+      return !this.isPlaying || startDate != this.startDate;
+    };
     this.hideAllCubes();
     this.enableCube(('CUBE_' + choice + '_ON') as ENABLE_CUBE_TYPE, { rotationPeriod: 0 });
     const op = this.optionsMap[choice];
@@ -379,15 +397,24 @@ export class QuestionaireController extends SceneControllerAbstract {
       }
       const { promise } = await this.playAudio('loose');
       await promise;
+      if (!isSameGame()) {
+        return;
+      }
     } else {
       // Celebrate, increment points!
       this.score += op.points * 10;
       this.setHudValue('score', this.score);
       const { promise } = await this.playAudio('success');
       await promise;
+      if (!isSameGame()) {
+        return;
+      }
     }
     //Persist life/score
     await ModeDiscovery.setLifeScore(this.life, this.score);
+    if (!isSameGame()) {
+      return;
+    }
 
     if (!this.isPlaying) {
       return;
@@ -429,6 +456,7 @@ export class QuestionaireController extends SceneControllerAbstract {
     if (event.name == 'START_ALL') {
       // Read mode and scenario
       this.isPlaying = true;
+      this.startDate = Date.now();
       this.resetGame(event.data);
       this.initializeQuestion();
     } else if (event.name == 'STOP_ALL') {

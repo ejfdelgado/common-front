@@ -116,6 +116,8 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
       const roles: string[] = [];
       if (userLoged) {
         roles.push('logged');
+      } else {
+        roles.push('not_logged');
       }
       if (this.isUserOwner) {
         // virtual role
@@ -137,7 +139,6 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
       .forEach((e) => {
         e.visible =
           roomExists &&
-          userLoged &&
           (e.roles instanceof Array && e.roles.length > 0 ? hasAllRoles(e.roles) : true);
       });
     // Check the levels
