@@ -208,7 +208,7 @@ export class QuestionaireController extends SceneControllerAbstract {
   async initializeQuestion() {
     const startDate = this.startDate;
     const isSameGame = () => {
-      return !this.isPlaying || startDate != this.startDate;
+      return this.isPlaying && startDate == this.startDate;
     };
     const dict = this.getDictionary();
     this.clearAll();
@@ -377,7 +377,7 @@ export class QuestionaireController extends SceneControllerAbstract {
   async evaluateAnswer(choice: string) {
     const startDate = this.startDate;
     const isSameGame = () => {
-      return !this.isPlaying || startDate != this.startDate;
+      return this.isPlaying && startDate == this.startDate;
     };
     this.hideAllCubes();
     this.enableCube(('CUBE_' + choice + '_ON') as ENABLE_CUBE_TYPE, { rotationPeriod: 0 });

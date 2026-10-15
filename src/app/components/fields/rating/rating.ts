@@ -4,12 +4,9 @@ import {
   forwardRef,
   ChangeDetectionStrategy,
   Input,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonComponent } from '@components/common.component';
 import { FullscreenService } from '@services/fullscreen.service';
@@ -19,9 +16,7 @@ export type OnOffDataType = number | null;
 @Component({
   selector: 'app-rating',
   standalone: true,
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   templateUrl: './rating.html',
   styleUrls: ['./rating.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,17 +24,18 @@ export type OnOffDataType = number | null;
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => RatingComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class RatingComponent extends CommonComponent implements ControlValueAccessor {
-
-  @Input() onImageUrl: string = "./assets/icons/star.svg";
-  @Input() offImageUrl: string = "./assets/icons/star_off.svg";
-  @Input() label: string = "Añadir a favorito";
+  @Input() onImageUrl: string = './assets/icons/star.svg';
+  @Input() offImageUrl: string = './assets/icons/star_off.svg';
+  @Input() label: string = 'Añadir a favorito';
   value: OnOffDataType = 0;
   disabled = false;
+  isShaking: boolean = false;
+  timeoutRef: NodeJS.Timeout | null = null;
 
   constructor(
     public cdr: ChangeDetectorRef,
@@ -53,16 +49,30 @@ export class RatingComponent extends CommonComponent implements ControlValueAcce
 
   writeValue(value: OnOffDataType | null): void {
     this.value = value;
+    this.shake();
     try {
       this.cdr.detectChanges();
-    } catch (err) { }
+    } catch (err) {}
   }
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
-  /* ========= Component Logic ========= */
+  shake() {
+    this.isShaking = true;
+    if (this.timeoutRef) {
+      return;
+    }
+    //this.cdr.detectChanges();
+    this.timeoutRef = setTimeout(() => {
+      this.isShaking = false;
+      this.cdr.detectChanges();
+      if (this.timeoutRef) {
+        this.timeoutRef = null;
+      }
+    }, 2000);
+  }
 
   clickRate(value: OnOffDataType): void {
     if (this.disabled) return;
@@ -72,6 +82,7 @@ export class RatingComponent extends CommonComponent implements ControlValueAcce
     } else {
       this.value = value;
     }
+    this.shake();
     this.onChange(this.value);
     this.onTouched();
   }
