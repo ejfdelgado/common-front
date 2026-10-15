@@ -56,9 +56,13 @@
               "rotate": true,
               "shiftX": 50,
               "shiftY": 50,
+              "offsetX": 70,
+              "offsetYUp": 40,
+              "offsetYDown": 90,
               "rotateAditionalSpeed": 100,
               "rotateMinSpeed": 100
-            }
+            },
+            "interaction": "stand"
           },
           "steps": [
             {

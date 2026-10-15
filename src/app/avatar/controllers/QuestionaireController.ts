@@ -42,13 +42,13 @@ function computeConstants(config: SelectionObjectConfig) {
   ROTATION_MIN = (2000 * config.rotateMinSpeed) / 100;
   ROTATION_MAX = ROTATION_MIN + (3000 * config.rotateAditionalSpeed) / 100;
 
-  X_MIN = 0.7;
+  X_MIN = (typeof config.offsetX == "number" ? config.offsetX : 70) / 100;
   X_MAX = X_MIN + 1 * FAR_AMOUNT_X;
 
-  Y_MIN = 0 - 0.5 * FAR_AMOUNT_Y;
-  Y_MAX = 0 + 0.4 * FAR_AMOUNT_Y;
+  Y_MIN = 0 - (typeof config.offsetYUp == "number" ? config.offsetYUp : 40) * FAR_AMOUNT_Y / 100;//down
+  Y_MAX = 0 + (typeof config.offsetYUp == "number" ? config.offsetYUp : 40) * FAR_AMOUNT_Y / 100;//up
 
-  Y_MIN_BOTTOM = -0.9;
+  Y_MIN_BOTTOM = -1*(typeof config.offsetYDown == "number" ? config.offsetYDown : 90) / 100;
   Y_MAX_BOTTOM = Y_MIN_BOTTOM + 0.3 * FAR_AMOUNT_Y;
 }
 
@@ -59,6 +59,9 @@ computeConstants({
   shiftX: 0,
   shiftY: 0,
   randomOrder: false,
+  offsetX: 70,
+  offsetYDown: 50,
+  offsetYUp: 40,
 });
 
 export interface LettersConfig {

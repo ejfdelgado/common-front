@@ -147,8 +147,17 @@
           "x_shift": {
             "label": "Horizontal shift"
           },
+          "x_offset": {
+            "label": "Horizontal offset"
+          },
           "y_shift": {
             "label": "Vertical shift"
+          },
+          "y_offset_up": {
+            "label": "Vertical offset up"
+          },
+          "y_offset_down": {
+            "label": "Vertical offset down"
           },
           "spin": {
             "label": "Spin?"

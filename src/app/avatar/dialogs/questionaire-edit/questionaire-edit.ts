@@ -150,7 +150,10 @@ export class QuestionaireEditComponent {
     });
     this.selectionObjectsForm = this.fb.group({
       shiftX: [data.stepsConfig?.selectionObjects?.shiftX ?? 0],
+      offsetX: [data.stepsConfig?.selectionObjects?.offsetX ?? 70],
       shiftY: [data.stepsConfig?.selectionObjects?.shiftY ?? 0],
+      offsetYUp: [data.stepsConfig?.selectionObjects?.offsetYUp ?? 40],
+      offsetYDown: [data.stepsConfig?.selectionObjects?.offsetYDown ?? 90],
       rotate: [data.stepsConfig?.selectionObjects?.rotate ?? false],
       rotateMinSpeed: [data.stepsConfig?.selectionObjects?.rotateMinSpeed ?? 0],
       rotateAditionalSpeed: [data.stepsConfig?.selectionObjects?.rotateAditionalSpeed ?? 0],
@@ -370,9 +373,27 @@ export class QuestionaireEditComponent {
     };
 
     const selectionObjectsValue = this.selectionObjectsForm.value;
+
+    if (selectionObjectsValue.interaction == "stand") {
+      selectionObjectsValue.shiftX = 50;
+      selectionObjectsValue.offsetX = 70;
+      selectionObjectsValue.shiftY = 50;
+      selectionObjectsValue.offsetYUp = 40;
+      selectionObjectsValue.offsetYDown = 90;
+    } else if (selectionObjectsValue.interaction == "sit") {
+      selectionObjectsValue.shiftX = 0;
+      selectionObjectsValue.offsetX = 50;
+      selectionObjectsValue.shiftY = 15;
+      selectionObjectsValue.offsetYUp = 40;
+      selectionObjectsValue.offsetYDown = 15;
+    }
+
     this.data.stepsConfig.selectionObjects = {
       shiftX: selectionObjectsValue.shiftX,
+      offsetX: selectionObjectsValue.offsetX,
       shiftY: selectionObjectsValue.shiftY,
+      offsetYUp: selectionObjectsValue.offsetYUp,
+      offsetYDown: selectionObjectsValue.offsetYDown,
       rotate: selectionObjectsValue.rotate,
       rotateMinSpeed: selectionObjectsValue.rotateMinSpeed,
       rotateAditionalSpeed: selectionObjectsValue.rotateAditionalSpeed,

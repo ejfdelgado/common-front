@@ -125,7 +125,10 @@ export interface GameStep {
 }
 
 export interface SelectionObjectConfig {
+  offsetX: number;
   shiftX: number;
+  offsetYUp: number;
+  offsetYDown: number;
   shiftY: number;
   rotate: boolean;
   rotateMinSpeed: number;

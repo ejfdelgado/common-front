@@ -196,10 +196,18 @@
                         }
                     </mat-select>
                 </mat-form-field>
+                @if (selectionObjectsForm.value.interaction === 'custom') {
+                <app-slider [label]="'popup.questionaire.tabs.objects.x_offset.label' | translate : 'avatar' | async"
+                    formControlName="offsetX" [config]="sliderConfig"></app-slider>
                 <app-slider [label]="'popup.questionaire.tabs.objects.x_shift.label' | translate : 'avatar' | async"
                     formControlName="shiftX" [config]="sliderConfig"></app-slider>
+                <app-slider [label]="'popup.questionaire.tabs.objects.y_offset_up.label' | translate : 'avatar' | async"
+                    formControlName="offsetYUp" [config]="sliderConfig"></app-slider>
+                <app-slider [label]="'popup.questionaire.tabs.objects.y_offset_down.label' | translate : 'avatar' | async"
+                    formControlName="offsetYDown" [config]="sliderConfig"></app-slider>
                 <app-slider [label]="'popup.questionaire.tabs.objects.y_shift.label' | translate : 'avatar' | async"
                     formControlName="shiftY" [config]="sliderConfig"></app-slider>
+                }
                 <app-on-off-toggle [label]="'popup.questionaire.tabs.objects.spin.label' | translate : 'avatar' | async"
                     [iconName]="'checkbox'" formControlName="rotate"></app-on-off-toggle>
                 <app-slider [label]="'popup.questionaire.tabs.objects.min_spin.label' | translate : 'avatar' | async"

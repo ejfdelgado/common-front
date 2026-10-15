@@ -150,6 +150,15 @@
           "y_shift": {
             "label": "Desplazamiento vertical"
           },
+          "x_offset": {
+            "label": "Desfase horizontal"
+          },
+          "y_offset_up": {
+            "label": "Desfase vertical arriba"
+          },
+          "y_offset_down": {
+            "label": "Desfase vertical abajo"
+          },  
           "spin": {
             "label": "Rotar?"
           },
