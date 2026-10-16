@@ -7,7 +7,7 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,16 +54,15 @@ import { epochTo } from '@tools/DateUtils';
 import { PhotoGallerySimple } from '@components/photo-gallery-simple/photo-gallery-simple';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 
-const MODEL_NAME_CLONE = "pubknowledge";
+const MODEL_NAME_CLONE = 'pubknowledge';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
     return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
-  }
+  },
 };
 
 marked.use({ renderer });
-
 
 @Component({
   selector: 'app-chatsession',
@@ -87,13 +86,12 @@ marked.use({ renderer });
   styleUrl: './chatsession.scss',
 })
 export class Chatsession extends CommonComponent implements AfterViewInit {
-
   @Input() config!: GenerateContentConfig;
   @Input() assistant!: AssistantDataType;
   @Input() lastModified: number = 0;
   @Input() knowledge: KnowledgeDataType[] = [];
   @Input() tools: ToolDataType[] = [];
-  @Input() language: SearchLangsType = "en";
+  @Input() language: SearchLangsType = 'en';
   @Input() top: number = 5;
   @Input() distance: number = 0.3;
   @Input() autowarm: boolean = true;
@@ -116,7 +114,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   private initialized: boolean = false;
   query: string = '';
   lastTrained: number = -1;
-  mdAssistanteDescription: string = "";
+  mdAssistanteDescription: string = '';
 
   toolModel: any = {};
   toolState: string | null = null;
@@ -171,10 +169,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     return null;
   }
 
-  processFiredTools(
-    input: Content,
-    toolsStatus: ToolResponseType[],
-  ): ToolDataType[] {
+  processFiredTools(input: Content, toolsStatus: ToolResponseType[]): ToolDataType[] {
     const toolsFired: ToolDataType[] = [];
     let toolsStatusIndex = 0;
     if (input.parts) {
@@ -186,7 +181,9 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           const args = el.functionCall.args;
           if (name && args) {
             // Make a copy of the tool
-            const toolRef = JSON.parse(JSON.stringify(this.searchNamedTool(name))) as ToolDataType | null;
+            const toolRef = JSON.parse(
+              JSON.stringify(this.searchNamedTool(name)),
+            ) as ToolDataType | null;
             if (toolRef) {
               // Set message
               if (responseRef) {
@@ -217,10 +214,10 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           const response = el.functionResponse.response;
           if (response) {
             const result = response['result'];
-            if (typeof result == "string") {
+            if (typeof result == 'string') {
               this.visualHistory.push({
                 date: Date.now() + index + this.timeOffset,
-                role: input.role ? input.role : "na",
+                role: input.role ? input.role : 'na',
                 txt: this.sanitizeText(result),
               });
             }
@@ -231,7 +228,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
           const formated = await marked.parse(textMD);
           this.visualHistory.push({
             date: Date.now() + index,
-            role: input.role ? input.role : "na",
+            role: input.role ? input.role : 'na',
             txt: this.sanitizeText(formated),
           });
         }
@@ -272,15 +269,18 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   }
 
   useFirstMessage() {
-    if (typeof this.assistant.startConversation == "string" && this.assistant.startConversation.trim().length > 0) {
+    if (
+      typeof this.assistant.startConversation == 'string' &&
+      this.assistant.startConversation.trim().length > 0
+    ) {
       this.visualHistory.push({
         date: Date.now() - 1,
-        role: "tool",
+        role: 'tool',
         txt: this.assistant.startConversation,
       });
       this.history.push({
-        role: "model",
-        parts: [{ text: this.assistant.startConversation }]
+        role: 'model',
+        parts: [{ text: this.assistant.startConversation }],
       });
     }
   }
@@ -298,7 +298,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       // Fecth closest facts
 
       // Add user message to local history
-      const userInputRaw = { role: "user", parts: [{ text: userInput }] };
+      const userInputRaw = { role: 'user', parts: [{ text: userInput }] };
       this.processVisualInput(userInputRaw);
 
       const extra: QueryChatType = {
@@ -314,11 +314,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       this.foundFacts.emit([]);
       this.foundTools.emit([]);
 
-      const {
-        result,
-        toolsStatus,
-        searchedResult,
-      } = await this.chatSrv.generateContent(
+      const { result, toolsStatus, searchedResult } = await this.chatSrv.generateContent(
         this.getLimitedHistory(),
         extra,
         this.config,
@@ -332,12 +328,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       );
 
       this.history.push({
-        role: "user",
-        parts: [{ text: userInput }]
+        role: 'user',
+        parts: [{ text: userInput }],
       });
 
       await this.interpretThis(result, toolsStatus, searchedResult);
-
     } catch (err: any) {
       this.uinotificationSrv.show(`Error: ${err.message}`);
       throw err;
@@ -349,6 +344,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       requestAnimationFrame(() => {
         this.scrollToBottom();
       });
+      //console.log(JSON.stringify(this.visualHistory, null, 4));
     }
   }
 
@@ -357,7 +353,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     toolsStatus: ToolResponseType[],
     searchedResult: FoundKnowledge[],
   ) {
-
     const factsUnion: FoundKnowledge[] = [...searchedResult];
     const articleUnion: ArticleDataType[] = [];
     const toolsUnion: ToolDataType[] = [];
@@ -367,7 +362,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     result.forEach((result) => {
       if (result && result.candidates && result.candidates.length > 0) {
         const assistantMessage: Content = {
-          role: "model",
+          role: 'model',
           parts: result.candidates[0].content?.parts?.map((el) => el),
         };
         // Assign val on args
@@ -404,51 +399,54 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     toolsStatus.forEach((tool: ToolResponseType) => {
       const standardName = normalizeName(tool.name);
       const toolMessage: Content = {
-        role: "tool",
-        parts: [{
-          functionResponse: {
-            name: standardName,
-            response: { result: tool.message }
-          }
-        }]
+        role: 'tool',
+        parts: [
+          {
+            functionResponse: {
+              name: standardName,
+              response: { result: tool.message },
+            },
+          },
+        ],
       };
       const dataPayload = (tool.message as InnerToolResponseType)?.data;
       // Display articles
       if (dataPayload && dataPayload instanceof Array) {
-        if (["article", "fact"].indexOf(tool.type) >= 0) {
+        if (['article', 'fact'].indexOf(tool.type) >= 0) {
           dataPayload.forEach((article: any) => {
-            if (tool.type == "article") {
+            if (tool.type == 'article') {
               articleUnion.push(article);
-            } else if (tool.type == "fact") {
+            } else if (tool.type == 'fact') {
               factsUnion.push(article);
             }
-            if (article.metadata
-              && article.metadata.has_gallery === true
-              && article.metadata.gallery
-              && article.metadata.gallery.length > 0
+            if (
+              article.metadata &&
+              article.metadata.has_gallery === true &&
+              article.metadata.gallery &&
+              article.metadata.gallery.length > 0
             ) {
               this.visualHistory.push({
                 date: Date.now() - 1,
-                role: "tool",
+                role: 'tool',
                 txt: article.desc,
                 gallery: article.metadata.gallery,
                 gallery_view: article.metadata.gallery_view,
               });
             }
           });
-        } else if (tool.type == "calendar_search") {
+        } else if (tool.type == 'calendar_search') {
           this.visualHistory.push({
             date: Date.now() - 1,
-            role: "tool",
-            txt: "",
+            role: 'tool',
+            txt: '',
             events: dataPayload,
           });
         }
       }
 
       if (
-        (typeof tool.message == "string" && tool.message.length > 0)
-        || (tool.message as InnerToolResponseType).data != undefined
+        (typeof tool.message == 'string' && tool.message.length > 0) ||
+        (tool.message as InnerToolResponseType).data != undefined
       ) {
         this.timeOffset++;
         if (tool.hidden !== true) {
@@ -462,7 +460,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       //console.log(tool.name, standardName, toolRef);
       if (toolRef) {
         if (toolRef.useStates === true) {
-          if (typeof toolRef.nextState == "string" && toolRef.nextState.trim().length > 0) {
+          if (typeof toolRef.nextState == 'string' && toolRef.nextState.trim().length > 0) {
             // Apply next state
             this.toolState = toolRef.nextState.trim();
           }
@@ -473,7 +471,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     result.forEach((result) => {
       if (result && result.candidates && result.candidates.length > 0) {
         const assistantMessage: Content = {
-          role: "model",
+          role: 'model',
           parts: result.candidates[0].content?.parts?.map((el) => el),
         };
         this.timeOffset++;
@@ -495,7 +493,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       this.notifyToolModelChange();
     }
 
-    this.query = "";
+    this.query = '';
   }
 
   async sendMessage() {
@@ -526,7 +524,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe(async (sent) => {
       // Show a notification
       if (sent) {
-        this.uinotificationSrv.show("Te estaremos contactando!");
+        this.uinotificationSrv.show('Te estaremos contactando!');
       }
     });
   }
@@ -542,16 +540,16 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   parseStates(t: ToolDataType): string[] {
     if (t.useInState === undefined || t.useInState == null || t.useStates !== true) {
-      return [""];
+      return [''];
     }
-    return t.useInState.split(/[,;]/).map(a => a.trim());
+    return t.useInState.split(/[,;]/).map((a) => a.trim());
   }
 
   getEnabledTools() {
     return this.tools.filter((t) => {
       const states = this.parseStates(t);
       if (this.toolState == null) {
-        return states.indexOf("") >= 0;
+        return states.indexOf('') >= 0;
       } else {
         return states.indexOf(this.toolState) >= 0;
       }
@@ -565,31 +563,31 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
   shareFun() {
     const temp: any = {
       collection: MODEL_NAME_CLONE,
-      path: "/alterego/use",
-      ...this.assistant
+      path: '/alterego/use',
+      ...this.assistant,
     };
-    this.shareSrv.share(temp, "link");
+    this.shareSrv.share(temp, 'link');
   }
 
   selectThisEvent(event: CalendarEventType) {
     const millis = new Date(event.start.dateTime).getTime();
-    const texto = epochTo(millis, "v5");
+    const texto = epochTo(millis, 'v5');
     this.sendMessageInternal(`**${texto}**`);
   }
 
   isEmbeddedMode() {
     const params = getUrlQueryParams();
-    return params.get("mode") == "embedded";
+    return params.get('mode') == 'embedded';
   }
 
   configureMessaging() {
     const params = getUrlQueryParams();
-    const origin = params.get("origin");
+    const origin = params.get('origin');
     window.addEventListener('message', (event) => {
       if (event.origin !== origin) return;
       try {
         const payload = JSON.parse(event.data.payload);
-        if (event.data.type == "echo") {
+        if (event.data.type == 'echo') {
           window.parent.postMessage(
             { type: `${event.data.type}_response`, payload: JSON.stringify(payload) },
             origin,
@@ -603,11 +601,11 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   closeChat() {
     const params = getUrlQueryParams();
-    const origin = params.get("origin");
+    const origin = params.get('origin');
     if (origin) {
       window.parent.postMessage(
         { type: 'close', payload: JSON.stringify('close') },
-        origin,//
+        origin, //
       );
     }
   }
