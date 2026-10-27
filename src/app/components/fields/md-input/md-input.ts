@@ -16,8 +16,8 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EmojiPickerComponent } from '@components/emoji-picker/emoji-picker.component';
 import { CommonComponent } from '@components/common.component';
-import { DomSanitizer } from '@angular/platform-browser';
-import { marked } from 'marked';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Marked } from 'marked';
 import { PDFService } from '@services/pdf.service';
 import { MatIconModule } from '@angular/material/icon';
 import { debounceTime, Subject, Subscription, tap } from 'rxjs';
@@ -27,23 +27,11 @@ export type EditModeType = 'edit' | 'preview' | 'both';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
-    return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
-    return '';
-  },
-  code({ text, lang }: any) {
-    const body = text.replace(/\n/g, '<br>');
-    const langClass = lang ? ` class="language-${lang}"` : '';
-    return `<pre><code${langClass}>${body}</code></pre>\n`;
-  },
-  codespan({ text }: any) {
-    return `<code>${text.replace(/\n/g, '<br>')}</code>`;
-  },
-  paragraph({ text }: any) {
-    return `<p>${text.replace(/\n/g, '<br>')}</p>\n`;
+    return `<a href="${href}" title="${text ?? ''}" target="_blank">${this.parser.parseInline(tokens)}</a>`;
   },
 };
 
-marked.use({ renderer });
+const marked = new Marked({ renderer, breaks: true });
 
 @Component({
   selector: 'app-md-input',
@@ -83,7 +71,7 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
   focused = false;
   private composing = false;
   savedScroll: number = 0;
-  preview: string = '';
+  preview: SafeHtml = '';
   previewSubject: Subject<void> = new Subject();
   previewSubscription!: Subscription;
 
@@ -318,16 +306,18 @@ export class MDInput extends CommonComponent implements ControlValueAccessor, On
 
   async computePreviewRaw() {
     const input = this.value;
-    this.preview = await marked.parse(input);
+    const rawHTML = await marked.parse(input);
+    this.preview = this.sanitizer.bypassSecurityTrustHtml(rawHTML);
     this.cdr.detectChanges();
-    return this.preview;
+    return {
+      rawHTML,
+    };
   }
 
   async exportPDF() {
-    const html = await this.computePreviewRaw();
-    //const element = this.printedVersion.nativeElement;
+    const { rawHTML } = await this.computePreviewRaw();
     const element = document.createElement('div');
-    element.innerHTML = html;
+    element.innerHTML = rawHTML;
     element.className = 'preview_scroll_content printed';
     await this.pdfSrv.exportHtmlToPdf(element, this.saveName ? this.saveName : 'download.pdf');
   }

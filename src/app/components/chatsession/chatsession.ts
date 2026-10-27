@@ -37,7 +37,7 @@ import {
   CalendarEventType,
   InnerToolResponseType,
 } from 'types/ragTypes';
-import { marked } from 'marked';
+import { Marked } from 'marked';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
@@ -58,11 +58,11 @@ const MODEL_NAME_CLONE = 'pubknowledge';
 
 const renderer: any = {
   link({ href, raw, text, tokens, type }: any) {
-    return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
+    return `<a href="${href}" title="${text ?? ''}" target="_blank">${this.parser.parseInline(tokens)}</a>`;
   },
 };
 
-marked.use({ renderer });
+const marked = new Marked({ renderer, breaks: true });
 
 @Component({
   selector: 'app-chatsession',

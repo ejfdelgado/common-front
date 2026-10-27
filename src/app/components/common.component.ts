@@ -5,16 +5,15 @@ import { epochTo } from "@tools/DateUtils";
 import { isMobile } from "@tools/mobile";
 import { DateOptionType } from "types/DateTypes";
 import { ImageTypeData } from "types/ImageTypes";
-import { marked } from 'marked';
+import { Marked } from 'marked';
 
 const renderer: any = {
     link({ href, raw, text, tokens, type }: any) {
-        return `<a href="${href}" title="${text ?? ''}" target="_blank">${text}</a>`;
-        return "";
+        return `<a href="${href}" title="${text ?? ''}" target="_blank">${this.parser.parseInline(tokens)}</a>`;
     }
 };
 
-marked.use({ renderer });
+const marked = new Marked({ renderer, breaks: true });
 
 export abstract class CommonComponent {
     cache: { [key: string]: SafeHtml } = {};
