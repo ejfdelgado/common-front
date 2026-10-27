@@ -39,7 +39,6 @@ import {
 } from 'types/ragTypes';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
-import { html2text } from '@tools/HtmlUtil';
 import { normalizeName } from '@tools/fieldTools';
 import { AlterEgo2Service } from '@services/alteregov2.service';
 import { PhotoGallery } from '@components/photo-gallery/photo-gallery';
@@ -52,6 +51,7 @@ import { CalendarEvent } from '@components/calendar-event/calendar-event';
 import { epochTo } from '@tools/DateUtils';
 import { PhotoGallerySimple } from '@components/photo-gallery-simple/photo-gallery-simple';
 import { getUrlQueryParams } from '@tools/UrlUtil';
+import { MarkdownPipe } from 'src/app/pipes/markdown.pipe';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -78,6 +78,7 @@ const renderer: any = {
     PhotoGallery,
     PhotoGallerySimple,
     CalendarEvent,
+    MarkdownPipe,
   ],
   templateUrl: './chatsession.html',
   styleUrl: './chatsession.scss',

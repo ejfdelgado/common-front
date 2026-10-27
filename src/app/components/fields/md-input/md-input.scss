@@ -122,6 +122,58 @@
     overflow-y: unset !important;
 }
 
+// Preview HTML is injected via [innerHTML], so ::ng-deep is needed to reach it
+.formatted_md_as_html ::ng-deep {
+    table {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        overflow-x: auto;
+        margin: 1em 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid #e0e6eb;
+        border-radius: 6px;
+        font-size: 0.95em;
+        color: #29343d;
+    }
+
+    th,
+    td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #e0e6eb;
+        vertical-align: top;
+    }
+
+    th:not([align]) {
+        text-align: left;
+    }
+
+    th + th,
+    td + td {
+        border-left: 1px solid #e0e6eb;
+    }
+
+    thead th {
+        background-color: #f2f6fa;
+        color: #526b7a;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f6f7f9;
+    }
+
+    tbody tr:hover {
+        background-color: aliceblue;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+}
+
 .fill_width {
     flex: 1;
 }

@@ -59,8 +59,8 @@
                     }
                 </div>
                 } @else {
-                <div class="single_msg" [ngClass]="'rol_'+message.role">
-                    <span class="text" [innerHTML]="sanitizeMD(message.txt)"></span>
+                <div class="single_msg formatted_md_as_html" [ngClass]="'rol_'+message.role">
+                    <span class="text" [innerHTML]="message.txt | markdown"></span>
                 </div>
                 }
                 }
