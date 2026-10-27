@@ -141,7 +141,7 @@ export interface SearchAnswerDataType {
 export interface MessageLocalDataType {
     date: number;
     role: string;
-    txt: SafeHtml;
+    txt: string;
     gallery?: ImageGalleryType[];
     gallery_view?: string;
     events?: CalendarEventType[];

@@ -60,7 +60,7 @@
                 </div>
                 } @else {
                 <div class="single_msg" [ngClass]="'rol_'+message.role">
-                    <span class="text" [innerHTML]="message.txt"></span>
+                    <span class="text" [innerHTML]="sanitizeMD(message.txt)"></span>
                 </div>
                 }
                 }

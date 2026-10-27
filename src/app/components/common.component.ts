@@ -1,117 +1,122 @@
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-import { FullscreenService } from "@services/fullscreen.service";
-import { getBucketFilePath, getSquarePath, getThumbnailPath } from "@tools/BucketPaths";
-import { epochTo } from "@tools/DateUtils";
-import { isMobile } from "@tools/mobile";
-import { DateOptionType } from "types/DateTypes";
-import { ImageTypeData } from "types/ImageTypes";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { FullscreenService } from '@services/fullscreen.service';
+import { getBucketFilePath, getSquarePath, getThumbnailPath } from '@tools/BucketPaths';
+import { epochTo } from '@tools/DateUtils';
+import { isMobile } from '@tools/mobile';
+import { DateOptionType } from 'types/DateTypes';
+import { ImageTypeData } from 'types/ImageTypes';
 import { Marked } from 'marked';
+import { html2text } from '../tools/HtmlUtil';
 
 const renderer: any = {
-    link({ href, raw, text, tokens, type }: any) {
-        return `<a href="${href}" title="${text ?? ''}" target="_blank">${this.parser.parseInline(tokens)}</a>`;
-    }
+  link({ href, raw, text, tokens, type }: any) {
+    return `<a href="${href}" title="${text ?? ''}" target="_blank">${this.parser.parseInline(tokens)}</a>`;
+  },
 };
 
 const marked = new Marked({ renderer, breaks: true });
 
 export abstract class CommonComponent {
-    cache: { [key: string]: SafeHtml } = {};
-    onChangeList: Function[] = [];
-    onTouchedList: Function[] = [];
-    isFullScreen: boolean = false;
+  cache: { [key: string]: SafeHtml } = {};
+  onChangeList: Function[] = [];
+  onTouchedList: Function[] = [];
+  isFullScreen: boolean = false;
 
-    constructor(
-        public sanitizer: DomSanitizer,
-        public fullScreenSrv: FullscreenService,
-    ) {
+  constructor(
+    public sanitizer: DomSanitizer,
+    public fullScreenSrv: FullscreenService,
+  ) {}
 
-    }
+  onChange(value: any) {
+    this.onChangeList.forEach((el) => {
+      el(value);
+    });
+  }
 
-    onChange(value: any) {
-        this.onChangeList.forEach((el) => {
-            el(value);
-        });
+  onTouched() {
+    this.onTouchedList.forEach((el) => {
+      el();
+    });
+  }
+
+  registerOnChange(fn: (value: any) => void): Function {
+    const list = this.onChangeList;
+    list.push(fn);
+    return () => {
+      const ix = list.indexOf(fn);
+      if (ix >= 0) {
+        list.splice(ix, 1);
+      }
     };
+  }
 
-    onTouched() {
-        this.onTouchedList.forEach((el) => {
-            el();
-        });
+  registerOnTouched(fn: () => void): Function {
+    const list = this.onTouchedList;
+    list.push(fn);
+    return () => {
+      const ix = list.indexOf(fn);
+      if (ix >= 0) {
+        list.splice(ix, 1);
+      }
     };
+  }
 
-    registerOnChange(fn: (value: any) => void): Function {
-        const list = this.onChangeList;
-        list.push(fn);
-        return () => {
-            const ix = list.indexOf(fn);
-            if (ix >= 0) {
-                list.splice(ix, 1);
-            }
-        }
-    }
+  public sanitizeMD(text: string) {
+    const temp = marked.parse(text) as string;
+    return this.sanitizeText(temp);
+  }
 
-    registerOnTouched(fn: () => void): Function {
-        const list = this.onTouchedList;
-        list.push(fn);
-        return () => {
-            const ix = list.indexOf(fn);
-            if (ix >= 0) {
-                list.splice(ix, 1);
-            }
-        }
-    }
+  public md2plain(md: string) {
+    const htmlText = marked.parse(md) as string;
+    const plainText = html2text(htmlText);
+    return plainText;
+  }
 
-    public sanitizeMD(text: string) {
-        const temp = marked.parse(text) as string;
-        return this.sanitizeText(temp);
+  public sanitizeText(text?: string | null, max?: number) {
+    if (!text) {
+      return '';
     }
+    if (max) {
+      if (text.length > max) {
+        text = text.substring(0, max) + '...';
+      }
+    }
+    if (text in this.cache) {
+      return this.cache[text];
+    } else {
+      this.cache[text] = this.sanitizer.bypassSecurityTrustHtml(text);
+      return this.cache[text];
+    }
+  }
 
-    public sanitizeText(text?: string | null, max?: number) {
-        if (!text) {
-            return "";
-        }
-        if (max) {
-            if (text.length > max) {
-                text = text.substring(0, max) + "...";
-            }
-        }
-        if (text in this.cache) {
-            return this.cache[text];
-        } else {
-            this.cache[text] = this.sanitizer.bypassSecurityTrustHtml(text);
-            return this.cache[text];
-        }
-    }
+  public isMobile() {
+    return isMobile();
+  }
 
-    public isMobile() {
-        return isMobile();
-    }
+  epochTo(millis: number, type: DateOptionType = 'v1') {
+    return epochTo(millis, type);
+  }
 
-    epochTo(millis: number, type: DateOptionType = "v1") {
-        return epochTo(millis, type);
-    }
+  getBucketFilePath(value: string | null) {
+    return getBucketFilePath(value);
+  }
 
-    getBucketFilePath(value: string | null) {
-        return getBucketFilePath(value);
+  getBucketFilePathWithType(value: string, type: ImageTypeData) {
+    if (type == 'big') {
+      return getBucketFilePath(value);
+    } else if (type == 'thumbnail') {
+      return getBucketFilePath(getThumbnailPath(value));
+    } else {
+      return getBucketFilePath(getSquarePath(value));
     }
+  }
 
-    getBucketFilePathWithType(value: string, type: ImageTypeData) {
-        if (type == "big") {
-            return getBucketFilePath(value);
-        } else if (type == "thumbnail") {
-            return getBucketFilePath(getThumbnailPath(value));
-        } else {
-            return getBucketFilePath(getSquarePath(value));
-        }
+  setFullScreen(value: boolean) {
+    this.isFullScreen = value;
+    if (value) {
+      this.fullScreenSrv.enterFullscreen();
+    } else {
+      this.fullScreenSrv.exitFullscreen();
     }
-
-    setFullScreen(value: boolean) {
-        this.isFullScreen = value;
-        if (value) {
-            this.fullScreenSrv.enterFullscreen();
-        } else {
-            this.fullScreenSrv.exitFullscreen();
-        }
-    }
+  }
 }

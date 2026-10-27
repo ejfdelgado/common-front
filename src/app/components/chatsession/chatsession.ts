@@ -37,7 +37,6 @@ import {
   CalendarEventType,
   InnerToolResponseType,
 } from 'types/ragTypes';
-import { Marked } from 'marked';
 import { UINotificationSrv } from '@services/uinotifications.service';
 import { AlterEgoSplash } from './splash/splash';
 import { html2text } from '@tools/HtmlUtil';
@@ -61,8 +60,6 @@ const renderer: any = {
     return `<a href="${href}" title="${text ?? ''}" target="_blank">${this.parser.parseInline(tokens)}</a>`;
   },
 };
-
-const marked = new Marked({ renderer, breaks: true });
 
 @Component({
   selector: 'app-chatsession',
@@ -218,18 +215,17 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
               this.visualHistory.push({
                 date: Date.now() + index + this.timeOffset,
                 role: input.role ? input.role : 'na',
-                txt: this.sanitizeText(result),
+                txt: result,
               });
             }
           }
         }
         if (el.text) {
           let textMD = el.text;
-          const formated = await marked.parse(textMD);
           this.visualHistory.push({
             date: Date.now() + index,
             role: input.role ? input.role : 'na',
-            txt: this.sanitizeText(formated),
+            txt: textMD,
           });
         }
       });
@@ -243,12 +239,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     this.toolModel = {};
     this.useFirstMessage();
     this.notifyToolModelChange();
-  }
-
-  md2plain(md: string) {
-    const htmlText = marked.parse(md) as string;
-    const plainText = html2text(htmlText);
-    return plainText;
   }
 
   async setup() {
@@ -344,7 +334,6 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
       requestAnimationFrame(() => {
         this.scrollToBottom();
       });
-      //console.log(JSON.stringify(this.visualHistory, null, 4));
     }
   }
 
