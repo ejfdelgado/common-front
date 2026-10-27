@@ -1,5 +1,5 @@
 import { User } from "@angular/fire/auth";
-import { BasicDataType, SimpleDataType } from "@services/firestore.service";
+import { type BasicDataType, SimpleDataType } from "@services/firestore.service";
 import { ImageGalleryType } from "./fieldsTypes";
 import { SafeHtml } from "@angular/platform-browser";
 

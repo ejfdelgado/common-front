@@ -12,7 +12,7 @@ import { SideMenu } from '@components/side-menu/side-menu';
 import { Statusbar } from '@components/statusbar/statusbar';
 import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
-import { BasicDataType, FirestoreService } from '@services/firestore.service';
+import { type BasicDataType, FirestoreService } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';

@@ -1,4 +1,4 @@
-import { BasicDataType } from "@services/firestore.service";
+import { type BasicDataType } from "@services/firestore.service";
 
 export interface RoomGameType extends BasicDataType {
 
