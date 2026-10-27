@@ -45,7 +45,7 @@ const marked = new Marked({ renderer, breaks: true });
   ],
   imports: [CommonModule, MatIconModule],
   templateUrl: './md-input.html',
-  styleUrl: './md-input.scss',
+  styleUrls: ['./md-input.scss', '../../../../assets/css/markdown.scss'],
 })
 export class MDInput extends CommonComponent implements ControlValueAccessor, OnDestroy {
   @ViewChild('editable', { static: true }) editable!: ElementRef<HTMLDivElement>;

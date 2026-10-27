@@ -81,7 +81,7 @@ const renderer: any = {
     MarkdownPipe,
   ],
   templateUrl: './chatsession.html',
-  styleUrl: './chatsession.scss',
+  styleUrls: ['./chatsession.scss', '../../../assets/css/markdown.scss'],
 })
 export class Chatsession extends CommonComponent implements AfterViewInit {
   @Input() config!: GenerateContentConfig;
