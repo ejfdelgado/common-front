@@ -28,6 +28,10 @@ export class TranslateService {
     this.configService.setLanguage(lang);
   }
 
+  getCurrentLanguage(): string {
+    return this.configService.getCurrentLanguage();
+  }
+
   getAvailableLanguages(): LangDefinitionData[] {
     return [
       {id: 'es', label: "Español"},

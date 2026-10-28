@@ -1,65 +1,69 @@
 .main_container {
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.login_icon {
+  background-color: white;
 }
 
 .title_content {
-    flex: 1;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    overflow: hidden;
+  flex: 1;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  overflow: hidden;
 }
 
 .title_content h1 {
-    font-size: 1.5em;
-    text-overflow: ellipsis;
-    margin: 0;
-    padding: 3px 0;
-    color: var(--color-font-soft);
+  font-size: 1.5em;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding: 3px 0;
+  color: var(--color-font-soft);
 }
 
 .small_user_picture {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .user_card {
-    display: flex;
-    flex-direction: row;
-    gap: 18px;
-    margin: 16px 0 24px 0;
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  margin: 16px 0 24px 0;
 }
 
 .user_card .card_photo {
-    border-radius: 100%;
-    width: 50px;
-    height: fit-content;
+  border-radius: 100%;
+  width: 50px;
+  height: fit-content;
 }
 
 .user_card .card_name_email {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .user_card .card_name_email span,
 .user_card .card_name_email h6 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  margin: 0;
 }
 
 .user_card .card_name_email .email {
-    color: var(--color-font-soft);
+  color: var(--color-font-soft);
 }
