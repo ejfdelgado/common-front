@@ -56,7 +56,7 @@ import { Subscription } from 'rxjs';
 import { AuthenticatedComponent } from '../authenticated.component';
 import { User } from 'firebase/auth';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
-import { GeoLocationService } from 'src/app/services/geolocation.service';
+import { GeoLocationData, GeoLocationService } from 'src/app/services/geolocation.service';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -128,6 +128,7 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
   userLocal: User | null = null;
+  geolocationLocal: GeoLocationData | null = null;
   authSubscriptionLocal: Subscription | null = null;
 
   constructor(
@@ -171,7 +172,7 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
       await this.setup();
       this.cdr.detectChanges();
     }
-    this.geoLocationSrv.getUserLocation();
+    this.geolocationLocal = await this.geoLocationSrv.getUserLocation();
   }
 
   incrementLoading() {
@@ -313,9 +314,13 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
     config.systemInstruction += `\nTake into account the user local time is: ${new Date().toDateString()} at ${new Date().toLocaleTimeString()}`;
     // Add user if exist
     if (this.userLocal) {
-      config.systemInstruction += `\nAnd take into account you are talking with the user named:`;
+      config.systemInstruction += `\nTake into account you are talking with the user named:`;
       config.systemInstruction += `${this.userLocal.displayName}`;
       config.systemInstruction += `and email: ${this.userLocal.email}`;
+    }
+    // Add geolocation if provided
+    if (this.geolocationLocal) {
+      config.systemInstruction += `\nTake into account you are talking with a user geolocated at: ${this.geolocationLocal.readable}.`;
     }
     return config;
   }
