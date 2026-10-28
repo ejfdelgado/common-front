@@ -56,6 +56,7 @@ import { Subscription } from 'rxjs';
 import { AuthenticatedComponent } from '../authenticated.component';
 import { User } from 'firebase/auth';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { GeoLocationService } from 'src/app/services/geolocation.service';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -141,6 +142,7 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
     private uinotificationSrv: UINotificationSrv,
     private dialog: MatDialog,
     public shareSrv: ShareSrv,
+    public geoLocationSrv: GeoLocationService,
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
     if (this.isEmbeddedMode()) {
@@ -169,6 +171,7 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
       await this.setup();
       this.cdr.detectChanges();
     }
+    this.geoLocationSrv.getUserLocation();
   }
 
   incrementLoading() {
