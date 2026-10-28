@@ -55,6 +55,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { AuthenticatedComponent } from '../authenticated.component';
 import { User } from 'firebase/auth';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -82,6 +83,7 @@ const renderer: any = {
     PhotoGallerySimple,
     CalendarEvent,
     MarkdownPipe,
+    TranslatePipe,
   ],
   templateUrl: './chatsession.html',
   styleUrls: ['./chatsession.scss', '../../../assets/css/markdown.scss'],
@@ -157,6 +159,8 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
   setCurrentUser(user: User | null) {
     if (user) {
       this.userLocal = user;
+    } else {
+      this.userLocal = null;
     }
   }
 

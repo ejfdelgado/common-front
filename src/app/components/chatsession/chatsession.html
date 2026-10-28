@@ -13,22 +13,40 @@
             </div>
             }
             <div class="right_button">
-                <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
-                    <mat-icon>more_vert</mat-icon>
+                @if (userLocal) {
+                <button class="small_user_picture" [style.background-image]="'url(' + userLocal.photoURL + ')'"
+                    mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
                 </button>
+                } @else {
+                <button mat-icon-button color="primary" [matMenuTriggerFor]="menu2" aria-label="Open menu">
+                    <mat-icon>face</mat-icon>
+                </button>
+                }
                 <mat-menu #menu2="matMenu">
+                    @if(userLocal == null) {
+                    <button mat-menu-item (click)="authSrv.login()">
+                        <mat-icon>login</mat-icon>
+                        <span>{{ "labels.login" | translate : "general" | async }}</span>
+                    </button>
+                    }
                     <button mat-menu-item (click)="shareFun()">
                         <mat-icon>share</mat-icon>
-                        <span>Compartir</span>
+                        <span>{{ "buttons.share" | translate : "general" | async }}</span>
                     </button>
                     <button mat-menu-item (click)="clearHistory()">
                         <mat-icon>delete</mat-icon>
-                        <span>Borrar historial</span>
+                        <span>{{ "chat.clean_history" | translate : "general" | async }}</span>
                     </button>
                     <button mat-menu-item (click)="contactUs()">
                         <mat-icon>question_mark</mat-icon>
-                        <span>¿Cómo funciona este asistente?</span>
+                        <span>{{ "chat.how_it_works" | translate : "general" | async }}</span>
                     </button>
+                    @if(userLocal != null) {
+                    <button mat-menu-item (click)="authSrv.logout()">
+                        <mat-icon>logout</mat-icon>
+                        <span>{{ "labels.logout" | translate : "general" | async }}</span>
+                    </button>
+                    }
                 </mat-menu>
                 @if (isEmbeddedMode()) {
                 <button mat-icon-button color="primary" (click)="closeChat()">

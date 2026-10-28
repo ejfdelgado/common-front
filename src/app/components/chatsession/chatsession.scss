@@ -127,6 +127,12 @@
     gap: 15px;
 }
 
+.small_user_picture {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 mat-toolbar {
     border-bottom: 1px solid var(--color-font-softer);
     gap: 10px;

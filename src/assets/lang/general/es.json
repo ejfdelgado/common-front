@@ -13,6 +13,7 @@
   "labels": {
     "search": "Buscar...",
     "more": "Más...",
+    "login": "Ingresar",
     "logout": "Salir"
   },
   "messages": {
@@ -30,5 +31,9 @@
   "confirm": {
     "sure": "Está seguro?",
     "erase_cant_undo": "Una vez borrado no se podrá deshacer."
+  },
+  "chat": {
+    "clean_history": "Borrar historial",
+    "how_it_works": "¿Cómo funciona este asistente?"
   }
 }

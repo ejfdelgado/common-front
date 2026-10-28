@@ -42,7 +42,7 @@
             @if(user == null) {
             <button mat-menu-item (click)="authSrv.login()">
                 <mat-icon>login</mat-icon>
-                <span>Ingresar</span>
+                <span>{{ "labels.login" | translate : "general" | async }}</span>
             </button>
             } @else {
             <button mat-menu-item>

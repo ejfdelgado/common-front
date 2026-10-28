@@ -13,6 +13,7 @@
   "labels": {
     "search": "Search...",
     "more": "More...",
+    "login": "Login",
     "logout": "Logout"
   },
   "messages": {
@@ -30,5 +31,9 @@
   "confirm": {
     "sure": "Are you sure?",
     "erase_cant_undo": "Once deleted, it cannot be undone."
+  },
+  "chat": {
+    "clean_history": "Delete history",
+    "how_it_works": "How this assitant works?"
   }
 }
