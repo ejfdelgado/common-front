@@ -54,6 +54,7 @@ import { MarkdownPipe } from 'src/app/pipes/markdown.pipe';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { AuthenticatedComponent } from '../authenticated.component';
+import { User } from 'firebase/auth';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -123,6 +124,7 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
 
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
+  userLocal: User | null = null;
   authSubscriptionLocal: Subscription | null = null;
 
   constructor(
@@ -143,16 +145,19 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
       this.configureMessaging();
     }
     this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
-      if (user) {
-        const { email, displayName } = user;
-        
-      }
+      this.setCurrentUser(user);
     });
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.authSubscriptionLocal?.unsubscribe();
+  }
+
+  setCurrentUser(user: User | null) {
+    if (user) {
+      this.userLocal = user;
+    }
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -292,6 +297,22 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
     }
   }
 
+  getExtendedConfig() {
+    const config: GenerateContentConfig = JSON.parse(JSON.stringify(this.config));
+    if (typeof config.systemInstruction != 'string') {
+      config.systemInstruction = '';
+    }
+    // Add time
+    config.systemInstruction += `\nTake into account the user local time is: ${new Date().toDateString()} at ${new Date().toLocaleTimeString()}`;
+    // Add user if exist
+    if (this.userLocal) {
+      config.systemInstruction += `\nAnd take into account you are talking with the user named:`;
+      config.systemInstruction += `${this.userLocal.displayName}`;
+      config.systemInstruction += `and email: ${this.userLocal.email}`;
+    }
+    return config;
+  }
+
   async sendMessageInternal(userInput: string): Promise<void> {
     let indicator: Wait | null = null;
     if (this.useIndicator) {
@@ -324,7 +345,7 @@ export class Chatsession extends AuthenticatedComponent implements AfterViewInit
       const { result, toolsStatus, searchedResult } = await this.chatSrv.generateContent(
         this.getLimitedHistory(),
         extra,
-        this.config,
+        this.getExtendedConfig(),
         this.assistant.author,
         this.getEnabledTools(),
         {
