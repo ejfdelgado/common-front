@@ -52,6 +52,7 @@ import { epochTo } from '@tools/DateUtils';
 import { PhotoGallerySimple } from '@components/photo-gallery-simple/photo-gallery-simple';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { MarkdownPipe } from 'src/app/pipes/markdown.pipe';
+import { AuthService } from 'src/app/services/auth.service';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -132,6 +133,7 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
     private uinotificationSrv: UINotificationSrv,
     private dialog: MatDialog,
     public shareSrv: ShareSrv,
+    public authSrv: AuthService,
   ) {
     super(sanitizer, fullScreenSrv);
     if (this.isEmbeddedMode()) {

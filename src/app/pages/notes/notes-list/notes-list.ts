@@ -21,23 +21,14 @@ import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 
-export interface NoteDataType extends BasicDataType {
+export interface NoteDataType extends BasicDataType {}
 
-};
-
-const MODEL_NAME = "note";
+const MODEL_NAME = 'note';
 
 @Component({
   selector: 'app-notes-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    Statusbar,
-    SearchInputComponent,
-    CardDoc,
-    SideMenu,
-  ],
+  imports: [CommonModule, MatButtonModule, Statusbar, SearchInputComponent, CardDoc, SideMenu],
   templateUrl: './notes-list.html',
   styleUrl: './notes-list.scss',
 })
@@ -45,8 +36,8 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
-  searchable: string = "";
-  authSubscription: Subscription | null = null;
+  searchable: string = '';
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: false,
     shareQR: false,
@@ -68,33 +59,30 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Agregar nota",
-      icon: "add",
+      label: 'Agregar nota',
+      icon: 'add',
       children: [],
       callback: this.openDialog.bind(this),
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.notes = [];
         try {
           this.cdr.detectChanges();
-        } catch (err) { }
+        } catch (err) {}
       } else {
         this.pageNotes(true);
       }
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async openDialog(payload: any) {
     let model: any = null;
@@ -102,21 +90,23 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
       model = payload.model;
     }
     const formConfig: FormDataType = {
-      title: model ? "Actualizar" : "Crear",
+      title: model ? 'Actualizar' : 'Crear',
       autoAuthor: true,
       modelName: MODEL_NAME,
-      searchFields: ["title", "description"],
+      searchFields: ['title', 'description'],
       fields: [
-        { label: "Título", type: "text", key: "title", required: true },
+        { label: 'Título', type: 'text', key: 'title', required: true },
         {
-          label: "Descripción", type: "contenteditable", key: "description",
-          contenteditable: { minHeight: "10em", maxHeight: "20em" }
+          label: 'Descripción',
+          type: 'contenteditable',
+          key: 'description',
+          contenteditable: { minHeight: '10em', maxHeight: '20em' },
         },
       ],
       model: {
         title: '',
         description: '',
-      }
+      },
     };
     if (model) {
       formConfig.model = model;
@@ -128,7 +118,7 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
       data: formConfig,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.pageNotes(true);
       }
@@ -150,11 +140,12 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
       if (startover && this.notes.length > 0) {
         this.notes.splice(0, this.notes.length);
       }
-      const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
+      const searchable: string | undefined = this.searchable == '' ? undefined : this.searchable;
       const pagingOptions: PageDataType = {
-        collectionName: MODEL_NAME, searchText: searchable,
-        orderColumn: "updated",
-        orderDirection: "desc",
+        collectionName: MODEL_NAME,
+        searchText: searchable,
+        orderColumn: 'updated',
+        orderDirection: 'desc',
         author: this.user?.uid,
         top: 20,
       };
@@ -163,11 +154,10 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
           pagingOptions.lastDoc = this.notes[this.notes.length - 1];
         }
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
+      const page = await this.firestoreSrv.paging(pagingOptions);
       this.notes.push(...(page as NoteDataType[]));
       this.cdr.detectChanges();
     } catch (err) {
-
     } finally {
       indicator.done();
     }
@@ -178,15 +168,18 @@ export class NotesList extends AuthenticatedComponent implements OnInit, OnDestr
     this.pageNotes(true);
   }
 
-  async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
+  async localShare({ model, type }: { model: any; type: 'link' | 'qr' }) {
     const { id, title, description, updated } = model;
-    this.shareSrv.share({
-      collection: MODEL_NAME,
-      path: "/note",
-      id,
-      title,
-      description,
-      updated,
-    }, type);
+    this.shareSrv.share(
+      {
+        collection: MODEL_NAME,
+        path: '/note',
+        id,
+        title,
+        description,
+        updated,
+      },
+      type,
+    );
   }
 }

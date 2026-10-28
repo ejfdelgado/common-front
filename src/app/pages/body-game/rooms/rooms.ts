@@ -36,7 +36,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
   isAssistantOpened: boolean = false;
   menuOptions: MenuOptionType[] = [];
   rooms: RoomGameType[] = [];
-  authSubscription: Subscription | null = null;
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -75,7 +75,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
       untracked(() => this.adjustPrivileges());
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.rooms = [];
         try {
@@ -235,10 +235,9 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     return getAssistanteIframeSrc(ASISTANT_ID[lang], this.sanitizer);
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
   async openRoom(model: any) {

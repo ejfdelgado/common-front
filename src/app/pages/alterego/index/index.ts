@@ -40,7 +40,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
   menuOptions: MenuOptionType[] = [];
   notes: AssistantDataType[] = [];
   searchable: string = "";
-  authSubscription: Subscription | null = null;
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -80,7 +80,7 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
       },
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.notes = [];
         try {
@@ -92,10 +92,9 @@ export class AlteregoIndex extends AuthenticatedComponent implements OnInit, OnD
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
   ngOnInit(): void {

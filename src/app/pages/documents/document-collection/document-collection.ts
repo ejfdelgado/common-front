@@ -22,23 +22,14 @@ import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 
-export interface NoteDataType extends BasicDataType {
+export interface NoteDataType extends BasicDataType {}
 
-};
-
-const MODEL_NAME = "document";
+const MODEL_NAME = 'document';
 
 @Component({
   selector: 'app-document-collection',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    Statusbar,
-    SearchInputComponent,
-    CardDoc,
-    SideMenu,
-  ],
+  imports: [CommonModule, MatButtonModule, Statusbar, SearchInputComponent, CardDoc, SideMenu],
   templateUrl: './document-collection.html',
   styleUrl: './document-collection.scss',
 })
@@ -46,8 +37,8 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
   menuOptions: MenuOptionType[] = [];
   notes: NoteDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
-  searchable: string = "";
-  authSubscription: Subscription | null = null;
+  searchable: string = '';
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -72,33 +63,30 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Agregar documento",
-      icon: "add",
+      label: 'Agregar documento',
+      icon: 'add',
       children: [],
       callback: this.openDialog.bind(this),
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.notes = [];
         try {
           this.cdr.detectChanges();
-        } catch (err) { }
+        } catch (err) {}
       } else {
         this.pageNotes(true);
       }
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async openDialog(payload: any) {
     let model: any = null;
@@ -106,16 +94,14 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
       model = payload.model;
     }
     const formConfig: FormDataType = {
-      title: model ? "Actualizar" : "Crear",
+      title: model ? 'Actualizar' : 'Crear',
       autoAuthor: true,
       modelName: MODEL_NAME,
-      searchFields: ["title"],
-      fields: [
-        { label: "Título", type: "text", key: "title", required: true },
-      ],
+      searchFields: ['title'],
+      fields: [{ label: 'Título', type: 'text', key: 'title', required: true }],
       model: {
         title: '',
-      }
+      },
     };
     if (model) {
       formConfig.model = model;
@@ -127,7 +113,7 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
       data: formConfig,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.openDocument({ model: result });
       }
@@ -149,12 +135,13 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
       if (startover && this.notes.length > 0) {
         this.notes.splice(0, this.notes.length);
       }
-      const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
+      const searchable: string | undefined = this.searchable == '' ? undefined : this.searchable;
       const pagingOptions: PageDataType = {
-        collectionName: MODEL_NAME, searchText: searchable,
-        orderColumn: "updated",
+        collectionName: MODEL_NAME,
+        searchText: searchable,
+        orderColumn: 'updated',
         author: this.user?.uid,
-        orderDirection: "desc",
+        orderDirection: 'desc',
         top: 20,
       };
       if (!startover) {
@@ -162,11 +149,10 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
           pagingOptions.lastDoc = this.notes[this.notes.length - 1];
         }
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
+      const page = await this.firestoreSrv.paging(pagingOptions);
       this.notes.push(...(page as NoteDataType[]));
       this.cdr.detectChanges();
     } catch (err) {
-
     } finally {
       indicator.done();
     }
@@ -177,27 +163,30 @@ export class DocumentCollection extends AuthenticatedComponent implements OnInit
     this.pageNotes(true);
   }
 
-  async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
+  async localShare({ model, type }: { model: any; type: 'link' | 'qr' }) {
     const { id, title, description, updated } = model;
-    this.shareSrv.share({
-      collection: MODEL_NAME,
-      path: "/docs/this",
-      id,
-      title,
-      description,
-      updated,
-    }, type);
+    this.shareSrv.share(
+      {
+        collection: MODEL_NAME,
+        path: '/docs/this',
+        id,
+        title,
+        description,
+        updated,
+      },
+      type,
+    );
   }
 
   async openDocument(model: any) {
     this.router.navigate([`docs/this`], {
-      queryParams: { col: MODEL_NAME, id: model.model.id }
+      queryParams: { col: MODEL_NAME, id: model.model.id },
     });
   }
 
   async cardEvents($event: any) {
     const { action, model } = $event;
-    if (action == "arrow_outward") {
+    if (action == 'arrow_outward') {
       this.openDocument(model);
     }
   }

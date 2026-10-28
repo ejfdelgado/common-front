@@ -321,10 +321,8 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.p2pStatusSubscription) {
-      this.p2pStatusSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   openAssistant() {

@@ -45,7 +45,7 @@ export class IndexPaca extends AuthenticatedComponent implements OnInit, OnDestr
   pacas: PacaDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
   searchable: string = "";
-  authSubscription: Subscription | null = null;
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -97,7 +97,7 @@ export class IndexPaca extends AuthenticatedComponent implements OnInit, OnDestr
       },
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.pacas = [];
         try {
@@ -109,10 +109,9 @@ export class IndexPaca extends AuthenticatedComponent implements OnInit, OnDestr
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
   ngOnInit(): void {

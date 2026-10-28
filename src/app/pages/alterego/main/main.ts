@@ -43,7 +43,7 @@ import {
   FactCursorDataType,
   FoundKnowledge,
   HistoryDataType,
-  ToolResponseType
+  ToolResponseType,
 } from 'types/ragTypes';
 import { DialogFormComponent, FormDataType } from '@components/dialog-form/dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -62,12 +62,12 @@ import { User } from '@angular/fire/auth';
 import { UserCard } from 'app/pages/admin/users/user-card/user-card';
 import { CalendarService } from '@services/calendar.service';
 
-const MODEL_NAME = "fact";
-const MODEL_TOOL_NAME = "tool";
-const MODEL_ARTICLE_NAME = "article";
-const MODEL_HISTORY_NAME = "history";
-const MODEL_NAME_PARENT = "knowledge";
-const MODEL_NAME_PARENT_CLONE = "pubknowledge";
+const MODEL_NAME = 'fact';
+const MODEL_TOOL_NAME = 'tool';
+const MODEL_ARTICLE_NAME = 'article';
+const MODEL_HISTORY_NAME = 'history';
+const MODEL_NAME_PARENT = 'knowledge';
+const MODEL_NAME_PARENT_CLONE = 'pubknowledge';
 
 @Component({
   selector: 'app-main',
@@ -97,7 +97,6 @@ const MODEL_NAME_PARENT_CLONE = "pubknowledge";
   styleUrl: './main.scss',
 })
 export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDestroy {
-
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('sidenavTools') sidenavTools!: MatSidenav;
   @ViewChild('sidenavArticles') sidenavArticles!: MatSidenav;
@@ -108,10 +107,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   @ViewChild('article_form_metadata') articleFormMetadata!: FormSimpleWithout;
   @ViewChild('chat_session') chatSession!: Chatsession;
 
-
   menuOptions: MenuOptionType[] = [];
-  authSubscription: Subscription | null = null;
-  language: SearchLangsType = "en";
+  language: SearchLangsType = 'en';
   top: number = 3;
   distance: number = 10;
   knowledge: KnowledgeDataType[] = [];
@@ -133,13 +130,13 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   lastModified: number = 0;
 
   argumentTypes: DropDownOptionDataType[] = [
-    { val: Type.STRING, txt: "Text" },
-    { val: Type.BOOLEAN, txt: "Yes/No" },
-    { val: Type.INTEGER, txt: "Integer" },
-    { val: Type.NUMBER, txt: "Number" },
-    { val: Type.ARRAY, txt: "Array" },
-    { val: Type.OBJECT, txt: "Object" },
-  ]
+    { val: Type.STRING, txt: 'Text' },
+    { val: Type.BOOLEAN, txt: 'Yes/No' },
+    { val: Type.INTEGER, txt: 'Integer' },
+    { val: Type.NUMBER, txt: 'Number' },
+    { val: Type.ARRAY, txt: 'Array' },
+    { val: Type.OBJECT, txt: 'Object' },
+  ];
 
   isHandset$!: Observable<boolean>;
 
@@ -156,9 +153,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   historyModel: FlatJsonDataType = {};
 
   chatConfig: GenerateContentConfig = {
-    systemInstruction: "You are an assistant giving some information",
+    systemInstruction: 'You are an assistant giving some information',
     tools: [],
-  }
+  };
 
   reportHTML: SafeHtml | null = null;
   dynamicModel: any = null;
@@ -183,70 +180,84 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   ) {
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
-    this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
-      .pipe(
-        map(result => result.matches),
-        shareReplay()
-      );
+    this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+      map((result) => result.matches),
+      shareReplay(),
+    );
 
     this.menuOptions.push({
-      label: "General information",
-      icon: "edit",
+      label: 'General information',
+      icon: 'edit',
       children: [],
       callback: () => {
-        this.openDialog({
-          model: this.collection,
-        }, "general");
+        this.openDialog(
+          {
+            model: this.collection,
+          },
+          'general',
+        );
       },
     });
 
     this.menuOptions.push({
-      label: "Role identity",
-      icon: "face",
+      label: 'Role identity',
+      icon: 'face',
       children: [],
       callback: () => {
-        this.openDialog({
-          model: this.collection,
-        }, "chat");
+        this.openDialog(
+          {
+            model: this.collection,
+          },
+          'chat',
+        );
       },
     });
 
     this.menuOptions.push({
-      label: "Whatsapp",
-      icon: "sms",
+      label: 'Whatsapp',
+      icon: 'sms',
       children: [],
       callback: () => {
-        this.openDialog({
-          model: this.collection,
-        }, "whatsapp");
+        this.openDialog(
+          {
+            model: this.collection,
+          },
+          'whatsapp',
+        );
       },
     });
 
     this.menuOptions.push({
-      label: "Social links",
-      icon: "link",
+      label: 'Social links',
+      icon: 'link',
       children: [],
       callback: () => {
-        this.openDialog({
-          model: this.collection,
-        }, "links");
+        this.openDialog(
+          {
+            model: this.collection,
+          },
+          'links',
+        );
       },
     });
 
     this.menuOptions.push({
-      label: "Facts database",
-      icon: "import_contacts",
+      label: 'Facts database',
+      icon: 'import_contacts',
       children: [],
       callback: () => {
-        this.openDialog({
-          model: this.collection,
-        }, "maths");
+        this.openDialog(
+          {
+            model: this.collection,
+          },
+          'maths',
+        );
       },
     });
 
     this.menuOptions.push({
-      label: "Publish",
-      icon: "public",
+      label: 'Publish',
+      icon: 'public',
       children: [],
       callback: () => {
         this.openExportDialog();
@@ -254,8 +265,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
-      label: "QR Code",
-      icon: "qr_code",
+      label: 'QR Code',
+      icon: 'qr_code',
       children: [],
       callback: () => {
         this.localShare();
@@ -263,28 +274,26 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     });
 
     this.menuOptions.push({
-      label: "Calendar",
-      icon: "edit_calendar",
+      label: 'Calendar',
+      icon: 'edit_calendar',
       children: [],
       callback: async () => {
         const confirmed = await this.confirmSrv.confirm({
-          title: "Grant permissions",
-          message: "Do you allow the assistant read/write on your Google Calendar and Gmail send emails on behalf of you?"
+          title: 'Grant permissions',
+          message:
+            'Do you allow the assistant read/write on your Google Calendar and Gmail send emails on behalf of you?',
         });
         if (!confirmed) {
           return;
         }
-        const scopes = [
-          "calendar",
-          "gmail",
-        ];
+        const scopes = ['calendar', 'gmail'];
         this.authSrv.askForOfflineGrantScope(scopes);
       },
     });
 
     this.menuOptions.push({
-      label: "Permissions",
-      icon: "lock",
+      label: 'Permissions',
+      icon: 'lock',
       children: [],
       callback: () => {
         this.openPermissions();
@@ -294,21 +303,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     //askForOfflineCalendarScope
 
     this.menuOptions.push({
-      label: "Back to databases",
-      icon: "arrow_back",
+      label: 'Back to databases',
+      icon: 'arrow_back',
       children: [],
       callback: () => {
         this.router.navigate([`alterego/index`], {
-          queryParams: {}
+          queryParams: {},
         });
       },
     });
-  }
-
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
   }
 
   async ngOnInit(): Promise<void> {
@@ -316,7 +319,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       await this.loadCollection();
       const promises: Promise<any>[] = [];
       promises.push(this.pageAllTools());
-      if (location.hostname != "localhost") {
+      if (location.hostname != 'localhost') {
         promises.push(this.pageAllFacts());
         promises.push(this.pageAllArticles());
         promises.push(this.pageAllHistory());
@@ -333,7 +336,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   getTitle(): string {
     if (!this.collection) {
-      return "Database";
+      return 'Database';
     } else {
       return this.collection.title;
     }
@@ -341,8 +344,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async loadCollection() {
     const params = getUrlQueryParams();
-    const col = params.get("col");
-    const id = params.get("id");
+    const col = params.get('col');
+    const id = params.get('id');
     if (col && id) {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {
@@ -370,36 +373,65 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         const isQuestion = this.currentSelected.type == 'question';
         this.fields = [
           {
-            label: "Type", type: "select", key: "type",
+            label: 'Type',
+            type: 'select',
+            key: 'type',
             select: {
               options: [
-                { txt: "Question", val: "question" },
-                { txt: "Fact", val: "fact" },
-              ]
-            }
+                { txt: 'Question', val: 'question' },
+                { txt: 'Fact', val: 'fact' },
+              ],
+            },
           },
-          { label: "Knowledge", type: "md", key: "txtFormat", md: { maxHeight: "200px", minHeight: "200px" } },
+          {
+            label: 'Knowledge',
+            type: 'md',
+            key: 'txtFormat',
+            md: { maxHeight: '200px', minHeight: '200px' },
+          },
         ];
         if (isQuestion) {
-          this.fields.push({ label: "Answer", type: "md", key: "answerFormat", md: { maxHeight: "200px", minHeight: "200px" } },)
+          this.fields.push({
+            label: 'Answer',
+            type: 'md',
+            key: 'answerFormat',
+            md: { maxHeight: '200px', minHeight: '200px' },
+          });
         }
-        this.fields.push({ label: "Use gallery?", type: "toggle", key: "has_gallery", required: false, });
+        this.fields.push({
+          label: 'Use gallery?',
+          type: 'toggle',
+          key: 'has_gallery',
+          required: false,
+        });
         if (this.currentSelected.has_gallery === true) {
           this.fields.push({
-            label: "Gallery view", type: "select", key: "gallery_view", required: true,
+            label: 'Gallery view',
+            type: 'select',
+            key: 'gallery_view',
+            required: true,
             select: {
               options: [
-                { txt: "Complete", val: "complete" },
-                { txt: "Simple", val: "simple" },
-              ]
-            }
+                { txt: 'Complete', val: 'complete' },
+                { txt: 'Simple', val: 'simple' },
+              ],
+            },
           });
           this.fields.push({
-            label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
-              thumbnailMaxSizePixels: 100,//generate thumbnail
-              squareMaxSizePixels: 100,//generate square
-              template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
-            }
+            label: '',
+            type: 'image-gallery',
+            key: 'gallery',
+            required: false,
+            gallery: {
+              thumbnailMaxSizePixels: 100, //generate thumbnail
+              squareMaxSizePixels: 100, //generate square
+              template:
+                'alterego/' +
+                this.collection?.author +
+                '/' +
+                this.getParentId() +
+                '/${date.year}-${date.month}-${date.day}/${random}.jpg',
+            },
           });
         }
         this.model = Object.assign({}, this.currentSelected);
@@ -426,56 +458,127 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.currentToolSelected = tools[index];
         this.toolFields = [
           {
-            label: "Type", type: "select", key: "type", required: true,
+            label: 'Type',
+            type: 'select',
+            key: 'type',
+            required: true,
             select: {
               options: [
-                { txt: "Basic", val: "basic" },
-                { txt: "Email", val: "mail" },
-                { txt: "Article", val: "article" },
-                { txt: "Fact", val: "fact" },
-                { txt: "Calendar - Search", val: "calendar_search" },
-                { txt: "Calendar - Modify guest", val: "calendar_write_guest" },
-              ]
-            }
+                { txt: 'Basic', val: 'basic' },
+                { txt: 'Email', val: 'mail' },
+                { txt: 'Article', val: 'article' },
+                { txt: 'Fact', val: 'fact' },
+                { txt: 'Calendar - Search', val: 'calendar_search' },
+                { txt: 'Calendar - Modify guest', val: 'calendar_write_guest' },
+              ],
+            },
           },
-          { label: "Name", type: "text", key: "name", required: true, },
-          { label: "Description", type: "text", key: "desc", required: false, },
+          { label: 'Name', type: 'text', key: 'name', required: true },
+          { label: 'Description', type: 'text', key: 'desc', required: false },
           //{ label: "Use states?", type: "toggle", key: "useStates", required: false, },
         ];
 
         if (this.currentToolSelected.useStates === true) {
-          this.toolFields.push({ label: "Activated in States", type: "text", key: "useInState", required: false, });
-          this.toolFields.push({ label: "Next state", type: "text", key: "nextState", required: false, });
-        }
-
-        if (this.currentToolSelected.type == 'mail') {
-          this.toolFields.push({ label: "Custom template?", type: "text", key: "template", required: false, });
-          this.toolFields.push({ label: "To", type: "text", key: "to", required: true, });
-        } else if (this.currentToolSelected.type == 'article') {
-          this.toolFields.push({ label: "Keywords added", type: "text", key: "keywords", required: false, });
-        } else if (this.currentToolSelected.type == 'fact') {
-          this.toolFields.push({ label: "Idea added", type: "text", key: "keywords", required: false, });
-          this.toolFields.push({ label: "Max. matches", type: "number", key: "factsMaxMatches", required: true, });
-          this.toolFields.push({ label: "Min. % similarity", type: "number", key: "factsMinDistance", required: true, });
-        } else if (this.currentToolSelected.type == 'calendar_search') {
-          this.toolFields.push({ label: "Calendar Id", type: "text", key: "calendarCalendarId", required: false, });
-          this.toolFields.push({ label: "Keyword", type: "text", key: "calendarKeyword", required: true, });
-          this.toolFields.push({ label: "Max. Guests", type: "number", key: "calendarMaxGuests", required: true, });
-          this.toolFields.push({ label: "Max. events", type: "number", key: "calendarMaxEvents", required: false, });
-          this.toolFields.push({ label: "Min hours before", type: "number", key: "calendarMinHoursGap", required: false, });
-        } else if (this.currentToolSelected.type == 'calendar_write_guest') {
           this.toolFields.push({
-            label: "Action", type: "select", key: "action", required: true,
-            select: {
-              options: [
-                { txt: "Add", val: "add" },
-                { txt: "Remove", val: "remove" },
-              ]
-            }
+            label: 'Activated in States',
+            type: 'text',
+            key: 'useInState',
+            required: false,
+          });
+          this.toolFields.push({
+            label: 'Next state',
+            type: 'text',
+            key: 'nextState',
+            required: false,
           });
         }
 
-        this.toolFields.push({ label: "Affect model?", type: "toggle", key: "affectModel", required: false, });
+        if (this.currentToolSelected.type == 'mail') {
+          this.toolFields.push({
+            label: 'Custom template?',
+            type: 'text',
+            key: 'template',
+            required: false,
+          });
+          this.toolFields.push({ label: 'To', type: 'text', key: 'to', required: true });
+        } else if (this.currentToolSelected.type == 'article') {
+          this.toolFields.push({
+            label: 'Keywords added',
+            type: 'text',
+            key: 'keywords',
+            required: false,
+          });
+        } else if (this.currentToolSelected.type == 'fact') {
+          this.toolFields.push({
+            label: 'Idea added',
+            type: 'text',
+            key: 'keywords',
+            required: false,
+          });
+          this.toolFields.push({
+            label: 'Max. matches',
+            type: 'number',
+            key: 'factsMaxMatches',
+            required: true,
+          });
+          this.toolFields.push({
+            label: 'Min. % similarity',
+            type: 'number',
+            key: 'factsMinDistance',
+            required: true,
+          });
+        } else if (this.currentToolSelected.type == 'calendar_search') {
+          this.toolFields.push({
+            label: 'Calendar Id',
+            type: 'text',
+            key: 'calendarCalendarId',
+            required: false,
+          });
+          this.toolFields.push({
+            label: 'Keyword',
+            type: 'text',
+            key: 'calendarKeyword',
+            required: true,
+          });
+          this.toolFields.push({
+            label: 'Max. Guests',
+            type: 'number',
+            key: 'calendarMaxGuests',
+            required: true,
+          });
+          this.toolFields.push({
+            label: 'Max. events',
+            type: 'number',
+            key: 'calendarMaxEvents',
+            required: false,
+          });
+          this.toolFields.push({
+            label: 'Min hours before',
+            type: 'number',
+            key: 'calendarMinHoursGap',
+            required: false,
+          });
+        } else if (this.currentToolSelected.type == 'calendar_write_guest') {
+          this.toolFields.push({
+            label: 'Action',
+            type: 'select',
+            key: 'action',
+            required: true,
+            select: {
+              options: [
+                { txt: 'Add', val: 'add' },
+                { txt: 'Remove', val: 'remove' },
+              ],
+            },
+          });
+        }
+
+        this.toolFields.push({
+          label: 'Affect model?',
+          type: 'toggle',
+          key: 'affectModel',
+          required: false,
+        });
 
         this.toolModel = Object.assign({}, this.currentToolSelected);
         this.cdr.detectChanges();
@@ -498,37 +601,62 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         this.currentArticleSelected = this.articles[index];
         this.articleFields = [
           {
-            label: "Type", type: "select", key: "type", required: true,
+            label: 'Type',
+            type: 'select',
+            key: 'type',
+            required: true,
             select: {
               options: [
-                { txt: "Basic", val: "basic" },
-                { txt: "Gallery", val: "gallery" },
-              ]
-            }
+                { txt: 'Basic', val: 'basic' },
+                { txt: 'Gallery', val: 'gallery' },
+              ],
+            },
           },
-          { label: "Keywords", type: "text", key: "keywords", required: true, },
+          { label: 'Keywords', type: 'text', key: 'keywords', required: true },
         ];
         this.articleFieldsMetadata = [];
-        if (this.currentArticleSelected.type == "gallery") {
-          this.articleFieldsMetadata.push({ label: "Description", type: "md", key: "desc", required: false, });
+        if (this.currentArticleSelected.type == 'gallery') {
           this.articleFieldsMetadata.push({
-            label: "Gallery view", type: "select", key: "gallery_view", required: true,
+            label: 'Description',
+            type: 'md',
+            key: 'desc',
+            required: false,
+          });
+          this.articleFieldsMetadata.push({
+            label: 'Gallery view',
+            type: 'select',
+            key: 'gallery_view',
+            required: true,
             select: {
               options: [
-                { txt: "Complete", val: "complete" },
-                { txt: "Simple", val: "simple" },
-              ]
-            }
+                { txt: 'Complete', val: 'complete' },
+                { txt: 'Simple', val: 'simple' },
+              ],
+            },
           });
           this.articleFieldsMetadata.push({
-            label: "", type: "image-gallery", key: "gallery", required: false, gallery: {
-              thumbnailMaxSizePixels: 100,//generate thumbnail
-              squareMaxSizePixels: 100,//generate square
-              template: "alterego/" + this.collection?.author + "/" + this.getParentId() + "/${date.year}-${date.month}-${date.day}/${random}.jpg",
-            }
+            label: '',
+            type: 'image-gallery',
+            key: 'gallery',
+            required: false,
+            gallery: {
+              thumbnailMaxSizePixels: 100, //generate thumbnail
+              squareMaxSizePixels: 100, //generate square
+              template:
+                'alterego/' +
+                this.collection?.author +
+                '/' +
+                this.getParentId() +
+                '/${date.year}-${date.month}-${date.day}/${random}.jpg',
+            },
           });
-        } else if (this.currentArticleSelected.type == "basic") {
-          this.articleFields.push({ label: "Metadata", type: "json_raw", key: "metadata", required: true, });
+        } else if (this.currentArticleSelected.type == 'basic') {
+          this.articleFields.push({
+            label: 'Metadata',
+            type: 'json_raw',
+            key: 'metadata',
+            required: true,
+          });
         }
         this.articleModel = Object.assign({}, this.currentArticleSelected);
         this.articleModelMetadata = Object.assign({}, this.currentArticleSelected.metadata);
@@ -557,7 +685,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
           this.cdr.detectChanges();
         });
         this.historyFields = [
-          { label: "Checked", type: "toggle", key: "checked", required: false, },
+          { label: 'Checked', type: 'toggle', key: 'checked', required: false },
         ];
         this.historyModel = Object.assign({}, this.currentHistorySelected);
         resolve();
@@ -578,11 +706,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return this.knowledge;
     } else {
       // In this way, is it not necessary to load all knowledge in the begining
-      return this.searchedResult.map((el) => {
-        const found = el.metadata;
-        const matches = this.knowledge.find((k) => { return k.id == found.id });
-        return matches;
-      }).filter((el) => el != undefined);
+      return this.searchedResult
+        .map((el) => {
+          const found = el.metadata;
+          const matches = this.knowledge.find((k) => {
+            return k.id == found.id;
+          });
+          return matches;
+        })
+        .filter((el) => el != undefined);
     }
   }
 
@@ -654,7 +786,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     event.preventDefault();
     event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
+      title: 'Sure?',
       message: "This action can't be undone",
     });
     if (!confirm) {
@@ -685,7 +817,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     event.preventDefault();
     event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
+      title: 'Sure?',
       message: "This action can't be undone",
     });
     if (!confirm) {
@@ -715,7 +847,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     event.preventDefault();
     event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
+      title: 'Sure?',
       message: "This action can't be undone",
     });
     if (!confirm) {
@@ -746,7 +878,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     event.preventDefault();
     event.stopPropagation();
     const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
+      title: 'Sure?',
       message: "This action can't be undone",
     });
     if (!confirm) {
@@ -774,36 +906,36 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   getCollectionName() {
     const params = getUrlQueryParams();
-    const id = params.get("id");
+    const id = params.get('id');
     if (!id) {
-      throw new Error("Missed parent");
+      throw new Error('Missed parent');
     }
     return `knowledge/${id}/${MODEL_NAME}`;
   }
 
   getToolsCollectionName() {
     const params = getUrlQueryParams();
-    const id = params.get("id");
+    const id = params.get('id');
     if (!id) {
-      throw new Error("Missed parent");
+      throw new Error('Missed parent');
     }
     return `knowledge/${id}/${MODEL_TOOL_NAME}`;
   }
 
   getArticlesCollectionName() {
     const params = getUrlQueryParams();
-    const id = params.get("id");
+    const id = params.get('id');
     if (!id) {
-      throw new Error("Missed parent");
+      throw new Error('Missed parent');
     }
     return `knowledge/${id}/${MODEL_ARTICLE_NAME}`;
   }
 
   getHistoryCollectionName() {
     const params = getUrlQueryParams();
-    const id = params.get("id");
+    const id = params.get('id');
     if (!id) {
-      throw new Error("Missed parent");
+      throw new Error('Missed parent');
     }
     return `knowledge/${id}/${MODEL_HISTORY_NAME}`;
   }
@@ -812,9 +944,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const created: KnowledgeDataType = {
       created: 0,
       updated: 0,
-      txtFormat: "This is a new knowledge",
+      txtFormat: 'This is a new knowledge',
       type: 'fact',
-      id: "",
+      id: '',
     };
     // Call to create
     const parent = this.getParentId();
@@ -823,19 +955,19 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.knowledge.unshift(created);
     requestAnimationFrame(() => {
       this.selectItem(0);
-    })
+    });
   }
 
   async addTool() {
     const created: ToolDataType = {
       created: 0,
       updated: 0,
-      name: "",
-      desc: "",
+      name: '',
+      desc: '',
       type: 'basic',
-      id: "",
-      ok: "",
-      error: "",
+      id: '',
+      ok: '',
+      error: '',
       args: [],
     };
     // Call to create
@@ -857,12 +989,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const created: ArticleDataType = {
       created: 0,
       updated: 0,
-      id: "",
-      keywords: "",
-      type: "basic",
+      id: '',
+      keywords: '',
+      type: 'basic',
       metadata: {
-        desc: "",
-      }
+        desc: '',
+      },
     };
     // Call to create
     const parent = this.getParentId();
@@ -870,7 +1002,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.articles.unshift(created);
     requestAnimationFrame(() => {
       this.selectArticleItem(0);
-    })
+    });
   }
 
   indexOfNamedFieldAnswer(name: string) {
@@ -908,7 +1040,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async articleMetadataEditionMade(event: ChangeFieldType) {
     if (this.currentArticleSelected) {
-      (this.currentArticleSelected as any)["metadata"][event.name] = event.val;
+      (this.currentArticleSelected as any)['metadata'][event.name] = event.val;
       if (this.articlesPendingToSave.indexOf(this.currentArticleSelected) < 0) {
         this.articlesPendingToSave.push(this.currentArticleSelected);
       }
@@ -938,9 +1070,9 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   getParentId() {
     const params = getUrlQueryParams();
-    const parent = params.get("id");
+    const parent = params.get('id');
     if (!parent) {
-      throw new Error("No parent");
+      throw new Error('No parent');
     }
     return parent;
   }
@@ -963,8 +1095,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   mixFacts(incoming: KnowledgeDataType[]) {
-    const ids = this.knowledge.map(f => f.id);
-    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    const ids = this.knowledge.map((f) => f.id);
+    const news = incoming.filter((f) => ids.indexOf(f.id) < 0);
     this.knowledge.push(...news);
     this.knowledge.sort((a, b) => b.created - a.created);
   }
@@ -984,7 +1116,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       const pageResult = await this.alterEgo2Srv.pageFacts(parent, limit, cursor);
       const page = pageResult.rows;
-      this.mixFacts((page as any[]));
+      this.mixFacts(page as any[]);
       this.cdr.detectChanges();
       return page;
     } catch (err: any) {
@@ -1011,8 +1143,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   mixTools(incoming: ToolDataType[]) {
-    const ids = this.tools.map(f => f.id);
-    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    const ids = this.tools.map((f) => f.id);
+    const news = incoming.filter((f) => ids.indexOf(f.id) < 0);
     this.tools.push(...news);
     this.tools.sort((a, b) => b.created - a.created);
   }
@@ -1025,15 +1157,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       const pagingOptions: PageDataType = {
         collectionName: this.getToolsCollectionName(),
-        orderColumn: "created",
-        orderDirection: "desc",
+        orderColumn: 'created',
+        orderDirection: 'desc',
         top: limit,
       };
       if (!startover) {
         pagingOptions.lastDoc = this.pageAllToolsCursor;
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
-      this.mixTools((page as any[]));
+      const page = await this.firestoreSrv.paging(pagingOptions);
+      this.mixTools(page as any[]);
       this.cdr.detectChanges();
       return page as any[];
     } catch (err: any) {
@@ -1062,8 +1194,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   mixArticles(incoming: ArticleDataType[]) {
-    const ids = this.articles.map(f => f.id);
-    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    const ids = this.articles.map((f) => f.id);
+    const news = incoming.filter((f) => ids.indexOf(f.id) < 0);
     this.articles.push(...news);
     this.articles.sort((a, b) => b.created - a.created);
   }
@@ -1108,8 +1240,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   mixHistory(incoming: HistoryDataType[]) {
-    const ids = this.history.map(f => f.id);
-    const news = incoming.filter(f => ids.indexOf(f.id) < 0);
+    const ids = this.history.map((f) => f.id);
+    const news = incoming.filter((f) => ids.indexOf(f.id) < 0);
     this.history.push(...news);
     this.history.sort((a, b) => b.created - a.created);
   }
@@ -1122,15 +1254,15 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       }
       const pagingOptions: PageDataType = {
         collectionName: this.getHistoryCollectionName(),
-        orderColumn: "created",
-        orderDirection: "desc",
+        orderColumn: 'created',
+        orderDirection: 'desc',
         top: limit,
       };
       if (!startover) {
         pagingOptions.lastDoc = this.pageAllHistoryCursor;
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
-      this.mixHistory((page as any[]));
+      const page = await this.firestoreSrv.paging(pagingOptions);
+      this.mixHistory(page as any[]);
       this.cdr.detectChanges();
       return page as any[];
     } catch (err: any) {
@@ -1161,7 +1293,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         const parent = this.getParentId();
         await this.alterEgo2Srv.createUpdate(first, parent);
         // Merge original refs
-        this.knowledge.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));
+        this.knowledge.filter((t) => t.id == first.id).forEach((t) => Object.assign(t, first));
         this.pendingToSave.splice(0, 1);
       } while (this.pendingToSave.length > 0);
       this.lastModified += 1;
@@ -1194,7 +1326,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
         const first = this.toolsPendingToSave[0];
         await this.firestoreSrv.createUpdate(this.getToolsCollectionName(), first);
         // Merge original refs
-        this.tools.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));
+        this.tools.filter((t) => t.id == first.id).forEach((t) => Object.assign(t, first));
         this.toolsPendingToSave.splice(0, 1);
       } while (this.toolsPendingToSave.length > 0);
       this.lastModified += 1;
@@ -1216,10 +1348,10 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       do {
         const first = this.articlesPendingToSave[0];
         const parent = this.getParentId();
-        first.metadata.has_gallery = (first.type == "gallery")
+        first.metadata.has_gallery = first.type == 'gallery';
         await this.alterEgo2Srv.createUpdateArticles(first, parent);
         // Merge original refs
-        this.articles.filter(t => t.id == first.id).forEach(t => Object.assign(t, first));
+        this.articles.filter((t) => t.id == first.id).forEach((t) => Object.assign(t, first));
         this.articlesPendingToSave.splice(0, 1);
       } while (this.articlesPendingToSave.length > 0);
       this.lastModified += 1;
@@ -1257,26 +1389,28 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       panelClass: 'custom-emoji-picker',
       autoFocus: !this.isMobile(),
       data: {
-        title: "Do you confirm publish now?",
-        message: "The assistant will be updated"
+        title: 'Do you confirm publish now?',
+        message: 'The assistant will be updated',
       },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result && result.accept && this.collection) {
-
         const indicator = this.indicatorSrv.start();
         try {
-          let publication: any = null
+          let publication: any = null;
           // 1. Read the old cloned colletion
-          publication = await this.firestoreSrv.readById(MODEL_NAME_PARENT_CLONE, this.collection.id);
+          publication = await this.firestoreSrv.readById(
+            MODEL_NAME_PARENT_CLONE,
+            this.collection.id,
+          );
 
           // 2. If it not exist, create a brand new
           if (!publication) {
-            publication = { ...this.collection };//A real clone
+            publication = { ...this.collection }; //A real clone
             delete publication.owners;
             delete publication.search;
             // Add the knowledge path
-            publication.knowledge_path = "";
+            publication.knowledge_path = '';
             await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
           } else {
             Object.assign(publication, { ...this.collection });
@@ -1286,8 +1420,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
           // 3. Define the urlpath for the published buquet file
           publication.knowledge_path = getBucketPath(
-            "alterego/${user.uid}/${random}.bin",
-            publication.knowledge_path ? publication.knowledge_path : "",
+            'alterego/${user.uid}/${random}.bin',
+            publication.knowledge_path ? publication.knowledge_path : '',
             {
               user: AuthService.userStatic,
             },
@@ -1304,7 +1438,12 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
             //makePublic: true,//not needed, it is already public
           };
           const blob = new Blob([binary], { type: 'application/octet-stream' });
-          await this.fileSrv.upload(publication.knowledge_path.replace(/\?.*$/, ""), blob, "bucket", options);
+          await this.fileSrv.upload(
+            publication.knowledge_path.replace(/\?.*$/, ''),
+            blob,
+            'bucket',
+            options,
+          );
 
           // 7. Update the cloned collection
           await this.firestoreSrv.createUpdate(MODEL_NAME_PARENT_CLONE, publication);
@@ -1323,74 +1462,94 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       model = payload.model;
     }
 
-    let modelTitle = "Update";
+    let modelTitle = 'Update';
     let fields: AllFieldsDataType[] = [];
-    if (type == "general") {
-      modelTitle = "General information";
+    if (type == 'general') {
+      modelTitle = 'General information';
       fields = [
-        { label: "Title", type: "text", key: "title", required: true },
+        { label: 'Title', type: 'text', key: 'title', required: true },
         {
-          label: "Language", type: "select", key: "language", required: true,
+          label: 'Language',
+          type: 'select',
+          key: 'language',
+          required: true,
           select: {
             options: [
-              { txt: "English", val: "en" },
-              { txt: "Español", val: "es" },
-              { txt: "Agnostic", val: "multi" },
-            ]
-          }
+              { txt: 'English', val: 'en' },
+              { txt: 'Español', val: 'es' },
+              { txt: 'Agnostic', val: 'multi' },
+            ],
+          },
         },
         {
-          label: "Imagen", type: "image", key: "image", image: {
+          label: 'Imagen',
+          type: 'image',
+          key: 'image',
+          image: {
             thumbnailMaxSizePixels: 200,
-            squareMaxSizePixels: 800,//For social
-            template: "alterego/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg",
-          }
+            squareMaxSizePixels: 800, //For social
+            template: 'alterego/${user.uid}/${date.year}-${date.month}-${date.day}/${random}.jpg',
+          },
         },
         {
-          label: "Description", type: "contenteditable", key: "description",
-          md: { minHeight: "10em", maxHeight: "20em" }
+          label: 'Description',
+          type: 'contenteditable',
+          key: 'description',
+          md: { minHeight: '10em', maxHeight: '20em' },
         },
         {
-          label: "QR Emoji", type: "contenteditable", key: "emoji",
-          contenteditable: { minHeight: "20px", maxHeight: "20px" }
+          label: 'QR Emoji',
+          type: 'contenteditable',
+          key: 'emoji',
+          contenteditable: { minHeight: '20px', maxHeight: '20px' },
         },
       ];
-    } else if (type == "maths") {
-      modelTitle = "Facts database";
-      fields = [
-        { label: "Use fact database?", type: "toggle", key: "useFacts", required: true, toggle: { iconName: "checkbox" } },
-        { label: "Max. matches", type: "number", key: "top", required: true },
-        { label: "Min. % similarity", type: "number", key: "distance", required: true },
-      ];
-    } else if (type == "links") {
-      modelTitle = "Social links";
-      fields = [
-        { label: "Instagram", type: "text", key: "instagram", required: false },
-        { label: "Facebook", type: "text", key: "facebook", required: false },
-        { label: "Youtube", type: "text", key: "youtube", required: false },
-        { label: "Tik Tok", type: "text", key: "tiktok", required: false },
-        { label: "LinkedIn", type: "text", key: "linkedin", required: false },
-      ];
-    } else if (type == "whatsapp") {
-      modelTitle = "WhatsApp";
-      fields = [
-        { label: "Phone", type: "phone", key: "whatsapp", required: false },
-        { label: "Message", type: "text", key: "whatsapp_msg", required: false },
-      ];
-    } else if (type == "chat") {
-      modelTitle = "Role identity";
+    } else if (type == 'maths') {
+      modelTitle = 'Facts database';
       fields = [
         {
-          label: "Role description", type: "md", key: "instruct",
-          contenteditable: { minHeight: "10em", maxHeight: "20em" },
+          label: 'Use fact database?',
+          type: 'toggle',
+          key: 'useFacts',
+          required: true,
+          toggle: { iconName: 'checkbox' },
+        },
+        { label: 'Max. matches', type: 'number', key: 'top', required: true },
+        { label: 'Min. % similarity', type: 'number', key: 'distance', required: true },
+      ];
+    } else if (type == 'links') {
+      modelTitle = 'Social links';
+      fields = [
+        { label: 'Instagram', type: 'text', key: 'instagram', required: false },
+        { label: 'Facebook', type: 'text', key: 'facebook', required: false },
+        { label: 'Youtube', type: 'text', key: 'youtube', required: false },
+        { label: 'Tik Tok', type: 'text', key: 'tiktok', required: false },
+        { label: 'LinkedIn', type: 'text', key: 'linkedin', required: false },
+      ];
+    } else if (type == 'whatsapp') {
+      modelTitle = 'WhatsApp';
+      fields = [
+        { label: 'Phone', type: 'phone', key: 'whatsapp', required: false },
+        { label: 'Message', type: 'text', key: 'whatsapp_msg', required: false },
+      ];
+    } else if (type == 'chat') {
+      modelTitle = 'Role identity';
+      fields = [
+        {
+          label: 'Role description',
+          type: 'md',
+          key: 'instruct',
+          contenteditable: { minHeight: '10em', maxHeight: '20em' },
         },
         {
-          label: "First message", type: "md", key: "startConversation",
-          contenteditable: { minHeight: "10em", maxHeight: "20em" },
+          label: 'First message',
+          type: 'md',
+          key: 'startConversation',
+          contenteditable: { minHeight: '10em', maxHeight: '20em' },
         },
-        { label: "Max. messages to remember", type: "number", key: "maxHistory", required: true },
-        { label: "Max. tokens", type: "number", key: "maxOutputTokens", required: true },
-        { label: "Temperature", type: "number", key: "temperature", required: true },
+        { label: 'Max. messages to remember', type: 'number', key: 'maxHistory', required: true },
+        { label: 'Max. tokens', type: 'number', key: 'maxOutputTokens', required: true },
+        { label: 'Temperature', type: 'number', key: 'temperature', required: true },
       ];
     }
 
@@ -1398,7 +1557,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       title: modelTitle,
       autoAuthor: true,
       modelName: MODEL_NAME_PARENT,
-      searchFields: ["title", "description"],
+      searchFields: ['title', 'description'],
       fields: fields,
       model: DEF_ASSISTANT_MODEL,
     };
@@ -1412,7 +1571,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       data: formConfig,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         Object.assign(this.collection as any, result);
         this.updateProperties();
@@ -1496,7 +1655,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   receiveSearch(search: FoundKnowledge[]) {
     this.searchedResult = search;
-    const facts = search.map(s => s.metadata);
+    const facts = search.map((s) => s.metadata);
     this.mixFacts(facts);
     this.updateSearch();
   }
@@ -1519,15 +1678,18 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       return;
     }
     const { id, title, description, updated, emoji } = this.collection;
-    this.shareSrv.share({
-      collection: MODEL_NAME_PARENT_CLONE,
-      path: "/alterego/use",
-      id,
-      title,
-      description,
-      updated,
-      emoji,
-    }, "qr");
+    this.shareSrv.share(
+      {
+        collection: MODEL_NAME_PARENT_CLONE,
+        path: '/alterego/use',
+        id,
+        title,
+        description,
+        updated,
+        emoji,
+      },
+      'qr',
+    );
   }
 
   addArgument() {
@@ -1536,8 +1698,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     }
     this.currentToolSelected.args.push({
       type: Type.STRING,
-      name: "",
-      desc: "",
+      name: '',
+      desc: '',
       required: true,
     });
     this.refreshArguments();
@@ -1545,7 +1707,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
 
   async removeArgument(arg: ArgumentDataType) {
     const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
+      title: 'Sure?',
       message: "This action can't be undone",
     });
     if (!confirm) {
@@ -1576,7 +1738,14 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       this.clearFilter();
     } else {
       const parent = this.getParentId();
-      const result = await this.alterEgo2Srv.search(txt, parent, this.top, this.distance, this.language, true);
+      const result = await this.alterEgo2Srv.search(
+        txt,
+        parent,
+        this.top,
+        this.distance,
+        this.language,
+        true,
+      );
       this.receiveSearch(result.data);
     }
   }
@@ -1602,7 +1771,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       data: {
         id: this.collection.id,
         collection: MODEL_NAME_PARENT,
-        mode: "normal",
+        mode: 'normal',
       },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -1620,37 +1789,37 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
   }
 
   getTabTitle(type: string) {
-    if (type == "fact") {
+    if (type == 'fact') {
       if (this.searchedResult.length > 0) {
-        return "Facts 🔴";
+        return 'Facts 🔴';
       } else {
-        return "Facts";
+        return 'Facts';
       }
-    } else if (type == "tool") {
+    } else if (type == 'tool') {
       if (this.searchedToolsResult.length > 0) {
-        return "Tools 🔴";
+        return 'Tools 🔴';
       } else {
-        return "Tools";
+        return 'Tools';
       }
-    } else if (type == "article") {
+    } else if (type == 'article') {
       if (this.searchedArticleResult.length > 0) {
-        return "Articles 🔴";
+        return 'Articles 🔴';
       } else {
-        return "Articles";
+        return 'Articles';
       }
-    } else if (type == "history") {
-      const found = this.historyFiltered.find(a => a.checked === false);
+    } else if (type == 'history') {
+      const found = this.historyFiltered.find((a) => a.checked === false);
       if (found !== undefined) {
-        return "History 🔴";
+        return 'History 🔴';
       } else {
-        return "History";
+        return 'History';
       }
     }
-    return "";
+    return '';
   }
 
   async assignCalendarUser() {
-    await this.assignSelectedUser("calendarUser");
+    await this.assignSelectedUser('calendarUser');
   }
 
   async assignSelectedUser(attrName: string) {
@@ -1665,8 +1834,8 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
       data: {
         id: this.collection.id,
         collection: MODEL_NAME_PARENT,
-        mode: "pick_one",
-        title: "Select a user",
+        mode: 'pick_one',
+        title: 'Select a user',
       },
     });
     dialogRef.afterClosed().subscribe(async (result: User | null) => {
@@ -1688,7 +1857,7 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     const events = await this.calendarSrv.search(
       this.getParentId(),
       this.currentToolSelected.id,
-      3,// Maybe some default
+      3, // Maybe some default
       this.currentToolSelected.calendarMinHoursGap,
       this.currentToolSelected.calendarKeyword,
     );
@@ -1700,26 +1869,24 @@ export class AlterEgoMain extends AuthenticatedComponent implements OnInit, OnDe
     this.cdr.detectChanges();
   }
 
-  async testGmail() {
-
-  }
+  async testGmail() {}
 
   async deleteGmailUser() {
     const confirm = await this.confirmSrv.confirm({
-      title: "Sure?",
-      message: "If erased, the sender will be the default.",
+      title: 'Sure?',
+      message: 'If erased, the sender will be the default.',
     });
     if (!confirm) {
       return;
     }
     this.toolEditionMade({
-      name: "gmailUser",
+      name: 'gmailUser',
       val: null,
     });
     this.cdr.detectChanges();
   }
 
   async assignGmailUser() {
-    await this.assignSelectedUser("gmailUser");
+    await this.assignSelectedUser('gmailUser');
   }
 }

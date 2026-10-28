@@ -6,7 +6,6 @@ import { AuthService } from '@services/auth.service';
 import { FileService } from '@services/file.srv';
 import { FirestoreService } from '@services/firestore.service';
 import { FullscreenService } from '@services/fullscreen.service';
-import { Subscription } from 'rxjs';
 import { getBucketPath, getJSONUrl } from '@tools/BucketPaths';
 
 @Component({
@@ -27,7 +26,6 @@ export class Tos extends AuthenticatedComponent implements OnDestroy {
     urlImage: "https://storage.googleapis.com/pro-ejflab-assets/images/letter.jpg",
   };
 
-  authSubscription: Subscription | null = null;
   MODEL_COLLECTION: string = "publicpage";
   MODEL_ID: string = "superadmin_tos_json";
   BUCKET_PATH: string = "superadmin/tos.json";
@@ -51,10 +49,8 @@ export class Tos extends AuthenticatedComponent implements OnDestroy {
     this.readJSONFile();
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   async readJSONFile() {

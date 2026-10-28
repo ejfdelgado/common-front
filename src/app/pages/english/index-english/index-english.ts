@@ -21,21 +21,14 @@ import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 import { MenuOptionType } from 'types/StatusBar';
 
-export interface EnglishDataType extends BasicDataType {
+export interface EnglishDataType extends BasicDataType {}
 
-};
-
-const MODEL_NAME = "english";
+const MODEL_NAME = 'english';
 
 @Component({
   selector: 'app-index-english',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    Statusbar,
-    SideMenu,
-  ],
+  imports: [CommonModule, MatButtonModule, Statusbar, SideMenu],
   templateUrl: './index-english.html',
   styleUrl: './index-english.scss',
 })
@@ -43,8 +36,8 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
   menuOptions: MenuOptionType[] = [];
   english: EnglishDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
-  searchable: string = "";
-  authSubscription: Subscription | null = null;
+  searchable: string = '';
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -69,8 +62,8 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
     super(sanitizer, fullScreenSrv, authSrv, cdr);
 
     this.menuOptions.push({
-      label: "Next events",
-      icon: "🗓️",
+      label: 'Next events',
+      icon: '🗓️',
       isPlainIcon: true,
       children: [],
       callback: () => {
@@ -78,8 +71,8 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
       },
     });
     this.menuOptions.push({
-      label: "Join an interest group",
-      icon: "💬",
+      label: 'Join an interest group',
+      icon: '💬',
       isPlainIcon: true,
       children: [],
       callback: () => {
@@ -87,27 +80,24 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
       },
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.english = [];
         try {
           this.cdr.detectChanges();
-        } catch (err) { }
+        } catch (err) {}
       } else {
         this.pageDocuments(true);
       }
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async openDialog(payload: any) {
     let model: any = null;
@@ -115,16 +105,14 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
       model = payload.model;
     }
     const formConfig: FormDataType = {
-      title: model ? "Actualizar" : "Crear",
+      title: model ? 'Actualizar' : 'Crear',
       autoAuthor: true,
       modelName: MODEL_NAME,
-      searchFields: ["title"],
-      fields: [
-        { label: "Título", type: "text", key: "title", required: true },
-      ],
+      searchFields: ['title'],
+      fields: [{ label: 'Título', type: 'text', key: 'title', required: true }],
       model: {
         title: '',
-      }
+      },
     };
     if (model) {
       formConfig.model = model;
@@ -136,7 +124,7 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
       data: formConfig,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.pageDocuments(true);
       }
@@ -158,13 +146,13 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
       if (startover && this.english.length > 0) {
         this.english.splice(0, this.english.length);
       }
-      const searchable: string | undefined = this.searchable == "" ? undefined : this.searchable;
+      const searchable: string | undefined = this.searchable == '' ? undefined : this.searchable;
       const pagingOptions: PageDataType = {
         collectionName: MODEL_NAME,
         searchText: searchable,
-        orderColumn: "updated",
+        orderColumn: 'updated',
         //author: this.user?.uid,
-        orderDirection: "desc",
+        orderDirection: 'desc',
         top: 20,
       };
       if (!startover) {
@@ -172,11 +160,10 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
           pagingOptions.lastDoc = this.english[this.english.length - 1];
         }
       }
-      const page = (await this.firestoreSrv.paging(pagingOptions));
+      const page = await this.firestoreSrv.paging(pagingOptions);
       this.english.push(...(page as EnglishDataType[]));
       this.cdr.detectChanges();
     } catch (err) {
-
     } finally {
       indicator.done();
     }
@@ -187,27 +174,30 @@ export class IndexEnglish extends AuthenticatedComponent implements OnInit, OnDe
     this.pageDocuments(true);
   }
 
-  async localShare({ model, type }: { model: any, type: "link" | "qr" }) {
+  async localShare({ model, type }: { model: any; type: 'link' | 'qr' }) {
     const { id, title, description, updated } = model;
-    this.shareSrv.share({
-      collection: MODEL_NAME,
-      path: "/pug/detail",
-      id,
-      title,
-      description,
-      updated,
-    }, type);
+    this.shareSrv.share(
+      {
+        collection: MODEL_NAME,
+        path: '/pug/detail',
+        id,
+        title,
+        description,
+        updated,
+      },
+      type,
+    );
   }
 
   async openDocument(model: any) {
     this.router.navigate([`pug/detail`], {
-      queryParams: { col: MODEL_NAME, id: model.id }
+      queryParams: { col: MODEL_NAME, id: model.id },
     });
   }
 
   async cardEvents($event: any) {
     const { action, model } = $event;
-    if (action == "arrow_outward") {
+    if (action == 'arrow_outward') {
       this.openDocument(model);
     }
   }

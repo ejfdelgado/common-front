@@ -46,7 +46,7 @@ export class IndexPug extends AuthenticatedComponent implements OnInit, OnDestro
   pugs: PugDataType[] = [];
   liveSubscription: Unsubscribe | null = null;
   searchable: string = "";
-  authSubscription: Subscription | null = null;
+  authSubscriptionLocal: Subscription | null = null;
   cardConfig: CardDocDataType = {
     shareLink: true,
     shareQR: true,
@@ -77,7 +77,7 @@ export class IndexPug extends AuthenticatedComponent implements OnInit, OnDestro
       callback: this.openDialog.bind(this),
     });
 
-    this.authSubscription = this.authSrv.authState$.subscribe((user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
       if (!user) {
         this.pugs = [];
         try {
@@ -89,10 +89,9 @@ export class IndexPug extends AuthenticatedComponent implements OnInit, OnDestro
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
   ngOnInit(): void {

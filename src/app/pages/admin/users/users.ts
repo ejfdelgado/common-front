@@ -40,9 +40,8 @@ const PAGE_SIZE = 20;
   styleUrl: './users.scss',
 })
 export class UsersView extends AuthenticatedComponent implements OnInit, OnDestroy {
-
   menuOptions: MenuOptionType[] = [];
-  authSubscription: Subscription | null = null;
+  authSubscriptionLocal: Subscription | null = null;
 
   usersList: User[] = [];
 
@@ -68,7 +67,7 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     });
     */
 
-    this.authSubscription = this.authSrv.authState$.subscribe(async (user) => {
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe(async (user) => {
       if (!user) {
         this.usersList = [];
         this.cdr.detectChanges();
@@ -79,15 +78,12 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async pageUsers(email?: string, reset: boolean = false) {
     const query: QueryUser = {
@@ -118,15 +114,22 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
     let fields: AllFieldsDataType[] = [];
     fields = [
       {
-        label: "Title", type: "chip", key: "roles", required: false, chip: {
-          stringOptions: environment.roles.split(/[,;]/).map(e => e.trim()).filter(e => e.length > 0),
-        }
+        label: 'Title',
+        type: 'chip',
+        key: 'roles',
+        required: false,
+        chip: {
+          stringOptions: environment.roles
+            .split(/[,;]/)
+            .map((e) => e.trim())
+            .filter((e) => e.length > 0),
+        },
       },
     ];
     const formConfig: FormDataType = {
-      title: "Edit roles",
+      title: 'Edit roles',
       autoAuthor: true,
-      modelName: "",
+      modelName: '',
       searchFields: [],
       fields: fields,
       model: {
@@ -143,14 +146,12 @@ export class UsersView extends AuthenticatedComponent implements OnInit, OnDestr
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-
       }
     });
   }
 
   async copyUID(user: User) {
     ClipboardUtil.writeText(user.uid);
-    this.uiNotificationSrv.show("copied!");
+    this.uiNotificationSrv.show('copied!');
   }
 }
-
