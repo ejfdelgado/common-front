@@ -156,6 +156,7 @@ export class RoomsComponent extends AuthenticatedComponent implements OnInit, On
     dialogRef.afterClosed().subscribe((result: RoomGameType) => {
       if (result) {
         if (create) {
+          this.analyticsSrv.event('create_room', { roomId: result.id });
           this.openRoom(result);
         } else {
           this.pageRooms(true);

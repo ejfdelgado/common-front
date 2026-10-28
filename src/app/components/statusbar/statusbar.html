@@ -60,6 +60,17 @@
                 <span>{{ "labels.logout" | translate : "general" | async }}</span>
             </button>
             }
+            <button mat-menu-item [matMenuTriggerFor]="langMenu">
+                <mat-icon>language</mat-icon>
+                <span>{{ "labels.language" | translate : "general" | async }}</span>
+            </button>
+        </mat-menu>
+        <mat-menu #langMenu="matMenu">
+            @for (lang of langs; track lang.id) {
+            <button mat-menu-item (click)="translateSrv.setLanguage(lang.id)">
+                <span>{{ lang.label }}</span>
+            </button>
+            }
         </mat-menu>
     </div>
 </div>

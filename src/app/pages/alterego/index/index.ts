@@ -15,7 +15,6 @@ import { FullscreenService } from '@services/fullscreen.service';
 import { IndicatorService } from '@services/indicator.service';
 import { LocationService } from '@services/location.service';
 import { ShareSrv } from '@services/share.service';
-import { Unsubscribe } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 import { AssistantDataType } from 'types/ragTypes';
 import { MenuOptionType } from 'types/StatusBar';

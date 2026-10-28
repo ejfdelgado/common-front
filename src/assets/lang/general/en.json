@@ -14,7 +14,8 @@
     "search": "Search...",
     "more": "More...",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "language": "Language"
   },
   "messages": {
     "link_clipboard_copied": "Link copied!"

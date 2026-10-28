@@ -4,6 +4,11 @@ import { ConfigService } from './config.service';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
+export interface LangDefinitionData {
+  id: string;
+  label: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +26,13 @@ export class TranslateService {
 
   setLanguage(lang: string) {
     this.configService.setLanguage(lang);
+  }
+
+  getAvailableLanguages(): LangDefinitionData[] {
+    return [
+      {id: 'es', label: "Español"},
+      {id: 'en', label: "English"},
+    ]
   }
 
   async loadLanguageDB(args: unknown[]) {

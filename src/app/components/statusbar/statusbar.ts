@@ -10,6 +10,7 @@ import { AuthService } from '@services/auth.service';
 import { SideMenuService } from '@services/side-menu.service';
 import { MenuOptionType, StatusBarConfigType } from 'types/StatusBar';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
+import { LangDefinitionData, TranslateService } from 'src/app/services/translate.service';
 
 @Component({
   selector: 'app-statusbar',
@@ -24,6 +25,7 @@ export class Statusbar {
   @Input() options: MenuOptionType[] = [];
   @Input() title: string = '';
   user: User | null = null;
+  langs: LangDefinitionData[] = [];
 
   constructor(
     private indicatorSrv: IndicatorService,
@@ -31,6 +33,7 @@ export class Statusbar {
     private http: HttpClient,
     public cdr: ChangeDetectorRef,
     public sideMenuSrv: SideMenuService,
+    public translateSrv: TranslateService,
   ) {
     this.authSrv.authState$.subscribe((user) => {
       this.user = user;
@@ -38,6 +41,7 @@ export class Statusbar {
         this.cdr.detectChanges();
       } catch (err) {}
     });
+    this.langs = this.translateSrv.getAvailableLanguages();
   }
 
   toggleSideNav() {
