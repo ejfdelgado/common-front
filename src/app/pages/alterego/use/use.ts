@@ -16,8 +16,8 @@ import {
 import { decode } from '@msgpack/msgpack';
 import { AlterEgoSplash } from '@components/chatsession/splash/splash';
 import { CommonModule } from '@angular/common';
-import { Base64 } from '@tools/Base64';
 import { getClientRef } from '../common';
+import { AuthService } from 'src/app/services/auth.service';
 
 const MODEL_NAME_PARENT_CLONE = "pubknowledge";
 
@@ -50,6 +50,7 @@ export class AlterEgoUse implements OnInit {
     private firestoreSrv: FirestoreService,
     private uinotificationSrv: UINotificationSrv,
     private fileSrv: FileService,
+    public authSrv: AuthService,
   ) {
   }
   async ngOnInit(): Promise<void> {

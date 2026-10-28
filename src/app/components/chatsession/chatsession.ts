@@ -18,7 +18,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CommonComponent } from '@components/common.component';
 import { Content, GenerateContentConfig, GenerateContentResponse } from '@google/genai';
 import { ChatGeminiService } from '@services/chat-gemini.service';
 import { ConfirmDialogService } from '@services/confirm-dialog.service';
@@ -53,6 +52,8 @@ import { PhotoGallerySimple } from '@components/photo-gallery-simple/photo-galle
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { MarkdownPipe } from 'src/app/pipes/markdown.pipe';
 import { AuthService } from 'src/app/services/auth.service';
+import { Subscription } from 'rxjs';
+import { AuthenticatedComponent } from '../authenticated.component';
 
 const MODEL_NAME_CLONE = 'pubknowledge';
 
@@ -84,7 +85,7 @@ const renderer: any = {
   templateUrl: './chatsession.html',
   styleUrls: ['./chatsession.scss', '../../../assets/css/markdown.scss'],
 })
-export class Chatsession extends CommonComponent implements AfterViewInit {
+export class Chatsession extends AuthenticatedComponent implements AfterViewInit {
   @Input() config!: GenerateContentConfig;
   @Input() assistant!: AssistantDataType;
   @Input() lastModified: number = 0;
@@ -122,23 +123,36 @@ export class Chatsession extends CommonComponent implements AfterViewInit {
 
   @ViewChild('scrolled_container') private scrollContainer!: ElementRef;
 
+  authSubscriptionLocal: Subscription | null = null;
+
   constructor(
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public override authSrv: AuthService,
+    public override cdr: ChangeDetectorRef,
     public confirmSrv: ConfirmDialogService,
     public chatSrv: ChatGeminiService,
-    public cdr: ChangeDetectorRef,
     public alterEgo2Srv: AlterEgo2Service,
     private indicatorSrv: IndicatorService,
     private uinotificationSrv: UINotificationSrv,
     private dialog: MatDialog,
     public shareSrv: ShareSrv,
-    public authSrv: AuthService,
   ) {
-    super(sanitizer, fullScreenSrv);
+    super(sanitizer, fullScreenSrv, authSrv, cdr);
     if (this.isEmbeddedMode()) {
       this.configureMessaging();
     }
+    this.authSubscriptionLocal = this.authSrv.authState$.subscribe((user) => {
+      if (user) {
+        const { email, displayName } = user;
+        
+      }
+    });
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.authSubscriptionLocal?.unsubscribe();
   }
 
   async ngAfterViewInit(): Promise<void> {
