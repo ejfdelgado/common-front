@@ -82,18 +82,6 @@ export class Practicesong extends CommonSpeech {
     const config: CommandConfigType = {
       confidenceMin: 0.5,
       maxDiffMillis: 600,
-
-      commands: {
-        "es-ES": {
-          "ayuda": "help",
-        },
-        "en-US": {
-          "help": "help",
-        },
-        "fr-FR": {
-          "aide": "help",//bug don't work aide-moi
-        }
-      },
     };
 
     const { word$, command$ } = this.voiceSrv.singleWordConnect(config);

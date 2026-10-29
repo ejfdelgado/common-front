@@ -2,12 +2,18 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { CommandConfigType, RecognizedWord, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
-import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { IndicatorService } from "@services/indicator.service";
-import { ThreejsComponent } from "./threejs/threejs.component";
-import { CommonSpeech, SelectOptionType } from "../commonSpeech";
-import { BooleanStateService } from "@services/boolean-state.service";
+import {
+  CommandConfigType,
+  RecognizedWord,
+  RecognizedWordId,
+  VoiceLangType,
+  VoiceRecognitionService,
+} from '@services/voicerecognition.service';
+import { SpeechSynthesisService } from '@services/speechsynthesis.service';
+import { IndicatorService } from '@services/indicator.service';
+import { ThreejsComponent } from './threejs/threejs.component';
+import { CommonSpeech, SelectOptionType } from '../commonSpeech';
+import { BooleanStateService } from '@services/boolean-state.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { Fullscreen } from '@components/fullscreen/fullscreen';
@@ -15,22 +21,13 @@ import { Fullscreen } from '@components/fullscreen/fullscreen';
 @Component({
   selector: 'app-game-lr',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatIconModule,
-    ThreejsComponent,
-    Fullscreen,
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule, ThreejsComponent, Fullscreen],
   templateUrl: './game-lr.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    './game-lr.scss',
-    '../../../threejs_styles.scss',
-  ],
+  styleUrls: ['./game-lr.scss', '../../../threejs_styles.scss'],
 })
 export class GameLr extends CommonSpeech {
-  @ViewChild("three_component") threeComponent!: ThreejsComponent;
+  @ViewChild('three_component') threeComponent!: ThreejsComponent;
 
   constructor(
     public cdr: ChangeDetectorRef,
@@ -44,64 +41,65 @@ export class GameLr extends CommonSpeech {
     super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv);
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
+    this.voiceSrv.clearAllCommands();
+
+    const commandsMap: Map<VoiceLangType, { [key: string]: string }> = new Map();
+    commandsMap.set('es-ES', {
+      izquierda: 'left',
+      //
+      derecha: 'right',
+      //
+      arriba: 'up',
+      adelante: 'up',
+      frente: 'up',
+      //
+      abajo: 'down',
+      atras: 'down',
+      deatras: 'down',
+      reversa: 'down',
+    });
+    commandsMap.set('en-US', {
+      left: 'left',
+      //
+      right: 'right',
+      write: 'right',
+      //
+      up: 'up',
+      front: 'up',
+      frontward: 'up',
+      //
+      down: 'down',
+      back: 'down',
+      bach: 'down',
+      backward: 'down',
+      reverse: 'down',
+    });
+
+    commandsMap.set('fr-FR', {
+      gauche: 'left',
+      //
+      droite: 'right',
+      droit: 'right',
+      adroit: 'right',
+      //
+      haut: 'up',
+      avant: 'up',
+      devant: 'up',
+      avance: 'up',
+      vents: 'up',
+      ventes: 'up',
+      vins: 'up',
+      devin: 'up',
+      vendre: 'up',
+      //
+      bas: 'down',
+      arriere: 'down',
+      derriere: 'down',
+    });
 
     const config: CommandConfigType = {
       confidenceMin: 0.5,
       maxDiffMillis: 600,
-
-      commands: {
-        "es-ES": {
-          "izquierda": "left",
-          //
-          "derecha": "right",
-          //
-          "arriba": "up",
-          "adelante": "up",
-          "frente": "up",
-          //
-          "abajo": "down",
-          "atras": "down",
-          "deatras": "down",
-          "reversa": "down",
-        },
-        "en-US": {
-          "left": "left",
-          //
-          "right": "right",
-          "write": "right",
-          //
-          "up": "up",
-          "front": "up",
-          "frontward": "up",
-          //
-          "down": "down",
-          "back": "down",
-          "bach": "down",
-          "backward": "down",
-          "reverse": "down",
-        },
-        "fr-FR": {
-          "gauche": "left",
-          //
-          "droite": "right",
-          "droit": "right",
-          "adroit": "right",
-          //
-          "haut": "up",
-          "avant": "up",
-          "devant": "up",
-          "avance": "up",
-          "vents": "up",
-          "ventes": "up",
-          "vins": "up",
-          "devin": "up",
-          "vendre": "up",
-          //
-          "bas": "down",
-          "arriere": "down",
-          "derriere": "down",
-        }
-      },
     };
     const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
 

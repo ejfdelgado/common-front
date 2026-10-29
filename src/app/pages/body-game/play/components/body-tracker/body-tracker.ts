@@ -84,20 +84,6 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     const config: CommandConfigType = {
       confidenceMin: 0.5,
       maxDiffMillis: 600,
-
-      commands: {
-        'es-ES': {
-          guardar: 'save',
-          iniciar: 'start',
-          detener: 'stop',
-        },
-        'en-US': {
-          save: 'save',
-          start: 'start',
-          stop: 'stop',
-        },
-        'fr-FR': {},
-      },
     };
     const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
 

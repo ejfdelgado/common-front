@@ -39,6 +39,7 @@ import { QuestionaireController } from './controllers/QuestionaireController';
 import { SpeechSynthesisService } from '../services/speechsynthesis.service';
 import { removeEmojis } from '../tools/StringUtils';
 import { html2text } from '../tools/HtmlUtil';
+import { VoiceRecognitionService } from '../services/voicerecognition.service';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
   hudData: { [key: string]: any } = {
@@ -92,6 +93,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     public cdr: ChangeDetectorRef,
     public p2pSrv: P2PService,
     public speechSrv: SpeechSynthesisService,
+    public voiceRecognitionSrv: VoiceRecognitionService,
   ) {
     super(sanitizer, fullScreenSrv);
     this.events.subscribe((event) => {
@@ -301,7 +303,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     } else if (config.id == GameControllerEnum.HandsCloseController) {
       temp = new HandsCloseController(this.events, this.controlProxy, this.p2pSrv);
     } else if (config.id == GameControllerEnum.RecordPoseController) {
-      temp = new RecordPoseController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new RecordPoseController(this.events, this.controlProxy, this.p2pSrv, this.voiceRecognitionSrv);
     } else if (config.id == GameControllerEnum.SimplePosesDetection) {
       temp = new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv);
     } else if (config.id == GameControllerEnum.SoundFeedbackController) {

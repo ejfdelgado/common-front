@@ -13,6 +13,7 @@ import { ControlProxy } from '../workers/ControlProxy';
 import { P2PService } from 'src/app/services/p2p.service';
 import { EventEmitter } from '@angular/core';
 import { ModuloSonido } from 'src/app/services/sonido.service';
+import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
 
 export class RecordPoseController extends SceneControllerAbstract {
   recording: boolean = false;
@@ -26,10 +27,21 @@ export class RecordPoseController extends SceneControllerAbstract {
     public override events: EventEmitter<AvatarBodyEvent>,
     public override controlProxy: ControlProxy,
     public override p2pSrv: P2PService,
+    public voiceRecognitionSrv: VoiceRecognitionService,
   ) {
     super(events, controlProxy, p2pSrv);
     const audios: string[] = ['/assets/sounds/mail.mp3'];
     ModuloSonido.preload(audios);
+    const commandsMap: Map<VoiceLangType, { [key: string]: string }> = new Map();
+    commandsMap.set('es-ES', {
+      iniciar: 'start',
+      finalizar: 'finish',
+    });
+    commandsMap.set('en-US', {
+      start: 'start',
+      finish: 'finish',
+    });
+    this.voiceRecognitionSrv.addCommands(commandsMap);
   }
 
   override async update(): Promise<ControllerUpdateResponse> {

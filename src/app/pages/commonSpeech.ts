@@ -181,7 +181,6 @@ export class CommonSpeech extends CommonComponent {
     const config: CommandConfigType = {
       confidenceMin: 0.5,
       maxDiffMillis: 600,
-      commands: {},
     };
     this.voiceSrv.setInterimResults(false);
     this.voiceSrv.setContinuous(false);

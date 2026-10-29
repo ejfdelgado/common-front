@@ -15,7 +15,7 @@ import { IndicatorService } from '@services/indicator.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RecognizedCommand } from '@services/voicerecognition.service';
+import { RecognizedCommand, VoiceRecognitionService } from '@services/voicerecognition.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FullscreenService } from '@services/fullscreen.service';
 import { ComponentWithAvatar } from '@avatar/ComponentWithAvatar';
@@ -57,11 +57,12 @@ export class AvatarContainer
     public override p2pSrv: P2PService,
     public override cdr: ChangeDetectorRef,
     public override speechSrv: SpeechSynthesisService,
+    public override voiceRecognitionSrv: VoiceRecognitionService,
     //
     private indicatorSrv: IndicatorService,
     private http: HttpClient,
   ) {
-    super(sanitizer, fullScreenSrv, cdr, p2pSrv, speechSrv);
+    super(sanitizer, fullScreenSrv, cdr, p2pSrv, speechSrv, voiceRecognitionSrv);
     this.hasMobile = this.isMobile();
   }
 
@@ -129,6 +130,7 @@ export class AvatarContainer
   }
 
   executeCommand(command: RecognizedCommand) {
+    console.log(JSON.stringify(command));
     if (!this.scene) {
       return;
     }

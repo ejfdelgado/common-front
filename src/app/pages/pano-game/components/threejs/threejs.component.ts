@@ -11,16 +11,21 @@ import { BasicScene } from './BasicScene';
 import { IndicatorService, Wait } from '@services/indicator.service';
 import { ModuloSonido } from '@services/sonido.service';
 import { MatIconModule } from '@angular/material/icon';
-import { PromiseEmitter } from "@tools/PromiseEmitter";
+import { PromiseEmitter } from '@tools/PromiseEmitter';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommonSpeech, VoiceQuery } from "../../../commonSpeech";
-import { CommandConfigType, RecognizedWordId, VoiceRecognitionService } from "@services/voicerecognition.service";
-import { SpeechSynthesisService } from "@services/speechsynthesis.service";
-import { Question, QuestionDataType } from "../question/question";
+import { CommonSpeech, VoiceQuery } from '../../../commonSpeech';
+import {
+  CommandConfigType,
+  RecognizedWordId,
+  VoiceLangType,
+  VoiceRecognitionService,
+} from '@services/voicerecognition.service';
+import { SpeechSynthesisService } from '@services/speechsynthesis.service';
+import { Question, QuestionDataType } from '../question/question';
 import { shuffleInPlace } from '@tools/ArrayUtil';
-import { BooleanStateService } from "@services/boolean-state.service";
-import { Statusbar } from "../statusbar/statusbar";
+import { BooleanStateService } from '@services/boolean-state.service';
+import { Statusbar } from '../statusbar/statusbar';
 import { isMobile } from '@tools/mobile';
 import { getUrlQueryParams } from '@tools/UrlUtil';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -38,13 +43,7 @@ export interface PanoConfig {
 @Component({
   standalone: true,
   selector: 'app-threejs',
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatIconModule,
-    Question,
-    Statusbar,
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule, Question, Statusbar],
   templateUrl: './threejs.component.html',
   styleUrls: ['./threejs.component.css'],
 })
@@ -56,8 +55,8 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   scene: BasicScene | null = null;
   bounds: DOMRect | null = null;
   soundActivated: boolean = false;
-  queryParam: string = "";
-  viewState: "photo" | "map" | "print" = "photo";
+  queryParam: string = '';
+  viewState: 'photo' | 'map' | 'print' = 'photo';
   sceneCreated: PromiseEmitter = new PromiseEmitter();
   hasMobile: boolean;
   useStereo: boolean = false;
@@ -65,44 +64,46 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   listeningTimeoutPercentage: number = 0;
   fadeTimeout: NodeJS.Timeout | null = null;
   configuration: PanoConfig = {
-    title: "Las mejores cosas de la vida",
-    subtitle: "toman tiempo...",
-    imageUrl: "",
+    title: 'Las mejores cosas de la vida',
+    subtitle: 'toman tiempo...',
+    imageUrl: '',
     audioUrl: null,
   };
   questions: QuestionDataType[] = [
     {
-      photo: "/pano/2025-07/001/pano.jpg",
-      sound: "/pano/2025-07/001/ambience.aac",
+      photo: '/pano/2025-07/001/pano.jpg',
+      sound: '/pano/2025-07/001/ambience.aac',
       //intro: "Imagina una ciudad que se alza en medio de un enorme valle verde, rodeada por montañas que parecen abrazarla. Su clima es tan suave que muchos la llaman “la ciudad de la eterna primavera”: no hace demasiado calor, ni demasiado frío, y siempre hay flores en los jardines, en los parques y hasta en los balcones.",
-      intro: "intro",
+      intro: 'intro',
       text: '¿A qué ciudad colombiana se le conoce como "La ciudad de la eterna primavera"?',
       options: [
         {
-          id: "gato",
-          idRegex: "gato",
-          emoji: "🐱",
-          text: "Cali",
-        }, {
-          id: "perro",
-          idRegex: "perro",
-          emoji: "🐶",
-          text: "Cartagena",
+          id: 'gato',
+          idRegex: 'gato',
+          emoji: '🐱',
+          text: 'Cali',
         },
         {
-          id: "mico",
-          idRegex: "mi[ck]o",
-          emoji: "🐒",
-          text: "Barranquilla",
-        }, {
-          id: "león",
-          idRegex: "leon",
-          emoji: "🦁",
-          text: "Medellín",
+          id: 'perro',
+          idRegex: 'perro',
+          emoji: '🐶',
+          text: 'Cartagena',
+        },
+        {
+          id: 'mico',
+          idRegex: 'mi[ck]o',
+          emoji: '🐒',
+          text: 'Barranquilla',
+        },
+        {
+          id: 'león',
+          idRegex: 'leon',
+          emoji: '🦁',
+          text: 'Medellín',
           points: 1,
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
   currentQuestion: QuestionDataType | null = null;
 
@@ -115,30 +116,31 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
   ) {
-    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv, "es-ES");
+    super(voiceSrv, speechSrv, indicatorSrv, booleanService, sanitizer, fullScreenSrv, 'es-ES');
     this.hasMobile = isMobile();
 
     this.voiceSrv.setInterimResults(true);
     this.voiceSrv.setContinuous(false);
 
+    const commandsMap: Map<VoiceLangType, { [key: string]: string }> = new Map();
+    commandsMap.set('es-ES', {
+      ayuda: 'help',
+      hola: 'hello',
+      ola: 'hello',
+      pregunta: 'ask',
+    });
+    commandsMap.set('en-US', {
+      help: 'help',
+    });
+    commandsMap.set('fr-FR', {
+      aide: 'help', //bug don't work aide-moi
+    });
+    this.voiceSrv.clearAllCommands();
+    this.voiceSrv.addCommands(commandsMap);
+
     const config: CommandConfigType = {
       confidenceMin: 0.5,
       maxDiffMillis: 600,
-
-      commands: {
-        "es-ES": {
-          "ayuda": "help",
-          "hola": "hello",
-          "ola": "hello",
-          "pregunta": "ask",
-        },
-        "en-US": {
-          "help": "help",
-        },
-        "fr-FR": {
-          "aide": "help",//bug don't work aide-moi
-        }
-      },
     };
 
     const { word$, command$ } = this.voiceSrv.singleWordConnect(config);
@@ -162,31 +164,31 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
 
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
-      if (command.command == "hello") {
+      if (command.command == 'hello') {
         this.askName();
-      } else if (command.command == "ask") {
+      } else if (command.command == 'ask') {
         this.placeQuestion(this.questions[0]);
       }
       //console.log(command);
     });
 
-    this.booleanService.state$.subscribe(value => {
+    this.booleanService.state$.subscribe((value) => {
       this.isSystemListening = value.inUse;
-      if (typeof value.percentage == "number") {
+      if (typeof value.percentage == 'number') {
         this.listeningTimeoutPercentage = value.percentage;
       }
       try {
         this.cdr.detectChanges();
-      } catch (err) { }
+      } catch (err) {}
     });
   }
 
   playSuccess() {
-    ModuloSonido.play(BASE_BUCKET + "/sounds/violin_success.mp3", false, 1, 0);
+    ModuloSonido.play(BASE_BUCKET + '/sounds/violin_success.mp3', false, 1, 0);
   }
 
   playFail() {
-    ModuloSonido.play(BASE_BUCKET + "/sounds/loose.mp3", false, 1, 0);
+    ModuloSonido.play(BASE_BUCKET + '/sounds/loose.mp3', false, 1, 0);
   }
 
   async placeQuestion(question: QuestionDataType) {
@@ -211,19 +213,19 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       await this.talk(question.text);
       ModuloSonido.pause(sonidoUrl);
       const INTRO_OPC: string[] = [
-        "las opciones son: ",
-        "elige una opción: ",
-        "escoge la respuesta que consideres verdadera: ",
-        "cual es la respuesta correcta?: ",
-        "elige la respuesta correcta: ",
+        'las opciones son: ',
+        'elige una opción: ',
+        'escoge la respuesta que consideres verdadera: ',
+        'cual es la respuesta correcta?: ',
+        'elige la respuesta correcta: ',
       ];
-      let textoCompleto = "";
+      let textoCompleto = '';
       let opciones: VoiceQuery[] = [];
       for (let option of question.options) {
         textoCompleto += `Di ${option.id}, para ${option.text}.`;
         opciones.push({
           index: 1,
-          reg: new RegExp(`(${option.idRegex})`, "ig"),
+          reg: new RegExp(`(${option.idRegex})`, 'ig'),
         });
       }
 
@@ -235,26 +237,26 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
 
       const idChoice = respuesta.index;
       if (idChoice < question.options.length) {
-        question.options.forEach((el) => el.selected = false);
+        question.options.forEach((el) => (el.selected = false));
         const selectedChoice = question.options[idChoice];
         selectedChoice.selected = true;
         this.cdr.detectChanges();
         const correctQuestions = question.options.filter((op) => {
-          return typeof op.points == "number" && op.points > 0;
+          return typeof op.points == 'number' && op.points > 0;
         });
 
         const CONFIRM: string[] = [
           `Di "última palabra" para ${selectedChoice.id}, ${selectedChoice.text}, o di "cancelar" para cambiar la respuesta.`,
         ];
         let confirmOptionsPositive: VoiceQuery[] = [
-          { reg: /(ultima palabra)/ig, index: 1 },
-          { reg: /(si)/ig, index: 1 },
-          { reg: /(correcto)/ig, index: 1 },
+          { reg: /(ultima palabra)/gi, index: 1 },
+          { reg: /(si)/gi, index: 1 },
+          { reg: /(correcto)/gi, index: 1 },
         ];
         let confirmOptionsNegative: VoiceQuery[] = [
-          { reg: /(no)/ig, index: 1 },
-          { reg: /(cancelar)/ig, index: 1 },
-          { reg: /(cambiar)/ig, index: 1 },
+          { reg: /(no)/gi, index: 1 },
+          { reg: /(cancelar)/gi, index: 1 },
+          { reg: /(cambiar)/gi, index: 1 },
         ];
 
         const confirmation = await this.genericVoiceQuery(
@@ -264,23 +266,15 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
         );
 
         if (confirmation.index >= confirmOptionsNegative.length) {
-          if (typeof selectedChoice.points == "number" && selectedChoice.points > 0) {
-            const SUCCESS_TEXT: string[] = [
-              "Correcto!",
-              "Excelente!",
-              "Muy bien hecho!",
-            ];
+          if (typeof selectedChoice.points == 'number' && selectedChoice.points > 0) {
+            const SUCCESS_TEXT: string[] = ['Correcto!', 'Excelente!', 'Muy bien hecho!'];
             const suffix = ` La respuesta correcta es ${correctQuestions[0].id}, ${correctQuestions[0].text}`;
             shuffleInPlace(SUCCESS_TEXT);
             this.playSuccess();
             await this.talk(SUCCESS_TEXT.map((op) => op + suffix)[0]);
             break;
           } else {
-            const ERROR_TEXT: string[] = [
-              `Te has equivocado, `,
-              `Lo siento mucho, `,
-              `Ups!, `,
-            ];
+            const ERROR_TEXT: string[] = [`Te has equivocado, `, `Lo siento mucho, `, `Ups!, `];
             const suffix = ` La respuesta correcta era ${correctQuestions[0].id}, ${correctQuestions[0].text}`;
             shuffleInPlace(ERROR_TEXT);
             this.playFail();
@@ -288,7 +282,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
             break;
           }
         } else {
-          question.options.forEach((el) => el.selected = false);
+          question.options.forEach((el) => (el.selected = false));
           this.cdr.detectChanges();
         }
       }
@@ -298,7 +292,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     this.cdr.detectChanges();
   }
 
-  setViewState(nextState: "map" | "photo" | "print") {
+  setViewState(nextState: 'map' | 'photo' | 'print') {
     this.viewState = nextState;
     setTimeout(() => {
       this.onResize({});
@@ -361,16 +355,18 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
       this.onResize({});
     }, 0);
     const urlParams = getUrlQueryParams();
-    const queryParam = urlParams.get("q");
+    const queryParam = urlParams.get('q');
     if (!queryParam) {
       return;
     }
-    const tParam = urlParams.get("t");
+    const tParam = urlParams.get('t');
     if (tParam) {
       this.tParam = tParam;
     }
     this.queryParam = queryParam;
-    this.loadConfiguration(`https://storage.googleapis.com/pro-ejflab-assets/pano/${this.queryParam}/config.json`).then(async (config) => {
+    this.loadConfiguration(
+      `https://storage.googleapis.com/pro-ejflab-assets/pano/${this.queryParam}/config.json`,
+    ).then(async (config) => {
       this.configuration = config;
       await this.sceneCreated.promise;
       if (this.scene) {
@@ -383,9 +379,11 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   enterFullscreen(element: any) {
     if (element.requestFullscreen) {
       element.requestFullscreen();
-    } else if (element.webkitRequestFullscreen) { // Safari
+    } else if (element.webkitRequestFullscreen) {
+      // Safari
       element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) { // IE11
+    } else if (element.msRequestFullscreen) {
+      // IE11
       element.msRequestFullscreen();
     }
   }
@@ -393,9 +391,11 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
   exitFullscreen() {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-    } else if ((document as any).webkitExitFullscreen) { // Safari
+    } else if ((document as any).webkitExitFullscreen) {
+      // Safari
       (document as any).webkitExitFullscreen();
-    } else if ((document as any).msExitFullscreen) { // IE11
+    } else if ((document as any).msExitFullscreen) {
+      // IE11
       (document as any).msExitFullscreen();
     }
   }
@@ -404,7 +404,7 @@ export class ThreejsComponent extends CommonSpeech implements OnInit, AfterViewI
     // Clamp between 0 and 1
     const v = Math.min(1, Math.max(0, value));
 
-    // Convert 0→1 into alpha 255→0  
+    // Convert 0→1 into alpha 255→0
     const alpha = Math.round((1 - v) * 255);
 
     // Convert alpha to 2-digit hex

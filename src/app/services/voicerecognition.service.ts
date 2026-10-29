@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, filter, map, distinctUntilChanged, tap } from 'rxjs';
-import { BooleanStateService } from "@services/boolean-state.service";
+import { BooleanStateService } from '@services/boolean-state.service';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-US', name: 'English (United States)' },
@@ -15,18 +15,19 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ja-JP', name: 'Japanese (Japan)' },
   { code: 'ko-KR', name: 'Korean (Korea)' },
   { code: 'zh-CN', name: 'Chinese (Simplified, China)' },
-  { code: 'zh-TW', name: 'Chinese (Traditional, Taiwan)' }
+  { code: 'zh-TW', name: 'Chinese (Traditional, Taiwan)' },
 ];
 
+export type VoiceLangType = 'es-ES' | 'en-US' | 'fr-FR';
+
 export interface CommandConfigType {
-  confidenceMin: number,
-  maxDiffMillis: number,
-  commands: { [key: string]: { [key: string]: any } },
-  type?: "singleWord" | "phrase",
+  confidenceMin: number;
+  maxDiffMillis: number;
+  type?: 'singleWord' | 'phrase';
 }
 
 export interface StartOptions {
-  lang?: string,
+  lang?: string;
   autorestart?: boolean;
 }
 
@@ -78,14 +79,18 @@ export class VoiceRecognitionService {
 
   constructor(
     private ngZone: NgZone,
-    private booleanService: BooleanStateService
+    private booleanService: BooleanStateService,
   ) {
     this.setupRecognition();
   }
 
   private setupRecognition() {
     const win = window as any;
-    const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition || win.mozSpeechRecognition || win.msSpeechRecognition;
+    const SpeechRecognition =
+      win.SpeechRecognition ||
+      win.webkitSpeechRecognition ||
+      win.mozSpeechRecognition ||
+      win.msSpeechRecognition;
 
     if (!SpeechRecognition) {
       this.isSupported = false;
@@ -106,7 +111,8 @@ export class VoiceRecognitionService {
       this.recognition.onstart = () => this.runInZone(() => this.statusSubject.next('listening'));
       this.recognition.onend = () => this.runInZone(() => this.statusSubject.next('stopped'));
       this.recognition.onerror = (ev: any) => this.runInZone(() => this.handleError(ev));
-      this.recognition.onresult = (ev: SpeechRecognitionEvent) => this.runInZone(() => this.handleResult(ev));
+      this.recognition.onresult = (ev: SpeechRecognitionEvent) =>
+        this.runInZone(() => this.handleResult(ev));
     } catch (err) {
       this.isSupported = false;
       this.statusSubject.next('unsupported');
@@ -139,14 +145,14 @@ export class VoiceRecognitionService {
       fullTranscript += (fullTranscript ? ' ' : '') + transcript;
 
       // split into words and emit per word
-      const words = transcript.split(/\s+/).filter(w => w.length > 0);
+      const words = transcript.split(/\s+/).filter((w) => w.length > 0);
       const timestamp = Date.now();
 
-      words.forEach(w => {
+      words.forEach((w) => {
         const normalized = w.replace(/[.,!?;:\/\"'()\[\]]+/g, '').toLowerCase();
         if (this.keywords && this.keywords.length > 0) {
           // emit only if word matches any keyword (case-insensitive)
-          if (!this.keywords.map(k => k.toLowerCase()).includes(normalized)) return;
+          if (!this.keywords.map((k) => k.toLowerCase()).includes(normalized)) return;
         }
 
         const payload: RecognizedWord = {
@@ -251,34 +257,51 @@ export class VoiceRecognitionService {
   }
 
   normalizeString(input: string) {
-    return input
-      // Normalize accented characters into base + diacritic
-      .normalize("NFD")
-      // Remove diacritics (accents)
-      .replace(/[\u0300-\u036f]/g, "")
-      // Keep only letters (A–Z, a–z) and spaces
-      .replace(/[^a-zA-Z\s]/g, "")
-      // Replace multiple spaces with a single one and trim
-      .replace(/\s+/g, " ")
-      .trim().toLowerCase();
+    return (
+      input
+        // Normalize accented characters into base + diacritic
+        .normalize('NFD')
+        // Remove diacritics (accents)
+        .replace(/[\u0300-\u036f]/g, '')
+        // Keep only letters (A–Z, a–z) and spaces
+        .replace(/[^a-zA-Z\s]/g, '')
+        // Replace multiple spaces with a single one and trim
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase()
+    );
   }
 
-  singleWordConnect({
-    confidenceMin,
-    maxDiffMillis,
-    commands,
-    type,
-  }: CommandConfigType) {
+  commandOptions: Map<VoiceLangType, { [key: string]: string }> = new Map();
+
+  clearAllCommands() {
+    this.commandOptions = new Map();
+  }
+
+  addCommands(map: Map<VoiceLangType, { [key: string]: string }>) {
+    map.forEach((dictionary, lang) => {
+      if (!(lang in this.commandOptions)) {
+        this.commandOptions.set(lang, {});
+      }
+      const old = this.commandOptions.get(lang);
+      if (old) {
+        Object.assign(old, dictionary);
+        this.commandOptions.set(lang, old);
+      }
+    });
+  }
+
+  singleWordConnect({ confidenceMin, maxDiffMillis, type }: CommandConfigType) {
     let counter: number = 0;
     this.word$ = this.recognizedWord$.pipe(
-      filter(w => w.confidence >= confidenceMin),
-      map(w => ({ ...w, word: this.simplifyWord(w.word) })),
+      filter((w) => w.confidence >= confidenceMin),
+      map((w) => ({ ...w, word: this.simplifyWord(w.word) })),
       distinctUntilChanged((prev, curr) => {
         const sameWord = prev.word === curr.word;
         const shortDiffTime = Math.abs(prev.timestamp - curr.timestamp) < maxDiffMillis;
         return sameWord && shortDiffTime;
       }),
-      map<RecognizedWord, RecognizedWordId>(w => {
+      map<RecognizedWord, RecognizedWordId>((w) => {
         const el = w as RecognizedWordId;
         el.id = counter++;
         return el;
@@ -286,33 +309,35 @@ export class VoiceRecognitionService {
     );
     this.command$ = this.word$.pipe(
       map((word) => {
-        let dictionary: any = {};
-        if (this.recognition?.lang && this.recognition.lang in commands) {
-          dictionary = commands[this.recognition.lang];
+        let dictionary: { [key: string]: string } | undefined = {};
+        if (this.recognition?.lang && this.recognition.lang in this.commandOptions) {
+          dictionary = this.commandOptions.get(this.recognition.lang as VoiceLangType);
         }
-        let simplifiedWord = "";
-        if (type == "phrase") {
+        let simplifiedWord = '';
+        if (type == 'phrase') {
           if (word.transcript) {
             simplifiedWord = this.normalizeString(word.transcript);
           }
-        } else if (type == "singleWord") {
+        } else if (type == 'singleWord') {
           simplifiedWord = this.normalizeString(word.word);
         } else {
           simplifiedWord = this.normalizeString(word.word);
         }
 
         const comm: RecognizedCommand = {
-          command: "",
+          command: '',
           timestamp: word.timestamp,
-        }
-        const keys = Object.keys(dictionary);
-        const filtered = keys.filter((key) => simplifiedWord.indexOf(key) >= 0);
-        if (filtered.length > 0) {
-          comm.command = dictionary[filtered[0]];
+        };
+        if (dictionary) {
+          const keys = Object.keys(dictionary);
+          const filtered = keys.filter((key) => simplifiedWord.indexOf(key) >= 0);
+          if (filtered.length > 0) {
+            comm.command = dictionary[filtered[0]];
+          }
         }
         return comm;
       }),
-      filter(w => w.command != "")
+      filter((w) => w.command != ''),
     );
     return {
       word$: this.word$,
