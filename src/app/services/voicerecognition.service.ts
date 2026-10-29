@@ -310,7 +310,7 @@ export class VoiceRecognitionService {
     this.command$ = this.word$.pipe(
       map((word) => {
         let dictionary: { [key: string]: string } | undefined = {};
-        if (this.recognition?.lang && this.recognition.lang in this.commandOptions) {
+        if (this.recognition?.lang && this.commandOptions.has(this.recognition.lang as VoiceLangType)) {
           dictionary = this.commandOptions.get(this.recognition.lang as VoiceLangType);
         }
         let simplifiedWord = '';
