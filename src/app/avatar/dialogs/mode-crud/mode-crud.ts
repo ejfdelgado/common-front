@@ -38,6 +38,7 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
   op_hands: [
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
     { id: GameControllerEnum.ArmsPointerController, params: {} },
     //{ id: GameControllerEnum.HandsCloseController, params: {} },
     { id: GameControllerEnum.HandPointerController, params: {} },
@@ -46,6 +47,7 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.SimplePosesDetection, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
     { id: GameControllerEnum.RecordPoseController, params: {} },
   ],
   op_walk: [
@@ -54,6 +56,7 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     { id: GameControllerEnum.TerrainElevationController, params: {} },
     { id: GameControllerEnum.WalkController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
   ],
 };
 
@@ -211,6 +214,31 @@ export class ModeCrudComponent {
           const controllers = CONTROLLERS_MAP[type];
           if (controllers) {
             originalMode.controllers = controllers;
+          }
+          if (type == 'op_walk') {
+            const DAFAULT_SCENARIO_NAME = 'scenario01';
+            const DEFAULT_SCENARIO = {
+              useComposer: true,
+              background: {
+                color: {
+                  r: 0.5,
+                  g: 0.5,
+                  b: 1,
+                },
+              },
+              characters: [],
+              meshes: [
+                {
+                  name: 'scenario_a',
+                  url: '/assets/models/scenario.glb',
+                },
+              ],
+            };
+            if (!originalMode.scenarios) {
+              originalMode.scenarios = {};
+            }
+            originalMode.scenarios[DAFAULT_SCENARIO_NAME] = DEFAULT_SCENARIO;
+            originalMode.defaultSenario = DAFAULT_SCENARIO_NAME;
           }
         }
 
