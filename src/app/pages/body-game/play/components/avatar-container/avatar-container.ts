@@ -130,7 +130,6 @@ export class AvatarContainer
   }
 
   executeCommand(command: RecognizedCommand) {
-    console.log(JSON.stringify(command));
     if (!this.scene) {
       return;
     }

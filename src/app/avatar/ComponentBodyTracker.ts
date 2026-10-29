@@ -690,6 +690,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     // Define controllers
     const controllers = this.mode.controllers;
     await avatarContainer.removeAllControllers();
+    this.voiceSrv.clearAllCommands();
     for (let i = 0; i < controllers.length; i++) {
       const config = controllers[i];
       const controller = avatarContainer.createController(config);

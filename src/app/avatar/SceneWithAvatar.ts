@@ -741,7 +741,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     }
 
     executeCommand(command: RecognizedCommand) {
-        console.log(command);
+        //
     }
 
     applyAvatarState(
