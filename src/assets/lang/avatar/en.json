@@ -202,7 +202,10 @@
           },
           "types": {
             "label": "Type",
-            "ch_question": "Questions"
+            "ch_question": "Questions",
+            "ch_hands": "Hand's interaction",
+            "ch_walk": "Walk",
+            "ch_record": "Body record"
           },
           "avatar_side": {
             "label": "Mirror",

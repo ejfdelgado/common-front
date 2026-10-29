@@ -19,9 +19,9 @@ export const MIRROR_OPTIONS: SelectOptionBoolean[] = [
 
 export const TYPE_OPTIONS: SelectOptionString[] = [
   { label_key: 'ch_question', label: 'preguntas', value: 'preguntas' },
-  //{ label: 'Test 01', value: 'test_01' },
-  //{ label: 'Test 02', value: 'test_02' },
-  //{ label: 'Test 03', value: 'test_03' },
+  { label_key: 'ch_record', label: 'record', value: 'op_record' },
+  { label_key: 'ch_hands', label: 'hands', value: 'op_hands' },
+  { label_key: 'ch_walk', label: 'walk', value: 'op_walk' },
 ];
 
 export const OBJECTS_OPTIONS: SelectOptionString[] = [

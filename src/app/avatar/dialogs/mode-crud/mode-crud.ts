@@ -33,38 +33,27 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
     { id: GameControllerEnum.CubeController, params: { enabled: false } },
-    { id: GameControllerEnum.SoundFeedbackController, params: {} },
     { id: GameControllerEnum.QuestionaireController, params: {} },
   ],
-  test_01: [
+  op_hands: [
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
-    //{ id: GameControllerEnum.CubeController, params: { enabled: false } },
-    { id: GameControllerEnum.SoundFeedbackController, params: {} },
-    { id: GameControllerEnum.SharePoseController, params: {} },
-    //{ id: GameControllerEnum.FingerController, params: {} },
     { id: GameControllerEnum.ArmsPointerController, params: {} },
+    //{ id: GameControllerEnum.HandsCloseController, params: {} },
     { id: GameControllerEnum.HandPointerController, params: {} },
   ],
-  test_02: [
+  op_record: [
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.SimplePosesDetection, params: {} },
-    { id: GameControllerEnum.TerrainElevationController, params: {} },
-    { id: GameControllerEnum.WalkController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
-    { id: GameControllerEnum.SoundFeedbackController, params: {} },
-    { id: GameControllerEnum.SharePoseController, params: {} },
-  ],
-  test_03: [
-    { id: GameControllerEnum.ComparableController, params: {} },
-    { id: GameControllerEnum.SimplePosesDetection, params: {} },
-    { id: GameControllerEnum.HandsCloseController, params: {} },
-    { id: GameControllerEnum.TerrainElevationController, params: {} },
-    { id: GameControllerEnum.WalkController, params: {} },
-    { id: GameControllerEnum.Stand2dController, params: {} },
-    { id: GameControllerEnum.SoundFeedbackController, params: {} },
     { id: GameControllerEnum.RecordPoseController, params: {} },
-    { id: GameControllerEnum.CubeController, params: { enabled: false } },
+  ],
+  op_walk: [
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.SimplePosesDetection, params: {} },
+    { id: GameControllerEnum.TerrainElevationController, params: {} },
+    { id: GameControllerEnum.WalkController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
   ],
 };
 

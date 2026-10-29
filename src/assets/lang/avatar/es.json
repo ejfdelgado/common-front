@@ -202,7 +202,10 @@
           },
           "types": {
             "label": "Tipo",
-            "ch_question": "Preguntas"
+            "ch_question": "Preguntas",
+            "ch_hands": "Interacción con manos",
+            "ch_walk": "Caminar",
+            "ch_record": "Grabación"
           },
           "avatar_side": {
             "label": "Espejo",
