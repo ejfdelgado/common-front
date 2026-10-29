@@ -35,11 +35,11 @@ export class RecordPoseController extends SceneControllerAbstract {
     const commandsMap: Map<VoiceLangType, { [key: string]: string }> = new Map();
     commandsMap.set('es-ES', {
       iniciar: 'start',
-      finalizar: 'finish',
+      detener: 'stop',
     });
     commandsMap.set('en-US', {
       start: 'start',
-      finish: 'finish',
+      stop: 'stop',
     });
     this.voiceRecognitionSrv.addCommands(commandsMap);
   }
@@ -60,7 +60,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.scene.avatarStateSmoot,
         avatar,
       );
-      this.history.a.push(state);
+      console.log(`this.history.a.length = ${this.history.a.length}`);
     }
     this.lastRecorded = now;
     return {};
