@@ -40,7 +40,9 @@ match /pro-room-private/{document=**} {
 
 ### Add index to allow search
 
+```
 [] search, updated (desc), __name__ (desc)
+```
 
 Important, when author is constrained, also add:
 ```

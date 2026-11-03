@@ -95,5 +95,8 @@ service cloud.firestore {
     match /pro-english/{document=**} {
         allow read: if true;
     }
+    match /pro-game/{document=**} {
+      allow read: if true;
+    }
   }
 }
