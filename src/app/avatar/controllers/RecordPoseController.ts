@@ -16,7 +16,7 @@ import { ModuloSonido } from 'src/app/services/sonido.service';
 import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
 
 const NPC_NAME = 'dancer';
-const NPC_LR = [0, 0, 0];
+const NPC_LR = [2, 0, 0];
 
 export class RecordPoseController extends SceneControllerAbstract {
   recording: boolean = false;
@@ -90,6 +90,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.history = { v: AVATAR_ANIM_VERSION, a: [] };
         this.recordingStartTime = Date.now();
       } else if (event.voiceCommand == 'stop') {
+        this.placeCamera(true);
         this.recording = false;
         if (this.scene) {
           this.scene.animationStop();
@@ -118,6 +119,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         }
       } else if (event.voiceCommand == 'play') {
         if (this.scene) {
+          this.placeCamera(false);
           this.scene.animationPlay();
         }
       } else if (event.voiceCommand == 'pause') {
@@ -133,6 +135,26 @@ export class RecordPoseController extends SceneControllerAbstract {
       if (event.data) {
         this.transformationMatrix = event.data;
       }
+    }
+  }
+
+  placeCamera(single: boolean) {
+    if (this.scene) {
+      this.scene.forceCameraState({
+        near: 0.1,
+        far: 1000,
+        fov: 30,
+        lookAt: {
+          x: single ? 0 : NPC_LR[0] / 2,
+          y: 1,
+          z: 0,
+        },
+        position: {
+          x: single ? 0 : NPC_LR[0] / 2,
+          y: 1,
+          z: 5,
+        },
+      });
     }
   }
 
