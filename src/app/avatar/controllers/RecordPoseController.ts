@@ -15,6 +15,9 @@ import { EventEmitter } from '@angular/core';
 import { ModuloSonido } from 'src/app/services/sonido.service';
 import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
 
+const NPC_NAME = 'dancer';
+const NPC_LR = [0, 0, 0];
+
 export class RecordPoseController extends SceneControllerAbstract {
   recording: boolean = false;
   recordingStartTime: number = 0;
@@ -93,19 +96,23 @@ export class RecordPoseController extends SceneControllerAbstract {
         if (this.scene) {
           await this.scene.loadCharacter(
             {
-              name: 'dancer',
+              name: NPC_NAME,
               meshName: 'esqueleto009_1_web.glb',
               animations: {},
             },
             false,
           );
           // TODO, place at some position...
-          await this.scene.applyAnimationToCharacter('dancer', {
+          const anim = await this.scene.applyAnimationToCharacter(NPC_NAME, {
             loop: false,
             startingTimeMillis: 0,
             animationBin: this.history,
-            lr: [0, 0, 0],
+            lr: NPC_LR,
           });
+          const state = anim?.a[0];
+          if (state) {
+            this.scene.applyAvatarStateByName(NPC_NAME, state, NPC_LR);
+          }
         }
       } else if (event.voiceCommand == 'play') {
         if (this.scene) {

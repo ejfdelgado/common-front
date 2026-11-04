@@ -737,6 +737,13 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     //
   }
 
+  applyAvatarStateByName(name: string, state: StoredAvatarState, lr?: number[]) {
+    const model3d = this.getObjectByName(name);
+    if (model3d) {
+      this.applyAvatarState(model3d, state, lr);
+    }
+  }
+
   applyAvatarState(
     avatar: THREE.Object3D<THREE.Object3DEventMap>,
     state: StoredAvatarState,

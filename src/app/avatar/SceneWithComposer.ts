@@ -206,10 +206,10 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   async applyAnimationToCharacter(
     characterName: string, 
     spec: AnimationSpecType,
-  ) {
+  ): Promise<StoredAvatarAnimation | null> {
     const avatar = this.getObjectByName(characterName);
     if (!avatar) {
-      return;
+      return null;
     }
     const old = this.animatedElements.find((a) => a.avatar == avatar);
     let anim: StoredAvatarAnimation | null = null;
@@ -218,7 +218,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     } else if (spec.animationBin) {
       anim = spec.animationBin;
     } else {
-      return;
+      return null;
     }
 
     if (spec.lr && spec.lr.length == 3) {
@@ -235,6 +235,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         state: anim,
       });
     }
+    return anim;
   }
 
   highlightOn(obj: THREE.Object3D<THREE.Object3DEventMap>) {
