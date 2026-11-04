@@ -59,14 +59,16 @@ export class RecordPoseController extends SceneControllerAbstract {
     const avatar = this.scene.getObjectByName(AVATAR_NAME);
     if (avatar) {
       // Traverse all the skeleton and store position and rotation
+      // Normalized time, starting since the voice command was fired
+      const t = now - this.recordingStartTime;
       const state = getStoredAvatarState(
-        now - this.recordingStartTime,
+        t,
         this.transformationMatrix,
         this.scene.avatarStateSmoot,
         avatar,
       );
       this.history.a.push(state);
-      //console.log(`this.history.a.length = ${this.history.a.length}`);
+      //console.log(`${t} - this.history.a.length = ${this.history.a.length}`);
     }
     this.lastRecorded = now;
     return {};
@@ -84,9 +86,9 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.recordingStartTime = Date.now();
       } else if (event.voiceCommand == 'stop') {
         this.recording = false;
-        if (this.history.a.length > 0) {
-          this.downloadTextPlain();
-        }
+        //if (this.history.a.length > 0) {
+        //  this.downloadTextPlain();
+        //}
       } else if (event.voiceCommand == 'load') {
         if (this.scene) {
           await this.scene.loadCharacter(

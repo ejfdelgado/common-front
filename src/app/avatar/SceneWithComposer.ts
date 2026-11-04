@@ -76,6 +76,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   animationStop() {
     this.startingAnimationTime = 0;
     this.pausedTime = 0;
+    this.animating = false;
   }
 
   async applyMode(mode: GameMode) {
@@ -223,16 +224,14 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     if (spec.lr && spec.lr.length == 3) {
       anim.lr = spec.lr;
     }
-    const now = Date.now();
-    const sceneTime = now - this.startingAnimationTime;
     if (old) {
-      old.startingTime = sceneTime;
+      old.startingTime = spec.startingTimeMillis;
       old.state = anim;
     } else {
       this.animatedElements.push({
         avatar: avatar,
         loop: spec.loop,
-        startingTime: sceneTime,
+        startingTime: spec.startingTimeMillis,
         state: anim,
       });
     }
