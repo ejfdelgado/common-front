@@ -1,5 +1,5 @@
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { SceneWithAvatar } from './SceneWithAvatar';
+import { BUCKET_PATH, SceneWithAvatar } from './SceneWithAvatar';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { CameraByPassShader } from './shaders/CameraByPass';
@@ -39,11 +39,14 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   previousLoadedMeshes: THREE.Object3D<THREE.Object3DEventMap>[] = [];
   composer: EffectComposer | null = null;
   outlinePass: OutlinePass | null = null;
-  animatedElements: AnimatedElements[] = [];
-  startingAnimationTime: number = Date.now();
   terrainMeshes: THREE.Mesh[] = [];
   private terrainGrid: TerrainGrid | null = null;
   characterList: CharacterSpec[] = [];
+  // Animations
+  startingAnimationTime: number = 0;
+  pausedTime: number = 0;
+  animating: boolean = false;
+  animatedElements: AnimatedElements[] = [];
 
   constructor(
     bounds: DOMRect,
@@ -54,6 +57,27 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
 
   abstract initialize(): void;
 
+  animationPlay() {
+    if (this.startingAnimationTime == 0) {
+      this.startingAnimationTime = Date.now();
+    } else {
+      const now = Date.now();
+      this.startingAnimationTime = now - this.pausedTime;
+    }
+    this.animating = true;
+  }
+
+  animationPause() {
+    const now = Date.now();
+    this.pausedTime = now - this.startingAnimationTime;
+    this.animating = false;
+  }
+
+  animationStop() {
+    this.startingAnimationTime = 0;
+    this.pausedTime = 0;
+  }
+
   async applyMode(mode: GameMode) {
     await this.initializeAvatar(mode);
   }
@@ -63,7 +87,9 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   }
 
   animate() {
-    this.animationHeartBeat();
+    if (this.animating) {
+      this.animationHeartBeat();
+    }
   }
 
   setupEffects(innerWidth: number, innerHeight: number) {
@@ -142,18 +168,24 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     }
   }
 
-  async loadCharacter(detail: CharacterSpec) {
+  async loadCharacter(detail: CharacterSpec, forceReload: boolean = false) {
     const autoAdd: boolean = true;
-    // *** This is a character ***
-    await this.addModel(
-      {
-        name: detail.name,
-        url: ROOT_PATH + DEFAULT_AVATAR_MESH,
-      },
-      autoAdd,
-    );
+    let model3d = this.getObjectByName(detail.name);
+    if (!model3d || forceReload) {
+      model3d = await this.addModel(
+        {
+          name: detail.name,
+          url:
+            BUCKET_PATH +
+            'avatar_meshes/' +
+            (detail.meshName ? detail.meshName : DEFAULT_AVATAR_MESH),
+        },
+        autoAdd,
+      );
+    }
     this.characterList.push(detail);
     // TODO, preload animations?
+    return model3d;
   }
 
   removeAllCharacters() {

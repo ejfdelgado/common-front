@@ -36,10 +36,12 @@ export class RecordPoseController extends SceneControllerAbstract {
     commandsMap.set('es-ES', {
       iniciar: 'start',
       detener: 'stop',
+      cargar: 'load',
     });
     commandsMap.set('en-US', {
       start: 'start',
       stop: 'stop',
+      load: 'load',
     });
     this.voiceRecognitionSrv.addCommands(commandsMap);
   }
@@ -81,6 +83,18 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.recording = false;
         if (this.history.a.length > 0) {
           this.downloadTextPlain();
+        }
+      } else if (event.voiceCommand == "load") {
+        if (this.scene) {
+          this.scene.loadCharacter({
+            name: "dancer",
+            meshName: 'esqueleto009_1_web.glb',
+            animations: {},
+          }, false);
+        }
+      } else if (event.voiceCommand == "move") {
+        if (this.scene) {
+          
         }
       }
     } else if (event.name == 'STAND2MATRIX') {

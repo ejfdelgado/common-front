@@ -930,9 +930,4 @@ export abstract class SceneWithAvatar extends THREE.Scene {
       loading.done();
     }
   }
-
-  async addNPC(url: string): Promise<THREE.Object3D<THREE.Object3DEventMap>> {
-    const model = await this.addModel({ name: AVATAR_NAME, url: url }, true);
-    return model;
-  }
 }

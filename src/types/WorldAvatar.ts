@@ -83,6 +83,7 @@ export interface GameMode {
 
 export interface CharacterSpec {
   name: string;
+  meshName?: string;
   defaultAnimation?: string;
   animations: { [key: string]: AnimationSpecType };
 }
