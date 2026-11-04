@@ -12,6 +12,7 @@ import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "@services/p2p.service";
 import { computeDistance } from "@avatar/utils/AvatarUtilities";
 import { GameMode, GameScenario } from "src/types/WorldAvatar";
+import { FileService } from "src/app/services/file.srv";
 
 export abstract class SceneControllerAbstract {
     enabled: boolean = true;
@@ -27,6 +28,7 @@ export abstract class SceneControllerAbstract {
         public events: EventEmitter<AvatarBodyEvent>,
         public controlProxy: ControlProxy,
         public p2pSrv: P2PService,
+        public fileSrv: FileService,
     ) {
 
     }

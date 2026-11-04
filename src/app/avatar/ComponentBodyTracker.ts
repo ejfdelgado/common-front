@@ -875,8 +875,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
           }
           await ModeDiscovery.checkDiscoveredMode(nextModeId);
           await this.applyMode(nextModeId);
-          // Propagate the event UP
-          this.notifyEvent(event);
           this.startAll({
             keepLife: true,
             keepPoints: true,
@@ -884,6 +882,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         }
       }
     }
+    // Propagate the event UP
+    this.notifyEvent(event);
   }
 
   getCurrentMode(): string | null {

@@ -6,6 +6,7 @@ import { angleBetweenDegrees } from "../utils/AvatarUtilities";
 import { EventEmitter } from "@angular/core";
 import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "src/app/services/p2p.service";
+import { FileService } from "src/app/services/file.srv";
 
 export class HandPointerController extends SceneControllerAbstract {
 
@@ -19,11 +20,13 @@ export class HandPointerController extends SceneControllerAbstract {
         public override events: EventEmitter<AvatarBodyEvent>,
         public override controlProxy: ControlProxy,
         public override p2pSrv: P2PService,
+        public override fileSrv: FileService,
     ) {
         super(
             events,
             controlProxy,
             p2pSrv,
+            fileSrv,
         );
         this.currentState.set("Left", false);
         this.currentState.set("Right", false);

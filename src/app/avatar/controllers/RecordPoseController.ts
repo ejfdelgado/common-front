@@ -17,6 +17,7 @@ import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicere
 import { BUCKET_PATH } from '../SceneWithAvatar';
 import { getBucketPath } from 'src/app/tools/BucketPaths';
 import { AuthService } from 'src/app/services/auth.service';
+import { FileService } from 'src/app/services/file.srv';
 
 const NPC_NAME = 'dancer';
 const NPC_LR = [2, 0, 0];
@@ -33,9 +34,10 @@ export class RecordPoseController extends SceneControllerAbstract {
     public override events: EventEmitter<AvatarBodyEvent>,
     public override controlProxy: ControlProxy,
     public override p2pSrv: P2PService,
+    public override fileSrv: FileService,
     public voiceRecognitionSrv: VoiceRecognitionService,
   ) {
-    super(events, controlProxy, p2pSrv);
+    super(events, controlProxy, p2pSrv, fileSrv);
     const audios: string[] = ['/assets/sounds/mail.mp3'];
     ModuloSonido.preload(audios);
     const commandsMap: Map<VoiceLangType, { [key: string]: string }> = new Map();
@@ -141,7 +143,7 @@ export class RecordPoseController extends SceneControllerAbstract {
     }
   }
 
-  saveAnimation() {
+  async saveAnimation() {
     const DICT_KEY = 'animation_stored';
     if (!this.scenario) {
       return;
@@ -161,8 +163,14 @@ export class RecordPoseController extends SceneControllerAbstract {
       },
       true,
     );
-    console.log(`nextName = ${nextName}`);
+
     this.scenario.dictionary[DICT_KEY] = nextName;
+
+    const encoded = encode(this.history);
+    const blob = new Blob([encoded], { type: 'application/octet-stream' });
+
+    await this.fileSrv.upload(nextName, blob, 'bucket');
+
     this.events.emit({
       name: 'SAVE_APPLY_SCENARIO',
       data: this.scenario,

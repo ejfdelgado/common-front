@@ -107,9 +107,6 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     word$.subscribe(addWordFun);
     command$.subscribe((command) => {
       this.avatarContainer.executeCommand(command);
-      if (command.command == 'save') {
-        this.downloadTextPlain();
-      }
     });
     //this.voiceSrv.recognizedWord$.subscribe(addWordFun);
     this.configSubs = this.configSrv.events.subscribe(() => {

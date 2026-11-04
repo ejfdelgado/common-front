@@ -32,6 +32,7 @@ import { P2PService } from '@services/p2p.service';
 import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { html2text } from 'src/app/tools/HtmlUtil';
+import { FileService } from 'src/app/services/file.srv';
 
 @Component({
   standalone: true,
@@ -58,11 +59,12 @@ export class AvatarContainer
     public override cdr: ChangeDetectorRef,
     public override speechSrv: SpeechSynthesisService,
     public override voiceRecognitionSrv: VoiceRecognitionService,
+    public override fileSrv: FileService,
     //
     private indicatorSrv: IndicatorService,
     private http: HttpClient,
   ) {
-    super(sanitizer, fullScreenSrv, cdr, p2pSrv, speechSrv, voiceRecognitionSrv);
+    super(sanitizer, fullScreenSrv, cdr, p2pSrv, speechSrv, voiceRecognitionSrv, fileSrv);
     this.hasMobile = this.isMobile();
   }
 

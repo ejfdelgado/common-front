@@ -18,6 +18,7 @@ import { EventEmitter } from '@angular/core';
 import { ControlProxy } from '../workers/ControlProxy';
 import { P2PService } from 'src/app/services/p2p.service';
 import { GameRegistryData, ModeDiscovery } from '../ModeDiscovery';
+import { FileService } from 'src/app/services/file.srv';
 
 let FAR_AMOUNT_X = 0;
 let FAR_AMOUNT_Y = 0;
@@ -101,8 +102,9 @@ export class QuestionaireController extends SceneControllerAbstract {
     public override events: EventEmitter<AvatarBodyEvent>,
     public override controlProxy: ControlProxy,
     public override p2pSrv: P2PService,
+    public override fileSrv: FileService,
   ) {
-    super(events, controlProxy, p2pSrv);
+    super(events, controlProxy, p2pSrv, fileSrv);
     ModeDiscovery.readFromDatabase().then((data: GameRegistryData) => {
       const { user } = data;
       this.life = user.life;

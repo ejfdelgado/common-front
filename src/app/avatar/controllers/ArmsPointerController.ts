@@ -10,6 +10,7 @@ import {
 import { EventEmitter } from "@angular/core";
 import { ControlProxy } from "../workers/ControlProxy";
 import { P2PService } from "src/app/services/p2p.service";
+import { FileService } from "src/app/services/file.srv";
 
 export class ArmsPointerController extends SceneControllerAbstract {
 
@@ -36,11 +37,13 @@ export class ArmsPointerController extends SceneControllerAbstract {
         public override events: EventEmitter<AvatarBodyEvent>,
         public override controlProxy: ControlProxy,
         public override p2pSrv: P2PService,
+        public override fileSrv: FileService,
     ) {
         super(
             events,
             controlProxy,
             p2pSrv,
+            fileSrv,
         );
     }
 

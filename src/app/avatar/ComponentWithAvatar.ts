@@ -40,6 +40,7 @@ import { SpeechSynthesisService } from '../services/speechsynthesis.service';
 import { removeEmojis } from '../tools/StringUtils';
 import { html2text } from '../tools/HtmlUtil';
 import { VoiceRecognitionService } from '../services/voicerecognition.service';
+import { FileService } from '../services/file.srv';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
   hudData: { [key: string]: any } = {
@@ -94,6 +95,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     public p2pSrv: P2PService,
     public speechSrv: SpeechSynthesisService,
     public voiceRecognitionSrv: VoiceRecognitionService,
+    public fileSrv: FileService,
   ) {
     super(sanitizer, fullScreenSrv);
     this.events.subscribe((event) => {
@@ -300,33 +302,33 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
   public createController(config: GameController): SceneControllerAbstract {
     let temp: SceneControllerAbstract | null = null;
     if (config.id == GameControllerEnum.ComparableController) {
-      temp = new ComparableController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new ComparableController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.CubeController) {
-      temp = new CubeController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new CubeController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.HandsCloseController) {
-      temp = new HandsCloseController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new HandsCloseController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.RecordPoseController) {
-      temp = new RecordPoseController(this.events, this.controlProxy, this.p2pSrv, this.voiceRecognitionSrv);
+      temp = new RecordPoseController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv, this.voiceRecognitionSrv);
     } else if (config.id == GameControllerEnum.SimplePosesDetection) {
-      temp = new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv);
+      temp = new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.SoundFeedbackController) {
-      temp = new SoundFeedbackController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new SoundFeedbackController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.Stand2dController) {
-      temp = new Stand2dController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new Stand2dController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.TerrainElevationController) {
-      temp = new TerrainElevationController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new TerrainElevationController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.SharePoseController) {
-      temp = new SharePoseController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new SharePoseController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.WalkController) {
-      temp = new WalkController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new WalkController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.FingerController) {
-      temp = new FingerController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new FingerController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.HandPointerController) {
-      temp = new HandPointerController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new HandPointerController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.ArmsPointerController) {
-      temp = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.QuestionaireController) {
-      temp = new QuestionaireController(this.events, this.controlProxy, this.p2pSrv);
+      temp = new QuestionaireController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     }
 
     if (temp == null) {
