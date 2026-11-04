@@ -147,20 +147,39 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     for (let i = 0; i < this.animatedElements.length; i++) {
       const { avatar, state, loop, startingTime } = this.animatedElements[i];
       const { a, lr, lrMode } = state;
-      // Busco el frame de acuerdo al tiempo
-      let frameId: number = -1;
-      const orderedBodyPoses = a;
-      for (let j = 0; j < orderedBodyPoses.length; j++) {
-        const pos = orderedBodyPoses[j];
-        if (startingTime + pos.t > sceneTime) {
-          frameId = j;
-          break;
-        }
-      }
+      // Busco el frame de acuerdo al tiempo (búsqueda binaria, a está ordenado por t)
+      const frameId = this.findFirstPoseAfter(a, sceneTime - startingTime, loop);
       if (frameId >= 0) {
         this.applyAvatarState(avatar, a[frameId], lr, lrMode);
       }
     }
+  }
+
+  /**
+   * Binary search (upper bound) over poses sorted ascending by t.
+   * Returns the index of the first pose with t > localTime, or -1 if none.
+   */
+  private findFirstPoseAfter(
+    poses: Array<{ t: number }>, 
+    requestedTime: number,
+    loop: boolean,
+  ): number {
+    let localTime = requestedTime;
+    if (loop) {
+      const lastFrame = poses[poses.length - 1];
+      localTime = requestedTime % lastFrame.t;
+    }
+    let lo = 0;
+    let hi = poses.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >>> 1;
+      if (poses[mid].t > localTime) {
+        hi = mid;
+      } else {
+        lo = mid + 1;
+      }
+    }
+    return lo < poses.length ? lo : -1;
   }
 
   async loadCharacter(detail: CharacterSpec, forceReload: boolean = false) {
