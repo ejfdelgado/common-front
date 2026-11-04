@@ -148,7 +148,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
       const { avatar, state, loop, startingTime } = this.animatedElements[i];
       const { a, lr, lrMode } = state;
       // Busco el frame de acuerdo al tiempo (búsqueda binaria, a está ordenado por t)
-      const frameId = this.findFirstPoseAfter(a, sceneTime - startingTime, loop);
+      const frameId = this.findPoseAt(a, sceneTime - startingTime, loop);
       if (frameId >= 0) {
         this.applyAvatarState(avatar, a[frameId], lr, lrMode);
       }
@@ -156,18 +156,46 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   }
 
   /**
-   * Binary search (upper bound) over poses sorted ascending by t.
-   * Returns the index of the first pose with t > localTime, or -1 if none.
+   * Binary search over poses sorted ascending by t for the pose that is
+   * current at requestedTime: the last pose with t <= localTime. Pose j is
+   * shown from its t until the next pose's t, so the pose at t=0 is shown
+   * first. Before the first pose's t, the first pose is returned.
+   *
+   * The animation lasts until the last pose's t plus one more frame (the gap
+   * between the last two poses), so the last pose keeps a full slot.
+   *
+   * Without loop, -1 is returned once that duration is over.
+   *
+   * With loop, requestedTime wraps by that duration, so the cycle restarts at
+   * the first pose.
+   *
+   * With a single pose, or all poses at t=0, there is no duration to measure,
+   * so index 0 is always returned.
+   *
+   * Returns -1 if poses is empty, or (without loop) after the animation ends.
    */
-  private findFirstPoseAfter(
-    poses: Array<{ t: number }>, 
+  private findPoseAt(
+    poses: Array<{ t: number }>,
     requestedTime: number,
     loop: boolean,
   ): number {
+    if (poses.length === 0) {
+      return -1;
+    }
+    if (poses.length === 1) {
+      return 0;
+    }
+    const lastT = poses[poses.length - 1].t;
+    const lastFrameDuration = lastT - poses[poses.length - 2].t;
+    const duration = lastT + lastFrameDuration;
+    if (duration <= 0) {
+      return 0; // all poses at t=0
+    }
     let localTime = requestedTime;
     if (loop) {
-      const lastFrame = poses[poses.length - 1];
-      localTime = requestedTime % lastFrame.t;
+      localTime = requestedTime % duration;
+    } else if (localTime >= duration) {
+      return -1; // the last pose's slot is over
     }
     let lo = 0;
     let hi = poses.length;
@@ -179,7 +207,9 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
         lo = mid + 1;
       }
     }
-    return lo < poses.length ? lo : -1;
+    // lo is the first pose with t > localTime, so lo - 1 is the current pose.
+    // lo === 0 means localTime is before the first pose: show the first one.
+    return Math.max(lo - 1, 0);
   }
 
   async loadCharacter(detail: CharacterSpec, forceReload: boolean = false) {
