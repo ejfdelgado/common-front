@@ -52,14 +52,20 @@ export class CameraCaptureComponent implements OnDestroy {
       this.rejecter = reject;
 
       try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        this.videoDevices = devices.filter(d => d.kind === 'videoinput');
-        this.cdr.detectChanges();
+        await this.refreshDevices();
 
         if (this.videoDevices.length === 0) {
           throw new Error('No camera devices found');
         }
         await this.startCamera();
+
+        // Before permission is granted, browsers return empty deviceIds/labels.
+        // Re-enumerate now that we have access so each camera has a real id.
+        if (this.videoDevices.some(d => !d.deviceId)) {
+          await this.refreshDevices();
+        }
+        this.syncIndexWithActiveTrack();
+        this.cdr.detectChanges();
 
       } catch (err) {
         this.cleanup();
@@ -68,13 +74,35 @@ export class CameraCaptureComponent implements OnDestroy {
     });
   }
 
+  private async refreshDevices(): Promise<void> {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    this.videoDevices = devices.filter(d => d.kind === 'videoinput');
+    if (currentDeviceIndex >= this.videoDevices.length) {
+      currentDeviceIndex = 0;
+    }
+    this.cdr.detectChanges();
+  }
+
+  private syncIndexWithActiveTrack(): void {
+    const activeId = this.stream?.getVideoTracks()[0]?.getSettings().deviceId;
+    if (!activeId) {
+      return;
+    }
+    const idx = this.videoDevices.findIndex(d => d.deviceId === activeId);
+    if (idx >= 0) {
+      currentDeviceIndex = idx;
+    }
+  }
+
   private async startCamera(): Promise<void> {
     this.stopStream();
 
-    const deviceId = this.videoDevices[currentDeviceIndex].deviceId;
+    const deviceId = this.videoDevices[currentDeviceIndex]?.deviceId;
 
     this.stream = await navigator.mediaDevices.getUserMedia({
-      video: { deviceId: { ideal: deviceId } },
+      // `ideal` is only a hint and browsers often keep the same camera;
+      // `exact` forces the selected device.
+      video: deviceId ? { deviceId: { exact: deviceId } } : true,
       audio: false
     });
 

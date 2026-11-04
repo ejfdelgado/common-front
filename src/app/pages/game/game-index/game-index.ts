@@ -168,7 +168,7 @@ export class GameIndex extends AuthenticatedComponent implements OnInit, OnDestr
     this.shareSrv.share(
       {
         collection: MODEL_NAME,
-        path: '/docs/this',
+        path: '/game/room',
         id,
         title,
         description,
@@ -179,7 +179,7 @@ export class GameIndex extends AuthenticatedComponent implements OnInit, OnDestr
   }
 
   async openDocument(model: any) {
-    this.router.navigate([`docs/this`], {
+    this.router.navigate([`game/room`], {
       queryParams: { col: MODEL_NAME, id: model.model.id },
     });
   }
