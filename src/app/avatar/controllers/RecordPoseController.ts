@@ -60,7 +60,8 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.scene.avatarStateSmoot,
         avatar,
       );
-      console.log(`this.history.a.length = ${this.history.a.length}`);
+      this.history.a.push(state);
+      //console.log(`this.history.a.length = ${this.history.a.length}`);
     }
     this.lastRecorded = now;
     return {};
