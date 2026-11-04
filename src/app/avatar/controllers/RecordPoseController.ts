@@ -22,12 +22,12 @@ import { FileService } from 'src/app/services/file.srv';
 const NPC_NAME = 'dancer';
 const NPC_LR = [2, 0, 0];
 const DICT_KEY = 'animation_stored';
+const MAX_STATES_PER_SECOND: number = 10;
 
 export class RecordPoseController extends SceneControllerAbstract {
   recording: boolean = false;
   recordingStartTime: number = 0;
   lastRecorded: number = 0;
-  MAX_STATES_PER_SECOND: number = 10;
   history: StoredAvatarAnimation = { v: AVATAR_ANIM_VERSION, a: [] };
   transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
 
@@ -60,11 +60,11 @@ export class RecordPoseController extends SceneControllerAbstract {
     this.voiceRecognitionSrv.addCommands(commandsMap);
   }
 
-  override async update(): Promise<ControllerUpdateResponse> {
+  async applyRecording(): Promise<void> {
     const now = Date.now();
     const difference = now - this.lastRecorded;
-    if (!this.recording || difference < 1000 / this.MAX_STATES_PER_SECOND) {
-      return {};
+    if (!this.recording || difference < 1000 / MAX_STATES_PER_SECOND) {
+      return;
     }
     // Leer el modelo
     const avatar = this.scene.getObjectByName(AVATAR_NAME);
@@ -82,6 +82,10 @@ export class RecordPoseController extends SceneControllerAbstract {
       //console.log(`${t} - this.history.a.length = ${this.history.a.length}`);
     }
     this.lastRecorded = now;
+  }
+
+  override async update(): Promise<ControllerUpdateResponse> {
+    await this.applyRecording();
     return {};
   }
 
