@@ -149,8 +149,9 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
       const { a, lr, lrMode } = state;
       // Busco el frame de acuerdo al tiempo
       let frameId: number = -1;
-      for (let j = 0; j < a.length; j++) {
-        const pos = a[j];
+      const orderedBodyPoses = a;
+      for (let j = 0; j < orderedBodyPoses.length; j++) {
+        const pos = orderedBodyPoses[j];
         if (startingTime + pos.t > sceneTime) {
           frameId = j;
           break;
