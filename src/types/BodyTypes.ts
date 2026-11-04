@@ -207,9 +207,13 @@ export interface WorkerData {
 }
 
 export interface AnimationSpecType {
-  animationUrl: string;
+  animationUrl?: string;
+  animationName?: string;
+  animationBin?: StoredAvatarAnimation;
   loop: boolean;
+  // Set location in 2D from top view and rotation in radians
   lr?: number[];
+  startingTimeMillis: number;
 }
 
 export interface HandPinchData {

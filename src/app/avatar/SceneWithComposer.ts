@@ -202,13 +202,24 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   }
 
   // applyAnimationToCharacter("friend", {"animations/animation.bin", true, [2, 2, Math.PI]});
-  async applyAnimationToCharacter(characterName: string, spec: AnimationSpecType) {
+  async applyAnimationToCharacter(
+    characterName: string, 
+    spec: AnimationSpecType,
+  ) {
     const avatar = this.getObjectByName(characterName);
     if (!avatar) {
       return;
     }
     const old = this.animatedElements.find((a) => a.avatar == avatar);
-    const anim = await this.loadAnimation(spec.animationUrl);
+    let anim: StoredAvatarAnimation | null = null;
+    if (spec.animationUrl) {
+      anim = await this.loadAnimation(spec.animationUrl);
+    } else if (spec.animationBin) {
+      anim = spec.animationBin;
+    } else {
+      return;
+    }
+
     if (spec.lr && spec.lr.length == 3) {
       anim.lr = spec.lr;
     }

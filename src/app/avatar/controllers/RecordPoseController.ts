@@ -34,9 +34,12 @@ export class RecordPoseController extends SceneControllerAbstract {
     ModuloSonido.preload(audios);
     const commandsMap: Map<VoiceLangType, { [key: string]: string }> = new Map();
     commandsMap.set('es-ES', {
-      iniciar: 'start',
+      grabar: 'start',
       detener: 'stop',
+      parar: 'stop',
       cargar: 'load',
+      mover: 'play',
+      pausa: 'pause',
     });
     commandsMap.set('en-US', {
       start: 'start',
@@ -72,7 +75,7 @@ export class RecordPoseController extends SceneControllerAbstract {
   override async stop(): Promise<void> {}
   override async destroy(): Promise<void> {}
 
-  override onEvent(event: AvatarBodyEvent): void {
+  override async onEvent(event: AvatarBodyEvent): Promise<void> {
     if (event.name == 'VOICE_COMMAND') {
       if (event.voiceCommand == 'start') {
         ModuloSonido.play('/assets/sounds/mail.mp3');
@@ -84,17 +87,35 @@ export class RecordPoseController extends SceneControllerAbstract {
         if (this.history.a.length > 0) {
           this.downloadTextPlain();
         }
-      } else if (event.voiceCommand == "load") {
+      } else if (event.voiceCommand == 'load') {
         if (this.scene) {
-          this.scene.loadCharacter({
-            name: "dancer",
-            meshName: 'esqueleto009_1_web.glb',
-            animations: {},
-          }, false);
+          await this.scene.loadCharacter(
+            {
+              name: 'dancer',
+              meshName: 'esqueleto009_1_web.glb',
+              animations: {},
+            },
+            false,
+          );
+          // TODO, place at some position...
+          await this.scene.applyAnimationToCharacter('dancer', {
+            loop: false,
+            startingTimeMillis: 0,
+            animationBin: this.history,
+            lr: [0, 0, 0],
+          });
         }
-      } else if (event.voiceCommand == "move") {
+      } else if (event.voiceCommand == 'play') {
         if (this.scene) {
-          
+          this.scene.animationPlay();
+        }
+      } else if (event.voiceCommand == 'pause') {
+        if (this.scene) {
+          this.scene.animationPause();
+        }
+      } else if (event.voiceCommand == 'stop') {
+        if (this.scene) {
+          this.scene.animationStop();
         }
       }
     } else if (event.name == 'STAND2MATRIX') {

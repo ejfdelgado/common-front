@@ -749,7 +749,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
                 const anim = spec.animations[spec.defaultAnimation];
                 if (anim) {
                   //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name}`);
-                  await avatarContainer.scene.applyAnimationToCharacter(spec.name, anim);
+                  //await avatarContainer.scene.applyAnimationToCharacter(spec.name, anim);
                   //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name} Ok!`);
                 }
               }
