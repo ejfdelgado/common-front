@@ -117,7 +117,7 @@ export class RecordPoseController extends SceneControllerAbstract {
           await this.assureCharacter();
           // TODO, place at some position with some animation
           const anim = await this.scene.applyAnimationToCharacter(NPC_NAME, {
-            loop: false,
+            loop: true,
             startingTimeMillis: 0,
             animationBin: this.history,
             lr: NPC_LR,
@@ -134,7 +134,7 @@ export class RecordPoseController extends SceneControllerAbstract {
             let oldName = this.scenario.dictionary[DICT_KEY];
             if (oldName) {
               await this.scene.applyAnimationToCharacter(NPC_NAME, {
-                loop: false,
+                loop: true,
                 startingTimeMillis: 0,
                 animationUrl: oldName,
                 lr: NPC_LR,
