@@ -7,6 +7,7 @@ import {
   FrontComputationType,
   GenericSizeType,
   ItemModelRef,
+  LR_MODE,
   ScenePoseEventType,
   StoredAvatarState,
 } from '@mytypes/BodyTypes';
@@ -748,7 +749,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     avatar: THREE.Object3D<THREE.Object3DEventMap>,
     state: StoredAvatarState,
     lr?: number[],
-    lrMode: '+' | '=' = '=',
+    lrMode: LR_MODE = '+',
   ) {
     for (let i = 0; i < state.bones.length; i++) {
       const { n, v } = state.bones[i];

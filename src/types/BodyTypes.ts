@@ -169,16 +169,17 @@ export interface StoredAvatarState {
   d?: number;
 }
 
+export type LR_MODE = '+' | '=';
+
 export interface StoredAvatarAnimation {
   // Animation version
   v: string;
   // The skeleton configuration + position
   a: StoredAvatarState[];
-  // Volatile variable, just to keep track of the state
-
   //positionX, positionZ, rotationY
   // If this is assigned, the state is overrided with this
   lr?: number[];
+  lrMode?: LR_MODE;
 }
 
 export interface AnimatedElements {
