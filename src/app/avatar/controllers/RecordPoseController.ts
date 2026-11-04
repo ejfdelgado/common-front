@@ -21,6 +21,7 @@ import { FileService } from 'src/app/services/file.srv';
 
 const NPC_NAME = 'dancer';
 const NPC_LR = [2, 0, 0];
+const DICT_KEY = 'animation_stored';
 
 export class RecordPoseController extends SceneControllerAbstract {
   recording: boolean = false;
@@ -87,6 +88,17 @@ export class RecordPoseController extends SceneControllerAbstract {
   override async stop(): Promise<void> {}
   override async destroy(): Promise<void> {}
 
+  async assureCharacter() {
+    await this.scene.loadCharacter(
+      {
+        name: NPC_NAME,
+        meshName: 'esqueleto009_1_web.glb',
+        animations: {},
+      },
+      false,
+    );
+  }
+
   override async onEvent(event: AvatarBodyEvent): Promise<void> {
     if (event.name == 'VOICE_COMMAND') {
       if (event.voiceCommand == 'start') {
@@ -102,14 +114,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         }
       } else if (event.voiceCommand == 'load') {
         if (this.scene) {
-          await this.scene.loadCharacter(
-            {
-              name: NPC_NAME,
-              meshName: 'esqueleto009_1_web.glb',
-              animations: {},
-            },
-            false,
-          );
+          await this.assureCharacter();
           // TODO, place at some position with some animation
           const anim = await this.scene.applyAnimationToCharacter(NPC_NAME, {
             loop: false,
@@ -124,6 +129,18 @@ export class RecordPoseController extends SceneControllerAbstract {
         }
       } else if (event.voiceCommand == 'play') {
         if (this.scene) {
+          await this.assureCharacter();
+          if (this.scenario?.dictionary && this.history.a.length == 0) {
+            let oldName = this.scenario.dictionary[DICT_KEY];
+            if (oldName) {
+              await this.scene.applyAnimationToCharacter(NPC_NAME, {
+                loop: false,
+                startingTimeMillis: 0,
+                animationUrl: oldName,
+                lr: NPC_LR,
+              });
+            }
+          }
           this.placeCamera(false);
           this.scene.animationPlay();
         }
@@ -133,7 +150,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         }
       } else if (event.voiceCommand == 'save') {
         //if (this.history.a.length > 0) {
-          this.saveAnimation();
+        this.saveAnimation();
         //}
       }
     } else if (event.name == 'STAND2MATRIX') {
@@ -144,7 +161,6 @@ export class RecordPoseController extends SceneControllerAbstract {
   }
 
   async saveAnimation() {
-    const DICT_KEY = 'animation_stored';
     if (!this.scenario) {
       return;
     }

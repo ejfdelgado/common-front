@@ -18,6 +18,7 @@ import { decode } from '@msgpack/msgpack';
 import { HttpClient } from '@angular/common/http';
 import { CharacterSpec, GameMode, GameScenario } from '@mytypes/WorldAvatar';
 import { Wait } from '../services/indicator.service';
+import { getBucketFilePath } from '../tools/BucketPaths';
 
 interface TerrainTriangle {
   a: THREE.Vector3;
@@ -174,11 +175,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
    *
    * Returns -1 if poses is empty, or (without loop) after the animation ends.
    */
-  private findPoseAt(
-    poses: Array<{ t: number }>,
-    requestedTime: number,
-    loop: boolean,
-  ): number {
+  private findPoseAt(poses: Array<{ t: number }>, requestedTime: number, loop: boolean): number {
     if (poses.length === 0) {
       return -1;
     }
@@ -247,7 +244,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
 
   // applyAnimationToCharacter("friend", {"animations/animation.bin", true, [2, 2, Math.PI]});
   async applyAnimationToCharacter(
-    characterName: string, 
+    characterName: string,
     spec: AnimationSpecType,
   ): Promise<StoredAvatarAnimation | null> {
     const avatar = this.getObjectByName(characterName);
@@ -302,8 +299,9 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
   }
 
   async loadAnimation(url: string): Promise<StoredAvatarAnimation> {
+    const completeUrl = getBucketFilePath(url);
     const loaded = await firstValueFrom(
-      this.http.get(ROOT_PATH + url, { responseType: 'arraybuffer' }),
+      this.http.get(completeUrl, { responseType: 'arraybuffer' }),
     );
     const model = decode(loaded);
     return model as StoredAvatarAnimation;
