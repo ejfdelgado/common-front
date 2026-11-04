@@ -44,6 +44,7 @@ export class RecordPoseController extends SceneControllerAbstract {
       mover: 'play',
       reproducir: 'play',
       pausa: 'pause',
+      guardar: 'save',
     });
     commandsMap.set('en-US', {
       start: 'start',
@@ -90,9 +91,9 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.recordingStartTime = Date.now();
       } else if (event.voiceCommand == 'stop') {
         this.recording = false;
-        //if (this.history.a.length > 0) {
-        //  this.downloadTextPlain();
-        //}
+        if (this.scene) {
+          this.scene.animationStop();
+        }
       } else if (event.voiceCommand == 'load') {
         if (this.scene) {
           await this.scene.loadCharacter(
@@ -123,9 +124,9 @@ export class RecordPoseController extends SceneControllerAbstract {
         if (this.scene) {
           this.scene.animationPause();
         }
-      } else if (event.voiceCommand == 'stop') {
-        if (this.scene) {
-          this.scene.animationStop();
+      } else if (event.voiceCommand == 'save') {
+        if (this.history.a.length > 0) {
+          this.downloadTextPlain();
         }
       }
     } else if (event.name == 'STAND2MATRIX') {
