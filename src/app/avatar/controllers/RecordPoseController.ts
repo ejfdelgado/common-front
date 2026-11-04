@@ -42,6 +42,7 @@ export class RecordPoseController extends SceneControllerAbstract {
       parar: 'stop',
       cargar: 'load',
       mover: 'play',
+      reproducir: 'play',
       pausa: 'pause',
     });
     commandsMap.set('en-US', {

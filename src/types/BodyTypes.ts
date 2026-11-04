@@ -170,10 +170,15 @@ export interface StoredAvatarState {
 }
 
 export interface StoredAvatarAnimation {
+  // Animation version
   v: string;
+  // The skeleton configuration + position
   a: StoredAvatarState[];
-  frameId?: number;
-  lr?: number[]; // If this is assigned, the state is overrided with this
+  // Volatile variable, just to keep track of the state
+
+  //positionX, positionZ, rotationY
+  // If this is assigned, the state is overrided with this
+  lr?: number[];
 }
 
 export interface AnimatedElements {

@@ -748,6 +748,7 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     avatar: THREE.Object3D<THREE.Object3DEventMap>,
     state: StoredAvatarState,
     lr?: number[],
+    lrMode: '+' | '=' = '=',
   ) {
     for (let i = 0; i < state.bones.length; i++) {
       const { n, v } = state.bones[i];
@@ -763,9 +764,15 @@ export abstract class SceneWithAvatar extends THREE.Scene {
     let rotationY = state.lr[2];
 
     if (lr && lr.length == 3) {
-      positionX = lr[0];
-      positionZ = lr[1];
-      rotationY = lr[2];
+      if (lrMode == '+') {
+        positionX += lr[0];
+        positionZ += lr[1];
+        rotationY += lr[2];
+      } else if (lrMode == '=') {
+        positionX = lr[0];
+        positionZ = lr[1];
+        rotationY = lr[2];
+      }
     }
     this.applyLR(avatar, positionX, positionZ, rotationY, state);
   }

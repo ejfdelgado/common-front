@@ -148,23 +148,16 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
       const { avatar, state, loop, startingTime } = this.animatedElements[i];
       const { a, lr } = state;
       // Busco el frame de acuerdo al tiempo
+      let frameId: number = -1;
       for (let j = 0; j < a.length; j++) {
         const pos = a[j];
         if (startingTime + pos.t > sceneTime) {
-          state.frameId = j;
+          frameId = j;
           break;
         }
       }
-      if (state.frameId != undefined && state.frameId >= 0) {
-        this.applyAvatarState(avatar, a[state.frameId], lr);
-      }
-      if (loop) {
-        if (state.frameId !== undefined) {
-          if (state.frameId >= a.length - 1) {
-            state.frameId = 0;
-            this.animatedElements[i].startingTime = sceneTime;
-          }
-        }
+      if (frameId >= 0) {
+        this.applyAvatarState(avatar, a[frameId], lr);
       }
     }
   }
