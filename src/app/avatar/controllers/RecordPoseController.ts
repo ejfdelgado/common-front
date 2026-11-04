@@ -14,6 +14,9 @@ import { P2PService } from 'src/app/services/p2p.service';
 import { EventEmitter } from '@angular/core';
 import { ModuloSonido } from 'src/app/services/sonido.service';
 import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
+import { BUCKET_PATH } from '../SceneWithAvatar';
+import { getBucketPath } from 'src/app/tools/BucketPaths';
+import { AuthService } from 'src/app/services/auth.service';
 
 const NPC_NAME = 'dancer';
 const NPC_LR = [2, 0, 0];
@@ -105,7 +108,7 @@ export class RecordPoseController extends SceneControllerAbstract {
             },
             false,
           );
-          // TODO, place at some position...
+          // TODO, place at some position with some animation
           const anim = await this.scene.applyAnimationToCharacter(NPC_NAME, {
             loop: false,
             startingTimeMillis: 0,
@@ -127,15 +130,43 @@ export class RecordPoseController extends SceneControllerAbstract {
           this.scene.animationPause();
         }
       } else if (event.voiceCommand == 'save') {
-        if (this.history.a.length > 0) {
-          this.downloadTextPlain();
-        }
+        //if (this.history.a.length > 0) {
+          this.saveAnimation();
+        //}
       }
     } else if (event.name == 'STAND2MATRIX') {
       if (event.data) {
         this.transformationMatrix = event.data;
       }
     }
+  }
+
+  saveAnimation() {
+    const DICT_KEY = 'animation_stored';
+    if (!this.scenario) {
+      return;
+    }
+    if (!this.scenario.dictionary) {
+      this.scenario.dictionary = {};
+    }
+    // Read from the model
+    let oldName = this.scenario.dictionary[DICT_KEY];
+    const roomId = new URLSearchParams(location.hash.split('?')[1]).get('id');
+    const nextName = getBucketPath(
+      'avatar_animation/room/${roomId}/user/${user.uid}/${random}.bin',
+      oldName ? oldName : '',
+      {
+        user: AuthService.userStatic,
+        roomId,
+      },
+      true,
+    );
+    console.log(`nextName = ${nextName}`);
+    this.scenario.dictionary[DICT_KEY] = nextName;
+    this.events.emit({
+      name: 'SAVE_APPLY_SCENARIO',
+      data: this.scenario,
+    });
   }
 
   placeCamera(single: boolean) {

@@ -101,7 +101,10 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
         controller.onEvent(event);
       });
       // Scale event
-      const SCALED_EVENTS = ['WON_MODE'];
+      const SCALED_EVENTS = [
+        'WON_MODE',
+        'SAVE_APPLY_SCENARIO',
+      ];
       if (SCALED_EVENTS.indexOf(event.name) >= 0) {
         //Next mode logic
         this.notifyEvent(event);

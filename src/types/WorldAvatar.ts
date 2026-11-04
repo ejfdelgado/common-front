@@ -113,6 +113,7 @@ export interface GameScenario {
   characters: GameCharacter[];
   stepsConfig?: StepsConfig;
   steps?: GameStep[];
+  dictionary?: { [key: string]: string };
 }
 
 export interface GameMesh {

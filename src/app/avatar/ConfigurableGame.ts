@@ -311,7 +311,6 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
       // Get the current mode
       const tracker = this.getTrackerComponent();
       const modeId = tracker.getCurrentMode();
-      console.log(`modeId = ${modeId}`);
       if (modeId) {
         // Update the flag inUse
         const scenarioMenu = this.menuOptions.find((a) => a.name == 'scenarios');
@@ -328,6 +327,9 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
         }
       }
       this.cdr.detectChanges();
+    } else if (event.name == 'SAVE_APPLY_SCENARIO') {
+      const scenario = event.data;
+      this.saveAndApplyScenario(scenario);
     }
   }
 }
