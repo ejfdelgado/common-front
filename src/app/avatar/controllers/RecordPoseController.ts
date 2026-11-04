@@ -102,6 +102,7 @@ export class RecordPoseController extends SceneControllerAbstract {
   override async onEvent(event: AvatarBodyEvent): Promise<void> {
     if (event.name == 'VOICE_COMMAND') {
       if (event.voiceCommand == 'start') {
+        this.placeCamera(true);
         ModuloSonido.play('/assets/sounds/mail.mp3');
         this.recording = true;
         this.history = { v: AVATAR_ANIM_VERSION, a: [] };
@@ -129,6 +130,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         }
       } else if (event.voiceCommand == 'play') {
         if (this.scene) {
+          ModuloSonido.play('/assets/sounds/marimba_on.mp3');
           await this.assureCharacter();
           if (this.scenario?.dictionary && this.history.a.length == 0) {
             let oldName = this.scenario.dictionary[DICT_KEY];
@@ -140,22 +142,36 @@ export class RecordPoseController extends SceneControllerAbstract {
                 lr: NPC_LR,
               });
             }
+          } else {
+            await this.scene.applyAnimationToCharacter(NPC_NAME, {
+              loop: true,
+              startingTimeMillis: 0,
+              animationBin: this.history,
+              lr: NPC_LR,
+            });
           }
           this.placeCamera(false);
           this.scene.animationPlay();
         }
       } else if (event.voiceCommand == 'pause') {
         if (this.scene) {
+          ModuloSonido.play('/assets/sounds/hangdown.mp3');
           this.scene.animationPause();
         }
       } else if (event.voiceCommand == 'save') {
-        //if (this.history.a.length > 0) {
-        this.saveAnimation();
-        //}
+        ModuloSonido.play('/assets/sounds/message.mp3');
+        if (this.history.a.length > 0) {
+          this.saveAnimation();
+        }
       }
     } else if (event.name == 'STAND2MATRIX') {
       if (event.data) {
         this.transformationMatrix = event.data;
+      }
+    } else if (event.name == 'START_ALL') {
+    } else if (event.name == 'STOP_ALL') {
+      if (this.scene) {
+        this.scene.animationStop();
       }
     }
   }
