@@ -9,7 +9,11 @@ import {
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import { encode } from '@msgpack/msgpack';
 import * as THREE from 'three';
-import { computeComparableFromModel, getStoredAvatarState } from '@avatar/utils/AvatarUtilities';
+import {
+  compareBodyPoses,
+  computeComparableFromModel,
+  getStoredAvatarState,
+} from '@avatar/utils/AvatarUtilities';
 import { ControlProxy } from '../workers/ControlProxy';
 import { P2PService } from 'src/app/services/p2p.service';
 import { EventEmitter } from '@angular/core';
@@ -85,20 +89,6 @@ export class RecordPoseController extends SceneControllerAbstract {
     this.lastRecorded = now;
   }
 
-  clamp(a: number, b: number, min: number, max: number) {
-    if (isNaN(a) || isNaN(b)) {
-      return 0;
-    }
-    let diff = Math.abs(a - b);
-    if (diff < min) {
-      diff = min;
-    }
-    if (diff > max) {
-      diff = max;
-    }
-    return Math.sqrt(diff / (max - min));
-  }
-
   printPoint3D(p: Point3D) {
     return '[' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ' ' + p.z.toFixed(1) + ']';
   }
@@ -112,21 +102,12 @@ export class RecordPoseController extends SceneControllerAbstract {
     if (referenceAvatar && actualAvatar) {
       const reference = computeComparableFromModel(referenceAvatar);
       const actual = computeComparableFromModel(actualAvatar);
+      
+      const total = compareBodyPoses(reference, actual);
 
-      const handL = this.clamp(reference.handL, actual.handL, 0, 90);
-      const handR = this.clamp(reference.handR, actual.handR, 0, 90);
-      const armL = this.clamp(reference.armL, actual.armL, 0, 160);
-      const armR = this.clamp(reference.armR, actual.armR, 0, 160);
-      const footL = this.clamp(reference.footL, actual.footL, 0, 115);
-      const footR = this.clamp(reference.footR, actual.footR, 0, 115);
-      const legsOpen = this.clamp(reference.legsOpen, actual.legsOpen, 0, 160);
-
-      const total = 100 - 100 * (handL + handR + armL + armR + footL + footR + legsOpen) / 7;
-      //const total = reference.legsOpen;
       this.setHudValue('percentage', total, false);
-
-      //const r1 = reference.armL;
-      //const a1 = actual.armL;
+      //const r1 = reference.armsOpen;
+      //const a1 = actual.armsOpen;
       //this.setHudValue('top', `Ref: ${r1.toFixed(0)} Act: ${a1.toFixed(0)}`, false);
     }
   }

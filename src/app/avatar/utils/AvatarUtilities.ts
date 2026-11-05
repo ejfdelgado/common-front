@@ -19,6 +19,7 @@ import * as THREE from 'three';
 import { TextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
+import { clamp } from "src/app/tools/NumberUtils";
 
 const textureLoader = new TextureLoader();
 
@@ -122,6 +123,22 @@ const toCanonical = (v: Point3D, front: Point3D, left: Point3D, up: Point3D): Po
     };
 };
 
+export function compareBodyPoses(
+    reference: ComparableBody,
+    actual: ComparableBody,
+) {
+      const handL = clamp(reference.handL, actual.handL, 0, 90);
+      const handR = clamp(reference.handR, actual.handR, 0, 90);
+      const armL = clamp(reference.armL, actual.armL, 0, 160);
+      const armR = clamp(reference.armR, actual.armR, 0, 160);
+      const footL = clamp(reference.footL, actual.footL, 0, 115);
+      const footR = clamp(reference.footR, actual.footR, 0, 115);
+      const legsOpen = clamp(reference.legsOpen, actual.legsOpen, 0, 160);
+      const armsOpen = clamp(reference.armsOpen, actual.armsOpen, 0, 150);
+
+      const total = 100 - 100 * (handL + handR + armL + armR + footL + footR + legsOpen + armsOpen) / 8;
+}
+
 export function computeComparableFromModel(
     model: THREE.Object3D<THREE.Object3DEventMap>
 ): ComparableBody {
@@ -191,6 +208,7 @@ export function computeComparableFromModel(
         armL, armR,
         leftHand, rightHand,
         legsOpen,
+        armsOpen,
     } = comparable;
 
     return {
@@ -201,6 +219,7 @@ export function computeComparableFromModel(
         armL, armR,
         legsOpen,
         leftHand, rightHand,
+        armsOpen,
     };
 }
 
@@ -273,6 +292,11 @@ export function computeComparableBodyInternal(
         y: (leftHip.y + rightHip.y)/2,
         z: (leftHip.z + rightHip.z)/2,
     };
+    const chest = {
+        x: (leftShoulder.x + rightShoulder.x)/2,
+        y: (leftShoulder.y + rightShoulder.y)/2,
+        z: (leftShoulder.z + rightShoulder.z)/2,
+    };
 
     return {
         leftArm,
@@ -288,6 +312,7 @@ export function computeComparableBodyInternal(
         footL: angleDegreesBetween(leftHeel, leftKnee, leftHip),
         footR: angleDegreesBetween(rightHeel, rightKnee, rightHip),
         legsOpen: angleDegreesBetween(leftKnee, pelvis, rightKnee),
+        armsOpen: angleDegreesBetween(leftElbow, chest, rightElbow),
     };
 }
 

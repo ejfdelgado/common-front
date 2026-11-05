@@ -102,6 +102,7 @@ export interface SimpleComparable {
   footL: number;
   footR: number;
   legsOpen: number;
+  armsOpen: number;
 }
 
 export interface ScenePoseEventType {
