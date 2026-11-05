@@ -123,7 +123,7 @@ export class RecordPoseController extends SceneControllerAbstract {
 
       const total = 100 - 100 * (handL + handR + armL + armR + footL + footR + legsOpen) / 7;
       //const total = reference.legsOpen;
-      this.setHudValue('top', `Score: ${total.toFixed(0)}`, false);
+      this.setHudValue('percentage', total, false);
 
       //const r1 = reference.armL;
       //const a1 = actual.armL;
@@ -161,6 +161,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.recordingStartTime = Date.now();
       } else if (event.voiceCommand == 'stop') {
         ModuloSonido.play('/assets/sounds/message.mp3');
+        this.setHudValue('percentage', null, false);
         this.placeCamera(true);
         this.recording = false;
         this.playing = false;
@@ -229,6 +230,7 @@ export class RecordPoseController extends SceneControllerAbstract {
       }
     } else if (event.name == 'START_ALL') {
     } else if (event.name == 'STOP_ALL') {
+      this.setHudValue('percentage', null, false);
       if (this.scene) {
         this.playing = false;
         this.recording = false;
