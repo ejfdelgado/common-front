@@ -229,6 +229,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.transformationMatrix = event.data;
       }
     } else if (event.name == 'START_ALL') {
+      this.placeCamera(true);
     } else if (event.name == 'STOP_ALL') {
       this.setHudValue('percentage', null, false);
       if (this.scene) {
@@ -277,7 +278,7 @@ export class RecordPoseController extends SceneControllerAbstract {
       this.scene.forceCameraState({
         near: 0.1,
         far: 1000,
-        fov: 30,
+        fov: 15,
         lookAt: {
           x: single ? 0 : NPC_LR[0] / 2,
           y: 1,
@@ -286,7 +287,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         position: {
           x: single ? 0 : NPC_LR[0] / 2,
           y: 1,
-          z: 5,
+          z: 10,
         },
       });
     }
