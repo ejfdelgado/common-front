@@ -52,6 +52,23 @@ export class AvatarContainer
   @Output() headUpLog: EventEmitter<any> = new EventEmitter();
   @Output() notifications: EventEmitter<AvatarBodyEvent> = new EventEmitter();
 
+  leftCursor: CursorPointerGUI = {
+    style: {
+      top: '0px',
+      left: '0px',
+    },
+    open: true,
+    visible: false,
+  };
+  rightCursor: CursorPointerGUI = {
+    style: {
+      top: '0px',
+      left: '0px',
+    },
+    open: true,
+    visible: false,
+  };
+
   constructor(
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
@@ -142,21 +159,6 @@ export class AvatarContainer
     });
   }
 
-  leftCursor: CursorPointerGUI = {
-    style: {
-      top: '0px',
-      left: '0px',
-    },
-    image: '/assets/icons/eye.svg',
-  };
-  rightCursor: CursorPointerGUI = {
-    style: {
-      top: '0px',
-      left: '0px',
-    },
-    image: '/assets/icons/eye.svg',
-  };
-
   override setCursor(data: CursorData): void {
     if (!this.scene) {
       return;
@@ -180,11 +182,8 @@ export class AvatarContainer
     if (side == 'L') {
       cursorGUI = this.leftCursor;
     }
-    if (data.state == 'on') {
-      cursorGUI.image = '/assets/icons/eye_off.svg';
-    } else {
-      cursorGUI.image = '/assets/icons/eye.svg';
-    }
+    cursorGUI.visible = true;
+    cursorGUI.open = data.state == 'on';
   }
 
   hasText(val: any) {
@@ -194,6 +193,10 @@ export class AvatarContainer
     }
     const rawText = html2text(innerText);
     return typeof rawText == 'string' && rawText.trim().length > 0;
+  }
+
+  hasNumber(val: any) {
+    return typeof val == "number" && !isNaN(val);
   }
 
   notifyEvent(event: AvatarBodyEvent): void {

@@ -2,19 +2,25 @@
     <canvas #mycanvas width="1" height="1">
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
-    <!--
+    @if (leftCursor.visible) {
     <div class="cursor_pointer" [ngStyle]="leftCursor.style">
-        <img [src]="leftCursor.image">
+        <img [src]="leftCursor.open ? '/assets/icons/hand-l-o.svg' : '/assets/icons/hand-l-c.svg'">
     </div>
+    }
+    @if (rightCursor.visible) {
     <div class="cursor_pointer" [ngStyle]="rightCursor.style">
-        <img [src]="rightCursor.image">
+        <img [src]="rightCursor.open ? '/assets/icons/hand-r-o.svg' : '/assets/icons/hand-r-c.svg'">
     </div>
-    -->
+    }
     <div class="hud_score white_subtitle">
+        @if(hasNumber(hudData['life'])) {
         <app-rating [onImageUrl]="'./assets/icons/heart.svg'" [offImageUrl]="'./assets/icons/heart_off_inverted.svg'"
             [ngModel]="hudData['life']" [label]="''"></app-rating>
+        }
+        @if(hasNumber(hudData['score'])) {
         <span class="score"><img class="points_icon" src="./assets/icons/star.svg"> <strong
                 [innerHTML]="hudData['score']"></strong></span>
+        }
     </div>
     <div class="hud_scenario_labels bigger no_mouse no_select">
         @if (hasText(hudData['top'])) {

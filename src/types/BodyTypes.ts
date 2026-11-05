@@ -261,7 +261,8 @@ export interface CursorPointerGUI {
     top: string;
     left: string;
   };
-  image: string;
+  open: boolean;
+  visible: boolean;
 }
 
 export type OrthogonalXY = 'X' | 'Y';
