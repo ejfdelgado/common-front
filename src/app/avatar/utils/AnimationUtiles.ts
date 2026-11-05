@@ -5,6 +5,8 @@ import { FileService } from 'src/app/services/file.srv';
 import { getBucketFilePath } from 'src/app/tools/BucketPaths';
 import { StoredAvatarAnimation } from 'src/types/BodyTypes';
 
+const MAX_FRAMES_PER_FILE = 100;
+
 export async function uploadAnimationToBucket(
   bucketPath: string,
   completeData: StoredAvatarAnimation,

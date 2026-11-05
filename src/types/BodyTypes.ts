@@ -182,6 +182,7 @@ export interface StoredAvatarAnimation {
   // If this is assigned, the state is overrided with this
   lr?: number[];
   lrMode?: LR_MODE;
+  nextSufix?: number;
 }
 
 export interface AnimatedElements {
