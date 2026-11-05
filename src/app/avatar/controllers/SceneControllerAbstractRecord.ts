@@ -5,6 +5,7 @@ import { getStoredAvatarState } from '../utils/AvatarUtilities';
 import { getBucketPath } from 'src/app/tools/BucketPaths';
 import { AuthService } from 'src/app/services/auth.service';
 import { encode } from '@msgpack/msgpack';
+import { uploadAnimationToBucket } from '../utils/AnimationUtiles';
 
 const MAX_STATES_PER_SECOND: number = 10;
 
@@ -59,10 +60,7 @@ export abstract class SceneControllerAbstractRecord extends SceneControllerAbstr
 
     this.scenario.dictionary[dictKey] = nextName;
 
-    const encoded = encode(this.history);
-    const blob = new Blob([encoded], { type: 'application/octet-stream' });
-
-    await this.fileSrv.upload(nextName, blob, 'bucket');
+    await uploadAnimationToBucket(nextName, this.history, this.fileSrv);
 
     this.events.emit({
       name: 'SAVE_APPLY_SCENARIO',

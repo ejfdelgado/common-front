@@ -7,18 +7,14 @@ import {
   AnimatedElements,
   AnimationSpecType,
   DEFAULT_AVATAR_MESH,
-  ROOT_PATH,
   StoredAvatarAnimation,
 } from '@mytypes/BodyTypes';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import * as THREE from 'three';
-import { firstValueFrom } from 'rxjs';
-import { decode } from '@msgpack/msgpack';
 import { HttpClient } from '@angular/common/http';
 import { CharacterSpec, GameMode, GameScenario } from '@mytypes/WorldAvatar';
-import { Wait } from '../services/indicator.service';
-import { getBucketFilePath } from '../tools/BucketPaths';
+import { loadAnimationFromBucket } from './utils/AnimationUtiles';
 
 interface TerrainTriangle {
   a: THREE.Vector3;
@@ -254,7 +250,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     const old = this.animatedElements.find((a) => a.avatar == avatar);
     let anim: StoredAvatarAnimation | null = null;
     if (spec.animationUrl) {
-      anim = await this.loadAnimation(spec.animationUrl);
+      anim = await loadAnimationFromBucket(spec.animationUrl, this.http);
     } else if (spec.animationBin) {
       anim = spec.animationBin;
     } else {
@@ -296,15 +292,6 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     if (index >= 0) {
       this.outlinePass.selectedObjects.splice(index, 1);
     }
-  }
-
-  async loadAnimation(url: string): Promise<StoredAvatarAnimation> {
-    const completeUrl = getBucketFilePath(url);
-    const loaded = await firstValueFrom(
-      this.http.get(completeUrl, { responseType: 'arraybuffer' }),
-    );
-    const model = decode(loaded);
-    return model as StoredAvatarAnimation;
   }
 
   indexTerrain() {
