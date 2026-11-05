@@ -8,13 +8,12 @@ import {
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import { encode } from '@msgpack/msgpack';
 import * as THREE from 'three';
-import { getStoredAvatarState } from '@avatar/utils/AvatarUtilities';
+import { computeComparableFromModel, getStoredAvatarState } from '@avatar/utils/AvatarUtilities';
 import { ControlProxy } from '../workers/ControlProxy';
 import { P2PService } from 'src/app/services/p2p.service';
 import { EventEmitter } from '@angular/core';
 import { ModuloSonido } from 'src/app/services/sonido.service';
 import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
-import { BUCKET_PATH } from '../SceneWithAvatar';
 import { getBucketPath } from 'src/app/tools/BucketPaths';
 import { AuthService } from 'src/app/services/auth.service';
 import { FileService } from 'src/app/services/file.srv';
@@ -26,6 +25,7 @@ const MAX_STATES_PER_SECOND: number = 10;
 
 export class RecordPoseController extends SceneControllerAbstract {
   recording: boolean = false;
+  playing: boolean = false;
   recordingStartTime: number = 0;
   lastRecorded: number = 0;
   history: StoredAvatarAnimation = { v: AVATAR_ANIM_VERSION, a: [] };
@@ -84,8 +84,43 @@ export class RecordPoseController extends SceneControllerAbstract {
     this.lastRecorded = now;
   }
 
+  clamp(a: number, b: number, min: number, max: number) {
+    let diff = Math.abs(a - b);
+    if (diff < min) {
+      return min;
+    }
+    if (diff > max) {
+      return max;
+    }
+    return diff;
+  }
+
+  async evaluateComparison() {
+    if (!this.playing) {
+      return;
+    }
+    const referenceAvatar = this.scene.getObjectByName(NPC_NAME);
+    const actualAvatar = this.scene.getObjectByName(AVATAR_NAME);
+    if (referenceAvatar && actualAvatar) {
+      const reference = computeComparableFromModel(referenceAvatar);
+      const actual = computeComparableFromModel(actualAvatar);
+      
+      const handL = this.clamp(reference.handL, actual.handL, 0, 90);
+      const handR = this.clamp(reference.handR, actual.handR, 0, 90);
+      const armL = this.clamp(reference.armL, actual.armL, -180, 180);
+      const armR = this.clamp(reference.armR, actual.armR, -180, 180);
+      const footL = this.clamp(reference.footL, actual.footL, 0, 115);
+      const footR = this.clamp(reference.footR, actual.footR, 0, 115);
+
+      //const total = (handL + handR + armL + armR + footL + footR);
+      const total = handR;
+      this.setHudValue('top', `Score: ${total.toFixed(0)}`, false);
+    }
+  }
+
   override async update(): Promise<ControllerUpdateResponse> {
     await this.applyRecording();
+    await this.evaluateComparison();
     return {};
   }
 
@@ -114,10 +149,11 @@ export class RecordPoseController extends SceneControllerAbstract {
       } else if (event.voiceCommand == 'stop') {
         this.placeCamera(true);
         this.recording = false;
+        this.playing = false;
         if (this.scene) {
           this.scene.animationStop();
         }
-      } else if (event.voiceCommand == 'load') {
+      } else if (event.voiceCommand == '...') {
         if (this.scene) {
           await this.assureCharacter();
           // TODO, place at some position with some animation
@@ -134,6 +170,8 @@ export class RecordPoseController extends SceneControllerAbstract {
         }
       } else if (event.voiceCommand == 'play') {
         if (this.scene) {
+          this.recording = false;
+          this.playing = true;
           ModuloSonido.play('/assets/sounds/marimba_on.mp3');
           await this.assureCharacter();
           if (this.scenario?.dictionary && this.history.a.length == 0) {
@@ -158,11 +196,14 @@ export class RecordPoseController extends SceneControllerAbstract {
           this.scene.animationPlay();
         }
       } else if (event.voiceCommand == 'pause') {
+        this.recording = false;
+        this.playing = false;
         if (this.scene) {
           ModuloSonido.play('/assets/sounds/hangdown.mp3');
           this.scene.animationPause();
         }
       } else if (event.voiceCommand == 'save') {
+        this.recording = false;
         ModuloSonido.play('/assets/sounds/message.mp3');
         if (this.history.a.length > 0) {
           this.saveAnimation();
@@ -175,6 +216,8 @@ export class RecordPoseController extends SceneControllerAbstract {
     } else if (event.name == 'START_ALL') {
     } else if (event.name == 'STOP_ALL') {
       if (this.scene) {
+        this.playing = false;
+        this.recording = false;
         this.scene.animationStop();
       }
     }

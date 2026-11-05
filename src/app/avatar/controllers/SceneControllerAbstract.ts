@@ -1,81 +1,86 @@
 import {
-    AvatarBodyEvent,
-    ControllerUpdateResponse,
-    CursorPositioner,
-    GenericSizeType,
-    ScenePoseAndWalkEventType,
-} from "@mytypes/BodyTypes";
-import { EventEmitter } from "@angular/core";
-import { SceneWithComposer } from "../SceneWithComposer";
-import { ControllerInitDataType } from "@mytypes/BodyTypesExtra";
-import { ControlProxy } from "../workers/ControlProxy";
-import { P2PService } from "@services/p2p.service";
-import { computeDistance } from "@avatar/utils/AvatarUtilities";
-import { GameMode, GameScenario } from "src/types/WorldAvatar";
-import { FileService } from "src/app/services/file.srv";
+  AvatarBodyEvent,
+  ControllerUpdateResponse,
+  CursorPositioner,
+  GenericSizeType,
+  ScenePoseAndWalkEventType,
+} from '@mytypes/BodyTypes';
+import { EventEmitter } from '@angular/core';
+import { SceneWithComposer } from '../SceneWithComposer';
+import { ControllerInitDataType } from '@mytypes/BodyTypesExtra';
+import { ControlProxy } from '../workers/ControlProxy';
+import { P2PService } from '@services/p2p.service';
+import { computeDistance } from '@avatar/utils/AvatarUtilities';
+import { GameMode, GameScenario } from 'src/types/WorldAvatar';
+import { FileService } from 'src/app/services/file.srv';
 
 export abstract class SceneControllerAbstract {
-    enabled: boolean = true;
-    now: number = 0;
-    scene!: SceneWithComposer;
-    lastData!: ScenePoseAndWalkEventType;
-    videoSize!: GenericSizeType;
-    cursorDisplay: CursorPositioner | null = null;
-    mode: GameMode | null = null;
-    scenario: GameScenario | null = null;
+  enabled: boolean = true;
+  now: number = 0;
+  scene!: SceneWithComposer;
+  lastData!: ScenePoseAndWalkEventType;
+  videoSize!: GenericSizeType;
+  cursorDisplay: CursorPositioner | null = null;
+  mode: GameMode | null = null;
+  scenario: GameScenario | null = null;
 
-    constructor(
-        public events: EventEmitter<AvatarBodyEvent>,
-        public controlProxy: ControlProxy,
-        public p2pSrv: P2PService,
-        public fileSrv: FileService,
-    ) {
+  constructor(
+    public events: EventEmitter<AvatarBodyEvent>,
+    public controlProxy: ControlProxy,
+    public p2pSrv: P2PService,
+    public fileSrv: FileService,
+  ) {}
 
-    }
+  async initialize(data: ControllerInitDataType) {
+    this.scene = data.scene;
+  }
 
-    async initialize(data: ControllerInitDataType) {
-        this.scene = data.scene;
-    }
+  async preUpdate(data: ScenePoseAndWalkEventType): Promise<void> {
+    this.lastData = data;
+    this.videoSize = data.videoSize;
+    this.now = new Date().getTime();
+  }
 
-    async preUpdate(data: ScenePoseAndWalkEventType): Promise<void> {
-        this.lastData = data;
-        this.videoSize = data.videoSize;
-        this.now = new Date().getTime();
-    }
+  abstract update(): Promise<ControllerUpdateResponse>;
 
-    abstract update(): Promise<ControllerUpdateResponse>;
+  async postUpdate(): Promise<void> {
+    return;
+  }
 
-    async postUpdate(): Promise<void> {
-        return;
-    }
+  computeDistanceByName(aName: string, bName: string) {
+    const a = this.lastData.keypoints3DMap[aName];
+    const b = this.lastData.keypoints3DMap[bName];
+    return computeDistance(a, b);
+  }
 
-    computeDistanceByName(aName: string, bName: string) {
-        const a = this.lastData.keypoints3DMap[aName];
-        const b = this.lastData.keypoints3DMap[bName];
-        return computeDistance(a, b);
-    }
+  abstract stop(): Promise<void>;
 
-    abstract stop(): Promise<void>;
+  abstract destroy(): Promise<void>;
 
-    abstract destroy(): Promise<void>;
+  abstract onEvent(event: AvatarBodyEvent): void;
 
-    abstract onEvent(event: AvatarBodyEvent): void;
+  setCursorDisplay(cursorDisplay: CursorPositioner) {
+    this.cursorDisplay = cursorDisplay;
+  }
 
-    setCursorDisplay(cursorDisplay: CursorPositioner) {
-        this.cursorDisplay = cursorDisplay;
-    }
+  setParams(params: { [key: string]: any }) {
+    Object.assign(this, params);
+  }
 
-    setParams(params: {
-        [key: string]: any;
-    }) {
-        Object.assign(this, params);
-    }
+  setMode(mode: GameMode) {
+    this.mode = mode;
+  }
 
-    setMode(mode: GameMode) {
-        this.mode = mode;
-    }
+  setScenario(scenario: GameScenario) {
+    this.scenario = scenario;
+  }
 
-    setScenario(scenario: GameScenario) {
-        this.scenario = scenario;
-    }
+  async setHudValue(key: string, val: any, speak?: boolean) {
+    await this.cursorDisplay?.setHudDisplay({
+      key: key,
+      value: val,
+      speak: speak,
+      lang: this.scenario?.language,
+    });
+  }
 }

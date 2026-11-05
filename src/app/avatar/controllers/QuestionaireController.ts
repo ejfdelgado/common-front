@@ -149,15 +149,6 @@ export class QuestionaireController extends SceneControllerAbstract {
     this.events.emit(payload);
   }
 
-  async setHudValue(key: string, val: any, speak?: boolean) {
-    await this.cursorDisplay?.setHudDisplay({
-      key: key,
-      value: val,
-      speak: speak,
-      lang: this.scenario?.language,
-    });
-  }
-
   async preloadAudios() {
     const audios: string[] = [];
     if (this.scenario?.audio) {
