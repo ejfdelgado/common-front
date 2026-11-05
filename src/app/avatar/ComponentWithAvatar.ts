@@ -85,6 +85,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
       footR: 0,
       armL: 0,
       armR: 0,
+      legsOpen: 0,
     },
   };
 

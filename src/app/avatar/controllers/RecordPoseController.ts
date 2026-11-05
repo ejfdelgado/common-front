@@ -4,6 +4,7 @@ import {
   AVATAR_NAME,
   StoredAvatarAnimation,
   AVATAR_ANIM_VERSION,
+  Point3D,
 } from '@mytypes/BodyTypes';
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import { encode } from '@msgpack/msgpack';
@@ -92,7 +93,11 @@ export class RecordPoseController extends SceneControllerAbstract {
     if (diff > max) {
       return max;
     }
-    return diff;
+    return diff / (max - min);
+  }
+
+  printPoint3D(p: Point3D) {
+    return '[' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ' ' + p.z.toFixed(1) + ']';
   }
 
   async evaluateComparison() {
@@ -104,17 +109,22 @@ export class RecordPoseController extends SceneControllerAbstract {
     if (referenceAvatar && actualAvatar) {
       const reference = computeComparableFromModel(referenceAvatar);
       const actual = computeComparableFromModel(actualAvatar);
-      
+
       const handL = this.clamp(reference.handL, actual.handL, 0, 90);
       const handR = this.clamp(reference.handR, actual.handR, 0, 90);
-      const armL = this.clamp(reference.armL, actual.armL, -180, 180);
-      const armR = this.clamp(reference.armR, actual.armR, -180, 180);
+      const armL = this.clamp(reference.armL, actual.armL, 0, 160);
+      const armR = this.clamp(reference.armR, actual.armR, 0, 160);
       const footL = this.clamp(reference.footL, actual.footL, 0, 115);
       const footR = this.clamp(reference.footR, actual.footR, 0, 115);
+      const legsOpen = this.clamp(reference.legsOpen, actual.legsOpen, 0, 160);
 
-      //const total = (handL + handR + armL + armR + footL + footR);
-      const total = handR;
+      const total = 100 - 100 * (handL + handR + armL + armR + footL + footR + legsOpen) / 7;
+      //const total = reference.legsOpen;
       this.setHudValue('top', `Score: ${total.toFixed(0)}`, false);
+
+      //const r1 = reference.armL;
+      //const a1 = actual.armL;
+      //this.setHudValue('top', `Ref: ${r1.toFixed(0)} Act: ${a1.toFixed(0)}`, false);
     }
   }
 
@@ -147,6 +157,7 @@ export class RecordPoseController extends SceneControllerAbstract {
         this.history = { v: AVATAR_ANIM_VERSION, a: [] };
         this.recordingStartTime = Date.now();
       } else if (event.voiceCommand == 'stop') {
+        ModuloSonido.play('/assets/sounds/message.mp3');
         this.placeCamera(true);
         this.recording = false;
         this.playing = false;
