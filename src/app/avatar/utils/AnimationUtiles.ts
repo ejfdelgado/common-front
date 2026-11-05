@@ -3,9 +3,9 @@ import { decode, encode } from '@msgpack/msgpack';
 import { firstValueFrom } from 'rxjs';
 import { FileService } from 'src/app/services/file.srv';
 import { getBucketFilePath } from 'src/app/tools/BucketPaths';
-import { StoredAvatarAnimation } from 'src/types/BodyTypes';
+import { MAX_STATES_PER_SECOND, StoredAvatarAnimation } from 'src/types/BodyTypes';
 
-const MAX_FRAMES_PER_FILE = 10;
+const MAX_FRAMES_PER_FILE = MAX_STATES_PER_SECOND * 60 * 2; // 2 minutes per file
 const MAX_CONCURRENT_UPLOADS = 2;
 
 /**

@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { FingerPinch, HandIdType } from './BodyParts';
 import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
 
+export const MAX_STATES_PER_SECOND: number = 10;
+
 // esqueleto009_1.glb
 // avatar005.glb
 // tigresa009_1.glb

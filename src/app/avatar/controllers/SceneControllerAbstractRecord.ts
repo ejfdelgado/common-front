@@ -1,4 +1,4 @@
-import { AVATAR_ANIM_VERSION, AVATAR_NAME, StoredAvatarAnimation } from 'src/types/BodyTypes';
+import { AVATAR_ANIM_VERSION, AVATAR_NAME, MAX_STATES_PER_SECOND, StoredAvatarAnimation } from 'src/types/BodyTypes';
 import { SceneControllerAbstract } from './SceneControllerAbstract';
 import * as THREE from 'three';
 import { getStoredAvatarState } from '../utils/AvatarUtilities';
@@ -6,8 +6,6 @@ import { getBucketPath } from 'src/app/tools/BucketPaths';
 import { AuthService } from 'src/app/services/auth.service';
 import { encode } from '@msgpack/msgpack';
 import { uploadAnimationToBucket } from '../utils/AnimationUtiles';
-
-const MAX_STATES_PER_SECOND: number = 10;
 
 export abstract class SceneControllerAbstractRecord extends SceneControllerAbstract {
   recording: boolean = false;
