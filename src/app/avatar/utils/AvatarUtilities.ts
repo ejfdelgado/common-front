@@ -137,6 +137,7 @@ export function compareBodyPoses(
       const armsOpen = clamp(reference.armsOpen, actual.armsOpen, 0, 150);
 
       const total = 100 - 100 * (handL + handR + armL + armR + footL + footR + legsOpen + armsOpen) / 8;
+      return total;
 }
 
 export function computeComparableFromModel(

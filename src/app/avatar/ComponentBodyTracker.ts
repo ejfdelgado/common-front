@@ -682,9 +682,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
 
     // Set general config
     this.mirror = this.mode.mirror;
-    // Place the camera
-    const camera = this.mode.defaultCameraState;
-    avatarContainer.scene.forceCameraState(camera);
     // Add scenario
     await this.applyScenario(scenarioId ? scenarioId : this.mode.defaultSenario);
     // Define controllers
@@ -783,6 +780,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     if (!this.mode || !avatarContainer) {
       return;
     }
+    // Place the camera
+    const camera = this.mode.defaultCameraState;
+    avatarContainer.scene?.forceCameraState(camera);
+
     this.scenario = this.mode.scenarios[scenarioId];
     if (!this.scenario) {
       return;

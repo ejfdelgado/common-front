@@ -945,4 +945,14 @@ export abstract class SceneWithAvatar extends THREE.Scene {
       loading.done();
     }
   }
+
+  setOrbitalsEnabled(val: boolean) {
+    if (!this.orbitals) {
+      return;
+    }
+    this.orbitals.enabled = false;
+    this.orbitals.enableRotate = false;
+    this.orbitals.enableZoom = false;
+    this.orbitals.enablePan = false;
+  }
 }

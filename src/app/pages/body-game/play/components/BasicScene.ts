@@ -39,6 +39,7 @@ export class BasicScene extends SceneWithComposer {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setSize(this.bounds.width, this.bounds.height);
     this.orbitals = new OrbitControls(this.camera, this.renderer.domElement);
+    //this.setOrbitalsEnabled(false);
 
     this.setupEffects(window.innerWidth, window.innerHeight);
 
