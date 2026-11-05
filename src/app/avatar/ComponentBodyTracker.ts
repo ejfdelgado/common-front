@@ -723,43 +723,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     // Clean old transformation
     avatarContainer.scene.forceAvatarState(position, this.mode.mirror);
 
-    // Remove all animations
-    avatarContainer.scene.clearAnimations();
-    // Remove old characters
-    avatarContainer.scene.removeAllCharacters();
-
-    // Add characters
-    if (this.mode.characters) {
-      const promises: Promise<any>[] = [];
-      for (let i = 0; i < this.mode.characters.length; i++) {
-        const spec = this.mode.characters[i];
-        promises.push(
-          new Promise<void>(async (resolve, reject) => {
-            try {
-              if (!avatarContainer.scene) {
-                return;
-              }
-              //console.log(`Loading character ${spec.name}`);
-              await avatarContainer.scene.loadCharacter(spec);
-              //console.log(`Loading character ${spec.name} Ok!`);
-              if (spec.defaultAnimation) {
-                const anim = spec.animations[spec.defaultAnimation];
-                if (anim) {
-                  //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name}`);
-                  //await avatarContainer.scene.applyAnimationToCharacter(spec.name, anim);
-                  //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name} Ok!`);
-                }
-              }
-              resolve();
-            } catch (err) {
-              reject(err);
-            }
-          }),
-        );
-      }
-      await Promise.all(promises);
-    }
-
     // Update controllers
     avatarContainer.controllers.forEach((controller) => {
       if (this.mode) {
@@ -788,6 +751,44 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     if (!this.scenario) {
       return;
     }
+
+    // Remove all animations
+    avatarContainer.scene?.clearAnimations();
+    // Remove old characters
+    avatarContainer.scene?.removeAllCharacters();
+
+    // Add characters
+    if (this.scenario.characters) {
+      const promises: Promise<any>[] = [];
+      for (let i = 0; i < this.scenario.characters.length; i++) {
+        const spec = this.scenario.characters[i];
+        promises.push(
+          new Promise<void>(async (resolve, reject) => {
+            try {
+              if (!avatarContainer.scene) {
+                return;
+              }
+              //console.log(`Loading character ${spec.name}`);
+              await avatarContainer.scene.loadCharacter(spec);
+              //console.log(`Loading character ${spec.name} Ok!`);
+              if (spec.defaultAnimation) {
+                const anim = spec.animations[spec.defaultAnimation];
+                if (anim) {
+                  //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name}`);
+                  //await avatarContainer.scene.applyAnimationToCharacter(spec.name, anim);
+                  //console.log(`Loading animation ${spec.defaultAnimation} on ${spec.name} Ok!`);
+                }
+              }
+              resolve();
+            } catch (err) {
+              reject(err);
+            }
+          }),
+        );
+      }
+      await Promise.all(promises);
+    }
+
     await avatarContainer.scene?.applyScenario(this.mode, this.scenario);
 
     //console.log(`this.scenario.language = ${this.scenario.language}`);

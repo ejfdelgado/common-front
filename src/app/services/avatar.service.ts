@@ -210,18 +210,6 @@ export class AvatarService {
                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                 { id: GameControllerEnum.SharePoseController, params: {} },
               ],
-              characters: [
-                /*{
-                                    name: "friend",
-                                    defaultAnimation: "initial",
-                                    animations: {
-                                        "initial": {
-                                            animationUrl: "animations/animation.bin",
-                                            loop: true,
-                                        }
-                                    }
-                                }*/
-              ],
             },
             mode02: {
               order: 2,
@@ -267,18 +255,6 @@ export class AvatarService {
                 { id: GameControllerEnum.SoundFeedbackController, params: {} },
                 { id: GameControllerEnum.RecordPoseController, params: {} },
                 { id: GameControllerEnum.CubeController, params: { enabled: false } },
-              ],
-              characters: [
-                /*{
-                                    name: "friend",
-                                    defaultAnimation: "initial",
-                                    animations: {
-                                        "initial": {
-                                            animationUrl: "animations/animation.bin",
-                                            loop: true,
-                                        }
-                                    }
-                                }*/
               ],
             },
             mode03: {

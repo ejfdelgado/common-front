@@ -76,16 +76,8 @@ export interface GameMode {
   defaultSenario: string;
   controllers: GameController[];
   scenarios: { [key: string]: GameScenario };
-  characters?: CharacterSpec[];
   useHands?: boolean;
   avatar?: AvatarModel;
-}
-
-export interface CharacterSpec {
-  name: string;
-  meshName?: string;
-  defaultAnimation?: string;
-  animations: { [key: string]: AnimationSpecType };
 }
 
 export interface ColorType {
@@ -110,10 +102,10 @@ export interface GameScenario {
     loose?: string;
   };
   meshes: GameMesh[];
-  characters: GameCharacter[];
+  characters: CharacterSpec[];
   stepsConfig?: StepsConfig;
   steps?: GameStep[];
-  dictionary?: { [key: string]: string };
+  dictionary?: { [key: string]: any };
 }
 
 export interface GameMesh {
@@ -153,11 +145,6 @@ export interface GameStepOption {
   label: string;
   points: number;
   answer: string;
-}
-
-export interface GameAnimation {
-  name: string;
-  url: string;
 }
 
 export interface CameraState {
@@ -207,10 +194,11 @@ export interface GameController {
   params: { [key: string]: any };
 }
 
-export interface GameCharacter {
-  meshes: GameMesh;
-  defaultAnimation: string;
-  animations: { [key: string]: GameAnimation };
+export interface CharacterSpec {
+  name: string;
+  meshName?: string;
+  defaultAnimation?: string;
+  animations: { [key: string]: AnimationSpecType };
 }
 
 export interface AvatarModel {
