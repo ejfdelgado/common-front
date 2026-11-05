@@ -5,7 +5,8 @@ import { FileService } from 'src/app/services/file.srv';
 import { getBucketFilePath } from 'src/app/tools/BucketPaths';
 import { StoredAvatarAnimation } from 'src/types/BodyTypes';
 
-const MAX_FRAMES_PER_FILE = 100;
+const MAX_FRAMES_PER_FILE = 10;
+const MAX_CONCURRENT_UPLOADS = 2;
 
 /**
  * Inserts "_<sufix>" right before the file extension, keeping any query string/hash.
@@ -34,8 +35,7 @@ export async function uploadAnimationToBucket(
 ) {
   const frames = completeData.a ?? [];
   const totalChunks = Math.max(1, Math.ceil(frames.length / MAX_FRAMES_PER_FILE));
-  const uploads: Promise<unknown>[] = [];
-  for (let i = 0; i < totalChunks; i++) {
+  const uploadChunk = async (i: number) => {
     const chunk: StoredAvatarAnimation = {
       ...completeData,
       a: frames.slice(i * MAX_FRAMES_PER_FILE, (i + 1) * MAX_FRAMES_PER_FILE),
@@ -47,9 +47,18 @@ export async function uploadAnimationToBucket(
     }
     const encoded = encode(chunk);
     const blob = new Blob([encoded], { type: 'application/octet-stream' });
-    uploads.push(fileSrv.upload(getChunkPath(bucketPath, i), blob, 'bucket'));
-  }
-  await Promise.all(uploads);
+    await fileSrv.upload(getChunkPath(bucketPath, i), blob, 'bucket');
+  };
+  // Worker pool: at most MAX_CONCURRENT_UPLOADS uploads in flight at any time
+  let nextIndex = 0;
+  const worker = async () => {
+    while (nextIndex < totalChunks) {
+      const i = nextIndex++;
+      await uploadChunk(i);
+    }
+  };
+  const workerCount = Math.max(1, Math.min(MAX_CONCURRENT_UPLOADS, totalChunks));
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
 }
 
 async function loadChunk(url: string, http: HttpClient): Promise<StoredAvatarAnimation> {
