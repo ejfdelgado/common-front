@@ -202,4 +202,23 @@ export class AvatarContainer
   notifyEvent(event: AvatarBodyEvent): void {
     this.notifications.emit(event);
   }
+
+  computePercentageColor(per: number) {
+    // Clamp to [0, 100]; treat invalid input as 0 (red)
+    const p = Number.isFinite(per) ? Math.min(100, Math.max(0, per)) : 0;
+    // Interpolate only the hue: 0° (red) -> 60° (yellow) -> 120° (green)
+    const hue = p * 1.2;
+    // HSV with S = 1 and V = 1 (maximum saturation) converted to RGB.
+    // For hue in [0, 120] the blue channel is always 0.
+    let r: number;
+    let g: number;
+    if (hue <= 60) {
+      r = 255;
+      g = Math.round((hue / 60) * 255);
+    } else {
+      r = Math.round(((120 - hue) / 60) * 255);
+      g = 255;
+    }
+    return `rgb(${r},${g},0)`;
+  }
 }

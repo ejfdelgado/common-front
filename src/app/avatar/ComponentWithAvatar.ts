@@ -52,7 +52,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     right_bottom: '',
     score: null,
     life: null,
-    percentage: 0,
+    percentage: null,
   };
   useComposer: boolean = false;
   sceneCreated: PromiseEmitter = new PromiseEmitter();

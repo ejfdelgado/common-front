@@ -2,6 +2,13 @@
     <canvas #mycanvas width="1" height="1">
         Tu navegador no admite el elemento &lt;canvas&gt;.
     </canvas>
+    @if(hasNumber(hudData['percentage'])) {
+    <div class="percentage_bar">
+        <div class="bar_parent">
+            <div class="bar" [ngStyle]="{height: hudData['percentage'] + '%', backgroundColor: computePercentageColor(hudData['percentage'])}"></div>
+        </div>
+    </div>
+    }
     @if (leftCursor.visible) {
     <div class="cursor_pointer" [ngStyle]="leftCursor.style">
         <img [src]="leftCursor.open ? '/assets/icons/hand-l-o.svg' : '/assets/icons/hand-l-c.svg'">
