@@ -7,6 +7,7 @@ import {
   AnimatedElements,
   AnimationSpecType,
   DEFAULT_AVATAR_MESH,
+  MAX_FRAMES_PER_FILE,
   StoredAvatarAnimation,
 } from '@mytypes/BodyTypes';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -14,7 +15,7 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import * as THREE from 'three';
 import { HttpClient } from '@angular/common/http';
 import { CharacterSpec, GameMode, GameScenario } from '@mytypes/WorldAvatar';
-import { loadAnimationFromBucket } from './utils/AnimationUtiles';
+import { loadAnimationFromBucket, loadNextChunkIfNeeded } from './utils/AnimationUtiles';
 
 interface TerrainTriangle {
   a: THREE.Vector3;
@@ -143,11 +144,20 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     const sceneTime = now - this.startingAnimationTime;
     for (let i = 0; i < this.animatedElements.length; i++) {
       const { avatar, state, loop, startingTime } = this.animatedElements[i];
-      const { a, lr, lrMode } = state;
+      const { a, lr, lrMode, nextSufix } = state;
       // Busco el frame de acuerdo al tiempo (búsqueda binaria, a está ordenado por t)
       const frameId = this.findPoseAt(a, sceneTime - startingTime, loop);
       if (frameId >= 0) {
         this.applyAvatarState(avatar, a[frameId], lr, lrMode);
+        if (typeof nextSufix == "number") {
+          // There are animations missed on memory
+          const totalFrames = a.length;
+          const framesBeforeLimit = totalFrames - frameId;
+          if (framesBeforeLimit < MAX_FRAMES_PER_FILE / 2) {
+            // Carga la siguiente animación, no espera...
+            loadNextChunkIfNeeded(state, this.http);
+          }
+        }
       }
     }
   }
@@ -250,7 +260,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     const old = this.animatedElements.find((a) => a.avatar == avatar);
     let anim: StoredAvatarAnimation | null = null;
     if (spec.animationUrl) {
-      anim = await loadAnimationFromBucket(spec.animationUrl, this.http);
+      anim = await loadAnimationFromBucket(spec.animationUrl, this.http, true);
     } else if (spec.animationBin) {
       anim = spec.animationBin;
     } else {

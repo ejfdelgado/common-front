@@ -3,9 +3,8 @@ import { decode, encode } from '@msgpack/msgpack';
 import { firstValueFrom } from 'rxjs';
 import { FileService } from 'src/app/services/file.srv';
 import { getBucketFilePath } from 'src/app/tools/BucketPaths';
-import { MAX_STATES_PER_SECOND, StoredAvatarAnimation } from 'src/types/BodyTypes';
+import { MAX_FRAMES_PER_FILE, StoredAvatarAnimation } from 'src/types/BodyTypes';
 
-const MAX_FRAMES_PER_FILE = MAX_STATES_PER_SECOND * 60 * 2; // 2 minutes per file
 const MAX_CONCURRENT_UPLOADS = 2;
 
 /**
@@ -33,6 +32,8 @@ export async function uploadAnimationToBucket(
   completeData: StoredAvatarAnimation,
   fileSrv: FileService,
 ) {
+  delete completeData.url;
+  delete completeData.lock;
   const frames = completeData.a ?? [];
   const totalChunks = Math.max(1, Math.ceil(frames.length / MAX_FRAMES_PER_FILE));
   const uploadChunk = async (i: number) => {
@@ -67,8 +68,16 @@ async function loadChunk(url: string, http: HttpClient): Promise<StoredAvatarAni
   return decode(loaded) as StoredAvatarAnimation;
 }
 
-export async function loadAnimationFromBucket(url: string, http: HttpClient): Promise<StoredAvatarAnimation> {
+export async function loadAnimationFromBucket(
+  url: string,
+  http: HttpClient,
+  onlyFirstChunk: boolean = false,
+): Promise<StoredAvatarAnimation> {
   const model = await loadChunk(url, http);
+  model.url = url; //self contained reference
+  if (onlyFirstChunk) {
+    return model;
+  }
   const frames = model.a ?? [];
   const visited = new Set<number>();
   let nextSufix = model.nextSufix;
@@ -83,4 +92,22 @@ export async function loadAnimationFromBucket(url: string, http: HttpClient): Pr
   model.a = frames;
   delete model.nextSufix;
   return model;
+}
+
+export async function loadNextChunkIfNeeded(model: StoredAvatarAnimation, http: HttpClient) {
+  if (!model.url || model.lock === true) {
+    return;
+  }
+  model.lock = true;
+  try {
+    const frames = model.a ?? [];
+    const chunk = await loadChunk(getChunkPath(model.url, model.nextSufix), http);
+    if (chunk.a) {
+      frames.push(...chunk.a);
+    }
+    model.nextSufix = chunk.nextSufix;
+  } catch (err) {
+  } finally {
+    model.lock = false;
+  }
 }

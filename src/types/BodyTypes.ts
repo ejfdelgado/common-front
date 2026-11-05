@@ -3,6 +3,8 @@ import { FingerPinch, HandIdType } from './BodyParts';
 import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
 
 export const MAX_STATES_PER_SECOND: number = 10;
+// Using 1 minute per file is 620KB
+export const MAX_FRAMES_PER_FILE = MAX_STATES_PER_SECOND * 60 * 1; // 1 minutes per file
 
 // esqueleto009_1.glb
 // avatar005.glb
@@ -185,6 +187,8 @@ export interface StoredAvatarAnimation {
   lr?: number[];
   lrMode?: LR_MODE;
   nextSufix?: number;
+  url?: string;
+  lock?: boolean;
 }
 
 export interface AnimatedElements {
