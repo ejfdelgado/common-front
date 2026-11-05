@@ -7,19 +7,71 @@ import { StoredAvatarAnimation } from 'src/types/BodyTypes';
 
 const MAX_FRAMES_PER_FILE = 100;
 
+/**
+ * Inserts "_<sufix>" right before the file extension, keeping any query string/hash.
+ * "folder/myfile.bin" + 1 => "folder/myfile_1.bin"
+ * "folder/myfile" + 2 => "folder/myfile_2"
+ */
+export function getChunkPath(path: string, sufix?: number): string {
+  if (!sufix) {
+    return path;
+  }
+  const queryIndex = path.search(/[?#]/);
+  const base = queryIndex >= 0 ? path.substring(0, queryIndex) : path;
+  const tail = queryIndex >= 0 ? path.substring(queryIndex) : '';
+  const lastSlash = base.lastIndexOf('/');
+  const lastDot = base.lastIndexOf('.');
+  if (lastDot > lastSlash + 1) {
+    return `${base.substring(0, lastDot)}_${sufix}${base.substring(lastDot)}${tail}`;
+  }
+  return `${base}_${sufix}${tail}`;
+}
+
 export async function uploadAnimationToBucket(
   bucketPath: string,
   completeData: StoredAvatarAnimation,
   fileSrv: FileService,
 ) {
-  const encoded = encode(completeData);
-  const blob = new Blob([encoded], { type: 'application/octet-stream' });
-  await fileSrv.upload(bucketPath, blob, 'bucket');
+  const frames = completeData.a ?? [];
+  const totalChunks = Math.max(1, Math.ceil(frames.length / MAX_FRAMES_PER_FILE));
+  const uploads: Promise<unknown>[] = [];
+  for (let i = 0; i < totalChunks; i++) {
+    const chunk: StoredAvatarAnimation = {
+      ...completeData,
+      a: frames.slice(i * MAX_FRAMES_PER_FILE, (i + 1) * MAX_FRAMES_PER_FILE),
+    };
+    if (i + 1 < totalChunks) {
+      chunk.nextSufix = i + 1;
+    } else {
+      delete chunk.nextSufix;
+    }
+    const encoded = encode(chunk);
+    const blob = new Blob([encoded], { type: 'application/octet-stream' });
+    uploads.push(fileSrv.upload(getChunkPath(bucketPath, i), blob, 'bucket'));
+  }
+  await Promise.all(uploads);
+}
+
+async function loadChunk(url: string, http: HttpClient): Promise<StoredAvatarAnimation> {
+  const completeUrl = getBucketFilePath(url);
+  const loaded = await firstValueFrom(http.get(completeUrl, { responseType: 'arraybuffer' }));
+  return decode(loaded) as StoredAvatarAnimation;
 }
 
 export async function loadAnimationFromBucket(url: string, http: HttpClient): Promise<StoredAvatarAnimation> {
-  const completeUrl = getBucketFilePath(url);
-  const loaded = await firstValueFrom(http.get(completeUrl, { responseType: 'arraybuffer' }));
-  const model = decode(loaded);
-  return model as StoredAvatarAnimation;
+  const model = await loadChunk(url, http);
+  const frames = model.a ?? [];
+  const visited = new Set<number>();
+  let nextSufix = model.nextSufix;
+  while (nextSufix && !visited.has(nextSufix)) {
+    visited.add(nextSufix);
+    const chunk = await loadChunk(getChunkPath(url, nextSufix), http);
+    if (chunk.a) {
+      frames.push(...chunk.a);
+    }
+    nextSufix = chunk.nextSufix;
+  }
+  model.a = frames;
+  delete model.nextSufix;
+  return model;
 }
