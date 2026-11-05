@@ -86,14 +86,17 @@ export class RecordPoseController extends SceneControllerAbstract {
   }
 
   clamp(a: number, b: number, min: number, max: number) {
+    if (isNaN(a) || isNaN(b)) {
+      return 0;
+    }
     let diff = Math.abs(a - b);
     if (diff < min) {
-      return min;
+      diff = min;
     }
     if (diff > max) {
-      return max;
+      diff = max;
     }
-    return diff / (max - min);
+    return Math.sqrt(diff / (max - min));
   }
 
   printPoint3D(p: Point3D) {
