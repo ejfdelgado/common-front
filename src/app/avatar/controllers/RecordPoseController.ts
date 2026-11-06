@@ -8,7 +8,7 @@ import { compareBodyPoses, computeComparableFromModel } from '@avatar/utils/Avat
 import { ControlProxy } from '../workers/ControlProxy';
 import { P2PService } from 'src/app/services/p2p.service';
 import { EventEmitter } from '@angular/core';
-import { ModuloSonido } from 'src/app/services/sonido.service';
+import { MicRecordingHandler, ModuloSonido } from 'src/app/services/sonido.service';
 import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
 import { FileService } from 'src/app/services/file.srv';
 import { SceneControllerAbstractRecord } from './SceneControllerAbstractRecord';
@@ -18,6 +18,10 @@ const NPC_LR = [2, 0, 0];
 const DICT_KEY = 'animation_stored';
 
 export class RecordPoseController extends SceneControllerAbstractRecord {
+  audioRecordHandler: MicRecordingHandler | null = null;
+  audioRecordedUrl: string | null = null;
+  audioPlayer: HTMLAudioElement | null = null;
+
   constructor(
     public override events: EventEmitter<AvatarBodyEvent>,
     public override controlProxy: ControlProxy,
@@ -86,78 +90,122 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     );
   }
 
+  async startRecording() {
+    this.placeCamera(true);
+    ModuloSonido.play('/assets/sounds/mail.mp3');
+    this.recording = true;
+    this.history = { v: AVATAR_ANIM_VERSION, a: [] };
+    this.recordingStartTime = Date.now();
+    this.audioRecordHandler = await ModuloSonido.recordFromMic();
+  }
+
+  async stopRecording() {
+    ModuloSonido.play('/assets/sounds/message.mp3');
+    this.setHudValue('percentage', null, false);
+    this.placeCamera(true);
+    this.recording = false;
+    this.playing = false;
+    if (this.scene) {
+      this.scene.animationStop();
+    }
+    if (this.audioRecordHandler) {
+      const { url } = await this.audioRecordHandler.stop();
+      if (this.audioRecordedUrl) {
+        URL.revokeObjectURL(this.audioRecordedUrl);
+      }
+      this.audioRecordedUrl = url;
+      this.audioRecordHandler = null;
+    }
+    if (this.audioPlayer) {
+      this.audioPlayer.pause();
+      
+    }
+  }
+
+  async playRecord() {
+    if (this.scene) {
+      this.recording = false;
+      this.playing = true;
+      ModuloSonido.play('/assets/sounds/marimba_on.mp3');
+      await this.assureCharacter();
+      if (this.scenario?.dictionary && this.history.a.length == 0) {
+        let oldName = this.scenario.dictionary[DICT_KEY];
+        if (oldName) {
+          await this.scene.applyAnimationToCharacter(NPC_NAME, {
+            loop: true,
+            startingTimeMillis: 0,
+            animationUrl: oldName,
+            lr: NPC_LR,
+          });
+        }
+      } else {
+        await this.scene.applyAnimationToCharacter(NPC_NAME, {
+          loop: true,
+          startingTimeMillis: 0,
+          animationBin: this.history,
+          lr: NPC_LR,
+        });
+      }
+      this.placeCamera(false);
+      if (this.audioRecordedUrl) {
+        this.audioPlayer = new Audio(this.audioRecordedUrl);
+        this.audioPlayer.play();
+      }
+      this.scene.animationPlay();
+    }
+  }
+
+  async prepare() {
+    if (this.scene) {
+      await this.assureCharacter();
+      // TODO, place at some position with some animation
+      const anim = await this.scene.applyAnimationToCharacter(NPC_NAME, {
+        loop: true,
+        startingTimeMillis: 0,
+        animationBin: this.history,
+        lr: NPC_LR,
+      });
+      const state = anim?.a[0];
+      if (state) {
+        this.scene.applyAvatarStateByName(NPC_NAME, state, NPC_LR);
+      }
+    }
+  }
+
+  async pauseReproduction() {
+    this.recording = false;
+    this.playing = false;
+    if (this.scene) {
+      ModuloSonido.play('/assets/sounds/hangdown.mp3');
+      this.scene.animationPause();
+    }
+    if (this.audioPlayer) {
+      this.audioPlayer.pause();
+    }
+  }
+
+  async saveRecording() {
+    this.recording = false;
+    ModuloSonido.play('/assets/sounds/message.mp3');
+    if (this.history.a.length > 0) {
+      this.saveAnimation(DICT_KEY);
+    }
+  }
+
   override async onEvent(event: AvatarBodyEvent): Promise<void> {
     if (event.name == 'VOICE_COMMAND') {
       if (event.voiceCommand == 'start') {
-        this.placeCamera(true);
-        ModuloSonido.play('/assets/sounds/mail.mp3');
-        this.recording = true;
-        this.history = { v: AVATAR_ANIM_VERSION, a: [] };
-        this.recordingStartTime = Date.now();
+        await this.startRecording();
       } else if (event.voiceCommand == 'stop') {
-        ModuloSonido.play('/assets/sounds/message.mp3');
-        this.setHudValue('percentage', null, false);
-        this.placeCamera(true);
-        this.recording = false;
-        this.playing = false;
-        if (this.scene) {
-          this.scene.animationStop();
-        }
+        await this.stopRecording();
       } else if (event.voiceCommand == '...') {
-        if (this.scene) {
-          await this.assureCharacter();
-          // TODO, place at some position with some animation
-          const anim = await this.scene.applyAnimationToCharacter(NPC_NAME, {
-            loop: true,
-            startingTimeMillis: 0,
-            animationBin: this.history,
-            lr: NPC_LR,
-          });
-          const state = anim?.a[0];
-          if (state) {
-            this.scene.applyAvatarStateByName(NPC_NAME, state, NPC_LR);
-          }
-        }
+        await this.prepare();
       } else if (event.voiceCommand == 'play') {
-        if (this.scene) {
-          this.recording = false;
-          this.playing = true;
-          ModuloSonido.play('/assets/sounds/marimba_on.mp3');
-          await this.assureCharacter();
-          if (this.scenario?.dictionary && this.history.a.length == 0) {
-            let oldName = this.scenario.dictionary[DICT_KEY];
-            if (oldName) {
-              await this.scene.applyAnimationToCharacter(NPC_NAME, {
-                loop: true,
-                startingTimeMillis: 0,
-                animationUrl: oldName,
-                lr: NPC_LR,
-              });
-            }
-          } else {
-            await this.scene.applyAnimationToCharacter(NPC_NAME, {
-              loop: true,
-              startingTimeMillis: 0,
-              animationBin: this.history,
-              lr: NPC_LR,
-            });
-          }
-          this.placeCamera(false);
-          this.scene.animationPlay();
-        }
+        await this.playRecord();
       } else if (event.voiceCommand == 'pause') {
-        this.recording = false;
-        this.playing = false;
-        if (this.scene) {
-          ModuloSonido.play('/assets/sounds/hangdown.mp3');
-          this.scene.animationPause();
-        }
+        await this.pauseReproduction();
       } else if (event.voiceCommand == 'save') {
-        this.recording = false;
-        ModuloSonido.play('/assets/sounds/message.mp3');
-        if (this.history.a.length > 0) {
-          this.saveAnimation(DICT_KEY);
-        }
+        await this.saveRecording();
       }
     } else if (event.name == 'STAND2MATRIX') {
       if (event.data) {
