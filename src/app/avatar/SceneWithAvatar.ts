@@ -26,6 +26,7 @@ import {
   getHigherAvatarScoredPose,
   computeComparableBody,
   AvatarScore,
+  readMyAvatar,
 } from '@avatar/utils/AvatarUtilities';
 import { AvatarBoneEnum, BodyPoseKey, DEFAULT_BOTTOM_VALUES } from '@mytypes/BodyParts';
 import { RecognizedCommand } from '@services/voicerecognition.service';
@@ -928,10 +929,18 @@ export abstract class SceneWithAvatar extends THREE.Scene {
         return;
       }
       // *** This is the main character ***
+      // Default
       let mesh = 'esqueleto009_1_web.glb';
+      // Default game
       if (mode.avatar?.meshPath) {
         mesh = mode.avatar.meshPath;
       }
+
+      const userAvatar = await readMyAvatar(false);
+      if (userAvatar && userAvatar.meshPath) {
+        mesh = userAvatar.meshPath;
+      }
+
       await this.addAvatar(
         BUCKET_PATH + 'avatar_meshes/' + mesh,
         this.camera,

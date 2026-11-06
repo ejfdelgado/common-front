@@ -22,6 +22,7 @@ import { MediaPipePerformanceType, MediaPipePoseEnum } from 'src/types/BodyTypes
 import { PerformanceEditComponent } from '../avatar/dialogs/performance-edit/performance-edit';
 import { sortify } from 'ejfdelgado-common-ts';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
+import { readMyAvatar } from '../avatar/utils/AvatarUtilities';
 
 @Injectable({
   providedIn: 'root',
@@ -421,20 +422,8 @@ export class AvatarService {
     }
   }
 
-  async readMyAvatar(): Promise<AvatarModel> {
-    const defaultValue: AvatarModel = {
-      meshPath: MESH_OPTIONS[0].value,
-    };
-    const old = localStorage.getItem('MY_AVATAR');
-    if (!old) {
-      return defaultValue;
-    }
-    try {
-      const parsed = JSON.parse(old);
-      return Object.assign({}, defaultValue, parsed);
-    } catch (e) {
-      return defaultValue;
-    }
+  async readMyAvatar(useDafault: boolean): Promise<AvatarModel | null> {
+    return await readMyAvatar(useDafault);
   }
 
   async writeMyAvatar(avatar: AvatarModel) : Promise<void> {

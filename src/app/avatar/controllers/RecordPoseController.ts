@@ -12,6 +12,7 @@ import { MicRecordingHandler, ModuloSonido } from 'src/app/services/sonido.servi
 import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicerecognition.service';
 import { FileService } from 'src/app/services/file.srv';
 import { SceneControllerAbstractRecord } from './SceneControllerAbstractRecord';
+import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 
 const NPC_NAME = 'dancer';
 const NPC_LR = [2.5, 0, 0];
@@ -82,10 +83,14 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   override async destroy(): Promise<void> {}
 
   async assureCharacter() {
+    let selectedMesh = MESH_OPTIONS[0].value;
+    if (this.mode?.avatar?.meshPath) {
+      selectedMesh = this.mode.avatar.meshPath;
+    }
     await this.scene.loadCharacter(
       {
         name: NPC_NAME,
-        meshName: 'esqueleto009_1_web.glb',
+        meshName: selectedMesh,
         animations: {},
       },
       false,
@@ -154,7 +159,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
 
   async playRecord() {
     ModuloSonido.play('/assets/sounds/marimba_on.mp3');
-    if (this.state == "PLAYING") {
+    if (this.state == 'PLAYING') {
       return;
     }
     if (this.scene) {

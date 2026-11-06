@@ -5,9 +5,9 @@ const BUCKET_ROOT = "https://storage.googleapis.com/pro-ejflab-assets/avatar_ass
 
 // https://storage.googleapis.com/pro-ejflab-assets/avatar_assets/avatar_meshes/
 export const MESH_OPTIONS: SelectOptionString[] = [
+    { label: 'Huesos', value: "esqueleto009_1_web.glb" },
     { label: 'Tigresa', value: "tigresa009_1_web.glb" },
     { label: 'Coco', value: "cocodrilo009_1_web.glb" },
-    { label: 'Huesos', value: "esqueleto009_1_web.glb" },
     //{ label: 'Bender', value: "bender2_web.glb" },
     //{ label: 'Steve', value: "steve_raw_web.glb" },
     //{ label: 'Star Wars', value: "starwars_decimate_web.glb" },
