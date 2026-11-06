@@ -4,17 +4,10 @@
     <mat-tab-group class="full-width">
 
         <mat-tab [label]="('popup.avatar.tabs.general.title' | translate : 'avatar' | async) ?? ''">
-            <app-photo-gallery [gallery]="gallery"></app-photo-gallery>
-            <form [formGroup]="generalForm" class="tab_content">
-                <mat-form-field class="full-width" appearance="outline">
-                    <mat-label>{{ "popup.avatar.tabs.general.character.label" | translate : "avatar" | async }}</mat-label>
-                    <mat-select formControlName="meshPath">
-                        @for (option of meshOptions; track option.value) {
-                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
-            </form>
+            <div class="tab_content">
+                <p>{{ "popup.avatar.tabs.general.character.label" | translate : "avatar" | async }}</p>
+                <app-photo-gallery [gallery]="gallery" (currentImage)="selectItem($event)"></app-photo-gallery>
+            </div>
         </mat-tab>
 
     </mat-tab-group>

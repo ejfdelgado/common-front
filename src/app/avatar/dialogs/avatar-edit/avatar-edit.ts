@@ -1,12 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatSelectModule } from '@angular/material/select';
 import { AvatarModel } from 'src/types/WorldAvatar';
 import { MESH_OPTIONS, MESH_PREVIEW } from 'src/types/WorldAvatarLibrary';
 import { Subscription } from 'rxjs';
@@ -19,14 +15,10 @@ import { ImageGalleryType } from 'src/types/fieldsTypes';
   selector: 'app-avatar-edit',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatIconModule,
     MatTabsModule,
-    MatSelectModule,
     TranslatePipe,
     AsyncPipe,
     PhotoGallery,
@@ -34,20 +26,17 @@ import { ImageGalleryType } from 'src/types/fieldsTypes';
   templateUrl: './avatar-edit.html',
   styleUrl: './avatar-edit.scss',
 })
-export class AvatarEditComponent {
+export class AvatarEditComponent implements AfterViewInit, OnDestroy {
+  @ViewChild(PhotoGallery) photoGallery?: PhotoGallery;
   private keydownSub: Subscription;
-  readonly meshOptions = MESH_OPTIONS;
-  generalForm: FormGroup;
   gallery: ImageGalleryType[] = [];
+  selectedMeshPath: string | null;
 
   constructor(
-    private fb: FormBuilder,
     private dialogRef: MatDialogRef<AvatarEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AvatarModel,
   ) {
-    this.generalForm = this.fb.group({
-      meshPath: [data.meshPath ?? null],
-    });
+    this.selectedMeshPath = data.meshPath ?? null;
     this.keydownSub = this.dialogRef.keydownEvents().subscribe((event) => {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -61,18 +50,19 @@ export class AvatarEditComponent {
         image: MESH_PREVIEW[option.value],
         description: option.label,
       });
-      
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // Preselect the current mesh; deferred to avoid ExpressionChangedAfterItHasBeenChecked
+    const initial = this.data.meshPath;
+    if (initial) {
+      setTimeout(() => this.photoGallery?.gotToId(initial));
     }
   }
 
   save(): void {
-    if (this.generalForm.invalid) {
-      this.generalForm.markAllAsTouched();
-      return;
-    }
-
-    this.data.meshPath = this.generalForm.value.meshPath;
-
+    this.data.meshPath = this.selectedMeshPath ?? undefined;
     this.dialogRef.close(this.data);
   }
 
@@ -82,5 +72,9 @@ export class AvatarEditComponent {
 
   cancel(): void {
     this.dialogRef.close(null);
+  }
+
+  selectItem(item: ImageGalleryType) {
+    this.selectedMeshPath = item.id;
   }
 }
