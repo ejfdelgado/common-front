@@ -14,7 +14,7 @@ export abstract class SceneControllerAbstractRecord extends SceneControllerAbstr
   history: StoredAvatarAnimation = { v: AVATAR_ANIM_VERSION, a: [] };
   transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
 
-  async applyRecording(): Promise<void> {
+  async recordBodyPose(): Promise<void> {
     const now = Date.now();
     const difference = now - this.lastRecorded;
     if (this.state != "RECORDING" || difference < 1000 / MAX_STATES_PER_SECOND) {

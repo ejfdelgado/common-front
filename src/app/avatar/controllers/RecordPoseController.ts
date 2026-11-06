@@ -71,7 +71,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   override async update(): Promise<ControllerUpdateResponse> {
-    await this.applyRecording();
+    await this.recordBodyPose();
     await this.evaluateComparison();
     return {};
   }
@@ -119,8 +119,6 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       }
     }
     this.state = 'STOPED';
-
-    
   }
 
   stopAudioPlayer() {
@@ -136,36 +134,42 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async playRecord() {
+    ModuloSonido.play('/assets/sounds/marimba_on.mp3');
     if (this.scene) {
-      this.state = 'PLAYING';
-      ModuloSonido.play('/assets/sounds/marimba_on.mp3');
-      await this.assureCharacter();
-      if (this.scenario?.dictionary && this.history.a.length == 0) {
-        // Fetch the animation from bucket url
-        let oldName = this.scenario.dictionary[DICT_KEY];
-        if (oldName) {
+      if (this.state != 'PAUSED') {
+        await this.assureCharacter();
+        if (this.scenario?.dictionary && this.history.a.length == 0) {
+          // Fetch the animation from bucket url
+          let oldName = this.scenario.dictionary[DICT_KEY];
+          if (oldName) {
+            await this.scene.applyAnimationToCharacter(NPC_NAME, {
+              loop: false,
+              startingTimeMillis: 0,
+              animationUrl: oldName,
+              lr: NPC_LR,
+            });
+          }
+        } else {
+          // Fetch the animation from the in memory array
           await this.scene.applyAnimationToCharacter(NPC_NAME, {
             loop: false,
             startingTimeMillis: 0,
-            animationUrl: oldName,
+            animationBin: this.history,
             lr: NPC_LR,
           });
         }
-      } else {
-        // Fetch the animation from the in memory array
-        await this.scene.applyAnimationToCharacter(NPC_NAME, {
-          loop: false,
-          startingTimeMillis: 0,
-          animationBin: this.history,
-          lr: NPC_LR,
-        });
+        this.stopAudioPlayer();
+        if (this.audioRecordedUrl) {
+          this.audioPlayer = new Audio(this.audioRecordedUrl);
+          this.audioPlayer.play();
+        }
+      } else if (this.state != 'PAUSED') {
+        if (this.audioPlayer) {
+          this.audioPlayer.play();
+        }
       }
+      this.state = 'PLAYING';
       this.placeCamera(false);
-      this.stopAudioPlayer();
-      if (this.audioRecordedUrl) {
-        this.audioPlayer = new Audio(this.audioRecordedUrl);
-        this.audioPlayer.play();
-      }
       this.scene.animationPlay();
     }
   }
