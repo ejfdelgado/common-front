@@ -11,6 +11,40 @@ export interface CreateSoundDataType {
   loop?: boolean;
 }
 
+export interface RecordFromMicOptions {
+  deviceId?: string; // Specific microphone, see navigator.mediaDevices.enumerateDevices()
+  mimeType?: string; // Preferred mime type, falls back to the first supported one
+  audioBitsPerSecond?: number;
+}
+
+export interface MicRecordingResult {
+  url: string; // In-memory object URL, usable as new Audio(url)
+  blob: Blob;
+  mimeType: string;
+  durationMillis: number;
+}
+
+export interface MicRecordingHandler {
+  stop: () => Promise<MicRecordingResult>;
+  cancel: () => void; // Stops and discards the recording
+  readonly stream: MediaStream;
+  readonly recorder: MediaRecorder;
+}
+
+function pickSupportedMimeType(preferred?: string): string | undefined {
+  if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) {
+    return undefined;
+  }
+  const candidates = [
+    preferred,
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/mp4',
+  ].filter((m): m is string => !!m);
+  return candidates.find((m) => MediaRecorder.isTypeSupported(m));
+}
+
 function dispose(audioEl: HTMLAudioElement) {
   audioEl.pause(); // Stop any ongoing playback
   audioEl.src = ''; // Release the media resource
@@ -138,6 +172,100 @@ export class ModuloSonido {
     if (sonido) {
       sonido.pause();
     }
+  }
+
+  /*
+  const handler = await ModuloSonido.recordFromMic();
+  // ... later
+  const { url } = await handler.stop();
+  const audio = new Audio(url);
+  audio.play();
+  // When no longer needed: URL.revokeObjectURL(url);
+  */
+  static async recordFromMic(options: RecordFromMicOptions = {}): Promise<MicRecordingHandler> {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('getUserMedia no está disponible en este navegador');
+    }
+    if (typeof MediaRecorder === 'undefined') {
+      throw new Error('MediaRecorder no está disponible en este navegador');
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: options.deviceId ? { deviceId: { exact: options.deviceId } } : true,
+    });
+    const mimeType = pickSupportedMimeType(options.mimeType);
+    let recorder: MediaRecorder;
+    try {
+      recorder = new MediaRecorder(stream, {
+        mimeType,
+        audioBitsPerSecond: options.audioBitsPerSecond,
+      });
+    } catch (err) {
+      stream.getTracks().forEach((t) => t.stop());
+      throw err;
+    }
+
+    const chunks: Blob[] = [];
+    recorder.addEventListener('dataavailable', (event: BlobEvent) => {
+      if (event.data && event.data.size > 0) {
+        chunks.push(event.data);
+      }
+    });
+
+    const releaseStream = () => stream.getTracks().forEach((t) => t.stop());
+    const startedAt = Date.now();
+    let stopPromise: Promise<MicRecordingResult> | null = null;
+
+    recorder.start();
+
+    const stop = (): Promise<MicRecordingResult> => {
+      if (stopPromise) {
+        return stopPromise;
+      }
+      stopPromise = new Promise<MicRecordingResult>((resolve, reject) => {
+        recorder.addEventListener(
+          'stop',
+          () => {
+            releaseStream();
+            const type = recorder.mimeType || mimeType || 'audio/webm';
+            const blob = new Blob(chunks, { type });
+            resolve({
+              url: URL.createObjectURL(blob),
+              blob,
+              mimeType: type,
+              durationMillis: Date.now() - startedAt,
+            });
+          },
+          { once: true },
+        );
+        recorder.addEventListener(
+          'error',
+          (event: Event) => {
+            releaseStream();
+            reject((event as any).error || new Error('Error grabando el audio'));
+          },
+          { once: true },
+        );
+        if (recorder.state !== 'inactive') {
+          recorder.stop();
+        } else {
+          releaseStream();
+          reject(new Error('La grabación ya fue detenida'));
+        }
+      });
+      return stopPromise;
+    };
+
+    const cancel = () => {
+      chunks.length = 0;
+      if (recorder.state !== 'inactive') {
+        recorder.stop();
+      }
+      releaseStream();
+      stopPromise = Promise.reject(new Error('La grabación fue cancelada'));
+      stopPromise.catch(() => {});
+    };
+
+    return { stop, cancel, stream, recorder };
   }
 
   static stopAll(whiteList?: string[]) {
