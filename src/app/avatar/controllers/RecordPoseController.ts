@@ -52,7 +52,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async evaluateComparison() {
-    if (!this.playing) {
+    if (this.state != 'PLAYING') {
       return;
     }
     const referenceAvatar = this.scene.getObjectByName(NPC_NAME);
@@ -93,30 +93,34 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   async startRecording() {
     this.placeCamera(true);
     ModuloSonido.play('/assets/sounds/mail.mp3');
-    this.recording = true;
+    this.state = 'RECORDING';
     this.history = { v: AVATAR_ANIM_VERSION, a: [] };
     this.recordingStartTime = Date.now();
     this.audioRecordHandler = await ModuloSonido.recordFromMic();
   }
 
-  async stopRecording() {
+  async stopAll() {
     ModuloSonido.play('/assets/sounds/message.mp3');
     this.setHudValue('percentage', null, false);
     this.placeCamera(true);
-    this.recording = false;
-    this.playing = false;
-    if (this.scene) {
-      this.scene.animationStop();
-    }
-    if (this.audioRecordHandler) {
-      const { url } = await this.audioRecordHandler.stop();
-      if (this.audioRecordedUrl) {
-        URL.revokeObjectURL(this.audioRecordedUrl);
+    if (['PLAYING', 'PAUSED'].indexOf(this.state) >= 0) {
+      if (this.scene) {
+        this.scene.animationStop();
       }
-      this.audioRecordedUrl = url;
-      this.audioRecordHandler = null;
+      this.stopAudioPlayer();
+    } else if (this.state == 'RECORDING') {
+      if (this.audioRecordHandler) {
+        const { url } = await this.audioRecordHandler.stop();
+        if (this.audioRecordedUrl) {
+          URL.revokeObjectURL(this.audioRecordedUrl);
+        }
+        this.audioRecordedUrl = url;
+        this.audioRecordHandler = null;
+      }
     }
-    this.stopAudioPlayer();
+    this.state = 'STOPED';
+
+    
   }
 
   stopAudioPlayer() {
@@ -133,23 +137,24 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
 
   async playRecord() {
     if (this.scene) {
-      this.recording = false;
-      this.playing = true;
+      this.state = 'PLAYING';
       ModuloSonido.play('/assets/sounds/marimba_on.mp3');
       await this.assureCharacter();
       if (this.scenario?.dictionary && this.history.a.length == 0) {
+        // Fetch the animation from bucket url
         let oldName = this.scenario.dictionary[DICT_KEY];
         if (oldName) {
           await this.scene.applyAnimationToCharacter(NPC_NAME, {
-            loop: true,
+            loop: false,
             startingTimeMillis: 0,
             animationUrl: oldName,
             lr: NPC_LR,
           });
         }
       } else {
+        // Fetch the animation from the in memory array
         await this.scene.applyAnimationToCharacter(NPC_NAME, {
-          loop: true,
+          loop: false,
           startingTimeMillis: 0,
           animationBin: this.history,
           lr: NPC_LR,
@@ -183,8 +188,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async pauseReproduction() {
-    this.recording = false;
-    this.playing = false;
+    this.state = 'PAUSED';
     if (this.scene) {
       ModuloSonido.play('/assets/sounds/hangdown.mp3');
       this.scene.animationPause();
@@ -195,7 +199,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async saveRecording() {
-    this.recording = false;
+    this.state = 'STOPED';
     ModuloSonido.play('/assets/sounds/message.mp3');
     if (this.history.a.length > 0) {
       this.saveAnimation(DICT_KEY);
@@ -207,7 +211,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       if (event.voiceCommand == 'start') {
         await this.startRecording();
       } else if (event.voiceCommand == 'stop') {
-        await this.stopRecording();
+        await this.stopAll();
       } else if (event.voiceCommand == '...') {
         await this.prepare();
       } else if (event.voiceCommand == 'play') {
@@ -224,12 +228,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     } else if (event.name == 'START_ALL') {
       this.placeCamera(true);
     } else if (event.name == 'STOP_ALL') {
-      this.setHudValue('percentage', null, false);
-      if (this.scene) {
-        this.playing = false;
-        this.recording = false;
-        this.scene.animationStop();
-      }
+      await this.stopAll();
     }
   }
 

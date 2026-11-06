@@ -8,8 +8,7 @@ import { encode } from '@msgpack/msgpack';
 import { uploadAnimationToBucket } from '../utils/AnimationUtiles';
 
 export abstract class SceneControllerAbstractRecord extends SceneControllerAbstract {
-  recording: boolean = false;
-  playing: boolean = false;
+  state: "STOPED" | "RECORDING" | "PLAYING" | "PAUSED" = "STOPED";
   recordingStartTime: number = 0;
   lastRecorded: number = 0;
   history: StoredAvatarAnimation = { v: AVATAR_ANIM_VERSION, a: [] };
@@ -18,7 +17,7 @@ export abstract class SceneControllerAbstractRecord extends SceneControllerAbstr
   async applyRecording(): Promise<void> {
     const now = Date.now();
     const difference = now - this.lastRecorded;
-    if (!this.recording || difference < 1000 / MAX_STATES_PER_SECOND) {
+    if (this.state != "RECORDING" || difference < 1000 / MAX_STATES_PER_SECOND) {
       return;
     }
     // Leer el modelo
