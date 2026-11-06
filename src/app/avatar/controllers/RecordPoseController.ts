@@ -21,6 +21,7 @@ const DICT_AUDIO_KEY = 'audio_stored';
 export class RecordPoseController extends SceneControllerAbstractRecord {
   audioRecordHandler: MicRecordingHandler | null = null;
   audioRecordedUrl: string | null = null;
+  audioLoadedUrl: string | null = null;
   audioPlayer: HTMLAudioElement | null = null;
 
   constructor(
@@ -134,6 +135,23 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     this.audioPlayer = null;
   }
 
+  async loadStoredAudio() {
+    if (!this.scenario || !this.scenario.dictionary) {
+      return;
+    }
+    // Fetch the audio from bucket url and expose it as an in-memory blob: URL
+    const oldAudio = this.scenario.dictionary[DICT_AUDIO_KEY];
+    if (this.audioLoadedUrl) {
+      URL.revokeObjectURL(this.audioLoadedUrl);
+      this.audioLoadedUrl = null;
+    }
+    if (oldAudio) {
+      const arrayBuffer = await this.fileSrv.getBinary(oldAudio);
+      const blob = new Blob([arrayBuffer], { type: 'audio/webm' });
+      this.audioLoadedUrl = URL.createObjectURL(blob);
+    }
+  }
+
   async playRecord() {
     ModuloSonido.play('/assets/sounds/marimba_on.mp3');
     if (this.scene) {
@@ -143,6 +161,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
         }
       } else {
         await this.assureCharacter();
+        await this.loadStoredAudio();
         if (this.scenario?.dictionary && this.history.a.length == 0) {
           // Fetch the animation from bucket url
           let oldName = this.scenario.dictionary[DICT_KEY];
@@ -166,6 +185,9 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
         this.stopAudioPlayer();
         if (this.audioRecordedUrl) {
           this.audioPlayer = new Audio(this.audioRecordedUrl);
+          this.audioPlayer.play();
+        } else if (this.audioLoadedUrl) {
+          this.audioPlayer = new Audio(this.audioLoadedUrl);
           this.audioPlayer.play();
         }
       }
@@ -207,7 +229,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async saveRecording() {
-    this.state = 'STOPED';
+    await this.stopAll();
     ModuloSonido.play('/assets/sounds/message.mp3');
     if (this.history.a.length > 0) {
       await this.saveAnimation(DICT_KEY);
