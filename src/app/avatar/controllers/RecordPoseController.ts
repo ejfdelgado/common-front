@@ -16,6 +16,7 @@ import { SceneControllerAbstractRecord } from './SceneControllerAbstractRecord';
 const NPC_NAME = 'dancer';
 const NPC_LR = [2, 0, 0];
 const DICT_KEY = 'animation_stored';
+const DICT_AUDIO_KEY = 'audio_stored';
 
 export class RecordPoseController extends SceneControllerAbstractRecord {
   audioRecordHandler: MicRecordingHandler | null = null;
@@ -136,7 +137,11 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   async playRecord() {
     ModuloSonido.play('/assets/sounds/marimba_on.mp3');
     if (this.scene) {
-      if (this.state != 'PAUSED') {
+      if (this.state == 'PAUSED') {
+        if (this.audioPlayer) {
+          this.audioPlayer.play();
+        }
+      } else {
         await this.assureCharacter();
         if (this.scenario?.dictionary && this.history.a.length == 0) {
           // Fetch the animation from bucket url
@@ -161,10 +166,6 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
         this.stopAudioPlayer();
         if (this.audioRecordedUrl) {
           this.audioPlayer = new Audio(this.audioRecordedUrl);
-          this.audioPlayer.play();
-        }
-      } else if (this.state != 'PAUSED') {
-        if (this.audioPlayer) {
           this.audioPlayer.play();
         }
       }
@@ -192,6 +193,9 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async pauseReproduction() {
+    if (this.state != 'PLAYING') {
+      return;
+    }
     this.state = 'PAUSED';
     if (this.scene) {
       ModuloSonido.play('/assets/sounds/hangdown.mp3');
@@ -206,7 +210,15 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     this.state = 'STOPED';
     ModuloSonido.play('/assets/sounds/message.mp3');
     if (this.history.a.length > 0) {
-      this.saveAnimation(DICT_KEY);
+      await this.saveAnimation(DICT_KEY);
+      if (this.audioRecordedUrl) {
+        await this.saveAudio(DICT_AUDIO_KEY, this.audioRecordedUrl);
+      }
+
+      this.events.emit({
+        name: 'SAVE_APPLY_SCENARIO',
+        data: this.scenario,
+      });
     }
   }
 

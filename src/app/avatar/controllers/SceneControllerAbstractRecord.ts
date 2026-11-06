@@ -58,11 +58,37 @@ export abstract class SceneControllerAbstractRecord extends SceneControllerAbstr
     this.scenario.dictionary[dictKey] = nextName;
 
     await uploadAnimationToBucket(nextName, this.history, this.fileSrv);
+  }
 
-    this.events.emit({
-      name: 'SAVE_APPLY_SCENARIO',
-      data: this.scenario,
-    });
+  async saveAudio(dictKey: string, audioUrl: string) {
+    if (!this.scenario) {
+      return;
+    }
+    if (!this.scenario.dictionary) {
+      this.scenario.dictionary = {};
+    }
+    // Read from the model
+    let oldName = this.scenario.dictionary[dictKey];
+    const roomId = new URLSearchParams(location.hash.split('?')[1]).get('id');
+    const nextName = getBucketPath(
+      'avatar_animation/room/${roomId}/user/${user.uid}/audio/${random}.bin',
+      oldName ? oldName : '',
+      {
+        user: AuthService.userStatic,
+        roomId,
+      },
+      true,
+    );
+
+    // Read the in-memory object URL (blob:...) back into a Blob
+    const response = await fetch(audioUrl);
+    if (!response.ok) {
+      throw new Error(`No se pudo leer el audio en memoria ${audioUrl}`);
+    }
+    const blob: Blob = await response.blob();
+
+    this.scenario.dictionary[dictKey] = nextName;
+    await this.fileSrv.upload(nextName, blob, 'bucket');
   }
 
   downloadTextPlain(filename = 'animation.bin') {
