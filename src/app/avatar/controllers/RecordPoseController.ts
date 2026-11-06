@@ -116,10 +116,19 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       this.audioRecordedUrl = url;
       this.audioRecordHandler = null;
     }
-    if (this.audioPlayer) {
-      this.audioPlayer.pause();
-      
+    this.stopAudioPlayer();
+  }
+
+  stopAudioPlayer() {
+    const player = this.audioPlayer;
+    if (!player) {
+      return;
     }
+    player.pause();
+    player.currentTime = 0;
+    player.removeAttribute('src'); // Detach the media resource
+    player.load(); // Flush buffers so the element is fully released
+    this.audioPlayer = null;
   }
 
   async playRecord() {
@@ -147,6 +156,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
         });
       }
       this.placeCamera(false);
+      this.stopAudioPlayer();
       if (this.audioRecordedUrl) {
         this.audioPlayer = new Audio(this.audioRecordedUrl);
         this.audioPlayer.play();
