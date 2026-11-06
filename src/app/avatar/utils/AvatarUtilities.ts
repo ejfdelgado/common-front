@@ -1070,7 +1070,9 @@ export async function readMyAvatar(useDafault: boolean): Promise<AvatarModel | n
   const defaultValue: AvatarModel = {
     meshPath: MESH_OPTIONS[0].value,
   };
-  const old = localStorage.getItem('MY_AVATAR');
+  // This file is also compiled for web workers (no DOM lib / no localStorage there)
+  const storage: { getItem(key: string): string | null } | undefined = (globalThis as any).localStorage;
+  const old = storage ? storage.getItem('MY_AVATAR') : null;
   if (!old) {
     if (useDafault) {
       return defaultValue;
