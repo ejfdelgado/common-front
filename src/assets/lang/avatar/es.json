@@ -15,7 +15,8 @@
     "end_call": "Colgar llamada",
     "editWorld": "Editar mundo",
     "editScenario": "Editar escenario",
-    "editAvatar": "Editar personaje",
+    "editAvatar": "Personaje por defecto",
+    "editAvatar2": "Mi personaje",
     "editPerformance": "Configurar calidad",
     "editModes": "Editar niveles"
   },

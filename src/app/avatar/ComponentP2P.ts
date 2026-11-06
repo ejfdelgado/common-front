@@ -198,6 +198,14 @@ export abstract class ComponentP2P extends ComponentBodyTracker {
     return null;
   }
 
+  public async editMyAvatar() {
+    const avatar = await this.avatarSrv.readMyAvatar();
+    const response = await this.avatarSrv.editAvatar(avatar);
+    if (response) {
+      this.avatarSrv.writeMyAvatar(response);
+    }
+  }
+
   public async editPerformance() {
     return this.avatarSrv.editPerformance(this.performance);
   }

@@ -21,6 +21,7 @@ import { ModeCrudComponent } from '../avatar/dialogs/mode-crud/mode-crud';
 import { MediaPipePerformanceType, MediaPipePoseEnum } from 'src/types/BodyTypes';
 import { PerformanceEditComponent } from '../avatar/dialogs/performance-edit/performance-edit';
 import { sortify } from 'ejfdelgado-common-ts';
+import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 
 @Injectable({
   providedIn: 'root',
@@ -418,5 +419,25 @@ export class AvatarService {
     } catch (e) {
       return defaultValue;
     }
+  }
+
+  async readMyAvatar(): Promise<AvatarModel> {
+    const defaultValue: AvatarModel = {
+      meshPath: MESH_OPTIONS[0].value,
+    };
+    const old = localStorage.getItem('MY_AVATAR');
+    if (!old) {
+      return defaultValue;
+    }
+    try {
+      const parsed = JSON.parse(old);
+      return Object.assign({}, defaultValue, parsed);
+    } catch (e) {
+      return defaultValue;
+    }
+  }
+
+  async writeMyAvatar(avatar: AvatarModel) : Promise<void> {
+    localStorage.setItem('MY_AVATAR', JSON.stringify(avatar));
   }
 }

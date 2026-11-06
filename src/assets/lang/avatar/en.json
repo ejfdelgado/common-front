@@ -15,7 +15,8 @@
     "end_call": "End call",
     "editWorld": "Edit world",
     "editScenario": "Edit scenario",
-    "editAvatar": "Edit character",
+    "editAvatar": "Default character",
+    "editAvatar2": "My character",
     "editPerformance": "Configure performance",
     "editModes": "Edit levels"
   },

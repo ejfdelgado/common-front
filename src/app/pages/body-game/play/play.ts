@@ -152,6 +152,21 @@ export class PlayComponent extends ConfigurableGame implements OnInit, OnDestroy
           },
         },
         {
+          label: 'menu.editAvatar2',
+          translateFolder: 'avatar',
+          name: 'my_edit_avatar',
+          autovisible: true,
+          roles: [],
+          isPlainIcon: true,
+          icon: '🎭',
+          visible: true,
+          children: [],
+          callback: async () => {
+            this.emitToc();
+            await this.trackerComponent.editMyAvatar();
+          },
+        },
+        {
           label: 'menu.editScenario',
           translateFolder: 'avatar',
           name: 'loged_edit_scenario',
