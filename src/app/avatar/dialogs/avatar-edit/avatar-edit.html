@@ -4,6 +4,7 @@
     <mat-tab-group class="full-width">
 
         <mat-tab [label]="('popup.avatar.tabs.general.title' | translate : 'avatar' | async) ?? ''">
+            <app-photo-gallery [gallery]="gallery"></app-photo-gallery>
             <form [formGroup]="generalForm" class="tab_content">
                 <mat-form-field class="full-width" appearance="outline">
                     <mat-label>{{ "popup.avatar.tabs.general.character.label" | translate : "avatar" | async }}</mat-label>

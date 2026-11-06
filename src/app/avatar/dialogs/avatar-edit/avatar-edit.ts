@@ -8,10 +8,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { AvatarModel } from 'src/types/WorldAvatar';
-import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
+import { MESH_OPTIONS, MESH_PREVIEW } from 'src/types/WorldAvatarLibrary';
 import { Subscription } from 'rxjs';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { AsyncPipe } from '@angular/common';
+import { PhotoGallery } from 'src/app/components/photo-gallery/photo-gallery';
+import { ImageGalleryType } from 'src/types/fieldsTypes';
 
 @Component({
   selector: 'app-avatar-edit',
@@ -27,6 +29,7 @@ import { AsyncPipe } from '@angular/common';
     MatSelectModule,
     TranslatePipe,
     AsyncPipe,
+    PhotoGallery,
   ],
   templateUrl: './avatar-edit.html',
   styleUrl: './avatar-edit.scss',
@@ -35,6 +38,7 @@ export class AvatarEditComponent {
   private keydownSub: Subscription;
   readonly meshOptions = MESH_OPTIONS;
   generalForm: FormGroup;
+  gallery: ImageGalleryType[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +54,15 @@ export class AvatarEditComponent {
         this.cancel();
       }
     });
+    //Build the gallery
+    for (let option of MESH_OPTIONS) {
+      this.gallery.push({
+        id: option.value,
+        image: MESH_PREVIEW[option.value],
+        description: option.label,
+      });
+      
+    }
   }
 
   save(): void {

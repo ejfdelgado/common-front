@@ -14,7 +14,7 @@ import { FileService } from 'src/app/services/file.srv';
 import { SceneControllerAbstractRecord } from './SceneControllerAbstractRecord';
 
 const NPC_NAME = 'dancer';
-const NPC_LR = [2, 0, 0];
+const NPC_LR = [2.5, 0, 0];
 const DICT_KEY = 'animation_stored';
 const DICT_AUDIO_KEY = 'audio_stored';
 
@@ -154,6 +154,9 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
 
   async playRecord() {
     ModuloSonido.play('/assets/sounds/marimba_on.mp3');
+    if (this.state == "PLAYING") {
+      return;
+    }
     if (this.scene) {
       if (this.state == 'PAUSED') {
         if (this.audioPlayer) {
@@ -275,10 +278,10 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       this.scene.forceCameraState({
         near: 0.1,
         far: 1000,
-        fov: 15,
+        fov: single ? 13 : 17,
         lookAt: {
           x: single ? 0 : NPC_LR[0] / 2,
-          y: 1,
+          y: single ? 0.8 : 1,
           z: 0,
         },
         position: {

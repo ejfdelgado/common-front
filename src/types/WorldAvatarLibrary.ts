@@ -9,9 +9,16 @@ export const MESH_OPTIONS: SelectOptionString[] = [
     { label: 'Coco', value: "cocodrilo009_1_web.glb" },
     { label: 'Huesos', value: "esqueleto009_1_web.glb" },
     //{ label: 'Bender', value: "bender2_web.glb" },
-    { label: 'Steve', value: "steve_raw_web.glb" },
+    //{ label: 'Steve', value: "steve_raw_web.glb" },
     //{ label: 'Star Wars', value: "starwars_decimate_web.glb" },
 ];
+
+export const MESH_PREVIEW: {[key: string]: string} = {
+    
+    "tigresa009_1_web.glb": "avatar_assets/avatar_meshes/preview/tigresa.jpg",
+    "cocodrilo009_1_web.glb": "avatar_assets/avatar_meshes/preview/coco.jpg",
+    "esqueleto009_1_web.glb": "avatar_assets/avatar_meshes/preview/esqueleto.jpg",
+};
 
 export type ABCDType = "cube" | "futbol" | "fruits" | "minecraft";
 
