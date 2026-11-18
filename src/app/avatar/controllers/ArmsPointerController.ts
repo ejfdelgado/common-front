@@ -48,6 +48,22 @@ export class ArmsPointerController extends SceneControllerAbstract {
     return this.useMirrored ? (type == 'L' ? 'R' : 'L') : type;
   }
 
+  getDragData(type: CursorDataSide) {
+    if (this.useMirrored) {
+      if (type == 'R') {
+        return this.leftDrag;
+      } else {
+        return this.rightDrag;
+      }
+    } else {
+      if (type == 'L') {
+        return this.leftDrag;
+      } else {
+        return this.rightDrag;
+      }
+    }
+  }
+
   // 180° means arms down
   // 90° means arms pointing to the front
   // Also compute ray traicing
@@ -86,21 +102,6 @@ export class ArmsPointerController extends SceneControllerAbstract {
         } else if (normalizedY > INTENTION_THRESHOLD) {
           dragData.intentionXY = 'Y';
         }
-      }
-      const point2DToText = (point: Point2D) => {
-        return `X: ${point.x.toFixed(2)} Y:${point.y.toFixed(2)}`;
-      };
-
-      if (type == 'L') {
-        this.setHudValue('left', point2DToText(dragData.delta));
-      } else {
-        this.setHudValue('right', point2DToText(dragData.delta));
-      }
-    } else {
-      if (type == 'L') {
-        this.setHudValue('left', `${!!dragData.start} && ${!!dragData.delta}`);
-      } else {
-        this.setHudValue('right', `${!!dragData.start} && ${!!dragData.delta}`);
       }
     }
     if (this.cursorDisplay) {
@@ -174,22 +175,6 @@ export class ArmsPointerController extends SceneControllerAbstract {
   override async stop(): Promise<void> {}
 
   override async destroy(): Promise<void> {}
-
-  getDragData(type: CursorDataSide) {
-    if (this.useMirrored) {
-      if (type == 'R') {
-        return this.leftDrag;
-      } else {
-        return this.rightDrag;
-      }
-    } else {
-      if (type == 'L') {
-        return this.leftDrag;
-      } else {
-        return this.rightDrag;
-      }
-    }
-  }
 
   resetHandDrag(type: CursorDataSide) {
     const dragData: DragDataType = this.getDragData(type);
