@@ -204,10 +204,17 @@ export class ArmsPointerController extends SceneControllerAbstract {
   }
 
   computeCursor(arrow: Point3D): Point2D {
-    return {
-      x: 1 - (1 - arrow.y) * 0.5,
-      y: (1 - arrow.z) * 0.5,
-    };
+    if (this.useMirrored) {
+      return {
+        x: 1 - (1 - arrow.y) * 0.5,
+        y: (1 - arrow.z) * 0.5,
+      };
+    } else {
+      return {
+        x: 1 - (1 + arrow.y) * 0.5,
+        y: (1 - arrow.z) * 0.5,
+      };
+    }
   }
 
   override async stop(): Promise<void> {}
