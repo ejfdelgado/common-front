@@ -32,6 +32,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
   usingHands: boolean = false;
   videoRatio: number = 0;
+  useMirrored: boolean = true;
 
   constructor(
     public override events: EventEmitter<AvatarBodyEvent>,
@@ -42,17 +43,20 @@ export class ArmsPointerController extends SceneControllerAbstract {
     super(events, controlProxy, p2pSrv, fileSrv);
   }
 
+  getRealType(type: CursorDataSide) {
+    return this.useMirrored ? (type == 'L' ? 'R' : 'L') : type;
+  }
+
   // 180° means arms down
   // 90° means arms pointing to the front
   // Also compute ray traicing
   processHand(
-    type: CursorDataSide,
+    typeIn: CursorDataSide,
     point3D: Point3D,
     point3D_2: Point3D,
     dragData: DragDataType,
   ): boolean {
-    const useMirrored = true;
-    const type2 = useMirrored ? (type == 'L' ? 'R' : 'L') : type;
+    const type = this.getRealType(typeIn);
     const pointer = this.computeCursor(point3D);
     const pointer2 = this.computeCursor(point3D_2);
 
@@ -63,8 +67,8 @@ export class ArmsPointerController extends SceneControllerAbstract {
     // pointing downward = 1
     if (normY > USER_ARE_USING_HANDS_THRESHOLD) {
       // Leave drag and open
-      this.resetHandDrag(type2);
-      this.cursorDisplay?.setCursorState({ type: type2, state: 'invisible' });
+      this.resetHandDrag(type);
+      this.cursorDisplay?.setCursorState({ type: type, state: 'invisible' });
       return false;
     }
 
@@ -82,10 +86,20 @@ export class ArmsPointerController extends SceneControllerAbstract {
           dragData.intentionXY = 'Y';
         }
       }
+      const point2DToText = (point: Point2D) => {
+        return `${point.x.toFixed(1)} - ${point.y.toFixed(1)}`;
+      };
+      /*
+      if (type == 'L') {
+        this.setHudValue('left', point2DToText(dragData.delta));
+      } else {
+        this.setHudValue('right', point2DToText(dragData.delta));
+      }
+      */
     }
     if (this.cursorDisplay) {
       this.cursorDisplay.setCursor({
-        type: type2,
+        type: type,
         x: pointer.x,
         y: pointer.y,
       });
@@ -157,20 +171,24 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
   override onEvent(event: AvatarBodyEvent): void {
     if (event.name == 'Left_HAND_CLOSE') {
+      this.setHudValue('top', event.name);
       this.leftDrag.start = {
         x: this.leftDrag.current.x,
         y: this.leftDrag.current.y,
       };
       this.leftDrag.delta = { x: 0, y: 0 };
     } else if (event.name == 'Right_HAND_CLOSE') {
+      this.setHudValue('top', event.name);
       this.rightDrag.start = {
         x: this.rightDrag.current.x,
         y: this.rightDrag.current.y,
       };
       this.rightDrag.delta = { x: 0, y: 0 };
     } else if (event.name == 'Left_HAND_OPEN') {
+      this.setHudValue('top', event.name);
       this.resetHandDrag('L');
     } else if (event.name == 'Right_HAND_OPEN') {
+      this.setHudValue('top', event.name);
       this.resetHandDrag('R');
     }
   }
