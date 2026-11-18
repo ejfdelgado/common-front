@@ -99,6 +99,8 @@ export interface SimpleComparable {
   rightLeg: Point3D;
   leftHand: Point3D;
   rightHand: Point3D;
+  leftHand2: Point3D;
+  rightHand2: Point3D;
   handL: number;
   handR: number;
   armL: number;
@@ -250,8 +252,19 @@ export interface CursorStateData {
   state: 'on' | 'off';
 }
 
+export type HudDisplatType = 
+    "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "left_bottom"
+    | "right_bottom"
+    | "score"
+    | "life"
+    | "percentage";
+
 export interface HudDisplayData {
-  key: string;
+  key: HudDisplatType;
   value: any;
   lang?: string;
   speak?: boolean;

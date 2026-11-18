@@ -80,6 +80,8 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
       rightLeg: { x: 0, y: 0, z: 0 },
       leftHand: { x: 0, y: 0, z: 0 },
       rightHand: { x: 0, y: 0, z: 0 },
+      leftHand2: { x: 0, y: 0, z: 0 },
+      rightHand2: { x: 0, y: 0, z: 0 },
       handL: 0,
       handR: 0,
       footL: 0,

@@ -1,180 +1,174 @@
-import { SceneControllerAbstract } from "@avatar/controllers/SceneControllerAbstract";
+import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import {
-    AvatarBodyEvent,
-    ControllerUpdateResponse,
-    CursorDataSide,
-    DragDataType,
-    Point2D,
-    Point3D,
-} from "@mytypes/BodyTypes";
-import { EventEmitter } from "@angular/core";
-import { ControlProxy } from "../workers/ControlProxy";
-import { P2PService } from "src/app/services/p2p.service";
-import { FileService } from "src/app/services/file.srv";
+  AvatarBodyEvent,
+  ControllerUpdateResponse,
+  CursorDataSide,
+  DragDataType,
+  Point2D,
+  Point3D,
+} from '@mytypes/BodyTypes';
+import { EventEmitter } from '@angular/core';
+import { ControlProxy } from '../workers/ControlProxy';
+import { P2PService } from 'src/app/services/p2p.service';
+import { FileService } from 'src/app/services/file.srv';
+
+const USER_ARE_USING_HANDS_THRESHOLD = 0.6;
+const INTENTION_THRESHOLD = 0.075;
 
 export class ArmsPointerController extends SceneControllerAbstract {
+  leftDrag: DragDataType = {
+    current: { x: 0, y: 0 },
+    start: null,
+    delta: null,
+    intentionXY: null,
+  };
 
-    leftDrag: DragDataType = {
-        current: { x: 0, y: 0 },
-        start: null,
-        delta: null,
-        intentionXY: null,
+  rightDrag: DragDataType = {
+    current: { x: 0, y: 0 },
+    start: null,
+    delta: null,
+    intentionXY: null,
+  };
+
+  usingHands: boolean = false;
+  videoRatio: number = 0;
+
+  constructor(
+    public override events: EventEmitter<AvatarBodyEvent>,
+    public override controlProxy: ControlProxy,
+    public override p2pSrv: P2PService,
+    public override fileSrv: FileService,
+  ) {
+    super(events, controlProxy, p2pSrv, fileSrv);
+  }
+
+  // 180° means arms down
+  // 90° means arms pointing to the front
+  // Also compute ray traicing
+  processHand(
+    type: CursorDataSide,
+    point3D: Point3D,
+    point3D_2: Point3D,
+    dragData: DragDataType,
+  ): boolean {
+    const pointer = this.computeCursor(point3D);
+    const pointer2 = this.computeCursor(point3D_2);
+
+    const normY = pointer2.y * 2 - 1;
+    //this.setHudValue('top', normY.toFixed(1));
+    // pointing upward = -1
+    // at center = 0
+    // pointing downward = 1
+    if (normY <= USER_ARE_USING_HANDS_THRESHOLD) {
+      // Leave drag and open
+      this.resetHandDrag(type);
+      return false;
+    }
+
+    dragData.current.x = pointer.x;
+    dragData.current.y = pointer.y;
+    if (dragData.start && dragData.delta) {
+      dragData.delta.x = dragData.start.x - pointer.x;
+      dragData.delta.y = dragData.start.y - pointer.y;
+      if (dragData.intentionXY == null) {
+        const normalizedX = Math.abs(dragData.delta.x * this.videoRatio);
+        const normalizedY = Math.abs(dragData.delta.y);
+        if (normalizedX > INTENTION_THRESHOLD) {
+          dragData.intentionXY = 'X';
+        } else if (normalizedY > INTENTION_THRESHOLD) {
+          dragData.intentionXY = 'Y';
+        }
+      }
+    }
+    if (this.cursorDisplay) {
+      this.cursorDisplay.setCursor({
+        type: type,
+        x: pointer.x,
+        y: pointer.y,
+      });
+    }
+    return true;
+  }
+
+  override async update(): Promise<ControllerUpdateResponse> {
+    if (this.videoRatio == 0) {
+      this.videoRatio = this.videoSize.width / this.videoSize.height;
+    }
+    // Check shoulder angle, or arm angle
+    const comparable = this.lastData?.stateBody.comparable;
+    if (!comparable) {
+      return {};
+    }
+    const { leftHand, rightHand, leftHand2, rightHand2 } = comparable;
+
+    let useLeft = false;
+    let useRight = false;
+    useLeft = this.processHand('L', leftHand, leftHand2, this.leftDrag);
+    useRight = this.processHand('R', rightHand, rightHand2, this.rightDrag);
+
+    if (useLeft || useRight) {
+      if (!this.usingHands) {
+        // Fire event of using hands
+        this.setHudValue('top', 'HANDS_ON');
+        this.events.emit({
+          name: 'HANDS_ON',
+        });
+        this.usingHands = true;
+      }
+    } else {
+      if (this.usingHands) {
+        // Fire event of DONT using hands
+        this.setHudValue('top', 'HANDS_OFF');
+        this.events.emit({
+          name: 'HANDS_OFF',
+        });
+        this.usingHands = false;
+      }
+    }
+
+    return {};
+  }
+
+  computeCursor(arrow: Point3D): Point2D {
+    return {
+      x: 1 - (1 - arrow.y) * 0.5,
+      y: (1 - arrow.z) * 0.5,
     };
+  }
 
-    rightDrag: DragDataType = {
-        current: { x: 0, y: 0 },
-        start: null,
-        delta: null,
-        intentionXY: null,
-    };
+  override async stop(): Promise<void> {}
 
-    usingHands: boolean = false;
-    USER_ARE_USING_HANDS_THRESHOLD = 0.9;
-    INTENTION_THRESHOLD = 0.075;
-    videoRatio: number = 0;
+  override async destroy(): Promise<void> {}
 
-    constructor(
-        public override events: EventEmitter<AvatarBodyEvent>,
-        public override controlProxy: ControlProxy,
-        public override p2pSrv: P2PService,
-        public override fileSrv: FileService,
-    ) {
-        super(
-            events,
-            controlProxy,
-            p2pSrv,
-            fileSrv,
-        );
+  resetHandDrag(type: CursorDataSide) {
+    let dragData: DragDataType | null = null;
+    if (type == 'L') {
+      dragData = this.leftDrag;
+    } else {
+      dragData = this.rightDrag;
     }
+    dragData.start = null;
+    dragData.delta = null;
+    dragData.intentionXY = null;
+  }
 
-    override async update(): Promise<ControllerUpdateResponse> {
-        if (this.videoRatio == 0) {
-            this.videoRatio = this.videoSize.width / this.videoSize.height;
-        }
-        // Check shoulder angle, or arm angle
-        const comparable = this.lastData?.stateBody.comparable;
-        if (!comparable) {
-            return {};
-        }
-        const {
-            leftHand,
-            rightHand,
-        } = comparable;
-        // 180° means arms down
-        // 90° means arms pointing to the front
-        // Also compute ray traicing
-
-        const processHand = (
-            type: CursorDataSide,
-            point3D: Point3D,
-            dragData: DragDataType,
-        ): boolean => {
-            const pointer = this.computeCursor(point3D);
-
-            const normY = (pointer.y * 2) - 1;
-            // pointing upward = -1
-            // at center = 0
-            // pointing downward = 1
-            if (normY >= this.USER_ARE_USING_HANDS_THRESHOLD) {
-                // Leave drag and open
-                this.resetHandDrag(type);
-                return false;
-            }
-
-            dragData.current.x = pointer.x;
-            dragData.current.y = pointer.y;
-            if (dragData.start && dragData.delta) {
-                dragData.delta.x = dragData.start.x - pointer.x;
-                dragData.delta.y = dragData.start.y - pointer.y;
-                if (dragData.intentionXY == null) {
-                    const normalizedX = Math.abs(dragData.delta.x * this.videoRatio);
-                    const normalizedY = Math.abs(dragData.delta.y);
-                    if (normalizedX > this.INTENTION_THRESHOLD) {
-                        dragData.intentionXY = "X";
-                    } else if (normalizedY > this.INTENTION_THRESHOLD) {
-                        dragData.intentionXY = "Y";
-                    }
-                }
-            }
-            if (this.cursorDisplay) {
-                this.cursorDisplay.setCursor({
-                    type: type,
-                    x: pointer.x,
-                    y: pointer.y,
-                });
-            }
-            return true;
-        };
-
-        const useLeft = processHand("L", leftHand, this.leftDrag);
-        const useRight = processHand("R", rightHand, this.rightDrag);
-
-        if (useLeft || useRight) {
-            if (!this.usingHands) {
-                // Fire event of using hands
-                this.events.emit({
-                    name: "HANDS_ON",
-                });
-                this.usingHands = true;
-            }
-        } else {
-            if (this.usingHands) {
-                // Fire event of DONT using hands
-                this.events.emit({
-                    name: "HANDS_OFF",
-                });
-                this.usingHands = false;
-            }
-        }
-
-        return {};
+  override onEvent(event: AvatarBodyEvent): void {
+    if (event.name == 'Left_HAND_CLOSE') {
+      this.leftDrag.start = {
+        x: this.leftDrag.current.x,
+        y: this.leftDrag.current.y,
+      };
+      this.leftDrag.delta = { x: 0, y: 0 };
+    } else if (event.name == 'Right_HAND_CLOSE') {
+      this.rightDrag.start = {
+        x: this.rightDrag.current.x,
+        y: this.rightDrag.current.y,
+      };
+      this.rightDrag.delta = { x: 0, y: 0 };
+    } else if (event.name == 'Left_HAND_OPEN') {
+      this.resetHandDrag('L');
+    } else if (event.name == 'Right_HAND_OPEN') {
+      this.resetHandDrag('R');
     }
-
-    computeCursor(arrow: Point3D): Point2D {
-
-        return {
-            x: ((1 - (1 - arrow.y) * 0.5)),
-            y: (((1 - arrow.z) * 0.5)),
-        };
-    }
-
-    override async stop(): Promise<void> {
-
-    }
-
-    override async destroy(): Promise<void> {
-
-    }
-
-    resetHandDrag(type: CursorDataSide) {
-        let dragData: DragDataType | null = null;
-        if (type == "L") {
-            dragData = this.leftDrag;
-        } else {
-            dragData = this.rightDrag;
-        }
-        dragData.start = null;
-        dragData.delta = null;
-        dragData.intentionXY = null;
-    }
-
-    override onEvent(event: AvatarBodyEvent): void {
-        if (event.name == "Left_HAND_CLOSE") {
-            this.leftDrag.start = {
-                x: this.leftDrag.current.x,
-                y: this.leftDrag.current.y,
-            };
-            this.leftDrag.delta = { x: 0, y: 0 };
-        } else if (event.name == "Right_HAND_CLOSE") {
-            this.rightDrag.start = {
-                x: this.rightDrag.current.x,
-                y: this.rightDrag.current.y,
-            };
-            this.rightDrag.delta = { x: 0, y: 0 };
-        } else if (event.name == "Left_HAND_OPEN") {
-            this.resetHandDrag("L");
-        } else if (event.name == "Right_HAND_OPEN") {
-            this.resetHandDrag("R");
-        }
-    }
+  }
 }

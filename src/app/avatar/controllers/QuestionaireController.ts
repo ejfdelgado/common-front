@@ -1,5 +1,5 @@
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
-import { AvatarBodyEvent, ControllerUpdateResponse } from '@mytypes/BodyTypes';
+import { AvatarBodyEvent, ControllerUpdateResponse, HudDisplatType } from '@mytypes/BodyTypes';
 import { ModuloSonido } from 'src/app/services/sonido.service';
 import { shuffleInPlace } from 'src/app/tools/ArrayUtil';
 import {
@@ -68,7 +68,7 @@ computeConstants({
 export interface LettersConfig {
   id: string;
   cube_id: string;
-  hud_id: string;
+  hud_id: HudDisplatType;
   minmax?: MinMaxCubeRange;
   rotate?: boolean;
 }

@@ -42,6 +42,9 @@ export class GeoLocationService {
   ) {}
 
   async getUserLocation(): Promise<GeoLocationData | null> {
+    if (location.hostname == 'localhost') {
+      return null;
+    }
     const indicator = this.indicatorSrv.start();
     try {
       let root = environment.apiUrl;

@@ -204,6 +204,8 @@ export function computeComparableFromModel(
     armR,
     leftHand,
     rightHand,
+    leftHand2,
+    rightHand2,
     legsOpen,
     armsOpen,
   } = comparable;
@@ -225,6 +227,8 @@ export function computeComparableFromModel(
     legsOpen,
     leftHand,
     rightHand,
+    leftHand2,
+    rightHand2,
     armsOpen,
   };
 }
@@ -320,6 +324,26 @@ export function computeComparableBodyInternal(
     left,
     up,
   );
+  const leftHand2 = toCanonical(
+    {
+      x: leftWrist.x - leftElbow.x,
+      y: leftWrist.y - leftElbow.y,
+      z: leftWrist.z - leftElbow.z,
+    },
+    front,
+    left,
+    up,
+  );
+  const rightHand2 = toCanonical(
+    {
+      x: rightWrist.x - rightElbow.x,
+      y: rightWrist.y - rightElbow.y,
+      z: rightWrist.z - rightElbow.z,
+    },
+    front,
+    left,
+    up,
+  );
   const pelvis = {
     x: (leftHip.x + rightHip.x) / 2,
     y: (leftHip.y + rightHip.y) / 2,
@@ -338,6 +362,8 @@ export function computeComparableBodyInternal(
     rightLeg,
     leftHand,
     rightHand,
+    leftHand2,
+    rightHand2,
     handL: angleDegreesBetween(leftWrist, leftElbow, leftShoulder),
     handR: angleDegreesBetween(rightWrist, rightElbow, rightShoulder),
     armL: angleDegreesBetween(leftElbow, leftShoulder, leftHip),

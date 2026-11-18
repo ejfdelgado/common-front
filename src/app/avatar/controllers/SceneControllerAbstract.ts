@@ -3,6 +3,7 @@ import {
   ControllerUpdateResponse,
   CursorPositioner,
   GenericSizeType,
+  HudDisplatType,
   ScenePoseAndWalkEventType,
 } from '@mytypes/BodyTypes';
 import { EventEmitter } from '@angular/core';
@@ -75,7 +76,7 @@ export abstract class SceneControllerAbstract {
     this.scenario = scenario;
   }
 
-  async setHudValue(key: string, val: any, speak?: boolean) {
+  async setHudValue(key: HudDisplatType, val: any, speak?: boolean) {
     await this.cursorDisplay?.setHudDisplay({
       key: key,
       value: val,

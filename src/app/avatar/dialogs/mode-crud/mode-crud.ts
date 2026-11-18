@@ -38,9 +38,10 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
   op_hands: [
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
+    //Here it is used only to say enabled false!
     { id: GameControllerEnum.CubeController, params: { enabled: false } },
     { id: GameControllerEnum.ArmsPointerController, params: {} },
-    //{ id: GameControllerEnum.HandsCloseController, params: {} },
+    { id: GameControllerEnum.HandsCloseController, params: {} },
     { id: GameControllerEnum.HandPointerController, params: {} },
   ],
   op_record: [
