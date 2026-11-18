@@ -150,6 +150,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
   }
 
   override async update(): Promise<ControllerUpdateResponse> {
+    this.useMirrored = !!this.mode?.mirror;
     if (this.videoRatio == 0) {
       this.videoRatio = this.videoSize.width / this.videoSize.height;
     }
@@ -230,7 +231,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     });
   }
 
-  initHandDrag(type: CursorDataSide) {
+  initHandDrag(type: CursorDataSide, useMirrored: boolean) {
     const dragData: DragDataType = this.getDragData(type);
     dragData.start = {
       x: dragData.current.x,
@@ -238,16 +239,24 @@ export class ArmsPointerController extends SceneControllerAbstract {
     };
     dragData.delta = { x: 0, y: 0 };
     this.events.emit({
-      name: type == 'L' ? 'HAND_LEFT_SDRAG' : 'HAND_RIGHT_SDRAG',
+      name: useMirrored
+        ? type == 'L'
+          ? 'HAND_LEFT_SDRAG'
+          : 'HAND_RIGHT_SDRAG'
+        : type == 'L'
+          ? 'HAND_RIGHT_SDRAG'
+          : 'HAND_LEFT_SDRAG',
       data: this.cloneDragData(dragData),
     });
   }
 
   override onEvent(event: AvatarBodyEvent): void {
     if (event.name == 'Left_HAND_CLOSE') {
-      this.initHandDrag('L');
+      //this.setHudValue('top', event.name);
+      this.initHandDrag('L', this.useMirrored);
     } else if (event.name == 'Right_HAND_CLOSE') {
-      this.initHandDrag('R');
+      //this.setHudValue('top', event.name);
+      this.initHandDrag('R', this.useMirrored);
     } else if (event.name == 'Left_HAND_OPEN') {
       //this.setHudValue('top', event.name);
       this.resetHandDrag('L', !this.useMirrored);

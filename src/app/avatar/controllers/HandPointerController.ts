@@ -32,6 +32,7 @@ export class HandPointerController extends SceneControllerAbstract {
   }
 
   override async update(): Promise<ControllerUpdateResponse> {
+    this.useMirrored = !!this.mode?.mirror;
     const hands = this.lastData.hands;
     hands.forEach((hand, handId) => {
       const { score, multiHandLandmarks, multiHandWorldLandmarks } = hand;
