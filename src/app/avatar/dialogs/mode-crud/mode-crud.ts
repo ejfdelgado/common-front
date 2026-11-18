@@ -57,9 +57,14 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     { id: GameControllerEnum.ComparableController, params: {} },
     { id: GameControllerEnum.SimplePosesDetection, params: {} },
     { id: GameControllerEnum.TerrainElevationController, params: {} },
-    { id: GameControllerEnum.WalkController, params: {} },
+    //{ id: GameControllerEnum.WalkController, params: {} },
     { id: GameControllerEnum.Stand2dController, params: {} },
     { id: GameControllerEnum.CubeController, params: { enabled: false } },
+    { id: GameControllerEnum.ArmsPointerController, params: {} },
+    // This just help to guess clap when wrists are close together
+    //{ id: GameControllerEnum.HandsCloseController, params: {} },
+    { id: GameControllerEnum.HandPointerController, params: {} },
+    { id: GameControllerEnum.HandsWalkController, params: {} },
   ],
 };
 
