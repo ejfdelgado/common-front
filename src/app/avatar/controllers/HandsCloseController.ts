@@ -26,12 +26,6 @@ export class HandsCloseController extends SceneControllerAbstract {
             BodyPoseKey.left_wrist,
             BodyPoseKey.right_wrist
         );
-        /*
-        const average = computeAverageByNames([
-            BodyPoseKey.left_wrist,
-            BodyPoseKey.right_wrist,
-        ], this.lastData.keypoints3DMap);
-        */
         if (distance <= this.HANDS_CLOSE) {
             if (this.handsClose == false) {
                 //this.clapLocation.set(average.x, average.y, average.z);

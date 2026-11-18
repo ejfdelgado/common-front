@@ -169,6 +169,7 @@ export enum GameControllerEnum {
   HandPointerController = 'HandPointerController',
   ArmsPointerController = 'ArmsPointerController',
   QuestionaireController = 'QuestionaireController',
+  HandsNavigationController = "HandsNavigationController",
 }
 
 export const POSE_CONTROLLERS: GameControllerEnum[] = [

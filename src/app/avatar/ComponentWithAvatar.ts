@@ -41,6 +41,7 @@ import { removeEmojis } from '../tools/StringUtils';
 import { html2text } from '../tools/HtmlUtil';
 import { VoiceRecognitionService } from '../services/voicerecognition.service';
 import { FileService } from '../services/file.srv';
+import { HandsNavigationController } from './controllers/HandsNavigationController';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
   hudData: { [key: string]: any } = {
@@ -334,6 +335,8 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
       temp = new ArmsPointerController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.QuestionaireController) {
       temp = new QuestionaireController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+    } else if (config.id == GameControllerEnum.HandsNavigationController) {
+      temp = new HandsNavigationController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     }
 
     if (temp == null) {

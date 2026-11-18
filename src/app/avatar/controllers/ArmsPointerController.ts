@@ -64,6 +64,31 @@ export class ArmsPointerController extends SceneControllerAbstract {
     }
   }
 
+  cloneDragData(data: DragDataType): DragDataType {
+    const temp: DragDataType = {
+      current: {
+        x: data.current.x,
+        y: data.current.y,
+      },
+      delta: null,
+      start: null,
+      intentionXY: data.intentionXY,
+    };
+    if (data.delta) {
+      temp.delta = {
+        x: data.delta.x,
+        y: data.delta.y,
+      };
+    }
+    if (data.start) {
+      temp.start = {
+        x: data.start.x,
+        y: data.start.y,
+      };
+    }
+    return temp;
+  }
+
   // 180° means arms down
   // 90° means arms pointing to the front
   // Also compute ray traicing
@@ -84,7 +109,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     // pointing downward = 1
     if (normY > USER_ARE_USING_HANDS_THRESHOLD) {
       // Leave drag and open
-      this.resetHandDrag(type);
+      this.resetHandDrag(type, !this.useMirrored);
       this.cursorDisplay?.setCursorState({ type: type, state: 'invisible' });
       return false;
     }
@@ -103,6 +128,16 @@ export class ArmsPointerController extends SceneControllerAbstract {
           dragData.intentionXY = 'Y';
         }
       }
+      this.events.emit({
+        name: this.useMirrored
+          ? typeIn == 'L'
+            ? 'HAND_RIGHT_DRAG'
+            : 'HAND_LEFT_DRAG'
+          : typeIn == 'L'
+            ? 'HAND_LEFT_DRAG'
+            : 'HAND_RIGHT_DRAG',
+        data: this.cloneDragData(dragData),
+      });
     }
     if (this.cursorDisplay) {
       this.cursorDisplay.setCursor({
@@ -134,6 +169,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
       if (!this.usingLeftHand) {
         this.events.emit({
           name: 'HAND_LEFT_ON',
+          data: this.cloneDragData(this.leftDrag),
         });
         this.usingLeftHand = true;
       }
@@ -150,6 +186,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
       if (!this.usingRightHand) {
         this.events.emit({
           name: 'HAND_RIGHT_ON',
+          data: this.cloneDragData(this.rightDrag),
         });
         this.usingRightHand = true;
       }
@@ -176,11 +213,21 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
   override async destroy(): Promise<void> {}
 
-  resetHandDrag(type: CursorDataSide) {
+  resetHandDrag(type: CursorDataSide, useMirrored: boolean) {
     const dragData: DragDataType = this.getDragData(type);
     dragData.start = null;
     dragData.delta = null;
     dragData.intentionXY = null;
+    this.events.emit({
+      name: useMirrored
+        ? type == 'L'
+          ? 'HAND_RIGHT_EDRAG'
+          : 'HAND_LEFT_EDRAG'
+        : type == 'L'
+          ? 'HAND_LEFT_EDRAG'
+          : 'HAND_RIGHT_EDRAG',
+      data: null,
+    });
   }
 
   initHandDrag(type: CursorDataSide) {
@@ -190,6 +237,10 @@ export class ArmsPointerController extends SceneControllerAbstract {
       y: dragData.current.y,
     };
     dragData.delta = { x: 0, y: 0 };
+    this.events.emit({
+      name: type == 'L' ? 'HAND_LEFT_SDRAG' : 'HAND_RIGHT_SDRAG',
+      data: this.cloneDragData(dragData),
+    });
   }
 
   override onEvent(event: AvatarBodyEvent): void {
@@ -199,10 +250,10 @@ export class ArmsPointerController extends SceneControllerAbstract {
       this.initHandDrag('R');
     } else if (event.name == 'Left_HAND_OPEN') {
       //this.setHudValue('top', event.name);
-      this.resetHandDrag('L');
+      this.resetHandDrag('L', !this.useMirrored);
     } else if (event.name == 'Right_HAND_OPEN') {
       //this.setHudValue('top', event.name);
-      this.resetHandDrag('R');
+      this.resetHandDrag('R', !this.useMirrored);
     }
   }
 }

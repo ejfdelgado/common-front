@@ -31,6 +31,10 @@ export interface Point2D {
   y: number;
 }
 
+export function printPoint2D(p: Point2D) {
+  return `X: ${p.x.toFixed(2)} Y: ${p.y.toFixed(2)}`;
+}
+
 export interface Point3D {
   x: number;
   y: number;
