@@ -18,6 +18,8 @@ export class HandPointerController extends SceneControllerAbstract {
 
   currentState: Map<HandIdType, boolean> = new Map();
 
+  useMirrored: boolean = true;
+
   constructor(
     public override events: EventEmitter<AvatarBodyEvent>,
     public override controlProxy: ControlProxy,
@@ -36,8 +38,10 @@ export class HandPointerController extends SceneControllerAbstract {
       if (score > this.HAND_TRESHOLD) {
         try {
           if (
-            (handId == 'Left' && this.usingLeftHand) ||
-            (handId == 'Right' && this.usingRightHand)
+            (!this.useMirrored && handId == 'Left' && this.usingLeftHand) ||
+            (!this.useMirrored && handId == 'Right' && this.usingRightHand) ||
+            (this.useMirrored && handId == 'Right' && this.usingLeftHand) ||
+            (this.useMirrored && handId == 'Left' && this.usingRightHand)
           ) {
             this.processHand(handId, multiHandLandmarks, multiHandWorldLandmarks);
           }
