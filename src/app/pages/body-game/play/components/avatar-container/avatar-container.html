@@ -11,12 +11,12 @@
     }
     @if (leftCursor.visible) {
     <div class="cursor_pointer" [ngStyle]="leftCursor.style">
-        <img [src]="leftCursor.open ? '/assets/icons/hand-r-o.svg' : '/assets/icons/hand-r-c.svg'">
+        <img [src]="leftCursor.open ? '/assets/icons/hand-l-o.svg' : '/assets/icons/hand-l-c.svg'">
     </div>
     }
     @if (rightCursor.visible) {
     <div class="cursor_pointer" [ngStyle]="rightCursor.style">
-        <img [src]="rightCursor.open ? '/assets/icons/hand-l-o.svg' : '/assets/icons/hand-l-c.svg'">
+        <img [src]="rightCursor.open ? '/assets/icons/hand-r-o.svg' : '/assets/icons/hand-r-c.svg'">
     </div>
     }
     <div class="hud_score white_subtitle">

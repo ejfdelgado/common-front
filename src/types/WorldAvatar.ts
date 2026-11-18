@@ -76,7 +76,6 @@ export interface GameMode {
   defaultSenario: string;
   controllers: GameController[];
   scenarios: { [key: string]: GameScenario };
-  useHands?: boolean;
   avatar?: AvatarModel;
 }
 

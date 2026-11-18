@@ -185,7 +185,7 @@ export class AvatarContainer
     }
     cursorGUI.visible = data.state != 'invisible';
     if (cursorGUI.visible) {
-      cursorGUI.open = data.state == 'on';
+      cursorGUI.open = data.state == 'off';
     }
   }
 

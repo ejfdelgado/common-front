@@ -41,7 +41,8 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     //Here it is used only to say enabled false!
     { id: GameControllerEnum.CubeController, params: { enabled: false } },
     { id: GameControllerEnum.ArmsPointerController, params: {} },
-    { id: GameControllerEnum.HandsCloseController, params: {} },
+    // This just help to guess clap when wrists are close together
+    //{ id: GameControllerEnum.HandsCloseController, params: {} },
     { id: GameControllerEnum.HandPointerController, params: {} },
   ],
   op_record: [

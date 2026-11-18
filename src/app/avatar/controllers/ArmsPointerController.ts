@@ -51,6 +51,8 @@ export class ArmsPointerController extends SceneControllerAbstract {
     point3D_2: Point3D,
     dragData: DragDataType,
   ): boolean {
+    const useMirrored = true;
+    const type2 = useMirrored ? (type == 'L' ? 'R' : 'L') : type;
     const pointer = this.computeCursor(point3D);
     const pointer2 = this.computeCursor(point3D_2);
 
@@ -61,7 +63,8 @@ export class ArmsPointerController extends SceneControllerAbstract {
     // pointing downward = 1
     if (normY > USER_ARE_USING_HANDS_THRESHOLD) {
       // Leave drag and open
-      this.resetHandDrag(type);
+      this.resetHandDrag(type2);
+      this.cursorDisplay?.setCursorState({ type: type2, state: 'invisible' });
       return false;
     }
 
@@ -82,7 +85,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     }
     if (this.cursorDisplay) {
       this.cursorDisplay.setCursor({
-        type: type,
+        type: type2,
         x: pointer.x,
         y: pointer.y,
       });
@@ -109,7 +112,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     if (useLeft || useRight) {
       if (!this.usingHands) {
         // Fire event of using hands
-        this.setHudValue('top', 'HANDS_ON');
+        //this.setHudValue('top', 'HANDS_ON');
         this.events.emit({
           name: 'HANDS_ON',
         });
@@ -118,7 +121,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     } else {
       if (this.usingHands) {
         // Fire event of DONT using hands
-        this.setHudValue('top', 'HANDS_OFF');
+        //this.setHudValue('top', 'HANDS_OFF');
         this.events.emit({
           name: 'HANDS_OFF',
         });

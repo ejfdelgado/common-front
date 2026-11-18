@@ -97,6 +97,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   };
   mode: GameMode | null = null;
   scenario: GameScenario | null = null;
+  useHandTraking: boolean = false;
   world: WorldAvatar = {
     defaultMode: 'mode',
     config: {
@@ -162,10 +163,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   assureSubscription() {
     if (this.eventSubscription == null) {
       this.eventSubscription = this.getAvatarContainer().events.subscribe((event) => {
-        // Adjust behavior, for example of hands segmentation
-        // Only when arms are rised
-        if (event.name == 'CUBE_A_SELECT_ON') {
-        } else if (event.name == 'CUBE_B_SELECT_ON') {
+        if (event.name == 'HANDS_ON') {
+          this.useHandTraking = true;
+        } else if (event.name == 'HANDS_OFF') {
+          this.useHandTraking = false;
         }
       });
     }
@@ -528,8 +529,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         deviceId: selectedCamera.id,
         onFrame: async () => {
           this.detectPose(videoElement);
-          // Only do this if arms are pointing to the front
-          if (this.mode?.useHands === true) {
+          if (this.useHandTraking) {
             this.detectHands(videoElement);
           }
         },
@@ -680,9 +680,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     await avatarContainer.scene.applyMode(this.mode);
     this.initializeBodyTracker(this.mode);
 
+    this.useHandTraking = false;
     // Clear cursor old state
-    avatarContainer.setCursorState({type: "L", state: "invisible"});
-    avatarContainer.setCursorState({type: "R", state: "invisible"});
+    avatarContainer.setCursorState({ type: 'L', state: 'invisible' });
+    avatarContainer.setCursorState({ type: 'R', state: 'invisible' });
 
     // Set general config
     this.mirror = this.mode.mirror;
@@ -826,8 +827,6 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     }
     // Mirror
     this.mode.mirror = data.mirror;
-    // Use hands
-    this.mode.useHands = data.useHands;
   }
 
   async applyScenarioBeforeSave(data: GameScenario) {
