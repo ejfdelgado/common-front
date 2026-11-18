@@ -97,7 +97,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   };
   mode: GameMode | null = null;
   scenario: GameScenario | null = null;
-  useHandTraking: boolean = false;
+  useLeftHandTraking: boolean = false;
+  useRightHandTraking: boolean = false;
   world: WorldAvatar = {
     defaultMode: 'mode',
     config: {
@@ -163,10 +164,14 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
   assureSubscription() {
     if (this.eventSubscription == null) {
       this.eventSubscription = this.getAvatarContainer().events.subscribe((event) => {
-        if (event.name == 'HANDS_ON') {
-          this.useHandTraking = true;
-        } else if (event.name == 'HANDS_OFF') {
-          this.useHandTraking = false;
+        if (event.name == 'HAND_LEFT_ON') {
+          this.useLeftHandTraking = true;
+        } else if (event.name == 'HAND_LEFT_OFF') {
+          this.useLeftHandTraking = false;
+        } else if (event.name == 'HAND_RIGHT_ON') {
+          this.useRightHandTraking = true;
+        } else if (event.name == 'HAND_RIGHT_OFF') {
+          this.useRightHandTraking = false;
         }
       });
     }
@@ -529,7 +534,7 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
         deviceId: selectedCamera.id,
         onFrame: async () => {
           this.detectPose(videoElement);
-          if (this.useHandTraking) {
+          if (this.useLeftHandTraking || this.useRightHandTraking) {
             this.detectHands(videoElement);
           }
         },
@@ -680,7 +685,8 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     await avatarContainer.scene.applyMode(this.mode);
     this.initializeBodyTracker(this.mode);
 
-    this.useHandTraking = false;
+    this.useLeftHandTraking = false;
+    this.useRightHandTraking = false;
     // Clear cursor old state
     avatarContainer.setCursorState({ type: 'L', state: 'invisible' });
     avatarContainer.setCursorState({ type: 'R', state: 'invisible' });

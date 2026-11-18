@@ -30,7 +30,8 @@ export class ArmsPointerController extends SceneControllerAbstract {
     intentionXY: null,
   };
 
-  usingHands: boolean = false;
+  usingLeftHand: boolean = false;
+  usingRightHand: boolean = false;
   videoRatio: number = 0;
   useMirrored: boolean = true;
 
@@ -123,23 +124,35 @@ export class ArmsPointerController extends SceneControllerAbstract {
     useLeft = this.processHand('L', leftHand, leftHand2, this.leftDrag);
     useRight = this.processHand('R', rightHand, rightHand2, this.rightDrag);
 
-    if (useLeft || useRight) {
-      if (!this.usingHands) {
-        // Fire event of using hands
-        //this.setHudValue('top', 'HANDS_ON');
+    if (useLeft) {
+      if (!this.usingLeftHand) {
         this.events.emit({
-          name: 'HANDS_ON',
+          name: 'HAND_LEFT_ON',
         });
-        this.usingHands = true;
+        this.usingLeftHand = true;
       }
     } else {
-      if (this.usingHands) {
-        // Fire event of DONT using hands
-        //this.setHudValue('top', 'HANDS_OFF');
+      if (this.usingLeftHand) {
         this.events.emit({
-          name: 'HANDS_OFF',
+          name: 'HAND_LEFT_OFF',
         });
-        this.usingHands = false;
+        this.usingLeftHand = false;
+      }
+    }
+
+    if (useRight) {
+      if (!this.usingRightHand) {
+        this.events.emit({
+          name: 'HAND_RIGHT_ON',
+        });
+        this.usingRightHand = true;
+      }
+    } else {
+      if (this.usingRightHand) {
+        this.events.emit({
+          name: 'HAND_RIGHT_OFF',
+        });
+        this.usingRightHand = false;
       }
     }
 
