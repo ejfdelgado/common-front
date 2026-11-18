@@ -88,15 +88,20 @@ export class ArmsPointerController extends SceneControllerAbstract {
         }
       }
       const point2DToText = (point: Point2D) => {
-        return `${point.x.toFixed(1)} - ${point.y.toFixed(1)}`;
+        return `X: ${point.x.toFixed(2)} Y:${point.y.toFixed(2)}`;
       };
-      /*
+
       if (type == 'L') {
         this.setHudValue('left', point2DToText(dragData.delta));
       } else {
         this.setHudValue('right', point2DToText(dragData.delta));
       }
-      */
+    } else {
+      if (type == 'L') {
+        this.setHudValue('left', `${!!dragData.start} && ${!!dragData.delta}`);
+      } else {
+        this.setHudValue('right', `${!!dragData.start} && ${!!dragData.delta}`);
+      }
     }
     if (this.cursorDisplay) {
       this.cursorDisplay.setCursor({
@@ -170,38 +175,48 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
   override async destroy(): Promise<void> {}
 
-  resetHandDrag(type: CursorDataSide) {
-    let dragData: DragDataType | null = null;
-    if (type == 'L') {
-      dragData = this.leftDrag;
+  getDragData(type: CursorDataSide) {
+    if (this.useMirrored) {
+      if (type == 'R') {
+        return this.leftDrag;
+      } else {
+        return this.rightDrag;
+      }
     } else {
-      dragData = this.rightDrag;
+      if (type == 'L') {
+        return this.leftDrag;
+      } else {
+        return this.rightDrag;
+      }
     }
+  }
+
+  resetHandDrag(type: CursorDataSide) {
+    const dragData: DragDataType = this.getDragData(type);
     dragData.start = null;
     dragData.delta = null;
     dragData.intentionXY = null;
   }
 
+  initHandDrag(type: CursorDataSide) {
+    const dragData: DragDataType = this.getDragData(type);
+    dragData.start = {
+      x: dragData.current.x,
+      y: dragData.current.y,
+    };
+    dragData.delta = { x: 0, y: 0 };
+  }
+
   override onEvent(event: AvatarBodyEvent): void {
     if (event.name == 'Left_HAND_CLOSE') {
-      this.setHudValue('top', event.name);
-      this.leftDrag.start = {
-        x: this.leftDrag.current.x,
-        y: this.leftDrag.current.y,
-      };
-      this.leftDrag.delta = { x: 0, y: 0 };
+      this.initHandDrag('L');
     } else if (event.name == 'Right_HAND_CLOSE') {
-      this.setHudValue('top', event.name);
-      this.rightDrag.start = {
-        x: this.rightDrag.current.x,
-        y: this.rightDrag.current.y,
-      };
-      this.rightDrag.delta = { x: 0, y: 0 };
+      this.initHandDrag('R');
     } else if (event.name == 'Left_HAND_OPEN') {
-      this.setHudValue('top', event.name);
+      //this.setHudValue('top', event.name);
       this.resetHandDrag('L');
     } else if (event.name == 'Right_HAND_OPEN') {
-      this.setHudValue('top', event.name);
+      //this.setHudValue('top', event.name);
       this.resetHandDrag('R');
     }
   }
