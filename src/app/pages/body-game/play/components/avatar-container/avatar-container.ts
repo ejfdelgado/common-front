@@ -174,6 +174,7 @@ export class AvatarContainer
     }
     cursorGUI.style.top = y + 'px';
     cursorGUI.style.left = x + 'px';
+    cursorGUI.visible = true;
   }
 
   override setCursorState(data: CursorStateData): void {
@@ -182,8 +183,10 @@ export class AvatarContainer
     if (side == 'L') {
       cursorGUI = this.leftCursor;
     }
-    cursorGUI.visible = true;
-    cursorGUI.open = data.state == 'on';
+    cursorGUI.visible = data.state != 'invisible';
+    if (cursorGUI.visible) {
+      cursorGUI.open = data.state == 'on';
+    }
   }
 
   hasText(val: any) {
@@ -196,7 +199,7 @@ export class AvatarContainer
   }
 
   hasNumber(val: any) {
-    return typeof val == "number" && !isNaN(val);
+    return typeof val == 'number' && !isNaN(val);
   }
 
   notifyEvent(event: AvatarBodyEvent): void {

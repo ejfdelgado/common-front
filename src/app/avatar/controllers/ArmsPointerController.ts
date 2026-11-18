@@ -59,7 +59,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     // pointing upward = -1
     // at center = 0
     // pointing downward = 1
-    if (normY <= USER_ARE_USING_HANDS_THRESHOLD) {
+    if (normY > USER_ARE_USING_HANDS_THRESHOLD) {
       // Leave drag and open
       this.resetHandDrag(type);
       return false;

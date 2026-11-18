@@ -249,7 +249,7 @@ export interface CursorData {
 
 export interface CursorStateData {
   type: CursorDataSide;
-  state: 'on' | 'off';
+  state: 'on' | 'off' | 'invisible';
 }
 
 export type HudDisplatType = 
@@ -271,7 +271,9 @@ export interface HudDisplayData {
 }
 
 export interface CursorPositioner {
+  // Set HUD cursor location
   setCursor(data: CursorData): void;
+  // Set HUD cursor open/close image
   setCursorState(data: CursorStateData): void;
   setHudDisplay(data: HudDisplayData): Promise<void>;
   detectChanges(): void;

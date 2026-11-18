@@ -680,6 +680,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     await avatarContainer.scene.applyMode(this.mode);
     this.initializeBodyTracker(this.mode);
 
+    // Clear cursor old state
+    avatarContainer.setCursorState({type: "L", state: "invisible"});
+    avatarContainer.setCursorState({type: "R", state: "invisible"});
+
     // Set general config
     this.mirror = this.mode.mirror;
     // Add scenario
