@@ -109,7 +109,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
     // pointing downward = 1
     if (normY > USER_ARE_USING_HANDS_THRESHOLD) {
       // Leave drag and open
-      this.resetHandDrag(type, !this.useMirrored);
+      this.resetHandDrag(type);
       this.cursorDisplay?.setCursorState({ type: type, state: 'invisible' });
       return false;
     }
@@ -129,13 +129,7 @@ export class ArmsPointerController extends SceneControllerAbstract {
         }
       }
       this.events.emit({
-        name: this.useMirrored
-          ? typeIn == 'L'
-            ? 'HAND_RIGHT_DRAG'
-            : 'HAND_LEFT_DRAG'
-          : typeIn == 'L'
-            ? 'HAND_LEFT_DRAG'
-            : 'HAND_RIGHT_DRAG',
+        name: type == 'L' ? 'HAND_LEFT_DRAG' : 'HAND_RIGHT_DRAG',
         data: this.cloneDragData(dragData),
       });
     }
@@ -221,55 +215,47 @@ export class ArmsPointerController extends SceneControllerAbstract {
 
   override async destroy(): Promise<void> {}
 
-  resetHandDrag(type: CursorDataSide, useMirrored: boolean) {
+  // `type` is the cursor side, which is the same as the mediapipe hand id
+  // ('Left' -> 'L', 'Right' -> 'R') in both mirrored and non mirrored modes.
+  // SDRAG / DRAG / EDRAG must all use that same side.
+  resetHandDrag(type: CursorDataSide) {
     const dragData: DragDataType = this.getDragData(type);
+    const wasDragging = dragData.start != null;
     dragData.start = null;
     dragData.delta = null;
     dragData.intentionXY = null;
+    if (!wasDragging) {
+      return;
+    }
     this.events.emit({
-      name: useMirrored
-        ? type == 'L'
-          ? 'HAND_RIGHT_EDRAG'
-          : 'HAND_LEFT_EDRAG'
-        : type == 'L'
-          ? 'HAND_LEFT_EDRAG'
-          : 'HAND_RIGHT_EDRAG',
+      name: type == 'L' ? 'HAND_LEFT_EDRAG' : 'HAND_RIGHT_EDRAG',
       data: null,
     });
   }
 
-  initHandDrag(type: CursorDataSide, useMirrored: boolean) {
+  initHandDrag(type: CursorDataSide) {
     const dragData: DragDataType = this.getDragData(type);
     dragData.start = {
       x: dragData.current.x,
       y: dragData.current.y,
     };
     dragData.delta = { x: 0, y: 0 };
+    dragData.intentionXY = null;
     this.events.emit({
-      name: useMirrored
-        ? type == 'L'
-          ? 'HAND_LEFT_SDRAG'
-          : 'HAND_RIGHT_SDRAG'
-        : type == 'L'
-          ? 'HAND_RIGHT_SDRAG'
-          : 'HAND_LEFT_SDRAG',
+      name: type == 'L' ? 'HAND_LEFT_SDRAG' : 'HAND_RIGHT_SDRAG',
       data: this.cloneDragData(dragData),
     });
   }
 
   override onEvent(event: AvatarBodyEvent): void {
     if (event.name == 'Left_HAND_CLOSE') {
-      //this.setHudValue('top', event.name);
-      this.initHandDrag('L', this.useMirrored);
+      this.initHandDrag('L');
     } else if (event.name == 'Right_HAND_CLOSE') {
-      //this.setHudValue('top', event.name);
-      this.initHandDrag('R', this.useMirrored);
+      this.initHandDrag('R');
     } else if (event.name == 'Left_HAND_OPEN') {
-      //this.setHudValue('top', event.name);
-      this.resetHandDrag('L', !this.useMirrored);
+      this.resetHandDrag('L');
     } else if (event.name == 'Right_HAND_OPEN') {
-      //this.setHudValue('top', event.name);
-      this.resetHandDrag('R', !this.useMirrored);
+      this.resetHandDrag('R');
     }
   }
 }
