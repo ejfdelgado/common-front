@@ -10,15 +10,28 @@ import {
 // unstable to compute a meaningful zoom or angle.
 const MIN_HANDS_DISTANCE = 0.05;
 
+// Extra horizontal separation (in normalized-width units) added only for the angle
+// computation. It keeps the left -> right vector pointing rightwards even when the
+// hands get close or slightly cross in the real world, avoiding a sudden 180° flip.
+// Side effect: the measured rotation is smaller than the real angle between the hands.
+// It assumes the left cursor is drawn to the left of the right cursor.
 const HORIZONTAL_GAP = 0.4;
 
 export interface ZoomRotationData {
   // Ratio between the current hands distance and the distance when the gesture started.
   // 1 = no change, > 1 = hands apart (zoom in), < 1 = hands closer (zoom out).
   zoom: number;
-  // Rotation in degrees of the line left-hand -> right-hand since the gesture started,
-  // in (-180, 180]. Positive = counterclockwise as seen on screen.
+  // Accumulated rotation in degrees of the line left-hand -> right-hand since the
+  // gesture started. Not bounded to ±180°: it is unwrapped, so it keeps growing
+  // continuously (e.g. 200°). Positive = counterclockwise as seen on screen.
   rotation: number;
+}
+
+interface HandsMeasure {
+  // Real distance between the cursors (aspect-corrected), used for zoom
+  distance: number;
+  // Angle in radians of the left -> right vector including HORIZONTAL_GAP
+  angle: number;
 }
 
 /**
@@ -80,22 +93,33 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
     return this.startDistance != null;
   }
 
-  startGesture() {
+  // Returns distance and angle between both cursors, or null when a hand is
+  // missing or the hands are too close to give a stable measure.
+  measureHands(): HandsMeasure | null {
     if (!this.leftDrag || !this.rightDrag) {
-      return;
+      return null;
     }
-    const v = this.getHandsVector(this.leftDrag.current, this.rightDrag.current);
-    const vAngle = this.getHandsVector(
-      this.leftDrag.current,
-      this.rightDrag.current,
-      HORIZONTAL_GAP,
-    );
+    const left = this.leftDrag.current;
+    const right = this.rightDrag.current;
+    const v = this.getHandsVector(left, right);
     const distance = Math.hypot(v.x, v.y);
     if (distance < MIN_HANDS_DISTANCE) {
+      return null;
+    }
+    const vAngle = this.getHandsVector(left, right, HORIZONTAL_GAP);
+    return {
+      distance,
+      angle: Math.atan2(vAngle.y, vAngle.x),
+    };
+  }
+
+  startGesture() {
+    const measure = this.measureHands();
+    if (!measure) {
       return;
     }
-    this.startDistance = distance;
-    this.startAngle = Math.atan2(vAngle.y, vAngle.x);
+    this.startDistance = measure.distance;
+    this.startAngle = measure.angle;
     this.lastAngle = this.startAngle;
     this.accumulatedAngle = 0;
     this.zoom = 1;
@@ -107,21 +131,15 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
   }
 
   updateGesture() {
-    if (!this.leftDrag || !this.rightDrag || this.startDistance == null || this.lastAngle == null) {
+    if (this.startDistance == null || this.lastAngle == null) {
       return;
     }
-    const v = this.getHandsVector(this.leftDrag.current, this.rightDrag.current);
-    const vAngle = this.getHandsVector(
-      this.leftDrag.current,
-      this.rightDrag.current,
-      HORIZONTAL_GAP,
-    );
-    const distance = Math.hypot(v.x, v.y);
-    if (distance < MIN_HANDS_DISTANCE) {
+    const measure = this.measureHands();
+    if (!measure) {
       // Hands overlapping: angle is meaningless, keep last values
       return;
     }
-    const angle = Math.atan2(vAngle.y, vAngle.x);
+    const { distance, angle } = measure;
     // Unwrap: add the shortest signed step so crossing ±180° does not jump 360°
     let step = angle - this.lastAngle;
     if (step > Math.PI) step -= 2 * Math.PI;
