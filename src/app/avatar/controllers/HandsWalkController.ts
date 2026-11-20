@@ -17,8 +17,10 @@ const UP_REFERENCE = new THREE.Vector3(0, 1, 0);
  * Navigation driven by a closed hand used as a virtual joystick:
  *  - Drag Y (hand up / down from where it closed): walk forward / backward.
  *  - Drag X (hand left / right from where it closed): turn left / right.
- * The speed is proportional to how far the hand moved from the drag start,
- * so holding the hand still at an offset keeps moving at constant speed.
+ * With keepMoving = true the speed is proportional to how far the hand moved from the
+ * drag start, so holding the hand still at an offset keeps moving at constant speed.
+ * With keepMoving = false the displacement follows the hand offset, so moving further
+ * requires opening the hand and repeating the gesture.
  * Camera placement and smoothing are the same as in WalkController.
  */
 export class HandsWalkController extends SceneControllerAbstract {
@@ -60,6 +62,18 @@ export class HandsWalkController extends SceneControllerAbstract {
   transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
   lastTime: number = 0;
 
+  // true: joystick mode, holding the hand at an offset keeps moving (speed control).
+  // false: direct drag mode, the displacement follows the hand offset (position control),
+  //        so a still hand does not move; open the hand and repeat the gesture to go further.
+  keepMoving: boolean = false;
+  // Used when keepMoving is false: world units walked at MAX_DELTA in a single gesture
+  MAX_TRANSLATION_PER_GESTURE: number = 6;
+  // Used when keepMoving is false: radians turned at MAX_DELTA in a single gesture
+  MAX_ROTATION_PER_GESTURE: number = Math.PI / 2;
+  // Joystick value already applied in the current gesture (keepMoving false)
+  appliedSide: 'L' | 'R' | null = null;
+  appliedJoystick: Point2D = { x: 0, y: 0 };
+
   override async update(): Promise<ControllerUpdateResponse> {
     const { camera, orbitals } = this.scene;
     this.handsWalkLogic();
@@ -78,6 +92,7 @@ export class HandsWalkController extends SceneControllerAbstract {
   override async stop(): Promise<void> {
     this.leftDrag = null;
     this.rightDrag = null;
+    this.resetApplied();
     const { orbitals } = this.scene;
     if (orbitals) {
       orbitals.enabled = true;
@@ -105,22 +120,25 @@ export class HandsWalkController extends SceneControllerAbstract {
   }
 
   // Picks the active drag; when both hands are dragging, the one with the biggest displacement
-  getActiveDrag(): DragDataType | null {
-    const candidates = [this.leftDrag, this.rightDrag].filter(
-      (d): d is DragDataType => !!d && !!d.delta,
-    );
+  getActiveDrag(): { side: 'L' | 'R'; drag: DragDataType } | null {
+    const candidates: { side: 'L' | 'R'; drag: DragDataType }[] = [];
+    if (this.leftDrag?.delta) {
+      candidates.push({ side: 'L', drag: this.leftDrag });
+    }
+    if (this.rightDrag?.delta) {
+      candidates.push({ side: 'R', drag: this.rightDrag });
+    }
     if (candidates.length == 0) {
       return null;
     }
     const magnitude = (d: DragDataType) =>
       Math.hypot(d.delta!.x * this.getVideoRatio(), d.delta!.y);
-    return candidates.reduce((a, b) => (magnitude(b) > magnitude(a) ? b : a));
+    return candidates.reduce((a, b) => (magnitude(b.drag) > magnitude(a.drag) ? b : a));
   }
 
   // Returns joystick values in [-1, 1]:
   //  x > 0 hand moved right, y > 0 hand moved up
-  getJoystick(): Point2D {
-    const drag = this.getActiveDrag();
+  getJoystick(drag: DragDataType | null): Point2D {
     if (!drag || !drag.delta) {
       return { x: 0, y: 0 };
     }
@@ -144,20 +162,54 @@ export class HandsWalkController extends SceneControllerAbstract {
     if (this.lastTime == 0) {
       return;
     }
-    const joystick = this.getJoystick();
-    if (joystick.x == 0 && joystick.y == 0) {
+    const active = this.getActiveDrag();
+    const joystick = this.getJoystick(active?.drag ?? null);
+
+    if (this.keepMoving) {
+      // Speed control: offset -> velocity
+      if (joystick.x == 0 && joystick.y == 0) {
+        return;
+      }
+      const dt = Math.min(this.now - this.lastTime, this.MAX_FRAME_MILLIS) / 1000;
+      this.moveAvatar(joystick.x * this.MAX_ROTATION_SPEED * dt, joystick.y * this.MAX_TRANSLATION_SPEED * dt);
       return;
     }
-    const dt = Math.min(this.now - this.lastTime, this.MAX_FRAME_MILLIS) / 1000;
 
+    // Position control: only the change of the offset since the last frame is applied
+    if (!active) {
+      this.resetApplied();
+      return;
+    }
+    if (active.side != this.appliedSide) {
+      // New gesture, or the dominant hand switched: start counting from the current offset
+      // of this hand so there is no jump.
+      this.appliedSide = active.side;
+      this.appliedJoystick = { x: joystick.x, y: joystick.y };
+      return;
+    }
+    const stepX = joystick.x - this.appliedJoystick.x;
+    const stepY = joystick.y - this.appliedJoystick.y;
+    this.appliedJoystick = { x: joystick.x, y: joystick.y };
+    if (stepX == 0 && stepY == 0) {
+      return;
+    }
+    this.moveAvatar(stepX * this.MAX_ROTATION_PER_GESTURE, stepY * this.MAX_TRANSLATION_PER_GESTURE);
+  }
+
+  resetApplied() {
+    this.appliedSide = null;
+    this.appliedJoystick = { x: 0, y: 0 };
+  }
+
+  // turn > 0 turns right (radians), advance > 0 walks forward (world units)
+  moveAvatar(turn: number, advance: number) {
     // Rotation: hand to the right turns right (negative rotationY around UP)
-    this.scene.avatarState.rotationY -= joystick.x * this.MAX_ROTATION_SPEED * dt;
+    this.scene.avatarState.rotationY -= turn;
 
     // Translation along the avatar front: hand up walks forward
     const advanceFront = FRONT_REFERENCE.clone()
       .applyAxisAngle(UP_REFERENCE, this.scene.avatarState.rotationY)
       .normalize();
-    const advance = joystick.y * this.MAX_TRANSLATION_SPEED * dt;
     this.scene.avatarState.positionX += advanceFront.x * advance;
     this.scene.avatarState.positionZ += advanceFront.z * advance;
   }
