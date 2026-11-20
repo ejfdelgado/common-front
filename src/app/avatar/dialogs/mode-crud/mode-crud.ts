@@ -45,6 +45,7 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     //{ id: GameControllerEnum.HandsCloseController, params: {} },
     { id: GameControllerEnum.HandPointerController, params: {} },
     { id: GameControllerEnum.HandsNavigationController, params: {} },
+    { id: GameControllerEnum.HandsZoomRotationController, params: {} },
   ],
   op_record: [
     { id: GameControllerEnum.ComparableController, params: {} },
