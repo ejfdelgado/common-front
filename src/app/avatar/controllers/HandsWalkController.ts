@@ -45,6 +45,9 @@ export class HandsWalkController extends SceneControllerAbstract {
   USE_INTENTION_LOCK: boolean = false;
   // Avoid big jumps after a frame stall
   MAX_FRAME_MILLIS: number = 100;
+  // Direction of each axis: 1 = hand right turns right / hand up walks forward, -1 = inverted
+  ROTATION_DIRECTION: number = -1;
+  TRANSLATION_DIRECTION: number = -1;
 
   // variables
   leftDrag: DragDataType | null = null;
@@ -137,14 +140,15 @@ export class HandsWalkController extends SceneControllerAbstract {
   }
 
   // Returns joystick values in [-1, 1]:
-  //  x > 0 hand moved right, y > 0 hand moved up
+  //  x > 0 turn right, y > 0 walk forward (hand direction set by ROTATION_DIRECTION /
+  //  TRANSLATION_DIRECTION)
   getJoystick(drag: DragDataType | null): Point2D {
     if (!drag || !drag.delta) {
       return { x: 0, y: 0 };
     }
     // delta = start - current, in screen coordinates (y grows downward)
-    let x = this.normalizeAxis(-drag.delta.x * this.getVideoRatio());
-    let y = this.normalizeAxis(drag.delta.y);
+    let x = this.ROTATION_DIRECTION * this.normalizeAxis(-drag.delta.x * this.getVideoRatio());
+    let y = this.TRANSLATION_DIRECTION * this.normalizeAxis(drag.delta.y);
     if (this.USE_INTENTION_LOCK) {
       if (drag.intentionXY == 'X') {
         y = 0;
