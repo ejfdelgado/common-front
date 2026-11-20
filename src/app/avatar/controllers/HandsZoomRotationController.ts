@@ -10,6 +10,8 @@ import {
 // unstable to compute a meaningful zoom or angle.
 const MIN_HANDS_DISTANCE = 0.05;
 
+const HORIZONTAL_GAP = 0.4;
+
 export interface ZoomRotationData {
   // Ratio between the current hands distance and the distance when the gesture started.
   // 1 = no change, > 1 = hands apart (zoom in), < 1 = hands closer (zoom out).
@@ -67,9 +69,9 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
   // Vector from left cursor to right cursor in an isotropic space
   // (x scaled by aspect ratio so distances and angles are not distorted),
   // with y pointing up so positive angles are counterclockwise on screen.
-  getHandsVector(left: Point2D, right: Point2D): Point2D {
+  getHandsVector(left: Point2D, right: Point2D, horizontalGap?: number): Point2D {
     return {
-      x: (right.x - left.x) * this.getVideoRatio(),
+      x: (right.x - left.x + (!!horizontalGap ? horizontalGap : 0)) * this.getVideoRatio(),
       y: -(right.y - left.y),
     };
   }
@@ -83,12 +85,17 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
       return;
     }
     const v = this.getHandsVector(this.leftDrag.current, this.rightDrag.current);
+    const vAngle = this.getHandsVector(
+      this.leftDrag.current,
+      this.rightDrag.current,
+      HORIZONTAL_GAP,
+    );
     const distance = Math.hypot(v.x, v.y);
     if (distance < MIN_HANDS_DISTANCE) {
       return;
     }
     this.startDistance = distance;
-    this.startAngle = Math.atan2(v.y, v.x);
+    this.startAngle = Math.atan2(vAngle.y, vAngle.x);
     this.lastAngle = this.startAngle;
     this.accumulatedAngle = 0;
     this.zoom = 1;
@@ -104,12 +111,17 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
       return;
     }
     const v = this.getHandsVector(this.leftDrag.current, this.rightDrag.current);
+    const vAngle = this.getHandsVector(
+      this.leftDrag.current,
+      this.rightDrag.current,
+      HORIZONTAL_GAP,
+    );
     const distance = Math.hypot(v.x, v.y);
     if (distance < MIN_HANDS_DISTANCE) {
       // Hands overlapping: angle is meaningless, keep last values
       return;
     }
-    const angle = Math.atan2(v.y, v.x);
+    const angle = Math.atan2(vAngle.y, vAngle.x);
     // Unwrap: add the shortest signed step so crossing ±180° does not jump 360°
     let step = angle - this.lastAngle;
     if (step > Math.PI) step -= 2 * Math.PI;
