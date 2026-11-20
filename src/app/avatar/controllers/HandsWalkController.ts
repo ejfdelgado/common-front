@@ -29,8 +29,9 @@ export class HandsWalkController extends SceneControllerAbstract {
   MAX_INACTIVITY_MILLIS: number = 3000;
   SMOOT_RATIO: number = 0.006 * 1.2;
   SMOOT_RATIO_TRANSLATION: number = 0.006 * 1.2;
-  CAMERA_HEIGTH_RATIO: number = 4;
-  CAMERA_DISTANCE_TO_AVATAR: number = 14;
+
+  CAMERA_HEIGTH_RATIO: number = 0.8;
+  CAMERA_DISTANCE_TO_AVATAR: number = 7;
 
   // constants (hands joystick)
   // Drag below this amount (normalized units) is ignored
@@ -47,6 +48,9 @@ export class HandsWalkController extends SceneControllerAbstract {
   MAX_FRAME_MILLIS: number = 100;
   // Direction of each axis: 1 = hand right turns right / hand up walks forward, -1 = inverted
   ROTATION_DIRECTION: number = -1;
+  // Multiplier applied to every rotation produced by the gesture, in both keepMoving modes.
+  // 1 = MAX_ROTATION_SPEED / MAX_ROTATION_PER_GESTURE as configured, < 1 slower, > 1 faster.
+  ROTATION_SENSITIVITY: number = 0.2;
   TRANSLATION_DIRECTION: number = -1;
 
   // variables
@@ -112,14 +116,16 @@ export class HandsWalkController extends SceneControllerAbstract {
     return this.videoSize.width / this.videoSize.height;
   }
 
-  // Maps a raw drag amount to [-1, 1] applying dead zone and saturation
-  normalizeAxis(value: number): number {
+  // Maps a raw drag amount applying dead zone. Reaches 1 at MAX_DELTA.
+  // When saturate is true the result is clamped to [-1, 1]; otherwise it keeps growing
+  // linearly beyond MAX_DELTA.
+  normalizeAxis(value: number, saturate: boolean = true): number {
     const abs = Math.abs(value);
     if (abs < this.DEAD_ZONE) {
       return 0;
     }
-    const clamped = Math.min(abs, this.MAX_DELTA);
-    return (Math.sign(value) * (clamped - this.DEAD_ZONE)) / (this.MAX_DELTA - this.DEAD_ZONE);
+    const limited = saturate ? Math.min(abs, this.MAX_DELTA) : abs;
+    return (Math.sign(value) * (limited - this.DEAD_ZONE)) / (this.MAX_DELTA - this.DEAD_ZONE);
   }
 
   // Picks the active drag; when both hands are dragging, the one with the biggest displacement
@@ -139,7 +145,7 @@ export class HandsWalkController extends SceneControllerAbstract {
     return candidates.reduce((a, b) => (magnitude(b.drag) > magnitude(a.drag) ? b : a));
   }
 
-  // Returns joystick values in [-1, 1]:
+  // Returns joystick values: y in [-1, 1] (clamped), x unbounded (rotation is not clamped).
   //  x > 0 turn right, y > 0 walk forward (hand direction set by ROTATION_DIRECTION /
   //  TRANSLATION_DIRECTION)
   getJoystick(drag: DragDataType | null): Point2D {
@@ -147,7 +153,8 @@ export class HandsWalkController extends SceneControllerAbstract {
       return { x: 0, y: 0 };
     }
     // delta = start - current, in screen coordinates (y grows downward)
-    let x = this.ROTATION_DIRECTION * this.normalizeAxis(-drag.delta.x * this.getVideoRatio());
+    let x =
+      this.ROTATION_DIRECTION * this.normalizeAxis(-drag.delta.x * this.getVideoRatio(), false);
     let y = this.TRANSLATION_DIRECTION * this.normalizeAxis(drag.delta.y);
     if (this.USE_INTENTION_LOCK) {
       if (drag.intentionXY == 'X') {
@@ -208,7 +215,7 @@ export class HandsWalkController extends SceneControllerAbstract {
   // turn > 0 turns right (radians), advance > 0 walks forward (world units)
   moveAvatar(turn: number, advance: number) {
     // Rotation: hand to the right turns right (negative rotationY around UP)
-    this.scene.avatarState.rotationY -= turn;
+    this.scene.avatarState.rotationY -= turn * this.ROTATION_SENSITIVITY;
 
     // Translation along the avatar front: hand up walks forward
     const advanceFront = FRONT_REFERENCE.clone()
