@@ -690,6 +690,17 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     // Clear cursor old state
     avatarContainer.setCursorState({ type: 'L', state: 'invisible' });
     avatarContainer.setCursorState({ type: 'R', state: 'invisible' });
+    // Reset hud values
+    avatarContainer.setHudDisplay({key: "life", value: null});
+    avatarContainer.setHudDisplay({key: "score", value: null});
+    avatarContainer.setHudDisplay({key: "percentage", value: null});
+    avatarContainer.setHudDisplay({key: "bottom", value: null});
+    avatarContainer.setHudDisplay({key: "kcal", value: null});
+    avatarContainer.setHudDisplay({key: "left", value: null});
+    avatarContainer.setHudDisplay({key: "right", value: null});
+    avatarContainer.setHudDisplay({key: "left_bottom", value: null});
+    avatarContainer.setHudDisplay({key: "right_bottom", value: null});
+    avatarContainer.setHudDisplay({key: "top", value: null});
 
     // Set general config
     this.mirror = this.mode.mirror;

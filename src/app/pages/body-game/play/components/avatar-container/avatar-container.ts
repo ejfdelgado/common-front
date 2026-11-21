@@ -189,6 +189,9 @@ export class AvatarContainer
   }
 
   hasText(val: any) {
+    if (!val) {
+      return false;
+    }
     const innerText = (val as any)['changingThisBreaksApplicationSecurity'];
     if (!(typeof innerText == 'string')) {
       return false;
