@@ -53,7 +53,20 @@ export class FileService {
         return this.pickFile(
             [
                 'image/png',
+                'image/apng',
                 'image/jpeg',
+                'image/jpg', // non-standard, reported by some browsers/OS
+                'image/pjpeg', // progressive JPEG (legacy IE)
+                'image/gif',
+                'image/webp',
+                'image/avif',
+                'image/svg+xml',
+                'image/bmp',
+                'image/x-icon',
+                'image/vnd.microsoft.icon',
+                'image/tiff',
+                'image/heic', // iOS photos
+                'image/heif',
             ]
         );
     }

@@ -5,12 +5,9 @@ import {
   ChangeDetectionStrategy,
   Input,
   ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -31,11 +28,7 @@ const MAX_SIZE_PIXELS = 2048;
 @Component({
   selector: 'app-image-field',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIcon,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIcon],
   templateUrl: './image-field.html',
   styleUrls: ['./image-field.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,18 +36,20 @@ const MAX_SIZE_PIXELS = 2048;
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ImageFileComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class ImageFileComponent extends CommonComponent implements ControlValueAccessor, OnDestroy, ComponentBucketField {
-  @Input() label: string = "";
+export class ImageFileComponent
+  extends CommonComponent
+  implements ControlValueAccessor, OnDestroy, ComponentBucketField
+{
+  @Input() label: string = '';
   @Input() config!: ImageDetailDataType;
   value: ComponentDataType = null;
   disabled = false;
   temporalUrl: string | null = null;
   lastBlob: Blob | null = null;
-
 
   constructor(
     private fileSrv: FileService,
@@ -68,7 +63,6 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
 
   /* ========= ControlValueAccessor API ========= */
 
-
   writeValue(value: ComponentDataType | null): void {
     this.value = value;
     this.cdr.detectChanges();
@@ -80,7 +74,7 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
 
   getImageUrl() {
     if (!this.value) {
-      return "./assets/img/default.jpeg";
+      return './assets/img/default.jpeg';
     } else {
       if (this.temporalUrl) {
         return this.temporalUrl;
@@ -91,14 +85,14 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
 
   /* ========= Component Logic ========= */
 
-  async askForEdit(type: "photo" | "file"): Promise<void> {
+  async askForEdit(type: 'photo' | 'file'): Promise<void> {
     if (this.disabled || !this.config) return;
 
     let blob: Blob | undefined = undefined;
 
-    if (type == "photo") {
+    if (type == 'photo') {
       blob = await this.fileSrv.openCamera();
-    } else if (type = "file") {
+    } else if ((type = 'file')) {
       blob = await this.fileSrv.pickImageFile();
     }
 
@@ -106,18 +100,16 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
       return;
     }
 
+    let resizedBlob = blob;
+
     // Assure max images size
-    const side = this.config.maxSizePixels ? this.config.maxSizePixels : MAX_SIZE_PIXELS;
-    const resizedBlob = await this.fileSrv.resizeImageBlob(
-      blob,
-      side,
-      side,
-      'image/jpeg',
-      0.9
-    );
+    try {
+      const side = this.config.maxSizePixels ? this.config.maxSizePixels : MAX_SIZE_PIXELS;
+      resizedBlob = await this.fileSrv.resizeImageBlob(blob, side, side, 'image/jpeg', 0.9);
+    } catch (err) {}
 
     // TODO In the middle we can edit image in canvas, then create the blob url
-    const nextPath = getBucketPath(this.config.template, this.value ? this.value : "", {
+    const nextPath = getBucketPath(this.config.template, this.value ? this.value : '', {
       user: AuthService.userStatic,
     });
 
@@ -149,34 +141,40 @@ export class ImageFileComponent extends CommonComponent implements ControlValueA
 
   async syncIfNeeded() {
     if (this.lastBlob && this.value) {
-      const rawFileName = this.value.split("?")[0];
+      const rawFileName = this.value.split('?')[0];
       const promesas: Promise<UploadResponse>[] = [];
 
       if (this.config?.thumbnailMaxSizePixels) {
         // Create thumbnail
         const side = this.config.thumbnailMaxSizePixels;
-        const thumbnailBlob = await this.fileSrv.resizeImageBlob(
-          this.lastBlob,
-          side,
-          side,
-          'image/jpeg',
-          0.9
-        );
-        promesas.push(this.fileSrv.upload(getThumbnailPath(rawFileName), thumbnailBlob, "bucket"));
+        let thumbnailBlob = this.lastBlob;
+        try {
+          thumbnailBlob = await this.fileSrv.resizeImageBlob(
+            this.lastBlob,
+            side,
+            side,
+            'image/jpeg',
+            0.9,
+          );
+        } catch (err) {}
+        promesas.push(this.fileSrv.upload(getThumbnailPath(rawFileName), thumbnailBlob, 'bucket'));
       }
 
       if (this.config?.squareMaxSizePixels) {
         const sideSquare = this.config.squareMaxSizePixels;
-        const squaredBlob = await this.fileSrv.squareImageCover(
-          this.lastBlob,
-          sideSquare,
-          'image/jpeg',
-          0.9
-        );
-        promesas.push(this.fileSrv.upload(getSquarePath(rawFileName), squaredBlob, "bucket"));
+        let squaredBlob = this.lastBlob;
+        try {
+          squaredBlob = await this.fileSrv.squareImageCover(
+            this.lastBlob,
+            sideSquare,
+            'image/jpeg',
+            0.9,
+          );
+        } catch (err) {}
+        promesas.push(this.fileSrv.upload(getSquarePath(rawFileName), squaredBlob, 'bucket'));
       }
 
-      promesas.push(this.fileSrv.upload(rawFileName, this.lastBlob, "bucket"));
+      promesas.push(this.fileSrv.upload(rawFileName, this.lastBlob, 'bucket'));
       await Promise.all(promesas);
       this.destroyBlobUrl();
     }
