@@ -30,7 +30,8 @@
 </div>
 <div class="full_screen no_mouse container_vertical">
     <div class="video_grand_parent">
-        <div class="video_parent" [ngClass]="{'stable_camera_tracking': errorState === null}">
+        <div class="video_parent"
+            [ngClass]="{'stable_camera_tracking': errorState === null, 'visibility_fade_out': scenario?.videoPreviewType == 'FADE_OUT', 'visibility_scale_down': scenario?.videoPreviewType == 'SCALE_DOWN'}">
             <video #video class="video_preview" width="640" height="480">
                 <source src="">
             </video>

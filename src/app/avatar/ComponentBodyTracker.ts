@@ -848,7 +848,9 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
     this.scenario.language = data.language;
     //
     this.scenario.audio = data.audio;
+    // Apply
     this.scenario.useComposer = data.useComposer;
+    this.scenario.videoPreviewType = data.videoPreviewType;
   }
 
   async applyAvatarBeforeSave(data: AvatarModel) {

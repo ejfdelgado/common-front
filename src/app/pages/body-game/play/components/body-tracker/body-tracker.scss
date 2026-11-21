@@ -106,8 +106,12 @@
     opacity: 0.65;
 }
 
-.visibility_fade_out.stable_camera_trackings {
+.video_parent.visibility_fade_out.stable_camera_trackings {
   animation: fadeOut 10s ease-out forwards;
+}
+
+.video_parent.visibility_scale_down.stable_camera_trackings .video_preview {
+    animation: scaleDown 10s ease-out forwards;
 }
 
 @keyframes fadeOut {
@@ -116,6 +120,15 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes scaleDown {
+  from {
+    height: 30vh;
+  }
+  to {
+    height: 10vh;
   }
 }
 

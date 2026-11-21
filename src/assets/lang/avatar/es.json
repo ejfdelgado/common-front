@@ -124,6 +124,12 @@
           },
           "useComposer": {
             "label": "Usar compositor"
+          },
+          "videoPreview": {
+            "label": "Vista previa de video",
+            "ch_none": "Ninguna",
+            "ch_scale_down": "Reducir",
+            "ch_fade_out": "Desvanecer"
           }
         },
         "sounds": {

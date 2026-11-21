@@ -16,7 +16,7 @@ import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
-import { BACKGROUND_OPTIONS, ColorType, GameScenario, GameStep, GameStepOption, INTERACTION_OPTIONS, OBJECTS_OPTIONS } from 'src/types/WorldAvatar';
+import { BACKGROUND_OPTIONS, ColorType, GameScenario, GameStep, GameStepOption, INTERACTION_OPTIONS, OBJECTS_OPTIONS, VIDEO_PREVIEW_OPTIONS } from 'src/types/WorldAvatar';
 import { EditableInput } from 'src/app/components/fields/editable-input/editable-input';
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { ColorPickerComponent } from 'src/app/components/fields/color-picker/color-picker';
@@ -86,6 +86,7 @@ export class QuestionaireEditComponent {
   readonly languageOptions = LANGUAGE_OPTIONS;
   readonly objectsOptions = OBJECTS_OPTIONS;
   readonly interactionOptions = INTERACTION_OPTIONS;
+  readonly videoPreviewOptions = VIDEO_PREVIEW_OPTIONS;
   private keydownSub: Subscription;
   stepsConfigForm: FormGroup;
   stepsForm: FormGroup;
@@ -137,6 +138,7 @@ export class QuestionaireEditComponent {
       steps: this.fb.array((data.steps ?? []).map((step) => this.buildStepGroup(step))),
     });
     this.backgroundForm = this.fb.group({
+      videoPreviewType: [data.videoPreviewType ?? null],
       useComposer: [typeof data.useComposer == 'boolean' ? data.useComposer : false],
       type: [data.background?.type ?? null],
       color: [data.background?.color ?? { ...DEFAULT_BACKGROUND_COLOR }],
@@ -187,6 +189,13 @@ export class QuestionaireEditComponent {
       this.cdr,
       this.translateSrv,
       'popup.questionaire.tabs.interaction.',
+    );
+    translateSelectOptions(
+      'avatar',
+      this.videoPreviewOptions,
+      this.cdr,
+      this.translateSrv,
+      'popup.questionaire.tabs.background.videoPreview.',
     );
   }
 
@@ -336,6 +345,7 @@ export class QuestionaireEditComponent {
     await this.syncIfNeeded();
 
     const backgroundValue = this.backgroundForm.value;
+    this.data.videoPreviewType = backgroundValue.videoPreviewType ?? null;
     this.data.useComposer =
       typeof backgroundValue.useComposer == 'boolean' ? backgroundValue.useComposer : false;
     this.data.background = {

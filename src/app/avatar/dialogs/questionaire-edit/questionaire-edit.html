@@ -148,6 +148,18 @@
         <mat-tab id="background" [label]="('popup.questionaire.tabs.background.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="backgroundForm" class="tab_content">
 
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>{{ "popup.questionaire.tabs.background.videoPreview.label" | translate : "avatar" | async
+                        }}</mat-label>
+                    <mat-select formControlName="videoPreviewType">
+                        <mat-option [value]="null">{{ "popup.questionaire.tabs.background.videoPreview.ch_none" |
+                            translate : "avatar" | async }}</mat-option>
+                        @for (option of videoPreviewOptions; track option.value) {
+                        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
                 <app-on-off-toggle
                     [label]="'popup.questionaire.tabs.background.useComposer.label' | translate : 'avatar' | async"
                     [iconName]="'checkbox'" formControlName="useComposer"></app-on-off-toggle>

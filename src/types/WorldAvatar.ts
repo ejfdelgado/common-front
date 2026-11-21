@@ -42,6 +42,11 @@ export const INTERACTION_OPTIONS: SelectOptionString[] = [
   { label_key: 'ch_custom', label: '', value: 'custom' },
 ];
 
+export const VIDEO_PREVIEW_OPTIONS: SelectOptionString[] = [
+  { label_key: 'ch_scale_down', label: '', value: 'SCALE_DOWN' },
+  { label_key: 'ch_fade_out', label: '', value: 'FADE_OUT' },
+];
+
 export interface StartGameOptions {
   keepPoints: boolean;
   keepLife: boolean;
@@ -85,8 +90,11 @@ export interface ColorType {
   b: number;
 }
 
+export type VideoPreview = 'SCALE_DOWN' | 'FADE_OUT';
+
 export interface GameScenario {
   useComposer?: boolean;
+  videoPreviewType?: VideoPreview | null;
   language?: string;
   background?: {
     type?: 'image' | 'color';
