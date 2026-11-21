@@ -29,7 +29,8 @@ export class HandsWalkController extends SceneControllerAbstract {
   // constants (hands joystick)
   // Drag below this amount (normalized units) is ignored
   DEAD_ZONE: number = 0.03;
-  // Drag beyond this amount does not increase the speed
+  // Drag amount that maps to the base speed / per-gesture amount (joystick value 1).
+  // Both axes are unclamped, so dragging further keeps increasing proportionally.
   MAX_DELTA: number = 0.3;
   // World units per second at MAX_DELTA
   MAX_TRANSLATION_SPEED: number = 6;
@@ -122,7 +123,8 @@ export class HandsWalkController extends SceneControllerAbstract {
     return candidates.reduce((a, b) => (magnitude(b.drag) > magnitude(a.drag) ? b : a));
   }
 
-  // Returns joystick values: y in [-1, 1] (clamped), x unbounded (rotation is not clamped).
+  // Returns joystick values, both unbounded (not clamped): 1 is reached at MAX_DELTA and
+  // they keep growing linearly beyond it.
   //  x > 0 turn right, y > 0 walk forward (hand direction set by ROTATION_DIRECTION /
   //  TRANSLATION_DIRECTION)
   getJoystick(drag: DragDataType | null): Point2D {
@@ -132,7 +134,7 @@ export class HandsWalkController extends SceneControllerAbstract {
     // delta = start - current, in screen coordinates (y grows downward)
     let x =
       this.ROTATION_DIRECTION * this.normalizeAxis(-drag.delta.x * this.getVideoRatio(), false);
-    let y = this.TRANSLATION_DIRECTION * this.normalizeAxis(drag.delta.y);
+    let y = this.TRANSLATION_DIRECTION * this.normalizeAxis(drag.delta.y, false);
     if (this.USE_INTENTION_LOCK) {
       if (drag.intentionXY == 'X') {
         y = 0;
