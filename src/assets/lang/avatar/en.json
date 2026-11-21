@@ -214,7 +214,8 @@
             "label": "Type",
             "ch_question": "Questions",
             "ch_hands": "Hand's interaction",
-            "ch_walk": "Walk",
+            "ch_walk": "Walk (hands)",
+            "ch_walk_old": "Walk (feet)",
             "ch_record": "Body record"
           },
           "avatar_side": {

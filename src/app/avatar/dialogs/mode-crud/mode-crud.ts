@@ -67,6 +67,14 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     { id: GameControllerEnum.HandPointerController, params: {} },
     { id: GameControllerEnum.HandsWalkController, params: {} },
   ],
+  op_walk_old: [
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.SimplePosesDetection, params: {} },
+    { id: GameControllerEnum.TerrainElevationController, params: {} },
+    { id: GameControllerEnum.WalkController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
+  ],
 };
 
 @Component({
@@ -224,7 +232,7 @@ export class ModeCrudComponent {
           if (controllers) {
             originalMode.controllers = controllers;
           }
-          if (type == 'op_walk') {
+          if (['op_walk', 'op_walk_old'].indexOf(type) >= 0) {
             const DAFAULT_SCENARIO_NAME = 'scenario01';
             const DEFAULT_SCENARIO = {
               useComposer: true,

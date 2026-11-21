@@ -22,6 +22,7 @@ export const TYPE_OPTIONS: SelectOptionString[] = [
   { label_key: 'ch_record', label: 'record', value: 'op_record' },
   { label_key: 'ch_hands', label: 'hands', value: 'op_hands' },
   { label_key: 'ch_walk', label: 'walk', value: 'op_walk' },
+  { label_key: 'ch_walk_old', label: 'walk_old', value: 'op_walk_old' },
 ];
 
 export const OBJECTS_OPTIONS: SelectOptionString[] = [

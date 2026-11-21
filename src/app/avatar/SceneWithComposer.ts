@@ -522,8 +522,11 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
           }
           this.background = null;
         }
+      } else {
+        this.background = null;
       }
     } else {
+      this.background = null;
       if (this.renderer) {
         this.renderer.setClearAlpha(0);
       }

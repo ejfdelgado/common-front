@@ -812,8 +812,10 @@ export abstract class ComponentBodyTracker extends CommonSpeech {
       }
     }
     this.selectedItems.scenario = scenarioId;
-    if (this.scenario.useComposer) {
+    if (this.scenario.useComposer === true) {
       avatarContainer.useComposer = this.scenario.useComposer;
+    } else {
+      avatarContainer.useComposer = false;
     }
     await avatarContainer.scene?.initializeScenario(this.scenario);
     this.backgroundUrl = null;
