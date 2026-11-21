@@ -100,6 +100,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     const renderPass = new RenderPass(this, this.camera);
     this.composer.addPass(renderPass);
 
+    // To create the halo arount some objects
     this.outlinePass = new OutlinePass(
       new THREE.Vector2(innerWidth, innerHeight),
       this,
@@ -107,6 +108,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     );
     this.configureHalo(this.outlinePass);
     this.composer.addPass(this.outlinePass);
+    //
     const smaaPass = new SMAAPass();
     this.composer.addPass(smaaPass);
   }
@@ -149,7 +151,7 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
       const frameId = this.findPoseAt(a, sceneTime - startingTime, loop);
       if (frameId >= 0) {
         this.applyAvatarState(avatar, a[frameId], lr, lrMode);
-        if (typeof nextSufix == "number") {
+        if (typeof nextSufix == 'number') {
           // There are animations missed on memory
           const totalFrames = a.length;
           const framesBeforeLimit = totalFrames - frameId;
@@ -460,11 +462,16 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
       if (child.isMesh && child.material) {
         const materials = Array.isArray(child.material) ? child.material : [child.material];
 
-        materials.forEach((material: any) => {
-          material.transparent = true;
-          material.side = THREE.FrontSide;
-          material.onBeforeCompile = shader;
-        });
+        // Apply some exceptions, for example, the terrain
+        if (child.name.toLocaleLowerCase().startsWith('terrain_')) {
+          //skip
+        } else {
+          materials.forEach((material: any) => {
+            material.transparent = true;
+            material.side = THREE.FrontSide;
+            material.onBeforeCompile = shader;
+          });
+        }
       }
     });
   }
