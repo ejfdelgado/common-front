@@ -229,13 +229,21 @@ export class HandsWalkController extends SceneControllerAbstract {
       this.displayLeftDelta();
     } else if (event.name == 'HAND_LEFT_EDRAG') {
       this.leftDrag = null;
+      this.setHudValue('kcal', this.computeKCal());
       this.displayLeftDelta();
     } else if (event.name == 'HAND_RIGHT_SDRAG' || event.name == 'HAND_RIGHT_DRAG') {
       this.rightDrag = event.data;
       this.displayRightDelta();
     } else if (event.name == 'HAND_RIGHT_EDRAG') {
       this.rightDrag = null;
+      this.setHudValue('kcal', this.computeKCal());
       this.displayRightDelta();
     }
+  }
+
+  computeKCal(): number {
+    let kCal = 1;
+    // make computation
+    return parseFloat(`${kCal.toFixed(2)}`);
   }
 }
