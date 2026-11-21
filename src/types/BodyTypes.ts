@@ -287,7 +287,8 @@ export type HudDisplatType =
     | "right_bottom"
     | "score"
     | "life"
-    | "percentage";
+    | "percentage"
+    | "kcal";
 
 export interface HudDisplayData {
   key: HudDisplatType;

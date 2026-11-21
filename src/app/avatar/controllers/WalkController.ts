@@ -18,7 +18,6 @@ export class WalkController extends SceneControllerAbstract {
 
   // KPIs
   stepCount: number = 0;
-  kilometers: number = 0;
   calories: number = 0;
 
   // Walking constants
@@ -122,8 +121,8 @@ export class WalkController extends SceneControllerAbstract {
   override async destroy(): Promise<void> {}
 
   makeStep(forward: number) {
-    this.stepCount += 1;
-    console.log(`this.stepSize ${this.stepSize}`);
+    this.stepCount += this.stepSize / 0.3;
+    this.setHudValue('kcal', this.computeKCal());
     const { frontData } = this.lastData;
 
     this.scene.avatarState.rotationY += (frontData.angle + Math.PI / 2) * this.ROTATION_AMOUNT;
@@ -131,5 +130,11 @@ export class WalkController extends SceneControllerAbstract {
     this.scene.avatarState.positionX += advanceFront.x * this.stepSize * this.STEP_AMOUNT * forward;
     this.scene.avatarState.positionZ += advanceFront.z * this.stepSize * this.STEP_AMOUNT * forward;
     this.followCamera.computeTransformationMatrix(this.scene);
+  }
+
+  computeKCal(): number {
+    let kCal = this.stepCount;
+    // make computation
+    return parseFloat(`${kCal.toFixed(2)}`);
   }
 }

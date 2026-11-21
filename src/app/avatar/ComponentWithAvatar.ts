@@ -56,6 +56,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     score: null,
     life: null,
     percentage: null,
+    kcal: null,
   };
   useComposer: boolean = false;
   sceneCreated: PromiseEmitter = new PromiseEmitter();

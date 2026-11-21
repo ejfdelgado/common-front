@@ -25,7 +25,6 @@ import {
   CursorData,
   CursorPointerGUI,
   CursorStateData,
-  HudDisplayData,
   Point3D,
 } from '@mytypes/BodyTypes';
 import { P2PService } from '@services/p2p.service';

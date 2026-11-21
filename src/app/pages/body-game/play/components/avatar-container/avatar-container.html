@@ -28,6 +28,10 @@
         <span class="score"><img class="points_icon" src="./assets/icons/star.svg"> <strong
                 [innerHTML]="hudData['score']"></strong></span>
         }
+        @if(hasNumber(hudData['kcal'])) {
+        <span class="kcal"><img class="points_icon" src="./assets/icons/fire.svg"> <strong
+                [innerHTML]="hudData['kcal']"></strong></span>
+        }
     </div>
     <div class="hud_scenario_labels bigger no_mouse no_select">
         @if (hasText(hudData['top'])) {
