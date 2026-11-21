@@ -5,11 +5,13 @@ import {
   DragDataType,
   printPoint2D,
 } from '@mytypes/BodyTypes';
+import { ZoomRotationData } from './HandsZoomRotationController';
 
 export class HandsBackgroundController extends SceneControllerAbstract {
   leftDrag: DragDataType | null = null;
   rightDrag: DragDataType | null = null;
   logDragValues: boolean = false;
+  zoomRotation: ZoomRotationData | null = null;
 
   bgDx: number = 0;
   bgDy: number = 0;
@@ -55,16 +57,16 @@ export class HandsBackgroundController extends SceneControllerAbstract {
       this.rightDrag = null;
       this.updateTranslationRotationScale();
     } else if (event.name == 'HANDS_ZOOM_ROTATION_START') {
-      // End drag
-      this.rightDrag = null;
+      // Start zoom and rotation
+      this.zoomRotation = event.data;
       this.updateTranslationRotationScale();
     } else if (event.name == 'HANDS_ZOOM_ROTATION') {
-      // End drag
-      this.rightDrag = null;
+      // zoom and rotation
+      this.zoomRotation = event.data;
       this.updateTranslationRotationScale();
     } else if (event.name == 'HANDS_ZOOM_ROTATION_END') {
-      // End drag
-      this.rightDrag = null;
+      // End zoom and rotation
+      this.zoomRotation = event.data;
       this.updateTranslationRotationScale();
     }
   }
