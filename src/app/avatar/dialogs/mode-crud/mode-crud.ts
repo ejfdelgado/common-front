@@ -44,8 +44,9 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     // This just help to guess clap when wrists are close together
     //{ id: GameControllerEnum.HandsCloseController, params: {} },
     { id: GameControllerEnum.HandPointerController, params: {} },
-    { id: GameControllerEnum.HandsNavigationController, params: {} },
+    //{ id: GameControllerEnum.HandsNavigationController, params: {} },
     { id: GameControllerEnum.HandsZoomRotationController, params: {} },
+    { id: GameControllerEnum.HandsBackgroundController, params: {} },
   ],
   op_record: [
     { id: GameControllerEnum.ComparableController, params: {} },

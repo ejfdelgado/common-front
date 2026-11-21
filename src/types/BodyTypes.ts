@@ -280,6 +280,10 @@ export interface CursorStateData {
 
 export type HudDisplatType = 
     "top"
+    | "bgDx"
+    | "bgDy"
+    | "bgScale"
+    | "bgRotateDeg"
     | "bottom"
     | "left"
     | "right"

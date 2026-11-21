@@ -45,6 +45,7 @@ import { HandsNavigationController } from './controllers/HandsNavigationControll
 import { HandsWalkController } from './controllers/HandsWalkController';
 import { HandsZoomRotationController } from './controllers/HandsZoomRotationController';
 import { AmbienceMusicController } from './controllers/AmbienceMusicController.ts';
+import { HandsBackgroundController } from './controllers/HandsBackgroundController';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
   hudData: { [key: string]: any } = {
@@ -58,6 +59,10 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     life: null,
     percentage: null,
     kcal: null,
+    bgDx: 0,
+    bgDy: 0,
+    bgScale: 1,
+    bgRotateDeg: 0,
   };
   useComposer: boolean = false;
   sceneCreated: PromiseEmitter = new PromiseEmitter();
@@ -347,6 +352,8 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
       temp = new HandsZoomRotationController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.AmbienceMusicController) {
       temp = new AmbienceMusicController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+    } else if (config.id == GameControllerEnum.HandsBackgroundController) {
+      temp = new HandsBackgroundController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     }
 
     if (temp == null) {

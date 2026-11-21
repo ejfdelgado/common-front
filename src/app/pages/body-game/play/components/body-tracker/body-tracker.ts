@@ -149,7 +149,10 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
   }
 
   getBackgroundTransformations() {
-    //return "translate(20px, 40px) scale(1.5) rotate(15deg)";
-    return "translate(0px, 0px) scale(1) rotate(0deg)";
+    if (!this.avatarContainer?.hudData) {
+      return "scale(1)";
+    }
+    const { bgDx, bgDy, bgScale, bgRotateDeg } = this.avatarContainer.hudData;
+    return `translate(${bgDx.toFixed(0)}px, ${bgDy.toFixed(0)}px) scale(${bgScale.toFixed(3)}) rotate(${bgRotateDeg.toFixed(0)}deg)`;
   }
 }
