@@ -106,11 +106,11 @@
     opacity: 0.65;
 }
 
-.video_parent.visibility_fade_out.stable_camera_trackings {
+.video_parent.visibility_fade_out.stable_camera_tracking {
   animation: fadeOut 10s ease-out forwards;
 }
 
-.video_parent.visibility_scale_down.stable_camera_trackings .video_preview {
+.video_parent.visibility_scale_down.stable_camera_tracking .video_preview {
     animation: scaleDown 10s ease-out forwards;
 }
 

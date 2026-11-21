@@ -69,6 +69,8 @@ export class HandsWalkController extends SceneControllerAbstract {
   appliedSide: 'L' | 'R' | null = null;
   appliedJoystick: Point2D = { x: 0, y: 0 };
 
+  logDragValues: boolean = false;
+
   override async update(): Promise<ControllerUpdateResponse> {
     this.handsWalkLogic();
     const avatarTransform = this.followCamera.follow(this.scene, this.lastData.stateBody.height);
@@ -210,11 +212,15 @@ export class HandsWalkController extends SceneControllerAbstract {
   }
 
   displayLeftDelta() {
-    this.setHudValue('left', this.leftDrag?.delta ? printPoint2D(this.leftDrag.delta) : '');
+    if (this.logDragValues) {
+      this.setHudValue('left', this.leftDrag?.delta ? printPoint2D(this.leftDrag.delta) : '');
+    }
   }
 
   displayRightDelta() {
-    this.setHudValue('right', this.rightDrag?.delta ? printPoint2D(this.rightDrag.delta) : '');
+    if (this.logDragValues) {
+      this.setHudValue('right', this.rightDrag?.delta ? printPoint2D(this.rightDrag.delta) : '');
+    }
   }
 
   override onEvent(event: AvatarBodyEvent): void {

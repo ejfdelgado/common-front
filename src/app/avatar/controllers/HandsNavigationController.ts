@@ -9,6 +9,7 @@ import {
 export class HandsNavigationController extends SceneControllerAbstract {
   leftDrag: DragDataType | null = null;
   rightDrag: DragDataType | null = null;
+  logDragValues: boolean = false;
   override async update(): Promise<ControllerUpdateResponse> {
     return {};
   }
@@ -16,11 +17,15 @@ export class HandsNavigationController extends SceneControllerAbstract {
   override async destroy(): Promise<void> {}
 
   displayLeftDelta() {
-    this.setHudValue('left', this.leftDrag?.delta ? printPoint2D(this.leftDrag.delta) : '');
+    if (this.logDragValues) {
+      this.setHudValue('left', this.leftDrag?.delta ? printPoint2D(this.leftDrag.delta) : '');
+    }
   }
 
   displayRightDelta() {
-    this.setHudValue('right', this.rightDrag?.delta ? printPoint2D(this.rightDrag.delta) : '');
+    if (this.logDragValues) {
+      this.setHudValue('right', this.rightDrag?.delta ? printPoint2D(this.rightDrag.delta) : '');
+    }
   }
 
   override onEvent(event: AvatarBodyEvent): void {
