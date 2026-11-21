@@ -71,6 +71,20 @@ export class HandsWalkController extends SceneControllerAbstract {
 
   logDragValues: boolean = false;
 
+  // KPIs
+  // Total hand path travelled while dragging, in meters (both hands)
+  armDistanceMeters: number = 0;
+  calories: number = 0;
+  // Calories constants
+  BODY_WEIGHT_KG: number = 70; // Default adult weight
+  // Real-world height covered by the video frame at the user's position (normalized y = 1)
+  FRAME_HEIGHT_M: number = 2;
+  // Arm exercise energy cost: ~2 MET above rest at ~1 m/s of hand speed
+  KCAL_PER_KG_PER_M: number = 0.0006;
+  // Last drag delta seen per hand, to measure the path travelled between events
+  lastLeftDelta: Point2D | null = null;
+  lastRightDelta: Point2D | null = null;
+
   override async update(): Promise<ControllerUpdateResponse> {
     this.handsWalkLogic();
     const avatarTransform = this.followCamera.follow(this.scene, this.lastData.stateBody.height);
@@ -225,25 +239,53 @@ export class HandsWalkController extends SceneControllerAbstract {
 
   override onEvent(event: AvatarBodyEvent): void {
     if (event.name == 'HAND_LEFT_SDRAG' || event.name == 'HAND_LEFT_DRAG') {
+      if (event.name == 'HAND_LEFT_SDRAG') {
+        this.lastLeftDelta = null;
+      }
       this.leftDrag = event.data;
+      this.lastLeftDelta = this.accumulateArmDisplacement(this.lastLeftDelta, event.data);
       this.displayLeftDelta();
     } else if (event.name == 'HAND_LEFT_EDRAG') {
       this.leftDrag = null;
+      this.lastLeftDelta = null;
       this.setHudValue('kcal', this.computeKCal());
       this.displayLeftDelta();
     } else if (event.name == 'HAND_RIGHT_SDRAG' || event.name == 'HAND_RIGHT_DRAG') {
+      if (event.name == 'HAND_RIGHT_SDRAG') {
+        this.lastRightDelta = null;
+      }
       this.rightDrag = event.data;
+      this.lastRightDelta = this.accumulateArmDisplacement(this.lastRightDelta, event.data);
       this.displayRightDelta();
     } else if (event.name == 'HAND_RIGHT_EDRAG') {
       this.rightDrag = null;
+      this.lastRightDelta = null;
       this.setHudValue('kcal', this.computeKCal());
       this.displayRightDelta();
     }
   }
 
+  // Adds the hand path travelled since the previous drag event (both the rotation axis X
+  // and the translation axis Y count). Returns the delta to remember for the next event.
+  accumulateArmDisplacement(previous: Point2D | null, drag: DragDataType | null): Point2D | null {
+    const current = drag?.delta;
+    if (!current) {
+      return previous;
+    }
+    if (previous) {
+      // delta = start - current, so its change is the hand movement. X is scaled by the
+      // video ratio so both axes share the frame height unit.
+      const dx = (current.x - previous.x) * this.getVideoRatio();
+      const dy = current.y - previous.y;
+      this.armDistanceMeters += Math.hypot(dx, dy) * this.FRAME_HEIGHT_M;
+    }
+    return { x: current.x, y: current.y };
+  }
+
   computeKCal(): number {
-    let kCal = 1;
-    // make computation
-    return parseFloat(`${kCal.toFixed(2)}`);
+    // kcal = KCAL_PER_KG_PER_M * weightKg * handPathMeters
+    const kCal = this.KCAL_PER_KG_PER_M * this.BODY_WEIGHT_KG * this.armDistanceMeters;
+    this.calories = kCal;
+    return parseFloat(kCal.toFixed(2));
   }
 }

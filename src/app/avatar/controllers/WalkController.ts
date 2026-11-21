@@ -19,6 +19,10 @@ export class WalkController extends SceneControllerAbstract {
   // KPIs
   stepCount: number = 0;
   calories: number = 0;
+  // Calories constants
+  BODY_WEIGHT_KG: number = 70; // Default adult weight
+  STRIDE_LENGTH_M: number = 0.75; // Average step length
+  KCAL_PER_KG_PER_KM: number = 0.78; // Walking energy cost
 
   // Walking constants
   MOVEMENT_THRESHOLD = 0.1;
@@ -133,8 +137,11 @@ export class WalkController extends SceneControllerAbstract {
   }
 
   computeKCal(): number {
-    let kCal = this.stepCount;
-    // make computation
-    return parseFloat(`${kCal.toFixed(2)}`);
+    // Walking burns roughly 0.78 kcal per kg of body weight per km (gross, ~5 km/h).
+    // kcal/step = KCAL_PER_KG_PER_KM * weightKg * strideMeters / 1000
+    const kCalPerStep = (this.KCAL_PER_KG_PER_KM * this.BODY_WEIGHT_KG * this.STRIDE_LENGTH_M) / 1000;
+    const kCal = this.stepCount * kCalPerStep;
+    this.calories = kCal;
+    return parseFloat(kCal.toFixed(2));
   }
 }
