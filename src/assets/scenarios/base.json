@@ -41,7 +41,7 @@
         "scenario01": {
           "useComposer": true,
           "background": {
-            "image": "./assets/img/default.jpeg"
+            
           },
           "characters": [],
           "meshes": [],

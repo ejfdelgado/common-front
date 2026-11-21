@@ -3,11 +3,9 @@ import { AvatarBodyEvent, ControllerUpdateResponse, HudDisplatType } from '@myty
 import { ModuloSonido } from 'src/app/services/sonido.service';
 import { shuffleInPlace } from 'src/app/tools/ArrayUtil';
 import {
-  BUCKET_ROOT,
   GameScenario,
   GameStep,
   GameStepOption,
-  LOCAL_AUDIO_PREFIX,
   MAX_LIFE,
   SelectionObjectConfig,
   StartGameOptions,
@@ -147,55 +145,6 @@ export class QuestionaireController extends SceneControllerAbstract {
   ) {
     const payload = { name: name, data };
     this.events.emit(payload);
-  }
-
-  async preloadAudios() {
-    const audios: string[] = [];
-    if (this.scenario?.audio) {
-      const audioKeys = ['intro', 'loop', 'finish', 'loose', 'success'];
-      for (let i = 0; i < audioKeys.length; i++) {
-        const audioKey = audioKeys[i];
-        const val = (this.scenario.audio as any)[audioKey];
-        if (val) {
-          if (val.startsWith(LOCAL_AUDIO_PREFIX)) {
-            audios.push(val);
-          } else {
-            audios.push(BUCKET_ROOT + val);
-          }
-        }
-      }
-    }
-    await ModuloSonido.preload(audios);
-  }
-
-  async playAudio(
-    type: 'intro' | 'loop' | 'finish' | 'loose' | 'success',
-    removeLoop: boolean = false,
-  ) {
-    if (!this.scenario?.audio) {
-      return { promise: Promise.resolve() };
-    }
-    const val = (this.scenario?.audio as any)[type];
-    if (!val) {
-      return { promise: Promise.resolve() };
-    }
-    const whiteList: string[] = [];
-    if (!removeLoop) {
-      const loop = this.scenario?.audio.loop;
-      if (loop) {
-        if (loop.startsWith(LOCAL_AUDIO_PREFIX)) {
-          whiteList.push(loop);
-        } else {
-          whiteList.push(BUCKET_ROOT + loop);
-        }
-      }
-    }
-    ModuloSonido.stopAll(whiteList);
-    if (val.startsWith(LOCAL_AUDIO_PREFIX)) {
-      return await ModuloSonido.play(val, type == 'loop');
-    } else {
-      return await ModuloSonido.play(BUCKET_ROOT + val, type == 'loop');
-    }
   }
 
   async initializeQuestion() {

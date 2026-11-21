@@ -12,8 +12,9 @@ import { ControllerInitDataType } from '@mytypes/BodyTypesExtra';
 import { ControlProxy } from '../workers/ControlProxy';
 import { P2PService } from '@services/p2p.service';
 import { computeDistance } from '@avatar/utils/AvatarUtilities';
-import { GameMode, GameScenario } from 'src/types/WorldAvatar';
+import { BUCKET_ROOT, GameMode, GameScenario, LOCAL_AUDIO_PREFIX } from 'src/types/WorldAvatar';
 import { FileService } from 'src/app/services/file.srv';
+import { ModuloSonido } from 'src/app/services/sonido.service';
 
 export abstract class SceneControllerAbstract {
   enabled: boolean = true;
@@ -83,5 +84,54 @@ export abstract class SceneControllerAbstract {
       speak: speak,
       lang: this.scenario?.language,
     });
+  }
+
+  async preloadAudios() {
+    const audios: string[] = [];
+    if (this.scenario?.audio) {
+      const audioKeys = ['intro', 'loop', 'finish', 'loose', 'success'];
+      for (let i = 0; i < audioKeys.length; i++) {
+        const audioKey = audioKeys[i];
+        const val = (this.scenario.audio as any)[audioKey];
+        if (val) {
+          if (val.startsWith(LOCAL_AUDIO_PREFIX)) {
+            audios.push(val);
+          } else {
+            audios.push(BUCKET_ROOT + val);
+          }
+        }
+      }
+    }
+    await ModuloSonido.preload(audios);
+  }
+
+  async playAudio(
+    type: 'intro' | 'loop' | 'finish' | 'loose' | 'success',
+    removeLoop: boolean = false,
+  ) {
+    if (!this.scenario?.audio) {
+      return { promise: Promise.resolve() };
+    }
+    const val = (this.scenario?.audio as any)[type];
+    if (!val) {
+      return { promise: Promise.resolve() };
+    }
+    const whiteList: string[] = [];
+    if (!removeLoop) {
+      const loop = this.scenario?.audio.loop;
+      if (loop) {
+        if (loop.startsWith(LOCAL_AUDIO_PREFIX)) {
+          whiteList.push(loop);
+        } else {
+          whiteList.push(BUCKET_ROOT + loop);
+        }
+      }
+    }
+    ModuloSonido.stopAll(whiteList);
+    if (val.startsWith(LOCAL_AUDIO_PREFIX)) {
+      return await ModuloSonido.play(val, type == 'loop');
+    } else {
+      return await ModuloSonido.play(BUCKET_ROOT + val, type == 'loop');
+    }
   }
 }

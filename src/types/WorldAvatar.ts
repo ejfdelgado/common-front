@@ -181,6 +181,7 @@ export enum GameControllerEnum {
   HandsNavigationController = 'HandsNavigationController',
   HandsWalkController = 'HandsWalkController',
   HandsZoomRotationController = 'HandsZoomRotationController',
+  AmbienceMusicController = 'AmbienceMusicController',
 }
 
 export const POSE_CONTROLLERS: GameControllerEnum[] = [
