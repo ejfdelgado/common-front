@@ -21,8 +21,9 @@ import { AvatarFollowCamera, getAvatarFront } from '@avatar/utils/AvatarFollowCa
 export class HandsWalkController extends SceneControllerAbstract {
   // Smoothing, avatar transform and camera placement
   followCamera = new AvatarFollowCamera({
-    CAMERA_HEIGTH_RATIO: 0.8,
-    CAMERA_DISTANCE_TO_AVATAR: 7,
+    LOOK_AT_HEIGHT_RATIO: 0.85,
+    CAMERA_HEIGTH_RATIO: 1.0,
+    CAMERA_DISTANCE_TO_AVATAR: 6,
   });
 
   // constants (hands joystick)
@@ -42,12 +43,12 @@ export class HandsWalkController extends SceneControllerAbstract {
   ROTATION_DIRECTION: number = -1;
   // Multiplier applied to every rotation produced by the gesture, in both keepMoving modes.
   // 1 = MAX_ROTATION_SPEED / MAX_ROTATION_PER_GESTURE as configured, < 1 slower, > 1 faster.
-  ROTATION_SENSITIVITY: number = 0.2;
+  ROTATION_SENSITIVITY: number = 0.15;
   TRANSLATION_DIRECTION: number = -1;
   // Multiplier applied to every front/back displacement produced by the gesture, in both
   // keepMoving modes. 1 = MAX_TRANSLATION_SPEED / MAX_TRANSLATION_PER_GESTURE as configured,
   // < 1 slower, > 1 faster.
-  TRANSLATION_SENSITIVITY: number = 0.6;
+  TRANSLATION_SENSITIVITY: number = 0.5;
 
   // variables
   leftDrag: DragDataType | null = null;

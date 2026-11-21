@@ -22,6 +22,9 @@ export interface AvatarFollowCameraConfig {
   CAMERA_HEIGTH_RATIO: number;
   // Distance from the camera to the avatar, behind it
   CAMERA_DISTANCE_TO_AVATAR: number;
+  // Point the camera looks at = body height * LOOK_AT_HEIGHT_RATIO + avatar Y
+  // 0 = feet, ~0.5 = hips, ~0.9 = head
+  LOOK_AT_HEIGHT_RATIO: number;
 }
 
 export const DEFAULT_FOLLOW_CAMERA_CONFIG: AvatarFollowCameraConfig = {
@@ -31,6 +34,7 @@ export const DEFAULT_FOLLOW_CAMERA_CONFIG: AvatarFollowCameraConfig = {
   SMOOT_RATIO_TRANSLATION: 0.006 * 1.2,
   CAMERA_HEIGTH_RATIO: 4,
   CAMERA_DISTANCE_TO_AVATAR: 14,
+  LOOK_AT_HEIGHT_RATIO: 0.9,
 };
 
 export interface AvatarFollowCameraScene {
@@ -135,7 +139,7 @@ export class AvatarFollowCamera {
 
     this.destinationLookAt.set(
       avatarStateSmoot.positionX,
-      avatarStateSmoot.positionY,
+      avatarStateSmoot.positionY + bodyHeight * this.config.LOOK_AT_HEIGHT_RATIO,
       avatarStateSmoot.positionZ,
     );
     this.lookAtLastT = makeSmootVector(
