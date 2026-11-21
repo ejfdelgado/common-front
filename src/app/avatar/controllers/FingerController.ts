@@ -85,7 +85,7 @@ export class FingerController extends SceneControllerAbstract {
             }
 
             if (isActive !== wasActive) {
-                const eventName = `PINCH_${handId}_${finger_pair}_` + (isActive ? "ON" : "OFF");
+                const eventName = `PINCH_${handId}_${finger_pair}_${isActive ? "ON" : "OFF"}` as const;
                 this.events.emit({
                     name: eventName,
                 });

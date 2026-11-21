@@ -129,7 +129,7 @@ export class HandPointerController extends SceneControllerAbstract {
     if (lastIsOpened) {
       if (Math.abs(angleAvg) < this.FINGER_CLOSE_DEG_THRESHOLD_OFF) {
         this.currentState.set(handId, false);
-        const eventName = `${handId}_HAND_OPEN`;
+        const eventName = `${handId}_HAND_OPEN` as const;
         this.events.emit({
           name: eventName,
         });
@@ -141,7 +141,7 @@ export class HandPointerController extends SceneControllerAbstract {
     } else {
       if (Math.abs(angleAvg) > this.FINGER_CLOSE_DEG_THRESHOLD_ON) {
         this.currentState.set(handId, true);
-        const eventName = `${handId}_HAND_CLOSE`;
+        const eventName = `${handId}_HAND_CLOSE` as const;
         this.events.emit({
           name: eventName,
         });

@@ -1,6 +1,6 @@
 import { SceneControllerAbstract } from '@avatar/controllers/SceneControllerAbstract';
 import { AvatarBoneEnum } from '@mytypes/BodyParts';
-import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME } from '@mytypes/BodyTypes';
+import { ControllerUpdateResponse, AvatarBodyEvent, AVATAR_NAME, CubeLetter } from '@mytypes/BodyTypes';
 import { randomize } from 'src/app/tools/NumberUtils';
 import { ControllerInitDataType } from 'src/types/BodyTypesExtra';
 import * as THREE from 'three';
@@ -42,7 +42,7 @@ export interface CubeConfigType {
   model: THREE.Object3D<THREE.Object3DEventMap> | null | undefined;
   material: any;
   selected: boolean;
-  eventName: string;
+  eventName: `CUBE_${CubeLetter}_SELECT_`;
   rotationPeriod: number;
 }
 
@@ -329,7 +329,7 @@ export class CubeController extends SceneControllerAbstract {
             config.material.opacity = OPACITY_HIGH;
             config.selected = true;
             this.events.emit({
-              name: config.eventName + 'ON',
+              name: `${config.eventName}ON` as const,
             });
           }
         }
@@ -342,7 +342,7 @@ export class CubeController extends SceneControllerAbstract {
             config.material.opacity = OPACITY_LOW;
             config.selected = false;
             this.events.emit({
-              name: config.eventName + 'OFF',
+              name: `${config.eventName}OFF` as const,
             });
           }
         }

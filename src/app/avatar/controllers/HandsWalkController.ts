@@ -182,7 +182,10 @@ export class HandsWalkController extends SceneControllerAbstract {
         return;
       }
       const dt = Math.min(this.now - this.lastTime, this.MAX_FRAME_MILLIS) / 1000;
-      this.moveAvatar(joystick.x * this.MAX_ROTATION_SPEED * dt, joystick.y * this.MAX_TRANSLATION_SPEED * dt);
+      this.moveAvatar(
+        joystick.x * this.MAX_ROTATION_SPEED * dt,
+        joystick.y * this.MAX_TRANSLATION_SPEED * dt,
+      );
       return;
     }
 
@@ -204,7 +207,10 @@ export class HandsWalkController extends SceneControllerAbstract {
     if (stepX == 0 && stepY == 0) {
       return;
     }
-    this.moveAvatar(stepX * this.MAX_ROTATION_PER_GESTURE, stepY * this.MAX_TRANSLATION_PER_GESTURE);
+    this.moveAvatar(
+      stepX * this.MAX_ROTATION_PER_GESTURE,
+      stepY * this.MAX_TRANSLATION_PER_GESTURE,
+    );
   }
 
   resetApplied() {

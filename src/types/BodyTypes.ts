@@ -142,8 +142,30 @@ export interface ScenePoseAndWalkEventType extends ScenePoseEventType {
   >;
 }
 
+export type CubeLetter = 'A' | 'B' | 'C' | 'D';
+
+export type AvatarEvent =
+  // drag / pointer
+  | 'HAND_LEFT_SDRAG' | 'HAND_LEFT_DRAG' | 'HAND_LEFT_EDRAG'
+  | 'HAND_RIGHT_SDRAG' | 'HAND_RIGHT_DRAG' | 'HAND_RIGHT_EDRAG'
+  | 'HAND_LEFT_ON' | 'HAND_LEFT_OFF' | 'HAND_RIGHT_ON' | 'HAND_RIGHT_OFF'
+  | `${HandIdType}_HAND_OPEN` | `${HandIdType}_HAND_CLOSE`
+  | `PINCH_${string}_ON` | `PINCH_${string}_OFF`
+  // poses
+  | 'LEFT_HAND_UP_ON' | 'LEFT_HAND_UP_OFF' | 'RIGHT_HAND_UP_ON' | 'RIGHT_HAND_UP_OFF'
+  | 'HANDS_JOINED_ON' | 'HANDS_JOINED_OFF' | 'T_POSE_ON' | 'T_POSE_OFF'
+  | 'JUMP_ON' | 'JUMP_OFF' | 'MAKE_STEP_FORWARD' | 'MAKE_STEP_BACKWARD'
+  | 'HANDS_ZOOM_ROTATION_START' | 'HANDS_ZOOM_ROTATION' | 'HANDS_ZOOM_ROTATION_END'
+  // cubes
+  | `CUBE_${CubeLetter}_ON` | `CUBE_${CubeLetter}_SELECT_ON` | `CUBE_${CubeLetter}_SELECT_OFF`
+  | 'CUBE_CONTROLL_ON' | 'CUBE_CONTROLL_OFF' | 'CUBE_LISTEN_ON' | 'CUBE_LISTEN_OFF'
+  // app / scene
+  | 'START_ALL' | 'STOP_ALL' | 'SCENE_LOADED' | 'WON_MODE'
+  | 'SAVE_APPLY_SCENARIO' | 'VOICE_COMMAND' | 'STAND2MATRIX';
+
+
 export interface AvatarBodyEvent {
-  name: string;
+  name: AvatarEvent;
   voiceCommand?: string;
   data?: any;
 }
