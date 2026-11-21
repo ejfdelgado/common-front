@@ -121,6 +121,9 @@
           },
           "color": {
             "label": "Color de fondo"
+          },
+          "useComposer": {
+            "label": "Usar compositor"
           }
         },
         "sounds": {

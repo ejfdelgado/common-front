@@ -148,6 +148,10 @@
         <mat-tab id="background" [label]="('popup.questionaire.tabs.background.title' | translate : 'avatar' | async) ?? ''">
             <form [formGroup]="backgroundForm" class="tab_content">
 
+                <app-on-off-toggle
+                    [label]="'popup.questionaire.tabs.background.useComposer.label' | translate : 'avatar' | async"
+                    [iconName]="'checkbox'" formControlName="useComposer"></app-on-off-toggle>
+
                 <mat-form-field class="full-width" appearance="outline">
                     <mat-label>{{ "popup.questionaire.tabs.background.type.label" | translate : "avatar" | async
                         }}</mat-label>

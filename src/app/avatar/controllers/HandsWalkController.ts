@@ -22,7 +22,7 @@ export class HandsWalkController extends SceneControllerAbstract {
   // Smoothing, avatar transform and camera placement
   followCamera = new AvatarFollowCamera({
     LOOK_AT_HEIGHT_RATIO: 0.85,
-    CAMERA_HEIGTH_RATIO: 1.0,
+    CAMERA_HEIGTH_RATIO: 1.5,
     CAMERA_DISTANCE_TO_AVATAR: 6,
   });
 

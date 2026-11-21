@@ -137,6 +137,7 @@ export class QuestionaireEditComponent {
       steps: this.fb.array((data.steps ?? []).map((step) => this.buildStepGroup(step))),
     });
     this.backgroundForm = this.fb.group({
+      useComposer: [typeof data.useComposer == 'boolean' ? data.useComposer : false],
       type: [data.background?.type ?? null],
       color: [data.background?.color ?? { ...DEFAULT_BACKGROUND_COLOR }],
       image: [data.background?.image ?? DEFAULT_BACKGROUND_IMAGE],
@@ -335,6 +336,8 @@ export class QuestionaireEditComponent {
     await this.syncIfNeeded();
 
     const backgroundValue = this.backgroundForm.value;
+    this.data.useComposer =
+      typeof backgroundValue.useComposer == 'boolean' ? backgroundValue.useComposer : false;
     this.data.background = {
       ...this.data.background,
       type: backgroundValue.type ?? undefined,
