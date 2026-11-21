@@ -52,6 +52,10 @@ export class HandsWalkController extends SceneControllerAbstract {
   // 1 = MAX_ROTATION_SPEED / MAX_ROTATION_PER_GESTURE as configured, < 1 slower, > 1 faster.
   ROTATION_SENSITIVITY: number = 0.2;
   TRANSLATION_DIRECTION: number = -1;
+  // Multiplier applied to every front/back displacement produced by the gesture, in both
+  // keepMoving modes. 1 = MAX_TRANSLATION_SPEED / MAX_TRANSLATION_PER_GESTURE as configured,
+  // < 1 slower, > 1 faster.
+  TRANSLATION_SENSITIVITY: number = 0.6;
 
   // variables
   leftDrag: DragDataType | null = null;
@@ -227,8 +231,9 @@ export class HandsWalkController extends SceneControllerAbstract {
     const advanceFront = FRONT_REFERENCE.clone()
       .applyAxisAngle(UP_REFERENCE, this.scene.avatarState.rotationY)
       .normalize();
-    this.scene.avatarState.positionX += advanceFront.x * advance;
-    this.scene.avatarState.positionZ += advanceFront.z * advance;
+    const scaledAdvance = advance * this.TRANSLATION_SENSITIVITY;
+    this.scene.avatarState.positionX += advanceFront.x * scaledAdvance;
+    this.scene.avatarState.positionZ += advanceFront.z * scaledAdvance;
   }
 
   updateValues() {
