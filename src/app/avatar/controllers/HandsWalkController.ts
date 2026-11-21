@@ -6,12 +6,7 @@ import {
   Point2D,
   printPoint2D,
 } from '@mytypes/BodyTypes';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import * as THREE from 'three';
-import { makeSmootValue, makeSmootVector } from '@avatar/utils/AvatarUtilities';
-
-const FRONT_REFERENCE = new THREE.Vector3(0, 0, -1);
-const UP_REFERENCE = new THREE.Vector3(0, 1, 0);
+import { AvatarFollowCamera, getAvatarFront } from '@avatar/utils/AvatarFollowCamera';
 
 /**
  * Navigation driven by a closed hand used as a virtual joystick:
@@ -21,17 +16,14 @@ const UP_REFERENCE = new THREE.Vector3(0, 1, 0);
  * drag start, so holding the hand still at an offset keeps moving at constant speed.
  * With keepMoving = false the displacement follows the hand offset, so moving further
  * requires opening the hand and repeating the gesture.
- * Camera placement and smoothing are the same as in WalkController.
+ * Camera placement and smoothing are shared with WalkController (AvatarFollowCamera).
  */
 export class HandsWalkController extends SceneControllerAbstract {
-  // constants (camera / smoothing, same as WalkController)
-  PRESITION_TRANSLATION: number = 0.0000001;
-  MAX_INACTIVITY_MILLIS: number = 3000;
-  SMOOT_RATIO: number = 0.006 * 1.2;
-  SMOOT_RATIO_TRANSLATION: number = 0.006 * 1.2;
-
-  CAMERA_HEIGTH_RATIO: number = 0.8;
-  CAMERA_DISTANCE_TO_AVATAR: number = 7;
+  // Smoothing, avatar transform and camera placement
+  followCamera = new AvatarFollowCamera({
+    CAMERA_HEIGTH_RATIO: 0.8,
+    CAMERA_DISTANCE_TO_AVATAR: 7,
+  });
 
   // constants (hands joystick)
   // Drag below this amount (normalized units) is ignored
@@ -61,16 +53,6 @@ export class HandsWalkController extends SceneControllerAbstract {
   leftDrag: DragDataType | null = null;
   rightDrag: DragDataType | null = null;
 
-  destinationCameraLocation = new THREE.Vector3(0, 0, 0);
-  lastCameraSmoot: number = 0;
-  lookAtLastT: number = 0;
-  destinationLookAt = new THREE.Vector3(0, 0, 0);
-  lookAtActual = new THREE.Vector3(0, 0, 0);
-
-  translationX1Last: number = 0;
-  translationZ1Last: number = 0;
-
-  transformationMatrix: THREE.Matrix4 = new THREE.Matrix4().identity();
   lastTime: number = 0;
 
   // true: joystick mode, holding the hand at an offset keeps moving (speed control).
@@ -86,17 +68,11 @@ export class HandsWalkController extends SceneControllerAbstract {
   appliedJoystick: Point2D = { x: 0, y: 0 };
 
   override async update(): Promise<ControllerUpdateResponse> {
-    const { camera, orbitals } = this.scene;
     this.handsWalkLogic();
-    if (camera && orbitals) {
-      orbitals.enabled = false;
-      this.computeTransformationMatrix();
-      // Affect the scene camera
-      this.placeCamera(camera, orbitals);
-    }
+    const avatarTransform = this.followCamera.follow(this.scene, this.lastData.stateBody.height);
     this.lastTime = this.now;
     return {
-      avatarTransform: this.transformationMatrix,
+      avatarTransform,
     };
   }
 
@@ -104,11 +80,7 @@ export class HandsWalkController extends SceneControllerAbstract {
     this.leftDrag = null;
     this.rightDrag = null;
     this.resetApplied();
-    const { orbitals } = this.scene;
-    if (orbitals) {
-      orbitals.enabled = true;
-      orbitals.update();
-    }
+    this.followCamera.release(this.scene.orbitals);
   }
 
   override async destroy(): Promise<void> {}
@@ -228,90 +200,10 @@ export class HandsWalkController extends SceneControllerAbstract {
     this.scene.avatarState.rotationY -= turn * this.ROTATION_SENSITIVITY;
 
     // Translation along the avatar front: hand up walks forward
-    const advanceFront = FRONT_REFERENCE.clone()
-      .applyAxisAngle(UP_REFERENCE, this.scene.avatarState.rotationY)
-      .normalize();
+    const advanceFront = getAvatarFront(this.scene.avatarState.rotationY);
     const scaledAdvance = advance * this.TRANSLATION_SENSITIVITY;
     this.scene.avatarState.positionX += advanceFront.x * scaledAdvance;
     this.scene.avatarState.positionZ += advanceFront.z * scaledAdvance;
-  }
-
-  updateValues() {
-    // Translation
-    const translationX1Res = makeSmootValue(
-      this.scene.avatarStateSmoot.positionX,
-      this.scene.avatarState.positionX,
-      this.translationX1Last,
-      this.SMOOT_RATIO_TRANSLATION,
-      this.MAX_INACTIVITY_MILLIS,
-      this.PRESITION_TRANSLATION,
-    );
-    this.scene.avatarStateSmoot.positionX = translationX1Res.v;
-    this.translationX1Last = translationX1Res.t;
-
-    const translationZ1Res = makeSmootValue(
-      this.scene.avatarStateSmoot.positionZ,
-      this.scene.avatarState.positionZ,
-      this.translationZ1Last,
-      this.SMOOT_RATIO_TRANSLATION,
-      this.MAX_INACTIVITY_MILLIS,
-      this.PRESITION_TRANSLATION,
-    );
-    this.scene.avatarStateSmoot.positionZ = translationZ1Res.v;
-    this.translationZ1Last = translationZ1Res.t;
-
-    // Rotation
-    this.scene.avatarStateSmoot.rotationY = this.scene.avatarState.rotationY;
-    this.scene.avatarStateSmoot.positionY = this.scene.avatarState.positionY;
-  }
-
-  placeCamera(camera: THREE.PerspectiveCamera, orbitals: OrbitControls) {
-    const advanceFront = FRONT_REFERENCE.clone()
-      .applyAxisAngle(UP_REFERENCE, this.scene.avatarStateSmoot.rotationY)
-      .normalize();
-
-    this.destinationCameraLocation.x =
-      this.scene.avatarStateSmoot.positionX - advanceFront.x * this.CAMERA_DISTANCE_TO_AVATAR;
-    this.destinationCameraLocation.y =
-      this.lastData.stateBody.height * this.CAMERA_HEIGTH_RATIO +
-      this.scene.avatarStateSmoot.positionY;
-    this.destinationCameraLocation.z =
-      this.scene.avatarStateSmoot.positionZ - advanceFront.z * this.CAMERA_DISTANCE_TO_AVATAR;
-    this.lastCameraSmoot = makeSmootVector(
-      camera.position,
-      this.destinationCameraLocation,
-      this.lastCameraSmoot,
-      this.SMOOT_RATIO,
-      this.MAX_INACTIVITY_MILLIS,
-    );
-
-    this.destinationLookAt.setX(this.scene.avatarStateSmoot.positionX);
-    this.destinationLookAt.setY(this.scene.avatarStateSmoot.positionY);
-    this.destinationLookAt.setZ(this.scene.avatarStateSmoot.positionZ);
-    this.lookAtLastT = makeSmootVector(
-      this.lookAtActual,
-      this.destinationLookAt,
-      this.lookAtLastT,
-      this.SMOOT_RATIO,
-      this.MAX_INACTIVITY_MILLIS,
-    );
-    camera.lookAt(this.lookAtActual);
-    orbitals.target.set(this.lookAtActual.x, this.lookAtActual.y, this.lookAtActual.z);
-  }
-
-  computeTransformationMatrix() {
-    this.updateValues();
-
-    const translationMatrix = new THREE.Matrix4().makeTranslation(
-      this.scene.avatarStateSmoot.positionX,
-      0,
-      this.scene.avatarStateSmoot.positionZ,
-    );
-    const rotationMatrix = new THREE.Matrix4().makeRotationY(this.scene.avatarStateSmoot.rotationY);
-    this.transformationMatrix = new THREE.Matrix4().multiplyMatrices(
-      translationMatrix,
-      rotationMatrix,
-    );
   }
 
   displayLeftDelta() {
