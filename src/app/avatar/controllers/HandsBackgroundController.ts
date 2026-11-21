@@ -7,8 +7,15 @@ import {
 } from '@mytypes/BodyTypes';
 import { ZoomRotationData } from './HandsZoomRotationController';
 
-const MIN_SCALE = 0.2;
-const MAX_SCALE = 5;
+// Sensitivity tuning. 1 = background follows the hands 1:1.
+// > 1 amplifies the gesture, < 1 dampens it.
+// Pan: multiplier of the cursor displacement (screen pixels).
+const PAN_SENSITIVITY = 1;
+// Rotation: multiplier of the angle between the hands (degrees).
+const ROTATION_SENSITIVITY = 1;
+// Scale: exponent applied to the zoom ratio (zoom ^ SCALE_SENSITIVITY),
+// so it stays symmetric for zoom in/out and never becomes negative.
+const SCALE_SENSITIVITY = 0.6;
 
 type HandSide = 'L' | 'R';
 
@@ -123,8 +130,8 @@ export class HandsBackgroundController extends SceneControllerAbstract {
       return false;
     }
     const { width, height } = this.getScreenSize();
-    this.bgDx = this.panAnchor.baseDx + (current.x - this.panAnchor.point.x) * width;
-    this.bgDy = this.panAnchor.baseDy + (current.y - this.panAnchor.point.y) * height;
+    this.bgDx = this.panAnchor.baseDx + (current.x - this.panAnchor.point.x) * width * PAN_SENSITIVITY;
+    this.bgDy = this.panAnchor.baseDy + (current.y - this.panAnchor.point.y) * height * PAN_SENSITIVITY;
     return true;
   }
 
@@ -142,9 +149,9 @@ export class HandsBackgroundController extends SceneControllerAbstract {
       return;
     }
     this.zoomRotation = data;
-    this.bgScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, this.zoomAnchor.baseScale * data.zoom));
+    this.bgScale = this.zoomAnchor.baseScale * Math.pow(data.zoom, SCALE_SENSITIVITY);
     // ZoomRotationData.rotation is counterclockwise-positive; CSS rotate() is clockwise-positive
-    this.bgRotateDeg = this.zoomAnchor.baseRotateDeg - data.rotation;
+    this.bgRotateDeg = this.zoomAnchor.baseRotateDeg - data.rotation * ROTATION_SENSITIVITY;
   }
 
   endZoom(data: ZoomRotationData | null) {
