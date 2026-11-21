@@ -1,109 +1,109 @@
 .words_space {
-    text-align: center;
-    max-width: 100%;
+  text-align: center;
+  max-width: 100%;
 }
 
 .one_word {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 .lang_option {
-    padding: 5px;
-    border-radius: 5px;
-    color: white;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
 }
 
 .higlighted {
-    font-weight: bold;
-    background: white;
-    color: black;
+  font-weight: bold;
+  background: white;
+  color: black;
 }
 
 .no_mouse {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 #canvas {
-    display: none;
+  display: none;
 }
 
 .video_grand_parent {
-    position: absolute;
-    z-index: 2;
-    border-radius: 7px;
-    overflow: hidden;
-    right: 20px;
-    bottom: 63px;
-    display: flex;
-    flex-direction: column;
+  position: absolute;
+  z-index: 2;
+  border-radius: 7px;
+  overflow: hidden;
+  right: 20px;
+  bottom: 63px;
+  display: flex;
+  flex-direction: column;
 }
 
 .video_parent {
-    position: relative;
-    display: inline-block;
-    line-height: 0;
+  position: relative;
+  display: inline-block;
+  line-height: 0;
 }
 
 .miss_avatar_parent {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .miss_avatar_parent img {
-    max-height: 100%;
-    max-width: 100%;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .video_preview {
-    height: 30vh;
-    width: auto;
-    transform: scaleX(-1);
-    /* maintains aspect ratio */
+  height: 30vh;
+  width: auto;
+  transform: scaleX(-1);
+  /* maintains aspect ratio */
 }
 
 .start_container {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .start_button {
-    pointer-events: all !important;
-    position: relative;
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
-    background-color: red;
-    color: white;
-    z-index: 2;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 0;
+  pointer-events: all !important;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  background-color: red;
+  color: white;
+  z-index: 2;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0;
 }
 
 .head_up_log {
-    align-items: end;
-    font-size: 3rem;
-    line-height: 3rem;
+  align-items: end;
+  font-size: 3rem;
+  line-height: 3rem;
 }
 
 .transparent {
-    opacity: 0.65;
+  opacity: 0.65;
 }
 
 .video_parent.visibility_fade_out.stable_camera_tracking {
@@ -111,7 +111,7 @@
 }
 
 .video_parent.visibility_scale_down.stable_camera_tracking .video_preview {
-    animation: scaleDown 10s ease-out forwards;
+  animation: scaleDown 10s ease-out forwards;
 }
 
 @keyframes fadeOut {
@@ -133,13 +133,16 @@
 }
 
 .background_image {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform-origin: center;
 }
 
 @media (max-width: 500px) {
-    #video {
-        max-height: 100px;
-    }
+  #video {
+    max-height: 100px;
+  }
 }

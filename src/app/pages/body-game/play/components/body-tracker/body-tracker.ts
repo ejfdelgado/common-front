@@ -147,4 +147,9 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
       this.analyticsSrv.event('play', { roomId: this.room.id });
     }
   }
+
+  getBackgroundTransformations() {
+    //return "translate(20px, 40px) scale(1.5) rotate(15deg)";
+    return "translate(0px, 0px) scale(1) rotate(0deg)";
+  }
 }
