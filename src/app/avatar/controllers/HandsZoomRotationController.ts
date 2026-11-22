@@ -56,6 +56,8 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
   lastAngle: number | null = null;
   accumulatedAngle: number = 0;
 
+  logEnabled: boolean = false;
+
   override async update(): Promise<ControllerUpdateResponse> {
     return {};
   }
@@ -65,6 +67,9 @@ export class HandsZoomRotationController extends SceneControllerAbstract {
   override async destroy(): Promise<void> {}
 
   displayZoomRotation() {
+    if (!this.logEnabled) {
+      return;
+    }
     if (this.zoom == null || this.rotation == null) {
       this.setHudValue('top', '');
     } else {
