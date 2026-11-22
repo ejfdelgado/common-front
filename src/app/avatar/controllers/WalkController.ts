@@ -133,7 +133,6 @@ export class WalkController extends SceneControllerAbstract {
     const advanceFront = getAvatarFront(this.scene.avatarState.rotationY);
     this.scene.avatarState.positionX += advanceFront.x * this.stepSize * this.STEP_AMOUNT * forward;
     this.scene.avatarState.positionZ += advanceFront.z * this.stepSize * this.STEP_AMOUNT * forward;
-    this.followCamera.computeTransformationMatrix(this.scene);
   }
 
   computeKCal(): number {
