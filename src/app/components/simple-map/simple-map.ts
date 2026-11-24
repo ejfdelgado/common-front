@@ -27,6 +27,8 @@ export class SimpleMapComponent implements AfterViewInit {
   @ViewChild('mapContainer') mapElement!: ElementRef;
 
   @Input() transform?: (a: MarkType) => Promise<string>;
+  // Extra options merged over the defaults (e.g. renderingType VECTOR to allow heading)
+  @Input() mapOptions: google.maps.MapOptions = {};
 
   map!: google.maps.Map;
   mapLib: any;
@@ -65,6 +67,7 @@ export class SimpleMapComponent implements AfterViewInit {
         zoom: 17,//lower becomes farder
         mapId: 'MAP_ID',
         disableDefaultUI: true,
+        ...this.mapOptions,
       };
 
       this.map = new Map(this.mapElement.nativeElement, mapOptions);

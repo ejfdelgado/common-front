@@ -161,7 +161,9 @@ export type AvatarEvent =
   | 'CUBE_CONTROLL_ON' | 'CUBE_CONTROLL_OFF' | 'CUBE_LISTEN_ON' | 'CUBE_LISTEN_OFF'
   // app / scene
   | 'START_ALL' | 'STOP_ALL' | 'SCENE_LOADED' | 'WON_MODE'
-  | 'SAVE_APPLY_SCENARIO' | 'VOICE_COMMAND' | 'STAND2MATRIX';
+  | 'SAVE_APPLY_SCENARIO' | 'VOICE_COMMAND' | 'STAND2MATRIX'
+  // google map
+  | 'MAP_GESTURE';
 
 
 export interface AvatarBodyEvent {

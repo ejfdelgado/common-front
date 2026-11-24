@@ -33,6 +33,7 @@ import { Subscription } from 'rxjs';
 import { StartGameOptions } from 'src/types/WorldAvatar';
 import { AnalyticsService } from 'src/app/services/analytics.service';
 import { SimpleMapComponent } from '@components/simple-map/simple-map';
+import { MapGestureData } from '@avatar/controllers/HandsGoogleMapController';
 
 @Component({
   selector: 'app-body-tracker',
@@ -48,6 +49,16 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
   @ViewChild('canvas') canvasRefGlobal!: ElementRef<HTMLCanvasElement>;
   // Only present while mode.type == 'op_google_map' (rendered inside an @if)
   @ViewChild('background_map') backgroundMap?: SimpleMapComponent;
+  // Vector rendering is required for setHeading (rotation) and fractional zoom.
+  // Hands are the input, so the map ignores mouse/touch/keyboard gestures.
+  backgroundMapOptions: google.maps.MapOptions = {
+    renderingType: 'VECTOR' as google.maps.RenderingType,
+    isFractionalZoomEnabled: true,
+    gestureHandling: 'none',
+    keyboardShortcuts: false,
+  };
+  // Map zoom / heading captured when the two-hand gesture starts
+  mapGestureBase: { zoom: number; heading: number } | null = null;
 
   @Output() events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
   headUpLogData: any = {};
@@ -141,7 +152,41 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
   }
 
   notifyEvent(event: AvatarBodyEvent): void {
+    if (event.name == 'MAP_GESTURE') {
+      this.applyMapGesture(event.data);
+      return;
+    }
     this.events.emit(event);
+  }
+
+  // Applies the commands produced by HandsGoogleMapController
+  applyMapGesture(data: MapGestureData) {
+    const map = this.backgroundMap?.map;
+    if (!map || !data) {
+      return;
+    }
+    switch (data.type) {
+      case 'pan':
+        // panBy moves the camera; grab semantics move the content with the hand
+        map.panBy(-data.dx, -data.dy);
+        break;
+      case 'zoom_rotation_start':
+        this.mapGestureBase = {
+          zoom: map.getZoom() ?? 0,
+          heading: map.getHeading() ?? 0,
+        };
+        break;
+      case 'zoom_rotation':
+        if (!this.mapGestureBase) {
+          return;
+        }
+        map.setZoom(this.mapGestureBase.zoom + data.zoomDelta);
+        map.setHeading(this.mapGestureBase.heading + data.headingDelta);
+        break;
+      case 'zoom_rotation_end':
+        this.mapGestureBase = null;
+        break;
+    }
   }
 
   override async startAll(options?: StartGameOptions) {

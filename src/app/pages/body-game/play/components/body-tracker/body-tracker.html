@@ -5,7 +5,7 @@
 
     @if (mode?.type == 'op_google_map') {
     <div class="background_map">
-        <app-simple-map #background_map></app-simple-map>
+        <app-simple-map #background_map [mapOptions]="backgroundMapOptions"></app-simple-map>
     </div>
     }
 

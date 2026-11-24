@@ -122,6 +122,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
       const SCALED_EVENTS = [
         'WON_MODE',
         'SAVE_APPLY_SCENARIO',
+        'MAP_GESTURE',
       ];
       if (SCALED_EVENTS.indexOf(event.name) >= 0) {
         //Next mode logic
