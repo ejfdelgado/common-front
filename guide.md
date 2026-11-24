@@ -93,3 +93,23 @@ CNAME	ghs.googlehosted.com	subdomain
 
 ### Remember to adjust the CORS on the infra
 variables.tf cors_allowed
+
+
+
+## Blender
+Select 1. Mesh, then 2. Skeleton, then Ctrl + P -> Armature Deform -> With Automatic Weights
+Then to refine:
+Change Object Mode to Weight Paint, then select the Data (the triangle in the right panel)
+Select every bone and redefine with a brush
+
+
+```
+npm install -g @gltf-transform/cli
+
+# resize all textures to max 1024 and convert to WebP
+gltf-transform resize female_dog_joined.glb female_dog_joined2.glb --width 1024 --height 1024
+gltf-transform webp female_dog_joined2.glb female_dog_joined3.glb
+
+# or KTX2/Basis compression (GPU-friendly, best for web/three.js)
+gltf-transform etc1s out.glb compressed.glb
+```
