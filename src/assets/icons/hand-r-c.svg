@@ -25,15 +25,19 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.42205436"
-     inkscape:cx="608.9263"
-     inkscape:cy="892.06518"
-     inkscape:window-width="1920"
-     inkscape:window-height="1163"
+     inkscape:zoom="1.19375"
+     inkscape:cx="302.40838"
+     inkscape:cy="341.36126"
+     inkscape:window-width="1853"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1" />
+  <path
+     style="fill:#ffffff;stroke-width:0.03"
+     d="M 10.756021,4.4984292 9.6,4.6743456 8.8460733,5.6293194 6.7853403,4.8502617 5.6544504,5.5539267 5.5790577,7.2125655 4.2471204,7.9413612 3.7696335,9.1727748 v 1.5329842 l -0.703665,1.482723 0.1507854,3.015706 1.382199,1.558116 2.1863874,1.030366 3.1664922,0.05026 2.2869115,-1.055498 2.211518,-2.211518 0.477487,-3.267015 -0.954974,-2.5633514 -1.532984,-2.6638743 z"
+     id="path1" />
   <path
      fill-rule="evenodd"
      clip-rule="evenodd"
