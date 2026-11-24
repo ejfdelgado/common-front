@@ -69,7 +69,7 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
   //  - Increase LOOK_AT_HEIGHT_RATIO to push the avatar further down.
   //  - Increase CAMERA_DISTANCE_TO_AVATAR to make it smaller.
   followCamera = new AvatarFollowCamera({
-    LOOK_AT_HEIGHT_RATIO: 1.9,
+    LOOK_AT_HEIGHT_RATIO: 2.1,
     CAMERA_HEIGTH_RATIO: 1.6,
     CAMERA_DISTANCE_TO_AVATAR: 10,
   });
