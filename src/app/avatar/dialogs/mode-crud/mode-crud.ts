@@ -75,6 +75,15 @@ export const CONTROLLERS_MAP: { [key: string]: GameController[] } = {
     { id: GameControllerEnum.CubeController, params: { enabled: false } },
     { id: GameControllerEnum.AmbienceMusicController, params: {} },
   ],
+  op_google_map: [
+    { id: GameControllerEnum.ComparableController, params: {} },
+    { id: GameControllerEnum.Stand2dController, params: {} },
+    { id: GameControllerEnum.CubeController, params: { enabled: false } },
+    { id: GameControllerEnum.ArmsPointerController, params: {} },
+    { id: GameControllerEnum.HandPointerController, params: {} },
+    { id: GameControllerEnum.HandsZoomRotationController, params: {} },
+    { id: GameControllerEnum.HandsGoogleMapController, params: {} },
+  ],
 };
 
 @Component({

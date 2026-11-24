@@ -216,6 +216,7 @@
             "ch_hands": "Hand's interaction",
             "ch_walk": "Walk (hands)",
             "ch_walk_old": "Walk (feet)",
+            "ch_google_map": "Google map",
             "ch_record": "Body record"
           },
           "avatar_side": {

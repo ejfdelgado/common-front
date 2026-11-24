@@ -53,6 +53,12 @@ export class HandsNavigationController extends SceneControllerAbstract {
       // End drag
       this.rightDrag = null;
       this.displayRightDelta();
+    } else if (event.name == 'HANDS_ZOOM_ROTATION_START') {
+      // 
+    } else if (event.name == 'HANDS_ZOOM_ROTATION') {
+      // 
+    } else if (event.name == 'HANDS_ZOOM_ROTATION_END') {
+      // 
     }
   }
 }

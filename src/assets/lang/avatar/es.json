@@ -216,6 +216,7 @@
             "ch_hands": "Interacción con manos",
             "ch_walk": "Caminar (manos)",
             "ch_walk_old": "Caminar (pies)",
+            "ch_google_map": "Google map",
             "ch_record": "Grabación"
           },
           "avatar_side": {

@@ -23,6 +23,7 @@ export const TYPE_OPTIONS: SelectOptionString[] = [
   { label_key: 'ch_hands', label: 'hands', value: 'op_hands' },
   { label_key: 'ch_walk', label: 'walk', value: 'op_walk' },
   { label_key: 'ch_walk_old', label: 'walk_old', value: 'op_walk_old' },
+  { label_key: 'ch_google_map', label: 'google_map', value: 'op_google_map' },
 ];
 
 export const OBJECTS_OPTIONS: SelectOptionString[] = [
@@ -183,6 +184,7 @@ export enum GameControllerEnum {
   HandsZoomRotationController = 'HandsZoomRotationController',
   AmbienceMusicController = 'AmbienceMusicController',
   HandsBackgroundController = 'HandsBackgroundController',
+  HandsGoogleMapController = 'HandsGoogleMapController',
 }
 
 export const POSE_CONTROLLERS: GameControllerEnum[] = [
