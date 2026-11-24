@@ -151,6 +151,12 @@
   height: 100%;
 }
 
+.background_map app-simple-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 @media (max-width: 500px) {
   #video {
     max-height: 100px;

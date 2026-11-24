@@ -32,11 +32,12 @@ import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 import { Subscription } from 'rxjs';
 import { StartGameOptions } from 'src/types/WorldAvatar';
 import { AnalyticsService } from 'src/app/services/analytics.service';
+import { SimpleMapComponent } from '@components/simple-map/simple-map';
 
 @Component({
   selector: 'app-body-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, AvatarContainer, TranslatePipe],
+  imports: [CommonModule, FormsModule, MatIconModule, AvatarContainer, TranslatePipe, SimpleMapComponent],
   templateUrl: './body-tracker.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./body-tracker.scss', '../../../../../../threejs_styles.scss'],
@@ -45,6 +46,8 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
   @ViewChild('three_component') avatarContainer!: AvatarContainer;
   @ViewChild('video') videoRefGlobal!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvasRefGlobal!: ElementRef<HTMLCanvasElement>;
+  // Only present while mode.type == 'op_google_map' (rendered inside an @if)
+  @ViewChild('background_map') backgroundMap?: SimpleMapComponent;
 
   @Output() events: EventEmitter<AvatarBodyEvent> = new EventEmitter();
   headUpLogData: any = {};
