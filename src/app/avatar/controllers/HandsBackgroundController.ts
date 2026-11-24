@@ -6,6 +6,7 @@ import {
   Point2D,
 } from '@mytypes/BodyTypes';
 import { ZoomRotationData } from './HandsZoomRotationController';
+import { AvatarFollowCamera } from '@avatar/utils/AvatarFollowCamera';
 
 // Sensitivity tuning. 1 = background follows the hands 1:1.
 // > 1 amplifies the gesture, < 1 dampens it.
@@ -56,8 +57,24 @@ export class HandsBackgroundController extends SceneControllerAbstract {
   panAnchor: PanAnchor | null = null;
   zoomAnchor: ZoomAnchor | null = null;
 
+  // Same framing as HandsGoogleMapController: third-person camera that keeps the
+  // avatar in the lower part of the screen, leaving most of the background visible.
+  //  - Increase LOOK_AT_HEIGHT_RATIO to push the avatar further down.
+  //  - Increase CAMERA_DISTANCE_TO_AVATAR to make it smaller.
+  followCamera = new AvatarFollowCamera({
+    LOOK_AT_HEIGHT_RATIO: 2.1,
+    CAMERA_HEIGTH_RATIO: 1.6,
+    CAMERA_DISTANCE_TO_AVATAR: 10,
+  });
+
   override async update(): Promise<ControllerUpdateResponse> {
-    return {};
+    if (!this.scene || !this.lastData?.stateBody) {
+      return {};
+    }
+    const avatarTransform = this.followCamera.follow(this.scene, this.lastData.stateBody.height);
+    return {
+      avatarTransform,
+    };
   }
   override async stop(): Promise<void> {
     this.leftDrag = null;
@@ -65,6 +82,26 @@ export class HandsBackgroundController extends SceneControllerAbstract {
     this.zoomRotation = null;
     this.panAnchor = null;
     this.zoomAnchor = null;
+    this.followCamera.release(this.scene?.orbitals);
+  }
+
+  /**
+   * Puts the avatar at the origin with its back to the camera. The background is
+   * the world here, so the avatar never walks: update() keeps the follow camera
+   * framing it at the bottom of the screen (see followCamera).
+   * The smoothed state is reset too, so the avatar does not slide in from the
+   * place it had in a previous mode.
+   */
+  placeAvatar() {
+    if (!this.scene) {
+      return;
+    }
+    for (const state of [this.scene.avatarState, this.scene.avatarStateSmoot]) {
+      state.positionX = 0;
+      state.positionY = 0;
+      state.positionZ = 0;
+      state.rotationY = 0;
+    }
   }
   override async destroy(): Promise<void> {}
 
@@ -165,6 +202,9 @@ export class HandsBackgroundController extends SceneControllerAbstract {
   override onEvent(event: AvatarBodyEvent): void {
     let changed = false;
     switch (event.name) {
+      case 'START_ALL':
+        this.placeAvatar();
+        return;
       case 'HAND_LEFT_SDRAG':
       case 'HAND_LEFT_DRAG':
         this.leftDrag = event.data;
