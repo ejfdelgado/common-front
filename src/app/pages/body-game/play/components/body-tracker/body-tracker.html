@@ -1,8 +1,13 @@
 <div class="full_screen container_vertical">
     <div class="background_image" [style.background-image]="backgroundUrl ? 'url(' + backgroundUrl + ')' : null"
         [style.transform]="getBackgroundTransformations()">
-
     </div>
+
+    @if (mode?.type == 'op_google_map') {
+    <div class="background_map">
+    </div>
+    }
+
     <app-avatar-container #three_component (headUpLog)="headUpLog($event)"
         (notifications)="notifications($event)"></app-avatar-container>
 
