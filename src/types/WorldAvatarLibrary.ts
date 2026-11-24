@@ -7,7 +7,7 @@ const BUCKET_ROOT = "https://storage.googleapis.com/pro-ejflab-assets/avatar_ass
 export const MESH_OPTIONS: SelectOptionString[] = [
     { label: 'Huesos', value: "esqueleto009_1_web.glb" },
     { label: 'Bruno', value: "skeleton_male_dog_joined3.glb" },
-    { label: 'Brenda', value: "female_dog_joined3.glb" },
+    { label: 'Brenda', value: "female_dog_joined_3.glb" },
     //{ label: 'Tigresa', value: "tigresa009_1_web.glb" },
     //{ label: 'Coco', value: "cocodrilo009_1_web.glb" },
     //{ label: 'Bender', value: "bender2_web.glb" },
@@ -21,7 +21,7 @@ export const MESH_PREVIEW: {[key: string]: string} = {
     "cocodrilo009_1_web.glb": "avatar_assets/avatar_meshes/preview/coco.jpg",
     "esqueleto009_1_web.glb": "avatar_assets/avatar_meshes/preview/esqueleto.jpg",
     "skeleton_male_dog_joined3.glb": "avatar_assets/avatar_meshes/preview/mini_boy-dog.jpg",
-    "female_dog_joined3.glb": "avatar_assets/avatar_meshes/preview/female-dog.jpg",
+    "female_dog_joined_3.glb": "avatar_assets/avatar_meshes/preview/female-dog.jpg",
 };
 
 export type ABCDType = "cube" | "futbol" | "fruits" | "minecraft";
