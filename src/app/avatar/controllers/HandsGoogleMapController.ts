@@ -6,6 +6,7 @@ import {
   Point2D,
 } from '@mytypes/BodyTypes';
 import { ZoomRotationData } from './HandsZoomRotationController';
+import { AvatarFollowCamera } from '@avatar/utils/AvatarFollowCamera';
 
 // Sensitivity tuning. 1 = map follows the hands 1:1.
 // Pan: multiplier of the cursor displacement (screen pixels).
@@ -61,8 +62,26 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
   // true: move the camera immediately on every frame (see MapGestureData.live)
   liveUpdate: boolean = true;
 
+  // Third-person camera that keeps the avatar in the lower part of the screen,
+  // leaving most of the map visible above it. The camera stands behind the avatar
+  // (so its hands match the user's hands) at about head height and looks at a point
+  // well above the head: the avatar ends up below the screen center.
+  //  - Increase LOOK_AT_HEIGHT_RATIO to push the avatar further down.
+  //  - Increase CAMERA_DISTANCE_TO_AVATAR to make it smaller.
+  followCamera = new AvatarFollowCamera({
+    LOOK_AT_HEIGHT_RATIO: 1.9,
+    CAMERA_HEIGTH_RATIO: 1.6,
+    CAMERA_DISTANCE_TO_AVATAR: 10,
+  });
+
   override async update(): Promise<ControllerUpdateResponse> {
-    return {};
+    if (!this.scene || !this.lastData?.stateBody) {
+      return {};
+    }
+    const avatarTransform = this.followCamera.follow(this.scene, this.lastData.stateBody.height);
+    return {
+      avatarTransform,
+    };
   }
   override async stop(): Promise<void> {
     if (this.zooming) {
@@ -72,6 +91,7 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
     this.rightDrag = null;
     this.panLast = null;
     this.zooming = false;
+    this.followCamera.release(this.scene?.orbitals);
   }
   override async destroy(): Promise<void> {}
 
@@ -134,8 +154,30 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
     });
   }
 
+  /**
+   * Puts the avatar at the origin with its back to the camera. The map is the
+   * world here, so the avatar never walks: update() keeps the follow camera
+   * framing it at the bottom of the screen (see followCamera).
+   * The smoothed state is reset too, so the avatar does not slide in from the
+   * place it had in a previous mode; the camera still glides to its framing.
+   */
+  placeAvatar() {
+    if (!this.scene) {
+      return;
+    }
+    for (const state of [this.scene.avatarState, this.scene.avatarStateSmoot]) {
+      state.positionX = 0;
+      state.positionY = 0;
+      state.positionZ = 0;
+      state.rotationY = 0;
+    }
+  }
+
   override onEvent(event: AvatarBodyEvent): void {
     switch (event.name) {
+      case 'START_ALL':
+        this.placeAvatar();
+        break;
       case 'HAND_LEFT_SDRAG':
       case 'HAND_LEFT_DRAG':
         this.leftDrag = event.data;
