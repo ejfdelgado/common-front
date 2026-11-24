@@ -167,7 +167,14 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
     }
     switch (data.type) {
       case 'pan':
-        // panBy moves the camera; grab semantics move the content with the hand
+        // Grab semantics: the content moves with the hand, so the camera moves opposite
+        if (data.live) {
+          const center = this.offsetMapCenter(map, -data.dx, -data.dy);
+          if (center) {
+            map.moveCamera({ center });
+            break;
+          }
+        }
         map.panBy(-data.dx, -data.dy);
         break;
       case 'zoom_rotation_start':
@@ -180,13 +187,48 @@ export class BodyTracker extends ComponentP2P implements AfterViewInit {
         if (!this.mapGestureBase) {
           return;
         }
-        map.setZoom(this.mapGestureBase.zoom + data.zoomDelta);
-        map.setHeading(this.mapGestureBase.heading + data.headingDelta);
+        const zoom = this.mapGestureBase.zoom + data.zoomDelta;
+        const heading = this.mapGestureBase.heading + data.headingDelta;
+        if (data.live) {
+          map.moveCamera({ zoom, heading });
+        } else {
+          map.setZoom(zoom);
+          map.setHeading(heading);
+        }
         break;
       case 'zoom_rotation_end':
         this.mapGestureBase = null;
         break;
     }
+  }
+
+  /**
+   * Returns the LatLng that is (dx, dy) screen pixels away from the current center,
+   * accounting for the map heading (tilt is assumed 0). Null if the projection
+   * is not ready yet.
+   */
+  offsetMapCenter(map: google.maps.Map, dx: number, dy: number): google.maps.LatLng | null {
+    const projection = map.getProjection();
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    if (!projection || !center || zoom == null) {
+      return null;
+    }
+    const worldCenter = projection.fromLatLngToPoint(center);
+    if (!worldCenter) {
+      return null;
+    }
+    // Screen axes are rotated by the heading (clockwise) relative to world axes
+    const h = ((map.getHeading() ?? 0) * Math.PI) / 180;
+    const cos = Math.cos(h);
+    const sin = Math.sin(h);
+    const worldDx = dx * cos - dy * sin;
+    const worldDy = dx * sin + dy * cos;
+    // World coordinates are 256 units wide at zoom 0, doubling every zoom level
+    const scale = Math.pow(2, zoom);
+    return projection.fromPointToLatLng(
+      new google.maps.Point(worldCenter.x + worldDx / scale, worldCenter.y + worldDy / scale),
+    );
   }
 
   override async startAll(options?: StartGameOptions) {

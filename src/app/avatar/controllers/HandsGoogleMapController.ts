@@ -28,11 +28,16 @@ type HandSide = 'L' | 'R';
  *  - zoom_rotation: zoomDelta (zoom levels) and headingDelta (degrees, clockwise
  *         as the Maps API heading) relative to the baseline.
  *  - zoom_rotation_end: release the baseline.
+ *
+ * live: when true the map camera is set immediately (moveCamera, no animation),
+ *       so the map follows the hands frame by frame. When false the animated
+ *       panBy / setZoom / setHeading are used; called every frame those animations
+ *       keep restarting, so the map only settles once the gesture stops.
  */
 export type MapGestureData =
-  | { type: 'pan'; dx: number; dy: number }
+  | { type: 'pan'; dx: number; dy: number; live: boolean }
   | { type: 'zoom_rotation_start' }
-  | { type: 'zoom_rotation'; zoomDelta: number; headingDelta: number }
+  | { type: 'zoom_rotation'; zoomDelta: number; headingDelta: number; live: boolean }
   | { type: 'zoom_rotation_end' };
 
 /**
@@ -53,6 +58,8 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
   // Last cursor used for the incremental pan, null = re-anchor on next drag
   panLast: { hand: HandSide; point: Point2D } | null = null;
   zooming: boolean = false;
+  // true: move the camera immediately on every frame (see MapGestureData.live)
+  liveUpdate: boolean = true;
 
   override async update(): Promise<ControllerUpdateResponse> {
     return {};
@@ -108,7 +115,7 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
     const dy = (current.y - this.panLast.point.y) * height * PAN_SENSITIVITY;
     this.panLast.point = { x: current.x, y: current.y };
     if (dx != 0 || dy != 0) {
-      this.emitMap({ type: 'pan', dx, dy });
+      this.emitMap({ type: 'pan', dx, dy, live: this.liveUpdate });
     }
   }
 
@@ -123,6 +130,7 @@ export class HandsGoogleMapController extends SceneControllerAbstract {
       // counterclockwise should rotate the content counterclockwise, which in the
       // Maps API means increasing the heading.
       headingDelta: data.rotation * ROTATION_SENSITIVITY,
+      live: this.liveUpdate,
     });
   }
 
