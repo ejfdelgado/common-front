@@ -6,7 +6,7 @@
             <img [src]="place.entry.user.photoURL" alt="" />
             <span class="name">{{ place.entry.user.displayName }}</span>
             <span class="points">{{ place.entry.points }}</span>
-            <div class="step">{{ place.rank }}</div>
+            <div class="step"><span class="rank_badge">{{ place.rank }}</span></div>
         </div>
         }
     </div>
@@ -18,7 +18,7 @@
             <tbody>
                 @for (row of rest(); track row.rank) {
                 <tr>
-                    <td>{{ row.rank }}</td>
+                    <td><span class="rank_badge">{{ row.rank }}</span></td>
                     <td><img [src]="row.entry.user.photoURL" alt="" width="32" height="32" /></td>
                     <td>{{ row.entry.user.displayName }}</td>
                     <td>{{ row.entry.points }}</td>
@@ -36,7 +36,8 @@
     <span class="status">{{ status() }}</span>
     }
     @if (hasMore()) {
-    <button (click)="loadMore()" [disabled]="loading()">
+    <button mat-flat-button color="primary" (click)="loadMore()" [disabled]="loading()">
+        <mat-icon>expand_more</mat-icon>
         {{ loading() ? 'Loading...' : 'Load more' }}
     </button>
     }

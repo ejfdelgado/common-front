@@ -2,21 +2,46 @@
 // what's left after the title and actions, and hands the scrolling over to
 // the leaderboard so the podium and "Load more" stay in place.
 :host {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 mat-dialog-content {
-    flex: 1 1 auto;
-    min-height: 0;
-    max-height: none;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 app-leaderboard {
-    flex: 1 1 auto;
-    min-height: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+// Compact title bar: only holds the X. Overrides the global popups.css
+// (margin-top 20px, header padding/line-height) and Material's title
+// padding/line-height, which together made the bar too tall.
+.dialog_title {
+  margin: 0;
+  padding: 24px 24px 0 24px;
+  line-height: normal;
+}
+
+header {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0;
+  line-height: 0;
+}
+
+// Block-level flex box so the inline icon doesn't add baseline space below it.
+.boton_cerrar {
+  display: flex;
+}
+
+header .close_icon {
+  cursor: pointer;
 }

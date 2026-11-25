@@ -71,10 +71,14 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding-top: 4px;
-        font-size: 1.5em;
-        font-weight: bold;
+        padding-top: 6px;
+        padding-top: 10px;
         border-radius: 4px 4px 0 0;
+
+        // White ring so the badge stays visible on the gold 1st-place step.
+        .rank_badge {
+            box-shadow: 0 0 0 2px #fff;
+        }
     }
 
     &.rank_1 .step {
@@ -100,6 +104,22 @@
 
 table {
     width: 100%;
+}
+
+.rank_badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    // min-width + padding: stays a circle for 1–2 digits, becomes a pill for more.
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    border-radius: 14px;
+    background: #f5c542;
+    color: #846100;
+    font-weight: bold;
+    font-size: 0.85em;
 }
 
 // Declared after `> *` so the scroll area keeps flex-grow/shrink.
