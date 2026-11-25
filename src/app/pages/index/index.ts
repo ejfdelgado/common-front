@@ -28,6 +28,8 @@ import { JsonEditorComponent } from '@components/json-editor/json-editor.compone
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '@services/config.service';
 import { MoneyDisplayComponent, MoneyPipe, MoneyService } from '@ejflab/common-angular';
+import { LeaderBoardService } from '@services/leaderboard.service';
+import { LeaderEntryType } from 'types/LeaderBoardTypes';
 
 @Component({
   selector: 'app-index',
@@ -65,6 +67,17 @@ export class Index implements AfterViewInit {
       { name: "Edgar" }
     ]
   };
+
+  // Leaderboard test sections
+  lbWriteRoomId = 'example_room';
+  lbPoints = 10;
+  lbDisplayName = 'Tester';
+  lbWriteStatus = '';
+  lbReadRoomId = 'example_room';
+  lbLimit = 10;
+  lbOffset = 0;
+  lbReadStatus = '';
+  lbEntries: LeaderEntryType[] = [];
 
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
@@ -120,6 +133,7 @@ export class Index implements AfterViewInit {
     public sanitizer: DomSanitizer,
     public configSrv: ConfigService,
     public moneySrv: MoneyService,
+    private leaderBoardSrv: LeaderBoardService,
     @Inject('appVersion') public appVersion: string,
   ) {
     console.log(this.moneySrv.format(45600));
@@ -215,6 +229,34 @@ export class Index implements AfterViewInit {
     this.pageList = await this.firestoreSrv.paging({
       collectionName: "animals",
     });
+    this.cdr.detectChanges();
+  }
+
+  async leaderboardWrite() {
+    this.lbWriteStatus = '';
+    try {
+      const displayName = this.authSrv.isLoggedIn() ? undefined : this.lbDisplayName;
+      await this.leaderBoardSrv.write(this.lbWriteRoomId, Number(this.lbPoints), displayName);
+      this.lbWriteStatus = `Saved ${this.lbPoints} points in ${this.lbWriteRoomId}`;
+    } catch (err: any) {
+      this.lbWriteStatus = `Error: ${err?.error?.message || err?.message || err}`;
+    }
+    this.cdr.detectChanges();
+  }
+
+  async leaderboardRead() {
+    this.lbReadStatus = '';
+    try {
+      this.lbEntries = await this.leaderBoardSrv.read(
+        this.lbReadRoomId,
+        Number(this.lbLimit),
+        Number(this.lbOffset),
+      );
+      this.lbReadStatus = `${this.lbEntries.length} entries`;
+    } catch (err: any) {
+      this.lbEntries = [];
+      this.lbReadStatus = `Error: ${err?.error?.message || err?.message || err}`;
+    }
     this.cdr.detectChanges();
   }
 
