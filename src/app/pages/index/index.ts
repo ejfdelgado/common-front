@@ -29,7 +29,7 @@ import { FormsModule } from '@angular/forms';
 import { ConfigService } from '@services/config.service';
 import { MoneyDisplayComponent, MoneyPipe, MoneyService } from '@ejflab/common-angular';
 import { LeaderBoardService } from '@services/leaderboard.service';
-import { LeaderEntryType } from 'types/LeaderBoardTypes';
+import { Leaderboard } from '@components/leaderboard/leaderboard';
 
 @Component({
   selector: 'app-index',
@@ -41,6 +41,7 @@ import { LeaderEntryType } from 'types/LeaderBoardTypes';
     FormsModule,
     MoneyPipe,
     MoneyDisplayComponent,
+    Leaderboard,
   ],
   templateUrl: './index.html',
   styleUrl: './index.scss',
@@ -49,6 +50,7 @@ export class Index implements AfterViewInit {
 
   @ViewChild("camera_capture_bucket") cameraBucket!: CameraCaptureComponent;
   @ViewChild("camera_capture_harddrive") cameraHarddrive!: CameraCaptureComponent;
+  @ViewChild(Leaderboard) leaderboard?: Leaderboard;
 
   openCamera$ = new Subject<void>();
   html: SafeHtml = "";
@@ -74,10 +76,8 @@ export class Index implements AfterViewInit {
   lbDisplayName = 'Tester';
   lbWriteStatus = '';
   lbReadRoomId = 'example_room';
-  lbLimit = 10;
-  lbOffset = 0;
-  lbReadStatus = '';
-  lbEntries: LeaderEntryType[] = [];
+  // Room shown by <app-leaderboard>; set on "Read" so typing doesn't fetch on every keystroke.
+  lbActiveRoomId = '';
 
   firestoreTemporal: any = { count: 0 };
   pageList: any[] = [];
@@ -244,20 +244,13 @@ export class Index implements AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  async leaderboardRead() {
-    this.lbReadStatus = '';
-    try {
-      this.lbEntries = await this.leaderBoardSrv.read(
-        this.lbReadRoomId,
-        Number(this.lbLimit),
-        Number(this.lbOffset),
-      );
-      this.lbReadStatus = `${this.lbEntries.length} entries`;
-    } catch (err: any) {
-      this.lbEntries = [];
-      this.lbReadStatus = `Error: ${err?.error?.message || err?.message || err}`;
+  leaderboardRead() {
+    if (this.lbActiveRoomId === this.lbReadRoomId) {
+      // Same room: the input doesn't change, so ask the component to refetch.
+      this.leaderboard?.reload();
+    } else {
+      this.lbActiveRoomId = this.lbReadRoomId;
     }
-    this.cdr.detectChanges();
   }
 
   async login() {

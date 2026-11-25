@@ -43,29 +43,9 @@
 <div class="leaderboard_sample">
     <span>Leaderboard - Read</span>
     <label>Room id <input type="text" [(ngModel)]="lbReadRoomId" /></label>
-    <label>Limit <input type="number" [(ngModel)]="lbLimit" /></label>
-    <label>Offset <input type="number" [(ngModel)]="lbOffset" /></label>
     <button (click)="leaderboardRead()">Read</button>
-    @if (lbReadStatus) {
-        <span>{{ lbReadStatus }}</span>
-    }
-    @if (lbEntries.length > 0) {
-        <table>
-            <thead>
-                <tr><th>#</th><th>Photo</th><th>Name</th><th>Points</th><th>Anonymous</th></tr>
-            </thead>
-            <tbody>
-                @for (entry of lbEntries; track entry.id; let i = $index) {
-                    <tr>
-                        <td>{{ lbOffset + i + 1 }}</td>
-                        <td><img [src]="entry.user.photoURL" alt="" width="32" height="32" /></td>
-                        <td>{{ entry.user.displayName }}</td>
-                        <td>{{ entry.points }}</td>
-                        <td>{{ entry.user.isAnonymous ? 'yes' : 'no' }}</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    @if (lbActiveRoomId) {
+        <app-leaderboard [roomId]="lbActiveRoomId"></app-leaderboard>
     }
 </div>
 
