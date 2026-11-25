@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
+<defs><linearGradient id="light" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff5a0"/><stop offset="1" stop-color="#ffd83d" stop-opacity=".12"/></linearGradient><radialGradient id="glow"><stop stop-color="#fff8b0" stop-opacity=".85"/><stop offset="1" stop-color="#ffd83d" stop-opacity="0"/></radialGradient><linearGradient id="gold"><stop stop-color="#e67b09"/><stop offset=".5" stop-color="#ffb51c"/><stop offset="1" stop-color="#e67b09"/></linearGradient></defs>
+<ellipse cx="200" cy="282" rx="174" ry="20" fill="#292040" opacity=".13"/>
+<ellipse cx="200" cy="156" rx="145" ry="145" fill="url(#glow)"/>
+<path d="M177 0H223L326 220H74Z" fill="url(#light)"/><path d="M190 0H210L251 211H149Z" fill="#fffbd1" opacity=".65"/><path d="M181 0H187L128 211H97ZM213 0H219L303 211H272Z" fill="#fff7a1" opacity=".35"/>
+<g fill="#ffd94d"><path d="M100 70Q103 85 116 88Q103 91 100 106Q97 91 84 88Q97 85 100 70Z"/><path d="M300 43Q303 57 316 60Q303 63 300 77Q297 63 284 60Q297 57 300 43Z"/><path d="M277 132Q279 142 289 144Q279 146 277 156Q275 146 265 144Q275 142 277 132Z"/></g>
+<path d="M48 220H153V278Q100 291 39 278Z" fill="#75638f"/><path d="M48 220H75L67 282L39 278Z" fill="#54446f"/><ellipse cx="100" cy="220" rx="53" ry="13" fill="#d8c8e9" stroke="#f5eaff" stroke-width="3"/>
+<path d="M247 239H352L361 278Q307 291 247 278Z" fill="#75638f"/><path d="M325 239H352L361 278L333 283Z" fill="#54446f"/><ellipse cx="300" cy="239" rx="53" ry="13" fill="#d8c8e9" stroke="#f5eaff" stroke-width="3"/>
+<path d="M137 185H263L270 280Q200 297 130 280Z" fill="url(#gold)"/><path d="M137 185H151L146 283L130 280ZM249 185H263L270 280L254 283Z" fill="#c66a08" opacity=".65"/><ellipse cx="200" cy="185" rx="63" ry="15" fill="#ffe35b" stroke="#fff7bc" stroke-width="4"/><ellipse cx="200" cy="183" rx="42" ry="8" fill="#fff9c5" opacity=".85"/>
+<g fill="#ffe875"><path id="leaf" d="M197 266Q166 257 168 224Q157 236 166 249Q153 245 158 255Q167 265 181 263Q171 267 184 272Z"/><use href="#leaf" transform="translate(400 0) scale(-1 1)"/><path d="M174 237Q173 221 187 216Q186 230 174 237ZM226 237Q227 221 213 216Q214 230 226 237Z"/></g>
+</svg>

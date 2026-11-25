@@ -1,15 +1,17 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, computed, effect, input, signal, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LeaderBoardService } from '@services/leaderboard.service';
 import { LeaderEntryType } from 'types/LeaderBoardTypes';
+import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 const PODIUM_SIZE = 3;
 
 @Component({
   selector: 'app-leaderboard',
-  imports: [MatButtonModule, MatIcon],
+  imports: [MatButtonModule, MatIcon, TranslatePipe, AsyncPipe],
   templateUrl: './leaderboard.html',
   styleUrl: './leaderboard.scss',
 })

@@ -14,23 +14,22 @@
 
     @if (rest().length > 0) {
     <div class="table_scroll">
-        <table>
-            <tbody>
-                @for (row of rest(); track row.rank) {
-                <tr>
-                    <td><span class="rank_badge">{{ row.rank }}</span></td>
-                    <td><img [src]="row.entry.user.photoURL" alt="" width="32" height="32" /></td>
-                    <td>{{ row.entry.user.displayName }}</td>
-                    <td>{{ row.entry.points }}</td>
-                </tr>
-                }
-            </tbody>
-        </table>
+        <div class="rows">
+            @for (row of rest(); track row.rank) {
+            <div class="row">
+                <span class="rank_badge">{{ row.rank }}</span>
+                <img class="photo" [src]="row.entry.user.photoURL" alt="" />
+                <span class="name">{{ row.entry.user.displayName }}</span>
+                <span class="points">{{ row.entry.points }}</span>
+            </div>
+            }
+        </div>
     </div>
     }
 
     @if (!loading() && entries().length === 0 && !status()) {
-    <span class="empty">No entries yet</span>
+    <span class="empty">{{ "leaderboard.empty" | translate : "general" | async }}</span>
+    <img src="/assets/img/empty-podium.svg">
     }
     @if (status()) {
     <span class="status">{{ status() }}</span>

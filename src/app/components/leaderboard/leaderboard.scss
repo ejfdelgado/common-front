@@ -26,12 +26,6 @@
     min-height: 0;
     width: 100%;
     overflow-y: auto;
-
-    thead th {
-        position: sticky;
-        top: 0;
-        background: var(--mat-sys-surface, #fff);
-    }
 }
 
 .podium {
@@ -45,7 +39,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 96px;
+    width: 130px;
     gap: 4px;
 
     img {
@@ -62,22 +56,19 @@
         white-space: nowrap;
     }
 
-    .points {
-        font-weight: bold;
-    }
-
     .step {
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: flex-start;
         padding-top: 6px;
-        padding-top: 10px;
+        padding-top: 15px;
         border-radius: 4px 4px 0 0;
 
         // White ring so the badge stays visible on the gold 1st-place step.
         .rank_badge {
             box-shadow: 0 0 0 2px #fff;
+            padding-top: 4px;
         }
     }
 
@@ -102,8 +93,49 @@
     }
 }
 
-table {
+// Columns: rank | photo | name | points. Each .row is a subgrid, so all rows
+// share the same column widths while staying a stylable element.
+.rows {
+    display: grid;
+    grid-template-columns: auto 32px minmax(0, 1fr) auto;
+    column-gap: 12px;
     width: 100%;
+}
+
+.row {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    padding: 6px 8px;
+    border-bottom: 1px solid #eee;
+
+    .photo {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rank_badge {
+        justify-self: center;
+    }
+
+    .points {
+        justify-self: end;
+    }
+}
+
+// Shared by the podium and the table.
+.points {
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
 .rank_badge {

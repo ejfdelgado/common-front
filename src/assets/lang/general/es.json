@@ -36,5 +36,8 @@
   "chat": {
     "clean_history": "Borrar historial",
     "how_it_works": "¿Cómo funciona este asistente?"
+  },
+  "leaderboard": {
+    "empty": "¡Sé el primero en ganar!"
   }
 }
