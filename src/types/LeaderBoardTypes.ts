@@ -22,8 +22,11 @@ export interface UserLeaderType {
 }
 
 export interface LeaderEntryType {
-  id: string;
+  id?: string;
   user: UserLeaderType;
   roomId: string;
   points: number;
+  // epoch
+  updated: number;
+  created: number;
 }

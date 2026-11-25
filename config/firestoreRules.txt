@@ -98,5 +98,11 @@ service cloud.firestore {
     match /pro-game/{document=**} {
       allow read: if true;
     }
+    match /pro-leaderboard_actual/{document=**} {
+      allow read: if true;
+    }
+    match /pro-leaderboard_history/{document=**} {
+      allow read: if true;
+    }
   }
 }
