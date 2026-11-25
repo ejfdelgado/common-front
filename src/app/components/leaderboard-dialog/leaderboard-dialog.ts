@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Leaderboard } from '@components/leaderboard/leaderboard';
 
@@ -10,7 +9,7 @@ export interface LeaderboardDialogData {
 
 @Component({
   selector: 'app-leaderboard-dialog',
-  imports: [MatDialogModule, MatButtonModule, MatIcon, Leaderboard],
+  imports: [MatDialogModule, MatIcon, Leaderboard],
   templateUrl: './leaderboard-dialog.html',
   styleUrl: './leaderboard-dialog.scss',
 })
