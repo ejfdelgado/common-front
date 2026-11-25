@@ -8,6 +8,11 @@ import { Buffer } from 'buffer';
 import { ParamsService } from './params.service';
 import { ApiResponse } from 'types/file';
 import { LeaderEntryType } from 'types/LeaderBoardTypes';
+import { MatDialog } from '@angular/material/dialog';
+// Type-only: erased at compile time. The component itself is imported
+// dynamically in openDialog() because it depends (via Leaderboard) on this
+// service, and a static import would create a circular module dependency.
+import type { LeaderboardDialogData } from '@components/leaderboard-dialog/leaderboard-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +24,26 @@ export class LeaderBoardService {
     private http: HttpClient,
     private indicatorSrv: IndicatorService,
     private paramsSrv: ParamsService,
+    private dialog: MatDialog,
   ) {}
+
+  /**
+   * Opens a dialog with the room's leaderboard.
+   * Resolves when the dialog is closed.
+   */
+  async openDialog(roomId: string): Promise<void> {
+    const { LeaderboardDialog } = await import(
+      '@components/leaderboard-dialog/leaderboard-dialog'
+    );
+    const data: LeaderboardDialogData = { roomId };
+    const dialogRef = this.dialog.open(LeaderboardDialog, {
+      data,
+      width: '520px',
+      maxWidth: '95vw',
+      height: '80vh',
+    });
+    await firstValueFrom(dialogRef.afterClosed());
+  }
 
   /**
    * Submits a score for a room.

@@ -2,7 +2,7 @@ import { Component, computed, effect, input, signal, untracked } from '@angular/
 import { LeaderBoardService } from '@services/leaderboard.service';
 import { LeaderEntryType } from 'types/LeaderBoardTypes';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 const PODIUM_SIZE = 3;
 
 @Component({

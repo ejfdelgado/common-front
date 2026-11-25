@@ -1,45 +1,43 @@
 <div class="leaderboard">
     @if (showPodium()) {
-        <div class="podium">
-            @for (place of podium(); track place.rank) {
-                <div class="podium_place" [class]="'rank_' + place.rank">
-                    <img [src]="place.entry.user.photoURL" alt="" />
-                    <span class="name">{{ place.entry.user.displayName }}</span>
-                    <span class="points">{{ place.entry.points }}</span>
-                    <div class="step">{{ place.rank }}</div>
-                </div>
-            }
+    <div class="podium">
+        @for (place of podium(); track place.rank) {
+        <div class="podium_place" [class]="'rank_' + place.rank">
+            <img [src]="place.entry.user.photoURL" alt="" />
+            <span class="name">{{ place.entry.user.displayName }}</span>
+            <span class="points">{{ place.entry.points }}</span>
+            <div class="step">{{ place.rank }}</div>
         </div>
+        }
+    </div>
     }
 
     @if (rest().length > 0) {
+    <div class="table_scroll">
         <table>
-            <thead>
-                <tr><th>#</th><th>Photo</th><th>Name</th><th>Points</th><th>Anonymous</th></tr>
-            </thead>
             <tbody>
                 @for (row of rest(); track row.rank) {
-                    <tr>
-                        <td>{{ row.rank }}</td>
-                        <td><img [src]="row.entry.user.photoURL" alt="" width="32" height="32" /></td>
-                        <td>{{ row.entry.user.displayName }}</td>
-                        <td>{{ row.entry.points }}</td>
-                        <td>{{ row.entry.user.isAnonymous ? 'yes' : 'no' }}</td>
-                    </tr>
+                <tr>
+                    <td>{{ row.rank }}</td>
+                    <td><img [src]="row.entry.user.photoURL" alt="" width="32" height="32" /></td>
+                    <td>{{ row.entry.user.displayName }}</td>
+                    <td>{{ row.entry.points }}</td>
+                </tr>
                 }
             </tbody>
         </table>
+    </div>
     }
 
     @if (!loading() && entries().length === 0 && !status()) {
-        <span class="empty">No entries yet</span>
+    <span class="empty">No entries yet</span>
     }
     @if (status()) {
-        <span class="status">{{ status() }}</span>
+    <span class="status">{{ status() }}</span>
     }
     @if (hasMore()) {
-        <button (click)="loadMore()" [disabled]="loading()">
-            {{ loading() ? 'Loading...' : 'Load more' }}
-        </button>
+    <button (click)="loadMore()" [disabled]="loading()">
+        {{ loading() ? 'Loading...' : 'Load more' }}
+    </button>
     }
 </div>

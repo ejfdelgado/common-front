@@ -1,9 +1,37 @@
+// When the parent limits the height (e.g. the dialog), only the table scrolls:
+// the podium stays at the top and "Load more" at the bottom. Without a height
+// limit the table simply grows.
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
 .leaderboard {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
     width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+
+    > * {
+        flex: 0 0 auto;
+    }
+}
+
+.table_scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    overflow-y: auto;
+
+    thead th {
+        position: sticky;
+        top: 0;
+        background: var(--mat-sys-surface, #fff);
+    }
 }
 
 .podium {
@@ -72,4 +100,9 @@
 
 table {
     width: 100%;
+}
+
+// Declared after `> *` so the scroll area keeps flex-grow/shrink.
+.leaderboard > .table_scroll {
+    flex: 1 1 auto;
 }

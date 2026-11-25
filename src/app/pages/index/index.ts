@@ -253,6 +253,10 @@ export class Index implements AfterViewInit {
     }
   }
 
+  async leaderboardDialog() {
+    await this.leaderBoardSrv.openDialog(this.lbReadRoomId);
+  }
+
   async login() {
     this.authSrv.login();
   }

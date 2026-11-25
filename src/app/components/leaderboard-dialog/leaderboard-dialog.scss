@@ -1,0 +1,22 @@
+// The dialog has a fixed height (set when opening it). The content fills
+// what's left after the title and actions, and hands the scrolling over to
+// the leaderboard so the podium and "Load more" stay in place.
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+mat-dialog-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+app-leaderboard {
+    flex: 1 1 auto;
+    min-height: 0;
+}

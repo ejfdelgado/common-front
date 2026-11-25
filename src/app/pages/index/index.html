@@ -44,6 +44,7 @@
     <span>Leaderboard - Read</span>
     <label>Room id <input type="text" [(ngModel)]="lbReadRoomId" /></label>
     <button (click)="leaderboardRead()">Read</button>
+    <button (click)="leaderboardDialog()">Open dialog</button>
     @if (lbActiveRoomId) {
         <app-leaderboard [roomId]="lbActiveRoomId"></app-leaderboard>
     }
