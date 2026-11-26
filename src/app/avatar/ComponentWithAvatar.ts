@@ -138,7 +138,14 @@ export abstract class ComponentWithAvatar
         const { leaderBoardRoomId } = getRoomData();
         if (this.user) {
           // User authenticated
-          this.leaderBoardSrv.write(leaderBoardRoomId, points);
+          this.leaderBoardSrv
+            .write(leaderBoardRoomId, points)
+            .then(() => {
+              this.leaderBoardSrv.openDialog(leaderBoardRoomId);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
         } else {
           // Anonymous user
           // Prompt the user with a dialog to invite it to login to record
