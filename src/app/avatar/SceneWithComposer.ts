@@ -16,6 +16,7 @@ import * as THREE from 'three';
 import { HttpClient } from '@angular/common/http';
 import { CharacterSpec, GameMode, GameScenario } from '@mytypes/WorldAvatar';
 import { loadAnimationFromBucket, loadNextChunkIfNeeded } from './utils/AnimationUtiles';
+import { EventEmitter } from '@angular/core';
 
 interface TerrainTriangle {
   a: THREE.Vector3;
@@ -275,13 +276,19 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     if (old) {
       old.startingTime = spec.startingTimeMillis;
       old.state = anim;
+      old.events.emit({ name: 'STARTED' });
+      old.currentState = 'STARTED';
     } else {
-      this.animatedElements.push({
+      const created: AnimatedElements = {
         avatar: avatar,
         loop: spec.loop,
         startingTime: spec.startingTimeMillis,
         state: anim,
-      });
+        events: new EventEmitter(),
+        currentState: 'STARTED',
+      };
+      created.events.emit({ name: 'STARTED' });
+      this.animatedElements.push(created);
     }
     return anim;
   }

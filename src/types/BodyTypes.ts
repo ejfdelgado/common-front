@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { FingerPinch, HandIdType } from './BodyParts';
 import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
+import { EventEmitter } from '@angular/core';
 
 export const MAX_STATES_PER_SECOND: number = 10;
 // Using 1 minute per file is 620KB
@@ -223,11 +224,19 @@ export interface StoredAvatarAnimation {
   lock?: boolean;
 }
 
+export type AnimationEventsType = "STARTED" | "STOPED";
+
+export interface AnimationEvents {
+  name: AnimationEventsType;
+}
+
 export interface AnimatedElements {
   avatar: THREE.Object3D<THREE.Object3DEventMap>;
   state: StoredAvatarAnimation;
   startingTime: number;
   loop: boolean;
+  events: EventEmitter<AnimationEvents>;
+  currentState: AnimationEventsType;
 }
 
 export const AVATAR_ANIM_VERSION = '1.0';
