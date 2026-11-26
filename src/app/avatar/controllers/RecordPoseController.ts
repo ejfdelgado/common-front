@@ -24,6 +24,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   audioRecordedUrl: string | null = null;
   audioLoadedUrl: string | null = null;
   audioPlayer: HTMLAudioElement | null = null;
+  scorePoints: number = 0;
 
   constructor(
     public override events: EventEmitter<AvatarBodyEvent>,
@@ -67,10 +68,19 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       const total = compareBodyPoses(reference, actual);
 
       this.setHudValue('percentage', total, false);
+      this.computeScorePoints(total);
       //const r1 = reference.armsOpen;
       //const a1 = actual.armsOpen;
       //this.setHudValue('top', `Ref: ${r1.toFixed(0)} Act: ${a1.toFixed(0)}`, false);
     }
+  }
+
+  computeScorePoints(actualMatch: number) {
+    // Time aware point assignment given the current actualMatch
+    // or an historical of the latest X seconds.
+    const deltaPoints = 0;
+    const nextScorePoint = this.scorePoints + deltaPoints;
+    this.setScorePoints(nextScorePoint);
   }
 
   override async update(): Promise<ControllerUpdateResponse> {
@@ -199,10 +209,16 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
           this.audioPlayer.play();
         }
       }
+      this.setScorePoints(0);
       this.state = 'PLAYING';
       this.placeCamera(false);
       this.scene.animationPlay();
     }
+  }
+
+  setScorePoints(points: number) {
+    this.setHudValue('score', points);
+    this.scorePoints = points;
   }
 
   async prepare() {
