@@ -84,6 +84,9 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   // Points per second of play from the match over the last seconds; see
   // TimedScore for the rules. Independent of how often this is called.
   computeScorePoints(actualMatch: number) {
+    if (this.state != 'PLAYING') {
+      return;
+    }
     this.timedScore.addSample(actualMatch, performance.now());
     const nextScorePoint = Math.round(this.timedScore.score);
     // The HUD only needs an update when the shown number changes.
@@ -129,6 +132,8 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     if (this.animationSubscription) {
       this.animationSubscription.unsubscribe();
     }
+    // Clean the points
+    this.setScorePoints(0);
     ModuloSonido.play('/assets/sounds/message.mp3');
     this.setHudValue('percentage', null, false);
     this.placeCamera(true);
@@ -236,6 +241,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       if (animationHandler?.handler) {
         this.animationSubscription = animationHandler.handler.events.subscribe((event) => {
           if (event.name == 'STOPED') {
+            this.state = 'STOPED';
             this.events.emit({
               name: 'LEADERBOARD_SAVE',
               data: {

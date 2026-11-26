@@ -146,11 +146,22 @@ export abstract class SceneWithComposer extends SceneWithAvatar {
     const now = Date.now();
     const sceneTime = now - this.startingAnimationTime;
     for (let i = 0; i < this.animatedElements.length; i++) {
-      const { avatar, state, loop, startingTime } = this.animatedElements[i];
+      const { avatar, state, loop, startingTime, events, currentState } = this.animatedElements[i];
       const { a, lr, lrMode, nextSufix } = state;
       // Busco el frame de acuerdo al tiempo (búsqueda binaria, a está ordenado por t)
       const frameId = this.findPoseAt(a, sceneTime - startingTime, loop);
       if (frameId >= 0) {
+        if (!loop) {
+          if (frameId == a.length - 1) {
+            // latest frame
+            if (currentState == 'STARTED') {
+              this.animatedElements[i].currentState = 'STOPED';
+              events.emit({
+                name: 'STOPED',
+              });
+            }
+          }
+        }
         this.applyAvatarState(avatar, a[frameId], lr, lrMode);
         if (typeof nextSufix == 'number') {
           // There are animations missed on memory
