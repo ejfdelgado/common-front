@@ -47,6 +47,8 @@ import { HandsZoomRotationController } from './controllers/HandsZoomRotationCont
 import { AmbienceMusicController } from './controllers/AmbienceMusicController.ts';
 import { HandsBackgroundController } from './controllers/HandsBackgroundController';
 import { HandsGoogleMapController } from './controllers/HandsGoogleMapController';
+import { LeaderBoardService } from '../services/leaderboard.service';
+import { getRoomData } from './utils/AvatarUtilities';
 
 export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
   hudData: { [key: string]: any } = {
@@ -112,6 +114,7 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     public speechSrv: SpeechSynthesisService,
     public voiceRecognitionSrv: VoiceRecognitionService,
     public fileSrv: FileService,
+    public leaderBoardSrv: LeaderBoardService,
   ) {
     super(sanitizer, fullScreenSrv);
     this.events.subscribe((event) => {
@@ -119,14 +122,18 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
         controller.onEvent(event);
       });
       // Scale event
-      const SCALED_EVENTS = [
-        'WON_MODE',
-        'SAVE_APPLY_SCENARIO',
-        'MAP_GESTURE',
-      ];
+      const SCALED_EVENTS = ['WON_MODE', 'SAVE_APPLY_SCENARIO', 'MAP_GESTURE'];
       if (SCALED_EVENTS.indexOf(event.name) >= 0) {
         //Next mode logic
         this.notifyEvent(event);
+      } else if (event.name == 'LEADERBOARD_SAVE') {
+        // Leaderboard events
+        const { points } = event.data;
+        const { leaderBoardRoomId } = getRoomData();
+        this.leaderBoardSrv.write(leaderBoardRoomId, points, 'Anonymous');
+      } else if (event.name == 'LEADERBOARD_SHOW') {
+        const { leaderBoardRoomId } = getRoomData();
+        this.leaderBoardSrv.openDialog(leaderBoardRoomId);
       }
     });
   }
@@ -325,7 +332,13 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     } else if (config.id == GameControllerEnum.HandsCloseController) {
       temp = new HandsCloseController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.RecordPoseController) {
-      temp = new RecordPoseController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv, this.voiceRecognitionSrv);
+      temp = new RecordPoseController(
+        this.events,
+        this.controlProxy,
+        this.p2pSrv,
+        this.fileSrv,
+        this.voiceRecognitionSrv,
+      );
     } else if (config.id == GameControllerEnum.SimplePosesDetection) {
       temp = new SimplePosesDetection(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.SoundFeedbackController) {
@@ -333,7 +346,12 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     } else if (config.id == GameControllerEnum.Stand2dController) {
       temp = new Stand2dController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.TerrainElevationController) {
-      temp = new TerrainElevationController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+      temp = new TerrainElevationController(
+        this.events,
+        this.controlProxy,
+        this.p2pSrv,
+        this.fileSrv,
+      );
     } else if (config.id == GameControllerEnum.SharePoseController) {
       temp = new SharePoseController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.WalkController) {
@@ -347,17 +365,37 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
     } else if (config.id == GameControllerEnum.QuestionaireController) {
       temp = new QuestionaireController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.HandsNavigationController) {
-      temp = new HandsNavigationController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+      temp = new HandsNavigationController(
+        this.events,
+        this.controlProxy,
+        this.p2pSrv,
+        this.fileSrv,
+      );
     } else if (config.id == GameControllerEnum.HandsWalkController) {
       temp = new HandsWalkController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.HandsZoomRotationController) {
-      temp = new HandsZoomRotationController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+      temp = new HandsZoomRotationController(
+        this.events,
+        this.controlProxy,
+        this.p2pSrv,
+        this.fileSrv,
+      );
     } else if (config.id == GameControllerEnum.AmbienceMusicController) {
       temp = new AmbienceMusicController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
     } else if (config.id == GameControllerEnum.HandsBackgroundController) {
-      temp = new HandsBackgroundController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+      temp = new HandsBackgroundController(
+        this.events,
+        this.controlProxy,
+        this.p2pSrv,
+        this.fileSrv,
+      );
     } else if (config.id == GameControllerEnum.HandsGoogleMapController) {
-      temp = new HandsGoogleMapController(this.events, this.controlProxy, this.p2pSrv, this.fileSrv);
+      temp = new HandsGoogleMapController(
+        this.events,
+        this.controlProxy,
+        this.p2pSrv,
+        this.fileSrv,
+      );
     }
 
     if (temp == null) {

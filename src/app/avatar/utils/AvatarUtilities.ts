@@ -17,6 +17,7 @@ import { Landmark, NormalizedLandmark } from '@mediapipe/tasks-vision';
 import { clamp } from 'src/app/tools/NumberUtils';
 import { AvatarModel } from 'src/types/WorldAvatar';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
+import { getUrlQueryParams } from 'src/app/tools/UrlUtil';
 
 const textureLoader = new TextureLoader();
 
@@ -1097,7 +1098,8 @@ export async function readMyAvatar(useDafault: boolean): Promise<AvatarModel | n
     meshPath: MESH_OPTIONS[0].value,
   };
   // This file is also compiled for web workers (no DOM lib / no localStorage there)
-  const storage: { getItem(key: string): string | null } | undefined = (globalThis as any).localStorage;
+  const storage: { getItem(key: string): string | null } | undefined = (globalThis as any)
+    .localStorage;
   const old = storage ? storage.getItem('MY_AVATAR') : null;
   if (!old) {
     if (useDafault) {
@@ -1112,4 +1114,12 @@ export async function readMyAvatar(useDafault: boolean): Promise<AvatarModel | n
   } catch (e) {
     return defaultValue;
   }
+}
+
+export function getRoomData() {
+  const params = getUrlQueryParams();
+  const col = params.get('col');
+  const id = params.get('id');
+  const leaderBoardRoomId = `{col}_${id}`;
+  return { col, id, leaderBoardRoomId };
 }

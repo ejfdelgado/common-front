@@ -154,6 +154,25 @@
     font-size: 0.85em;
 }
 
+// Three columns: the side ones share the free space equally, so "Load more"
+// stays centered whether or not it is shown, and the filter sits at the right.
+.footer {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+
+    .load_more {
+        grid-column: 2;
+    }
+
+    .type_filter {
+        grid-column: 3;
+        justify-self: end;
+        width: 150px;
+    }
+}
+
 // Declared after `> *` so the scroll area keeps flex-grow/shrink.
 .leaderboard > .table_scroll {
     flex: 1 1 auto;

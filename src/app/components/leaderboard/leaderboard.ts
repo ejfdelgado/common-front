@@ -3,7 +3,9 @@ import { Component, computed, effect, input, signal, untracked } from '@angular/
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LeaderBoardService } from '@services/leaderboard.service';
-import { LeaderEntryType } from 'types/LeaderBoardTypes';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { LeaderEntryType, LeaderboardReadType } from 'types/LeaderBoardTypes';
 import { TranslatePipe } from 'src/app/pipes/translate.pipe';
 
 const PAGE_SIZE = 10;
@@ -11,7 +13,7 @@ const PODIUM_SIZE = 3;
 
 @Component({
   selector: 'app-leaderboard',
-  imports: [MatButtonModule, MatIcon, TranslatePipe, AsyncPipe],
+  imports: [MatButtonModule, MatIcon, MatFormFieldModule, MatSelectModule, TranslatePipe, AsyncPipe],
   templateUrl: './leaderboard.html',
   styleUrl: './leaderboard.scss',
 })
@@ -22,6 +24,8 @@ export class Leaderboard {
   loading = signal(false);
   hasMore = signal(false);
   status = signal('');
+  type = signal<LeaderboardReadType>('ALL');
+  readonly typeOptions: LeaderboardReadType[] = ['ALL', 'SIGNED', 'ANONYMOUS'];
 
   showPodium = computed(() => this.entries().length >= PODIUM_SIZE);
   // Visual order: 2nd at left, 1st in the center, 3rd at right.
@@ -54,6 +58,15 @@ export class Leaderboard {
     });
   }
 
+  // A new filter means a new ranking: restart from the first page.
+  async changeType(type: LeaderboardReadType) {
+    if (type === this.type()) {
+      return;
+    }
+    this.type.set(type);
+    await this.reset(this.roomId());
+  }
+
   async reload() {
     await this.reset(this.roomId());
   }
@@ -79,7 +92,7 @@ export class Leaderboard {
     const offset = this.entries().length;
     this.loading.set(true);
     try {
-      const page = await this.leaderBoardSrv.read(roomId, PAGE_SIZE, offset);
+      const page = await this.leaderBoardSrv.read(roomId, PAGE_SIZE, offset, this.type());
       if (current !== this.requestId) {
         return;
       }

@@ -7,7 +7,7 @@ import { encode } from '@msgpack/msgpack';
 import { Buffer } from 'buffer';
 import { ParamsService } from './params.service';
 import { ApiResponse } from 'types/file';
-import { LeaderEntryType } from 'types/LeaderBoardTypes';
+import { LeaderEntryType, LeaderboardReadType } from 'types/LeaderBoardTypes';
 import { MatDialog } from '@angular/material/dialog';
 // Type-only: erased at compile time. The component itself is imported
 // dynamically in openDialog() because it depends (via Leaderboard) on this
@@ -97,12 +97,19 @@ export class LeaderBoardService {
   /**
    * Reads one page of a room's leaderboard, best score first.
    * The backend caps limit at 100.
+   * type: ALL (default), SIGNED (logged users only) or ANONYMOUS.
    */
-  async read(roomId: string, limit = 10, offset = 0): Promise<LeaderEntryType[]> {
+  async read(
+    roomId: string,
+    limit = 10,
+    offset = 0,
+    type: LeaderboardReadType = 'ALL',
+  ): Promise<LeaderEntryType[]> {
     const params = new HttpParams()
       .set('roomId', roomId)
       .set('limit', limit)
-      .set('offset', offset);
+      .set('offset', offset)
+      .set('type', type);
     const indicator = this.indicatorSrv.start();
     try {
       const response = await firstValueFrom(

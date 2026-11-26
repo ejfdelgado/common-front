@@ -34,10 +34,21 @@
     @if (status()) {
     <span class="status">{{ status() }}</span>
     }
-    @if (hasMore()) {
-    <button mat-flat-button color="primary" (click)="loadMore()" [disabled]="loading()">
-        <mat-icon>expand_more</mat-icon>
-        {{ loading() ? 'Loading...' : 'Load more' }}
-    </button>
-    }
+    <!-- Load more stays centered; the type filter sits at the bottom right. -->
+    <div class="footer">
+        @if (hasMore()) {
+        <button class="load_more" mat-flat-button color="primary" (click)="loadMore()" [disabled]="loading()">
+            <mat-icon>expand_more</mat-icon>
+            {{ loading() ? 'Loading...' : 'Load more' }}
+        </button>
+        }
+        <mat-form-field class="type_filter" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>{{ "leaderboard.type.label" | translate : "general" | async }}</mat-label>
+            <mat-select [value]="type()" (selectionChange)="changeType($event.value)">
+                @for (option of typeOptions; track option) {
+                <mat-option [value]="option">{{ "leaderboard.type." + option | translate : "general" | async }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
 </div>

@@ -38,6 +38,12 @@
     "how_it_works": "How this assitant works?"
   },
   "leaderboard": {
-    "empty": "Be the first winner!"
+    "empty": "Be the first winner!",
+    "type": {
+      "label": "Show",
+      "ALL": "All",
+      "SIGNED": "Signed in",
+      "ANONYMOUS": "Anonymous"
+    }
   }
 }

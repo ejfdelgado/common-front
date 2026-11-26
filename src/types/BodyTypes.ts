@@ -163,7 +163,9 @@ export type AvatarEvent =
   | 'START_ALL' | 'STOP_ALL' | 'SCENE_LOADED' | 'WON_MODE'
   | 'SAVE_APPLY_SCENARIO' | 'VOICE_COMMAND' | 'STAND2MATRIX'
   // google map
-  | 'MAP_GESTURE';
+  | 'MAP_GESTURE'
+  // Leader board
+  | 'LEADERBOARD_SAVE' | 'LEADERBOARD_SHOW';
 
 
 export interface AvatarBodyEvent {

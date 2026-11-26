@@ -26,6 +26,7 @@ import { sleep } from '../tools/rxjsUtils';
 import { getUrlQueryParams } from '../tools/UrlUtil';
 import { ModeDiscovery, ModeEntryType } from './ModeDiscovery';
 import { AvatarBodyEvent } from 'src/types/BodyTypes';
+import { getRoomData } from './utils/AvatarUtilities';
 
 export abstract class ConfigurableGame extends AuthenticatedComponent {
   room: AvatarStoredDataType | null = null;
@@ -237,9 +238,7 @@ export abstract class ConfigurableGame extends AuthenticatedComponent {
   }
 
   async loadCollection() {
-    const params = getUrlQueryParams();
-    const col = params.get('col');
-    const id = params.get('id');
+    const { col, id } = getRoomData();
     if (col && id) {
       const temp = await this.firestoreSrv.readById(col, id);
       if (temp) {

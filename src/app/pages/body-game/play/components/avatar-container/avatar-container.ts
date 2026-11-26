@@ -32,6 +32,7 @@ import { SpeechSynthesisService } from 'src/app/services/speechsynthesis.service
 import { RatingComponent } from 'src/app/components/fields/rating/rating';
 import { html2text } from 'src/app/tools/HtmlUtil';
 import { FileService } from 'src/app/services/file.srv';
+import { LeaderBoardService } from 'src/app/services/leaderboard.service';
 
 @Component({
   standalone: true,
@@ -76,11 +77,21 @@ export class AvatarContainer
     public override speechSrv: SpeechSynthesisService,
     public override voiceRecognitionSrv: VoiceRecognitionService,
     public override fileSrv: FileService,
+    public override leaderBoardSrv: LeaderBoardService,
     //
     private indicatorSrv: IndicatorService,
     private http: HttpClient,
   ) {
-    super(sanitizer, fullScreenSrv, cdr, p2pSrv, speechSrv, voiceRecognitionSrv, fileSrv);
+    super(
+      sanitizer,
+      fullScreenSrv,
+      cdr,
+      p2pSrv,
+      speechSrv,
+      voiceRecognitionSrv,
+      fileSrv,
+      leaderBoardSrv,
+    );
     this.hasMobile = this.isMobile();
   }
 
