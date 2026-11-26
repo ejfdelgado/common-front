@@ -3,6 +3,8 @@ import {
   AvatarBodyEvent,
   AVATAR_NAME,
   AVATAR_ANIM_VERSION,
+  StoredAvatarAnimation,
+  AnimatedElements,
 } from '@mytypes/BodyTypes';
 import { compareBodyPoses, computeComparableFromModel } from '@avatar/utils/AvatarUtilities';
 import { ControlProxy } from '../workers/ControlProxy';
@@ -14,6 +16,7 @@ import { FileService } from 'src/app/services/file.srv';
 import { SceneControllerAbstractRecord } from './SceneControllerAbstractRecord';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
 import { TimedScore } from '@avatar/utils/TimedScore';
+import { Subscription } from 'rxjs';
 
 const NPC_NAME = 'dancer';
 const NPC_LR = [2.5, 0, 0];
@@ -27,6 +30,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   audioPlayer: HTMLAudioElement | null = null;
   scorePoints: number = 0;
   timedScore: TimedScore = new TimedScore();
+  animationSubscription: Subscription | null = null;
 
   constructor(
     public override events: EventEmitter<AvatarBodyEvent>,
@@ -122,6 +126,9 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   }
 
   async stopAll() {
+    if (this.animationSubscription) {
+      this.animationSubscription.unsubscribe();
+    }
     ModuloSonido.play('/assets/sounds/message.mp3');
     this.setHudValue('percentage', null, false);
     this.placeCamera(true);
@@ -179,6 +186,10 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     if (this.state == 'PLAYING') {
       return;
     }
+    let animationHandler: {
+      animation: StoredAvatarAnimation | null;
+      handler: AnimatedElements | null;
+    } | null = null;
     if (this.scene) {
       if (this.state == 'PAUSED') {
         // Resume: keep the score earned so far.
@@ -194,7 +205,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
           // Fetch the animation from bucket url
           let oldName = this.scenario.dictionary[DICT_KEY];
           if (oldName) {
-            await this.scene.applyAnimationToCharacter(NPC_NAME, {
+            animationHandler = await this.scene.applyAnimationToCharacter(NPC_NAME, {
               loop: false,
               startingTimeMillis: 0,
               animationUrl: oldName,
@@ -203,7 +214,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
           }
         } else {
           // Fetch the animation from the in memory array
-          await this.scene.applyAnimationToCharacter(NPC_NAME, {
+          animationHandler = await this.scene.applyAnimationToCharacter(NPC_NAME, {
             loop: false,
             startingTimeMillis: 0,
             animationBin: this.history,
@@ -218,6 +229,21 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
           this.audioPlayer = new Audio(this.audioLoadedUrl);
           this.audioPlayer.play();
         }
+      }
+      if (this.animationSubscription) {
+        this.animationSubscription.unsubscribe();
+      }
+      if (animationHandler?.handler) {
+        this.animationSubscription = animationHandler.handler.events.subscribe((event) => {
+          if (event.name == 'STOPED') {
+            this.events.emit({
+              name: 'LEADERBOARD_SAVE',
+              data: {
+                points: this.scorePoints,
+              },
+            });
+          }
+        });
       }
       this.state = 'PLAYING';
       this.placeCamera(false);
@@ -240,7 +266,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
         animationBin: this.history,
         lr: NPC_LR,
       });
-      const state = anim?.a[0];
+      const state = anim?.animation?.a[0];
       if (state) {
         this.scene.applyAvatarStateByName(NPC_NAME, state, NPC_LR);
       }
