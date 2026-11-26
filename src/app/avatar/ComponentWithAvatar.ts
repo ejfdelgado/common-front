@@ -136,29 +136,42 @@ export abstract class ComponentWithAvatar
         // Leaderboard events
         const { points } = event.data;
         const { leaderBoardRoomId } = getRoomData();
-        if (this.user) {
-          // User authenticated
-          this.leaderBoardSrv
-            .write(leaderBoardRoomId, points)
-            .then(() => {
-              this.leaderBoardSrv.openDialog(leaderBoardRoomId);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-        } else {
-          // Anonymous user
-          // Prompt the user with a dialog to invite it to login to record
-          // the point or just write the user name in order to relate the score points
-          // with the provided name.
-          let anonymousName = 'Anonymous';
-          this.leaderBoardSrv.write(leaderBoardRoomId, points, anonymousName);
-        }
+        this.saveLeaderBoardScore(leaderBoardRoomId, points).catch((err) => {
+          console.error(err);
+        });
       } else if (event.name == 'LEADERBOARD_SHOW') {
         const { leaderBoardRoomId } = getRoomData();
         this.leaderBoardSrv.openDialog(leaderBoardRoomId);
       }
     });
+  }
+
+  /**
+   * Logged user: saves the score under their account.
+   * Anonymous user: asks first whether to sign in (then saves as logged) or
+   * to save under a typed name. A failed or cancelled sign-in returns to the
+   * question; closing it saves nothing.
+   */
+  async saveLeaderBoardScore(roomId: string, points: number) {
+    let loginFailed = false;
+    while (!this.user) {
+      const choice = await this.leaderBoardSrv.openSaveDialog(points, loginFailed);
+      if (!choice) {
+        return;
+      }
+      if (choice.action === 'anonymous') {
+        await this.leaderBoardSrv.write(roomId, points, choice.displayName);
+        await this.leaderBoardSrv.openDialog(roomId);
+        return;
+      }
+      if (await this.authSrv.loginAndWait()) {
+        // authState$ may not have reached this.user yet.
+        break;
+      }
+      loginFailed = true;
+    }
+    await this.leaderBoardSrv.write(roomId, points);
+    await this.leaderBoardSrv.openDialog(roomId);
   }
 
   abstract setCursor(data: CursorData): void;

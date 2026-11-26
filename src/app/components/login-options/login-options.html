@@ -4,6 +4,8 @@
 </h2>
 
 <mat-dialog-content>
+    <p *ngIf="errorMessage && !showEmailForm && !isPhoneAuth" style="color: #f44336; margin: 0; font-size: 14px;">{{
+        errorMessage }}</p>
     <div *ngIf="showEmailForm"
         style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-bottom: 10px;">
         <mat-form-field appearance="outline" style="width: 100%;">

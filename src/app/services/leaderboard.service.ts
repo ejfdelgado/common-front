@@ -13,6 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
 // dynamically in openDialog() because it depends (via Leaderboard) on this
 // service, and a static import would create a circular module dependency.
 import type { LeaderboardDialogData } from '@components/leaderboard-dialog/leaderboard-dialog';
+import type {
+  LeaderboardSaveDialogData,
+  LeaderboardSaveDialogResult,
+} from '@components/leaderboard-save-dialog/leaderboard-save-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +47,26 @@ export class LeaderBoardService {
       height: '80vh',
     });
     await firstValueFrom(dialogRef.afterClosed());
+  }
+
+  /**
+   * Asks an anonymous user how to save their score: sign in, or type a name.
+   * Resolves undefined when they choose not to save it.
+   */
+  async openSaveDialog(
+    points: number,
+    loginFailed = false,
+  ): Promise<LeaderboardSaveDialogResult | undefined> {
+    const { LeaderboardSaveDialog } = await import(
+      '@components/leaderboard-save-dialog/leaderboard-save-dialog'
+    );
+    const data: LeaderboardSaveDialogData = { points, loginFailed };
+    const dialogRef = this.dialog.open(LeaderboardSaveDialog, {
+      data,
+      width: '420px',
+      maxWidth: '95vw',
+    });
+    return firstValueFrom(dialogRef.afterClosed());
   }
 
   /**

@@ -44,6 +44,17 @@
       "ALL": "All",
       "SIGNED": "Signed in",
       "ANONYMOUS": "Anonymous"
+    },
+    "save": {
+      "title": "Save your score",
+      "login_hint": "Sign in to keep your best score under your account.",
+      "login": "Sign in and save",
+      "or": "or",
+      "anonymous_hint": "Or just type a name to save it as a guest.",
+      "name": "Your name",
+      "anonymous": "Save as guest",
+      "skip": "Don't save",
+      "login_failed": "Sign-in didn't complete. You can try again or save as a guest."
     }
   }
 }

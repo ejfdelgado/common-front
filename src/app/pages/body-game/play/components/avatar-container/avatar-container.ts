@@ -1,3 +1,4 @@
+import { AuthService } from '@services/auth.service';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -72,6 +73,7 @@ export class AvatarContainer
   constructor(
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
+    public override authSrv: AuthService,
     public override p2pSrv: P2PService,
     public override cdr: ChangeDetectorRef,
     public override speechSrv: SpeechSynthesisService,
@@ -85,6 +87,7 @@ export class AvatarContainer
     super(
       sanitizer,
       fullScreenSrv,
+      authSrv,
       cdr,
       p2pSrv,
       speechSrv,
@@ -95,7 +98,8 @@ export class AvatarContainer
     this.hasMobile = this.isMobile();
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
     if (this.restoreInterval) {
       clearInterval(this.restoreInterval);
     }

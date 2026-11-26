@@ -121,6 +121,53 @@ export class AuthService {
     });
   }
 
+  /**
+   * Like login(), but resolves once the outcome is known: true when the user
+   * is signed in and the token the AuthInterceptor sends is ready, false if
+   * they cancelled or the login failed.
+   */
+  async loginAndWait(): Promise<boolean> {
+    if (this.token()) {
+      return true;
+    }
+    // waitForPopup keeps the dialog open until the Google popup finishes,
+    // so a dismissed popup reports false instead of hanging.
+    const data: LoginOptionsData = { waitForPopup: true };
+    const dialogRef = this.dialog.open(LoginOptions, {
+      width: '400px',
+      disableClose: true,
+      data,
+      panelClass: 'custom-emoji-picker',
+    });
+    const loggedIn = (await firstValueFrom(dialogRef.afterClosed())) === true;
+    if (!loggedIn) {
+      return false;
+    }
+    // The user is set right away, but the token arrives after a refresh.
+    return this.waitForLogin();
+  }
+
+  // Resolves true once the token is ready, or false after timeoutMs.
+  private waitForLogin(timeoutMs = 15 * 1000): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      if (this.token()) {
+        resolve(true);
+        return;
+      }
+      const interval = setInterval(() => {
+        if (this.token()) {
+          clearInterval(interval);
+          clearTimeout(timeout);
+          resolve(true);
+        }
+      }, 300);
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+        resolve(false);
+      }, timeoutMs);
+    });
+  }
+
   /** 🔑 Google login */
   loginWithGoogle(): Promise<void> {
     const provider = new GoogleAuthProvider();

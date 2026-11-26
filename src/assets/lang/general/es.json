@@ -44,6 +44,17 @@
       "ALL": "Todos",
       "SIGNED": "Registrados",
       "ANONYMOUS": "Anónimos"
+    },
+    "save": {
+      "title": "Guarda tu puntaje",
+      "login_hint": "Inicia sesión para guardar tu mejor puntaje en tu cuenta.",
+      "login": "Iniciar sesión y guardar",
+      "or": "o",
+      "anonymous_hint": "O simplemente escribe un nombre para guardarlo como invitado.",
+      "name": "Tu nombre",
+      "anonymous": "Guardar como invitado",
+      "skip": "No guardar",
+      "login_failed": "No se completó el inicio de sesión. Puedes intentarlo de nuevo o guardar como invitado."
     }
   }
 }

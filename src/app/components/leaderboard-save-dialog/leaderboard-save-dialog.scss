@@ -1,0 +1,51 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+p {
+  margin: 0;
+}
+
+.points {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 8px;
+
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+    color: #f5b301;
+  }
+}
+
+.error {
+  color: #f44336;
+  font-size: 14px;
+}
+
+.full {
+  width: 100%;
+}
+
+// Horizontal rule with the "or" label in the middle.
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  opacity: 0.7;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid currentColor;
+  }
+}

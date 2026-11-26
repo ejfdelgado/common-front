@@ -11,7 +11,9 @@ import { RecaptchaVerifier } from '@angular/fire/auth';
 import { PhoneInputComponent, PhoneValue } from '@components/fields/phone-input/phone-input';
 
 export interface LoginOptionsData {
-
+  // When true, the Google option waits for the popup and closes the dialog
+  // with true/false depending on the outcome. Otherwise it closes right away.
+  waitForPopup?: boolean;
 }
 
 @Component({
@@ -87,8 +89,19 @@ export class LoginOptions {
   }
 
   async loginWithGoogle() {
-    this.authSrv.loginWithGoogle();
-    this.dialogRef.close(true);
+    if (!this.data?.waitForPopup) {
+      this.authSrv.loginWithGoogle();
+      this.dialogRef.close(true);
+      return;
+    }
+    try {
+      await this.authSrv.loginWithGoogle();
+      this.dialogRef.close(true);
+    } catch (e: any) {
+      // Includes the user closing the popup: back to the options.
+      this.errorMessage = e.customData?.message || 'Google sign-in did not complete';
+      this.cdr.detectChanges();
+    }
   }
 
   async loginWithEmail() {
