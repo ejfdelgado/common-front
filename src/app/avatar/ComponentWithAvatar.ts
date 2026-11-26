@@ -49,8 +49,13 @@ import { HandsBackgroundController } from './controllers/HandsBackgroundControll
 import { HandsGoogleMapController } from './controllers/HandsGoogleMapController';
 import { LeaderBoardService } from '../services/leaderboard.service';
 import { getRoomData } from './utils/AvatarUtilities';
+import { AuthenticatedComponent } from '../components/authenticated.component';
+import { AuthService } from '../services/auth.service';
 
-export abstract class ComponentWithAvatar extends CommonComponent implements CursorPositioner {
+export abstract class ComponentWithAvatar
+  extends AuthenticatedComponent
+  implements CursorPositioner
+{
   hudData: { [key: string]: any } = {
     top: '',
     bottom: '',
@@ -109,14 +114,15 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
   constructor(
     public override sanitizer: DomSanitizer,
     public override fullScreenSrv: FullscreenService,
-    public cdr: ChangeDetectorRef,
+    public override authSrv: AuthService,
+    public override cdr: ChangeDetectorRef,
     public p2pSrv: P2PService,
     public speechSrv: SpeechSynthesisService,
     public voiceRecognitionSrv: VoiceRecognitionService,
     public fileSrv: FileService,
     public leaderBoardSrv: LeaderBoardService,
   ) {
-    super(sanitizer, fullScreenSrv);
+    super(sanitizer, fullScreenSrv, authSrv, cdr);
     this.events.subscribe((event) => {
       this.controllers.forEach((controller) => {
         controller.onEvent(event);
@@ -130,7 +136,15 @@ export abstract class ComponentWithAvatar extends CommonComponent implements Cur
         // Leaderboard events
         const { points } = event.data;
         const { leaderBoardRoomId } = getRoomData();
-        this.leaderBoardSrv.write(leaderBoardRoomId, points, 'Anonymous');
+        if (this.user) {
+          // User authenticated
+          this.leaderBoardSrv.write(leaderBoardRoomId, points);
+        } else {
+          // Anonymous user
+          // Prompt the user with a dialog to invite it to login to record
+          // the point or just write the user name in order to relate the score points
+          // with the provided name.
+        }
       } else if (event.name == 'LEADERBOARD_SHOW') {
         const { leaderBoardRoomId } = getRoomData();
         this.leaderBoardSrv.openDialog(leaderBoardRoomId);

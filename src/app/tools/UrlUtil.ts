@@ -16,7 +16,8 @@ export type SharePayload = {
 };
 
 export function getUrlQueryParams() {
-    return new URLSearchParams(window.location.hash.split("?")[1]);
+    // self works in both window and worker contexts (worker tsconfig has no DOM lib)
+    return new URLSearchParams(self.location.hash.split("?")[1]);
 }
 
 export function truncateString(max: number, val?: string) {
