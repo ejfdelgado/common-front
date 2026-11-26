@@ -144,6 +144,8 @@ export abstract class ComponentWithAvatar
           // Prompt the user with a dialog to invite it to login to record
           // the point or just write the user name in order to relate the score points
           // with the provided name.
+          let anonymousName = 'Anonymous';
+          this.leaderBoardSrv.write(leaderBoardRoomId, points, anonymousName);
         }
       } else if (event.name == 'LEADERBOARD_SHOW') {
         const { leaderBoardRoomId } = getRoomData();
