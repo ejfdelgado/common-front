@@ -13,6 +13,7 @@ import { VoiceLangType, VoiceRecognitionService } from 'src/app/services/voicere
 import { FileService } from 'src/app/services/file.srv';
 import { SceneControllerAbstractRecord } from './SceneControllerAbstractRecord';
 import { MESH_OPTIONS } from 'src/types/WorldAvatarLibrary';
+import { TimedScore } from '@avatar/utils/TimedScore';
 
 const NPC_NAME = 'dancer';
 const NPC_LR = [2.5, 0, 0];
@@ -25,6 +26,7 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
   audioLoadedUrl: string | null = null;
   audioPlayer: HTMLAudioElement | null = null;
   scorePoints: number = 0;
+  timedScore: TimedScore = new TimedScore();
 
   constructor(
     public override events: EventEmitter<AvatarBodyEvent>,
@@ -75,12 +77,15 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     }
   }
 
+  // Points per second of play from the match over the last seconds; see
+  // TimedScore for the rules. Independent of how often this is called.
   computeScorePoints(actualMatch: number) {
-    // Time aware point assignment given the current actualMatch
-    // or an historical of the latest X seconds.
-    const deltaPoints = 0;
-    const nextScorePoint = this.scorePoints + deltaPoints;
-    this.setScorePoints(nextScorePoint);
+    this.timedScore.addSample(actualMatch, performance.now());
+    const nextScorePoint = Math.round(this.timedScore.score);
+    // The HUD only needs an update when the shown number changes.
+    if (nextScorePoint != this.scorePoints) {
+      this.setScorePoints(nextScorePoint);
+    }
   }
 
   override async update(): Promise<ControllerUpdateResponse> {
@@ -121,6 +126,8 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     this.setHudValue('percentage', null, false);
     this.placeCamera(true);
     if (['PLAYING', 'PAUSED'].indexOf(this.state) >= 0) {
+      // Stop scoring; the final score stays on the HUD.
+      this.timedScore.pause();
       if (this.scene) {
         this.scene.animationStop();
       }
@@ -174,10 +181,13 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
     }
     if (this.scene) {
       if (this.state == 'PAUSED') {
+        // Resume: keep the score earned so far.
         if (this.audioPlayer) {
           this.audioPlayer.play();
         }
       } else {
+        this.timedScore.reset();
+        this.setScorePoints(0);
         await this.assureCharacter();
         await this.loadStoredAudio();
         if (this.scenario?.dictionary && this.history.a.length == 0) {
@@ -209,7 +219,6 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
           this.audioPlayer.play();
         }
       }
-      this.setScorePoints(0);
       this.state = 'PLAYING';
       this.placeCamera(false);
       this.scene.animationPlay();
@@ -243,6 +252,8 @@ export class RecordPoseController extends SceneControllerAbstractRecord {
       return;
     }
     this.state = 'PAUSED';
+    // The paused time must not count as play time when resuming.
+    this.timedScore.pause();
     if (this.scene) {
       ModuloSonido.play('/assets/sounds/hangdown.mp3');
       this.scene.animationPause();
